@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import VueRouter, { RouteConfig } from 'vue-router';
 import LandingPage from '../views/LandingPage.vue';
+import SessionPage from '../views/SessionPage.vue';
 
 Vue.use(VueRouter);
 
@@ -9,6 +10,11 @@ const routes: Array<RouteConfig> = [
     path: '/',
     name: 'LandingPage',
     component: LandingPage,
+  },
+  {
+    path: '/session',
+    name: 'SessionPage',
+    component: SessionPage,
   },
   {
     path: '/waitingRoom',
