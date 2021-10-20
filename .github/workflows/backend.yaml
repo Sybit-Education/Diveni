@@ -25,4 +25,4 @@ jobs:
         distribution: 'adopt'
         cache: maven
     - name: Build and test with Maven
-      run: mvn -B package --file pom.xml
+      run: cd backend && mvn -B package --file pom.xml

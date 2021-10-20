@@ -17,7 +17,7 @@ jobs:
       - name: Installing project dependencies
       - run: npm install
       - name: Building the project
-      - run: npm run lint
+      - run: cd frontend && npm run lint
       
   build-dev:
     runs-on: ubuntu-latest
@@ -27,7 +27,7 @@ jobs:
       - name: Installing project dependencies
       - run: npm install
       - name: Building the project
-      - run: npm run build
+      - run: cd frontend && npm run build
 
   build-prod:
     runs-on: ubuntu-latest
@@ -37,4 +37,4 @@ jobs:
       - name: Installing project dependencies
       - run: npm install
       - name: Building the project
-      - run: npm run build --release
+      - run: cd frontend && npm run build --release
