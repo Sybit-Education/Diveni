@@ -11,8 +11,8 @@ const routes: Array<RouteConfig> = [
     component: LandingPage,
   },
   {
-    path: '/about',
-    name: 'About',
+    path: '/waitingRoom',
+    name: 'WaitingRoom',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.

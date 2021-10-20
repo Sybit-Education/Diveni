@@ -9,6 +9,7 @@
           :title="'Join meeting'"
           :description="'Join a existing meeting and help your team estimating'"
           :button-text="'GO'"
+          :on-click="sendCreateSessionRequest"
         />
       </v-flex>
       <v-flex class="xs12 sm6">
@@ -25,17 +26,33 @@
 <script lang="ts">
 import Vue from 'vue';
 import LandingPageCard from '../components/LandingPageCard.vue';
+import Session from '../model/Session';
+import * as Constants from '../constants';
 
 export default Vue.extend({
   name: 'LandingPage',
   components: {
-    // eslint-disable-next-line vue/no-unused-components
     LandingPageCard,
   },
   data() {
     return {
       title: 'Agile poker',
     };
+  },
+  methods: {
+    async sendCreateSessionRequest() {
+      const url = Constants.default.backendURL + Constants.default.backendSessionRoute;
+      try {
+        const response = await this.$axios.get(url);
+        const session = Session.fromJson(response);
+        this.goToWaitingRoomPage(session);
+      } catch (e) {
+        console.error(`Response of ${url} is invalid: ${e}`);
+      }
+    },
+    goToWaitingRoomPage(session: Session) {
+      this.$router.push({ path: '/waitingRoom', arguments: { session } });
+    },
   },
 });
 </script>

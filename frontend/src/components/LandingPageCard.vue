@@ -28,6 +28,7 @@ export default Vue.extend({
     title: { type: String, required: true },
     description: { type: String, required: true },
     buttonText: { type: String, required: true },
+    onClick: { type: Function, required: true },
   },
 });
 </script>
