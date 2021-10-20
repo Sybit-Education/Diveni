@@ -46,6 +46,13 @@
 			<scope>provided</scope>
 		</dependency>
 
+		<!-- MongoDB for testing -->
+		<dependency>
+			<groupId>de.flapdoodle.embed</groupId>
+			<artifactId>de.flapdoodle.embed.mongo</artifactId>
+			<scope>test</scope>
+		</dependency>
+
 	</dependencies>
 
 	<build>
