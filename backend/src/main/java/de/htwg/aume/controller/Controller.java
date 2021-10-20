@@ -1,7 +1,5 @@
 package de.htwg.aume.controller;
 
-import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -17,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import de.htwg.aume.model.Session;
 import de.htwg.aume.repository.SessionRepository;
+import lombok.val;
 
 @RestController
 public class Controller {
@@ -26,17 +25,17 @@ public class Controller {
 
 	@PostMapping(value = "createSession")
 	public ResponseEntity<Session> createSession() {
-		Set<UUID> usedUuids = sessionRepo.findAll().stream().map(s -> s.getSessionID()).collect(Collectors.toSet());
-		List<UUID> sessionUuids = Stream.generate(UUID::randomUUID).filter(s -> !usedUuids.contains(s)).limit(3)
+		val usedUuids = sessionRepo.findAll().stream().map(s -> s.getSessionID()).collect(Collectors.toSet());
+		val sessionUuids = Stream.generate(UUID::randomUUID).filter(s -> !usedUuids.contains(s)).limit(3)
 				.collect(Collectors.toList());
-		final var session = new Session(sessionUuids.get(0), sessionUuids.get(1), sessionUuids.get(2));
+		val session = new Session(sessionUuids.get(0), sessionUuids.get(1), sessionUuids.get(2));
 		sessionRepo.save(session);
 		return new ResponseEntity<Session>(session, HttpStatus.CREATED);
 	}
 
 	@GetMapping(value = "getSession/{sessionID}")
 	public @ResponseBody Session getSession(@PathVariable UUID sessionID) {
-		Session session = sessionRepo.findBySessionID(sessionID);
+		val session = sessionRepo.findBySessionID(sessionID);
 		if (session == null) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "session not found");
 		}
