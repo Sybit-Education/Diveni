@@ -7,10 +7,10 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,11 +24,6 @@ public class Controller {
 	@Autowired
 	SessionRepository sessionRepo;
 
-	@RequestMapping("/")
-	public @ResponseBody String greeting() {
-		return "Hello, World";
-	}
-
 	@PostMapping(value = "createSession")
 	public ResponseEntity<Session> createSession() {
 		Set<UUID> usedUuids = sessionRepo.findAll().stream().map(s -> s.getSessionID()).collect(Collectors.toSet());
@@ -41,7 +36,11 @@ public class Controller {
 
 	@GetMapping(value = "getSession/{sessionID}")
 	public @ResponseBody Session getSession(@PathVariable UUID sessionID) {
-		return sessionRepo.findBySessionID(sessionID);
+		Session session = sessionRepo.findBySessionID(sessionID);
+		if (session == null) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "session not found");
+		}
+		return session;
 	}
 
 }
