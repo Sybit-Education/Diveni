@@ -1,26 +1,25 @@
 <template>
   <div>
-    <h1 class="mt-3">
+    <h1 class="my-5 mx-2">
       {{ title }}
     </h1>
     <b-row>
-      <b-col>
-        <landing-page-card
-          class="col-12 col-md-3"
-          :title="'Join meeting'"
-          :description="'Join a existing meeting and help your team estimating'"
-          :button-text="'GO'"
-          :on-click="sendCreateSessionRequest"
-        />
-        <landing-page-card
-          class="col-12 col-md-3"
-          :title="'New meeting'"
-          :description="'Start a new meeting, invite colleagues and start estimating'"
-          :button-text="'GO'"
-          :on-click="() => {}"
-        />
-      </b-col>
-      <div class="mt-4" />
+      <div class="col-12 col-md-1" />
+      <landing-page-card
+        class="col-12  col-md-5 m-2"
+        :title="'Join meeting'"
+        :description="'Join a existing meeting and help your team estimating'"
+        :button-text="'GO'"
+        :on-click="sendCreateSessionRequest"
+      />
+      <landing-page-card
+        class="col-12 col-md-5 m-2"
+        :title="'New meeting'"
+        :description="'Start a new meeting, invite colleagues and start estimating'"
+        :button-text="'GO'"
+        :on-click="() => {}"
+      />
+      <div class="col-12 col-md-1" />
       <b-col />
     </b-row>
   </div>
