@@ -1,16 +1,14 @@
 <template>
-  <v-app>
-    <v-main>
-      <router-view />
-    </v-main>
-  </v-app>
+  <b-container>
+    <router-view />
+  </b-container>
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import Vue from 'vue';
 
 export default Vue.extend({
-  name: "App",
+  name: 'App',
 
   data: () => ({
     //

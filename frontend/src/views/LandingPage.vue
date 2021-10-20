@@ -1,32 +1,34 @@
 <template>
-  <v-container>
-    <div class="text-h3 ma-8">
+  <div>
+    <h1 class="mt-3">
       {{ title }}
-    </div>
-    <v-layout class="row wrap">
-      <v-flex class="xs12 sm6">
+    </h1>
+    <b-row>
+      <b-col>
         <landing-page-card
+          class="col-12 col-md-3"
           :title="'Join meeting'"
           :description="'Join a existing meeting and help your team estimating'"
           :button-text="'GO'"
           :on-click="sendCreateSessionRequest"
         />
-      </v-flex>
-      <v-flex class="xs12 sm6">
         <landing-page-card
+          class="col-12 col-md-3"
           :title="'New meeting'"
           :description="'Start a new meeting, invite colleagues and start estimating'"
           :button-text="'GO'"
+          :on-click="() => {}"
         />
-      </v-flex>
-    </v-layout>
-  </v-container>
+      </b-col>
+      <div class="mt-4" />
+      <b-col />
+    </b-row>
+  </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
 import LandingPageCard from '../components/LandingPageCard.vue';
-import Session from '../model/Session';
 import * as Constants from '../constants';
 
 export default Vue.extend({
@@ -43,15 +45,14 @@ export default Vue.extend({
     async sendCreateSessionRequest() {
       const url = Constants.default.backendURL + Constants.default.backendSessionRoute;
       try {
-        const response = await this.$axios.get(url);
-        const session = Session.fromJson(response);
-        this.goToWaitingRoomPage(session);
+        const response = await this.axios.get(url);
+        this.goToWaitingRoomPage(response.data as string);
       } catch (e) {
         console.error(`Response of ${url} is invalid: ${e}`);
       }
     },
-    goToWaitingRoomPage(session: Session) {
-      this.$router.push({ path: '/waitingRoom', arguments: { session } });
+    goToWaitingRoomPage(session: string) {
+      this.$router.push({ path: '/waitingRoom', params: { session } });
     },
   },
 });

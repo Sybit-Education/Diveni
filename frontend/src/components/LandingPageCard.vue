@@ -1,20 +1,19 @@
 <template>
-  <v-card
-    elevation="8"
-    rounded="xl"
-    class="pa-8 ma-4"
-    color="lightgray"
-  >
-    <div class="text-center text-h4">
+  <b-card class="p-3 text-center">
+    <h3 class="text-center">
       {{ title }}
-    </div>
-    <div class="text-center text-b1">
+    </h3>
+    <div
+      class="mt-5"
+    >
       {{ description }}
     </div>
-    <v-card-actions class="justify-center">
-      <success-button :button-text="buttonText" />
-    </v-card-actions>
-  </v-card>
+    <success-button
+      class="mt-5"
+      :button-text="buttonText"
+      :on-click="onClick"
+    />
+  </b-card>
 </template>
 
 <script lang="ts">

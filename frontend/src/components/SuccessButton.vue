@@ -1,7 +1,10 @@
 <template>
-  <v-btn color="green white--text">
+  <b-button
+    variant="success"
+    @click="onClick"
+  >
     {{ buttonText }}
-  </v-btn>
+  </b-button>
 </template>
 
 <script lang="ts">
@@ -11,6 +14,7 @@ export default Vue.extend({
   name: 'SuccessButton',
   props: {
     buttonText: { type: String, required: true },
+    onClick: { type: Function, required: true },
   },
 });
 </script>
