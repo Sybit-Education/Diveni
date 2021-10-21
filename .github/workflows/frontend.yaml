@@ -16,7 +16,7 @@ jobs:
       - uses: actions/setup-node@master
       - name: Installing project dependencies
       - run: npm install
-      - name: Building the project
+      - name: Linting the project
       - run: cd frontend && npm run lint
       
   build-dev:
@@ -26,7 +26,7 @@ jobs:
       - uses: actions/setup-node@master
       - name: Installing project dependencies
       - run: npm install
-      - name: Building the project
+      - name: Building the project for development
       - run: cd frontend && npm run build
 
   build-prod:
@@ -36,5 +36,5 @@ jobs:
       - uses: actions/setup-node@master
       - name: Installing project dependencies
       - run: npm install
-      - name: Building the project
+      - name: Building the project for production
       - run: cd frontend && npm run build --release
