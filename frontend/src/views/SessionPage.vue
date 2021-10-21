@@ -10,32 +10,47 @@
       <b-icon-unlock animation="throb"
                      font-scale="1.5"/>
     </h4>
-    <b-container class="mt-5">
+    <b-container class="my-5">
       <b-row>
-        <b-col sm="2">
+        <b-col
+          cols="6"
+          md="4"
+          lg="3"
+          xl="2"
+        >
           <WaitingForMemberCard
             color="gold"
             name="Tom"
             icon=1
           />
         </b-col>
-        <b-col sm="2">
+        <b-col
+          cols="6"
+          md="4"
+          lg="3"
+          xl="2"
+        >
           <WaitingForMemberCard
-              color="mediumpurple"
-              name="John"
-              icon=2
+            color="mediumpurple"
+            name="John"
+            icon=2
           />
         </b-col>
-        <b-col sm="2">
+        <b-col
+          cols="6"
+          md="4"
+          lg="3"
+          xl="2"
+        >
           <WaitingForMemberCard
-              color="royalblue"
-              name="Linda"
-              icon=3
+            color="royalblue"
+            name="Linda"
+            icon=3
           />
         </b-col>
       </b-row>
       <b-row>
-        <b-col class="text-center mt-5">
+        <b-col class="text-center mt-5 mb-5">
           <b-button variant="success"
                     style="color: black; border-style: solid;
                     border-color: black; background: greenyellow">
@@ -43,8 +58,10 @@
           </b-button>
         </b-col>
       </b-row>
+      <b-row>
+        <div class="mt-5 text-center">Icons erstellt von <a href="https://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/de/" title="Flaticon">www.flaticon.com</a></div>
+      </b-row>
     </b-container>
-    <div style="position: absolute; bottom: 50px; right: 300px">Icons erstellt von <a href="https://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/de/" title="Flaticon">www.flaticon.com</a></div>
   </div>
 </template>
 
