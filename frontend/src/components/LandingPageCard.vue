@@ -12,6 +12,7 @@
       class="mt-5"
       :button-text="buttonText"
       :on-click="onClick"
+      :disabled="false"
     />
   </b-card>
 </template>
