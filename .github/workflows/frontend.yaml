@@ -2,23 +2,33 @@ name: Build and validate frontend
 
 on:
   push:
-    branches: 
-    - '**'
+    branches:
+      - "**"
   pull_request:
     branches:
-    - '**'
+      - "**"
 
 jobs:
-  validate:
+  test:
     runs-on: ubuntu-latest
+
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-node@v2
-    - name: Installing project dependencies
-    - run: npm install
-    - name: Linting the project
-    - run: cd frontend && npm run lint
-      
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "14"
+      - run: npm install
+      - run: npm test
+  # validate:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: actions/checkout@v2
+  #   - uses: actions/setup-node@v2
+  #   - name: Installing project dependencies
+  #     run: npm install
+  #   - name: Linting the project
+  #     run: cd frontend && npm run lint
+
   # build-dev:
   #   runs-on: ubuntu-latest
   #   steps:
