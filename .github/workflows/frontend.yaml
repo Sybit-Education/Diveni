@@ -20,22 +20,24 @@ jobs:
       - run: cd frontend && npm install
       - run: cd frontend && npm run lint
   
-  # build-dev:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - uses: actions/checkout@v2
-  #   - uses: actions/setup-node@v2
-  #   - name: Installing project dependencies
-  #   - run: npm install
-  #   - name: Building the project for development
-  #   - run: cd frontend && npm run build
+  build-dev:
+    runs-on: ubuntu-latest
 
-  # build-prod:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - uses: actions/checkout@v2
-  #   - uses: actions/setup-node@v2
-  #   - name: Installing project dependencies
-  #   - run: npm install
-  #   - name: Building the project for production
-  #   - run: cd frontend && npm run build --release
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "14"
+      - run: cd frontend && npm install
+      - run: cd frontend && npm run build
+    
+  build-prod:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "14"
+      - run: cd frontend && npm install
+      - run: cd frontend && npm run build --release
