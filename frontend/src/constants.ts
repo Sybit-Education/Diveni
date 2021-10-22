@@ -1,5 +1,5 @@
 class Constants {
-  backendURL = '127.0.0.1:9090';
+  backendURL = 'http://localhost:9090';
 
   backendSessionRoute = '/createSession';
 
