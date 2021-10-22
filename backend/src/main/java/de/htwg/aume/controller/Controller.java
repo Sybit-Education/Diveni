@@ -29,7 +29,7 @@ public class Controller {
 	@Autowired
 	SessionRepository sessionRepo;
 
-	@CrossOrigin(origins = "http://localhost:9090/")
+	@CrossOrigin(origins = "http://localhost:8080/")
 	@PostMapping(value = "createSession")
 	public ResponseEntity<Session> createSession() {
 		val usedUuids = sessionRepo.findAll().stream().map(s -> s.getSessionID()).collect(Collectors.toSet());
