@@ -5,61 +5,34 @@
     </h1>
     <h4 class="mt-4">
       Share the code
-      <b-link href="/session">XFFRGHT</b-link>
+      <b-link
+        href=""
+        @click="copyCodeToClipboard"
+      >
+        {{ joinCode }}
+      </b-link>
       with your team mates.
-      <b-icon-unlock animation="throb"
-                     font-scale="1.5"/>
+      <b-icon-unlock />
     </h4>
     <b-container class="my-5">
-      <b-row>
-        <b-col
-          cols="6"
-          md="4"
-          lg="3"
-          xl="2"
-        >
-          <WaitingForMemberCard
-            color="gold"
-            name="Tom"
-            :icon=1
-          />
-        </b-col>
-        <b-col
-          cols="6"
-          md="4"
-          lg="3"
-          xl="2"
-        >
-          <WaitingForMemberCard
-            color="mediumpurple"
-            name="John"
-            :icon=2
-          />
-        </b-col>
-        <b-col
-          cols="6"
-          md="4"
-          lg="3"
-          xl="2"
-        >
-          <WaitingForMemberCard
-            color="royalblue"
-            name="Linda"
-            :icon=3
-          />
-        </b-col>
+      <b-row class="d-flex justify-content-center">
+        <SessionMemberCard
+          v-for="member of members"
+          :key="member.id"
+          class="m-4"
+          :color="member.color"
+          :asset-name="member.assetName"
+          :name="member.name"
+        />
       </b-row>
       <b-row>
         <b-col class="text-center mt-5 mb-5">
-          <b-button variant="success"
-                    style="color: black; border-style: solid;
-                    border-color: black; background: greenyellow">
-            Start Planning
-          </b-button>
+          <success-button
+            :button-text="'Start Planning'"
+            :disabled="false"
+            :on-click="() =>{}"
+          />
         </b-col>
-      </b-row>
-      <b-row>
-        <div class="mt-5 text-center">Icons erstellt von <a href="https://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/de/" title="Flaticon">www.flaticon.com</a></div>
       </b-row>
     </b-container>
   </div>
@@ -71,23 +44,82 @@ import { BootstrapVue, IconsPlugin } from 'bootstrap-vue';
 import SockJS from 'sockjs-client';
 import webstomp from 'webstomp-client';
 import * as Constants from '../constants';
-import WaitingForMemberCard from '../components/WaitingForMemberCard.vue';
+import SessionMemberCard from '../components/SessionMemberCard.vue';
+import SuccessButton from '../components/SuccessButton.vue';
 
 Vue.use(IconsPlugin);
 
 export default Vue.extend({
   name: 'LandingPage',
   components: {
-    WaitingForMemberCard,
+    SessionMemberCard,
+    SuccessButton,
   },
   data() {
     return {
       title: 'Waiting for members ...',
+      joinCode: 'XFFRGHT',
       connected: false,
       stompClient: webstomp.over(new SockJS(`${Constants.default.backendURL}/connect`)),
+      members: [
+        {
+          id: '1',
+          color: 'mediumpurple',
+          assetName: 'animal-icon-1.png',
+          name: 'Esenosarumensemwonken',
+        },
+        {
+          id: '2',
+          color: 'green',
+          assetName: 'animal-icon-2.png',
+          name: 'Zellner',
+        },
+        {
+          id: '3',
+          color: 'red',
+          assetName: 'animal-icon-3.png',
+          name: 'Maximilian',
+        },
+        {
+          id: '4',
+          color: 'blue',
+          assetName: 'animal-icon-4.png',
+          name: 'Bahner',
+        },
+        {
+          id: '5',
+          color: 'mediumpurple',
+          assetName: 'animal-icon-1.png',
+          name: 'Esenosarumensemwonken',
+        },
+        {
+          id: '6',
+          color: 'green',
+          assetName: 'animal-icon-2.png',
+          name: 'Zellner',
+        },
+        {
+          id: '7',
+          color: 'red',
+          assetName: 'animal-icon-3.png',
+          name: 'Maximilian',
+        },
+      ],
     };
   },
+  mounted() {
+    this.connect();
+    const msg = JSON.stringify({ name: 'John' });
+    setTimeout(() => this.send(msg), 5000);
+  },
   methods: {
+    copyCodeToClipboard() {
+      navigator.clipboard.writeText(this.joinCode).then(() => {
+        console.log('Async: Copying to clipboard was successful!');
+      }, (err) => {
+        console.error('Async: Could not copy text: ', err);
+      });
+    },
     send(body: any) {
       if (this.stompClient && this.stompClient.connected) {
         this.stompClient.send('/ws/hello', body, {});
@@ -114,11 +146,6 @@ export default Vue.extend({
       }
       this.connected = false;
     },
-  },
-  mounted() {
-    this.connect();
-    const msg = JSON.stringify({ name: 'John' });
-    setTimeout(() => this.send(msg), 5000);
   },
 });
 </script>
