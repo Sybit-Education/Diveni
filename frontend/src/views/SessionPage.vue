@@ -71,7 +71,6 @@ import { BootstrapVue, IconsPlugin } from 'bootstrap-vue';
 import * as Constants from '../constants';
 import WaitingForMemberCard from '../components/WaitingForMemberCard.vue';
 
-Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
 
 export default Vue.extend({
