@@ -26,6 +26,7 @@ import lombok.val;
 @SpringBootTest
 @AutoConfigureMockMvc
 public class SessionRouteTest {
+
 	public static final MediaType APPLICATION_JSON_UTF8 = new MediaType(MediaType.APPLICATION_JSON.getType(),
 			MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
 
@@ -54,9 +55,9 @@ public class SessionRouteTest {
 		val sessionUUID = UUID.randomUUID();
 
 		sessionRepo.save(new Session(sessionUUID, UUID.randomUUID(), UUID.randomUUID(), new ArrayList<Member>()));
-		
+
 		// @formatter:off
-		var memberAsJson = 
+		var memberAsJson =
 		"{" +
 		"'memberID': '365eef59-931d-0000-0000-2ba016cb523b'," +
 		"'name': 'Julian'," +
@@ -67,8 +68,9 @@ public class SessionRouteTest {
 		// @formatter:on
 		memberAsJson = memberAsJson.replaceAll("'", "\"");
 
-		this.mockMvc.perform(
-				post("/join/{sessionID}", sessionUUID).contentType(APPLICATION_JSON_UTF8).content(memberAsJson))
+		this.mockMvc
+				.perform(
+						post("/join/{sessionID}", sessionUUID).contentType(APPLICATION_JSON_UTF8).content(memberAsJson))
 				.andDo(print()).andExpect(status().isOk());
 	}
 
@@ -76,9 +78,9 @@ public class SessionRouteTest {
 	public void joinMember_failsToAddMemberDueToFalseAvatarAnimal() throws Exception {
 		val sessionUUID = UUID.randomUUID();
 		sessionRepo.save(new Session(sessionUUID, UUID.randomUUID(), UUID.randomUUID(), new ArrayList<Member>()));
-		
+
 		// @formatter:off
-		var memberAsJson = 
+		var memberAsJson =
 		"{" +
 		"'memberID': '365eef59-931d-0000-0000-2ba016cb523b'," +
 		"'name': 'Julian'," +
@@ -89,8 +91,9 @@ public class SessionRouteTest {
 		// @formatter:on
 		memberAsJson = memberAsJson.replaceAll("'", "\"");
 
-		this.mockMvc.perform(
-				post("/join/{sessionID}", sessionUUID).contentType(APPLICATION_JSON_UTF8).content(memberAsJson))
+		this.mockMvc
+				.perform(
+						post("/join/{sessionID}", sessionUUID).contentType(APPLICATION_JSON_UTF8).content(memberAsJson))
 				.andDo(print()).andExpect(status().isBadRequest());
 	}
 
@@ -98,9 +101,9 @@ public class SessionRouteTest {
 	public void joinMember_failsToAddMemberDueToFalseEstimation() throws Exception {
 		val sessionUUID = UUID.randomUUID();
 		sessionRepo.save(new Session(sessionUUID, UUID.randomUUID(), UUID.randomUUID(), new ArrayList<Member>()));
-		
+
 		// @formatter:off
-		var memberAsJson = 
+		var memberAsJson =
 		"{" +
 		"'memberID': '365eef59-931d-0000-0000-2ba016cb523b'," +
 		"'name': 'Julian'," +
@@ -111,17 +114,17 @@ public class SessionRouteTest {
 		// @formatter:on
 		memberAsJson = memberAsJson.replaceAll("'", "\"");
 
-		this.mockMvc.perform(
-				post("/join/{sessionID}", sessionUUID).contentType(APPLICATION_JSON_UTF8).content(memberAsJson))
+		this.mockMvc
+				.perform(
+						post("/join/{sessionID}", sessionUUID).contentType(APPLICATION_JSON_UTF8).content(memberAsJson))
 				.andDo(print()).andExpect(status().isBadRequest());
 	}
 
-
 	@Test
 	public void joinMember_givesErrorWhenSessionNotExists() throws Exception {
-		
+
 		// @formatter:off
-		var memberAsJson = 
+		var memberAsJson =
 		"{" +
 		"'memberID': '365eef59-931d-0000-0000-2ba016cb523b'," +
 		"'name': 'Julian'," +

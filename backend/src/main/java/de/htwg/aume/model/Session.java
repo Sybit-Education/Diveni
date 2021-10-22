@@ -26,17 +26,18 @@ public class Session {
 	public Session copyWith(UUID sessionID, UUID adminID, UUID membersID, List<Member> members) {
 		var tmpSession = this;
 		if (sessionID != null) {
-			tmpSession = new Session(sessionID, this.adminID, this.membersID, this.members);
+			tmpSession = new Session(sessionID, tmpSession.adminID, tmpSession.membersID, tmpSession.members);
 		}
 		if (adminID != null) {
-			tmpSession = new Session(this.sessionID, adminID, this.membersID, this.members);
+			tmpSession = new Session(tmpSession.sessionID, adminID, tmpSession.membersID, tmpSession.members);
 		}
 		if (membersID != null) {
-			tmpSession = new Session(this.sessionID, this.adminID, membersID, this.members);
+			tmpSession = new Session(tmpSession.sessionID, tmpSession.adminID, membersID, tmpSession.members);
 		}
 		if (members != null) {
-			tmpSession = new Session(this.sessionID, this.adminID, this.membersID, members);
+			tmpSession = new Session(tmpSession.sessionID, tmpSession.adminID, tmpSession.membersID, members);
 		}
 		return tmpSession;
 	}
+
 }

@@ -47,5 +47,4 @@ public class SessionRepositoryTest {
 		assertEquals(session, sessionRepo.save(session));
 	}
 
-
 }
