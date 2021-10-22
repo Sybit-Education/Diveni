@@ -21,7 +21,7 @@
           <WaitingForMemberCard
             color="gold"
             name="Tom"
-            icon=1
+            :icon=1
           />
         </b-col>
         <b-col
@@ -33,7 +33,7 @@
           <WaitingForMemberCard
             color="mediumpurple"
             name="John"
-            icon=2
+            :icon=2
           />
         </b-col>
         <b-col
@@ -45,7 +45,7 @@
           <WaitingForMemberCard
             color="royalblue"
             name="Linda"
-            icon=3
+            :icon=3
           />
         </b-col>
       </b-row>
@@ -68,6 +68,8 @@
 <script lang="ts">
 import Vue from 'vue';
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue';
+import SockJS from 'sockjs-client';
+import webstomp from 'webstomp-client';
 import * as Constants from '../constants';
 import WaitingForMemberCard from '../components/WaitingForMemberCard.vue';
 
@@ -81,21 +83,42 @@ export default Vue.extend({
   data() {
     return {
       title: 'Waiting for members ...',
+      connected: false,
+      stompClient: webstomp.over(new SockJS(`${Constants.default.backendURL}/connect`)),
     };
   },
   methods: {
-    async sendCreateSessionRequest() {
-      const url = Constants.default.backendURL + Constants.default.backendSessionRoute;
-      try {
-        const response = await this.axios.get(url);
-        this.goToWaitingRoomPage(response.data as string);
-      } catch (e) {
-        console.error(`Response of ${url} is invalid: ${e}`);
+    send(body: any) {
+      if (this.stompClient && this.stompClient.connected) {
+        this.stompClient.send('/ws/hello', body, {});
       }
     },
-    goToWaitingRoomPage(session: string) {
-      this.$router.push({ path: '/waitingRoom', params: { session } });
+    connect() {
+      this.stompClient.connect(
+        {},
+        (frame) => {
+          this.connected = true;
+          this.stompClient.subscribe('/admin/update', (tick) => {
+            console.log(tick);
+          });
+        },
+        (error) => {
+          console.log(error);
+          this.connected = false;
+        },
+      );
     },
+    disconnect() {
+      if (this.stompClient) {
+        this.stompClient.disconnect();
+      }
+      this.connected = false;
+    },
+  },
+  mounted() {
+    this.connect();
+    const msg = JSON.stringify({ name: 'John' });
+    setTimeout(() => this.send(msg), 5000);
   },
 });
 </script>
