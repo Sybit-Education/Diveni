@@ -4,6 +4,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +24,7 @@ public class Controller {
 	@Autowired
 	SessionRepository sessionRepo;
 
+	@CrossOrigin(origins = "http://localhost:9090/")
 	@PostMapping(value = "createSession")
 	public ResponseEntity<Session> createSession() {
 		val usedUuids = sessionRepo.findAll().stream().map(s -> s.getSessionID()).collect(Collectors.toSet());
