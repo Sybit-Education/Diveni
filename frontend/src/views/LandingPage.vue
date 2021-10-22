@@ -44,7 +44,7 @@ export default Vue.extend({
     async sendCreateSessionRequest() {
       const url = Constants.default.backendURL + Constants.default.backendSessionRoute;
       try {
-        const response = await this.axios.get(url);
+        const response = await this.axios.post(url);
         this.goToWaitingRoomPage(response.data as string);
       } catch (e) {
         console.error(`Response of ${url} is invalid: ${e}`);
