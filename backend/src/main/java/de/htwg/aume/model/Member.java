@@ -8,7 +8,6 @@ import java.util.UUID;
 
 @Getter
 @RequiredArgsConstructor
-// @Document("member")
 public class Member {
 
 	private final UUID memberID;
