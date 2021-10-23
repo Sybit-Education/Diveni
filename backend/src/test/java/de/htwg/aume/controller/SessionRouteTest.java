@@ -37,14 +37,14 @@ public class SessionRouteTest {
 
 	@Test
 	public void createSession_returnsSession() throws Exception {
-		this.mockMvc.perform(post("/createSession")).andDo(print()).andExpect(status().isCreated())
+		this.mockMvc.perform(post("/sessions")).andDo(print()).andExpect(status().isCreated())
 				.andExpect(jsonPath("$.sessionID").isNotEmpty()).andExpect(jsonPath("$.adminID").isNotEmpty())
 				.andExpect(jsonPath("$.membersID").isNotEmpty());
 	}
 
 	@Test
 	public void getSession_isNotFound() throws Exception {
-		this.mockMvc.perform(get("/getSession/{sessionID}", UUID.randomUUID())).andExpect(status().isNotFound());
+		this.mockMvc.perform(get("/sessions/{sessionID}", UUID.randomUUID())).andExpect(status().isNotFound());
 	}
 
 	@Test
@@ -67,10 +67,8 @@ public class SessionRouteTest {
 		// @formatter:on
 		memberAsJson = memberAsJson.replaceAll("'", "\"");
 
-		this.mockMvc
-				.perform(
-						post("/join/{sessionID}", sessionUUID).contentType(APPLICATION_JSON_UTF8).content(memberAsJson))
-				.andDo(print()).andExpect(status().isOk());
+		this.mockMvc.perform(post("/sessions/{sessionID}/join", sessionUUID).contentType(APPLICATION_JSON_UTF8)
+				.content(memberAsJson)).andDo(print()).andExpect(status().isOk());
 	}
 
 	@Test
@@ -90,10 +88,8 @@ public class SessionRouteTest {
 		// @formatter:on
 		memberAsJson = memberAsJson.replaceAll("'", "\"");
 
-		this.mockMvc
-				.perform(
-						post("/join/{sessionID}", sessionUUID).contentType(APPLICATION_JSON_UTF8).content(memberAsJson))
-				.andDo(print()).andExpect(status().isBadRequest());
+		this.mockMvc.perform(post("/sessions/{sessionID}/join", sessionUUID).contentType(APPLICATION_JSON_UTF8)
+				.content(memberAsJson)).andDo(print()).andExpect(status().isBadRequest());
 	}
 
 	@Test
@@ -113,10 +109,8 @@ public class SessionRouteTest {
 		// @formatter:on
 		memberAsJson = memberAsJson.replaceAll("'", "\"");
 
-		this.mockMvc
-				.perform(
-						post("/join/{sessionID}", sessionUUID).contentType(APPLICATION_JSON_UTF8).content(memberAsJson))
-				.andDo(print()).andExpect(status().isBadRequest());
+		this.mockMvc.perform(post("/sessions/{sessionID}/join", sessionUUID).contentType(APPLICATION_JSON_UTF8)
+				.content(memberAsJson)).andDo(print()).andExpect(status().isBadRequest());
 	}
 
 	@Test
