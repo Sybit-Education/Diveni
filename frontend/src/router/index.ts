@@ -15,6 +15,7 @@ const routes: Array<RouteConfig> = [
   {
     path: '/session',
     name: 'SessionPage',
+    props: true,
     component: SessionPage,
   },
   {

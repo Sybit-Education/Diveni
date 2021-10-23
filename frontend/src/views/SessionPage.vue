@@ -1,27 +1,30 @@
 <template>
   <div>
-    <h1 class="mt-3">
+    <h1 class="my-5 mx-2">
       {{ title }}
     </h1>
-    <h4 class="mt-4">
+    <h4 class="mt-4 mx-2">
       Share the code
       <b-link
         href=""
         @click="copyCodeToClipboard"
       >
-        {{ joinCode }}
+        {{ sessionID }}
       </b-link>
       with your team mates.
       <b-icon-unlock />
     </h4>
     <b-container class="my-5">
-      <b-row class="d-flex justify-content-center">
+      <b-row
+        class="d-flex justify-content-center border rounded"
+        style="min-height: 200px;"
+      >
         <SessionMemberCard
           v-for="member of members"
-          :key="member.id"
+          :key="member.memberID"
           class="m-4"
-          :color="member.color"
-          :asset-name="member.assetName"
+          :color="member.hexColor"
+          :asset-name="backendAnimalToAssetName(member.avatarAnimal)"
           :name="member.name"
         />
       </b-row>
@@ -40,14 +43,11 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { BootstrapVue, IconsPlugin } from 'bootstrap-vue';
 import SockJS from 'sockjs-client';
-import webstomp from 'webstomp-client';
+import * as webStomp from 'webstomp-client';
 import * as Constants from '../constants';
 import SessionMemberCard from '../components/SessionMemberCard.vue';
 import SuccessButton from '../components/SuccessButton.vue';
-
-Vue.use(IconsPlugin);
 
 export default Vue.extend({
   name: 'LandingPage',
@@ -55,88 +55,66 @@ export default Vue.extend({
     SessionMemberCard,
     SuccessButton,
   },
+  props: {
+    adminID: {
+      type: String,
+      default: undefined,
+    },
+    sessionID: {
+      type: String,
+      default: undefined,
+    },
+  },
   data() {
     return {
       title: 'Waiting for members ...',
-      joinCode: 'XFFRGHT',
-      connected: false,
-      stompClient: webstomp.over(new SockJS(`${Constants.default.backendURL}/connect`)),
-      members: [
-        {
-          id: '1',
-          color: Constants.default.getRandomPastelColor(),
-          assetName: 'animal-icon-1.png',
-          name: 'Esenosarumensemwonken',
-        },
-        {
-          id: '2',
-          color: Constants.default.getRandomPastelColor(),
-          assetName: 'animal-icon-2.png',
-          name: 'Zellner',
-        },
-        {
-          id: '3',
-          color: Constants.default.getRandomPastelColor(),
-          assetName: 'animal-icon-3.png',
-          name: 'Maximilian',
-        },
-        {
-          id: '4',
-          color: Constants.default.getRandomPastelColor(),
-          assetName: 'animal-icon-4.png',
-          name: 'Bahner',
-        },
-        {
-          id: '5',
-          color: Constants.default.getRandomPastelColor(),
-          assetName: 'animal-icon-1.png',
-          name: 'Esenosarumensemwonken',
-        },
-        {
-          id: '6',
-          color: Constants.default.getRandomPastelColor(),
-          assetName: 'animal-icon-2.png',
-          name: 'Zellner',
-        },
-        {
-          id: '7',
-          color: Constants.default.getRandomPastelColor(),
-          assetName: 'animal-icon-3.png',
-          name: 'Maximilian',
-        },
-      ],
+      webSocketConnected: false,
+      stompClient: webStomp.over(new SockJS(`${Constants.default.backendURL}/connect?sessionID=${this.sessionID}&adminID=${this.adminID}`)),
+      members: [],
     };
   },
   mounted() {
-    this.connect();
-    const msg = JSON.stringify({ name: 'John' });
-    setTimeout(() => this.send(msg), 5000);
+    if (this.sessionID === undefined || this.adminID === undefined) {
+      // TODO: handle when user goes directly to /session and not via landing Page
+      // eslint-disable-next-line no-alert
+      alert('ids undefined');
+    }
+    console.debug({ sessionID: this.sessionID });
+    this.connectToWebSocketBackend();
   },
   methods: {
     copyCodeToClipboard() {
-      navigator.clipboard.writeText(this.joinCode).then(() => {
+      navigator.clipboard.writeText(this.sessionID).then(() => {
         console.log('Async: Copying to clipboard was successful!');
       }, (err) => {
         console.error('Async: Could not copy text: ', err);
       });
     },
-    send(body: any) {
+    sendJoinAdminCommand() {
       if (this.stompClient && this.stompClient.connected) {
-        this.stompClient.send('/ws/hello', body, {});
+        this.stompClient.send(Constants.default.webSocketRegisterAdminUserRoute, '', {});
       }
     },
-    connect() {
-      this.stompClient.connect(
-        {},
-        (frame) => {
-          this.connected = true;
-          this.stompClient.subscribe('/admin/update', (tick) => {
-            console.log(tick);
-          });
+    backendAnimalToAssetName(animal:string) {
+      return Constants.default.avatarAnimalToAssetName(animal);
+    },
+    connectToWebSocketBackend() {
+      this.stompClient.connect({},
+        () => {
+          this.webSocketConnected = true;
+          this.subscripeToWebSocketBackend();
+          this.sendJoinAdminCommand();
         },
         (error) => {
-          console.log(error);
-          this.connected = false;
+          console.error(error);
+          this.webSocketConnected = false;
+        });
+    },
+    subscripeToWebSocketBackend() {
+      this.stompClient.subscribe(
+        Constants.default.webSocketMembersUpdatedRoute,
+        (message: webStomp.Frame) => {
+          this.members = JSON.parse(message.body);
         },
       );
     },
@@ -144,7 +122,7 @@ export default Vue.extend({
       if (this.stompClient) {
         this.stompClient.disconnect();
       }
-      this.connected = false;
+      this.webSocketConnected = false;
     },
   },
 });
