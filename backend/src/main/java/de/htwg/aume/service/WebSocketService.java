@@ -20,47 +20,50 @@ import lombok.val;
 @Service
 public class WebSocketService {
 
-    @Autowired
-    SessionRepository sessionRepo;
+	@Autowired
+	SessionRepository sessionRepo;
 
-    private final SimpMessagingTemplate simpMessagingTemplate;
-    private Optional<AdminPrincipal> admin;
-    private List<MemberPrincipal> members = new ArrayList<>();
+	private final SimpMessagingTemplate simpMessagingTemplate;
 
-    WebSocketService(SimpMessagingTemplate simpMessagingTemplate) {
-        this.simpMessagingTemplate = simpMessagingTemplate;
-    }
+	private Optional<AdminPrincipal> admin;
 
-    public synchronized void addMemberIfNew(MemberPrincipal member) {
-        members = members.stream().filter(m -> !m.getName().toString().equals(member.getName().toString())).collect(Collectors.toList());
-        members.add(member);
-    }
+	private List<MemberPrincipal> members = new ArrayList<>();
 
-    public void setAdminUser(AdminPrincipal principal) {
-        this.admin = Optional.of(principal);
-    }
+	WebSocketService(SimpMessagingTemplate simpMessagingTemplate) {
+		this.simpMessagingTemplate = simpMessagingTemplate;
+	}
 
-    public void sendAddedMemberMessage() {
-        val session = getSessionFromID();
-        if (admin.isPresent() && session.isPresent()) {
-            simpMessagingTemplate.convertAndSendToUser(admin.get().getName(), "/updates/membersUpdated",
-                    session.get().getMembers());
-        }
-    }
+	public synchronized void addMemberIfNew(MemberPrincipal member) {
+		members = members.stream().filter(m -> !m.getName().toString().equals(member.getName().toString()))
+				.collect(Collectors.toList());
+		members.add(member);
+	}
 
-    private Optional<Session> getSessionFromID() {
-        return Optional.ofNullable(sessionRepo.findBySessionID(admin.get().getSessionID()));
-    }
+	public void setAdminUser(AdminPrincipal principal) {
+		this.admin = Optional.of(principal);
+	}
 
-    // public void sendStartEstimationMessages() {
-    // if (admin.isPresent()) {
-    // simpMessagingTemplate.convertAndSendToUser(admin.get().getName(),
-    // "/updates/messages", "Hello");
-    // }
-    // for (var member : members) {
-    // simpMessagingTemplate.convertAndSendToUser(member.getName(),
-    // "/updates/messages", "Hello");
-    // }
-    // }
+	public void sendAddedMemberMessage() {
+		val session = getSessionFromID();
+		if (admin.isPresent() && session.isPresent()) {
+			simpMessagingTemplate.convertAndSendToUser(admin.get().getName(), "/updates/membersUpdated",
+					session.get().getMembers());
+		}
+	}
+
+	private Optional<Session> getSessionFromID() {
+		return Optional.ofNullable(sessionRepo.findBySessionID(admin.get().getSessionID()));
+	}
+
+	// public void sendStartEstimationMessages() {
+	// if (admin.isPresent()) {
+	// simpMessagingTemplate.convertAndSendToUser(admin.get().getName(),
+	// "/updates/messages", "Hello");
+	// }
+	// for (var member : members) {
+	// simpMessagingTemplate.convertAndSendToUser(member.getName(),
+	// "/updates/messages", "Hello");
+	// }
+	// }
 
 }
