@@ -1,5 +1,8 @@
 <template>
-  <b-card class="p-3 text-center">
+  <b-card
+    id="landing-page-card"
+    class="p-3 text-center"
+  >
     <h3 class="text-center">
       {{ title }}
     </h3>
@@ -33,7 +36,11 @@ export default Vue.extend({
 });
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+#landing-page-card {
+  border-radius: 20px;
+}
+h3 {
+  font-weight:500;
+}
 </style>
