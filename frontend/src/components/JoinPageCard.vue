@@ -25,17 +25,17 @@
       <b-row class="mt-4">
         <b-col
           cols="12"
-          md="6"
+          :md="showPassword ? '6' : '12'"
         >
-          <h6>Your meeting code</h6>
+          <h6>Session id</h6>
           <b-form-input
-            v-model="meetingCode"
+            v-model="sessionID"
             class="mt-3"
             type="text"
           />
         </b-col>
         <b-col
-          v-if="show"
+          v-if="showPassword"
           class="mt-2 mt-md-0"
           cols="12"
           md="6"
@@ -52,8 +52,8 @@
         <success-button
           class="mt-5"
           :button-text="buttonText"
-          :on-click="onClick"
-          :disabled="name.length < 1 || meetingCode.length < 1"
+          :on-click="onClickButton"
+          :disabled="name.length < 1 || sessionID.length < 1"
         />
       </b-row>
     </div>
@@ -74,18 +74,26 @@ export default Vue.extend({
     SuccessButton,
   },
   props: {
-    show: { type: Boolean, required: true },
+    showPassword: { type: Boolean, required: true },
     color: { type: String, required: true },
     animalAssetName: { type: String, required: true },
     buttonText: { type: String, required: true },
-    onClick: { type: Function, required: true },
   },
   data() {
     return {
-      meetingCode: '',
+      sessionID: '',
       password: '',
       name: '',
     };
+  },
+  methods: {
+    onClickButton() {
+      this.$emit('clicked', {
+        sessionID: this.sessionID,
+        password: this.password,
+        name: this.name,
+      });
+    },
   },
 });
 </script>
