@@ -1,6 +1,5 @@
 package de.htwg.aume.repository;
 
-import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.mongodb.repository.*;
