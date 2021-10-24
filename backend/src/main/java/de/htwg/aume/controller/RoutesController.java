@@ -1,6 +1,7 @@
 package de.htwg.aume.controller;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -24,7 +25,11 @@ import lombok.val;
 
 @CrossOrigin(origins = "http://localhost:8080/")
 @RestController
-public class Controller {
+public class RoutesController {
+
+	public static String sessionNotFoundErrorMessage = "session not found";
+
+	public static String memberExistsErrorMessage = "member already exists";
 
 	@Autowired
 	SessionRepository sessionRepo;
@@ -44,7 +49,7 @@ public class Controller {
 	public ResponseEntity<String> joinSession(@PathVariable UUID sessionID, @RequestBody Member member) {
 		val successful = addMemberToSession(sessionID, member);
 		if (!successful) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "session not found");
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, sessionNotFoundErrorMessage);
 		}
 		return new ResponseEntity<>("", HttpStatus.OK);
 	}
@@ -53,7 +58,7 @@ public class Controller {
 	public @ResponseBody Session getSession(@PathVariable UUID sessionID) {
 		val session = sessionRepo.findBySessionID(sessionID);
 		if (session == null) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "session not found");
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, sessionNotFoundErrorMessage);
 		}
 		return session;
 	}
@@ -63,8 +68,10 @@ public class Controller {
 		if (session == null) {
 			return false;
 		}
-		var members = session.getMembers().stream()
-				.filter(m -> !m.getName().toString().equals(member.getName().toString())).collect(Collectors.toList());
+		List<Member> members = session.getMembers().stream().map(m -> m).collect(Collectors.toList());
+		if (members.stream().anyMatch(m -> m.getMemberID().equals(member.getMemberID()))) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, memberExistsErrorMessage);
+		}
 		members.add(member);
 		sessionRepo.save(session.copyWith(null, null, null, members));
 		return true;
