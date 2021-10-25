@@ -31,6 +31,19 @@ class Constants {
   }
 
   // eslint-disable-next-line class-methods-use-this
+  public hexToRgb(hex: string) {
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      r: parseInt(result![1], 16),
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      g: parseInt(result![2], 16),
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      b: parseInt(result![3], 16),
+    };
+  }
+
+  // eslint-disable-next-line class-methods-use-this
   public getRandomAvatarAnimalAssetName() {
     // TODO implement;
     return 'wolf.png';
