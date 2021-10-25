@@ -3,6 +3,11 @@ package de.htwg.aume.principals;
 import java.security.Principal;
 import java.util.UUID;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+
+@EqualsAndHashCode
+@Getter
 public class MemberPrincipal implements Principal {
 
 	private final UUID sessionID;
@@ -17,10 +22,6 @@ public class MemberPrincipal implements Principal {
 	@Override
 	public String getName() {
 		return memberID.toString();
-	}
-
-	public UUID getSessionID() {
-		return sessionID;
 	}
 
 }
