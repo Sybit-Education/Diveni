@@ -13,7 +13,6 @@ import de.htwg.aume.principals.AdminPrincipal;
 import de.htwg.aume.principals.MemberPrincipal;
 import de.htwg.aume.repository.SessionRepository;
 import de.htwg.aume.service.WebSocketService;
-import lombok.val;
 
 @Controller
 public class WebsocketController {
@@ -48,15 +47,19 @@ public class WebsocketController {
 		webSocketService.sendAddedMemberMessage();
 	}
 
-	@MessageMapping("/startEstimation")
-	public void startEstimation(Principal principal) {
-		System.out.println("Called start Estimation");
-		if (!(principal instanceof AdminPrincipal)) {
-			new ResponseStatusException(HttpStatus.UNAUTHORIZED, "not an admin");
-		}
-		Optional.ofNullable(sessionRepo.findBySessionID(((AdminPrincipal) principal).getSessionID()))
-				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "session not found"));
-		webSocketService.sendStartEstimationMessages();
-	}
+	// @MessageMapping("/startEstimation")
+	// public void startEstimation(Principal principal) {
+	// System.out.println("Called start Esimtaion");
+	// if (!(principal instanceof AdminPrincipal)) {
+	// new ResponseStatusException(HttpStatus.UNAUTHORIZED, "not an admin");
+	// }
+	// val session =
+	// Optional.ofNullable(sessionRepo.findBySessionID(((AdminPrincipal)
+	// principal).getSessionID()))
+	// .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "session
+	// not found"));
+	// webSocketService.addAdminUser((AdminPrincipal) principal);
+	// webSocketService.sendStartEstimationMessages();
+	// }
 
 }

@@ -72,10 +72,9 @@ export default Vue.extend({
       stompClient.connect({},
         (frame) => {
           this.webSocketConnected = true;
-          stompClient.subscribe(Constants.default.webSocketStartPlanningListenRoute, (message) => {
+          stompClient.subscribe('/users/updates/messages', (message) => {
             console.log(message);
             console.log('Message came in');
-            this.goToEstimationPage();
           });
           stompClient.send(Constants.default.webSocketRegisterMemberRoute, '', {});
         },
@@ -83,11 +82,6 @@ export default Vue.extend({
           console.log(error);
           this.webSocketConnected = false;
         });
-    },
-    goToEstimationPage() {
-      // TODO: go to estimation page once implemented
-      // this.$router.push({ name: 'EstimationPage' });
-      console.log('Would go to estimation page');
     },
   },
 });

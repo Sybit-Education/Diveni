@@ -52,10 +52,15 @@ public class WebSocketService {
 		return Optional.ofNullable(sessionRepo.findBySessionID(admin.get().getSessionID()));
 	}
 
-	public void sendStartEstimationMessages() {
-		for (var member : members) {
-			simpMessagingTemplate.convertAndSendToUser(member.getName(), "/updates/startEstimation", "Hello");
-		}
-	}
+	// public void sendStartEstimationMessages() {
+	// if (admin.isPresent()) {
+	// simpMessagingTemplate.convertAndSendToUser(admin.get().getName(),
+	// "/updates/messages", "Hello");
+	// }
+	// for (var member : members) {
+	// simpMessagingTemplate.convertAndSendToUser(member.getName(),
+	// "/updates/messages", "Hello");
+	// }
+	// }
 
 }

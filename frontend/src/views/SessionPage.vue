@@ -33,7 +33,7 @@
           <success-button
             :button-text="'Start Planning'"
             :disabled="false"
-            :on-click="sendStartPlanningMessage"
+            :on-click="() =>{}"
           />
         </b-col>
       </b-row>
@@ -83,11 +83,6 @@ export default Vue.extend({
     this.connectToWebSocketBackend();
   },
   methods: {
-    async sendStartPlanningMessage() {
-      if (this.stompClient && this.stompClient.connected) {
-        this.stompClient.send(Constants.default.webSocketStartPlanningRoute, 'start planning', {});
-      }
-    },
     copyCodeToClipboard() {
       navigator.clipboard.writeText(this.sessionID).then(() => {
         console.log('Async: Copying to clipboard was successful!');
