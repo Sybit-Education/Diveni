@@ -85,7 +85,7 @@ export default Vue.extend({
   methods: {
     async sendStartPlanningMessage() {
       if (this.stompClient && this.stompClient.connected) {
-        this.stompClient.send(Constants.default.webSocketStartPlanningRoute, 'start planning', {});
+        this.stompClient.send(Constants.default.webSocketStartPlanningRoute, '', {});
       }
     },
     copyCodeToClipboard() {
