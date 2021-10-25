@@ -2,18 +2,15 @@ package de.htwg.aume.controller;
 
 import java.security.Principal;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.server.ResponseStatusException;
-
 import de.htwg.aume.principals.AdminPrincipal;
 import de.htwg.aume.principals.MemberPrincipal;
 import de.htwg.aume.repository.SessionRepository;
 import de.htwg.aume.service.WebSocketService;
-import lombok.val;
 
 @Controller
 public class WebsocketController {
@@ -32,8 +29,8 @@ public class WebsocketController {
 		if (!(principal instanceof AdminPrincipal)) {
 			new ResponseStatusException(HttpStatus.UNAUTHORIZED, "not an admin");
 		}
-		Optional.ofNullable(sessionRepo.findBySessionID(((AdminPrincipal) principal).getSessionID()))
-				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "session not found"));
+		Optional.ofNullable(sessionRepo.findBySessionID(((AdminPrincipal) principal).getSessionID())).orElseThrow(
+				() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessages.sessionNotFoundErrorMessage));
 		webSocketService.setAdminUser((AdminPrincipal) principal);
 	}
 
@@ -42,8 +39,8 @@ public class WebsocketController {
 		if (!(principal instanceof MemberPrincipal)) {
 			new ResponseStatusException(HttpStatus.I_AM_A_TEAPOT, "not an admin");
 		}
-		Optional.ofNullable(sessionRepo.findBySessionID(((MemberPrincipal) principal).getSessionID()))
-				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "session not found"));
+		Optional.ofNullable(sessionRepo.findBySessionID(((MemberPrincipal) principal).getSessionID())).orElseThrow(
+				() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessages.sessionNotFoundErrorMessage));
 		webSocketService.addMemberIfNew((MemberPrincipal) principal);
 		webSocketService.sendAddedMemberMessage();
 	}
@@ -52,10 +49,10 @@ public class WebsocketController {
 	public void startEstimation(Principal principal) {
 		System.out.println("Called start Estimation");
 		if (!(principal instanceof AdminPrincipal)) {
-			new ResponseStatusException(HttpStatus.UNAUTHORIZED, "not an admin");
+			new ResponseStatusException(HttpStatus.UNAUTHORIZED, ErrorMessages.notAnAdminErrorMessage);
 		}
-		Optional.ofNullable(sessionRepo.findBySessionID(((AdminPrincipal) principal).getSessionID()))
-				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "session not found"));
+		Optional.ofNullable(sessionRepo.findBySessionID(((AdminPrincipal) principal).getSessionID())).orElseThrow(
+				() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessages.sessionNotFoundErrorMessage));
 		webSocketService.sendStartEstimationMessages();
 	}
 

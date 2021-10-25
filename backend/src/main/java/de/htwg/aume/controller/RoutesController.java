@@ -27,10 +27,6 @@ import lombok.val;
 @RestController
 public class RoutesController {
 
-	public static String sessionNotFoundErrorMessage = "session not found";
-
-	public static String memberExistsErrorMessage = "member already exists";
-
 	@Autowired
 	SessionRepository sessionRepo;
 
@@ -49,7 +45,7 @@ public class RoutesController {
 	public ResponseEntity<String> joinSession(@PathVariable UUID sessionID, @RequestBody Member member) {
 		val successful = addMemberToSession(sessionID, member);
 		if (!successful) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, sessionNotFoundErrorMessage);
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessages.sessionNotFoundErrorMessage);
 		}
 		return new ResponseEntity<>("", HttpStatus.OK);
 	}
@@ -58,7 +54,7 @@ public class RoutesController {
 	public @ResponseBody Session getSession(@PathVariable UUID sessionID) {
 		val session = sessionRepo.findBySessionID(sessionID);
 		if (session == null) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, sessionNotFoundErrorMessage);
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessages.sessionNotFoundErrorMessage);
 		}
 		return session;
 	}
@@ -70,7 +66,7 @@ public class RoutesController {
 		}
 		List<Member> members = session.getMembers().stream().map(m -> m).collect(Collectors.toList());
 		if (members.stream().anyMatch(m -> m.getMemberID().equals(member.getMemberID()))) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, memberExistsErrorMessage);
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessages.memberExistsErrorMessage);
 		}
 		members.add(member);
 		sessionRepo.save(session.copyWith(null, null, null, members));

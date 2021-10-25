@@ -151,7 +151,7 @@ public class RoutesControllerTest {
 				.perform(post("/sessions/{sessionID}/join", UUID.randomUUID()).contentType(APPLICATION_JSON_UTF8)
 						.content(memberAsJson))
 				.andDo(print()).andExpect(status().isNotFound())
-				.andExpect(status().reason(RoutesController.sessionNotFoundErrorMessage));
+				.andExpect(status().reason(ErrorMessages.sessionNotFoundErrorMessage));
 	}
 
 	@Test
@@ -179,7 +179,7 @@ public class RoutesControllerTest {
 				.perform(post("/sessions/{sessionID}/join", sessionUUID).contentType(APPLICATION_JSON_UTF8)
 						.content(memberAsJson))
 				.andDo(print()).andExpect(status().isBadRequest())
-				.andExpect(status().reason(RoutesController.memberExistsErrorMessage));
+				.andExpect(status().reason(ErrorMessages.memberExistsErrorMessage));
 	}
 
 }
