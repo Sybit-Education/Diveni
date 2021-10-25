@@ -32,8 +32,7 @@ public class WebSocketService {
 	}
 
 	public synchronized void addMemberIfNew(MemberPrincipal member) {
-		members = members.stream().filter(m -> !m.getName().equals(member.getName()))
-				.collect(Collectors.toList());
+		members = members.stream().filter(m -> !m.getName().equals(member.getName())).collect(Collectors.toList());
 		members.add(member);
 	}
 
