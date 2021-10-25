@@ -53,8 +53,8 @@ public class WebSocketService {
 	}
 
 	public void sendStartEstimationMessages() {
-		for (var member : members) {
-			simpMessagingTemplate.convertAndSendToUser(member.getName(), "/updates/startEstimation", "Hello");
+		for (val member : members) {
+			simpMessagingTemplate.convertAndSendToUser(member.getName(), "/updates/startEstimation", "");
 		}
 	}
 
