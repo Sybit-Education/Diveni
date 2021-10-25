@@ -30,11 +30,13 @@
       </b-row>
       <b-row>
         <b-col class="text-center mt-5 mb-5">
-          <success-button
-            :button-text="'Start Planning'"
+          <b-button
+            variant="success"
             :disabled="false"
-            :on-click="sendStartPlanningMessage"
-          />
+            @click="sendStartPlanningMessage"
+          >
+            Start Planning
+          </b-button>
         </b-col>
       </b-row>
     </b-container>
@@ -47,13 +49,11 @@ import SockJS from 'sockjs-client';
 import * as webStomp from 'webstomp-client';
 import * as Constants from '../constants';
 import SessionMemberCard from '../components/SessionMemberCard.vue';
-import SuccessButton from '../components/SuccessButton.vue';
 
 export default Vue.extend({
   name: 'LandingPage',
   components: {
     SessionMemberCard,
-    SuccessButton,
   },
   props: {
     adminID: {

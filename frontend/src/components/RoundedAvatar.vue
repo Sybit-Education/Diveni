@@ -1,12 +1,24 @@
 <template>
   <div
+    id="parent"
     class="rounded-circle"
     :style="`background-color: ${color}`"
   >
-    <img
-      :src="require(`@/assets/${assetName}`)"
-      width="44"
+    <div
+      id="column"
+      class="text-center"
     >
+      <img
+        :src="require(`@/assets/${assetName}`)"
+        width="44"
+      >
+      <div
+        v-if="showName"
+        id="name"
+      >
+        {{ name }}
+      </div>
+    </div>
   </div>
 </template>
 
@@ -18,6 +30,8 @@ export default Vue.extend({
   props: {
     color: { type: String, required: true },
     assetName: { type: String, required: true },
+    showName: { type: Boolean, required: true },
+    name: { type: String, required: true },
   },
   mounted() {
     console.log(this.assetName);
@@ -27,9 +41,9 @@ export default Vue.extend({
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-div{
-  width: 80px;
-  height: 80px;
+#parent{
+  width: 90px;
+  height: 90px;
   padding-left: 8px;
   padding-bottom: 8px;
   padding-right: 8px;
@@ -37,5 +51,7 @@ div{
   display: flex;
   justify-content: center;  /* Centering y-axis */
   align-items :center; /* Centering x-axis */
+}
+#name{
 }
 </style>

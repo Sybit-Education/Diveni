@@ -10,6 +10,8 @@
         <rounded-avatar
           :color="'transparent'"
           :asset-name="animalAssetName"
+          :show-name="false"
+          :name="''"
         />
       </b-row>
       <b-row class="mt-2">
@@ -49,12 +51,14 @@
         </b-col>
       </b-row>
       <b-row>
-        <success-button
+        <b-button
           class="mt-5"
-          :button-text="buttonText"
-          :on-click="onClickButton"
+          variant="success"
           :disabled="name.length < 1 || sessionID.length < 1"
-        />
+          @click="onClickButton"
+        >
+          {{ buttonText }}
+        </b-button>
       </b-row>
     </div>
     <div class="col-lg-3 col-md-2 col-sm-1" />
@@ -65,13 +69,11 @@
 <script lang="ts">
 import Vue from 'vue';
 import RoundedAvatar from './RoundedAvatar.vue';
-import SuccessButton from './SuccessButton.vue';
 
 export default Vue.extend({
   name: 'JoinPageCard',
   components: {
     RoundedAvatar,
-    SuccessButton,
   },
   props: {
     showPassword: { type: Boolean, required: true },

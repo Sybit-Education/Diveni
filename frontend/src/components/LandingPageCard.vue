@@ -11,22 +11,22 @@
     >
       {{ description }}
     </div>
-    <success-button
+    <b-button
       class="mt-5"
-      :button-text="buttonText"
-      :on-click="onClick"
+      variant="success"
       :disabled="false"
-    />
+      @click="onClick"
+    >
+      {{ buttonText }}
+    </b-button>
   </b-card>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
-import SuccessButton from './SuccessButton.vue';
 
 export default Vue.extend({
   name: 'LandingPageCard',
-  components: { SuccessButton },
   props: {
     title: { type: String, required: true },
     description: { type: String, required: true },
