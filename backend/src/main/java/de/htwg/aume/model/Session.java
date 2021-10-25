@@ -3,6 +3,7 @@ package de.htwg.aume.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -11,6 +12,7 @@ import java.util.UUID;
 
 @Getter
 @RequiredArgsConstructor
+@EqualsAndHashCode
 @Document("sessions")
 public class Session {
 

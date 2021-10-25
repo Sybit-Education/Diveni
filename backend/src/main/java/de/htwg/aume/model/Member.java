@@ -1,5 +1,6 @@
 package de.htwg.aume.model;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -7,8 +8,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Getter
+@EqualsAndHashCode
 @RequiredArgsConstructor
-// @Document("member")
 public class Member {
 
 	private final UUID memberID;

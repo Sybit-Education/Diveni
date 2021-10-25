@@ -1,13 +1,45 @@
 class Constants {
   backendURL = 'http://localhost:9090';
 
-  backendSessionRoute = '/createSession';
+  createSessionRoute = '/sessions';
+
+  webSocketRegisterAdminUserRoute = '/ws/registerAdminUser';
+
+  webSocketRegisterMemberRoute = '/ws/registerMember';
+
+  webSocketMembersUpdatedRoute = '/users/updates/membersUpdated';
+
+  // eslint-disable-next-line class-methods-use-this
+  public joinSessionRoute(sessionID: string) {
+    return `/sessions/${sessionID}/join`;
+  }
 
   // eslint-disable-next-line class-methods-use-this
   public getRandomPastelColor() {
-    return `hsl(${360 * Math.random()},${
-      25 + 70 * Math.random()}%,${
-      85 + 10 * Math.random()}%)`;
+    const l2 = (85 + 10 * Math.random()) / 100;
+    const a = ((25 + 70 * Math.random()) * Math.min(l2, 1 - l2)) / 100;
+    const f = (n:number) => {
+      const k = (n + (360 * Math.random()) / 30) % 12;
+      const color = l2 - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+      return Math.round(255 * color).toString(16).padStart(2, '0');
+    };
+    return `#${f(0)}${f(8)}${f(4)}`;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  public getRandomAvatarAnimalAssetName() {
+    // TODO implement;
+    return 'wolf.png';
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  public avatarAnimalAssetNameToBackendEnum(assetName:string) {
+    return assetName.split('.')[0].toUpperCase();
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  public avatarAnimalToAssetName(animal:string) {
+    return `${animal.toLowerCase()}.png`;
   }
 }
 
