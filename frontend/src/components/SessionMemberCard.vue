@@ -1,15 +1,12 @@
 <template>
   <div
-    :id="'memberCard-' + index"
     :style="`background-color: ${color};`"
     class="text-center"
   >
     <h1
       class="mt-3 fs-3-rem"
     >
-      <strong
-        :id="'estimate-' + index"
-      >?</strong>
+      <strong>?</strong>
     </h1>
     <img
       :src="require(`@/assets/${assetName}`)"
@@ -34,7 +31,6 @@ export default Vue.extend({
     assetName: { type: String, required: true },
     altAttribute: { type: String, required: false, default: 'animal' },
     color: { type: String, required: true },
-    index: { type: Number, required: true },
     name: { type: String, required: true },
   },
 });
@@ -47,7 +43,7 @@ export default Vue.extend({
 }
 div{
   position: relative;
-  bottom: -170px;
+  /*bottom: -170px;*/
   width: 200px;
   height: 250px;
   /*justify-content: center;  !* Centering y-axis *!*/

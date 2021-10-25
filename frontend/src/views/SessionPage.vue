@@ -68,6 +68,41 @@
             :name="member.name"
             :index="index"
           />
+          <!--          <div class="my-5">-->
+          <!--          </div>-->
+          <!--          <vue-card-stack-->
+          <!--            :cards="members"-->
+          <!--            :stack-width="1250"-->
+          <!--            :card-width="250"-->
+          <!--            :card-height="300"-->
+          <!--            :scale-multiplier="1.0"-->
+          <!--            :max-visible-cards="20"-->
+          <!--          >-->
+          <!--            <template v-slot:card="{ card }">-->
+          <!--              <SessionMemberCard-->
+          <!--                :key="card.memberID"-->
+          <!--                class="m-4"-->
+          <!--                :color="card.hexColor"-->
+          <!--                :asset-name="backendAnimalToAssetName(card.avatarAnimal)"-->
+          <!--                :alt-attribute="card.avatarAnimal"-->
+          <!--                :name="card.name"-->
+          <!--              />-->
+          <!--            </template>-->
+          <!--          </vue-card-stack>-->
+        </b-row>
+        <b-row>
+          <div class="cards text-center">
+            <SessionMemberCard
+              v-for="(member, index) of members"
+              :key="member.memberID"
+              class="m-4 cardWrapper"
+              :color="member.hexColor"
+              :asset-name="backendAnimalToAssetName(member.avatarAnimal)"
+              :alt-attribute="member.avatarAnimal"
+              :name="member.name"
+              :index="index"
+            />
+          </div>
         </b-row>
       </b-container>
     </span>
@@ -77,6 +112,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import SockJS from 'sockjs-client';
+import VueCardStack from 'vue-card-stack';
 import * as webStomp from 'webstomp-client';
 import * as Constants from '../constants';
 import SessionMemberCircle from '../components/SessionMemberCircle.vue';
@@ -89,6 +125,7 @@ export default Vue.extend({
     SessionMemberCircle,
     SessionMemberCard,
     SuccessButton,
+    // VueCardStack,
   },
   props: {
     adminID: {
@@ -108,47 +145,40 @@ export default Vue.extend({
       stompClient: webStomp.over(new SockJS(`${Constants.default.backendURL}/connect?sessionID=${this.sessionID}&adminID=${this.adminID}`)),
       members: [
         {
-          name: 'Maxi',
+          name: 'Tom',
           avatarAnimal: 'DUCK',
           currentEstimation: null,
           hexColor: '#e7e0d2',
-          memberID: 'b11c0c20-df81-4417-9153-7c110c7c1833',
+          memberID: 'b11c0c20-df81-4417-9153-7c1hnh10c7c1833',
         },
         {
-          name: 'Johannes',
+          name: 'John',
           avatarAnimal: 'turtle',
           currentEstimation: null,
-          hexColor: '#e7e0d2',
-          memberID: 'b11c0c20-df81-4417-9153-7c110c7c23833',
+          hexColor: 'rgb(245, 245, 230)',
+          memberID: 'b11c0c20-df81-4417-9153-7c11nh0c7c23833',
         },
         {
-          name: 'Maxi',
+          name: 'Bud',
           avatarAnimal: 'DUCK',
           currentEstimation: null,
-          hexColor: '#e7e0d2',
-          memberID: 'b11c0c20-df81-4417-9153-7c110c7c1833',
+          hexColor: 'rgb(246, 233, 246)',
+          memberID: 'b11c0c20-df81-4417-9153-7cgf110c7c1833',
         },
         {
-          name: 'Johannes',
+          name: 'Doe',
           avatarAnimal: 'turtle',
           currentEstimation: null,
           hexColor: '#e7e0d2',
-          memberID: 'b11c0c20-df81-4417-9153-7c110c7c23833',
+          memberID: 'b11c0c20-df81-4417-9153-7cdf110c7c23833',
         },
-        {
-          name: 'Maxi',
-          avatarAnimal: 'DUCK',
-          currentEstimation: null,
-          hexColor: '#e7e0d2',
-          memberID: 'b11c0c20-df81-4417-9153-7c110c7c1833',
-        },
-        {
-          name: 'Johannes',
-          avatarAnimal: 'turtle',
-          currentEstimation: null,
-          hexColor: '#e7e0d2',
-          memberID: 'b11c0c20-df81-4417-9153-7c110c7c23833',
-        },
+      ],
+      cards: [
+        { background: '#00659d' },
+        { background: '#00abbc' },
+        { background: '#e2c58a' },
+        { background: '#fc8890' },
+        { background: '#b35d7f' },
       ],
       planningStart: false,
     };
@@ -219,3 +249,33 @@ export default Vue.extend({
   },
 });
 </script>
+
+<style scoped>
+.cards {
+  display: flex;
+  align-content: center;
+}
+
+.cardWrapper {
+  overflow: hidden;
+}
+
+.cardWrapper:last-child, .cardWrapper:hover {
+  overflow: visible;
+}
+
+.card {
+  width: 10em;
+  min-width: 10em;
+  height: 6em;
+  border-radius: 0.5em;
+  border: solid #666 1px;
+  background-color: #ccc;
+  padding: 0.25em;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+</style>
