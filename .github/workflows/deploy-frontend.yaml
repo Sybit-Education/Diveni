@@ -20,4 +20,4 @@ jobs:
           run: git remote add heroku https://heroku:${{ secrets.HEROKU_ZELLNER_API_KEY }}@git.heroku.com/aume-frontend.git
 
         - name: Deploy frontend to heroku
-          run: git push --force heroku `git subtree split --prefix server HEAD`:master
+          run: git push --force heroku `git subtree split --prefix server HEAD`:main
