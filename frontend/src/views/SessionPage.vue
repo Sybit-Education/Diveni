@@ -31,11 +31,13 @@
         </b-row>
         <b-row>
           <b-col class="text-center mt-5 mb-5">
-            <success-button
-              :button-text="'Start Planning'"
+            <b-button
+              variant="success"
               :disabled="false"
-              :on-click="sendStartPlanningMessage"
-            />
+              @click="sendStartPlanningMessage"
+            >
+              Start Planning
+            </b-button>
           </b-col>
         </b-row>
       </b-container>
@@ -49,12 +51,13 @@
       <b-button
         variant="outline-dark"
         class="ml-5 pl-5"
-        @click="makeSomeReady"
+        @click="getNumPerRow"
       >
         <b-icon-arrow-clockwise /> New
       </b-button>
       <b-container class="my-5">
         <b-row
+          id="grid"
           class="d-flex justify-content-center border rounded"
           style="min-height: 200px;"
         >
@@ -62,47 +65,13 @@
             v-for="(member, index) of members"
             :key="member.memberID"
             class="m-4"
+            :style="{top: -1 * ((Math.trunc(index/grid))) * 200+'px', zIndex: -1*index}"
             :color="member.hexColor"
             :asset-name="backendAnimalToAssetName(member.avatarAnimal)"
             :alt-attribute="member.avatarAnimal"
             :name="member.name"
             :index="index"
           />
-          <!--          <div class="my-5">-->
-          <!--          </div>-->
-          <!--          <vue-card-stack-->
-          <!--            :cards="members"-->
-          <!--            :stack-width="1250"-->
-          <!--            :card-width="250"-->
-          <!--            :card-height="300"-->
-          <!--            :scale-multiplier="1.0"-->
-          <!--            :max-visible-cards="20"-->
-          <!--          >-->
-          <!--            <template v-slot:card="{ card }">-->
-          <!--              <SessionMemberCard-->
-          <!--                :key="card.memberID"-->
-          <!--                class="m-4"-->
-          <!--                :color="card.hexColor"-->
-          <!--                :asset-name="backendAnimalToAssetName(card.avatarAnimal)"-->
-          <!--                :alt-attribute="card.avatarAnimal"-->
-          <!--                :name="card.name"-->
-          <!--              />-->
-          <!--            </template>-->
-          <!--          </vue-card-stack>-->
-        </b-row>
-        <b-row>
-          <div class="cards text-center">
-            <SessionMemberCard
-              v-for="(member, index) of members"
-              :key="member.memberID"
-              class="m-4 cardWrapper"
-              :color="member.hexColor"
-              :asset-name="backendAnimalToAssetName(member.avatarAnimal)"
-              :alt-attribute="member.avatarAnimal"
-              :name="member.name"
-              :index="index"
-            />
-          </div>
         </b-row>
       </b-container>
     </span>
@@ -112,7 +81,6 @@
 <script lang="ts">
 import Vue from 'vue';
 import SockJS from 'sockjs-client';
-import VueCardStack from 'vue-card-stack';
 import * as webStomp from 'webstomp-client';
 import * as Constants from '../constants';
 import SessionMemberCircle from '../components/SessionMemberCircle.vue';
@@ -123,7 +91,6 @@ export default Vue.extend({
   components: {
     SessionMemberCircle,
     SessionMemberCard,
-    // VueCardStack,
   },
   props: {
     adminID: {
@@ -139,6 +106,7 @@ export default Vue.extend({
     return {
       titleWaiting: 'Waiting for members ...',
       titleEstimate: 'Estimtate!',
+      grid: 5,
       webSocketConnected: false,
       stompClient: webStomp.over(new SockJS(`${Constants.default.backendURL}/connect?sessionID=${this.sessionID}&adminID=${this.adminID}`)),
       members: [
@@ -168,15 +136,50 @@ export default Vue.extend({
           avatarAnimal: 'turtle',
           currentEstimation: null,
           hexColor: '#e7e0d2',
-          memberID: 'b11c0c20-df81-4417-9153-7cdf110c7c23833',
+          memberID: 'b11c0c20-df81-4417-9bg153-7cdf110c7c23833',
         },
-      ],
-      cards: [
-        { background: '#00659d' },
-        { background: '#00abbc' },
-        { background: '#e2c58a' },
-        { background: '#fc8890' },
-        { background: '#b35d7f' },
+        {
+          name: 'Pogo',
+          avatarAnimal: 'DUCK',
+          currentEstimation: null,
+          hexColor: 'rgb(246, 233, 246)',
+          memberID: 'b11c0c20-dfdd81-4417-9153-7bgbcgf110c7c1833',
+        },
+        {
+          name: 'Blue',
+          avatarAnimal: 'turtle',
+          currentEstimation: null,
+          hexColor: '#e7e0d2',
+          memberID: 'b11c0c20-df81-44vd17-9153-7cdf110c7nhc23833',
+        },
+        {
+          name: 'Blue',
+          avatarAnimal: 'turtle',
+          currentEstimation: null,
+          hexColor: '#e7e0d2',
+          memberID: 'b11c0c20-df81-44vd17-9153-7cdf110c7bgbc23833',
+        },
+        {
+          name: 'Blue',
+          avatarAnimal: 'turtle',
+          currentEstimation: null,
+          hexColor: '#e7e0d2',
+          memberID: 'b11c0c20-vfvdf81-44vd17-9153-7cdf110c7c23833',
+        },
+        {
+          name: 'Blue',
+          avatarAnimal: 'turtle',
+          currentEstimation: null,
+          hexColor: '#e7e0d2',
+          memberID: 'b11c0c20-df81-44vd17-9153-7cdfvfvf110c7c23833',
+        },
+        {
+          name: 'Blue',
+          avatarAnimal: 'turtle',
+          currentEstimation: null,
+          hexColor: '#e7e0d2',
+          memberID: 'b11c0c20-df81-44vd17-91vfv53-7cdf110c7c23833',
+        },
       ],
       planningStart: false,
     };
@@ -194,6 +197,7 @@ export default Vue.extend({
     async sendStartPlanningMessage() {
       if (this.stompClient && this.stompClient.connected) {
         this.stompClient.send(Constants.default.webSocketStartPlanningRoute, '', {});
+        this.planningStart = true;
       }
     },
     copyCodeToClipboard() {
@@ -237,42 +241,12 @@ export default Vue.extend({
       }
       this.webSocketConnected = false;
     },
-    makeSomeReady() {
-      document.getElementById('memberCard-2').style.bottom = 0;
-      document.getElementById('estimate-2').innerHTML = 3;
-      document.getElementById('memberCard-4').style.bottom = 0;
-      document.getElementById('estimate-4').innerHTML = 5;
+    getNumPerRow() {
+      const grid = Array.from((document.querySelector('#grid') as HTMLElement).children);
+      const baseOffset = (grid[0] as HTMLElement).offsetTop;
+      const breakIndex = grid.findIndex((item) => (item as HTMLElement).offsetTop > baseOffset);
+      this.grid = (breakIndex === -1 ? grid.length : breakIndex);
     },
   },
 });
 </script>
-
-<style scoped>
-.cards {
-  display: flex;
-  align-content: center;
-}
-
-.cardWrapper {
-  overflow: hidden;
-}
-
-.cardWrapper:last-child, .cardWrapper:hover {
-  overflow: visible;
-}
-
-.card {
-  width: 10em;
-  min-width: 10em;
-  height: 6em;
-  border-radius: 0.5em;
-  border: solid #666 1px;
-  background-color: #ccc;
-  padding: 0.25em;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-</style>
