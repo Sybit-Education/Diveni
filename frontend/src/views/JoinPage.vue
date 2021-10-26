@@ -20,7 +20,7 @@ import Vue from 'vue';
 import { v4 as uuidv4 } from 'uuid';
 import JoinPageCard from '../components/JoinPageCard.vue';
 import JoinCommand from '../model/JoinCommand';
-import * as Constants from '../constants';
+import Constants from '../constants';
 
 export default Vue.extend({
   name: 'JoinPage',
@@ -30,36 +30,34 @@ export default Vue.extend({
   data() {
     return {
       title: 'Join a meeting ...',
-      hexColor: Constants.default.getRandomPastelColor(),
-      avatarAnimalAssetName: Constants.default.getRandomAvatarAnimalAssetName(),
+      hexColor: Constants.getRandomPastelColor(),
+      avatarAnimalAssetName: Constants.getRandomAvatarAnimalAssetName(),
+      memberID: uuidv4(),
+      name: '',
     };
   },
   computed: {
     webSocketIsConnected() {
       return this.$store.state.webSocketConnected;
     },
-    startPlanning() {
-      return this.$store.state.startPlanning;
-    },
   },
   watch: {
     webSocketIsConnected(isConnected) {
       if (isConnected) {
         console.debug('JoinPage: member connected to websocket');
-        this.registerPrincipalOnBackend();
+        this.registerMemberPrincipalOnBackend();
+        this.subscribeWSStartEstimating();
         this.goToEstimationPage();
       }
-    },
-    startPlanning(message) {
-      console.debug(`JoinPage: ${message}`);
     },
   },
   methods: {
     async sendJoinSessionRequest(data: JoinCommand) {
-      const url = `${Constants.default.backendURL}${Constants.default.joinSessionRoute(data.sessionID)}`;
+      this.name = data.name;
+      const url = `${Constants.backendURL}${Constants.joinSessionRoute(data.sessionID)}`;
       const member = {
-        memberID: uuidv4(),
-        name: data.name,
+        memberID: this.memberID,
+        name: this.name,
         hexColor: this.hexColor,
         avatarAnimal: this.convertAvatarAssetNameToBackendAnimal(),
         currentEstimation: null,
@@ -72,23 +70,31 @@ export default Vue.extend({
       }
     },
     convertAvatarAssetNameToBackendAnimal() {
-      return Constants.default.avatarAnimalAssetNameToBackendEnum(
+      return Constants.avatarAnimalAssetNameToBackendEnum(
         this.avatarAnimalAssetName,
       );
     },
     connectToWebSocket(sessionID: string, memberID: string) {
-      const url = `${Constants.default.backendURL}/connect?sessionID=${sessionID}&memberID=${memberID}`;
+      const url = `${Constants.backendURL}/connect?sessionID=${sessionID}&memberID=${memberID}`;
       this.$store.commit('connectToBackendWS', url);
     },
-    registerPrincipalOnBackend() {
-      const endPoint = Constants.default.webSocketRegisterMemberRoute;
-      this.$store.commit('sendViaBackendWS', endPoint, {});
+    registerMemberPrincipalOnBackend() {
+      const endPoint = Constants.webSocketRegisterMemberRoute;
+      this.$store.commit('sendViaBackendWS', { endPoint });
     },
-    subscribeWSStartPlanning() {
+    subscribeWSStartEstimating() {
       this.$store.commit('subscribeOnBackendWSStartPlanningListenRoute');
     },
     goToEstimationPage() {
-      console.log('Would go to estimation page');
+      this.$router.push({
+        name: 'MemberVotePage',
+        params: {
+          memberID: this.memberID,
+          name: this.name,
+          hexColor: this.hexColor,
+          avatarAnimalAssetName: this.avatarAnimalAssetName,
+        },
+      });
     },
   },
 });

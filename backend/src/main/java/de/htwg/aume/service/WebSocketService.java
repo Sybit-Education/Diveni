@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
-
+import de.htwg.aume.model.MemberUpdateCommand;
 import de.htwg.aume.principals.AdminPrincipal;
 import de.htwg.aume.principals.MemberPrincipal;
 import lombok.val;
@@ -45,7 +45,7 @@ public class WebSocketService {
 
 	public void sendStartEstimationMessages() {
 		for (val member : members) {
-			simpMessagingTemplate.convertAndSendToUser(member.getName(), "/updates/startEstimation", "");
+			simpMessagingTemplate.convertAndSendToUser(member.getName(), "/updates/member", MemberUpdateCommand.START_VOTING.toString());
 		}
 	}
 }

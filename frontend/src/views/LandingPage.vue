@@ -29,7 +29,7 @@
 import Vue from 'vue';
 import LandingPageCard from '../components/LandingPageCard.vue';
 import Session from '../model/Session';
-import * as Constants from '../constants';
+import Constants from '../constants';
 
 export default Vue.extend({
   name: 'LandingPage',
@@ -43,7 +43,7 @@ export default Vue.extend({
   },
   methods: {
     async sendCreateSessionRequest() {
-      const url = Constants.default.backendURL + Constants.default.createSessionRoute;
+      const url = Constants.backendURL + Constants.createSessionRoute;
       try {
         const session : Session = (await this.axios.post(url)).data as {
           sessionID: string,
