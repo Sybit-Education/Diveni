@@ -1,11 +1,13 @@
 <template>
   <div>
     <Vue2InteractDraggable
+      :key="dragged"
       :interact-max-rotation="0"
       :interact-out-of-sight-x-coordinate="0"
       :interact-out-of-sight-y-coordinate="0"
       :interact-x-threshold="200"
       :interact-lock-x-axis="true"
+      :interact-lock-y-axis="dragged"
       :interact-lock-swipe-down="true"
       @draggedUp="draggedUp"
     >
