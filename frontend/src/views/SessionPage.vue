@@ -117,14 +117,12 @@ import * as webStomp from 'webstomp-client';
 import * as Constants from '../constants';
 import SessionMemberCircle from '../components/SessionMemberCircle.vue';
 import SessionMemberCard from '../components/SessionMemberCard.vue';
-import SuccessButton from '../components/SuccessButton.vue';
 
 export default Vue.extend({
   name: 'LandingPage',
   components: {
     SessionMemberCircle,
     SessionMemberCard,
-    SuccessButton,
     // VueCardStack,
   },
   props: {
@@ -187,7 +185,7 @@ export default Vue.extend({
     if (this.sessionID === undefined || this.adminID === undefined) {
       // TODO: handle when user goes directly to /session and not via landing Page
       // eslint-disable-next-line no-alert
-      console.log('ids undefined');
+      alert('ids undefined');
     }
     console.debug({ sessionID: this.sessionID });
     this.connectToWebSocketBackend();
@@ -196,7 +194,6 @@ export default Vue.extend({
     async sendStartPlanningMessage() {
       if (this.stompClient && this.stompClient.connected) {
         this.stompClient.send(Constants.default.webSocketStartPlanningRoute, '', {});
-        this.planningStart = true;
       }
     },
     copyCodeToClipboard() {
