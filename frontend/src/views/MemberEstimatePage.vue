@@ -14,10 +14,9 @@
           />
         </b-row>
       </div>
-      <b-row class="my-5 ">
+      <b-row class="my-5">
         <flicking
-          style="overflow:visible; width: 100vw; position: relative; left: calc(-50vw + 50%);"
-
+          id="flicking"
           :options="{ renderOnlyVisible: false,
                       horizontal:true,
                       align: 'center',
@@ -28,22 +27,14 @@
           <member-estimate-card
             v-for="number in numbers"
             :key="number"
+            :ref="`memberCard${number}`"
             class="flicking-panel mx-2"
             :number="number"
             :hex-color="hexColor"
+            :dragged="number == draggedNumber"
             @sentEstimation="onSentEstimation"
           />
         </flicking>
-      </b-row>
-      <b-row>
-        <b-button
-          variant="danger"
-          class="btn-lg mt-5"
-          :disabled="disabled"
-          @click="onClickUndo"
-        >
-          UNDO
-        </b-button>
       </b-row>
     </b-container>
   </div>
@@ -78,16 +69,22 @@ export default Vue.extend({
       animalAssetName: Constants.default.getRandomAvatarAnimalAssetName(),
       name: 'linda',
       numbers: [1, 2, 3, 5, 8, 13, 21, 34],
+      draggedNumber: null,
     };
   },
   methods: {
     onSentEstimation({ estimation }) {
-      this.numbers = [1, 2, 3, 5, 8, 13, 21, 34];
+      this.draggedNumber = estimation;
       console.log(`TODO: send estimation to backend ${estimation}`);
-    },
-    onClickUndo() {
-      console.log('TODO: send undo to backend');
     },
   },
 });
 </script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped>
+#flicking {
+  /* overflow:visible;  Add when fix is clear how to stay responsiv*/
+  width: 100%;
+}
+</style>

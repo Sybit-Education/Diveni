@@ -30,7 +30,6 @@ import Vue from 'vue';
 import LandingPageCard from '../components/LandingPageCard.vue';
 import Session from '../model/Session';
 import * as Constants from '../constants';
-import UUID from '../model/UUID';
 
 export default Vue.extend({
   name: 'LandingPage',
@@ -46,16 +45,11 @@ export default Vue.extend({
     async sendCreateSessionRequest() {
       const url = Constants.default.backendURL + Constants.default.createSessionRoute;
       try {
-        const response = (await this.axios.post(url)).data as {
+        const session : Session = (await this.axios.post(url)).data as {
           sessionID: string,
           adminID: string,
           membersID: string
         };
-        const session: Session = new Session(
-          UUID.fromString(response.sessionID) as UUID,
-          UUID.fromString(response.adminID) as UUID,
-          UUID.fromString(response.membersID) as UUID,
-        );
         this.goToSessionPage(session);
       } catch (e) {
         console.error(`Response of ${url} is invalid: ${e}`);
@@ -65,8 +59,8 @@ export default Vue.extend({
       this.$router.push({
         name: 'SessionPage',
         params: {
-          sessionID: session.sessionID.value,
-          adminID: session.adminID.value,
+          sessionID: session.sessionID,
+          adminID: session.adminID,
         },
       });
     },
