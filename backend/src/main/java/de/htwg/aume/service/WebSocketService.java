@@ -21,15 +21,15 @@ public class WebSocketService {
 	@Autowired
 	SessionRepository sessionRepo;
 
-	private final SimpMessagingTemplate simpMessagingTemplate;
+	@Autowired
+	private SimpMessagingTemplate simpMessagingTemplate;
+
+	@Autowired
+	private DatabaseService databaseService;
 
 	private Optional<AdminPrincipal> admin;
 
 	private List<MemberPrincipal> members = new ArrayList<>();
-
-	WebSocketService(SimpMessagingTemplate simpMessagingTemplate) {
-		this.simpMessagingTemplate = simpMessagingTemplate;
-	}
 
 	public synchronized void addMemberIfNew(MemberPrincipal member) {
 		members = members.stream().filter(m -> !m.getName().equals(member.getName())).collect(Collectors.toList());
@@ -57,5 +57,4 @@ public class WebSocketService {
 			simpMessagingTemplate.convertAndSendToUser(member.getName(), "/updates/startEstimation", "");
 		}
 	}
-
 }

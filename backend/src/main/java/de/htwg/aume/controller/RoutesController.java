@@ -20,7 +20,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import de.htwg.aume.model.Member;
 import de.htwg.aume.model.Session;
-import de.htwg.aume.repository.SessionRepository;
+import de.htwg.aume.service.DatabaseService;
 import lombok.val;
 
 @CrossOrigin(origins = "http://localhost:8080/")
@@ -28,23 +28,22 @@ import lombok.val;
 public class RoutesController {
 
 	@Autowired
-	SessionRepository sessionRepo;
+	DatabaseService databaseService;
 
 	@PostMapping(value = "/sessions")
 	public ResponseEntity<Session> createSession() {
-		val usedUuids = sessionRepo.findAll().stream().map(s -> s.getSessionID()).collect(Collectors.toSet());
+		val usedUuids = databaseService.getSessions().stream().map(s -> s.getSessionID()).collect(Collectors.toSet());
 		val sessionUuids = Stream.generate(UUID::randomUUID).filter(s -> !usedUuids.contains(s)).limit(3)
 				.collect(Collectors.toList());
 		val session = new Session(sessionUuids.get(0), sessionUuids.get(1), sessionUuids.get(2),
 				new ArrayList<Member>());
-		sessionRepo.save(session);
+		databaseService.saveSession(session);
 		return new ResponseEntity<Session>(session, HttpStatus.CREATED);
 	}
 
 	@PostMapping(value = "/sessions/{sessionID}/join")
 	public ResponseEntity<String> joinSession(@PathVariable UUID sessionID, @RequestBody Member member) {
-		val successful = addMemberToSession(sessionID, member);
-		if (!successful) {
+		if (!addMemberToSession(sessionID, member)) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessages.sessionNotFoundErrorMessage);
 		}
 		return new ResponseEntity<>("", HttpStatus.OK);
@@ -52,16 +51,12 @@ public class RoutesController {
 
 	@GetMapping(value = "/sessions/{sessionID}")
 	public @ResponseBody Session getSession(@PathVariable UUID sessionID) {
-		val session = sessionRepo.findBySessionID(sessionID);
-		if (session == null) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessages.sessionNotFoundErrorMessage);
-		}
-		return session;
+		return databaseService.getSessionByID(sessionID).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessages.sessionNotFoundErrorMessage));
 	}
 
 	private synchronized boolean addMemberToSession(UUID sessionID, Member member) {
-		val session = sessionRepo.findBySessionID(sessionID);
-		if (session == null) {
+		val session = databaseService.getSessionByID(sessionID).orElse(null);
+		if(session == null) {
 			return false;
 		}
 		List<Member> members = session.getMembers().stream().map(m -> m).collect(Collectors.toList());
@@ -69,8 +64,7 @@ public class RoutesController {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessages.memberExistsErrorMessage);
 		}
 		members.add(member);
-		sessionRepo.save(session.copyWith(null, null, null, members));
+		databaseService.saveSession(session.copyWith(null, null, null, members));
 		return true;
 	}
-
 }
