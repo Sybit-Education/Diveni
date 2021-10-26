@@ -26,6 +26,7 @@
             class="m-4"
             :color="member.hexColor"
             :asset-name="backendAnimalToAssetName(member.avatarAnimal)"
+            :alt-attribute="member.avatarAnimal"
             :name="member.name"
           />
         </b-row>
@@ -51,18 +52,41 @@
       <b-button
         variant="outline-dark"
         class="ml-5 pl-5"
-        @click="getNumPerRow"
+        @click="getNumberOfCardColumns"
       >
         <b-icon-arrow-clockwise /> New
       </b-button>
-      <b-container class="my-5">
+      <b-container
+        class="my-5 border rounded"
+        style="min-height: 200px;"
+      >
         <b-row
-          id="grid"
-          class="d-flex justify-content-center border rounded"
+          class="d-flex justify-content-center"
           style="min-height: 200px;"
         >
+          <b-icon-three-dots
+            v-if="membersEstimated.length === 0"
+            animation="fade"
+            class="my-5"
+            font-scale="4"/>
           <SessionMemberCard
-            v-for="(member, index) of members"
+            v-for="member of membersEstimated"
+            :key="member.memberID"
+            class="m-4"
+            :color="member.hexColor"
+            :asset-name="backendAnimalToAssetName(member.avatarAnimal)"
+            :alt-attribute="member.avatarAnimal"
+            :name="member.name"
+            :estimation="member.currentEstimation"
+            :estimate-finished="estimateFinished"
+          />
+        </b-row>
+        <b-row
+          class="d-flex justify-content-center"
+          ref="grid"
+        >
+          <SessionMemberCard
+            v-for="(member, index) of membersPending"
             :key="member.memberID"
             class="m-4"
             :style="{top: -1 * ((Math.trunc(index/grid))) * 200+'px', zIndex: -1*index}"
@@ -70,7 +94,8 @@
             :asset-name="backendAnimalToAssetName(member.avatarAnimal)"
             :alt-attribute="member.avatarAnimal"
             :name="member.name"
-            :index="index"
+            :estimation="member.currentEstimation"
+            :estimate-finished="estimateFinished"
           />
         </b-row>
       </b-container>
@@ -109,80 +134,20 @@ export default Vue.extend({
       grid: 5,
       webSocketConnected: false,
       stompClient: webStomp.over(new SockJS(`${Constants.default.backendURL}/connect?sessionID=${this.sessionID}&adminID=${this.adminID}`)),
-      members: [
-        {
-          name: 'Tom',
-          avatarAnimal: 'DUCK',
-          currentEstimation: null,
-          hexColor: '#e7e0d2',
-          memberID: 'b11c0c20-df81-4417-9153-7c1hnh10c7c1833',
-        },
-        {
-          name: 'John',
-          avatarAnimal: 'turtle',
-          currentEstimation: null,
-          hexColor: 'rgb(245, 245, 230)',
-          memberID: 'b11c0c20-df81-4417-9153-7c11nh0c7c23833',
-        },
-        {
-          name: 'Bud',
-          avatarAnimal: 'DUCK',
-          currentEstimation: null,
-          hexColor: 'rgb(246, 233, 246)',
-          memberID: 'b11c0c20-df81-4417-9153-7cgf110c7c1833',
-        },
-        {
-          name: 'Doe',
-          avatarAnimal: 'turtle',
-          currentEstimation: null,
-          hexColor: '#e7e0d2',
-          memberID: 'b11c0c20-df81-4417-9bg153-7cdf110c7c23833',
-        },
-        {
-          name: 'Pogo',
-          avatarAnimal: 'DUCK',
-          currentEstimation: null,
-          hexColor: 'rgb(246, 233, 246)',
-          memberID: 'b11c0c20-dfdd81-4417-9153-7bgbcgf110c7c1833',
-        },
-        {
-          name: 'Blue',
-          avatarAnimal: 'turtle',
-          currentEstimation: null,
-          hexColor: '#e7e0d2',
-          memberID: 'b11c0c20-df81-44vd17-9153-7cdf110c7nhc23833',
-        },
-        {
-          name: 'Blue',
-          avatarAnimal: 'turtle',
-          currentEstimation: null,
-          hexColor: '#e7e0d2',
-          memberID: 'b11c0c20-df81-44vd17-9153-7cdf110c7bgbc23833',
-        },
-        {
-          name: 'Blue',
-          avatarAnimal: 'turtle',
-          currentEstimation: null,
-          hexColor: '#e7e0d2',
-          memberID: 'b11c0c20-vfvdf81-44vd17-9153-7cdf110c7c23833',
-        },
-        {
-          name: 'Blue',
-          avatarAnimal: 'turtle',
-          currentEstimation: null,
-          hexColor: '#e7e0d2',
-          memberID: 'b11c0c20-df81-44vd17-9153-7cdfvfvf110c7c23833',
-        },
-        {
-          name: 'Blue',
-          avatarAnimal: 'turtle',
-          currentEstimation: null,
-          hexColor: '#e7e0d2',
-          memberID: 'b11c0c20-df81-44vd17-91vfv53-7cdf110c7c23833',
-        },
-      ],
+      members: [],
       planningStart: false,
     };
+  },
+  computed: {
+    membersPending() {
+      return this.members.filter((member) => member.currentEstimation === null);
+    },
+    membersEstimated() {
+      return this.members.filter((member) => member.currentEstimation !== null);
+    },
+    estimateFinished() {
+      return !this.members.map((elem) => elem.currentEstimation).includes(null);
+    },
   },
   mounted() {
     if (this.sessionID === undefined || this.adminID === undefined) {
@@ -193,11 +158,19 @@ export default Vue.extend({
     console.debug({ sessionID: this.sessionID });
     this.connectToWebSocketBackend();
   },
+  created() {
+    window.addEventListener('resize', this.getNumberOfCardColumns);
+  },
+  destroyed() {
+    window.removeEventListener('resize', this.getNumberOfCardColumns);
+  },
   methods: {
-    async sendStartPlanningMessage() {
+    sendStartPlanningMessage() {
       if (this.stompClient && this.stompClient.connected) {
         this.stompClient.send(Constants.default.webSocketStartPlanningRoute, '', {});
+        console.log(this.membersSorted);
         this.planningStart = true;
+        this.getNumberOfCardColumns();
       }
     },
     copyCodeToClipboard() {
@@ -219,7 +192,7 @@ export default Vue.extend({
       this.stompClient.connect({},
         () => {
           this.webSocketConnected = true;
-          this.subscripeToWebSocketBackend();
+          this.subscribeToWebSocketBackend();
           this.sendJoinAdminCommand();
         },
         (error) => {
@@ -227,7 +200,7 @@ export default Vue.extend({
           this.webSocketConnected = false;
         });
     },
-    subscripeToWebSocketBackend() {
+    subscribeToWebSocketBackend() {
       this.stompClient.subscribe(
         Constants.default.webSocketMembersUpdatedRoute,
         (message: webStomp.Frame) => {
@@ -235,17 +208,14 @@ export default Vue.extend({
         },
       );
     },
-    disconnect() {
-      if (this.stompClient) {
-        this.stompClient.disconnect();
-      }
-      this.webSocketConnected = false;
-    },
-    getNumPerRow() {
-      const grid = Array.from((document.querySelector('#grid') as HTMLElement).children);
-      const baseOffset = (grid[0] as HTMLElement).offsetTop;
-      const breakIndex = grid.findIndex((item) => (item as HTMLElement).offsetTop > baseOffset);
-      this.grid = (breakIndex === -1 ? grid.length : breakIndex);
+    getNumberOfCardColumns() {
+      setTimeout(() => {
+        const grid = Array.from((this.$refs.grid as HTMLElement).children);
+        const baseOffset = (grid[0] as HTMLElement).offsetTop;
+        const breakIndex = grid.findIndex((item) => (item as HTMLElement).offsetTop > baseOffset);
+        this.grid = (breakIndex === -1 ? grid.length : breakIndex);
+        window.scrollTo({ top: 0 });
+      }, 0);
     },
   },
 });

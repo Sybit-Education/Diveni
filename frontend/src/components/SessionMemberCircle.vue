@@ -5,6 +5,7 @@
   >
     <img
       :src="require(`@/assets/${assetName}`)"
+      :alt="altAttribute.toLowerCase() + ' image'"
       width="80"
     >
     <h4
@@ -21,9 +22,10 @@ import Vue from 'vue';
 export default Vue.extend({
   name: 'SessionMemberCircle',
   props: {
+    assetName: { type: String, required: true },
+    altAttribute: { type: String, required: false, default: 'animal' },
     name: { type: String, required: true },
     color: { type: String, required: true },
-    assetName: { type: String, required: true },
   },
 });
 </script>
