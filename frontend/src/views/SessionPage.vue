@@ -106,8 +106,6 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import SockJS from 'sockjs-client';
-import * as webStomp from 'webstomp-client';
 import * as Constants from '../constants';
 import SessionMemberCircle from '../components/SessionMemberCircle.vue';
 import Member from '../model/Member';
@@ -134,13 +132,16 @@ export default Vue.extend({
       titleWaiting: 'Waiting for members ...',
       titleEstimate: 'Estimtate!',
       grid: 5,
-      webSocketConnected: false,
-      stompClient: webStomp.over(new SockJS(`${Constants.default.backendURL}/connect?sessionID=${this.sessionID}&adminID=${this.adminID}`)),
-      members: new Array<Member>(),
       planningStart: false,
     };
   },
   computed: {
+    members() {
+      return this.$store.state.members;
+    },
+    webSocketIsConnected() {
+      return this.$store.state.webSocketConnected;
+    },
     membersPending(): Member[] {
       return this.members.filter((member: Member) => member.currentEstimation === null);
     },
@@ -151,14 +152,22 @@ export default Vue.extend({
       return !this.members.map((elem) => elem.currentEstimation).includes(null);
     },
   },
+  watch: {
+    webSocketIsConnected(isConnected) {
+      if (isConnected) {
+        console.debug('JoinPage: member connected to websocket');
+        this.subscribeWSMemberUpdated();
+        this.registerAdminPrincipalOnBackend();
+      }
+    },
+  },
   mounted() {
     if (this.sessionID === undefined || this.adminID === undefined) {
       // TODO: handle when user goes directly to /session and not via landing Page
       // eslint-disable-next-line no-alert
       alert('ids undefined');
     }
-    console.debug({ sessionID: this.sessionID });
-    this.connectToWebSocketBackend();
+    this.connectToWebSocket();
   },
   created() {
     window.addEventListener('resize', this.getNumberOfCardColumns);
@@ -167,47 +176,32 @@ export default Vue.extend({
     window.removeEventListener('resize', this.getNumberOfCardColumns);
   },
   methods: {
+    connectToWebSocket() {
+      const url = `${Constants.default.backendURL}/connect?sessionID=${this.sessionID}&adminID=${this.adminID}`;
+      this.$store.commit('connectToBackendWS', url);
+    },
+    registerAdminPrincipalOnBackend() {
+      const endPoint = Constants.default.webSocketRegisterAdminUserRoute;
+      this.$store.commit('sendViaBackendWS', endPoint, {});
+    },
+    subscribeWSMemberUpdated() {
+      this.$store.commit('subscribeOnBackendWSAdminUpdate');
+    },
     sendStartPlanningMessage() {
-      if (this.stompClient && this.stompClient.connected) {
-        this.stompClient.send(Constants.default.webSocketStartPlanningRoute, '', {});
-        this.planningStart = true;
-        this.getNumberOfCardColumns();
-      }
+      const endPoint = Constants.default.webSocketStartPlanningRoute;
+      this.$store.commit('sendViaBackendWS', endPoint, {});
+      this.planningStart = true;
+      this.getNumberOfCardColumns();
     },
     copyCodeToClipboard() {
       navigator.clipboard.writeText(this.sessionID).then(() => {
-        console.log('Async: Copying to clipboard was successful!');
+        console.log('Copying to clipboard was successful!');
       }, (err) => {
-        console.error('Async: Could not copy text: ', err);
+        console.error('Could not copy text: ', err);
       });
     },
-    sendJoinAdminCommand() {
-      if (this.stompClient && this.stompClient.connected) {
-        this.stompClient.send(Constants.default.webSocketRegisterAdminUserRoute, '', {});
-      }
-    },
-    backendAnimalToAssetName(animal:string) {
+    backendAnimalToAssetName(animal: string) {
       return Constants.default.avatarAnimalToAssetName(animal);
-    },
-    connectToWebSocketBackend() {
-      this.stompClient.connect({},
-        () => {
-          this.webSocketConnected = true;
-          this.subscribeToWebSocketBackend();
-          this.sendJoinAdminCommand();
-        },
-        (error) => {
-          console.error(error);
-          this.webSocketConnected = false;
-        });
-    },
-    subscribeToWebSocketBackend() {
-      this.stompClient.subscribe(
-        Constants.default.webSocketMembersUpdatedRoute,
-        (message: webStomp.Frame) => {
-          this.members = JSON.parse(message.body);
-        },
-      );
     },
     getNumberOfCardColumns() {
       setTimeout(() => {
@@ -216,7 +210,7 @@ export default Vue.extend({
         const breakIndex = grid.findIndex((item) => (item as HTMLElement).offsetTop > baseOffset);
         this.grid = (breakIndex === -1 ? grid.length : breakIndex);
         window.scrollTo({ top: 0 });
-      }, 0);
+      }, 30);
     },
   },
 });
