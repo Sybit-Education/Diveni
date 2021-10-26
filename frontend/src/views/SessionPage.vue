@@ -68,7 +68,8 @@
             v-if="membersEstimated.length === 0"
             animation="fade"
             class="my-5"
-            font-scale="4"/>
+            font-scale="4"
+          />
           <SessionMemberCard
             v-for="member of membersEstimated"
             :key="member.memberID"
@@ -82,8 +83,8 @@
           />
         </b-row>
         <b-row
-          class="d-flex justify-content-center"
           ref="grid"
+          class="d-flex justify-content-center"
         >
           <SessionMemberCard
             v-for="(member, index) of membersPending"
@@ -109,6 +110,7 @@ import SockJS from 'sockjs-client';
 import * as webStomp from 'webstomp-client';
 import * as Constants from '../constants';
 import SessionMemberCircle from '../components/SessionMemberCircle.vue';
+import Member from '../model/Member';
 import SessionMemberCard from '../components/SessionMemberCard.vue';
 
 export default Vue.extend({
@@ -134,18 +136,18 @@ export default Vue.extend({
       grid: 5,
       webSocketConnected: false,
       stompClient: webStomp.over(new SockJS(`${Constants.default.backendURL}/connect?sessionID=${this.sessionID}&adminID=${this.adminID}`)),
-      members: [],
+      members: new Array<Member>(),
       planningStart: false,
     };
   },
   computed: {
-    membersPending() {
-      return this.members.filter((member) => member.currentEstimation === null);
+    membersPending(): Member[] {
+      return this.members.filter((member: Member) => member.currentEstimation === null);
     },
-    membersEstimated() {
-      return this.members.filter((member) => member.currentEstimation !== null);
+    membersEstimated(): Member[] {
+      return this.members.filter((member: Member) => member.currentEstimation !== null);
     },
-    estimateFinished() {
+    estimateFinished(): boolean {
       return !this.members.map((elem) => elem.currentEstimation).includes(null);
     },
   },
@@ -168,7 +170,6 @@ export default Vue.extend({
     sendStartPlanningMessage() {
       if (this.stompClient && this.stompClient.connected) {
         this.stompClient.send(Constants.default.webSocketStartPlanningRoute, '', {});
-        console.log(this.membersSorted);
         this.planningStart = true;
         this.getNumberOfCardColumns();
       }
