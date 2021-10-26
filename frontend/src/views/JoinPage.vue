@@ -9,7 +9,7 @@
         :color="hexColor"
         :animal-asset-name="avatarAnimalAssetName"
         :button-text="'GO'"
-        @clicked="onClicked"
+        @clicked="sendJoinSessionRequest"
       />
     </b-container>
   </div>
@@ -17,10 +17,9 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import SockJS from 'sockjs-client';
-import webstomp from 'webstomp-client';
 import { v4 as uuidv4 } from 'uuid';
 import JoinPageCard from '../components/JoinPageCard.vue';
+import JoinCommand from '../model/JoinCommand';
 import * as Constants from '../constants';
 
 export default Vue.extend({
@@ -31,62 +30,64 @@ export default Vue.extend({
   data() {
     return {
       title: 'Join a meeting ...',
-      webSocketConnected: false,
-      memberID: uuidv4(),
       hexColor: Constants.default.getRandomPastelColor(),
       avatarAnimalAssetName: Constants.default.getRandomAvatarAnimalAssetName(),
     };
   },
-  methods: {
-    onClicked(event: any) {
-      const data = event as {
-        sessionID: string,
-        password: string,
-        name: string,
-      };
-      this.sendJoinSessionRequest(data);
+  computed: {
+    webSocketIsConnected() {
+      return this.$store.state.webSocketConnected;
     },
-    async sendJoinSessionRequest(data: { sessionID: string, password: string, name: string}) {
-      const url = Constants.default.backendURL + Constants.default.joinSessionRoute(data.sessionID);
+    startPlanning() {
+      return this.$store.state.startPlanning;
+    },
+  },
+  watch: {
+    webSocketIsConnected(isConnected) {
+      if (isConnected) {
+        console.debug('JoinPage: member connected to websocket');
+        this.registerPrincipalOnBackend();
+        this.goToEstimationPage();
+      }
+    },
+    startPlanning(message) {
+      console.debug(`JoinPage: ${message}`);
+    },
+  },
+  methods: {
+    async sendJoinSessionRequest(data: JoinCommand) {
+      const url = `${Constants.default.backendURL}${Constants.default.joinSessionRoute(data.sessionID)}`;
       const member = {
-        memberID: this.memberID,
+        memberID: uuidv4(),
         name: data.name,
         hexColor: this.hexColor,
-        avatarAnimal: Constants.default.avatarAnimalAssetNameToBackendEnum(
-          this.avatarAnimalAssetName,
-        ),
+        avatarAnimal: this.convertAvatarAssetNameToBackendAnimal(),
         currentEstimation: null,
       };
       try {
         await this.axios.post(url, member);
-        this.connect(data.sessionID);
+        this.connectToWebSocket(data.sessionID, member.memberID);
       } catch (e) {
         console.error(`Response of ${url} is invalid: ${e}`);
       }
     },
-    connect(sessionID: string) {
-      if (this.webSocketConnected) {
-        return;
-      }
-      const stompClient = webstomp.over(new SockJS(`${Constants.default.backendURL}/connect?sessionID=${sessionID}&memberID=${this.memberID}`));
-      stompClient.connect({},
-        (frame) => {
-          this.webSocketConnected = true;
-          stompClient.subscribe(Constants.default.webSocketStartPlanningListenRoute, (message) => {
-            console.log(message);
-            console.log('Message came in');
-            this.goToEstimationPage();
-          });
-          stompClient.send(Constants.default.webSocketRegisterMemberRoute, '', {});
-        },
-        (error) => {
-          console.log(error);
-          this.webSocketConnected = false;
-        });
+    convertAvatarAssetNameToBackendAnimal() {
+      return Constants.default.avatarAnimalAssetNameToBackendEnum(
+        this.avatarAnimalAssetName,
+      );
+    },
+    connectToWebSocket(sessionID: string, memberID: string) {
+      const url = `${Constants.default.backendURL}/connect?sessionID=${sessionID}&memberID=${memberID}`;
+      this.$store.commit('connectToBackendWS', url);
+    },
+    registerPrincipalOnBackend() {
+      const endPoint = Constants.default.webSocketRegisterMemberRoute;
+      this.$store.commit('sendViaBackendWS', endPoint, {});
+    },
+    subscribeWSStartPlanning() {
+      this.$store.commit('subscribeOnBackendWSStartPlanningListenRoute');
     },
     goToEstimationPage() {
-      // TODO: go to estimation page once implemented
-      // this.$router.push({ name: 'EstimationPage' });
       console.log('Would go to estimation page');
     },
   },

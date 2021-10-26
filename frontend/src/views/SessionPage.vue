@@ -45,8 +45,6 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import SockJS from 'sockjs-client';
-import * as webStomp from 'webstomp-client';
 import * as Constants from '../constants';
 import SessionMemberCard from '../components/SessionMemberCard.vue';
 
@@ -68,10 +66,24 @@ export default Vue.extend({
   data() {
     return {
       title: 'Waiting for members ...',
-      webSocketConnected: false,
-      stompClient: webStomp.over(new SockJS(`${Constants.default.backendURL}/connect?sessionID=${this.sessionID}&adminID=${this.adminID}`)),
-      members: [],
     };
+  },
+  computed: {
+    members() {
+      return this.$store.state.members;
+    },
+    webSocketIsConnected() {
+      return this.$store.state.webSocketConnected;
+    },
+  },
+  watch: {
+    webSocketIsConnected(isConnected) {
+      if (isConnected) {
+        console.debug('JoinPage: member connected to websocket');
+        this.registerAdminPrincipalOnBackend();
+        this.subscribeWSMemberUpdated();
+      }
+    },
   },
   mounted() {
     if (this.sessionID === undefined || this.adminID === undefined) {
@@ -79,14 +91,23 @@ export default Vue.extend({
       // eslint-disable-next-line no-alert
       alert('ids undefined');
     }
-    console.debug({ sessionID: this.sessionID });
-    this.connectToWebSocketBackend();
+    this.connectToWebSocket();
   },
   methods: {
-    async sendStartPlanningMessage() {
-      if (this.stompClient && this.stompClient.connected) {
-        this.stompClient.send(Constants.default.webSocketStartPlanningRoute, '', {});
-      }
+    connectToWebSocket() {
+      const url = `${Constants.default.backendURL}/connect?sessionID=${this.sessionID}&adminID=${this.adminID}`;
+      this.$store.commit('connectToBackendWS', url);
+    },
+    registerAdminPrincipalOnBackend() {
+      const endPoint = Constants.default.webSocketRegisterAdminUserRoute;
+      this.$store.commit('sendViaBackendWS', endPoint, {});
+    },
+    subscribeWSMemberUpdated() {
+      this.$store.commit('subscribeOnBackendWSAdminUpdate');
+    },
+    sendStartPlanningMessage() {
+      const endPoint = Constants.default.webSocketStartPlanningRoute;
+      this.$store.commit('sendViaBackendWS', endPoint, {});
     },
     copyCodeToClipboard() {
       navigator.clipboard.writeText(this.sessionID).then(() => {
@@ -95,39 +116,8 @@ export default Vue.extend({
         console.error('Async: Could not copy text: ', err);
       });
     },
-    sendJoinAdminCommand() {
-      if (this.stompClient && this.stompClient.connected) {
-        this.stompClient.send(Constants.default.webSocketRegisterAdminUserRoute, '', {});
-      }
-    },
     backendAnimalToAssetName(animal:string) {
       return Constants.default.avatarAnimalToAssetName(animal);
-    },
-    connectToWebSocketBackend() {
-      this.stompClient.connect({},
-        () => {
-          this.webSocketConnected = true;
-          this.subscripeToWebSocketBackend();
-          this.sendJoinAdminCommand();
-        },
-        (error) => {
-          console.error(error);
-          this.webSocketConnected = false;
-        });
-    },
-    subscripeToWebSocketBackend() {
-      this.stompClient.subscribe(
-        Constants.default.webSocketMembersUpdatedRoute,
-        (message: webStomp.Frame) => {
-          this.members = JSON.parse(message.body);
-        },
-      );
-    },
-    disconnect() {
-      if (this.stompClient) {
-        this.stompClient.disconnect();
-      }
-      this.webSocketConnected = false;
     },
   },
 });
