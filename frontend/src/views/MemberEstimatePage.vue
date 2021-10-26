@@ -14,10 +14,9 @@
           />
         </b-row>
       </div>
-      <b-row class="my-5 ">
+      <b-row class="my-5">
         <flicking
-          style="overflow:visible; width: 100vw; position: relative; left: calc(-50vw + 50%);"
-
+          id="flicking"
           :options="{ renderOnlyVisible: false,
                       horizontal:true,
                       align: 'center',
@@ -81,3 +80,11 @@ export default Vue.extend({
   },
 });
 </script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped>
+#flicking {
+  /* overflow:visible;  Add when fix is clear how to stay responsiv*/
+  width: 100%;
+}
+</style>
