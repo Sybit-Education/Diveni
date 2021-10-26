@@ -39,7 +39,7 @@ public class SessionRepositoryTest {
 		val sessionID = UUID.randomUUID();
 		val adminID = UUID.randomUUID();
 		val membersID = UUID.randomUUID();
-		val member = new Member(UUID.randomUUID(), "John", "0x0a0a0a", AvatarAnimal.CAMEL, Optional.empty());
+		val member = new Member(UUID.randomUUID(), "John", "0x0a0a0a", AvatarAnimal.CAMEL, null);
 		val members = new ArrayList<Member>();
 		members.add(member);
 		val session = new Session(sessionID, adminID, membersID, members);
