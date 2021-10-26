@@ -2,16 +2,17 @@ package de.htwg.aume.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import lombok.val;
 
-@SpringBootTest
 public class SessionTest {
 
 	@Test
@@ -87,6 +88,23 @@ public class SessionTest {
 		assertEquals(adminIdAfter, result.getAdminID());
 		assertEquals(session.getMembersID(), result.getMembersID());
 		assertEquals(session.getMembers(), result.getMembers());
+	}
+
+	@Test
+	public void updateEstimation_works() {
+		val memberID1 = UUID.randomUUID();
+		val memberID2 = UUID.randomUUID();
+		val member1 = new Member(memberID1, null, null, null, Optional.empty());
+		val member2 = new Member(memberID2, null, null, null, Optional.empty());
+		val members = Arrays.asList(member1, member2);
+		val vote = 5;
+
+		val session = new Session(null, null, null, members);
+		val result = session.updateEstimation(member1.getMemberID(), vote);
+
+		val resultMember = result.getMembers().stream().filter(m -> m.getMemberID().equals(member1.getMemberID())).findFirst().get();
+		assertTrue(resultMember.getCurrentEstimation().isPresent());
+		assertEquals(resultMember.getCurrentEstimation().get(), vote);
 	}
 
 }

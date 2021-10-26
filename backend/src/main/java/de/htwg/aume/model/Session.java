@@ -9,6 +9,9 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
+
+import lombok.val;
 
 @Getter
 @RequiredArgsConstructor
@@ -40,6 +43,13 @@ public class Session {
 			tmpSession = new Session(tmpSession.sessionID, tmpSession.adminID, tmpSession.membersID, members);
 		}
 		return tmpSession;
+	}
+
+	public Session updateEstimation(UUID memberID, int vote) {
+		val updatedMembers = members.stream()
+			.map(m -> m.getMemberID().equals(memberID) ? m.updateEstimation(vote) : m)
+			.collect(Collectors.toList());
+		return this.copyWith(null, null, null, updatedMembers);
 	}
 
 }

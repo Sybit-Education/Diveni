@@ -9,27 +9,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
-import de.htwg.aume.model.Session;
 import de.htwg.aume.principals.AdminPrincipal;
 import de.htwg.aume.principals.MemberPrincipal;
-import de.htwg.aume.repository.SessionRepository;
 import lombok.val;
 
 @Service
 public class WebSocketService {
 
 	@Autowired
-	SessionRepository sessionRepo;
+	private SimpMessagingTemplate simpMessagingTemplate;
 
-	private final SimpMessagingTemplate simpMessagingTemplate;
+	@Autowired
+	private DatabaseService databaseService;
 
 	private Optional<AdminPrincipal> admin;
 
 	private List<MemberPrincipal> members = new ArrayList<>();
-
-	WebSocketService(SimpMessagingTemplate simpMessagingTemplate) {
-		this.simpMessagingTemplate = simpMessagingTemplate;
-	}
 
 	public synchronized void addMemberIfNew(MemberPrincipal member) {
 		members = members.stream().filter(m -> !m.getName().equals(member.getName())).collect(Collectors.toList());
@@ -40,16 +35,12 @@ public class WebSocketService {
 		this.admin = Optional.of(principal);
 	}
 
-	public void sendAddedMemberMessage() {
-		val session = getSessionFromID();
-		if (admin.isPresent() && session.isPresent()) {
-			simpMessagingTemplate.convertAndSendToUser(admin.get().getName(), "/updates/membersUpdated",
-					session.get().getMembers());
-		}
-	}
-
-	private Optional<Session> getSessionFromID() {
-		return Optional.ofNullable(sessionRepo.findBySessionID(admin.get().getSessionID()));
+	public void sendMembersUpdate() {
+		admin.ifPresent(admin -> {
+			databaseService.getSessionByID(admin.getSessionID()).ifPresent(session -> {
+				simpMessagingTemplate.convertAndSendToUser(admin.getName(), "/updates/membersUpdated", session.getMembers());
+			});
+		});
 	}
 
 	public void sendStartEstimationMessages() {
@@ -57,5 +48,4 @@ public class WebSocketService {
 			simpMessagingTemplate.convertAndSendToUser(member.getName(), "/updates/startEstimation", "");
 		}
 	}
-
 }

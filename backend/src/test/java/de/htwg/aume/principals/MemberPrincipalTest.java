@@ -6,11 +6,9 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import lombok.val;
 
-@SpringBootTest
 public class MemberPrincipalTest {
 
 	@Test

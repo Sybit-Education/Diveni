@@ -48,4 +48,8 @@ public class Member {
 		return tmpMember;
 	}
 
+	public Member updateEstimation(int estimation) {
+		return this.copyWith(null, null, null, null, Optional.of(estimation));
+	}
+
 }
