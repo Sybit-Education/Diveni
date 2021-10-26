@@ -2,35 +2,40 @@ package de.htwg.aume.controller;
 
 import java.security.Principal;
 import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
+
+import de.htwg.aume.model.Session;
 import de.htwg.aume.principals.AdminPrincipal;
 import de.htwg.aume.principals.MemberPrincipal;
 import de.htwg.aume.repository.SessionRepository;
+import de.htwg.aume.service.DatabaseService;
 import de.htwg.aume.service.WebSocketService;
+
+import lombok.val;
 
 @Controller
 public class WebsocketController {
 
 	@Autowired
-	SessionRepository sessionRepo;
+	private WebSocketService webSocketService;
 
-	private final WebSocketService webSocketService;
-
-	WebsocketController(WebSocketService webSocketService) {
-		this.webSocketService = webSocketService;
-	}
+	@Autowired
+	DatabaseService databaseService;
 
 	@MessageMapping("/registerAdminUser")
 	public void registerAdminUser(Principal principal) {
 		if (!(principal instanceof AdminPrincipal)) {
 			new ResponseStatusException(HttpStatus.UNAUTHORIZED, "not an admin");
 		}
-		Optional.ofNullable(sessionRepo.findBySessionID(((AdminPrincipal) principal).getSessionID())).orElseThrow(
-				() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessages.sessionNotFoundErrorMessage));
+		ControllerUtils.getSessionOrThrowResponse(databaseService, ((AdminPrincipal) principal).getSessionID());
 		webSocketService.setAdminUser((AdminPrincipal) principal);
 	}
 
@@ -39,10 +44,9 @@ public class WebsocketController {
 		if (!(principal instanceof MemberPrincipal)) {
 			new ResponseStatusException(HttpStatus.I_AM_A_TEAPOT, "not an admin");
 		}
-		Optional.ofNullable(sessionRepo.findBySessionID(((MemberPrincipal) principal).getSessionID())).orElseThrow(
-				() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessages.sessionNotFoundErrorMessage));
+		ControllerUtils.getSessionByMemberIDOrThrowResponse(databaseService, ((MemberPrincipal) principal).getSessionID());
 		webSocketService.addMemberIfNew((MemberPrincipal) principal);
-		webSocketService.sendAddedMemberMessage();
+		webSocketService.sendMembersUpdate();
 	}
 
 	@MessageMapping("/startEstimation")
@@ -51,9 +55,15 @@ public class WebsocketController {
 		if (!(principal instanceof AdminPrincipal)) {
 			new ResponseStatusException(HttpStatus.UNAUTHORIZED, ErrorMessages.notAnAdminErrorMessage);
 		}
-		Optional.ofNullable(sessionRepo.findBySessionID(((AdminPrincipal) principal).getSessionID())).orElseThrow(
-				() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessages.sessionNotFoundErrorMessage));
+		ControllerUtils.getSessionOrThrowResponse(databaseService, ((AdminPrincipal) principal).getSessionID());
 		webSocketService.sendStartEstimationMessages();
+	}
+
+	@MessageMapping("/vote")
+	public synchronized void processVote(@RequestParam int vote, MemberPrincipal member) {
+		val session = ControllerUtils.getSessionByMemberIDOrThrowResponse(databaseService, member.getMemberID()).updateEstimation(member.getMemberID(), vote);
+		databaseService.saveSession(session);
+		webSocketService.sendMembersUpdate();
 	}
 
 }

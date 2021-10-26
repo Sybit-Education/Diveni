@@ -10,7 +10,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import lombok.val;
 
-@SpringBootTest
 public class AdminPrincipalTest {
 
 	@Test

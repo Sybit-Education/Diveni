@@ -40,16 +40,12 @@ public class WebSocketService {
 		this.admin = Optional.of(principal);
 	}
 
-	public void sendAddedMemberMessage() {
-		val session = getSessionFromID();
-		if (admin.isPresent() && session.isPresent()) {
-			simpMessagingTemplate.convertAndSendToUser(admin.get().getName(), "/updates/membersUpdated",
-					session.get().getMembers());
-		}
-	}
-
-	private Optional<Session> getSessionFromID() {
-		return Optional.ofNullable(sessionRepo.findBySessionID(admin.get().getSessionID()));
+	public void sendMembersUpdate() {
+		admin.ifPresent(admin -> {
+			databaseService.getSessionByID(admin.getSessionID()).ifPresent(session -> {
+				simpMessagingTemplate.convertAndSendToUser(admin.getName(), "/updates/membersUpdated", session.getMembers());
+			});
+		});
 	}
 
 	public void sendStartEstimationMessages() {
