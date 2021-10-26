@@ -19,5 +19,7 @@ module.exports = {
     "@typescript-eslint/no-shadow": ["error"],
     "noImplicitAny": 0,
     "allowJs": 0,
+    "vue/no-unused-components": 0,
+    "no-unused-components": 0,
   },
 };

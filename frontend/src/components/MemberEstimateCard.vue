@@ -1,11 +1,13 @@
 <template>
   <div>
     <Vue2InteractDraggable
-      v-if="!dragged"
+      :key="dragged"
       :interact-max-rotation="0"
-      :interact-out-of-sight-x-coordinate="500"
+      :interact-out-of-sight-x-coordinate="0"
+      :interact-out-of-sight-y-coordinate="0"
       :interact-x-threshold="200"
       :interact-lock-x-axis="true"
+      :interact-lock-y-axis="dragged"
       :interact-lock-swipe-down="true"
       @draggedUp="draggedUp"
     >
@@ -15,19 +17,10 @@
         :style="swipeableCardBackgroundColor"
       >
         <div id="text">
-          {{ number }}
+          {{ dragged ? '💪' : number }}
         </div>
       </div>
     </Vue2InteractDraggable>
-    <div
-      v-else
-      id="swiped-card"
-      class="flicking-panel"
-    >
-      <div id="text">
-        💪
-      </div>
-    </div>
   </div>
 </template>
 
@@ -45,15 +38,14 @@ export default Vue.extend({
   props: {
     number: { type: Number, required: true },
     hexColor: { type: String, required: true },
-  },
-  data() {
-    return {
-      dragged: false,
-    };
+    dragged: { type: Boolean, required: true },
   },
   computed: {
     swipeableCardBackgroundColor():string {
-      const { r, g, b } = Constants.default.hexToRgb(this.hexColor);
+      let { r, g, b } = Constants.default.hexToRgb(this.hexColor);
+      r = !this.dragged ? r : 230;
+      g = !this.dragged ? g : 225;
+      b = !this.dragged ? b : 228;
       return `background-color: rgb(${r - this.number * 2}, ${g}, ${b});`;
     },
   },
@@ -64,7 +56,6 @@ export default Vue.extend({
         startVelocity: 30,
         spread: 360,
       });
-      this.dragged = !this.dragged;
       this.$emit('sentEstimation', {
         estimation: this.number,
       });
@@ -82,16 +73,6 @@ export default Vue.extend({
   align-items :center; /* Centering x-axis */
   border-radius: 5%;
   display: flex;
-  flex-direction: column;
-}
-#swiped-card{
-  width: 280px;
-  height: 370px;
-  justify-content: center;  /* Centering y-axis */
-  align-items :center; /* Centering x-axis */
-  border-radius: 5%;
-  display: flex;
-  background-color: rgb(230, 225, 228);
   flex-direction: column;
 }
 #text {
