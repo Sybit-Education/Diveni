@@ -1,9 +1,6 @@
 package de.htwg.aume.controller;
 
 import java.security.Principal;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,13 +9,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 
-import de.htwg.aume.model.Session;
 import de.htwg.aume.principals.AdminPrincipal;
 import de.htwg.aume.principals.MemberPrincipal;
-import de.htwg.aume.repository.SessionRepository;
 import de.htwg.aume.service.DatabaseService;
 import de.htwg.aume.service.WebSocketService;
-
 import lombok.val;
 
 @Controller
@@ -61,7 +55,8 @@ public class WebsocketController {
 
 	@MessageMapping("/vote")
 	public synchronized void processVote(@RequestParam int vote, MemberPrincipal member) {
-		val session = ControllerUtils.getSessionByMemberIDOrThrowResponse(databaseService, member.getMemberID()).updateEstimation(member.getMemberID(), vote);
+		val session = ControllerUtils.getSessionByMemberIDOrThrowResponse(databaseService, member.getMemberID())
+				.updateEstimation(member.getMemberID(), vote);
 		databaseService.saveSession(session);
 		webSocketService.sendMembersUpdate();
 	}

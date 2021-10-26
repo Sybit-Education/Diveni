@@ -9,17 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
-import de.htwg.aume.model.Session;
 import de.htwg.aume.principals.AdminPrincipal;
 import de.htwg.aume.principals.MemberPrincipal;
-import de.htwg.aume.repository.SessionRepository;
 import lombok.val;
 
 @Service
 public class WebSocketService {
-
-	@Autowired
-	SessionRepository sessionRepo;
 
 	@Autowired
 	private SimpMessagingTemplate simpMessagingTemplate;

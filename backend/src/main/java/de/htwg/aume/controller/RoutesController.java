@@ -35,8 +35,7 @@ public class RoutesController {
 		val usedUuids = databaseService.getSessions().stream().map(s -> s.getSessionID()).collect(Collectors.toSet());
 		val sessionUuids = Stream.generate(UUID::randomUUID).filter(s -> !usedUuids.contains(s)).limit(3)
 				.collect(Collectors.toList());
-		val session = new Session(sessionUuids.get(0), sessionUuids.get(1), sessionUuids.get(2),
-				new ArrayList<Member>());
+		val session = new Session(sessionUuids.get(0), sessionUuids.get(1), sessionUuids.get(2), new ArrayList<Member>());
 		databaseService.saveSession(session);
 		return new ResponseEntity<Session>(session, HttpStatus.CREATED);
 	}
@@ -51,12 +50,12 @@ public class RoutesController {
 
 	@GetMapping(value = "/sessions/{sessionID}")
 	public @ResponseBody Session getSession(@PathVariable UUID sessionID) {
-		return databaseService.getSessionByID(sessionID).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessages.sessionNotFoundErrorMessage));
+		return ControllerUtils.getSessionOrThrowResponse(databaseService, sessionID);
 	}
 
 	private synchronized boolean addMemberToSession(UUID sessionID, Member member) {
 		val session = databaseService.getSessionByID(sessionID).orElse(null);
-		if(session == null) {
+		if (session == null) {
 			return false;
 		}
 		List<Member> members = session.getMembers().stream().map(m -> m).collect(Collectors.toList());
