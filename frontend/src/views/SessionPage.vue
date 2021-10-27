@@ -80,6 +80,8 @@
             :name="member.name"
             :estimation="member.currentEstimation"
             :estimate-finished="estimateFinished"
+            :highest="estimateHighest.memberID === member.memberID"
+            :lowest="estimateLowest.memberID === member.memberID"
           />
         </b-row>
         <b-row
@@ -96,7 +98,6 @@
             :alt-attribute="member.avatarAnimal"
             :name="member.name"
             :estimation="member.currentEstimation"
-            :estimate-finished="estimateFinished"
           />
         </b-row>
       </b-container>
@@ -150,6 +151,16 @@ export default Vue.extend({
     },
     estimateFinished(): boolean {
       return !this.members.map((elem) => elem.currentEstimation).includes(null);
+    },
+    estimateHighest(): Member {
+      return this.membersEstimated.reduce((prev, current) => (
+        (prev.currentEstimation! > current.currentEstimation!) ? prev : current
+      ));
+    },
+    estimateLowest(): Member {
+      return this.membersEstimated.reduce((prev, current) => (
+        (prev.currentEstimation! < current.currentEstimation!) ? prev : current
+      ));
     },
   },
   watch: {
