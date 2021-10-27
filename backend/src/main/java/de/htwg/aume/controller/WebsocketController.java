@@ -32,6 +32,15 @@ public class WebsocketController {
 		webSocketService.sendMembersUpdate();
 	}
 
+	@MessageMapping("/unregisterMember")
+	public void removeMember(MemberPrincipal principal) {
+		val session = ControllerUtils
+			.getSessionByMemberIDOrThrowResponse(databaseService, principal.getMemberID())
+			.removeMember(principal.getMemberID());
+		databaseService.saveSession(session);
+		webSocketService.sendMembersUpdate();
+	}
+
 	@MessageMapping("/startEstimation")
 	public void startEstimation(AdminPrincipal principal) {
 		ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID());
@@ -56,5 +65,4 @@ public class WebsocketController {
 		webSocketService.sendMembersUpdate();
 		webSocketService.sendStartEstimationMessages();
 	}
-
 }

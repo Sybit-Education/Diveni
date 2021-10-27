@@ -8,6 +8,9 @@ public class ErrorMessages {
 
 	public static String memberExistsErrorMessage = "member already exists";
 
+	public static String memberNotExistsErrorMessage = "member does not exist";
+
+
 	private ErrorMessages() {
 	}
 

@@ -27,8 +27,12 @@ public class WebSocketService {
 	private List<MemberPrincipal> members = new ArrayList<>();
 
 	public synchronized void addMemberIfNew(MemberPrincipal member) {
-		members = members.stream().filter(m -> !m.getName().equals(member.getName())).collect(Collectors.toList());
+		members = members.stream().filter(m -> !m.getMemberID().equals(member.getMemberID())).collect(Collectors.toList());
 		members.add(member);
+	}
+
+	public synchronized void removeMember(MemberPrincipal member) {
+		members = members.stream().filter(m -> !m.getMemberID().equals(member.getMemberID())).collect(Collectors.toList());
 	}
 
 	public void setAdminUser(AdminPrincipal principal) {
