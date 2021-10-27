@@ -84,7 +84,7 @@ export default Vue.extend({
     memberUpdate() {
       return this.$store.state.memberUpdate;
     },
-    isStartVoting() {
+    isStartVoting(): boolean {
       return this.memberUpdate === Constants.memberUpdateCommandStartVoting;
     },
   },
