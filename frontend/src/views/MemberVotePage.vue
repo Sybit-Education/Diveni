@@ -95,11 +95,20 @@ export default Vue.extend({
       }
     },
   },
+  mounted() {
+    if (this.memberID === undefined || this.name === undefined
+          || this.hexColor === undefined || this.avatarAnimalAssetName === undefined) {
+      this.goToJoinPage();
+    }
+  },
   methods: {
     onSendVote({ vote }) {
       this.draggedNumber = vote;
       const endPoint = `${Constants.webSocketVoteRoute}`;
       this.$store.commit('sendViaBackendWS', { endPoint, data: vote });
+    },
+    goToJoinPage() {
+      this.$router.push({ name: 'JoinPage' });
     },
   },
 });

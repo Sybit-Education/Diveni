@@ -174,9 +174,7 @@ export default Vue.extend({
   },
   mounted() {
     if (this.sessionID === undefined || this.adminID === undefined) {
-      // TODO: handle when user goes directly to /session and not via landing Page
-      // eslint-disable-next-line no-alert
-      alert('ids undefined');
+      this.goToLandingPage();
     }
     this.connectToWebSocket();
   },
@@ -226,6 +224,9 @@ export default Vue.extend({
     sendRestartMessage() {
       const endPoint = Constants.webSocketRestartPlanningRoute;
       this.$store.commit('sendViaBackendWS', { endPoint });
+    },
+    goToLandingPage() {
+      this.$router.push({ name: 'LandingPage' });
     },
   },
 });
