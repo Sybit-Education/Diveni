@@ -48,4 +48,15 @@ public class WebsocketController {
 		webSocketService.sendMembersUpdate();
 	}
 
+	@MessageMapping("/restart")
+	public synchronized void restartVote(AdminPrincipal principal) {
+		System.out.println("Restart estimation");
+		val session = ControllerUtils
+				.getSessionOrThrowResponse(databaseService, principal.getSessionID())
+				.resetEstimations();
+		databaseService.saveSession(session);
+		webSocketService.sendMembersUpdate();
+		webSocketService.sendStartEstimationMessages();
+	}
+
 }

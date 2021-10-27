@@ -2,6 +2,7 @@ package de.htwg.aume.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -60,6 +61,17 @@ public class MemberTest {
 
 		assertEquals(result.getCurrentEstimation(), Optional.of(vote));
 		assertEquals(member.getCurrentEstimation(), Optional.empty());
+	}
+
+	@Test
+	public void resetEstimation_works() {
+		val vote = 5;
+		val member = new Member(null, null, null, null, vote);
+
+		val result = member.resetEstimation();
+
+		assertEquals(member.getCurrentEstimation(), Optional.of(vote));
+		assertTrue(result.getCurrentEstimation().isEmpty());
 	}
 
 }
