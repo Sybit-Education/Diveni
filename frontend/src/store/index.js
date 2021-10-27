@@ -28,9 +28,7 @@ export default new Vuex.Store({
     subscribeOnBackendWSStartPlanningListenRoute(state) {
       state.stompClient.subscribe(
         Constants.webSocketMemberListenRoute, (frame) => {
-          const array = state.memberUpdates.map((m) => m);
-          array.push(frame.body);
-          state.memberUpdates = array;
+          state.memberUpdates = state.memberUpdates.concat([frame.body]);
         },
       );
     },
