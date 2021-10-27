@@ -8,7 +8,7 @@
         Share the code
         <b-link
           href=""
-          @click="copyCodeToClipboard"
+          @click="copyLinkToClipboard"
         >
           {{ sessionID }}
         </b-link>
@@ -204,8 +204,9 @@ export default Vue.extend({
       this.planningStart = true;
       this.getNumberOfCardColumns();
     },
-    copyCodeToClipboard() {
-      navigator.clipboard.writeText(this.sessionID).then(() => {
+    copyLinkToClipboard() {
+      const link = `${document.URL.toString().replace('session', 'join?sessionID=')}${this.sessionID}`;
+      navigator.clipboard.writeText(link).then(() => {
         console.log('Copying to clipboard was successful!');
       }, (err) => {
         console.error('Could not copy text: ', err);
