@@ -68,6 +68,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
+import JoinCommand from '../model/JoinCommand';
 import RoundedAvatar from './RoundedAvatar.vue';
 
 export default Vue.extend({
@@ -90,11 +91,12 @@ export default Vue.extend({
   },
   methods: {
     onClickButton() {
-      this.$emit('clicked', {
+      const data: JoinCommand = {
         sessionID: this.sessionID,
         password: this.password,
         name: this.name,
-      });
+      };
+      this.$emit('clicked', data);
     },
   },
 });
