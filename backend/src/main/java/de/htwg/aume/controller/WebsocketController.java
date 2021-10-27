@@ -40,7 +40,6 @@ public class WebsocketController {
 
 	@MessageMapping("/vote")
 	public synchronized void processVote(@Payload int vote, MemberPrincipal member) {
-		System.out.println("vote");
 		val session = ControllerUtils
 				.getSessionByMemberIDOrThrowResponse(databaseService, member.getMemberID())
 				.updateEstimation(member.getMemberID(), vote);
@@ -50,7 +49,6 @@ public class WebsocketController {
 
 	@MessageMapping("/restart")
 	public synchronized void restartVote(AdminPrincipal principal) {
-		System.out.println("Restart estimation");
 		val session = ControllerUtils
 				.getSessionOrThrowResponse(databaseService, principal.getSessionID())
 				.resetEstimations();
