@@ -88,6 +88,13 @@ export default Vue.extend({
       return this.memberUpdate === Constants.memberUpdateCommandStartVoting;
     },
   },
+  watch: {
+    memberUpdate(update) {
+      if (update === Constants.memberUpdateCommandStartVoting) {
+        this.draggedNumber = null;
+      }
+    },
+  },
   methods: {
     onSentVote({ vote }) {
       this.draggedNumber = vote;

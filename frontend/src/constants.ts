@@ -11,6 +11,8 @@ class Constants {
 
   webSocketStartPlanningRoute = '/ws/startEstimation';
 
+  webSocketRestartPlanningRoute = '/ws/restart';
+
   webSocketVoteRoute = '/ws/vote';
 
   webSocketMemberListenRoute = '/users/updates/member';
