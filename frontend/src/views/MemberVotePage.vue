@@ -35,7 +35,7 @@
             :number="number"
             :hex-color="hexColor"
             :dragged="number == draggedNumber"
-            @sentVote="onSentVote"
+            @sentVote="onSendVote"
           />
         </flicking>
       </b-row>
@@ -81,15 +81,22 @@ export default Vue.extend({
     };
   },
   computed: {
-    memberUpdate() {
-      return this.$store.state.memberUpdate;
+    memberUpdates() {
+      return this.$store.state.memberUpdates;
     },
     isStartVoting(): boolean {
-      return this.memberUpdate === Constants.memberUpdateCommandStartVoting;
+      return this.memberUpdates.at(-1) === Constants.memberUpdateCommandStartVoting;
+    },
+  },
+  watch: {
+    memberUpdates(updates) {
+      if (updates.at(-1) === Constants.memberUpdateCommandStartVoting) {
+        this.draggedNumber = null;
+      }
     },
   },
   methods: {
-    onSentVote({ vote }) {
+    onSendVote({ vote }) {
       this.draggedNumber = vote;
       const endPoint = `${Constants.webSocketVoteRoute}`;
       this.$store.commit('sendViaBackendWS', { endPoint, data: vote });

@@ -40,12 +40,21 @@ public class WebsocketController {
 
 	@MessageMapping("/vote")
 	public synchronized void processVote(@Payload int vote, MemberPrincipal member) {
-		System.out.println("vote");
 		val session = ControllerUtils
 				.getSessionByMemberIDOrThrowResponse(databaseService, member.getMemberID())
 				.updateEstimation(member.getMemberID(), vote);
 		databaseService.saveSession(session);
 		webSocketService.sendMembersUpdate();
+	}
+
+	@MessageMapping("/restart")
+	public synchronized void restartVote(AdminPrincipal principal) {
+		val session = ControllerUtils
+				.getSessionOrThrowResponse(databaseService, principal.getSessionID())
+				.resetEstimations();
+		databaseService.saveSession(session);
+		webSocketService.sendMembersUpdate();
+		webSocketService.sendStartEstimationMessages();
 	}
 
 }

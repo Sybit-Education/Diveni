@@ -52,7 +52,7 @@
       <b-button
         variant="outline-dark"
         class="ml-5 pl-5"
-        @click="getNumberOfCardColumns"
+        @click="sendRestartMessage"
       >
         <b-icon-arrow-clockwise /> New
       </b-button>
@@ -211,6 +211,10 @@ export default Vue.extend({
         this.grid = (breakIndex === -1 ? grid.length : breakIndex);
         window.scrollTo({ top: 0 });
       }, 30);
+    },
+    sendRestartMessage() {
+      const endPoint = Constants.webSocketRestartPlanningRoute;
+      this.$store.commit('sendViaBackendWS', { endPoint });
     },
   },
 });

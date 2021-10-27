@@ -52,4 +52,11 @@ public class Session {
 		return this.copyWith(null, null, null, updatedMembers);
 	}
 
+	public Session resetEstimations() {
+		val updatedMembers = members.stream()
+			.map(m -> m.resetEstimation())
+			.collect(Collectors.toList());
+		return this.copyWith(null, null, null, updatedMembers);
+	}
+
 }

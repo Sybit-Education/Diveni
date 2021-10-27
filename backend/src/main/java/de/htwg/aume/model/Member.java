@@ -57,4 +57,8 @@ public class Member {
 		return this.copyWith(null, null, null, null, Optional.of(estimation));
 	}
 
+	public Member resetEstimation() {
+		return new Member(this.memberID, this.name, this.hexColor, this.avatarAnimal, null);
+	}
+
 }

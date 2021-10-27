@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Optional;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
@@ -105,6 +104,20 @@ public class SessionTest {
 		val resultMember = result.getMembers().stream().filter(m -> m.getMemberID().equals(member1.getMemberID())).findFirst().get();
 		assertTrue(resultMember.getCurrentEstimation().isPresent());
 		assertEquals(resultMember.getCurrentEstimation().get(), vote);
+	}
+
+	@Test
+	public void resetEstimations_works() {
+		val memberID1 = UUID.randomUUID();
+		val memberID2 = UUID.randomUUID();
+		val member1 = new Member(memberID1, null, null, null, 3);
+		val member2 = new Member(memberID2, null, null, null, 5);
+		val members = Arrays.asList(member1, member2);
+		val session = new Session(null, null, null, members);
+		
+		val result = session.resetEstimations();
+
+		assertTrue(result.getMembers().stream().allMatch(m -> m.getCurrentEstimation().isEmpty()));
 	}
 
 }

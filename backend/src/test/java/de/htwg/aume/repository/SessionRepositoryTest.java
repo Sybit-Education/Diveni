@@ -3,7 +3,6 @@ package de.htwg.aume.repository;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
-import java.util.Optional;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
