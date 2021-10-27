@@ -8,13 +8,16 @@
         <b-row class="justify-content-center">
           <rounded-avatar
             :color="hexColor"
-            :asset-name="animalAssetName"
+            :asset-name="avatarAnimalAssetName"
             :show-name="true"
             :name="name"
           />
         </b-row>
       </div>
-      <b-row class="my-5">
+      <b-row
+        v-if="isStartVoting"
+        class="my-5"
+      >
         <flicking
           id="flicking"
           :options="{ renderOnlyVisible: false,
@@ -24,7 +27,7 @@
                       defaultIndex: 0,
                       deceleration: 0.0005 }"
         >
-          <member-estimate-card
+          <member-vote-card
             v-for="number in numbers"
             :key="number"
             :ref="`memberCard${number}`"
@@ -32,9 +35,20 @@
             :number="number"
             :hex-color="hexColor"
             :dragged="number == draggedNumber"
-            @sentEstimation="onSentEstimation"
+            @sentVote="onSentVote"
           />
         </flicking>
+      </b-row>
+      <b-row
+        v-else
+        class="my-5 text-center"
+      >
+        <b-icon-three-dots
+          animation="fade"
+          class="my-5"
+          font-scale="4"
+        />
+        <h1>{{ waitingText }} </h1>
       </b-row>
     </b-container>
   </div>
@@ -42,40 +56,43 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import * as Constants from '../constants';
 import RoundedAvatar from '../components/RoundedAvatar.vue';
-import MemberEstimateCard from '../components/MemberEstimateCard.vue';
+import MemberVoteCard from '../components/MemberVoteCard.vue';
+import Constants from '../constants';
 
 export default Vue.extend({
-  name: 'MemberEstimatePage',
+  name: 'MemberVotePage',
   components: {
     RoundedAvatar,
-    MemberEstimateCard,
+    MemberVoteCard,
   },
   props: {
-    sessionID: {
-      type: String,
-      default: undefined,
-    },
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
+    memberID: { type: String, default: undefined },
+    name: { type: String, default: undefined },
+    hexColor: { type: String, default: undefined },
+    avatarAnimalAssetName: { type: String, default: undefined },
   },
   data() {
     return {
       title: 'Estimate!',
-      hexColor: Constants.default.getRandomPastelColor(),
-      animalAssetName: Constants.default.getRandomAvatarAnimalAssetName(),
-      name: 'linda',
       numbers: [1, 2, 3, 5, 8, 13, 21, 34],
       draggedNumber: null,
+      waitingText: 'Waiting for Scrum master to start ...',
     };
   },
+  computed: {
+    memberUpdate() {
+      return this.$store.state.memberUpdate;
+    },
+    isStartVoting(): boolean {
+      return this.memberUpdate === Constants.memberUpdateCommandStartVoting;
+    },
+  },
   methods: {
-    onSentEstimation({ estimation }) {
-      this.draggedNumber = estimation;
-      console.log(`TODO: send estimation to backend ${estimation}`);
+    onSentVote({ vote }) {
+      this.draggedNumber = vote;
+      const endPoint = `${Constants.webSocketVoteRoute}`;
+      this.$store.commit('sendViaBackendWS', { endPoint, data: vote });
     },
   },
 });

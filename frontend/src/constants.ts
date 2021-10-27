@@ -11,7 +11,11 @@ class Constants {
 
   webSocketStartPlanningRoute = '/ws/startEstimation';
 
-  webSocketStartPlanningListenRoute = '/users/updates/startEstimation';
+  webSocketVoteRoute = '/ws/vote';
+
+  webSocketMemberListenRoute = '/users/updates/member';
+
+  memberUpdateCommandStartVoting = 'START_VOTING';
 
   // eslint-disable-next-line class-methods-use-this
   public joinSessionRoute(sessionID: string) {

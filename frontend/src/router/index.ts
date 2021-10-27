@@ -3,7 +3,7 @@ import VueRouter, { RouteConfig } from 'vue-router';
 import LandingPage from '../views/LandingPage.vue';
 import JoinPage from '../views/JoinPage.vue';
 import SessionPage from '../views/SessionPage.vue';
-import MemberEstimatePage from '../views/MemberEstimatePage.vue';
+import MemberVotePage from '../views/MemberVotePage.vue';
 
 Vue.use(VueRouter);
 
@@ -25,9 +25,10 @@ const routes: Array<RouteConfig> = [
     component: JoinPage,
   },
   {
-    path: '/estimate',
-    name: 'MemberEstimate',
-    component: MemberEstimatePage,
+    path: '/vote',
+    name: 'MemberVotePage',
+    props: true,
+    component: MemberVotePage,
   },
 ];
 

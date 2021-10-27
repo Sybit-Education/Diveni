@@ -20,30 +20,35 @@ public class Member {
 
 	private final AvatarAnimal avatarAnimal;
 
-	private final Optional<Integer> currentEstimation;
+	private final Integer currentEstimation;
+
+	// Override because MongoRepository has a problem with Optional<Integer> as property
+	public Optional<Integer> getCurrentEstimation() {
+		return Optional.ofNullable(this.currentEstimation);
+	}
 
 	public Member copyWith(UUID memberID, String name, String hexColor, AvatarAnimal avatarAnimal,
 			Optional<Integer> currentEstimation) {
 		var tmpMember = this;
 		if (memberID != null) {
-			tmpMember = new Member(memberID, tmpMember.name, tmpMember.hexColor, tmpMember.avatarAnimal,
-					tmpMember.currentEstimation);
+			tmpMember = new Member(memberID, tmpMember.name, tmpMember.hexColor,
+					tmpMember.avatarAnimal, tmpMember.currentEstimation);
 		}
 		if (name != null) {
-			tmpMember = new Member(tmpMember.memberID, name, tmpMember.hexColor, tmpMember.avatarAnimal,
-					tmpMember.currentEstimation);
+			tmpMember = new Member(tmpMember.memberID, name, tmpMember.hexColor,
+					tmpMember.avatarAnimal, tmpMember.currentEstimation);
 		}
 		if (hexColor != null) {
-			tmpMember = new Member(tmpMember.memberID, tmpMember.name, hexColor, tmpMember.avatarAnimal,
-					tmpMember.currentEstimation);
+			tmpMember = new Member(tmpMember.memberID, tmpMember.name, hexColor,
+					tmpMember.avatarAnimal, tmpMember.currentEstimation);
 		}
 		if (avatarAnimal != null) {
-			tmpMember = new Member(tmpMember.memberID, tmpMember.name, tmpMember.hexColor, avatarAnimal,
-					tmpMember.currentEstimation);
+			tmpMember = new Member(tmpMember.memberID, tmpMember.name, tmpMember.hexColor,
+					avatarAnimal, tmpMember.currentEstimation);
 		}
 		if (currentEstimation != null) {
-			tmpMember = new Member(tmpMember.memberID, tmpMember.name, tmpMember.hexColor, tmpMember.avatarAnimal,
-					currentEstimation);
+			tmpMember = new Member(tmpMember.memberID, tmpMember.name, tmpMember.hexColor,
+					tmpMember.avatarAnimal, currentEstimation.orElse(null));
 		}
 		return tmpMember;
 	}

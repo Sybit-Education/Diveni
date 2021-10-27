@@ -28,10 +28,10 @@
 import Vue from 'vue';
 import { Vue2InteractDraggable } from 'vue2-interact';
 import confetti from 'canvas-confetti';
-import * as Constants from '../constants';
+import Constants from '../constants';
 
 export default Vue.extend({
-  name: 'MemberEstimateCard',
+  name: 'MemberVoteCard',
   components: {
     Vue2InteractDraggable,
   },
@@ -42,7 +42,7 @@ export default Vue.extend({
   },
   computed: {
     swipeableCardBackgroundColor():string {
-      let { r, g, b } = Constants.default.hexToRgb(this.hexColor);
+      let { r, g, b } = Constants.hexToRgb(this.hexColor);
       r = !this.dragged ? r : 230;
       g = !this.dragged ? g : 225;
       b = !this.dragged ? b : 228;
@@ -56,8 +56,8 @@ export default Vue.extend({
         startVelocity: 30,
         spread: 360,
       });
-      this.$emit('sentEstimation', {
-        estimation: this.number,
+      this.$emit('sentVote', {
+        vote: this.number,
       });
     },
   },

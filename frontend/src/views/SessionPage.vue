@@ -35,7 +35,7 @@
             <b-button
               variant="success"
               :disabled="false"
-              @click="sendStartPlanningMessage"
+              @click="sendStartEstimationMessages"
             >
               Start Planning
             </b-button>
@@ -106,7 +106,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import * as Constants from '../constants';
+import Constants from '../constants';
 import SessionMemberCircle from '../components/SessionMemberCircle.vue';
 import Member from '../model/Member';
 import SessionMemberCard from '../components/SessionMemberCard.vue';
@@ -155,9 +155,9 @@ export default Vue.extend({
   watch: {
     webSocketIsConnected(isConnected) {
       if (isConnected) {
-        console.debug('JoinPage: member connected to websocket');
-        this.subscribeWSMemberUpdated();
+        console.debug('SessionPage: member connected to websocket');
         this.registerAdminPrincipalOnBackend();
+        this.subscribeWSMemberUpdated();
       }
     },
   },
@@ -177,19 +177,19 @@ export default Vue.extend({
   },
   methods: {
     connectToWebSocket() {
-      const url = `${Constants.default.backendURL}/connect?sessionID=${this.sessionID}&adminID=${this.adminID}`;
+      const url = `${Constants.backendURL}/connect?sessionID=${this.sessionID}&adminID=${this.adminID}`;
       this.$store.commit('connectToBackendWS', url);
     },
     registerAdminPrincipalOnBackend() {
-      const endPoint = Constants.default.webSocketRegisterAdminUserRoute;
-      this.$store.commit('sendViaBackendWS', endPoint, {});
+      const endPoint = Constants.webSocketRegisterAdminUserRoute;
+      this.$store.commit('sendViaBackendWS', { endPoint });
     },
     subscribeWSMemberUpdated() {
       this.$store.commit('subscribeOnBackendWSAdminUpdate');
     },
-    sendStartPlanningMessage() {
-      const endPoint = Constants.default.webSocketStartPlanningRoute;
-      this.$store.commit('sendViaBackendWS', endPoint, {});
+    sendStartEstimationMessages() {
+      const endPoint = Constants.webSocketStartPlanningRoute;
+      this.$store.commit('sendViaBackendWS', { endPoint });
       this.planningStart = true;
       this.getNumberOfCardColumns();
     },
@@ -201,7 +201,7 @@ export default Vue.extend({
       });
     },
     backendAnimalToAssetName(animal: string) {
-      return Constants.default.avatarAnimalToAssetName(animal);
+      return Constants.avatarAnimalToAssetName(animal);
     },
     getNumberOfCardColumns() {
       setTimeout(() => {

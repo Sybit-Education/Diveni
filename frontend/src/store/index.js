@@ -10,7 +10,7 @@ export default new Vuex.Store({
   state: {
     stompClient: undefined,
     webSocketConnected: false,
-    startPlanning: null,
+    memberUpdate: null,
     members: null,
   },
   mutations: {
@@ -27,9 +27,8 @@ export default new Vuex.Store({
     },
     subscribeOnBackendWSStartPlanningListenRoute(state) {
       state.stompClient.subscribe(
-        Constants.webSocketStartPlanningListenRoute, (message) => {
-          console.log(`web socket member receive start planning: message ${message}`);
-          state.startPlanning = message;
+        Constants.webSocketMemberListenRoute, (frame) => {
+          state.memberUpdate = frame.body;
         },
       );
     },
@@ -41,8 +40,8 @@ export default new Vuex.Store({
         },
       );
     },
-    sendViaBackendWS(state, endPoint, data) {
-      state.stompClient.send(endPoint, '', data);
+    sendViaBackendWS(state, { endPoint, data }) {
+      state.stompClient.send(endPoint, JSON.stringify(data));
     },
   },
   actions: {

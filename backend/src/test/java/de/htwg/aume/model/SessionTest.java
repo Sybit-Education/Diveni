@@ -94,8 +94,8 @@ public class SessionTest {
 	public void updateEstimation_works() {
 		val memberID1 = UUID.randomUUID();
 		val memberID2 = UUID.randomUUID();
-		val member1 = new Member(memberID1, null, null, null, Optional.empty());
-		val member2 = new Member(memberID2, null, null, null, Optional.empty());
+		val member1 = new Member(memberID1, null, null, null, null);
+		val member2 = new Member(memberID2, null, null, null, null);
 		val members = Arrays.asList(member1, member2);
 		val vote = 5;
 
