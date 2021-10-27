@@ -7,6 +7,8 @@ class Constants {
 
   webSocketRegisterMemberRoute = '/ws/registerMember';
 
+  webSocketUnregisterMemberRoute = '/ws/unregisterMember'
+
   webSocketMembersUpdatedRoute = '/users/updates/membersUpdated';
 
   webSocketStartPlanningRoute = '/ws/startEstimation';
