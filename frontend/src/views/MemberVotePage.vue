@@ -77,7 +77,7 @@ export default Vue.extend({
       title: 'Estimate!',
       numbers: [1, 2, 3, 5, 8, 13, 21, 34],
       draggedNumber: null,
-      waitingText: 'Waiting for Scrum master to start ...',
+      waitingText: 'Waiting for Host to start ...',
     };
   },
   computed: {
