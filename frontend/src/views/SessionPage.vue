@@ -62,7 +62,7 @@
           </b-col>
           <b-col>
             <h4
-              class="mt-5 text-right"
+              class="session-link"
             >
               <b-link
                 href=""
@@ -253,3 +253,16 @@ export default Vue.extend({
   },
 });
 </script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped>
+.session-link {
+  margin-top: 3.8rem!important;
+  text-align: center;
+}
+@media (min-width: 341px) {
+  .session-link {
+    text-align: right;
+  }
+}
+</style>
