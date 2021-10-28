@@ -30,6 +30,10 @@ const routes: Array<RouteConfig> = [
     props: true,
     component: MemberVotePage,
   },
+  {
+    path: '*',
+    component: LandingPage,
+  },
 ];
 
 const router = new VueRouter({
