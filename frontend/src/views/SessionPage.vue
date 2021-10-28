@@ -182,6 +182,9 @@ export default Vue.extend({
     },
   },
   watch: {
+    members() {
+      this.updateNumberOfCardColumns();
+    },
     webSocketIsConnected(isConnected) {
       if (isConnected) {
         console.debug('SessionPage: member connected to websocket');
@@ -192,17 +195,15 @@ export default Vue.extend({
   },
   mounted() {
     if (this.sessionID === undefined || this.adminID === undefined) {
-      // TODO: handle when user goes directly to /session and not via landing Page
-      // eslint-disable-next-line no-alert
-      alert('ids undefined');
+      this.goToLandingPage();
     }
     this.connectToWebSocket();
   },
   created() {
-    window.addEventListener('resize', this.getNumberOfCardColumns);
+    window.addEventListener('resize', this.updateNumberOfCardColumns);
   },
   destroyed() {
-    window.removeEventListener('resize', this.getNumberOfCardColumns);
+    window.removeEventListener('resize', this.updateNumberOfCardColumns);
   },
   methods: {
     connectToWebSocket() {
@@ -220,7 +221,7 @@ export default Vue.extend({
       const endPoint = Constants.webSocketStartPlanningRoute;
       this.$store.commit('sendViaBackendWS', { endPoint });
       this.planningStart = true;
-      this.getNumberOfCardColumns();
+      this.updateNumberOfCardColumns();
     },
     copyLinkToClipboard() {
       const link = `${document.URL.toString().replace('session', 'join?sessionID=')}${this.sessionID}`;
@@ -233,7 +234,7 @@ export default Vue.extend({
     backendAnimalToAssetName(animal: string) {
       return Constants.avatarAnimalToAssetName(animal);
     },
-    getNumberOfCardColumns() {
+    updateNumberOfCardColumns() {
       setTimeout(() => {
         const grid = Array.from((this.$refs.grid as HTMLElement).children);
         const baseOffset = (grid[0] as HTMLElement).offsetTop;
@@ -245,6 +246,9 @@ export default Vue.extend({
     sendRestartMessage() {
       const endPoint = Constants.webSocketRestartPlanningRoute;
       this.$store.commit('sendViaBackendWS', { endPoint });
+    },
+    goToLandingPage() {
+      this.$router.push({ name: 'LandingPage' });
     },
   },
 });
