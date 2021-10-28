@@ -9,6 +9,7 @@
         :color="hexColor"
         :animal-asset-name="avatarAnimalAssetName"
         :button-text="'GO'"
+        :session-id-from-url="sessionID"
         @clicked="sendJoinSessionRequest"
       />
     </b-container>
@@ -34,6 +35,7 @@ export default Vue.extend({
       avatarAnimalAssetName: Constants.getRandomAvatarAnimalAssetName(),
       memberID: uuidv4(),
       name: '',
+      sessionID: '',
     };
   },
   computed: {
@@ -50,6 +52,12 @@ export default Vue.extend({
         this.goToEstimationPage();
       }
     },
+  },
+  created() {
+    const id = this.$route.query as unknown as {sessionID: string};
+    if (id.sessionID) {
+      this.sessionID = id.sessionID;
+    }
   },
   methods: {
     async sendJoinSessionRequest(data: JoinCommand) {
