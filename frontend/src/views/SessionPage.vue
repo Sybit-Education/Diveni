@@ -46,16 +46,34 @@
     <span
       v-if="planningStart"
     >
-      <h1 class="mt-5 mb-3 mx-2">
-        {{ titleEstimate }}
-      </h1>
-      <b-button
-        variant="outline-dark"
-        class="ml-5 pl-5"
-        @click="sendRestartMessage"
-      >
-        <b-icon-arrow-clockwise /> New
-      </b-button>
+      <b-container>
+        <b-row>
+          <b-col>
+            <h1 class="mt-5 mb-3 mx-2">
+              {{ titleEstimate }}
+            </h1>
+            <b-button
+              variant="outline-dark"
+              class="ml-5 pl-5"
+              @click="sendRestartMessage"
+            >
+              <b-icon-arrow-clockwise /> New
+            </b-button>
+          </b-col>
+          <b-col>
+            <h4
+              class="session-link"
+            >
+              <b-link
+                href=""
+                @click="copyLinkToClipboard"
+              >
+                {{ sessionID }}
+              </b-link>
+            </h4>
+          </b-col>
+        </b-row>
+      </b-container>
       <b-container
         class="my-5 border rounded"
         style="min-height: 200px;"
@@ -235,3 +253,16 @@ export default Vue.extend({
   },
 });
 </script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped>
+.session-link {
+  margin-top: 3.8rem!important;
+  text-align: center;
+}
+@media (min-width: 341px) {
+  .session-link {
+    text-align: right;
+  }
+}
+</style>
