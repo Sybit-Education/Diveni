@@ -3,12 +3,16 @@ package de.htwg.aume.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
+
+import de.htwg.aume.model.Member;
 import de.htwg.aume.model.MemberUpdateCommand;
+import de.htwg.aume.model.Session;
 import de.htwg.aume.principals.AdminPrincipal;
 import de.htwg.aume.principals.MemberPrincipal;
 import lombok.val;
@@ -50,6 +54,14 @@ public class WebSocketService {
 	public void sendStartEstimationMessages() {
 		for (val member : members) {
 			simpMessagingTemplate.convertAndSendToUser(member.getName(), "/updates/member", MemberUpdateCommand.START_VOTING.toString());
+		}
+	}
+
+	public void closeSessionConnections(Session session) {
+		val sessionMemberIDs = session.getMembers().stream().map(m -> m.getMemberID().toString()).collect(Collectors.toList());
+		val sessionMembers = members.stream().filter(m -> sessionMemberIDs.contains(m.getName())).collect(Collectors.toList());
+		for (val member : sessionMembers) {
+			simpMessagingTemplate.convertAndSendToUser(member.getName(), "/updates/member", MemberUpdateCommand.SESSION_CLOSED.toString());
 		}
 	}
 }
