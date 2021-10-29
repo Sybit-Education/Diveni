@@ -1,7 +1,7 @@
 <template>
   <div
     :style="`background-color: ${color};`"
-    class="text-center"
+    class="text-center card"
     :class="{ highlight: (highest || lowest) && estimateFinished }"
   >
     <h1
@@ -47,13 +47,13 @@ export default Vue.extend({
 .fs-3-rem{
   font-size: 5rem;
 }
-div{
+.card{
   position: relative;
-  width: 200px;
-  height: 250px;
-  align-items: center; /* Centering x-axis */
-  border-radius: 20%;
-  border: 1px solid;
+  width: 280px;
+  height: 370px;
+  justify-content: center;  /* Centering y-axis */
+  align-items :center; /* Centering x-axis */
+  border-radius: 5%;
   display: flex;
   flex-direction: column;
 }

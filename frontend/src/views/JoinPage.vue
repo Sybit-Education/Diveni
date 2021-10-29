@@ -1,19 +1,17 @@
 <template>
-  <div>
+  <b-container>
     <h1 class="my-5 mx-2">
       {{ title }}
     </h1>
-    <b-container>
-      <join-page-card
-        :show-password="false"
-        :color="hexColor"
-        :animal-asset-name="avatarAnimalAssetName"
-        :button-text="'GO'"
-        :session-id-from-url="sessionID"
-        @clicked="sendJoinSessionRequest"
-      />
-    </b-container>
-  </div>
+    <join-page-card
+      :show-password="false"
+      :color="hexColor"
+      :animal-asset-name="avatarAnimalAssetName"
+      :button-text="'GO'"
+      :session-id-from-url="sessionID"
+      @clicked="sendJoinSessionRequest"
+    />
+  </b-container>
 </template>
 
 <script lang="ts">
