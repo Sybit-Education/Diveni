@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Controller;
+import de.htwg.aume.model.SessionState;
 import de.htwg.aume.principals.AdminPrincipal;
 import de.htwg.aume.principals.MemberPrincipal;
 import de.htwg.aume.service.DatabaseService;
@@ -30,12 +31,17 @@ public class WebsocketController {
 		ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID());
 		webSocketService.addMemberIfNew((MemberPrincipal) principal);
 		webSocketService.sendMembersUpdate();
+		webSocketService.sendSessionStateToMember(principal.getName());
 	}
 
-	@MessageMapping("/startEstimation")
+	@MessageMapping("/startVoting")
 	public void startEstimation(AdminPrincipal principal) {
 		ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID());
-		webSocketService.sendStartEstimationMessages();
+		val session = ControllerUtils
+				.getSessionOrThrowResponse(databaseService, principal.getSessionID())
+				.updateSessionState(SessionState.START_VOTING );
+		databaseService.saveSession(session);
+		webSocketService.sendSessionStateToMembers();
 	}
 
 	@MessageMapping("/vote")
@@ -49,12 +55,12 @@ public class WebsocketController {
 
 	@MessageMapping("/restart")
 	public synchronized void restartVote(AdminPrincipal principal) {
-		val session = ControllerUtils
-				.getSessionOrThrowResponse(databaseService, principal.getSessionID())
-				.resetEstimations();
+		val session =
+				ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID())
+						.resetEstimations();
 		databaseService.saveSession(session);
 		webSocketService.sendMembersUpdate();
-		webSocketService.sendStartEstimationMessages();
+		webSocketService.sendSessionStateToMembers();
 	}
 
 }

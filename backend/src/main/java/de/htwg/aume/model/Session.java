@@ -28,35 +28,28 @@ public class Session {
 
 	private final List<Member> members;
 
-	public Session copyWith(UUID sessionID, UUID adminID, UUID membersID, List<Member> members) {
-		var tmpSession = this;
-		if (sessionID != null) {
-			tmpSession = new Session(sessionID, tmpSession.adminID, tmpSession.membersID, tmpSession.members);
-		}
-		if (adminID != null) {
-			tmpSession = new Session(tmpSession.sessionID, adminID, tmpSession.membersID, tmpSession.members);
-		}
-		if (membersID != null) {
-			tmpSession = new Session(tmpSession.sessionID, tmpSession.adminID, membersID, tmpSession.members);
-		}
-		if (members != null) {
-			tmpSession = new Session(tmpSession.sessionID, tmpSession.adminID, tmpSession.membersID, members);
-		}
-		return tmpSession;
-	}
+	private final SessionState sessionState;
+
 
 	public Session updateEstimation(UUID memberID, int vote) {
 		val updatedMembers = members.stream()
-			.map(m -> m.getMemberID().equals(memberID) ? m.updateEstimation(vote) : m)
-			.collect(Collectors.toList());
-		return this.copyWith(null, null, null, updatedMembers);
+				.map(m -> m.getMemberID().equals(memberID) ? m.updateEstimation(vote) : m)
+				.collect(Collectors.toList());
+		return new Session(sessionID, adminID, membersID, updatedMembers, sessionState);
 	}
 
 	public Session resetEstimations() {
-		val updatedMembers = members.stream()
-			.map(m -> m.resetEstimation())
-			.collect(Collectors.toList());
-		return this.copyWith(null, null, null, updatedMembers);
+		val updatedMembers =
+				members.stream().map(m -> m.resetEstimation()).collect(Collectors.toList());
+		return new Session(sessionID, adminID, membersID, updatedMembers, sessionState);
+	}
+	
+    public Session updateMembers(List<Member> updatedMembers) {
+		return new Session(sessionID, adminID, membersID, updatedMembers, sessionState);
+    }
+	
+	public Session updateSessionState(SessionState updatedSessionState) {
+		return new Session(sessionID, adminID, membersID, members, updatedSessionState);
 	}
 
 }
