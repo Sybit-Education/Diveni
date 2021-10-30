@@ -1,28 +1,25 @@
 <template>
-  <div>
+  <b-container>
     <h1 class="my-5 mx-2">
       {{ title }}
     </h1>
-    <b-row>
-      <div class="col-12 col-md-1" />
+    <b-row class="justify-content-center">
       <landing-page-card
-        class="col-12 col-md-5 m-2"
+        class="col-md-4 m-2 col-12"
         :title="'New meeting'"
         :description="'Start a new meeting, invite colleagues and start estimating'"
         :button-text="'GO'"
         :on-click="sendCreateSessionRequest"
       />
       <landing-page-card
-        class="col-12  col-md-5 m-2"
+        class="col-md-4 m-2 col-12"
         :title="'Join meeting'"
         :description="'Join a existing meeting and help your team estimating'"
         :button-text="'GO'"
         :on-click="goToJoinPage"
       />
-      <div class="col-12 col-md-1" />
-      <b-col />
     </b-row>
-  </div>
+  </b-container>
 </template>
 
 <script lang="ts">
