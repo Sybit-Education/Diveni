@@ -32,6 +32,10 @@ public class DatabaseService {
         return sessionRepo.save(session);
     }
 
+    public void deleteSession(Session session) {
+        sessionRepo.delete(session);
+    }
+
     
 
 }

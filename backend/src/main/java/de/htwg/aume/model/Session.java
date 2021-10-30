@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -50,6 +51,19 @@ public class Session {
 	
 	public Session updateSessionState(SessionState updatedSessionState) {
 		return new Session(sessionID, adminID, membersID, members, updatedSessionState);
+	}
+
+	public Session addMember(Member member) {
+		var updatedMembers = new ArrayList<>(members);
+		updatedMembers.add(member);
+		return this.copyWith(null, null, null, updatedMembers);
+	}
+
+	public Session removeMember(UUID memberID) {
+		val updatedMembers = members.stream()
+			.filter(m -> !m.getMemberID().equals(memberID))
+			.collect(Collectors.toList());
+		return this.copyWith(null, null, null, updatedMembers);
 	}
 
 }

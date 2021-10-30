@@ -1,10 +1,13 @@
 package de.htwg.aume.controller;
 
+import java.security.Principal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Controller;
 import de.htwg.aume.model.SessionState;
+
 import de.htwg.aume.principals.AdminPrincipal;
 import de.htwg.aume.principals.MemberPrincipal;
 import de.htwg.aume.service.DatabaseService;
@@ -34,6 +37,26 @@ public class WebsocketController {
 		webSocketService.sendSessionStateToMember(principal.getName());
 	}
 
+	@MessageMapping("/unregister")
+	public void removeMember(MemberPrincipal principal) {
+		webSocketService.removeMember(principal);
+		val session = ControllerUtils
+			.getSessionByMemberIDOrThrowResponse(databaseService, principal.getMemberID())
+			.removeMember(principal.getMemberID());
+		databaseService.saveSession(session);
+		webSocketService.sendMembersUpdate();
+	}
+
+	@MessageMapping("/unregister")
+	public void removeMember(AdminPrincipal principal) {
+		val session = ControllerUtils
+				.getSessionOrThrowResponse(databaseService, principal.getSessionID())
+				.updateSessionState(SessionState.SESSION_CLOSED);
+		webSocketService.closeSessionConnections(session);
+		databaseService.deleteSession(session);
+	}
+
+
 	@MessageMapping("/startVoting")
 	public void startEstimation(AdminPrincipal principal) {
 		ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID());
@@ -62,5 +85,4 @@ public class WebsocketController {
 		webSocketService.sendMembersUpdate();
 		webSocketService.sendSessionStateToMembers();
 	}
-
 }

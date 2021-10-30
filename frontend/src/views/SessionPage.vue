@@ -201,9 +201,11 @@ export default Vue.extend({
   },
   created() {
     window.addEventListener('resize', this.updateNumberOfCardColumns);
+    window.addEventListener('beforeunload', this.sendUnregisterCommand);
   },
   destroyed() {
     window.removeEventListener('resize', this.updateNumberOfCardColumns);
+    window.removeEventListener('beforeunload', this.sendUnregisterCommand);
   },
   methods: {
     connectToWebSocket() {
@@ -216,6 +218,10 @@ export default Vue.extend({
     },
     subscribeWSMemberUpdated() {
       this.$store.commit('subscribeOnBackendWSAdminUpdate');
+    },
+    sendUnregisterCommand() {
+      const endPoint = `${Constants.webSocketUnregisterRoute}`;
+      this.$store.commit('sendViaBackendWS', { endPoint, data: null });
     },
     sendStartEstimationMessages() {
       const endPoint = Constants.webSocketStartPlanningRoute;

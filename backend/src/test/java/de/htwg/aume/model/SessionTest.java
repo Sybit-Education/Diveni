@@ -63,4 +63,34 @@ public class SessionTest {
 		assertTrue(result.getMembers().stream().allMatch(m -> m.getCurrentEstimation().isEmpty()));
 	}
 
+	@Test
+	public void addMember_works() {
+		val memberID1 = UUID.randomUUID();
+		val member1 = new Member(memberID1, null, null, null, 3);
+		val members = Arrays.asList(member1);
+		val session = new Session(null, null, null, members);
+		val memberID2 = UUID.randomUUID();
+		val member2 = new Member(memberID2, null, null, null, 5);
+
+		val result = session.addMember(member2);
+
+		assertEquals(result.getMembers().size(), 2);
+		assertTrue(result.getMembers().stream().anyMatch(m -> m.getMemberID().equals(memberID2)));
+	}
+
+	@Test
+	public void removeMember_works() {
+		val memberID1 = UUID.randomUUID();
+		val memberID2 = UUID.randomUUID();
+		val member1 = new Member(memberID1, null, null, null, 3);
+		val member2 = new Member(memberID2, null, null, null, 5);
+		val members = Arrays.asList(member1, member2);
+		val session = new Session(null, null, null, members);
+
+		val result = session.removeMember(memberID1);
+
+		assertTrue(result.getMembers().stream().noneMatch(m -> m.getMemberID().equals(memberID1)));
+		assertEquals(result.getMembers().size(), 1);
+	}
+
 }
