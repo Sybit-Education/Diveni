@@ -56,14 +56,14 @@ public class Session {
 	public Session addMember(Member member) {
 		var updatedMembers = new ArrayList<>(members);
 		updatedMembers.add(member);
-		return this.copyWith(null, null, null, updatedMembers);
+		return new Session(sessionID, adminID, membersID, updatedMembers, sessionState);
 	}
 
 	public Session removeMember(UUID memberID) {
 		val updatedMembers = members.stream()
 			.filter(m -> !m.getMemberID().equals(memberID))
 			.collect(Collectors.toList());
-		return this.copyWith(null, null, null, updatedMembers);
-	}
+			return new Session(sessionID, adminID, membersID, updatedMembers, sessionState);
+		}
 
 }
