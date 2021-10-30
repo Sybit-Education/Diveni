@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import de.htwg.aume.model.Member;
 import de.htwg.aume.model.Session;
+import de.htwg.aume.model.SessionState;
 import de.htwg.aume.repository.SessionRepository;
 import lombok.val;
 
@@ -50,7 +51,7 @@ public class RoutesControllerTest {
 	@Test
 	public void joinMember_addsMemberToSession() throws Exception {
 		val sessionUUID = UUID.randomUUID();
-		sessionRepo.save(new Session(sessionUUID, UUID.randomUUID(), UUID.randomUUID(), new ArrayList<Member>()));
+		sessionRepo.save(new Session(sessionUUID, UUID.randomUUID(), UUID.randomUUID(), new ArrayList<Member>(), SessionState.WAITING_FOR_MEMBERS));
 
 		// @formatter:off
 		var memberAsJson =
@@ -71,7 +72,7 @@ public class RoutesControllerTest {
 	@Test
 	public void joinMember_failsToAddMemberDueToFalseAvatarAnimal() throws Exception {
 		val sessionUUID = UUID.randomUUID();
-		sessionRepo.save(new Session(sessionUUID, UUID.randomUUID(), UUID.randomUUID(), new ArrayList<Member>()));
+		sessionRepo.save(new Session(sessionUUID, UUID.randomUUID(), UUID.randomUUID(), new ArrayList<Member>(), SessionState.WAITING_FOR_MEMBERS));
 
 		// @formatter:off
 		var memberAsJson =
@@ -92,7 +93,7 @@ public class RoutesControllerTest {
 	@Test
 	public void joinMember_failsToAddMemberDueToFalseAvatarAnimal2() throws Exception {
 		val sessionUUID = UUID.randomUUID();
-		sessionRepo.save(new Session(sessionUUID, UUID.randomUUID(), UUID.randomUUID(), new ArrayList<Member>()));
+		sessionRepo.save(new Session(sessionUUID, UUID.randomUUID(), UUID.randomUUID(), new ArrayList<Member>(), SessionState.WAITING_FOR_MEMBERS));
 
 		// @formatter:off
 		var memberAsJson =
@@ -113,7 +114,7 @@ public class RoutesControllerTest {
 	@Test
 	public void joinMember_failsToAddMemberDueToFalseEstimation() throws Exception {
 		val sessionUUID = UUID.randomUUID();
-		sessionRepo.save(new Session(sessionUUID, UUID.randomUUID(), UUID.randomUUID(), new ArrayList<Member>()));
+		sessionRepo.save(new Session(sessionUUID, UUID.randomUUID(), UUID.randomUUID(), new ArrayList<Member>(), SessionState.WAITING_FOR_MEMBERS));
 
 		// @formatter:off
 		var memberAsJson =
@@ -157,7 +158,7 @@ public class RoutesControllerTest {
 	@Test
 	public void joinMember_addsMemberNotIfAlreadyExisting() throws Exception {
 		val sessionUUID = UUID.randomUUID();
-		sessionRepo.save(new Session(sessionUUID, UUID.randomUUID(), UUID.randomUUID(), new ArrayList<Member>()));
+		sessionRepo.save(new Session(sessionUUID, UUID.randomUUID(), UUID.randomUUID(), new ArrayList<Member>(), SessionState.WAITING_FOR_MEMBERS));
 
 		// @formatter:off
 		var memberAsJson =

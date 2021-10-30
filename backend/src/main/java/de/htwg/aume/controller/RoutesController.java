@@ -20,6 +20,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import de.htwg.aume.model.Member;
 import de.htwg.aume.model.Session;
+import de.htwg.aume.model.SessionState;
 import de.htwg.aume.service.DatabaseService;
 import lombok.val;
 
@@ -35,7 +36,7 @@ public class RoutesController {
 		val usedUuids = databaseService.getSessions().stream().map(s -> s.getSessionID()).collect(Collectors.toSet());
 		val sessionUuids = Stream.generate(UUID::randomUUID).filter(s -> !usedUuids.contains(s)).limit(3)
 				.collect(Collectors.toList());
-		val session = new Session(sessionUuids.get(0), sessionUuids.get(1), sessionUuids.get(2), new ArrayList<Member>());
+		val session = new Session(sessionUuids.get(0), sessionUuids.get(1), sessionUuids.get(2), new ArrayList<Member>(), SessionState.WAITING_FOR_MEMBERS);
 		databaseService.saveSession(session);
 		return new ResponseEntity<Session>(session, HttpStatus.CREATED);
 	}
@@ -63,7 +64,7 @@ public class RoutesController {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessages.memberExistsErrorMessage);
 		}
 		members.add(member);
-		databaseService.saveSession(session.copyWith(null, null, null, members));
+		databaseService.saveSession(session.updateMembers(members));
 		return true;
 	}
 }

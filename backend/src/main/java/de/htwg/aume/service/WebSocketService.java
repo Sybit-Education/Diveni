@@ -4,14 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
-import de.htwg.aume.model.MemberUpdateCommand;
+import de.htwg.aume.model.Member;
 import de.htwg.aume.principals.AdminPrincipal;
 import de.htwg.aume.principals.MemberPrincipal;
-import lombok.val;
 
 @Service
 public class WebSocketService {
@@ -27,7 +25,8 @@ public class WebSocketService {
 	private List<MemberPrincipal> members = new ArrayList<>();
 
 	public synchronized void addMemberIfNew(MemberPrincipal member) {
-		members = members.stream().filter(m -> !m.getName().equals(member.getName())).collect(Collectors.toList());
+		members = members.stream().filter(m -> !m.getName().equals(member.getName()))
+				.collect(Collectors.toList());
 		members.add(member);
 	}
 
@@ -38,14 +37,24 @@ public class WebSocketService {
 	public void sendMembersUpdate() {
 		admin.ifPresent(admin -> {
 			databaseService.getSessionByID(admin.getSessionID()).ifPresent(session -> {
-				simpMessagingTemplate.convertAndSendToUser(admin.getName(), "/updates/membersUpdated", session.getMembers());
+				simpMessagingTemplate.convertAndSendToUser(admin.getName(),
+						"/updates/membersUpdated", session.getMembers());
 			});
 		});
 	}
 
-	public void sendStartEstimationMessages() {
-		for (val member : members) {
-			simpMessagingTemplate.convertAndSendToUser(member.getName(), "/updates/member", MemberUpdateCommand.START_VOTING.toString());
-		}
+	public void sendSessionStateToMembers() {
+		members.stream()
+				.forEach(member -> sendSessionStateToMember(member.getMemberID().toString()));
+	}
+
+
+	public void sendSessionStateToMember(String memberID) {
+		admin.ifPresent(admin -> {
+			databaseService.getSessionByID(admin.getSessionID()).ifPresent(session -> {
+				simpMessagingTemplate.convertAndSendToUser(memberID, "/updates/member",
+						session.getSessionState().toString());
+			});
+		});
 	}
 }

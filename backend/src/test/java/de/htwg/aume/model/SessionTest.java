@@ -19,74 +19,16 @@ public class SessionTest {
 		val sessionIdBefore = UUID.randomUUID();
 		val adminIdBefore = UUID.randomUUID();
 		val membersIdBefore = UUID.randomUUID();
-		val session = new Session(sessionIdBefore, adminIdBefore, membersIdBefore, new ArrayList<Member>());
-		val sameSession = new Session(sessionIdBefore, adminIdBefore, membersIdBefore, new ArrayList<Member>());
-		val otherSession = new Session(UUID.randomUUID(), adminIdBefore, membersIdBefore, new ArrayList<Member>());
+		val session = new Session(sessionIdBefore, adminIdBefore, membersIdBefore,
+				new ArrayList<Member>(), SessionState.WAITING_FOR_MEMBERS);
+		val sameSession = new Session(sessionIdBefore, adminIdBefore, membersIdBefore,
+				new ArrayList<Member>(), SessionState.WAITING_FOR_MEMBERS);
+		val otherSession = new Session(UUID.randomUUID(), adminIdBefore, membersIdBefore,
+				new ArrayList<Member>(), SessionState.WAITING_FOR_MEMBERS);
 
 		assertEquals(session, sameSession);
 		assertNotEquals(session, otherSession);
 		assertEquals(session.hashCode(), sameSession.hashCode());
-	}
-
-	@Test
-	public void copyWithSessionID_works() {
-		val uuidBefore = UUID.randomUUID();
-		val uuidAfter = UUID.randomUUID();
-		val session = new Session(uuidBefore, UUID.randomUUID(), UUID.randomUUID(), new ArrayList<Member>());
-
-		val result = session.copyWith(uuidAfter, null, null, null);
-
-		assertNotEquals(session.getSessionID(), result.getSessionID());
-		assertEquals(session.getSessionID(), uuidBefore);
-		assertEquals(result.getSessionID(), uuidAfter);
-		assertEquals(session.getAdminID(), result.getAdminID());
-		assertEquals(session.getMembersID(), result.getMembersID());
-		assertEquals(session.getMembers(), result.getMembers());
-	}
-
-	@Test
-	public void copyWithAdminID_works() {
-		val uuidBefore = UUID.randomUUID();
-		val uuidAfter = UUID.randomUUID();
-		val session = new Session(UUID.randomUUID(), uuidBefore, UUID.randomUUID(), new ArrayList<Member>());
-
-		val result = session.copyWith(null, uuidAfter, null, null);
-
-		assertEquals(session.getSessionID(), result.getSessionID());
-		assertNotEquals(session.getAdminID(), result.getAdminID());
-		assertEquals(session.getMembersID(), result.getMembersID());
-		assertEquals(session.getMembers(), result.getMembers());
-	}
-
-	@Test
-	public void copyWithMembersID_works() {
-		val uuidBefore = UUID.randomUUID();
-		val uuidAfter = UUID.randomUUID();
-		val session = new Session(UUID.randomUUID(), UUID.randomUUID(), uuidBefore, new ArrayList<Member>());
-
-		val result = session.copyWith(null, null, uuidAfter, null);
-
-		assertEquals(session.getSessionID(), result.getSessionID());
-		assertEquals(session.getAdminID(), result.getAdminID());
-		assertNotEquals(session.getMembersID(), uuidAfter);
-		assertEquals(result.getMembersID(), uuidAfter);
-		assertEquals(session.getMembers(), result.getMembers());
-	}
-
-	@Test
-	public void copyWithMultiple_works() {
-		val adminIdBefore = UUID.randomUUID();
-		val adminIdAfter = UUID.randomUUID();
-		val sessionIdBefore = UUID.randomUUID();
-		val sessionIdAfter = UUID.randomUUID();
-		val session = new Session(sessionIdBefore, adminIdBefore, UUID.randomUUID(), new ArrayList<Member>());
-
-		val result = session.copyWith(sessionIdAfter, adminIdAfter, null, null);
-
-		assertEquals(sessionIdAfter, result.getSessionID());
-		assertEquals(adminIdAfter, result.getAdminID());
-		assertEquals(session.getMembersID(), result.getMembersID());
-		assertEquals(session.getMembers(), result.getMembers());
 	}
 
 	@Test
@@ -98,10 +40,11 @@ public class SessionTest {
 		val members = Arrays.asList(member1, member2);
 		val vote = 5;
 
-		val session = new Session(null, null, null, members);
+		val session = new Session(null, null, null, members, SessionState.WAITING_FOR_MEMBERS);
 		val result = session.updateEstimation(member1.getMemberID(), vote);
 
-		val resultMember = result.getMembers().stream().filter(m -> m.getMemberID().equals(member1.getMemberID())).findFirst().get();
+		val resultMember = result.getMembers().stream()
+				.filter(m -> m.getMemberID().equals(member1.getMemberID())).findFirst().get();
 		assertTrue(resultMember.getCurrentEstimation().isPresent());
 		assertEquals(resultMember.getCurrentEstimation().get(), vote);
 	}
@@ -113,8 +56,8 @@ public class SessionTest {
 		val member1 = new Member(memberID1, null, null, null, 3);
 		val member2 = new Member(memberID2, null, null, null, 5);
 		val members = Arrays.asList(member1, member2);
-		val session = new Session(null, null, null, members);
-		
+		val session = new Session(null, null, null, members, SessionState.WAITING_FOR_MEMBERS);
+
 		val result = session.resetEstimations();
 
 		assertTrue(result.getMembers().stream().allMatch(m -> m.getCurrentEstimation().isEmpty()));

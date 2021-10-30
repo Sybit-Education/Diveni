@@ -14,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import de.htwg.aume.model.AvatarAnimal;
 import de.htwg.aume.model.Member;
 import de.htwg.aume.model.Session;
+import de.htwg.aume.model.SessionState;
 import lombok.val;
 
 @ExtendWith(SpringExtension.class)
@@ -28,7 +29,7 @@ public class SessionRepositoryTest {
 		val sessionID = UUID.randomUUID();
 		val adminID = UUID.randomUUID();
 		val membersID = UUID.randomUUID();
-		val session = new Session(sessionID, adminID, membersID, new ArrayList<Member>());
+		val session = new Session(sessionID, adminID, membersID, new ArrayList<Member>(), SessionState.WAITING_FOR_MEMBERS);
 
 		assertEquals(session, sessionRepo.save(session));
 	}
@@ -41,7 +42,7 @@ public class SessionRepositoryTest {
 		val member = new Member(UUID.randomUUID(), "John", "0x0a0a0a", AvatarAnimal.CAMEL, null);
 		val members = new ArrayList<Member>();
 		members.add(member);
-		val session = new Session(sessionID, adminID, membersID, members);
+		val session = new Session(sessionID, adminID, membersID, members, SessionState.WAITING_FOR_MEMBERS);
 
 		assertEquals(session, sessionRepo.save(session));
 	}

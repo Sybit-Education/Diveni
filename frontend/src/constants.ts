@@ -9,7 +9,7 @@ class Constants {
 
   webSocketMembersUpdatedRoute = '/users/updates/membersUpdated';
 
-  webSocketStartPlanningRoute = '/ws/startEstimation';
+  webSocketStartPlanningRoute = '/ws/startVoting';
 
   webSocketRestartPlanningRoute = '/ws/restart';
 
