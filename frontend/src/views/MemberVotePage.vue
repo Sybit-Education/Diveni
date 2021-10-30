@@ -80,7 +80,7 @@ export default Vue.extend({
       title: 'Estimate!',
       numbers: [1, 2, 3, 5, 8, 13, 21, 34],
       draggedNumber: null,
-      waitingText: 'Waiting for Scrum master to start ...',
+      waitingText: 'Waiting for Host to start ...',
     };
   },
   computed: {
@@ -98,6 +98,12 @@ export default Vue.extend({
       }
     },
   },
+  mounted() {
+    if (this.memberID === undefined || this.name === undefined
+          || this.hexColor === undefined || this.avatarAnimalAssetName === undefined) {
+      this.goToJoinPage();
+    }
+  },
   methods: {
     onSendVote({ vote }) {
       this.draggedNumber = vote;
@@ -107,6 +113,9 @@ export default Vue.extend({
     sendUnregisterCommand() {
       const endPoint = `${Constants.webSocketUnregisterMemberRoute}`;
       this.$store.commit('sendViaBackendWS', { endPoint, data: null });
+    },
+    goToJoinPage() {
+      this.$router.push({ name: 'JoinPage' });
     },
   },
 });

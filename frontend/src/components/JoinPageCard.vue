@@ -81,6 +81,7 @@ export default Vue.extend({
     color: { type: String, required: true },
     animalAssetName: { type: String, required: true },
     buttonText: { type: String, required: true },
+    sessionIdFromUrl: { type: String, required: true },
   },
   data() {
     return {
@@ -88,6 +89,11 @@ export default Vue.extend({
       password: '',
       name: '',
     };
+  },
+  created() {
+    if (this.sessionIdFromUrl) {
+      this.sessionID = this.sessionIdFromUrl;
+    }
   },
   methods: {
     onClickButton() {

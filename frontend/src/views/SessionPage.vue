@@ -8,7 +8,7 @@
         Share the code
         <b-link
           href=""
-          @click="copyCodeToClipboard"
+          @click="copyLinkToClipboard"
         >
           {{ sessionID }}
         </b-link>
@@ -46,16 +46,34 @@
     <span
       v-if="planningStart"
     >
-      <h1 class="mt-5 mb-3 mx-2">
-        {{ titleEstimate }}
-      </h1>
-      <b-button
-        variant="outline-dark"
-        class="ml-5 pl-5"
-        @click="sendRestartMessage"
-      >
-        <b-icon-arrow-clockwise /> New
-      </b-button>
+      <b-container>
+        <b-row>
+          <b-col>
+            <h1 class="mt-5 mb-3 mx-2">
+              {{ titleEstimate }}
+            </h1>
+            <b-button
+              variant="outline-dark"
+              class="ml-5 pl-5"
+              @click="sendRestartMessage"
+            >
+              <b-icon-arrow-clockwise /> New
+            </b-button>
+          </b-col>
+          <b-col>
+            <h4
+              class="session-link"
+            >
+              <b-link
+                href=""
+                @click="copyLinkToClipboard"
+              >
+                {{ sessionID }}
+              </b-link>
+            </h4>
+          </b-col>
+        </b-row>
+      </b-container>
       <b-container
         class="my-5 border rounded"
         style="min-height: 200px;"
@@ -80,6 +98,8 @@
             :name="member.name"
             :estimation="member.currentEstimation"
             :estimate-finished="estimateFinished"
+            :highest="estimateHighest.memberID === member.memberID"
+            :lowest="estimateLowest.memberID === member.memberID"
           />
         </b-row>
         <b-row
@@ -96,7 +116,6 @@
             :alt-attribute="member.avatarAnimal"
             :name="member.name"
             :estimation="member.currentEstimation"
-            :estimate-finished="estimateFinished"
           />
         </b-row>
       </b-container>
@@ -151,8 +170,21 @@ export default Vue.extend({
     estimateFinished(): boolean {
       return !this.members.map((elem) => elem.currentEstimation).includes(null);
     },
+    estimateHighest(): Member {
+      return this.membersEstimated.reduce((prev, current) => (
+        (prev.currentEstimation! > current.currentEstimation!) ? prev : current
+      ));
+    },
+    estimateLowest(): Member {
+      return this.membersEstimated.reduce((prev, current) => (
+        (prev.currentEstimation! < current.currentEstimation!) ? prev : current
+      ));
+    },
   },
   watch: {
+    members() {
+      this.updateNumberOfCardColumns();
+    },
     webSocketIsConnected(isConnected) {
       if (isConnected) {
         console.debug('SessionPage: member connected to websocket');
@@ -163,17 +195,15 @@ export default Vue.extend({
   },
   mounted() {
     if (this.sessionID === undefined || this.adminID === undefined) {
-      // TODO: handle when user goes directly to /session and not via landing Page
-      // eslint-disable-next-line no-alert
-      alert('ids undefined');
+      this.goToLandingPage();
     }
     this.connectToWebSocket();
   },
   created() {
-    window.addEventListener('resize', this.getNumberOfCardColumns);
+    window.addEventListener('resize', this.updateNumberOfCardColumns);
   },
   destroyed() {
-    window.removeEventListener('resize', this.getNumberOfCardColumns);
+    window.removeEventListener('resize', this.updateNumberOfCardColumns);
   },
   methods: {
     connectToWebSocket() {
@@ -191,10 +221,11 @@ export default Vue.extend({
       const endPoint = Constants.webSocketStartPlanningRoute;
       this.$store.commit('sendViaBackendWS', { endPoint });
       this.planningStart = true;
-      this.getNumberOfCardColumns();
+      this.updateNumberOfCardColumns();
     },
-    copyCodeToClipboard() {
-      navigator.clipboard.writeText(this.sessionID).then(() => {
+    copyLinkToClipboard() {
+      const link = `${document.URL.toString().replace('session', 'join?sessionID=')}${this.sessionID}`;
+      navigator.clipboard.writeText(link).then(() => {
         console.log('Copying to clipboard was successful!');
       }, (err) => {
         console.error('Could not copy text: ', err);
@@ -203,7 +234,7 @@ export default Vue.extend({
     backendAnimalToAssetName(animal: string) {
       return Constants.avatarAnimalToAssetName(animal);
     },
-    getNumberOfCardColumns() {
+    updateNumberOfCardColumns() {
       setTimeout(() => {
         const grid = Array.from((this.$refs.grid as HTMLElement).children);
         const baseOffset = (grid[0] as HTMLElement).offsetTop;
@@ -216,6 +247,22 @@ export default Vue.extend({
       const endPoint = Constants.webSocketRestartPlanningRoute;
       this.$store.commit('sendViaBackendWS', { endPoint });
     },
+    goToLandingPage() {
+      this.$router.push({ name: 'LandingPage' });
+    },
   },
 });
 </script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped>
+.session-link {
+  margin-top: 3.8rem!important;
+  text-align: center;
+}
+@media (min-width: 341px) {
+  .session-link {
+    text-align: right;
+  }
+}
+</style>

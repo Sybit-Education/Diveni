@@ -2,6 +2,7 @@
   <div
     :style="`background-color: ${color};`"
     class="text-center"
+    :class="{ highlight: (highest || lowest) && estimateFinished }"
   >
     <h1
       class="mt-3 fs-3-rem"
@@ -35,6 +36,8 @@ export default Vue.extend({
     estimation: { type: Number, required: false, default: null },
     name: { type: String, required: true },
     estimateFinished: { type: Boolean, required: false, default: false },
+    highest: { type: Boolean, required: false, default: false },
+    lowest: { type: Boolean, required: false, default: false },
   },
 });
 </script>
@@ -59,5 +62,10 @@ h4 {
   white-space: nowrap;
   overflow: hidden;
   width:100px;
+}
+.highlight {
+  transform: scale(1.10);
+  border-width: 3px;
+  border-color: darkred;
 }
 </style>
