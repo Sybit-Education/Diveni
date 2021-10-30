@@ -7,7 +7,7 @@ class Constants {
 
   webSocketRegisterMemberRoute = '/ws/registerMember';
 
-  webSocketUnregisterMemberRoute = '/ws/unregisterMember'
+  webSocketUnregisterRoute = '/ws/unregister'
 
   webSocketMembersUpdatedRoute = '/users/updates/membersUpdated';
 
@@ -20,6 +20,8 @@ class Constants {
   webSocketMemberListenRoute = '/users/updates/member';
 
   memberUpdateCommandStartVoting = 'START_VOTING';
+
+  memberUpdateCloseSession = 'SESSION_CLOSED';
 
   // eslint-disable-next-line class-methods-use-this
   public joinSessionRoute(sessionID: string) {

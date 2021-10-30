@@ -95,6 +95,8 @@ export default Vue.extend({
     memberUpdates(updates) {
       if (updates.at(-1) === Constants.memberUpdateCommandStartVoting) {
         this.draggedNumber = null;
+      } else if (updates.at(-1) === Constants.memberUpdateCloseSession) {
+        this.goToJoinPage();
       }
     },
   },
@@ -111,7 +113,7 @@ export default Vue.extend({
       this.$store.commit('sendViaBackendWS', { endPoint, data: vote });
     },
     sendUnregisterCommand() {
-      const endPoint = `${Constants.webSocketUnregisterMemberRoute}`;
+      const endPoint = `${Constants.webSocketUnregisterRoute}`;
       this.$store.commit('sendViaBackendWS', { endPoint, data: null });
     },
     goToJoinPage() {

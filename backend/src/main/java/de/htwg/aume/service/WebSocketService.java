@@ -3,14 +3,12 @@ package de.htwg.aume.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
-import de.htwg.aume.model.Member;
 import de.htwg.aume.model.MemberUpdateCommand;
 import de.htwg.aume.model.Session;
 import de.htwg.aume.principals.AdminPrincipal;

@@ -48,7 +48,7 @@ public class WebsocketController {
 		} else {
 			val session = ControllerUtils
 				.getSessionOrThrowResponse(databaseService, ((AdminPrincipal)principal).getSessionID());
-			webSocketService.closeSession();
+			webSocketService.closeSessionConnections(session);
 			databaseService.deleteSession(session);
 		}
 	}
