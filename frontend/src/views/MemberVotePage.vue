@@ -70,6 +70,9 @@ export default Vue.extend({
     hexColor: { type: String, default: undefined },
     avatarAnimalAssetName: { type: String, default: undefined },
   },
+  created() {
+    window.addEventListener('beforeunload', this.sendUnregisterCommand);
+  },
   data() {
     return {
       title: 'Estimate!',
@@ -90,6 +93,8 @@ export default Vue.extend({
     memberUpdates(updates) {
       if (updates.at(-1) === Constants.memberUpdateCommandStartVoting) {
         this.draggedNumber = null;
+      } else if (updates.at(-1) === Constants.memberUpdateCloseSession) {
+        this.goToJoinPage();
       }
     },
   },
@@ -104,6 +109,10 @@ export default Vue.extend({
       this.draggedNumber = vote;
       const endPoint = `${Constants.webSocketVoteRoute}`;
       this.$store.commit('sendViaBackendWS', { endPoint, data: vote });
+    },
+    sendUnregisterCommand() {
+      const endPoint = `${Constants.webSocketUnregisterRoute}`;
+      this.$store.commit('sendViaBackendWS', { endPoint, data: null });
     },
     goToJoinPage() {
       this.$router.push({ name: 'JoinPage' });

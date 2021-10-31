@@ -1,10 +1,13 @@
 package de.htwg.aume.controller;
 
+import java.security.Principal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Controller;
 import de.htwg.aume.model.SessionState;
+
 import de.htwg.aume.principals.AdminPrincipal;
 import de.htwg.aume.principals.MemberPrincipal;
 import de.htwg.aume.service.DatabaseService;
@@ -28,20 +31,39 @@ public class WebsocketController {
 
 	@MessageMapping("/registerMember")
 	public void joinMember(MemberPrincipal principal) {
-		ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID());
+		val session = ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID());
 		webSocketService.addMemberIfNew((MemberPrincipal) principal);
-		webSocketService.sendMembersUpdate();
-		webSocketService.sendSessionStateToMember(principal.getName());
+		webSocketService.sendMembersUpdate(session);
+		webSocketService.sendSessionStateToMember(session, principal.getName());
 	}
+
+	@MessageMapping("/unregister")
+	public void removeMember(Principal principal) {
+		if (principal instanceof MemberPrincipal) {
+			webSocketService.removeMember((MemberPrincipal)principal);
+			val session = ControllerUtils
+				.getSessionByMemberIDOrThrowResponse(databaseService, ((MemberPrincipal)principal).getMemberID())
+				.removeMember(((MemberPrincipal)principal).getMemberID());
+			databaseService.saveSession(session);
+			webSocketService.sendMembersUpdate(session);
+		} else {
+			val session = ControllerUtils
+				.getSessionOrThrowResponse(databaseService, ((AdminPrincipal)principal).getSessionID())
+				.updateSessionState(SessionState.SESSION_CLOSED);
+			webSocketService.sendSessionStateToMembers(session);
+			webSocketService.removeSession(session);
+			databaseService.deleteSession(session);
+		}
+	}
+
 
 	@MessageMapping("/startVoting")
 	public void startEstimation(AdminPrincipal principal) {
-		ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID());
 		val session = ControllerUtils
 				.getSessionOrThrowResponse(databaseService, principal.getSessionID())
 				.updateSessionState(SessionState.START_VOTING );
 		databaseService.saveSession(session);
-		webSocketService.sendSessionStateToMembers();
+		webSocketService.sendSessionStateToMembers(session);
 	}
 
 	@MessageMapping("/vote")
@@ -50,7 +72,7 @@ public class WebsocketController {
 				.getSessionByMemberIDOrThrowResponse(databaseService, member.getMemberID())
 				.updateEstimation(member.getMemberID(), vote);
 		databaseService.saveSession(session);
-		webSocketService.sendMembersUpdate();
+		webSocketService.sendMembersUpdate(session);
 	}
 
 	@MessageMapping("/restart")
@@ -59,8 +81,7 @@ public class WebsocketController {
 				ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID())
 						.resetEstimations();
 		databaseService.saveSession(session);
-		webSocketService.sendMembersUpdate();
-		webSocketService.sendSessionStateToMembers();
+		webSocketService.sendMembersUpdate(session);
+		webSocketService.sendSessionStateToMembers(session);
 	}
-
 }
