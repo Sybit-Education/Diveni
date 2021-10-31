@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+  database:
+    build: ./database
+    container_name: database
+    ports:
+      - 27017:27017
+    restart: always
+  backend:
+    depends_on:
+      - database
+    build: ./backend
+    container_name: backend
+    ports:
+      - 9090:9090
+    restart: always
+  frontend:
+    depends_on:
+      - backend
+    container_name: frontend
+    build: ./frontend
+    ports:
+      - 8080:8080
+    restart: always
+  proxy:
+    depends_on:
+        - frontend
+        - backend
+        - database
+    container_name: proxy
+    build: ./proxy
+    restart: always
+    ports:
+        - 80:80
