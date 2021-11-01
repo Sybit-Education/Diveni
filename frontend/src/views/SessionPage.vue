@@ -76,12 +76,11 @@
       </b-container>
       <b-container
         class="my-5 border rounded"
-        style="min-height: 200px;"
       >
         <b-row
-          class="d-flex justify-content-center"
-          style="min-height: 200px;"
+          class="d-flex justify-content-center pb-3"
         >
+          <h4 class="pl-2 pt-2">{{ stageLabelReady }}</h4>
           <b-icon-three-dots
             v-if="membersEstimated.length === 0"
             animation="fade"
@@ -91,7 +90,6 @@
           <SessionMemberCard
             v-for="member of membersEstimated"
             :key="member.memberID"
-            class="m-4"
             :color="member.hexColor"
             :asset-name="backendAnimalToAssetName(member.avatarAnimal)"
             :alt-attribute="member.avatarAnimal"
@@ -102,14 +100,17 @@
             :lowest="estimateLowest.memberID === member.memberID"
           />
         </b-row>
+        <b-row v-if="!estimateFinished">
+          <hr class="m-0" />
+          <h4 class="pl-2 pt-2">{{ stageLabelWaiting }}</h4>
+        </b-row>
         <b-row
           ref="grid"
-          class="d-flex justify-content-center"
+          class="d-flex justify-content-center pb-3"
         >
           <SessionMemberCard
             v-for="(member, index) of membersPending"
             :key="member.memberID"
-            class="m-4"
             :style="{top: -1 * ((Math.trunc(index/grid))) * 200+'px', zIndex: -1*index}"
             :color="member.hexColor"
             :asset-name="backendAnimalToAssetName(member.avatarAnimal)"
@@ -150,6 +151,8 @@ export default Vue.extend({
     return {
       titleWaiting: 'Waiting for members ...',
       titleEstimate: 'Estimtate!',
+      stageLabelReady: 'Ready',
+      stageLabelWaiting: 'Waiting room',
       grid: 5,
       planningStart: false,
     };
