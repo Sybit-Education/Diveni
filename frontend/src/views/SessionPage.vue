@@ -255,6 +255,7 @@ export default Vue.extend({
     sendRestartMessage() {
       const endPoint = Constants.webSocketRestartPlanningRoute;
       this.$store.commit('sendViaBackendWS', { endPoint });
+      this.updateNumberOfCardColumns();
     },
     goToLandingPage() {
       this.$router.push({ name: 'LandingPage' });
