@@ -34,7 +34,7 @@
           <b-col class="text-center mt-5 mb-5">
             <b-button
               variant="success"
-              :disabled="false"
+              :disabled="!members || members.length < 1"
               @click="sendStartEstimationMessages"
             >
               Start Planning
@@ -131,7 +131,7 @@ import Member from '../model/Member';
 import SessionMemberCard from '../components/SessionMemberCard.vue';
 
 export default Vue.extend({
-  name: 'LandingPage',
+  name: 'SessionPage',
   components: {
     SessionMemberCircle,
     SessionMemberCard,
