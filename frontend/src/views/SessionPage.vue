@@ -34,7 +34,7 @@
           <b-col class="text-center mt-5 mb-5">
             <b-button
               variant="success"
-              :disabled="false"
+              :disabled="!members || members.length < 1"
               @click="sendStartEstimationMessages"
             >
               Start Planning
@@ -76,12 +76,11 @@
       </b-container>
       <b-container
         class="my-5 border rounded"
-        style="min-height: 200px;"
       >
         <b-row
-          class="d-flex justify-content-center"
-          style="min-height: 200px;"
+          class="d-flex justify-content-center pb-3"
         >
+          <h4 class="pl-2 pt-2">{{ stageLabelReady }}</h4>
           <b-icon-three-dots
             v-if="membersEstimated.length === 0"
             animation="fade"
@@ -91,7 +90,6 @@
           <SessionMemberCard
             v-for="member of membersEstimated"
             :key="member.memberID"
-            class="m-4"
             :color="member.hexColor"
             :asset-name="backendAnimalToAssetName(member.avatarAnimal)"
             :alt-attribute="member.avatarAnimal"
@@ -102,14 +100,17 @@
             :lowest="estimateLowest.memberID === member.memberID"
           />
         </b-row>
+        <b-row v-if="!estimateFinished">
+          <hr class="m-0" />
+          <h4 class="pl-2 pt-2">{{ stageLabelWaiting }}</h4>
+        </b-row>
         <b-row
           ref="grid"
-          class="d-flex justify-content-center"
+          class="d-flex justify-content-center pb-3"
         >
           <SessionMemberCard
             v-for="(member, index) of membersPending"
             :key="member.memberID"
-            class="m-4"
             :style="{top: -1 * ((Math.trunc(index/grid))) * 200+'px', zIndex: -1*index}"
             :color="member.hexColor"
             :asset-name="backendAnimalToAssetName(member.avatarAnimal)"
@@ -131,7 +132,7 @@ import Member from '../model/Member';
 import SessionMemberCard from '../components/SessionMemberCard.vue';
 
 export default Vue.extend({
-  name: 'LandingPage',
+  name: 'SessionPage',
   components: {
     SessionMemberCircle,
     SessionMemberCard,
@@ -150,6 +151,8 @@ export default Vue.extend({
     return {
       titleWaiting: 'Waiting for members ...',
       titleEstimate: 'Estimtate!',
+      stageLabelReady: 'Ready',
+      stageLabelWaiting: 'Waiting room',
       grid: 5,
       planningStart: false,
     };
@@ -201,9 +204,11 @@ export default Vue.extend({
   },
   created() {
     window.addEventListener('resize', this.updateNumberOfCardColumns);
+    window.addEventListener('beforeunload', this.sendUnregisterCommand);
   },
   destroyed() {
     window.removeEventListener('resize', this.updateNumberOfCardColumns);
+    window.removeEventListener('beforeunload', this.sendUnregisterCommand);
   },
   methods: {
     connectToWebSocket() {
@@ -216,6 +221,10 @@ export default Vue.extend({
     },
     subscribeWSMemberUpdated() {
       this.$store.commit('subscribeOnBackendWSAdminUpdate');
+    },
+    sendUnregisterCommand() {
+      const endPoint = `${Constants.webSocketUnregisterRoute}`;
+      this.$store.commit('sendViaBackendWS', { endPoint, data: null });
     },
     sendStartEstimationMessages() {
       const endPoint = Constants.webSocketStartPlanningRoute;
@@ -246,6 +255,7 @@ export default Vue.extend({
     sendRestartMessage() {
       const endPoint = Constants.webSocketRestartPlanningRoute;
       this.$store.commit('sendViaBackendWS', { endPoint });
+      this.updateNumberOfCardColumns();
     },
     goToLandingPage() {
       this.$router.push({ name: 'LandingPage' });
