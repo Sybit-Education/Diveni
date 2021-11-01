@@ -233,8 +233,8 @@ export default Vue.extend({
       this.updateNumberOfCardColumns();
     },
     copyLinkToClipboard() {
-      const link = `${document.URL.toString().replace('session', 'join?sessionID=')}${this.sessionID}`;
-      navigator.clipboard.writeText(link).then(() => {
+      // `${document.URL.toString().replace('session', 'join?sessionID=')}${this.sessionID}`;
+      navigator.clipboard.writeText(this.sessionID).then(() => {
         console.log('Copying to clipboard was successful!');
       }, (err) => {
         console.error('Could not copy text: ', err);
