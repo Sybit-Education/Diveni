@@ -55,8 +55,11 @@ class Constants {
 
   // eslint-disable-next-line class-methods-use-this
   public getRandomAvatarAnimalAssetName() {
-    // TODO implement;
-    return 'wolf.png';
+    const animals = ['bull', 'camel', 'cat', 'cow', 'dog', 'duck', 'elephant',
+      'fish', 'giraffe', 'goose', 'horse', 'lion', 'monkey',
+      'mouse', 'pigeon', 'rabbit', 'tiger', 'turtle', 'wolf', 'zebra'];
+    const num = Math.random() * (animals.length - 0);
+    return `${animals[parseInt(num.toString(), 10)]}.png`;
   }
 
   // eslint-disable-next-line class-methods-use-this
