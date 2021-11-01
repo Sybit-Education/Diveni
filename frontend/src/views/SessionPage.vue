@@ -18,7 +18,6 @@
       <b-container class="my-5">
         <b-row
           class="d-flex justify-content-center border rounded"
-          style="min-height: 200px;"
         >
           <SessionMemberCircle
             v-for="member of members"
@@ -76,11 +75,10 @@
       </b-container>
       <b-container
         class="my-5 border rounded"
-        style="min-height: 200px;"
       >
         <b-row
           class="d-flex justify-content-center"
-          style="min-height: 200px;"
+          :class="{ 'mb-4': estimateFinished }"
         >
           <b-icon-three-dots
             v-if="membersEstimated.length === 0"
@@ -91,7 +89,6 @@
           <SessionMemberCard
             v-for="member of membersEstimated"
             :key="member.memberID"
-            class="m-4"
             :color="member.hexColor"
             :asset-name="backendAnimalToAssetName(member.avatarAnimal)"
             :alt-attribute="member.avatarAnimal"
@@ -102,6 +99,11 @@
             :lowest="estimateLowest.memberID === member.memberID"
           />
         </b-row>
+        <b-row v-if="!estimateFinished">
+          <p class="m-0 text-right">{{ stageLabelReady }}</p>
+          <hr class="m-0" />
+          <p class="m-0 text-right">{{ stageLabelWaiting }}</p>
+        </b-row>
         <b-row
           ref="grid"
           class="d-flex justify-content-center"
@@ -109,7 +111,6 @@
           <SessionMemberCard
             v-for="(member, index) of membersPending"
             :key="member.memberID"
-            class="m-4"
             :style="{top: -1 * ((Math.trunc(index/grid))) * 200+'px', zIndex: -1*index}"
             :color="member.hexColor"
             :asset-name="backendAnimalToAssetName(member.avatarAnimal)"
@@ -150,6 +151,8 @@ export default Vue.extend({
     return {
       titleWaiting: 'Waiting for members ...',
       titleEstimate: 'Estimtate!',
+      stageLabelReady: 'ready',
+      stageLabelWaiting: 'waiting room',
       grid: 5,
       planningStart: false,
     };
@@ -265,6 +268,9 @@ export default Vue.extend({
 .session-link {
   margin-top: 3.8rem!important;
   text-align: center;
+}
+.text-right {
+  text-align: right;
 }
 @media (min-width: 341px) {
   .session-link {

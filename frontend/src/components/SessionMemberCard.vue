@@ -1,7 +1,7 @@
 <template>
   <div
     :style="`background-color: ${color};`"
-    class="text-center card"
+    class="text-center card mt-4 mx-3"
     :class="{ highlight: (highest || lowest) && estimateFinished }"
   >
     <h1
