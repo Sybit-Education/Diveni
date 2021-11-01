@@ -49,8 +49,8 @@ export default Vue.extend({
 }
 .card{
   position: relative;
-  width: 280px;
-  height: 370px;
+  width: 224px;
+  height: 296px;
   justify-content: center;  /* Centering y-axis */
   align-items :center; /* Centering x-axis */
   border-radius: 5%;
@@ -64,8 +64,8 @@ h4 {
   width:100px;
 }
 .highlight {
-  transform: scale(1.10);
-  border-width: 3px;
+  transform: scale(1.05);
+  border-width: 5px;
   border-color: darkred;
 }
 </style>

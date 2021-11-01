@@ -18,6 +18,7 @@
       <b-container class="my-5">
         <b-row
           class="d-flex justify-content-center border rounded"
+          style="min-height: 200px;"
         >
           <SessionMemberCircle
             v-for="member of members"
@@ -77,9 +78,9 @@
         class="my-5 border rounded"
       >
         <b-row
-          class="d-flex justify-content-center"
-          :class="{ 'mb-4': estimateFinished }"
+          class="d-flex justify-content-center pb-3"
         >
+          <h4 class="pl-2 pt-2">{{ stageLabelReady }}</h4>
           <b-icon-three-dots
             v-if="membersEstimated.length === 0"
             animation="fade"
@@ -100,13 +101,12 @@
           />
         </b-row>
         <b-row v-if="!estimateFinished">
-          <p class="m-0 text-right">{{ stageLabelReady }}</p>
           <hr class="m-0" />
-          <p class="m-0 text-right">{{ stageLabelWaiting }}</p>
+          <h4 class="pl-2 pt-2">{{ stageLabelWaiting }}</h4>
         </b-row>
         <b-row
           ref="grid"
-          class="d-flex justify-content-center"
+          class="d-flex justify-content-center pb-3"
         >
           <SessionMemberCard
             v-for="(member, index) of membersPending"
@@ -151,8 +151,8 @@ export default Vue.extend({
     return {
       titleWaiting: 'Waiting for members ...',
       titleEstimate: 'Estimtate!',
-      stageLabelReady: 'ready',
-      stageLabelWaiting: 'waiting room',
+      stageLabelReady: 'Ready',
+      stageLabelWaiting: 'Waiting room',
       grid: 5,
       planningStart: false,
     };
@@ -268,9 +268,6 @@ export default Vue.extend({
 .session-link {
   margin-top: 3.8rem!important;
   text-align: center;
-}
-.text-right {
-  text-align: right;
 }
 @media (min-width: 341px) {
   .session-link {
