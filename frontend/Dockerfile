@@ -4,11 +4,8 @@ RUN npm install -g http-server
 
 WORKDIR /app
 
-COPY ./package*.json ./
-RUN npm install
-
-COPY . .
-RUN npm run build --release
+RUN cd /app && mkdir dist
+COPY ./dist /app/dist
 
 EXPOSE 8080
 CMD http-server dist
