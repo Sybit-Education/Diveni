@@ -26,13 +26,13 @@ public class WebsocketController {
 	@MessageMapping("/registerAdminUser")
 	public void registerAdminUser(AdminPrincipal principal) {
 		ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID());
-		webSocketService.setAdminUser((AdminPrincipal) principal);
+		webSocketService.setAdminUser(principal);
 	}
 
 	@MessageMapping("/registerMember")
 	public void joinMember(MemberPrincipal principal) {
 		val session = ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID());
-		webSocketService.addMemberIfNew((MemberPrincipal) principal);
+		webSocketService.addMemberIfNew(principal);
 		webSocketService.sendMembersUpdate(session);
 		webSocketService.sendSessionStateToMember(session, principal.getName());
 	}
