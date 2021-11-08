@@ -4,24 +4,18 @@ services:
   database:
     image: aume2021-team-2_database
     container_name: database
-    ports:
-      - 27017:27017
     restart: always
   backend:
     depends_on:
       - database
     image: aume2021-team-2_backend
     container_name: backend
-    ports:
-      - 9090:9090
     restart: always
   frontend:
     depends_on:
       - backend
     container_name: frontend
     image: aume2021-team-2_frontend
-    ports:
-      - 8080:8080
     restart: always
   proxy:
     depends_on:
