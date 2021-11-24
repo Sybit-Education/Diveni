@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Optional;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
@@ -20,12 +19,12 @@ public class SessionTest {
 		val sessionIdBefore = UUID.randomUUID();
 		val adminIdBefore = UUID.randomUUID();
 		val membersIdBefore = UUID.randomUUID();
-		val session = new Session(sessionIdBefore, adminIdBefore, membersIdBefore, Optional.empty(),
-				new ArrayList<Member>(), SessionState.WAITING_FOR_MEMBERS);
-		val sameSession = new Session(sessionIdBefore, adminIdBefore, membersIdBefore, Optional.empty(),
-				new ArrayList<Member>(), SessionState.WAITING_FOR_MEMBERS);
-		val otherSession = new Session(UUID.randomUUID(), adminIdBefore, membersIdBefore, Optional.empty(),
-				new ArrayList<Member>(), SessionState.WAITING_FOR_MEMBERS);
+		val session = new Session(sessionIdBefore, adminIdBefore, membersIdBefore, null, new ArrayList<Member>(),
+				SessionState.WAITING_FOR_MEMBERS);
+		val sameSession = new Session(sessionIdBefore, adminIdBefore, membersIdBefore, null, new ArrayList<Member>(),
+				SessionState.WAITING_FOR_MEMBERS);
+		val otherSession = new Session(UUID.randomUUID(), adminIdBefore, membersIdBefore, null, new ArrayList<Member>(),
+				SessionState.WAITING_FOR_MEMBERS);
 
 		assertEquals(session, sameSession);
 		assertNotEquals(session, otherSession);
@@ -41,7 +40,7 @@ public class SessionTest {
 		val members = Arrays.asList(member1, member2);
 		val vote = 5;
 
-		val session = new Session(null, null, null, Optional.empty(), members, SessionState.WAITING_FOR_MEMBERS);
+		val session = new Session(null, null, null, null, members, SessionState.WAITING_FOR_MEMBERS);
 		val result = session.updateEstimation(member1.getMemberID(), vote);
 
 		val resultMember = result.getMembers().stream().filter(m -> m.getMemberID().equals(member1.getMemberID()))
@@ -57,7 +56,7 @@ public class SessionTest {
 		val member1 = new Member(memberID1, null, null, null, 3);
 		val member2 = new Member(memberID2, null, null, null, 5);
 		val members = Arrays.asList(member1, member2);
-		val session = new Session(null, null, null, Optional.empty(), members, SessionState.WAITING_FOR_MEMBERS);
+		val session = new Session(null, null, null, null, members, SessionState.WAITING_FOR_MEMBERS);
 
 		val result = session.resetEstimations();
 
@@ -69,7 +68,7 @@ public class SessionTest {
 		val memberID1 = UUID.randomUUID();
 		val member1 = new Member(memberID1, null, null, null, 3);
 		val members = Arrays.asList(member1);
-		val session = new Session(null, null, null, Optional.empty(), members, SessionState.WAITING_FOR_MEMBERS);
+		val session = new Session(null, null, null, null, members, SessionState.WAITING_FOR_MEMBERS);
 		val memberID2 = UUID.randomUUID();
 		val member2 = new Member(memberID2, null, null, null, 5);
 
@@ -86,7 +85,7 @@ public class SessionTest {
 		val member1 = new Member(memberID1, null, null, null, 3);
 		val member2 = new Member(memberID2, null, null, null, 5);
 		val members = Arrays.asList(member1, member2);
-		val session = new Session(null, null, null, Optional.empty(),members, SessionState.WAITING_FOR_MEMBERS);
+		val session = new Session(null, null, null, null, members, SessionState.WAITING_FOR_MEMBERS);
 
 		val result = session.removeMember(memberID1);
 

@@ -1,8 +1,8 @@
 package de.htwg.aume.controller;
 
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -26,11 +26,8 @@ import de.htwg.aume.model.SessionInfo;
 import de.htwg.aume.model.SessionState;
 import de.htwg.aume.service.DatabaseService;
 import lombok.val;
-import java.util.Optional;
 
-import com.google.common.hash.Hashing;
-
-@CrossOrigin(origins = "http://localhost:8080/")
+@CrossOrigin(origins = "http://localhost:8080")
 @RestController
 public class RoutesController {
 
@@ -38,8 +35,8 @@ public class RoutesController {
 	DatabaseService databaseService;
 
 	@PostMapping(value = "/sessions")
-	public ResponseEntity<Session> createSession(@RequestBody SessionInfo sessionInfo) {
-		val password = Optional.of(sessionInfo.getPassword());
+	public ResponseEntity<Session> createSession(@RequestBody Optional<SessionInfo> sessionInfo) {
+		String password = sessionInfo.isPresent() ? sessionInfo.get().getPassword() : null;
 		val usedUuids = databaseService.getSessions().stream().map(s -> s.getSessionID()).collect(Collectors.toSet());
 		val sessionUuids = Stream.generate(UUID::randomUUID).filter(s -> !usedUuids.contains(s)).limit(3)
 				.collect(Collectors.toList());
@@ -71,10 +68,9 @@ public class RoutesController {
 		if (members.stream().anyMatch(m -> m.getMemberID().equals(member.getMemberID()))) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessages.memberExistsErrorMessage);
 		}
-		if (session.getPassword().isPresent()) {
-			if (!password.isPresent() || !session.getPassword().get()
-					.equals(Hashing.sha256().hashString(password.get(), StandardCharsets.UTF_8).toString())) {
-
+		if (session.getPassword() != null) {
+			if (!password.isPresent() || !password.get().equals(session.getPassword())) {
+				throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, ErrorMessages.wrongPasswordMessage);
 			}
 		}
 		members.add(member);

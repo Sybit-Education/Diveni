@@ -8,7 +8,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.Optional;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
@@ -52,18 +51,31 @@ public class RoutesControllerTest {
 	@Test
 	public void joinMember_addsMemberToSession() throws Exception {
 		val sessionUUID = UUID.randomUUID();
-		sessionRepo.save(new Session(sessionUUID, UUID.randomUUID(), UUID.randomUUID(), Optional.empty(),
+		sessionRepo.save(new Session(sessionUUID, UUID.randomUUID(), UUID.randomUUID(), null, new ArrayList<Member>(),
+				SessionState.WAITING_FOR_MEMBERS));
+
+		// @formatter:off
+		var memberAsJson = "{" + "'member': {" + "'memberID': '365eef59-931d-0000-0000-2ba016cb523b',"
+				+ "'name': 'Julian'," + "'hexColor': '0xababab'," + "'avatarAnimal': 'LION',"
+				+ "'currentEstimation': null" + "}" + "}";
+		// @formatter:on
+		memberAsJson = memberAsJson.replaceAll("'", "\"");
+
+		this.mockMvc.perform(post("/sessions/{sessionID}/join", sessionUUID).contentType(APPLICATION_JSON_UTF8)
+				.content(memberAsJson)).andDo(print()).andExpect(status().isOk());
+	}
+
+	@Test
+	public void joinMember_addsMemberToProtectedSession() throws Exception {
+		val sessionUUID = UUID.randomUUID();
+		val password = "testPassword";
+		sessionRepo.save(new Session(sessionUUID, UUID.randomUUID(), UUID.randomUUID(), password,
 				new ArrayList<Member>(), SessionState.WAITING_FOR_MEMBERS));
 
 		// @formatter:off
-		var memberAsJson =
-		"{" +
-		"'memberID': '365eef59-931d-0000-0000-2ba016cb523b'," +
-		"'name': 'Julian'," +
-		"'hexColor': '0xababab'," +
-		"'avatarAnimal': 'LION'," +
-		"'currentEstimation': null" +
-		"}";
+		var memberAsJson = "{" + "'password': '" + password + "'," + "'member': {"
+				+ "'memberID': '365eef59-931d-0000-0000-2ba016cb523b'," + "'name': 'Julian',"
+				+ "'hexColor': '0xababab'," + "'avatarAnimal': 'LION'," + "'currentEstimation': null" + "}" + "}";
 		// @formatter:on
 		memberAsJson = memberAsJson.replaceAll("'", "\"");
 
@@ -74,18 +86,13 @@ public class RoutesControllerTest {
 	@Test
 	public void joinMember_failsToAddMemberDueToFalseAvatarAnimal() throws Exception {
 		val sessionUUID = UUID.randomUUID();
-		sessionRepo.save(new Session(sessionUUID, UUID.randomUUID(), UUID.randomUUID(), Optional.empty(), new ArrayList<Member>(),
+		sessionRepo.save(new Session(sessionUUID, UUID.randomUUID(), UUID.randomUUID(), null, new ArrayList<Member>(),
 				SessionState.WAITING_FOR_MEMBERS));
 
 		// @formatter:off
-		var memberAsJson =
-		"{" +
-		"'memberID': '365eef59-931d-0000-0000-2ba016cb523b'," +
-		"'name': 'Julian'," +
-		"'hexColor': '0xababab'," +
-		"'avatarAnimal': 'NON_EXISTING_ANIMAL'," +
-		"'currentEstimation': null" +
-		"}";
+		var memberAsJson = "{" + "'member': {" + "'memberID': '365eef59-931d-0000-0000-2ba016cb523b',"
+				+ "'name': 'Julian'," + "'hexColor': '0xababab'," + "'avatarAnimal': 'NON_EXISTING_ANIMAL',"
+				+ "'currentEstimation': null" + "}" + "}";
 		// @formatter:on
 		memberAsJson = memberAsJson.replaceAll("'", "\"");
 
@@ -96,18 +103,13 @@ public class RoutesControllerTest {
 	@Test
 	public void joinMember_failsToAddMemberDueToFalseAvatarAnimal2() throws Exception {
 		val sessionUUID = UUID.randomUUID();
-		sessionRepo.save(new Session(sessionUUID, UUID.randomUUID(), UUID.randomUUID(), Optional.empty(),
-				new ArrayList<Member>(), SessionState.WAITING_FOR_MEMBERS));
+		sessionRepo.save(new Session(sessionUUID, UUID.randomUUID(), UUID.randomUUID(), null, new ArrayList<Member>(),
+				SessionState.WAITING_FOR_MEMBERS));
 
 		// @formatter:off
-		var memberAsJson =
-		"{" +
-		"'memberID': '365eef59-931d-0000-0000-2ba016cb523b'," +
-		"'name': 'Julian'," +
-		"'hexColor': '0xababab'," +
-		"'avatarAnimal': 'wolf.png'," +
-		"'currentEstimation': null" +
-		"}";
+		var memberAsJson = "{" + "'member': {" + "'memberID': '365eef59-931d-0000-0000-2ba016cb523b',"
+				+ "'name': 'Julian'," + "'hexColor': '0xababab'," + "'avatarAnimal': 'wolf.png',"
+				+ "'currentEstimation': null" + "}" + "}";
 		// @formatter:on
 		memberAsJson = memberAsJson.replaceAll("'", "\"");
 
@@ -118,18 +120,13 @@ public class RoutesControllerTest {
 	@Test
 	public void joinMember_failsToAddMemberDueToFalseEstimation() throws Exception {
 		val sessionUUID = UUID.randomUUID();
-		sessionRepo.save(new Session(sessionUUID, UUID.randomUUID(), UUID.randomUUID(), Optional.empty(),
-				new ArrayList<Member>(), SessionState.WAITING_FOR_MEMBERS));
+		sessionRepo.save(new Session(sessionUUID, UUID.randomUUID(), UUID.randomUUID(), null, new ArrayList<Member>(),
+				SessionState.WAITING_FOR_MEMBERS));
 
 		// @formatter:off
-		var memberAsJson =
-		"{" +
-		"'memberID': '365eef59-931d-0000-0000-2ba016cb523b'," +
-		"'name': 'Julian'," +
-		"'hexColor': '0xababab'," +
-		"'avatarAnimal': 'NON_EXISTING_ANIMAL'," +
-		"'currentEstimation': 'test'" +
-		"}";
+		var memberAsJson = "{" + "'member': {" + "'memberID': '365eef59-931d-0000-0000-2ba016cb523b',"
+				+ "'name': 'Julian'," + "'hexColor': '0xababab'," + "'avatarAnimal': 'NON_EXISTING_ANIMAL',"
+				+ "'currentEstimation': 'test'" + "}" + "}";
 		// @formatter:on
 		memberAsJson = memberAsJson.replaceAll("'", "\"");
 
@@ -141,14 +138,9 @@ public class RoutesControllerTest {
 	public void joinMember_givesErrorWhenSessionNotExists() throws Exception {
 
 		// @formatter:off
-		var memberAsJson =
-		"{" +
-		"'memberID': '365eef59-931d-0000-0000-2ba016cb523b'," +
-		"'name': 'Julian'," +
-		"'hexColor': '0xababab'," +
-		"'avatarAnimal': 'LION'," +
-		"'currentEstimation': null" +
-		"}";
+		var memberAsJson = "{" + "'member': {" + "'memberID': '365eef59-931d-0000-0000-2ba016cb523b',"
+				+ "'name': 'Julian'," + "'hexColor': '0xababab'," + "'avatarAnimal': 'LION',"
+				+ "'currentEstimation': null" + "}" + "}";
 		// @formatter:on
 
 		memberAsJson = memberAsJson.replaceAll("'", "\"");
@@ -163,18 +155,13 @@ public class RoutesControllerTest {
 	@Test
 	public void joinMember_addsMemberNotIfAlreadyExisting() throws Exception {
 		val sessionUUID = UUID.randomUUID();
-		sessionRepo.save(new Session(sessionUUID, UUID.randomUUID(), UUID.randomUUID(), Optional.empty(),
-				new ArrayList<Member>(), SessionState.WAITING_FOR_MEMBERS));
+		sessionRepo.save(new Session(sessionUUID, UUID.randomUUID(), UUID.randomUUID(), null, new ArrayList<Member>(),
+				SessionState.WAITING_FOR_MEMBERS));
 
 		// @formatter:off
-		var memberAsJson =
-		"{" +
-		"'memberID': '365eef59-931d-0000-0000-2ba016cb523b'," +
-		"'name': 'Julian'," +
-		"'hexColor': '0xababab'," +
-		"'avatarAnimal': 'LION'," +
-		"'currentEstimation': null" +
-		"}";
+		var memberAsJson = "{" + "'member': {" + "'memberID': '365eef59-931d-0000-0000-2ba016cb523b',"
+				+ "'name': 'Julian'," + "'hexColor': '0xababab'," + "'avatarAnimal': 'LION',"
+				+ "'currentEstimation': null" + "}" + "}";
 		// @formatter:on
 
 		memberAsJson = memberAsJson.replaceAll("'", "\"");

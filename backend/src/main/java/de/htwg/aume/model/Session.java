@@ -2,7 +2,6 @@ package de.htwg.aume.model;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -13,10 +12,12 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Getter
 @RequiredArgsConstructor
 @EqualsAndHashCode
+@JsonIgnoreProperties(value = { "password" }, allowGetters = true)
 @Document("sessions")
 public class Session {
 
@@ -27,7 +28,7 @@ public class Session {
 
 	private final UUID membersID;
 
-	private final Optional<String> password;
+	private final String password;
 
 	private final List<Member> members;
 

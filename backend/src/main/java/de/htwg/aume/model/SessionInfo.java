@@ -1,12 +1,12 @@
 package de.htwg.aume.model;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 @Getter
-@RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 public class SessionInfo {
-    private final String password;
-
-    private final Member member;
+    private String password;
 }
