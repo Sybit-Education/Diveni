@@ -7,6 +7,24 @@
       <b-row>
         <b-col>
           <h4>
+            3. Specify estimation duration
+          </h4>
+          <b-col>
+            <b-button>
+              -
+            </b-button>
+            <b-button>
+              Platzhalter für ausgewähler Timer
+            </b-button>
+            <b-button>
+              +
+            </b-button>
+          </b-col>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col>
+          <h4>
             4. Secure with password
           </h4>
           <b-form>
