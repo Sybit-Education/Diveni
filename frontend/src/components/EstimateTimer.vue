@@ -13,22 +13,27 @@ export default Vue.extend({
   name: 'EstimateTimer',
   props: {
     timer: { type: Number, required: true },
-    isEnable: { type: Boolean, required: true },
+    isEnabled: { type: Boolean, required: true },
   },
   data() {
     return {
       timerCount: this.timer,
-      enable: this.isEnable,
+      intervalHandler: -1,
     };
   },
   watch: {
-    enable(timerEnable) {
+    isEnabled(timerEnable) {
+      console.log('enable changed');
       if (timerEnable) {
-        setTimeout(() => {
+        this.intervalHandler = setInterval(() => {
           if (this.timerCount > 1) {
             this.timerCount -= 1;
+          } else {
+            clearInterval(this.intervalHandler);
           }
         }, 1000);
+      } else {
+        clearInterval(this.intervalHandler);
       }
     },
   },

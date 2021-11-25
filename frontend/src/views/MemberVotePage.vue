@@ -5,9 +5,9 @@
         {{ title }}
       </h1>
       <estimate-timer
-        :isEnable="startVoting"
+        :is-enabled="startTimer"
         :timer="countdown"
-        />
+      />
       <b-row class="justify-content-center">
         <rounded-avatar
           :color="hexColor"
@@ -17,18 +17,17 @@
         />
       </b-row>
     </div>
-    <b-row
-      v-if="isStartVoting"
-      class="my-5"
-    >
+    <b-row v-if="isStartVoting" class="my-5">
       <flicking
         id="flicking"
-        :options="{ renderOnlyVisible: false,
-                    horizontal:true,
-                    align: 'center',
-                    bound: false,
-                    defaultIndex: 0,
-                    deceleration: 0.0005 }"
+        :options="{
+          renderOnlyVisible: false,
+          horizontal: true,
+          align: 'center',
+          bound: false,
+          defaultIndex: 0,
+          deceleration: 0.0005,
+        }"
       >
         <member-vote-card
           v-for="number in numbers"
@@ -42,16 +41,9 @@
         />
       </flicking>
     </b-row>
-    <b-row
-      v-else
-      class="my-5 text-center"
-    >
-      <b-icon-three-dots
-        animation="fade"
-        class="my-5"
-        font-scale="4"
-      />
-      <h1>{{ waitingText }} </h1>
+    <b-row v-else class="my-5 text-center">
+      <b-icon-three-dots animation="fade" class="my-5" font-scale="4" />
+      <h1>{{ waitingText }}</h1>
     </b-row>
   </b-container>
 </template>
@@ -76,9 +68,6 @@ export default Vue.extend({
     hexColor: { type: String, default: undefined },
     avatarAnimalAssetName: { type: String, default: undefined },
   },
-  created() {
-    window.addEventListener('beforeunload', this.sendUnregisterCommand);
-  },
   data() {
     return {
       title: 'Estimate!',
@@ -86,7 +75,7 @@ export default Vue.extend({
       draggedNumber: null,
       waitingText: 'Waiting for Host to start ...',
       countdown: 50,
-      startVoting: false,
+      startTimer: false,
     };
   },
   computed: {
@@ -101,26 +90,16 @@ export default Vue.extend({
     memberUpdates(updates) {
       if (updates.at(-1) === Constants.memberUpdateCommandStartVoting) {
         this.draggedNumber = null;
+        this.startTimer = !this.startTimer;
       } else if (updates.at(-1) === Constants.memberUpdateCloseSession) {
         this.goToJoinPage();
       }
     },
-    // countDown: {
-    //   handler(value, timerEnable) {
-    //     if (value > 0 && timerEnable) {
-    //       setTimeout(() => {
-    //         this.countdown -= 1;
-    //       }, 1000);
-    //     }
-    //   },
-    //   // immediate: true, // This ensures the watcher is triggered upon creation
-    // },
   },
   mounted() {
     if (this.memberID === undefined || this.name === undefined
           || this.hexColor === undefined || this.avatarAnimalAssetName === undefined) {
       this.goToJoinPage();
-      this.startVoting = true;
     }
   },
   methods: {
