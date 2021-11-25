@@ -35,13 +35,12 @@ public class RoutesController {
 	DatabaseService databaseService;
 
 	@PostMapping(value = "/sessions")
-	public ResponseEntity<Session> createSession(@RequestBody Optional<SessionInfo> sessionInfo) {
-		String password = sessionInfo.isPresent() ? sessionInfo.get().getPassword() : null;
+	public ResponseEntity<Session> createSession(@RequestBody SessionInfo sessionInfo) {
 		val usedUuids = databaseService.getSessions().stream().map(s -> s.getSessionID()).collect(Collectors.toSet());
 		val sessionUuids = Stream.generate(UUID::randomUUID).filter(s -> !usedUuids.contains(s)).limit(3)
 				.collect(Collectors.toList());
-		val session = new Session(sessionUuids.get(0), sessionUuids.get(1), sessionUuids.get(2), password,
-				new ArrayList<Member>(), SessionState.WAITING_FOR_MEMBERS);
+		val session = new Session(sessionUuids.get(0), sessionUuids.get(1), sessionUuids.get(2),
+				sessionInfo.getPassword(), new ArrayList<Member>(), SessionState.WAITING_FOR_MEMBERS);
 		databaseService.saveSession(session);
 		return new ResponseEntity<Session>(session, HttpStatus.CREATED);
 	}

@@ -46,6 +46,7 @@
             v-model="password"
             class="mt-3"
             type="password"
+            placeholder="(optional)"
           />
         </b-col>
       </b-row>

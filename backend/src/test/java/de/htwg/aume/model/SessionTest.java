@@ -64,6 +64,17 @@ public class SessionTest {
 	}
 
 	@Test
+	public void updateSessionState_works() {
+		val oldSessionState = SessionState.WAITING_FOR_MEMBERS;
+		val newSessionState = SessionState.START_VOTING;
+
+		val session = new Session(null, null, null, null, new ArrayList<Member>(), SessionState.WAITING_FOR_MEMBERS);
+		val result = session.updateSessionState(newSessionState);
+
+		assertEquals(result.getSessionState(), newSessionState);
+	}
+
+	@Test
 	public void addMember_works() {
 		val memberID1 = UUID.randomUUID();
 		val member1 = new Member(memberID1, null, null, null, 3);
