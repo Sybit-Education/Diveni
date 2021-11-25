@@ -2,7 +2,6 @@ package de.htwg.aume.controller;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -38,9 +37,18 @@ public class RoutesControllerTest {
 
 	@Test
 	public void createSession_returnsSession() throws Exception {
-		this.mockMvc.perform(post("/sessions")).andExpect(status().isCreated())
-				.andExpect(jsonPath("$.sessionID").isNotEmpty()).andExpect(jsonPath("$.adminID").isNotEmpty())
-				.andExpect(jsonPath("$.membersID").isNotEmpty());
+		val sessionInfoJson = "{ \"password\": \"testPassword\" }";
+		this.mockMvc.perform(post("/sessions").contentType(APPLICATION_JSON_UTF8).content(sessionInfoJson))
+				.andExpect(status().isCreated()).andExpect(jsonPath("$.sessionID").isNotEmpty())
+				.andExpect(jsonPath("$.adminID").isNotEmpty()).andExpect(jsonPath("$.membersID").isNotEmpty());
+	}
+
+	@Test
+	public void createProtectedSession_returnsSession() throws Exception {
+		val sessionInfoJson = "{ \"password\": null }";
+		this.mockMvc.perform(post("/sessions").contentType(APPLICATION_JSON_UTF8).content(sessionInfoJson))
+				.andExpect(status().isCreated()).andExpect(jsonPath("$.sessionID").isNotEmpty())
+				.andExpect(jsonPath("$.adminID").isNotEmpty()).andExpect(jsonPath("$.membersID").isNotEmpty());
 	}
 
 	@Test
@@ -212,6 +220,27 @@ public class RoutesControllerTest {
 				.perform(post("/sessions/{sessionID}/join", sessionUUID).contentType(APPLICATION_JSON_UTF8)
 						.content(memberAsJson))
 				.andExpect(status().isBadRequest()).andExpect(status().reason(ErrorMessages.memberExistsErrorMessage));
+	}
+
+	@Test
+	public void getSession_returnsSession() throws Exception {
+		val sessionUUID = UUID.randomUUID();
+		sessionRepo.save(new Session(sessionUUID, UUID.randomUUID(), UUID.randomUUID(), null, new ArrayList<Member>(),
+				SessionState.WAITING_FOR_MEMBERS));
+
+		this.mockMvc.perform(get("/sessions/{sessionID}", sessionUUID)).andExpect(status().isOk())
+				.andExpect(jsonPath("$.sessionID").isNotEmpty()).andExpect(jsonPath("$.adminID").isNotEmpty())
+				.andExpect(jsonPath("$.membersID").isNotEmpty());
+	}
+
+	@Test
+	public void getSession_failsWrongID() throws Exception {
+		val sessionUUID = UUID.randomUUID();
+		sessionRepo.save(new Session(sessionUUID, UUID.randomUUID(), UUID.randomUUID(), null, new ArrayList<Member>(),
+				SessionState.WAITING_FOR_MEMBERS));
+
+		this.mockMvc.perform(get("/sessions/{sessionID}", UUID.randomUUID())).andExpect(status().isNotFound())
+				.andExpect(status().reason(ErrorMessages.sessionNotFoundErrorMessage));
 	}
 
 }
