@@ -4,6 +4,10 @@
       <h1 class="my-5 mx-2">
         {{ title }}
       </h1>
+      <estimate-timer
+        :isEnable="isStartVoting"
+        :timer="countdown"
+        />
       <b-row class="justify-content-center">
         <rounded-avatar
           :color="hexColor"
@@ -57,12 +61,14 @@ import Vue from 'vue';
 import RoundedAvatar from '../components/RoundedAvatar.vue';
 import MemberVoteCard from '../components/MemberVoteCard.vue';
 import Constants from '../constants';
+import EstimateTimer from '../components/EstimateTimer.vue';
 
 export default Vue.extend({
   name: 'MemberVotePage',
   components: {
     RoundedAvatar,
     MemberVoteCard,
+    EstimateTimer,
   },
   props: {
     memberID: { type: String, default: undefined },
@@ -79,6 +85,7 @@ export default Vue.extend({
       numbers: [1, 2, 3, 5, 8, 13, 21, 34],
       draggedNumber: null,
       waitingText: 'Waiting for Host to start ...',
+      countdown: 50,
     };
   },
   computed: {
@@ -97,6 +104,16 @@ export default Vue.extend({
         this.goToJoinPage();
       }
     },
+    // countDown: {
+    //   handler(value, timerEnable) {
+    //     if (value > 0 && timerEnable) {
+    //       setTimeout(() => {
+    //         this.countdown -= 1;
+    //       }, 1000);
+    //     }
+    //   },
+    //   // immediate: true, // This ensures the watcher is triggered upon creation
+    // },
   },
   mounted() {
     if (this.memberID === undefined || this.name === undefined
