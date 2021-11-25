@@ -7,18 +7,15 @@
       <b-row>
         <b-col>
           <h4>
-            1. Select a card set
+            1. Select a card set and it's values
           </h4>
         </b-col>
       </b-row>
-      <b-row class="card-group">
-        <b-col>
-          <card-set-component
-            @selectedCardSet="setCardSet"
-          />
-        </b-col>
-      </b-row>
-      <b-row>
+      <card-set-component
+        class="mt-3"
+        @selectedCardSetNumbers="setCardSetNumbers"
+      />
+      <b-row class="mt-4">
         <b-col>
           <h4>
             4. Secure with password
@@ -34,7 +31,7 @@
           </b-form>
         </b-col>
       </b-row>
-      <b-button class="mt-5" variant="success" :disabled="buttonDisabled" @click="sendCreateSessionRequest">
+      <b-button class="mt-5" variant="success" :disabled="buttonDisabled()" @click="sendCreateSessionRequest">
         Start session
       </b-button>
     </b-container>
@@ -56,7 +53,7 @@ export default Vue.extend({
     return {
       title: 'Prepare session',
       password: '',
-      selectedCardSet: '',
+      selectedCardSetNumbers: [],
     };
   },
   methods: {
@@ -83,11 +80,11 @@ export default Vue.extend({
         },
       });
     },
-    setCardSet($event) {
-      this.selectedCardSet = $event.name;
+    setCardSetNumbers($event) {
+      this.selectedCardSetNumbers = $event;
     },
     buttonDisabled() {
-      return this.selectedCardSet === '';
+      return this.selectedCardSetNumbers.length < 1;
     },
   },
 });
