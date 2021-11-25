@@ -70,9 +70,6 @@ export default Vue.extend({
     hexColor: { type: String, default: undefined },
     avatarAnimalAssetName: { type: String, default: undefined },
   },
-  created() {
-    window.addEventListener('beforeunload', this.sendUnregisterCommand);
-  },
   data() {
     return {
       title: 'Estimate!',
@@ -97,6 +94,9 @@ export default Vue.extend({
         this.goToJoinPage();
       }
     },
+  },
+  created() {
+    window.addEventListener('beforeunload', this.sendUnregisterCommand);
   },
   mounted() {
     if (this.memberID === undefined || this.name === undefined
