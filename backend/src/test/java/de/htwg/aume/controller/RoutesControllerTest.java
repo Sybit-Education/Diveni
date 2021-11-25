@@ -38,7 +38,7 @@ public class RoutesControllerTest {
 
 	@Test
 	public void createSession_returnsSession() throws Exception {
-		this.mockMvc.perform(post("/sessions")).andDo(print()).andExpect(status().isCreated())
+		this.mockMvc.perform(post("/sessions")).andExpect(status().isCreated())
 				.andExpect(jsonPath("$.sessionID").isNotEmpty()).andExpect(jsonPath("$.adminID").isNotEmpty())
 				.andExpect(jsonPath("$.membersID").isNotEmpty());
 	}
@@ -62,7 +62,7 @@ public class RoutesControllerTest {
 		memberAsJson = memberAsJson.replaceAll("'", "\"");
 
 		this.mockMvc.perform(post("/sessions/{sessionID}/join", sessionUUID).contentType(APPLICATION_JSON_UTF8)
-				.content(memberAsJson)).andDo(print()).andExpect(status().isOk());
+				.content(memberAsJson)).andExpect(status().isOk());
 	}
 
 	@Test
@@ -80,7 +80,47 @@ public class RoutesControllerTest {
 		memberAsJson = memberAsJson.replaceAll("'", "\"");
 
 		this.mockMvc.perform(post("/sessions/{sessionID}/join", sessionUUID).contentType(APPLICATION_JSON_UTF8)
-				.content(memberAsJson)).andDo(print()).andExpect(status().isOk());
+				.content(memberAsJson)).andExpect(status().isOk());
+	}
+
+	@Test
+	public void joinMember_failsToAddMemberToProtectedSessionWrongPassword() throws Exception {
+		val sessionUUID = UUID.randomUUID();
+		val password = "testPassword";
+		sessionRepo.save(new Session(sessionUUID, UUID.randomUUID(), UUID.randomUUID(), password,
+				new ArrayList<Member>(), SessionState.WAITING_FOR_MEMBERS));
+
+		// @formatter:off
+		var memberAsJson = "{" + "'password': '" + "wrongPassword" + "'," + "'member': {"
+				+ "'memberID': '365eef59-931d-0000-0000-2ba016cb523b'," + "'name': 'Julian',"
+				+ "'hexColor': '0xababab'," + "'avatarAnimal': 'LION'," + "'currentEstimation': null" + "}" + "}";
+		// @formatter:on
+		memberAsJson = memberAsJson.replaceAll("'", "\"");
+
+		this.mockMvc
+				.perform(post("/sessions/{sessionID}/join", sessionUUID).contentType(APPLICATION_JSON_UTF8)
+						.content(memberAsJson))
+				.andExpect(status().isUnauthorized()).andExpect(status().reason(ErrorMessages.wrongPasswordMessage));
+	}
+
+	@Test
+	public void joinMember_failsToAddMemberToProtectedSessionNullPassword() throws Exception {
+		val sessionUUID = UUID.randomUUID();
+		val password = "testPassword";
+		sessionRepo.save(new Session(sessionUUID, UUID.randomUUID(), UUID.randomUUID(), password,
+				new ArrayList<Member>(), SessionState.WAITING_FOR_MEMBERS));
+
+		// @formatter:off
+		var memberAsJson = "{" + "'password': " + "null" + "," + "'member': {"
+				+ "'memberID': '365eef59-931d-0000-0000-2ba016cb523b'," + "'name': 'Julian',"
+				+ "'hexColor': '0xababab'," + "'avatarAnimal': 'LION'," + "'currentEstimation': null" + "}" + "}";
+		// @formatter:on
+		memberAsJson = memberAsJson.replaceAll("'", "\"");
+
+		this.mockMvc
+				.perform(post("/sessions/{sessionID}/join", sessionUUID).contentType(APPLICATION_JSON_UTF8)
+						.content(memberAsJson))
+				.andExpect(status().isUnauthorized()).andExpect(status().reason(ErrorMessages.wrongPasswordMessage));
 	}
 
 	@Test
@@ -97,7 +137,7 @@ public class RoutesControllerTest {
 		memberAsJson = memberAsJson.replaceAll("'", "\"");
 
 		this.mockMvc.perform(post("/sessions/{sessionID}/join", sessionUUID).contentType(APPLICATION_JSON_UTF8)
-				.content(memberAsJson)).andDo(print()).andExpect(status().isBadRequest());
+				.content(memberAsJson)).andExpect(status().isBadRequest());
 	}
 
 	@Test
@@ -114,7 +154,7 @@ public class RoutesControllerTest {
 		memberAsJson = memberAsJson.replaceAll("'", "\"");
 
 		this.mockMvc.perform(post("/sessions/{sessionID}/join", sessionUUID).contentType(APPLICATION_JSON_UTF8)
-				.content(memberAsJson)).andDo(print()).andExpect(status().isBadRequest());
+				.content(memberAsJson)).andExpect(status().isBadRequest());
 	}
 
 	@Test
@@ -131,7 +171,7 @@ public class RoutesControllerTest {
 		memberAsJson = memberAsJson.replaceAll("'", "\"");
 
 		this.mockMvc.perform(post("/sessions/{sessionID}/join", sessionUUID).contentType(APPLICATION_JSON_UTF8)
-				.content(memberAsJson)).andDo(print()).andExpect(status().isBadRequest());
+				.content(memberAsJson)).andExpect(status().isBadRequest());
 	}
 
 	@Test
@@ -148,8 +188,7 @@ public class RoutesControllerTest {
 		this.mockMvc
 				.perform(post("/sessions/{sessionID}/join", UUID.randomUUID()).contentType(APPLICATION_JSON_UTF8)
 						.content(memberAsJson))
-				.andDo(print()).andExpect(status().isNotFound())
-				.andExpect(status().reason(ErrorMessages.sessionNotFoundErrorMessage));
+				.andExpect(status().isNotFound()).andExpect(status().reason(ErrorMessages.sessionNotFoundErrorMessage));
 	}
 
 	@Test
@@ -167,13 +206,12 @@ public class RoutesControllerTest {
 		memberAsJson = memberAsJson.replaceAll("'", "\"");
 
 		this.mockMvc.perform(post("/sessions/{sessionID}/join", sessionUUID).contentType(APPLICATION_JSON_UTF8)
-				.content(memberAsJson)).andDo(print()).andExpect(status().isOk());
+				.content(memberAsJson)).andExpect(status().isOk());
 
 		this.mockMvc
 				.perform(post("/sessions/{sessionID}/join", sessionUUID).contentType(APPLICATION_JSON_UTF8)
 						.content(memberAsJson))
-				.andDo(print()).andExpect(status().isBadRequest())
-				.andExpect(status().reason(ErrorMessages.memberExistsErrorMessage));
+				.andExpect(status().isBadRequest()).andExpect(status().reason(ErrorMessages.memberExistsErrorMessage));
 	}
 
 }
