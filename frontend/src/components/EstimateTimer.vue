@@ -13,24 +13,23 @@ export default Vue.extend({
   name: 'EstimateTimer',
   props: {
     timer: { type: Number, required: true },
-    isEnable: { type: Boolean, required: false },
+    isEnable: { type: Boolean, required: true },
   },
   data() {
     return {
-      timerEnable: this.isEnable,
       timerCount: this.timer,
+      enable: this.isEnable,
     };
   },
   watch: {
-    timerCount: {
-      handler(value) {
-        if (value > 0 && this.timerEnable) {
-          setTimeout(() => {
+    enable(timerEnable) {
+      if (timerEnable) {
+        setTimeout(() => {
+          if (this.timerCount > 1) {
             this.timerCount -= 1;
-          }, 1000);
-        } else { this.timerCount = 60; }
-      },
-      immediate: true, // This ensures the watcher is triggered upon creation
+          }
+        }, 1000);
+      }
     },
   },
 });

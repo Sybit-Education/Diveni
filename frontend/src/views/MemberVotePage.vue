@@ -5,7 +5,7 @@
         {{ title }}
       </h1>
       <estimate-timer
-        :isEnable="isStartVoting"
+        :isEnable="startVoting"
         :timer="countdown"
         />
       <b-row class="justify-content-center">
@@ -86,6 +86,7 @@ export default Vue.extend({
       draggedNumber: null,
       waitingText: 'Waiting for Host to start ...',
       countdown: 50,
+      startVoting: false,
     };
   },
   computed: {
@@ -119,6 +120,7 @@ export default Vue.extend({
     if (this.memberID === undefined || this.name === undefined
           || this.hexColor === undefined || this.avatarAnimalAssetName === undefined) {
       this.goToJoinPage();
+      this.startVoting = true;
     }
   },
   methods: {
