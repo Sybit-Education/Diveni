@@ -59,11 +59,6 @@ export default Vue.extend({
       selectedCardSet: '',
     };
   },
-  computed: {
-    buttonDisabled() {
-      return this.selectedCardSet === '';
-    },
-  },
   methods: {
     async sendCreateSessionRequest() {
       const url = Constants.backendURL + Constants.createSessionRoute;
@@ -90,6 +85,9 @@ export default Vue.extend({
     },
     setCardSet($event) {
       this.selectedCardSet = $event.name;
+    },
+    buttonDisabled() {
+      return this.selectedCardSet === '';
     },
   },
 });
