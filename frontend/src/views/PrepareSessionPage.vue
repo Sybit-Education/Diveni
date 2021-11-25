@@ -14,7 +14,6 @@
               <b-form-input
                 id="input-password"
                 v-model="password"
-                type="email"
                 placeholder="Password (leave empty for unprotected session)"
               />
             </b-form-group>
@@ -46,7 +45,7 @@ export default Vue.extend({
   methods: {
     async sendCreateSessionRequest() {
       const url = Constants.backendURL + Constants.createSessionRoute;
-      const payload = { password: this.password === '' ? this.password : null };
+      const payload = { password: this.password === '' ? null : this.password };
       try {
         const session : Session = (await this.axios.post(url, payload)).data as {
           sessionID: string,
