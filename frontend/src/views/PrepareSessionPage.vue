@@ -7,7 +7,7 @@
       <b-row>
         <b-col>
           <h4>
-            1. Select a card set and it's values
+            1. Select a card set and its values
           </h4>
         </b-col>
       </b-row>

@@ -26,7 +26,7 @@
           :key="item" class="m-1" pill
           :variant="isActiveCardSetNumber(item)"
           style="width: 60px"
-          @click="onCardSeNumberSelected(item)"
+          @click="onCardSetNumberSelected(item)"
         >
           {{ item }}
         </b-button>
@@ -80,7 +80,7 @@ export default Vue.extend({
     emitChanges() {
       this.$emit('selectedCardSetNumbers', this.selectedCardSet.activeValues);
     },
-    onCardSeNumberSelected(number) {
+    onCardSetNumberSelected(number) {
       if (this.selectedCardSet.activeValues.includes(number)) {
         this.selectedCardSet.activeValues = this.selectedCardSet.activeValues.filter((num) => num !== number);
       } else {
