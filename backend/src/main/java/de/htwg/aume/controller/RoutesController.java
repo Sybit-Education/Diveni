@@ -22,7 +22,7 @@ import org.springframework.web.server.ResponseStatusException;
 import de.htwg.aume.model.JoinInfo;
 import de.htwg.aume.model.Member;
 import de.htwg.aume.model.Session;
-import de.htwg.aume.model.SessionInfo;
+import de.htwg.aume.model.SessionConfig;
 import de.htwg.aume.model.SessionState;
 import de.htwg.aume.service.DatabaseService;
 import lombok.val;
@@ -35,12 +35,12 @@ public class RoutesController {
 	DatabaseService databaseService;
 
 	@PostMapping(value = "/sessions")
-	public ResponseEntity<Session> createSession(@RequestBody SessionInfo sessionInfo) {
+	public ResponseEntity<Session> createSession(@RequestBody SessionConfig sessionConfig) {
 		val usedUuids = databaseService.getSessions().stream().map(s -> s.getSessionID()).collect(Collectors.toSet());
 		val sessionUuids = Stream.generate(UUID::randomUUID).filter(s -> !usedUuids.contains(s)).limit(3)
 				.collect(Collectors.toList());
-		val session = new Session(sessionUuids.get(0), sessionUuids.get(1), sessionUuids.get(2),
-				sessionInfo.getPassword(), new ArrayList<Member>(), SessionState.WAITING_FOR_MEMBERS);
+		val session = new Session(sessionUuids.get(0), sessionUuids.get(1), sessionUuids.get(2), sessionConfig,
+				new ArrayList<Member>(), SessionState.WAITING_FOR_MEMBERS);
 		databaseService.saveSession(session);
 		return new ResponseEntity<Session>(session, HttpStatus.CREATED);
 	}
@@ -67,8 +67,8 @@ public class RoutesController {
 		if (members.stream().anyMatch(m -> m.getMemberID().equals(member.getMemberID()))) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessages.memberExistsErrorMessage);
 		}
-		if (session.getPassword() != null) {
-			if (!password.isPresent() || !password.get().equals(session.getPassword())) {
+		if (session.getSessionConfig().getPassword() != null) {
+			if (!password.isPresent() || !password.get().equals(session.getSessionConfig().getPassword())) {
 				throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, ErrorMessages.wrongPasswordMessage);
 			}
 		}

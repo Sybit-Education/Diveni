@@ -68,7 +68,7 @@ public class SessionTest {
 		val oldSessionState = SessionState.WAITING_FOR_MEMBERS;
 		val newSessionState = SessionState.START_VOTING;
 
-		val session = new Session(null, null, null, null, new ArrayList<Member>(), SessionState.WAITING_FOR_MEMBERS);
+		val session = new Session(null, null, null, null, new ArrayList<Member>(), oldSessionState);
 		val result = session.updateSessionState(newSessionState);
 
 		assertEquals(result.getSessionState(), newSessionState);

@@ -59,7 +59,10 @@ export default Vue.extend({
   methods: {
     async sendCreateSessionRequest() {
       const url = Constants.backendURL + Constants.createSessionRoute;
-      const payload = { password: this.password === '' ? null : this.password };
+      const payload = {
+        set: this.selectedCardSetNumbers,
+        password: this.password === '' ? null : this.password,
+      };
       try {
         const session: Session = (await this.axios.post(url, payload)).data as {
           sessionID: string,
