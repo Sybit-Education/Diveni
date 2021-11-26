@@ -7,6 +7,17 @@
       <b-row>
         <b-col>
           <h4>
+            1. Select a card set and its values
+          </h4>
+        </b-col>
+      </b-row>
+      <card-set-component
+        class="mt-3"
+        @selectedCardSetNumbers="setCardSetNumbers"
+      />
+      <b-row class="mt-4">
+        <b-col>
+          <h4>
             4. Secure with password
           </h4>
           <b-form>
@@ -20,7 +31,7 @@
           </b-form>
         </b-col>
       </b-row>
-      <b-button class="mt-5" variant="success" :disabled="false" @click="sendCreateSessionRequest">
+      <b-button class="mt-5" variant="success" :disabled="buttonDisabled()" @click="sendCreateSessionRequest">
         Start session
       </b-button>
     </b-container>
@@ -31,15 +42,18 @@
 import Vue from 'vue';
 import Session from '../model/Session';
 import Constants from '../constants';
+import CardSetComponent from '../components/CardSetComponent.vue';
 
 export default Vue.extend({
   name: 'PrepareSessionPage',
   components: {
+    CardSetComponent,
   },
   data() {
     return {
       title: 'Prepare session',
       password: '',
+      selectedCardSetNumbers: [],
     };
   },
   methods: {
@@ -47,7 +61,7 @@ export default Vue.extend({
       const url = Constants.backendURL + Constants.createSessionRoute;
       const payload = { password: this.password === '' ? null : this.password };
       try {
-        const session : Session = (await this.axios.post(url, payload)).data as {
+        const session: Session = (await this.axios.post(url, payload)).data as {
           sessionID: string,
           adminID: string,
           membersID: string
@@ -65,6 +79,12 @@ export default Vue.extend({
           adminID: session.adminID,
         },
       });
+    },
+    setCardSetNumbers($event) {
+      this.selectedCardSetNumbers = $event;
+    },
+    buttonDisabled() {
+      return this.selectedCardSetNumbers.length < 1;
     },
   },
 });
