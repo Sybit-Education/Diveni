@@ -32,7 +32,7 @@ public class Session {
 
 	private final SessionState sessionState;
 
-	public Session updateEstimation(UUID memberID, int vote) {
+	public Session updateEstimation(UUID memberID, String vote) {
 		val updatedMembers = members.stream().map(m -> m.getMemberID().equals(memberID) ? m.updateEstimation(vote) : m)
 				.collect(Collectors.toList());
 		return new Session(sessionID, adminID, membersID, sessionConfig, updatedMembers, sessionState);

@@ -67,7 +67,7 @@ public class WebsocketController {
 	}
 
 	@MessageMapping("/vote")
-	public synchronized void processVote(@Payload int vote, MemberPrincipal member) {
+	public synchronized void processVote(@Payload String vote, MemberPrincipal member) {
 		val session = ControllerUtils
 				.getSessionByMemberIDOrThrowResponse(databaseService, member.getMemberID())
 				.updateEstimation(member.getMemberID(), vote);

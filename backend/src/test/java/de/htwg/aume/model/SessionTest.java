@@ -38,7 +38,7 @@ public class SessionTest {
 		val member1 = new Member(memberID1, null, null, null, null);
 		val member2 = new Member(memberID2, null, null, null, null);
 		val members = Arrays.asList(member1, member2);
-		val vote = 5;
+		val vote = "5";
 
 		val session = new Session(null, null, null, null, members, SessionState.WAITING_FOR_MEMBERS);
 		val result = session.updateEstimation(member1.getMemberID(), vote);
@@ -53,8 +53,8 @@ public class SessionTest {
 	public void resetEstimations_works() {
 		val memberID1 = UUID.randomUUID();
 		val memberID2 = UUID.randomUUID();
-		val member1 = new Member(memberID1, null, null, null, 3);
-		val member2 = new Member(memberID2, null, null, null, 5);
+		val member1 = new Member(memberID1, null, null, null, "3");
+		val member2 = new Member(memberID2, null, null, null, "5");
 		val members = Arrays.asList(member1, member2);
 		val session = new Session(null, null, null, null, members, SessionState.WAITING_FOR_MEMBERS);
 
@@ -77,11 +77,11 @@ public class SessionTest {
 	@Test
 	public void addMember_works() {
 		val memberID1 = UUID.randomUUID();
-		val member1 = new Member(memberID1, null, null, null, 3);
+		val member1 = new Member(memberID1, null, null, null, "3");
 		val members = Arrays.asList(member1);
 		val session = new Session(null, null, null, null, members, SessionState.WAITING_FOR_MEMBERS);
 		val memberID2 = UUID.randomUUID();
-		val member2 = new Member(memberID2, null, null, null, 5);
+		val member2 = new Member(memberID2, null, null, null, "5");
 
 		val result = session.addMember(member2);
 
@@ -93,8 +93,8 @@ public class SessionTest {
 	public void removeMember_works() {
 		val memberID1 = UUID.randomUUID();
 		val memberID2 = UUID.randomUUID();
-		val member1 = new Member(memberID1, null, null, null, 3);
-		val member2 = new Member(memberID2, null, null, null, 5);
+		val member1 = new Member(memberID1, null, null, null, "3");
+		val member2 = new Member(memberID2, null, null, null, "5");
 		val members = Arrays.asList(member1, member2);
 		val session = new Session(null, null, null, null, members, SessionState.WAITING_FOR_MEMBERS);
 

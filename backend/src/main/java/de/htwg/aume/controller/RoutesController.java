@@ -46,11 +46,9 @@ public class RoutesController {
 	}
 
 	@PostMapping(value = "/sessions/{sessionID}/join")
-	public ResponseEntity<String> joinSession(@PathVariable UUID sessionID, @RequestBody JoinInfo joinInfo) {
-		if (!addMemberToSession(sessionID, joinInfo.getMember(), joinInfo.getPassword())) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessages.sessionNotFoundErrorMessage);
-		}
-		return new ResponseEntity<>("", HttpStatus.OK);
+	public ResponseEntity<List<String>> joinSession(@PathVariable UUID sessionID, @RequestBody JoinInfo joinInfo) {
+		val session = addMemberToSession(sessionID, joinInfo.getMember(), joinInfo.getPassword());
+		return new ResponseEntity<List<String>>(session.getSessionConfig().getSet(), HttpStatus.OK);
 	}
 
 	@GetMapping(value = "/sessions/{sessionID}")
@@ -58,11 +56,9 @@ public class RoutesController {
 		return ControllerUtils.getSessionOrThrowResponse(databaseService, sessionID);
 	}
 
-	private synchronized boolean addMemberToSession(UUID sessionID, Member member, Optional<String> password) {
-		val session = databaseService.getSessionByID(sessionID).orElse(null);
-		if (session == null) {
-			return false;
-		}
+	private synchronized Session addMemberToSession(UUID sessionID, Member member, Optional<String> password) {
+		val session = databaseService.getSessionByID(sessionID).orElseThrow(
+				() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessages.sessionNotFoundErrorMessage));
 		List<Member> members = session.getMembers().stream().map(m -> m).collect(Collectors.toList());
 		if (members.stream().anyMatch(m -> m.getMemberID().equals(member.getMemberID()))) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessages.memberExistsErrorMessage);
@@ -74,6 +70,6 @@ public class RoutesController {
 		}
 		members.add(member);
 		databaseService.saveSession(session.updateMembers(members));
-		return true;
+		return session;
 	}
 }
