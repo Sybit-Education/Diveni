@@ -69,6 +69,10 @@ public class WebsocketControllerTest {
 
     private static final String REGISTER_MEMBER = "/ws/registerMember";
 
+    private static final String START_VOTING = "/ws/startVoting";
+
+    private static final String RESTART = "/ws/restart";
+
     private static final String VOTE = "/ws/vote";
 
     private static final String UNREGISTER = "/ws/unregister";
@@ -148,7 +152,6 @@ public class WebsocketControllerTest {
         Field memberMapField = WebSocketService.class.getDeclaredField("memberMap");
         memberMapField.setAccessible(true);
         memberMapField.set(webSocketService, new HashMap<>());
-        assertTrue(webSocketService.getMemberMap().isEmpty());
         sessionRepo.deleteAll();
     }
 
@@ -325,5 +328,49 @@ public class WebsocketControllerTest {
 
         Member[] result = objectMapper.readValue(blockingQueue.poll(), Member[].class);
         assertEquals(Arrays.asList(result), List.of(member.updateEstimation(vote)));
+    }
+
+    @Test
+    public void startVoting_updatesState() throws Exception {
+        val sessionID = UUID.randomUUID();
+        val adminID = UUID.randomUUID();
+        val memberID = UUID.randomUUID();
+        val member = new Member(memberID, null, null, null, null);
+        val memberList = List.of(member);
+        val adminPrincipal = new AdminPrincipal(sessionID, adminID);
+        val oldSession = new Session(sessionID, adminID, UUID.randomUUID(), new SessionConfig(new ArrayList<>(), null),
+                memberList, SessionState.WAITING_FOR_MEMBERS);
+        sessionRepo.save(oldSession);
+        webSocketService.setAdminUser(adminPrincipal);
+        StompSession adminSession = getAdminSession(sessionID, adminID);
+
+        adminSession.send(START_VOTING, null);
+        // Wait for server-side handling
+        TimeUnit.MILLISECONDS.sleep(TIMEOUT);
+
+        val newSession = sessionRepo.findBySessionID(oldSession.getSessionID());
+        assertEquals(SessionState.START_VOTING, newSession.getSessionState());
+    }
+
+    @Test
+    public void restartVoting_resetsEstimations() throws Exception {
+        val sessionID = UUID.randomUUID();
+        val adminID = UUID.randomUUID();
+        val memberID = UUID.randomUUID();
+        val member = new Member(memberID, null, null, null, "5");
+        val memberList = List.of(member);
+        val adminPrincipal = new AdminPrincipal(sessionID, adminID);
+        val oldSession = new Session(sessionID, adminID, UUID.randomUUID(), new SessionConfig(new ArrayList<>(), null),
+                memberList, SessionState.WAITING_FOR_MEMBERS);
+        sessionRepo.save(oldSession);
+        webSocketService.setAdminUser(adminPrincipal);
+        StompSession adminSession = getAdminSession(sessionID, adminID);
+
+        adminSession.send(RESTART, null);
+        // Wait for server-side handling
+        TimeUnit.MILLISECONDS.sleep(TIMEOUT);
+
+        val newMembers = sessionRepo.findBySessionID(oldSession.getSessionID()).getMembers();
+        assertTrue(newMembers.stream().allMatch(m -> m.getCurrentEstimation().isEmpty()));
     }
 }
