@@ -84,7 +84,8 @@ export default Vue.extend({
       if (this.selectedCardSet.activeValues.includes(number)) {
         this.selectedCardSet.activeValues = this.selectedCardSet.activeValues.filter((num) => num !== number);
       } else {
-        this.selectedCardSet.activeValues.push(number);
+        const newActiveValues = [...this.selectedCardSet.activeValues, number];
+        this.selectedCardSet.activeValues = this.selectedCardSet.values.filter((num) => newActiveValues.includes(num));
       }
       this.emitChanges();
     },
