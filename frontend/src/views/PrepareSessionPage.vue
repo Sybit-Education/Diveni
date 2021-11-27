@@ -7,6 +7,17 @@
       <b-row>
         <b-col>
           <h4>
+            1. Select a card set and its values
+          </h4>
+        </b-col>
+      </b-row>
+      <card-set-component
+        class="mt-3"
+        @selectedCardSetNumbers="setCardSetNumbers"
+      />
+      <b-row class="mt-4">
+        <b-col>
+          <h4>
             3. Specify estimation duration
           </h4>
           <b-col>

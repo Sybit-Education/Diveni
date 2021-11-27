@@ -101,7 +101,7 @@
           />
         </b-row>
         <b-row v-if="!estimateFinished">
-          <hr class="m-0" />
+          <hr class="m-0">
           <h4 class="pl-2 pt-2">{{ stageLabelWaiting }}</h4>
         </b-row>
         <b-row
