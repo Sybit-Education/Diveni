@@ -67,7 +67,10 @@ export default Vue.extend({
         const session: Session = (await this.axios.post(url, payload)).data as {
           sessionID: string,
           adminID: string,
-          membersID: string
+          membersID: string,
+          sessionConfig: {
+            set: Array<string>,
+          },
         };
         this.goToSessionPage(session);
       } catch (e) {
@@ -80,6 +83,7 @@ export default Vue.extend({
         params: {
           sessionID: session.sessionID,
           adminID: session.adminID,
+          voteSetJson: JSON.stringify(session.sessionConfig.set),
         },
       });
     },
