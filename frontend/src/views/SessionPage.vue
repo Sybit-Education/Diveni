@@ -53,14 +53,13 @@
             </b-button>
           </b-col>
           <b-col>
-            <h4
-              class="session-link"
-            >
-              <b-link
-                href=""
-                @click="copyLinkToClipboard"
-              >
+            <h4 class="session-link">
+              <b-link href="" @click="copyLinkToClipboard()">
                 {{ sessionID }}
+                <b-popover target="popover-link" triggers="hover" placement="top">
+                  <b-button class="mx-1" variant="success" @click="copyIdToClipboard()">Copy ID </b-button>
+                  <b-button class="mx-1" variant="success" @click="copyLinkToClipboard()"> Copy link </b-button>
+                </b-popover>
               </b-link>
             </h4>
           </b-col>
