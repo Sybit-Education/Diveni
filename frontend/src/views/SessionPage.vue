@@ -52,6 +52,11 @@
             <h1 class="mt-5 mb-3 mx-2">
               {{ titleEstimate }}
             </h1>
+            <estimate-timer
+            :timer-triggered="triggerTimer"
+            :timer="countdown"
+            :fromBeginning="fromBeginning"
+            />
             <b-button
               variant="outline-dark"
               class="ml-5 pl-5"
@@ -130,12 +135,14 @@ import Constants from '../constants';
 import SessionMemberCircle from '../components/SessionMemberCircle.vue';
 import Member from '../model/Member';
 import SessionMemberCard from '../components/SessionMemberCard.vue';
+import EstimateTimer from '../components/EstimateTimer.vue';
 
 export default Vue.extend({
   name: 'SessionPage',
   components: {
     SessionMemberCircle,
     SessionMemberCard,
+    EstimateTimer,
   },
   props: {
     adminID: {
@@ -155,6 +162,9 @@ export default Vue.extend({
       stageLabelWaiting: 'Waiting room',
       grid: 5,
       planningStart: false,
+      countdown: 60,
+      triggerTimer: 0,
+      fromBeginning: true,
     };
   },
   computed: {
@@ -231,6 +241,7 @@ export default Vue.extend({
       this.$store.commit('sendViaBackendWS', { endPoint });
       this.planningStart = true;
       this.updateNumberOfCardColumns();
+      /* this.startTimer(); */
     },
     copyLinkToClipboard() {
       // `${document.URL.toString().replace('session', 'join?sessionID=')}${this.sessionID}`;
@@ -256,9 +267,14 @@ export default Vue.extend({
       const endPoint = Constants.webSocketRestartPlanningRoute;
       this.$store.commit('sendViaBackendWS', { endPoint });
       this.updateNumberOfCardColumns();
+      this.startTimer();
+      console.log(this.triggerTimer);
     },
     goToLandingPage() {
       this.$router.push({ name: 'LandingPage' });
+    },
+    startTimer() {
+      this.triggerTimer = (this.triggerTimer + 1) % 5;
     },
   },
 });

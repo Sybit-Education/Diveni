@@ -105,9 +105,6 @@ export default Vue.extend({
     }
   },
   methods: {
-    setTimer() {
-      this.countdown = 60;
-    },
     onSendVote({ vote }) {
       this.draggedNumber = vote;
       const endPoint = `${Constants.webSocketVoteRoute}`;

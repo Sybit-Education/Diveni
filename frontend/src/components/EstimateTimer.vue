@@ -12,14 +12,20 @@ import Vue from 'vue';
 export default Vue.extend({
   name: 'EstimateTimer',
   props: {
-    timer: { type: Number, required: true },
+    timer: { type: Number, required: false },
     timerTriggered: { type: Number, required: true },
+    fromBeginning: { type: Boolean, required: false },
   },
   data() {
     return {
-      timerCount: this.timer,
+      timerCount: 60,
       intervalHandler: -1,
     };
+  },
+  created() {
+    if (this.fromBeginning) {
+      this.countdown();
+    }
   },
   watch: {
     timerTriggered() {
