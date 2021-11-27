@@ -1,7 +1,9 @@
 package de.htwg.aume.model;
 
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Optional;
@@ -9,18 +11,19 @@ import java.util.UUID;
 
 @Getter
 @EqualsAndHashCode
-@RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 public class Member {
 
-	private final UUID memberID;
+	private UUID memberID;
 
-	private final String name;
+	private String name;
 
-	private final String hexColor;
+	private String hexColor;
 
-	private final AvatarAnimal avatarAnimal;
+	private AvatarAnimal avatarAnimal;
 
-	private final String currentEstimation;
+	private String currentEstimation;
 
 	// Override because MongoRepository has a problem with Optional<String> as
 	// property

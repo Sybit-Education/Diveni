@@ -18,6 +18,7 @@ import de.htwg.aume.controller.ErrorMessages;
 import de.htwg.aume.model.Session;
 import de.htwg.aume.principals.AdminPrincipal;
 import de.htwg.aume.principals.MemberPrincipal;
+import lombok.Getter;
 import lombok.val;
 
 @Service
@@ -26,12 +27,13 @@ public class WebSocketService {
 	@Autowired
 	private SimpMessagingTemplate simpMessagingTemplate;
 
+	@Getter
 	private Map<AdminPrincipal, Set<MemberPrincipal>> memberMap = new HashMap<>();
 
 	Entry<AdminPrincipal, Set<MemberPrincipal>> getSessionEntry(UUID sessionID) {
 		return memberMap.entrySet().stream().filter(e -> e.getKey().getSessionID().equals(sessionID)).findFirst()
-				.orElseThrow(
-						() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessages.sessionNotFoundErrorMessage));
+				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+						ErrorMessages.sessionNotFoundErrorMessage));
 	}
 
 	public synchronized void addMemberIfNew(MemberPrincipal member) {
@@ -65,7 +67,7 @@ public class WebSocketService {
 	}
 
 	public void sendSessionStateToMember(Session session, String memberID) {
-		simpMessagingTemplate.convertAndSendToUser(memberID, "/updates/member", session.getSessionState().toString());
+		simpMessagingTemplate.convertAndSendToUser(memberID, "/updates/member", session.getSessionState());
 	}
 
 	public void removeSession(Session session) {

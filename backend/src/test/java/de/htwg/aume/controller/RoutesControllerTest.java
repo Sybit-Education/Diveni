@@ -25,7 +25,7 @@ import de.htwg.aume.model.SessionState;
 import de.htwg.aume.repository.SessionRepository;
 import lombok.val;
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 public class RoutesControllerTest {
 

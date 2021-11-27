@@ -40,36 +40,33 @@ public class WebsocketController {
 	@MessageMapping("/unregister")
 	public void removeMember(Principal principal) {
 		if (principal instanceof MemberPrincipal) {
-			webSocketService.removeMember((MemberPrincipal)principal);
+			webSocketService.removeMember((MemberPrincipal) principal);
 			val session = ControllerUtils
-				.getSessionByMemberIDOrThrowResponse(databaseService, ((MemberPrincipal)principal).getMemberID())
-				.removeMember(((MemberPrincipal)principal).getMemberID());
+					.getSessionByMemberIDOrThrowResponse(databaseService, ((MemberPrincipal) principal).getMemberID())
+					.removeMember(((MemberPrincipal) principal).getMemberID());
 			databaseService.saveSession(session);
 			webSocketService.sendMembersUpdate(session);
 		} else {
 			val session = ControllerUtils
-				.getSessionOrThrowResponse(databaseService, ((AdminPrincipal)principal).getSessionID())
-				.updateSessionState(SessionState.SESSION_CLOSED);
+					.getSessionOrThrowResponse(databaseService, ((AdminPrincipal) principal).getSessionID())
+					.updateSessionState(SessionState.SESSION_CLOSED);
 			webSocketService.sendSessionStateToMembers(session);
 			webSocketService.removeSession(session);
 			databaseService.deleteSession(session);
 		}
 	}
 
-
 	@MessageMapping("/startVoting")
 	public void startEstimation(AdminPrincipal principal) {
-		val session = ControllerUtils
-				.getSessionOrThrowResponse(databaseService, principal.getSessionID())
-				.updateSessionState(SessionState.START_VOTING );
+		val session = ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID())
+				.updateSessionState(SessionState.START_VOTING);
 		databaseService.saveSession(session);
 		webSocketService.sendSessionStateToMembers(session);
 	}
 
 	@MessageMapping("/vote")
 	public synchronized void processVote(@Payload String vote, MemberPrincipal member) {
-		val session = ControllerUtils
-				.getSessionByMemberIDOrThrowResponse(databaseService, member.getMemberID())
+		val session = ControllerUtils.getSessionByMemberIDOrThrowResponse(databaseService, member.getMemberID())
 				.updateEstimation(member.getMemberID(), vote);
 		databaseService.saveSession(session);
 		webSocketService.sendMembersUpdate(session);
@@ -77,9 +74,8 @@ public class WebsocketController {
 
 	@MessageMapping("/restart")
 	public synchronized void restartVote(AdminPrincipal principal) {
-		val session =
-				ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID())
-						.resetEstimations();
+		val session = ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID())
+				.resetEstimations();
 		databaseService.saveSession(session);
 		webSocketService.sendMembersUpdate(session);
 		webSocketService.sendSessionStateToMembers(session);
