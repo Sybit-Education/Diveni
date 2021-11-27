@@ -5,7 +5,7 @@
         {{ title }}
       </h1>
       <estimate-timer
-        :is-enabled="startTimer"
+        :timer-triggered="triggerTimer"
         :timer="countdown"
       />
       <b-row class="justify-content-center">
@@ -74,8 +74,9 @@ export default Vue.extend({
       numbers: [1, 2, 3, 5, 8, 13, 21, 34],
       draggedNumber: null,
       waitingText: 'Waiting for Host to start ...',
-      countdown: 50,
-      startTimer: false,
+      countdown: 60,
+      triggerTimer: 0,
+
     };
   },
   computed: {
@@ -88,9 +89,10 @@ export default Vue.extend({
   },
   watch: {
     memberUpdates(updates) {
+      console.log('triggeredTimer');
       if (updates.at(-1) === Constants.memberUpdateCommandStartVoting) {
         this.draggedNumber = null;
-        this.startTimer = !this.startTimer;
+        this.triggerTimer = (this.triggerTimer + 1) % 5;
       } else if (updates.at(-1) === Constants.memberUpdateCloseSession) {
         this.goToJoinPage();
       }
@@ -103,6 +105,9 @@ export default Vue.extend({
     }
   },
   methods: {
+    setTimer() {
+      this.countdown = 60;
+    },
     onSendVote({ vote }) {
       this.draggedNumber = vote;
       const endPoint = `${Constants.webSocketVoteRoute}`;

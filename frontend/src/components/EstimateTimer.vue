@@ -13,7 +13,7 @@ export default Vue.extend({
   name: 'EstimateTimer',
   props: {
     timer: { type: Number, required: true },
-    isEnabled: { type: Boolean, required: true },
+    timerTriggered: { type: Number, required: true },
   },
   data() {
     return {
@@ -22,20 +22,29 @@ export default Vue.extend({
     };
   },
   watch: {
-    isEnabled(timerEnable) {
-      console.log('enable changed');
-      if (timerEnable) {
-        this.intervalHandler = setInterval(() => {
-          if (this.timerCount > 1) {
-            this.timerCount -= 1;
-          } else {
-            clearInterval(this.intervalHandler);
-          }
-        }, 1000);
-      } else {
-        clearInterval(this.intervalHandler);
-      }
+    timerTriggered() {
+      this.countdown();
     },
+  },
+  methods: {
+    resetTimer(time) {
+      this.timerCount = time;
+    },
+    countdown() {
+      console.log('timertriggered method called');
+      clearInterval(this.intervalHandler);
+      this.resetTimer(60);
+      this.intervalHandler = setInterval(() => {
+        if (this.timerCount > 0) {
+          this.timerCount -= 1;
+        } else {
+          clearInterval(this.intervalHandler);
+        }
+      }, 1000);
+    },
+  },
+  beforeDestroy() {
+    clearInterval(this.intervalHandler);
   },
 });
 </script>
