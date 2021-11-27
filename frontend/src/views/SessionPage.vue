@@ -1,25 +1,17 @@
 <template>
   <div>
     <span v-if="!planningStart">
-      <h1 class="my-5 mx-2">
-        {{ titleWaiting }}
-      </h1>
-      <h4 class="mt-4 mx-2">
-        Share the code
-        <b-link
-          href=""
-          @click="copyLinkToClipboard"
-        >
-          {{ sessionID }}
-        </b-link>
-        with your team mates.
-        <b-icon-unlock />
+      <h1 class="my-5 mx-2"> {{ titleWaiting }} </h1>
+      <h4 id="popover-link" class="mt-4 mx-2">
+        Share the code <b-link href="" @click="copyLinkToClipboard()"> {{ sessionID }} </b-link> with your team mates. <b-icon-unlock />
+        <b-popover target="popover-link" triggers="hover" placement="top">
+          <b-button class="mx-1" variant="success" @click="copyIdToClipboard()">Copy ID </b-button>
+          <b-button class="mx-1" variant="success" @click="copyLinkToClipboard()"> Copy link </b-button>
+        </b-popover>
       </h4>
+
       <b-container class="my-5">
-        <b-row
-          class="d-flex justify-content-center border rounded"
-          style="min-height: 200px;"
-        >
+        <b-row class="d-flex justify-content-center border rounded" style="min-height: 200px;">
           <SessionMemberCircle
             v-for="member of members"
             :key="member.memberID"
@@ -232,9 +224,15 @@ export default Vue.extend({
       this.planningStart = true;
       this.updateNumberOfCardColumns();
     },
-    copyLinkToClipboard() {
-      // `${document.URL.toString().replace('session', 'join?sessionID=')}${this.sessionID}`;
+    copyIdToClipboard() {
       navigator.clipboard.writeText(this.sessionID).then(() => {
+        console.log('Copying to clipboard was successful!');
+      }, (err) => {
+        console.error('Could not copy text: ', err);
+      });
+    },
+    copyLinkToClipboard() {
+      navigator.clipboard.writeText(`${document.URL.toString().replace('session', 'join?sessionID=')}${this.sessionID}`).then(() => {
         console.log('Copying to clipboard was successful!');
       }, (err) => {
         console.error('Could not copy text: ', err);
