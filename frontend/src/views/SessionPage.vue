@@ -241,7 +241,6 @@ export default Vue.extend({
       this.$store.commit('sendViaBackendWS', { endPoint });
       this.planningStart = true;
       this.updateNumberOfCardColumns();
-      /* this.startTimer(); */
     },
     copyLinkToClipboard() {
       // `${document.URL.toString().replace('session', 'join?sessionID=')}${this.sessionID}`;
@@ -268,7 +267,6 @@ export default Vue.extend({
       this.$store.commit('sendViaBackendWS', { endPoint });
       this.updateNumberOfCardColumns();
       this.startTimer();
-      console.log(this.triggerTimer);
     },
     goToLandingPage() {
       this.$router.push({ name: 'LandingPage' });
