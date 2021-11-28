@@ -67,7 +67,7 @@ public class WebSocketService {
 	}
 
 	public void sendSessionStateToMember(Session session, String memberID) {
-		simpMessagingTemplate.convertAndSendToUser(memberID, "/updates/member", session.getSessionState());
+		simpMessagingTemplate.convertAndSendToUser(memberID, "/updates/member", session.getSessionState().toString());
 	}
 
 	public void removeSession(Session session) {
