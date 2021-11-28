@@ -14,7 +14,7 @@ export default Vue.extend({
   props: {
     timer: { type: Number, required: false },
     timerTriggered: { type: Number, required: true },
-    fromBeginning: { type: Boolean, required: false },
+    atStart: { type: Boolean, required: false },
   },
   data() {
     return {
@@ -23,7 +23,7 @@ export default Vue.extend({
     };
   },
   created() {
-    if (this.fromBeginning) {
+    if (this.atStart) {
       this.countdown();
     }
   },

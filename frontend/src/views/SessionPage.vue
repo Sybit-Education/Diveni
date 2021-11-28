@@ -55,7 +55,7 @@
             <estimate-timer
             :timer-triggered="triggerTimer"
             :timer="countdown"
-            :fromBeginning="fromBeginning"
+            :atStart="atStart"
             />
             <b-button
               variant="outline-dark"
@@ -164,7 +164,7 @@ export default Vue.extend({
       planningStart: false,
       countdown: 60,
       triggerTimer: 0,
-      fromBeginning: true,
+      atStart: true,
     };
   },
   computed: {
