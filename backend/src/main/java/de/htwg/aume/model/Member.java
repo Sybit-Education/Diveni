@@ -1,13 +1,12 @@
 package de.htwg.aume.model;
 
+import java.util.Optional;
+import java.util.UUID;
+
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-
-import java.util.Optional;
-import java.util.UUID;
 
 @Getter
 @EqualsAndHashCode
