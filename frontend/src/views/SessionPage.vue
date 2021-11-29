@@ -3,7 +3,11 @@
     <span v-if="!planningStart">
       <h1 class="my-5 mx-2"> {{ titleWaiting }} </h1>
       <h4 id="popover-link" class="mt-4 mx-2">
-        Share the code <b-link href="" @click="copyLinkToClipboard()"> {{ sessionID }} </b-link> with your team mates. <b-icon-unlock />
+        Share the code <b-link
+          href=""
+          @click="copyLinkToClipboard()"
+        > {{ sessionID }}
+        </b-link> with your team mates. <b-icon-unlock />
         <b-popover target="popover-link" triggers="hover" placement="top">
           <b-button class="mx-1" variant="success" @click="copyIdToClipboard()">Copy ID </b-button>
           <b-button class="mx-1" variant="success" @click="copyLinkToClipboard()"> Copy link </b-button>

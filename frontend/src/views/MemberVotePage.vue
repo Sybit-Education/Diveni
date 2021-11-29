@@ -39,7 +39,7 @@
           :key="voteOption"
           :ref="`memberCard${voteOption}`"
           class="flicking-panel mx-2"
-          :voteOption="voteOption"
+          :vote-option="voteOption"
           :index="index"
           :hex-color="hexColor"
           :dragged="voteOption == draggedVote"

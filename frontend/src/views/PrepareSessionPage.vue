@@ -31,7 +31,8 @@
           </b-form>
         </b-col>
       </b-row>
-      <b-button class="mt-5" variant="success" :disabled="buttonDisabled()" @click="sendCreateSessionRequest">
+      <b-button class="mt-5" variant="success" :disabled="buttonDisabled()"
+                @click="sendCreateSessionRequest">
         Start session
       </b-button>
     </b-container>
