@@ -25,12 +25,16 @@
           class="list-group-item"
         >
           <b-input-group>
+            <b-button
+              v-b-toggle="`collapse-${index}`"
+              variant="outline-secondary"
+            >
+              <b-icon-caret-down />
+            </b-button>
             <b-form-input
               v-model="userStories[index].title"
-              v-b-toggle="`collapse-${index}`"
               :readonly="!editEnabled"
               size="lg"
-              :style="`background-color:white; border: ${editEnabled ? '': 'none'}`"
               placeholder="Story title"
             />
             <b-dropdown
@@ -50,7 +54,11 @@
               </b-dropdown-item>
             </b-dropdown>
 
-            <b-button v-if="!editEnabled && showEstimations" pill variant="info">
+            <b-button
+              v-if="!editEnabled && showEstimations"
+              class="mx-2"
+              pill variant="info"
+            >
               {{ story.estimation ? story.estimation: '?' }}
             </b-button>
 
@@ -63,7 +71,6 @@
             <b-form-textarea
               v-model="userStories[index].description"
               :disabled="!editEnabled"
-              :style="`background-color:white; border: ${editEnabled ? '': 'none'}`"
               placeholder="Description and acceptance criteria..."
               rows="3"
               max-rows="6"
