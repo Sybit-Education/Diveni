@@ -1,22 +1,27 @@
 <template>
   <b-container>
-    <div>
-      <h1 class="my-5 mx-2">
-        {{ title }}
-      </h1>
-      <estimate-timer
-        :timer-triggered="triggerTimer"
-        :timer="countdown"
-      />
-      <b-row class="justify-content-center">
-        <rounded-avatar
-          :color="hexColor"
-          :asset-name="avatarAnimalAssetName"
-          :show-name="true"
-          :name="name"
+    <b-row class="my-5 mx-2">
+      <b-col>
+        <h1>
+          {{ title }}
+        </h1>
+      </b-col>
+      <b-col>
+        <estimate-timer
+          :timer-triggered="triggerTimer"
+          :timer="timerCountdownNumber"
+          :start-timer-on-component-creation="false"
         />
-      </b-row>
-    </div>
+      </b-col>
+    </b-row>
+    <b-row class="justify-content-center">
+      <rounded-avatar
+        :color="hexColor"
+        :asset-name="avatarAnimalAssetName"
+        :show-name="true"
+        :name="name"
+      />
+    </b-row>
     <b-row v-if="isStartVoting" class="my-5">
       <flicking
         id="flicking"
@@ -74,7 +79,7 @@ export default Vue.extend({
       numbers: [1, 2, 3, 5, 8, 13, 21, 34],
       draggedNumber: null,
       waitingText: 'Waiting for Host to start ...',
-      countdown: 60,
+      timerCountdownNumber: 60,
       triggerTimer: 0,
 
     };

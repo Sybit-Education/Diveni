@@ -53,9 +53,9 @@
               {{ titleEstimate }}
             </h1>
             <estimate-timer
-            :timer-triggered="triggerTimer"
-            :timer="countdown"
-            :atStart="atStart"
+              :timer-triggered="triggerTimer"
+              :timer="timerCountdownNumber"
+              :start-timer-on-component-creation="startTimerOnComponentCreation"
             />
             <b-button
               variant="outline-dark"
@@ -106,7 +106,7 @@
           />
         </b-row>
         <b-row v-if="!estimateFinished">
-          <hr class="m-0" />
+          <hr class="m-0">
           <h4 class="pl-2 pt-2">{{ stageLabelWaiting }}</h4>
         </b-row>
         <b-row
@@ -162,9 +162,9 @@ export default Vue.extend({
       stageLabelWaiting: 'Waiting room',
       grid: 5,
       planningStart: false,
-      countdown: 60,
+      timerCountdownNumber: 60,
       triggerTimer: 0,
-      atStart: true,
+      startTimerOnComponentCreation: true,
     };
   },
   computed: {
@@ -266,12 +266,12 @@ export default Vue.extend({
       const endPoint = Constants.webSocketRestartPlanningRoute;
       this.$store.commit('sendViaBackendWS', { endPoint });
       this.updateNumberOfCardColumns();
-      this.startTimer();
+      this.retriggerTimer();
     },
     goToLandingPage() {
       this.$router.push({ name: 'LandingPage' });
     },
-    startTimer() {
+    retriggerTimer() {
       this.triggerTimer = (this.triggerTimer + 1) % 5;
     },
   },

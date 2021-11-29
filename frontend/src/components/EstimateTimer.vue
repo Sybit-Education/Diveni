@@ -1,8 +1,8 @@
 <template>
-  <div id="estimate-timer" class="p-3 text-center">
-    <h3 class="text-center">
-      {{ timerCount }}
-    </h3>
+  <div id="estimate-timer" class="d-flex justify-content-end">
+    <h2>
+      {{ formatTimer() }}
+    </h2>
   </div>
 </template>
 
@@ -12,9 +12,9 @@ import Vue from 'vue';
 export default Vue.extend({
   name: 'EstimateTimer',
   props: {
-    timer: { type: Number, required: false },
+    timer: { type: Number, required: true },
     timerTriggered: { type: Number, required: true },
-    atStart: { type: Boolean, required: false },
+    startTimerOnComponentCreation: { type: Boolean, required: false },
   },
   data() {
     return {
@@ -22,24 +22,31 @@ export default Vue.extend({
       intervalHandler: -1,
     };
   },
-  created() {
-    if (this.atStart) {
-      this.countdown();
-    }
-  },
   watch: {
     timerTriggered() {
       this.countdown();
     },
   },
+  created() {
+    if (this.startTimerOnComponentCreation) {
+      this.countdown();
+    }
+  },
+  beforeDestroy() {
+    clearInterval(this.intervalHandler);
+  },
   methods: {
+    formatTimer() {
+      const minutes = Math.floor(this.timerCount / 60);
+      const seconds = (this.timerCount % 60).toString().padStart(2, '0');
+      return `${minutes}:${seconds}`;
+    },
     resetTimer(time) {
       this.timerCount = time;
     },
     countdown() {
-      console.log('timertriggered method called');
       clearInterval(this.intervalHandler);
-      this.resetTimer(60);
+      this.resetTimer(this.timerCount);
       this.intervalHandler = setInterval(() => {
         if (this.timerCount > 0) {
           this.timerCount -= 1;
@@ -48,9 +55,6 @@ export default Vue.extend({
         }
       }, 1000);
     },
-  },
-  beforeDestroy() {
-    clearInterval(this.intervalHandler);
   },
 });
 </script>
