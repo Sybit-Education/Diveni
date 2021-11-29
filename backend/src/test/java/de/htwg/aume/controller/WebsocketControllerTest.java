@@ -151,8 +151,9 @@ public class WebsocketControllerTest {
     public void registerAdminPrincipal_isRegistered() throws Exception {
         val sessionID = UUID.randomUUID();
         val adminID = UUID.randomUUID();
-        sessionRepo.save(new Session(sessionID, adminID, UUID.randomUUID(), new SessionConfig(new ArrayList<>(), null),
-                new ArrayList<Member>(), SessionState.WAITING_FOR_MEMBERS));
+        sessionRepo.save(new Session(sessionID, adminID, UUID.randomUUID(),
+                new SessionConfig(new ArrayList<>(), List.of(), null), new ArrayList<Member>(),
+                SessionState.WAITING_FOR_MEMBERS));
         val adminPrincipal = new AdminPrincipal(sessionID, adminID);
         StompSession session = getAdminSession(sessionID, adminID);
 
@@ -172,8 +173,9 @@ public class WebsocketControllerTest {
         val memberID = UUID.randomUUID();
         val member = new Member(memberID, null, null, null, null);
         val adminPrincipal = new AdminPrincipal(sessionID, adminID);
-        sessionRepo.save(new Session(sessionID, adminID, UUID.randomUUID(), new SessionConfig(new ArrayList<>(), null),
-                List.of(member), SessionState.WAITING_FOR_MEMBERS));
+        sessionRepo.save(new Session(sessionID, adminID, UUID.randomUUID(),
+                new SessionConfig(new ArrayList<>(), List.of(), null), List.of(member),
+                SessionState.WAITING_FOR_MEMBERS));
         webSocketService.setAdminUser(adminPrincipal);
         val memberPrincipal = new MemberPrincipal(sessionID, memberID);
         StompSession session = getMemberSession(sessionID, memberID);
@@ -194,8 +196,8 @@ public class WebsocketControllerTest {
         val memberID = UUID.randomUUID();
         val memberList = List.of(new Member(memberID, null, null, null, null));
         val adminPrincipal = new AdminPrincipal(sessionID, adminID);
-        sessionRepo.save(new Session(sessionID, adminID, UUID.randomUUID(), new SessionConfig(new ArrayList<>(), null),
-                memberList, SessionState.WAITING_FOR_MEMBERS));
+        sessionRepo.save(new Session(sessionID, adminID, UUID.randomUUID(),
+                new SessionConfig(new ArrayList<>(), List.of(), null), memberList, SessionState.WAITING_FOR_MEMBERS));
         webSocketService.setAdminUser(adminPrincipal);
         StompSession session = getMemberSession(sessionID, memberID);
         StompSession adminSession = getAdminSession(sessionID, adminID);
@@ -238,8 +240,9 @@ public class WebsocketControllerTest {
     public void unregisterAdminPrincipal_isUnregistered() throws Exception {
         val sessionID = UUID.randomUUID();
         val adminID = UUID.randomUUID();
-        sessionRepo.save(new Session(sessionID, adminID, UUID.randomUUID(), new SessionConfig(new ArrayList<>(), null),
-                new ArrayList<Member>(), SessionState.WAITING_FOR_MEMBERS));
+        sessionRepo.save(new Session(sessionID, adminID, UUID.randomUUID(),
+                new SessionConfig(new ArrayList<>(), List.of(), null), new ArrayList<Member>(),
+                SessionState.WAITING_FOR_MEMBERS));
         val adminPrincipal = new AdminPrincipal(sessionID, adminID);
         webSocketService.setAdminUser(adminPrincipal);
         StompSession session = getAdminSession(sessionID, adminID);
@@ -257,8 +260,9 @@ public class WebsocketControllerTest {
         val adminID = UUID.randomUUID();
         val memberID = UUID.randomUUID();
         val member = new Member(memberID, null, null, null, null);
-        sessionRepo.save(new Session(sessionID, adminID, UUID.randomUUID(), new SessionConfig(new ArrayList<>(), null),
-                List.of(member), SessionState.WAITING_FOR_MEMBERS));
+        sessionRepo.save(new Session(sessionID, adminID, UUID.randomUUID(),
+                new SessionConfig(new ArrayList<>(), List.of(), null), List.of(member),
+                SessionState.WAITING_FOR_MEMBERS));
         val adminPrincipal = new AdminPrincipal(sessionID, adminID);
         val memberPrincipal = new MemberPrincipal(sessionID, memberID);
         webSocketService.setAdminUser(adminPrincipal);
@@ -282,8 +286,8 @@ public class WebsocketControllerTest {
         val member = new Member(memberID, null, null, null, null);
         val memberList = List.of(member);
         val adminPrincipal = new AdminPrincipal(sessionID, adminID);
-        sessionRepo.save(new Session(sessionID, adminID, UUID.randomUUID(), new SessionConfig(new ArrayList<>(), null),
-                memberList, SessionState.WAITING_FOR_MEMBERS));
+        sessionRepo.save(new Session(sessionID, adminID, UUID.randomUUID(),
+                new SessionConfig(new ArrayList<>(), List.of(), null), memberList, SessionState.WAITING_FOR_MEMBERS));
         webSocketService.setAdminUser(adminPrincipal);
         StompSession session = getMemberSession(sessionID, memberID);
         val vote = "5";
@@ -305,8 +309,8 @@ public class WebsocketControllerTest {
         val member = new Member(memberID, null, null, null, null);
         val memberList = List.of(member);
         val adminPrincipal = new AdminPrincipal(sessionID, adminID);
-        sessionRepo.save(new Session(sessionID, adminID, UUID.randomUUID(), new SessionConfig(new ArrayList<>(), null),
-                memberList, SessionState.WAITING_FOR_MEMBERS));
+        sessionRepo.save(new Session(sessionID, adminID, UUID.randomUUID(),
+                new SessionConfig(new ArrayList<>(), List.of(), null), memberList, SessionState.WAITING_FOR_MEMBERS));
         webSocketService.setAdminUser(adminPrincipal);
         StompSession session = getMemberSession(sessionID, memberID);
         StompSession adminSession = getAdminSession(sessionID, adminID);
@@ -330,8 +334,8 @@ public class WebsocketControllerTest {
         val member = new Member(memberID, null, null, null, null);
         val memberList = List.of(member);
         val adminPrincipal = new AdminPrincipal(sessionID, adminID);
-        val oldSession = new Session(sessionID, adminID, UUID.randomUUID(), new SessionConfig(new ArrayList<>(), null),
-                memberList, SessionState.WAITING_FOR_MEMBERS);
+        val oldSession = new Session(sessionID, adminID, UUID.randomUUID(),
+                new SessionConfig(new ArrayList<>(), List.of(), null), memberList, SessionState.WAITING_FOR_MEMBERS);
         sessionRepo.save(oldSession);
         webSocketService.setAdminUser(adminPrincipal);
         StompSession adminSession = getAdminSession(sessionID, adminID);
@@ -352,8 +356,8 @@ public class WebsocketControllerTest {
         val member = new Member(memberID, null, null, null, "5");
         val memberList = List.of(member);
         val adminPrincipal = new AdminPrincipal(sessionID, adminID);
-        val oldSession = new Session(sessionID, adminID, UUID.randomUUID(), new SessionConfig(new ArrayList<>(), null),
-                memberList, SessionState.WAITING_FOR_MEMBERS);
+        val oldSession = new Session(sessionID, adminID, UUID.randomUUID(),
+                new SessionConfig(new ArrayList<>(), List.of(), null), memberList, SessionState.WAITING_FOR_MEMBERS);
         sessionRepo.save(oldSession);
         webSocketService.setAdminUser(adminPrincipal);
         StompSession adminSession = getAdminSession(sessionID, adminID);
