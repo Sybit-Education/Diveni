@@ -3,7 +3,7 @@ interface Member {
     name: string;
     hexColor: string;
     avatarAnimalAssetName: string;
-    currentEstimation: number | null;
+    currentEstimation: string | null;
 }
 
 export default Member;

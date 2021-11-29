@@ -50,7 +50,12 @@
           </b-form>
         </b-col>
       </b-row>
-      <b-button class="mt-5" variant="success" :disabled="false" @click="sendCreateSessionRequest">
+      <user-stories-sidebar
+        :card-set="['1', '2', 'A', '4', '5', '6']"
+        :show-estimations="false"
+        @userStoriesChanged="onUserStoriesChanged($event)"
+      />
+      <b-button class="mt-5" variant="success" :disabled="buttonDisabled()" @click="sendCreateSessionRequest">
         Start session
       </b-button>
     </b-container>
@@ -61,14 +66,20 @@
 import Vue from 'vue';
 import Session from '../model/Session';
 import Constants from '../constants';
+import CardSetComponent from '../components/CardSetComponent.vue';
+import UserStoriesSidebar from '../components/UserStoriesSidebar.vue';
 
 export default Vue.extend({
   name: 'PrepareSessionPage',
   components: {
+    CardSetComponent,
+    UserStoriesSidebar,
   },
   data() {
     return {
+      title: 'Prepare session',
       password: '',
+      selectedCardSetNumbers: [],
       timer: 60,
       warningWhenUnderZero: '',
     };
@@ -93,12 +104,18 @@ export default Vue.extend({
   methods: {
     async sendCreateSessionRequest() {
       const url = Constants.backendURL + Constants.createSessionRoute;
-      const payload = { password: this.password === '' ? null : this.password };
+      const payload = {
+        set: this.selectedCardSetNumbers,
+        password: this.password === '' ? null : this.password,
+      };
       try {
-        const session : Session = (await this.axios.post(url, payload)).data as {
+        const session: Session = (await this.axios.post(url, payload)).data as {
           sessionID: string,
           adminID: string,
-          membersID: string
+          membersID: string,
+          sessionConfig: {
+            set: Array<string>,
+          },
         };
         this.goToSessionPage(session);
       } catch (e) {
@@ -111,8 +128,18 @@ export default Vue.extend({
         params: {
           sessionID: session.sessionID,
           adminID: session.adminID,
+          voteSetJson: JSON.stringify(session.sessionConfig.set),
         },
       });
+    },
+    setCardSetNumbers($event) {
+      this.selectedCardSetNumbers = $event;
+    },
+    buttonDisabled() {
+      return this.selectedCardSetNumbers.length < 1;
+    },
+    onUserStoriesChanged(newUserStories) {
+      console.log('user stories changed', newUserStories);
     },
     setTimerUp() {
       console.log(this.timer);
