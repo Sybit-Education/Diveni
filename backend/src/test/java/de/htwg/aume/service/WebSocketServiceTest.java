@@ -132,7 +132,7 @@ public class WebSocketServiceTest {
         webSocketService.sendSessionStateToMember(session, defaultMemberPrincipal.getMemberID().toString());
 
         verify(simpMessagingTemplateMock, times(1)).convertAndSendToUser(
-                defaultMemberPrincipal.getMemberID().toString(), MEMBER_UPDATES, session.getSessionState());
+                defaultMemberPrincipal.getMemberID().toString(), MEMBER_UPDATES, session.getSessionState().toString());
     }
 
     @Test
@@ -147,9 +147,9 @@ public class WebSocketServiceTest {
         webSocketService.sendSessionStateToMembers(session);
 
         verify(simpMessagingTemplateMock, times(1)).convertAndSendToUser(
-                defaultMemberPrincipal.getMemberID().toString(), MEMBER_UPDATES, session.getSessionState());
+                defaultMemberPrincipal.getMemberID().toString(), MEMBER_UPDATES, session.getSessionState().toString());
         verify(simpMessagingTemplateMock, times(1)).convertAndSendToUser(memberPrincipal.getMemberID().toString(),
-                MEMBER_UPDATES, session.getSessionState());
+                MEMBER_UPDATES, session.getSessionState().toString());
     }
 
     @Test
