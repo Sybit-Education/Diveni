@@ -29,7 +29,8 @@ public class SessionRepositoryTest {
 		val sessionID = UUID.randomUUID();
 		val adminID = UUID.randomUUID();
 		val membersID = UUID.randomUUID();
-		val session = new Session(sessionID, adminID, membersID, new ArrayList<Member>(), SessionState.WAITING_FOR_MEMBERS);
+		val session = new Session(sessionID, adminID, membersID, null, new ArrayList<Member>(),
+				SessionState.WAITING_FOR_MEMBERS);
 
 		assertEquals(session, sessionRepo.save(session));
 	}
@@ -42,7 +43,7 @@ public class SessionRepositoryTest {
 		val member = new Member(UUID.randomUUID(), "John", "0x0a0a0a", AvatarAnimal.CAMEL, null);
 		val members = new ArrayList<Member>();
 		members.add(member);
-		val session = new Session(sessionID, adminID, membersID, members, SessionState.WAITING_FOR_MEMBERS);
+		val session = new Session(sessionID, adminID, membersID, null, members, SessionState.WAITING_FOR_MEMBERS);
 
 		assertEquals(session, sessionRepo.save(session));
 	}

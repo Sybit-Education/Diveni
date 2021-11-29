@@ -27,13 +27,14 @@
                     deceleration: 0.0005 }"
       >
         <member-vote-card
-          v-for="number in numbers"
-          :key="number"
-          :ref="`memberCard${number}`"
+          v-for="(voteOption, index) in voteSet"
+          :key="voteOption"
+          :ref="`memberCard${voteOption}`"
           class="flicking-panel mx-2"
-          :number="number"
+          :voteOption="voteOption"
+          :index="index"
           :hex-color="hexColor"
-          :dragged="number == draggedNumber"
+          :dragged="voteOption == draggedVote"
           @sentVote="onSendVote"
         />
       </flicking>
@@ -69,16 +70,14 @@ export default Vue.extend({
     name: { type: String, default: undefined },
     hexColor: { type: String, default: undefined },
     avatarAnimalAssetName: { type: String, default: undefined },
-  },
-  created() {
-    window.addEventListener('beforeunload', this.sendUnregisterCommand);
+    voteSetJson: { type: String, default: undefined },
   },
   data() {
     return {
       title: 'Estimate!',
-      numbers: [1, 2, 3, 5, 8, 13, 21, 34],
-      draggedNumber: null,
+      draggedVote: null,
       waitingText: 'Waiting for Host to start ...',
+      voteSet: [] as string[],
     };
   },
   computed: {
@@ -92,21 +91,25 @@ export default Vue.extend({
   watch: {
     memberUpdates(updates) {
       if (updates.at(-1) === Constants.memberUpdateCommandStartVoting) {
-        this.draggedNumber = null;
+        this.draggedVote = null;
       } else if (updates.at(-1) === Constants.memberUpdateCloseSession) {
         this.goToJoinPage();
       }
     },
+  },
+  created() {
+    window.addEventListener('beforeunload', this.sendUnregisterCommand);
   },
   mounted() {
     if (this.memberID === undefined || this.name === undefined
           || this.hexColor === undefined || this.avatarAnimalAssetName === undefined) {
       this.goToJoinPage();
     }
+    this.voteSet = JSON.parse(this.voteSetJson);
   },
   methods: {
     onSendVote({ vote }) {
-      this.draggedNumber = vote;
+      this.draggedVote = vote;
       const endPoint = `${Constants.webSocketVoteRoute}`;
       this.$store.commit('sendViaBackendWS', { endPoint, data: vote });
     },

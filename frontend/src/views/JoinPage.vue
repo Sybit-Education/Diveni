@@ -4,7 +4,6 @@
       {{ title }}
     </h1>
     <join-page-card
-      :show-password="false"
       :color="hexColor"
       :animal-asset-name="avatarAnimalAssetName"
       :button-text="'GO'"
@@ -34,6 +33,7 @@ export default Vue.extend({
       memberID: uuidv4(),
       name: '',
       sessionID: '',
+      voteSet: '',
     };
   },
   computed: {
@@ -61,16 +61,19 @@ export default Vue.extend({
     async sendJoinSessionRequest(data: JoinCommand) {
       this.name = data.name;
       const url = `${Constants.backendURL}${Constants.joinSessionRoute(data.sessionID)}`;
-      const member = {
-        memberID: this.memberID,
-        name: this.name,
-        hexColor: this.hexColor,
-        avatarAnimal: this.convertAvatarAssetNameToBackendAnimal(),
-        currentEstimation: null,
+      const joinInfo = {
+        password: data.password,
+        member: {
+          memberID: this.memberID,
+          name: this.name,
+          hexColor: this.hexColor,
+          avatarAnimal: this.convertAvatarAssetNameToBackendAnimal(),
+          currentEstimation: null,
+        },
       };
       try {
-        await this.axios.post(url, member);
-        this.connectToWebSocket(data.sessionID, member.memberID);
+        this.voteSet = JSON.stringify((await this.axios.post(url, joinInfo)).data);
+        this.connectToWebSocket(data.sessionID, joinInfo.member.memberID);
       } catch (e) {
         console.error(`Response of ${url} is invalid: ${e}`);
       }
@@ -99,6 +102,7 @@ export default Vue.extend({
           name: this.name,
           hexColor: this.hexColor,
           avatarAnimalAssetName: this.avatarAnimalAssetName,
+          voteSetJson: this.voteSet,
         },
       });
     },

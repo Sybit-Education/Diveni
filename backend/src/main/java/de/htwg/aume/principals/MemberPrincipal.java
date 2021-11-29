@@ -23,5 +23,4 @@ public class MemberPrincipal implements Principal {
 	public String getName() {
 		return memberID.toString();
 	}
-
 }
