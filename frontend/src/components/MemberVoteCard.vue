@@ -77,7 +77,7 @@ export default Vue.extend({
   flex-direction: column;
 }
 #text {
-  font-size: 200px;
+  font-size: 7rem;
   font-weight: 500;
 }
 </style>
