@@ -1,5 +1,6 @@
 <template>
   <div>
+    <card-grid/>
     <b-container>
       <h1 class="my-5">
         {{ title }}
@@ -49,12 +50,14 @@ import Session from '../model/Session';
 import Constants from '../constants';
 import CardSetComponent from '../components/CardSetComponent.vue';
 import UserStoriesSidebar from '../components/UserStoriesSidebar.vue';
+import CardGrid from '../components/CardGrid.vue';
 
 export default Vue.extend({
   name: 'PrepareSessionPage',
   components: {
     CardSetComponent,
     UserStoriesSidebar,
+    CardGrid,
   },
   data() {
     return {
