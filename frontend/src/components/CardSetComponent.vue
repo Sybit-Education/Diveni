@@ -78,7 +78,7 @@ export default Vue.extend({
       this.emitChanges();
     },
     emitChanges() {
-      this.$emit('selectedCardSetNumbers', this.selectedCardSet.activeValues);
+      this.$emit('selectedCardSetOptions', this.selectedCardSet.activeValues);
     },
     onCardSetNumberSelected(number) {
       if (this.selectedCardSet.activeValues.includes(number)) {

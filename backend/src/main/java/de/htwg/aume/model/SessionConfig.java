@@ -13,6 +13,8 @@ public class SessionConfig {
 
     private final List<String> set;
 
+    private final List<UserStory> userStories;
+
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private final String password;
 }

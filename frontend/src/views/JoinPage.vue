@@ -34,6 +34,7 @@ export default Vue.extend({
       name: '',
       sessionID: '',
       voteSet: '',
+      userStories: '';
     };
   },
   computed: {
@@ -73,6 +74,12 @@ export default Vue.extend({
       };
       try {
         this.voteSet = JSON.stringify((await this.axios.post(url, joinInfo)).data);
+        const sessionConfig = (await this.axios.post(url, joinInfo)).data as {
+          set: Array<string>,
+          userStories: Array<{title:string, description:string, estimation:string|null }>,
+        };
+        this.voteSet = JSON.stringify(sessionConfig.set);
+        this.userStories = JSON.stringify(sessionConfig.userStories);
         this.connectToWebSocket(data.sessionID, joinInfo.member.memberID);
       } catch (e) {
         console.error(`Response of ${url} is invalid: ${e}`);
