@@ -41,7 +41,7 @@ export default new Vuex.Store({
       );
     },
     sendViaBackendWS(state, { endPoint, data }) {
-      state.stompClient.send(endPoint, JSON.stringify(data));
+      state.stompClient.send(endPoint, data);
     },
   },
   actions: {

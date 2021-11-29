@@ -1,25 +1,17 @@
 <template>
   <div>
     <span v-if="!planningStart">
-      <h1 class="my-5 mx-2">
-        {{ titleWaiting }}
-      </h1>
-      <h4 class="mt-4 mx-2">
-        Share the code
-        <b-link
-          href=""
-          @click="copyLinkToClipboard"
-        >
-          {{ sessionID }}
-        </b-link>
-        with your team mates.
-        <b-icon-unlock />
+      <h1 class="my-5 mx-2"> {{ titleWaiting }} </h1>
+      <h4 id="popover-link" class="mt-4 mx-2">
+        Share the code <b-link href="" @click="copyLinkToClipboard()"> {{ sessionID }} </b-link> with your team mates. <b-icon-unlock />
+        <b-popover target="popover-link" triggers="hover" placement="top">
+          <b-button class="mx-1" variant="success" @click="copyIdToClipboard()">Copy ID </b-button>
+          <b-button class="mx-1" variant="success" @click="copyLinkToClipboard()"> Copy link </b-button>
+        </b-popover>
       </h4>
+
       <b-container class="my-5">
-        <b-row
-          class="d-flex justify-content-center border rounded"
-          style="min-height: 200px;"
-        >
+        <b-row class="d-flex justify-content-center border rounded" style="min-height: 200px;">
           <SessionMemberCircle
             v-for="member of members"
             :key="member.memberID"
@@ -66,14 +58,13 @@
             </b-button>
           </b-col>
           <b-col>
-            <h4
-              class="session-link"
-            >
-              <b-link
-                href=""
-                @click="copyLinkToClipboard"
-              >
+            <h4 class="session-link">
+              <b-link href="" @click="copyLinkToClipboard()">
                 {{ sessionID }}
+                <b-popover target="popover-link" triggers="hover" placement="top">
+                  <b-button class="mx-1" variant="success" @click="copyIdToClipboard()">Copy ID </b-button>
+                  <b-button class="mx-1" variant="success" @click="copyLinkToClipboard()"> Copy link </b-button>
+                </b-popover>
               </b-link>
             </h4>
           </b-col>
@@ -153,6 +144,10 @@ export default Vue.extend({
       type: String,
       default: undefined,
     },
+    voteSetJson: {
+      type: String,
+      default: undefined,
+    },
   },
   data() {
     return {
@@ -162,6 +157,7 @@ export default Vue.extend({
       stageLabelWaiting: 'Waiting room',
       grid: 5,
       planningStart: false,
+      voteSet: [] as string[],
       timerCountdownNumber: 60,
       triggerTimer: 0,
       startTimerOnComponentCreation: true,
@@ -185,12 +181,12 @@ export default Vue.extend({
     },
     estimateHighest(): Member {
       return this.membersEstimated.reduce((prev, current) => (
-        (prev.currentEstimation! > current.currentEstimation!) ? prev : current
+        this.voteSet.indexOf(prev.currentEstimation!) > this.voteSet.indexOf(current.currentEstimation!) ? prev : current
       ));
     },
     estimateLowest(): Member {
       return this.membersEstimated.reduce((prev, current) => (
-        (prev.currentEstimation! < current.currentEstimation!) ? prev : current
+        this.voteSet.indexOf(prev.currentEstimation!) < this.voteSet.indexOf(current.currentEstimation!) ? prev : current
       ));
     },
   },
@@ -210,6 +206,7 @@ export default Vue.extend({
     if (this.sessionID === undefined || this.adminID === undefined) {
       this.goToLandingPage();
     }
+    this.voteSet = JSON.parse(this.voteSetJson);
     this.connectToWebSocket();
   },
   created() {
@@ -242,9 +239,15 @@ export default Vue.extend({
       this.planningStart = true;
       this.updateNumberOfCardColumns();
     },
-    copyLinkToClipboard() {
-      // `${document.URL.toString().replace('session', 'join?sessionID=')}${this.sessionID}`;
+    copyIdToClipboard() {
       navigator.clipboard.writeText(this.sessionID).then(() => {
+        console.log('Copying to clipboard was successful!');
+      }, (err) => {
+        console.error('Could not copy text: ', err);
+      });
+    },
+    copyLinkToClipboard() {
+      navigator.clipboard.writeText(`${document.URL.toString().replace('session', 'join?sessionID=')}${this.sessionID}`).then(() => {
         console.log('Copying to clipboard was successful!');
       }, (err) => {
         console.error('Could not copy text: ', err);

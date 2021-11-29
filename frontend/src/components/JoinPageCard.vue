@@ -97,9 +97,9 @@ export default Vue.extend({
   methods: {
     onClickButton() {
       const data: JoinCommand = {
-        sessionID: this.sessionID,
+        sessionID: this.sessionID.split(' ').join(''),
         password: this.password,
-        name: this.name,
+        name: this.name.trim(),
       };
       this.$emit('clicked', data);
     },
