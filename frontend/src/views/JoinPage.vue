@@ -33,6 +33,7 @@ export default Vue.extend({
       memberID: uuidv4(),
       name: '',
       sessionID: '',
+      voteSet: '',
     };
   },
   computed: {
@@ -71,7 +72,7 @@ export default Vue.extend({
         },
       };
       try {
-        await this.axios.post(url, joinInfo);
+        this.voteSet = JSON.stringify((await this.axios.post(url, joinInfo)).data);
         this.connectToWebSocket(data.sessionID, joinInfo.member.memberID);
       } catch (e) {
         console.error(`Response of ${url} is invalid: ${e}`);
@@ -101,6 +102,7 @@ export default Vue.extend({
           name: this.name,
           hexColor: this.hexColor,
           avatarAnimalAssetName: this.avatarAnimalAssetName,
+          voteSetJson: this.voteSet,
         },
       });
     },

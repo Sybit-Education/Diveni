@@ -12,12 +12,10 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Getter
 @RequiredArgsConstructor
 @EqualsAndHashCode
-@JsonIgnoreProperties(value = { "password" }, allowGetters = true)
 @Document("sessions")
 public class Session {
 
@@ -28,41 +26,41 @@ public class Session {
 
 	private final UUID membersID;
 
-	private final String password;
+	private final SessionConfig sessionConfig;
 
 	private final List<Member> members;
 
 	private final SessionState sessionState;
 
-	public Session updateEstimation(UUID memberID, int vote) {
+	public Session updateEstimation(UUID memberID, String vote) {
 		val updatedMembers = members.stream().map(m -> m.getMemberID().equals(memberID) ? m.updateEstimation(vote) : m)
 				.collect(Collectors.toList());
-		return new Session(sessionID, adminID, membersID, password, updatedMembers, sessionState);
+		return new Session(sessionID, adminID, membersID, sessionConfig, updatedMembers, sessionState);
 	}
 
 	public Session resetEstimations() {
 		val updatedMembers = members.stream().map(m -> m.resetEstimation()).collect(Collectors.toList());
-		return new Session(sessionID, adminID, membersID, password, updatedMembers, sessionState);
+		return new Session(sessionID, adminID, membersID, sessionConfig, updatedMembers, sessionState);
 	}
 
 	public Session updateMembers(List<Member> updatedMembers) {
-		return new Session(sessionID, adminID, membersID, password, updatedMembers, sessionState);
+		return new Session(sessionID, adminID, membersID, sessionConfig, updatedMembers, sessionState);
 	}
 
 	public Session updateSessionState(SessionState updatedSessionState) {
-		return new Session(sessionID, adminID, membersID, password, members, updatedSessionState);
+		return new Session(sessionID, adminID, membersID, sessionConfig, members, updatedSessionState);
 	}
 
 	public Session addMember(Member member) {
 		var updatedMembers = new ArrayList<>(members);
 		updatedMembers.add(member);
-		return new Session(sessionID, adminID, membersID, password, updatedMembers, sessionState);
+		return new Session(sessionID, adminID, membersID, sessionConfig, updatedMembers, sessionState);
 	}
 
 	public Session removeMember(UUID memberID) {
 		val updatedMembers = members.stream().filter(m -> !m.getMemberID().equals(memberID))
 				.collect(Collectors.toList());
-		return new Session(sessionID, adminID, membersID, password, updatedMembers, sessionState);
+		return new Session(sessionID, adminID, membersID, sessionConfig, updatedMembers, sessionState);
 	}
 
 }
