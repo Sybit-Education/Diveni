@@ -17,7 +17,7 @@
         :style="swipeableCardBackgroundColor"
       >
         <div id="text">
-          {{ dragged ? '💪' : number }}
+          {{ dragged ? '💪' : voteOption }}
         </div>
       </div>
     </Vue2InteractDraggable>
@@ -36,7 +36,8 @@ export default Vue.extend({
     Vue2InteractDraggable,
   },
   props: {
-    number: { type: Number, required: true },
+    voteOption: { type: String, required: true },
+    index: { type: Number, required: true },
     hexColor: { type: String, required: true },
     dragged: { type: Boolean, required: true },
   },
@@ -46,7 +47,7 @@ export default Vue.extend({
       r = !this.dragged ? r : 230;
       g = !this.dragged ? g : 225;
       b = !this.dragged ? b : 228;
-      return `background-color: rgb(${r - this.number * 2}, ${g}, ${b});`;
+      return `background-color: rgb(${r - this.index ** 2}, ${g}, ${b});`;
     },
   },
   methods: {
@@ -57,7 +58,7 @@ export default Vue.extend({
         spread: 360,
       });
       this.$emit('sentVote', {
-        vote: this.number,
+        vote: this.voteOption,
       });
     },
   },
