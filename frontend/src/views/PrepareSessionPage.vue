@@ -18,25 +18,26 @@
       <b-row class="mt-4">
         <b-col>
           <h4>
-            3. Specify estimation duration
+            2. Specify estimation duration
           </h4>
           <b-col>
-            <b-button>
+            <b-button variant="outline-secondary" @click="setTimerDown()">
               -
             </b-button>
-            <b-button>
-              Platzhalter für ausgewähler Timer
-            </b-button>
-            <b-button>
+            {{ formatTimer }}
+            <b-button variant="outline-secondary" @click="setTimerUp()">
               +
             </b-button>
+            <span style="color:#FF0000">
+            {{ warningWhenUnderZero }}
+            </span>
           </b-col>
         </b-col>
       </b-row>
       <b-row>
         <b-col>
           <h4>
-            4. Secure with password
+            3. Secure with password
           </h4>
           <b-form>
             <b-form-group label-for="input-password">
@@ -67,9 +68,27 @@ export default Vue.extend({
   },
   data() {
     return {
-      title: 'Prepare session',
       password: '',
+      timer: 60,
+      warningWhenUnderZero: '',
     };
+  },
+  watch: {
+    timer(newTimer) {
+      if (newTimer <= 0) {
+        this.warningWhenUnderZero = 'Timer cannot be less than zero!';
+      }
+      if (newTimer > 0) {
+        this.warningWhenUnderZero = '';
+      }
+    },
+  },
+  computed: {
+    formatTimer() {
+      const minutes = Math.floor(this.timer / 60);
+      const seconds = `0${this.timer % 60}`.slice(-2);
+      return `${minutes}:${seconds}`;
+    },
   },
   methods: {
     async sendCreateSessionRequest() {
@@ -94,6 +113,13 @@ export default Vue.extend({
           adminID: session.adminID,
         },
       });
+    },
+    setTimerUp() {
+      console.log(this.timer);
+      this.timer += 15;
+    },
+    setTimerDown() {
+      this.timer -= 15;
     },
   },
 });
