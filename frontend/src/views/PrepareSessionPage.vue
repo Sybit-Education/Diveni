@@ -31,6 +31,11 @@
           </b-form>
         </b-col>
       </b-row>
+      <user-stories-sidebar
+        :card-set="['1', '2', 'A', '4', '5', '6']"
+        :show-estimations="false"
+        @userStoriesChanged="onUserStoriesChanged($event)"
+      />
       <b-button class="mt-5" variant="success" :disabled="buttonDisabled()" @click="sendCreateSessionRequest">
         Start session
       </b-button>
@@ -43,11 +48,13 @@ import Vue from 'vue';
 import Session from '../model/Session';
 import Constants from '../constants';
 import CardSetComponent from '../components/CardSetComponent.vue';
+import UserStoriesSidebar from '../components/UserStoriesSidebar.vue';
 
 export default Vue.extend({
   name: 'PrepareSessionPage',
   components: {
     CardSetComponent,
+    UserStoriesSidebar,
   },
   data() {
     return {
@@ -85,6 +92,9 @@ export default Vue.extend({
     },
     buttonDisabled() {
       return this.selectedCardSetNumbers.length < 1;
+    },
+    onUserStoriesChanged(newUserStories) {
+      console.log('user stories changed', newUserStories);
     },
   },
 });
