@@ -146,6 +146,10 @@ export default Vue.extend({
       type: String,
       default: undefined,
     },
+    voteSetJson: {
+      type: String,
+      default: undefined,
+    },
   },
   data() {
     return {
@@ -155,6 +159,7 @@ export default Vue.extend({
       stageLabelWaiting: 'Waiting room',
       grid: 5,
       planningStart: false,
+      voteSet: [] as string[],
     };
   },
   computed: {
@@ -175,12 +180,12 @@ export default Vue.extend({
     },
     estimateHighest(): Member {
       return this.membersEstimated.reduce((prev, current) => (
-        (prev.currentEstimation! > current.currentEstimation!) ? prev : current
+        this.voteSet.indexOf(prev.currentEstimation!) > this.voteSet.indexOf(current.currentEstimation!) ? prev : current
       ));
     },
     estimateLowest(): Member {
       return this.membersEstimated.reduce((prev, current) => (
-        (prev.currentEstimation! < current.currentEstimation!) ? prev : current
+        this.voteSet.indexOf(prev.currentEstimation!) < this.voteSet.indexOf(current.currentEstimation!) ? prev : current
       ));
     },
   },
@@ -200,6 +205,7 @@ export default Vue.extend({
     if (this.sessionID === undefined || this.adminID === undefined) {
       this.goToLandingPage();
     }
+    this.voteSet = JSON.parse(this.voteSetJson);
     this.connectToWebSocket();
   },
   created() {

@@ -7,7 +7,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +20,12 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import de.htwg.aume.model.Member;
 import de.htwg.aume.model.Session;
+import de.htwg.aume.model.SessionConfig;
 import de.htwg.aume.model.SessionState;
 import de.htwg.aume.repository.SessionRepository;
 import lombok.val;
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 public class RoutesControllerTest {
 
@@ -35,20 +38,28 @@ public class RoutesControllerTest {
 	@Autowired
 	private MockMvc mockMvc;
 
+	private static String sessionConfigToJson(SessionConfig config) {
+		val set = config.getSet().stream().map(s -> "\"" + s + "\"").collect(Collectors.joining(","));
+		val password = config.getPassword() == null ? "null" : "\"" + config.getPassword() + "\"";
+		return String.format("{ \"set\": [%s], \"password\": %s }", set, password);
+	}
+
 	@Test
 	public void createSession_returnsSession() throws Exception {
-		val sessionInfoJson = "{ \"password\": \"testPassword\" }";
-		this.mockMvc.perform(post("/sessions").contentType(APPLICATION_JSON_UTF8).content(sessionInfoJson))
+		val sessionConfigJson = sessionConfigToJson(new SessionConfig(Arrays.asList("1", "2", "3"), null));
+		this.mockMvc.perform(post("/sessions").contentType(APPLICATION_JSON_UTF8).content(sessionConfigJson))
 				.andExpect(status().isCreated()).andExpect(jsonPath("$.sessionID").isNotEmpty())
-				.andExpect(jsonPath("$.adminID").isNotEmpty()).andExpect(jsonPath("$.membersID").isNotEmpty());
+				.andExpect(jsonPath("$.adminID").isNotEmpty()).andExpect(jsonPath("$.membersID").isNotEmpty())
+				.andExpect(jsonPath("$.sessionConfig").isNotEmpty());
 	}
 
 	@Test
 	public void createProtectedSession_returnsSession() throws Exception {
-		val sessionInfoJson = "{ \"password\": null }";
-		this.mockMvc.perform(post("/sessions").contentType(APPLICATION_JSON_UTF8).content(sessionInfoJson))
+		val sessionConfigJson = sessionConfigToJson(new SessionConfig(Arrays.asList("1", "2", "3"), "testPassword"));
+		this.mockMvc.perform(post("/sessions").contentType(APPLICATION_JSON_UTF8).content(sessionConfigJson))
 				.andExpect(status().isCreated()).andExpect(jsonPath("$.sessionID").isNotEmpty())
-				.andExpect(jsonPath("$.adminID").isNotEmpty()).andExpect(jsonPath("$.membersID").isNotEmpty());
+				.andExpect(jsonPath("$.adminID").isNotEmpty()).andExpect(jsonPath("$.membersID").isNotEmpty())
+				.andExpect(jsonPath("$.sessionConfig").isNotEmpty());
 	}
 
 	@Test
@@ -59,8 +70,8 @@ public class RoutesControllerTest {
 	@Test
 	public void joinMember_addsMemberToSession() throws Exception {
 		val sessionUUID = UUID.randomUUID();
-		sessionRepo.save(new Session(sessionUUID, UUID.randomUUID(), UUID.randomUUID(), null, new ArrayList<Member>(),
-				SessionState.WAITING_FOR_MEMBERS));
+		sessionRepo.save(new Session(sessionUUID, UUID.randomUUID(), UUID.randomUUID(),
+				new SessionConfig(new ArrayList<>(), null), new ArrayList<Member>(), SessionState.WAITING_FOR_MEMBERS));
 
 		// @formatter:off
 		var memberAsJson = "{" + "'member': {" + "'memberID': '365eef59-931d-0000-0000-2ba016cb523b',"
@@ -77,7 +88,8 @@ public class RoutesControllerTest {
 	public void joinMember_addsMemberToProtectedSession() throws Exception {
 		val sessionUUID = UUID.randomUUID();
 		val password = "testPassword";
-		sessionRepo.save(new Session(sessionUUID, UUID.randomUUID(), UUID.randomUUID(), password,
+		SessionConfig sessionConfig = new SessionConfig(new ArrayList<>(), password);
+		sessionRepo.save(new Session(sessionUUID, UUID.randomUUID(), UUID.randomUUID(), sessionConfig,
 				new ArrayList<Member>(), SessionState.WAITING_FOR_MEMBERS));
 
 		// @formatter:off
@@ -95,7 +107,8 @@ public class RoutesControllerTest {
 	public void joinMember_failsToAddMemberToProtectedSessionWrongPassword() throws Exception {
 		val sessionUUID = UUID.randomUUID();
 		val password = "testPassword";
-		sessionRepo.save(new Session(sessionUUID, UUID.randomUUID(), UUID.randomUUID(), password,
+		SessionConfig sessionConfig = new SessionConfig(new ArrayList<>(), password);
+		sessionRepo.save(new Session(sessionUUID, UUID.randomUUID(), UUID.randomUUID(), sessionConfig,
 				new ArrayList<Member>(), SessionState.WAITING_FOR_MEMBERS));
 
 		// @formatter:off
@@ -115,7 +128,8 @@ public class RoutesControllerTest {
 	public void joinMember_failsToAddMemberToProtectedSessionNullPassword() throws Exception {
 		val sessionUUID = UUID.randomUUID();
 		val password = "testPassword";
-		sessionRepo.save(new Session(sessionUUID, UUID.randomUUID(), UUID.randomUUID(), password,
+		SessionConfig sessionConfig = new SessionConfig(new ArrayList<>(), password);
+		sessionRepo.save(new Session(sessionUUID, UUID.randomUUID(), UUID.randomUUID(), sessionConfig,
 				new ArrayList<Member>(), SessionState.WAITING_FOR_MEMBERS));
 
 		// @formatter:off
@@ -134,8 +148,8 @@ public class RoutesControllerTest {
 	@Test
 	public void joinMember_failsToAddMemberDueToFalseAvatarAnimal() throws Exception {
 		val sessionUUID = UUID.randomUUID();
-		sessionRepo.save(new Session(sessionUUID, UUID.randomUUID(), UUID.randomUUID(), null, new ArrayList<Member>(),
-				SessionState.WAITING_FOR_MEMBERS));
+		sessionRepo.save(new Session(sessionUUID, UUID.randomUUID(), UUID.randomUUID(),
+				new SessionConfig(new ArrayList<>(), null), new ArrayList<Member>(), SessionState.WAITING_FOR_MEMBERS));
 
 		// @formatter:off
 		var memberAsJson = "{" + "'member': {" + "'memberID': '365eef59-931d-0000-0000-2ba016cb523b',"
@@ -151,8 +165,8 @@ public class RoutesControllerTest {
 	@Test
 	public void joinMember_failsToAddMemberDueToFalseAvatarAnimal2() throws Exception {
 		val sessionUUID = UUID.randomUUID();
-		sessionRepo.save(new Session(sessionUUID, UUID.randomUUID(), UUID.randomUUID(), null, new ArrayList<Member>(),
-				SessionState.WAITING_FOR_MEMBERS));
+		sessionRepo.save(new Session(sessionUUID, UUID.randomUUID(), UUID.randomUUID(),
+				new SessionConfig(new ArrayList<>(), null), new ArrayList<Member>(), SessionState.WAITING_FOR_MEMBERS));
 
 		// @formatter:off
 		var memberAsJson = "{" + "'member': {" + "'memberID': '365eef59-931d-0000-0000-2ba016cb523b',"
@@ -168,8 +182,8 @@ public class RoutesControllerTest {
 	@Test
 	public void joinMember_failsToAddMemberDueToFalseEstimation() throws Exception {
 		val sessionUUID = UUID.randomUUID();
-		sessionRepo.save(new Session(sessionUUID, UUID.randomUUID(), UUID.randomUUID(), null, new ArrayList<Member>(),
-				SessionState.WAITING_FOR_MEMBERS));
+		sessionRepo.save(new Session(sessionUUID, UUID.randomUUID(), UUID.randomUUID(),
+				new SessionConfig(new ArrayList<>(), null), new ArrayList<Member>(), SessionState.WAITING_FOR_MEMBERS));
 
 		// @formatter:off
 		var memberAsJson = "{" + "'member': {" + "'memberID': '365eef59-931d-0000-0000-2ba016cb523b',"
@@ -202,8 +216,8 @@ public class RoutesControllerTest {
 	@Test
 	public void joinMember_addsMemberNotIfAlreadyExisting() throws Exception {
 		val sessionUUID = UUID.randomUUID();
-		sessionRepo.save(new Session(sessionUUID, UUID.randomUUID(), UUID.randomUUID(), null, new ArrayList<Member>(),
-				SessionState.WAITING_FOR_MEMBERS));
+		sessionRepo.save(new Session(sessionUUID, UUID.randomUUID(), UUID.randomUUID(),
+				new SessionConfig(new ArrayList<>(), null), new ArrayList<Member>(), SessionState.WAITING_FOR_MEMBERS));
 
 		// @formatter:off
 		var memberAsJson = "{" + "'member': {" + "'memberID': '365eef59-931d-0000-0000-2ba016cb523b',"
@@ -225,8 +239,8 @@ public class RoutesControllerTest {
 	@Test
 	public void getSession_returnsSession() throws Exception {
 		val sessionUUID = UUID.randomUUID();
-		sessionRepo.save(new Session(sessionUUID, UUID.randomUUID(), UUID.randomUUID(), null, new ArrayList<Member>(),
-				SessionState.WAITING_FOR_MEMBERS));
+		sessionRepo.save(new Session(sessionUUID, UUID.randomUUID(), UUID.randomUUID(),
+				new SessionConfig(new ArrayList<>(), null), new ArrayList<Member>(), SessionState.WAITING_FOR_MEMBERS));
 
 		this.mockMvc.perform(get("/sessions/{sessionID}", sessionUUID)).andExpect(status().isOk())
 				.andExpect(jsonPath("$.sessionID").isNotEmpty()).andExpect(jsonPath("$.adminID").isNotEmpty())
@@ -236,8 +250,8 @@ public class RoutesControllerTest {
 	@Test
 	public void getSession_failsWrongID() throws Exception {
 		val sessionUUID = UUID.randomUUID();
-		sessionRepo.save(new Session(sessionUUID, UUID.randomUUID(), UUID.randomUUID(), null, new ArrayList<Member>(),
-				SessionState.WAITING_FOR_MEMBERS));
+		sessionRepo.save(new Session(sessionUUID, UUID.randomUUID(), UUID.randomUUID(),
+				new SessionConfig(new ArrayList<>(), null), new ArrayList<Member>(), SessionState.WAITING_FOR_MEMBERS));
 
 		this.mockMvc.perform(get("/sessions/{sessionID}", UUID.randomUUID())).andExpect(status().isNotFound())
 				.andExpect(status().reason(ErrorMessages.sessionNotFoundErrorMessage));
