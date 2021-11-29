@@ -31,7 +31,7 @@
           :key="voteOption"
           :ref="`memberCard${voteOption}`"
           class="flicking-panel mx-2"
-          :voteOption="voteOption"
+          :vote-option="voteOption"
           :index="index"
           :hex-color="hexColor"
           :dragged="voteOption == draggedVote"
@@ -92,6 +92,8 @@ export default Vue.extend({
     memberUpdates(updates) {
       if (updates.at(-1) === Constants.memberUpdateCommandStartVoting) {
         this.draggedVote = null;
+      } else if (updates.at(-1) === Constants.memberUpdateUpdatedUserStories) {
+        //  TODO: Set the current user story, but backend currently not able to send it.
       } else if (updates.at(-1) === Constants.memberUpdateCloseSession) {
         this.goToJoinPage();
       }

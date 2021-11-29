@@ -32,8 +32,9 @@
         </b-col>
       </b-row>
       <user-stories-sidebar
-        :card-set="['1', '2', 'A', '4', '5', '6']"
+        :card-set="selectedCardSetOptions"
         :show-estimations="false"
+        :initial-stories="userStories"
         @userStoriesChanged="onUserStoriesChanged($event)"
       />
       <b-button class="mt-5" variant="success" :disabled="buttonDisabled()" @click="sendCreateSessionRequest">
@@ -61,8 +62,12 @@ export default Vue.extend({
       title: 'Prepare session',
       password: '',
       selectedCardSetOptions: [],
-      userStories: [],
     };
+  },
+  computed: {
+    userStories() {
+      return this.$store.state.userStories;
+    },
   },
   methods: {
     async sendCreateSessionRequest() {
@@ -79,7 +84,7 @@ export default Vue.extend({
           membersID: string,
           sessionConfig: {
             set: Array<string>,
-            userStories: Array<{title:string, description:string, estimation:string|null }>,
+            userStories: Array<{title:string, description:string, estimation:string|null, isActive:false }>,
           },
         };
         this.goToSessionPage(session);
@@ -103,9 +108,8 @@ export default Vue.extend({
     buttonDisabled() {
       return this.selectedCardSetOptions.length < 1;
     },
-    onUserStoriesChanged(newUserStories) {
-      console.log('user stories changed', newUserStories);
-      this.userStories = newUserStories;
+    onUserStoriesChanged(stories) {
+      this.$store.commit('setUserStories', { stories });
     },
   },
 });

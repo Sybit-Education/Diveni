@@ -37,6 +37,10 @@ public class Session {
 				.collect(Collectors.toList());
 		return new Session(sessionID, adminID, membersID, sessionConfig, updatedMembers, sessionState);
 	}
+	public Session updateUserStories(List<UserStory> userStories) {
+		val updatedSessionConfig = new SessionConfig(sessionConfig.getSet(), userStories, sessionConfig.getPassword());
+		return new Session(sessionID, adminID, membersID, updatedSessionConfig, members, sessionState);
+	}
 
 	public Session resetEstimations() {
 		val updatedMembers = members.stream().map(m -> m.resetEstimation()).collect(Collectors.toList());

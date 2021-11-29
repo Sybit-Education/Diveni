@@ -11,6 +11,7 @@ export default new Vuex.Store({
     stompClient: undefined,
     webSocketConnected: false,
     memberUpdates: [],
+    userStories: [],
     members: null,
   },
   mutations: {
@@ -42,6 +43,9 @@ export default new Vuex.Store({
     },
     sendViaBackendWS(state, { endPoint, data }) {
       state.stompClient.send(endPoint, data);
+    },
+    setUserStories(state, { stories }) {
+      state.userStories = stories;
     },
   },
   actions: {

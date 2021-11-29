@@ -1,5 +1,11 @@
 <template>
   <div>
+    <user-stories-sidebar
+      :card-set="['1', '2', 'A', '4', '5', '6']"
+      :show-estimations="planningStart"
+      :initial-stories="userStories"
+      @userStoriesChanged="onUserStoriesChanged($event)"
+    />
     <span v-if="!planningStart">
       <h1 class="my-5 mx-2"> {{ titleWaiting }} </h1>
       <h4 id="popover-link" class="mt-4 mx-2">
@@ -121,12 +127,14 @@ import Constants from '../constants';
 import SessionMemberCircle from '../components/SessionMemberCircle.vue';
 import Member from '../model/Member';
 import SessionMemberCard from '../components/SessionMemberCard.vue';
+import UserStoriesSidebar from '../components/UserStoriesSidebar.vue';
 
 export default Vue.extend({
   name: 'SessionPage',
   components: {
     SessionMemberCircle,
     SessionMemberCard,
+    UserStoriesSidebar,
   },
   props: {
     adminID: {
@@ -145,15 +153,19 @@ export default Vue.extend({
   data() {
     return {
       titleWaiting: 'Waiting for members ...',
-      titleEstimate: 'Estimtate!',
+      titleEstimate: 'Estimate!',
       stageLabelReady: 'Ready',
       stageLabelWaiting: 'Waiting room',
       grid: 5,
       planningStart: false,
+      connectionEstablished: false,
       voteSet: [] as string[],
     };
   },
   computed: {
+    userStories() {
+      return this.$store.state.userStories;
+    },
     members() {
       return this.$store.state.members;
     },
@@ -208,9 +220,17 @@ export default Vue.extend({
     window.removeEventListener('beforeunload', this.sendUnregisterCommand);
   },
   methods: {
+    onUserStoriesChanged($event) {
+      this.$store.commit('setUserStories', { stories: $event });
+      if (this.connectionEstablished) {
+        const endPoint = `${Constants.webSocketUpdatedUserStoriesRoute}`;
+        this.$store.commit('sendViaBackendWS', { endPoint, data: JSON.stringify($event) });
+      }
+    },
     connectToWebSocket() {
       const url = `${Constants.backendURL}/connect?sessionID=${this.sessionID}&adminID=${this.adminID}`;
       this.$store.commit('connectToBackendWS', url);
+      this.connectionEstablished = true;
     },
     registerAdminPrincipalOnBackend() {
       const endPoint = Constants.webSocketRegisterAdminUserRoute;
