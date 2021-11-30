@@ -83,9 +83,9 @@ export default Vue.extend({
     };
   },
   computed: {
-    formatTimer() {
+    formatTimer() : string {
       const minutes = Math.floor(this.timer / 60);
-      const seconds = `0${this.timer % 60}`.slice(-2);
+      const seconds = (this.timer % 60).toString().padStart(2, '0');
       return `${minutes}:${seconds}`;
     },
   },
