@@ -26,10 +26,17 @@ export default new Vuex.Store({
           state.webSocketConnected = false;
         });
     },
-    subscribeOnBackendWSStartPlanningListenRoute(state) {
+    subscribeOnBackendWSMemberUpdates(state) {
       state.stompClient.subscribe(
         Constants.webSocketMemberListenRoute, (frame) => {
           state.memberUpdates = state.memberUpdates.concat([frame.body]);
+        },
+      );
+    },
+    subscribeOnBackendWSStoriesUpdated(state) {
+      state.stompClient.subscribe(
+        Constants.webSocketMemberListenUserStoriesRoute, (frame) => {
+          state.userStories = JSON.parse(frame.body);
         },
       );
     },

@@ -17,7 +17,9 @@ class Constants {
 
   webSocketVoteRoute = '/ws/vote';
 
-  webSocketUpdatedUserStoriesRoute = '/ws/userStoriesUpdated';
+  webSocketAdminUpdatedUserStoriesRoute = '/ws/adminUpdatedUserStories';
+
+  webSocketMemberListenUserStoriesRoute = '/users/updates/userStories';
 
   webSocketMemberListenRoute = '/users/updates/member';
 

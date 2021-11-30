@@ -1,7 +1,13 @@
 <template>
   <b-container>
     <div>
-      <h1 class="my-5 mx-2">
+      <user-stories-sidebar
+        :card-set="voteSet"
+        :show-estimations="true"
+        :initial-stories="userStories"
+        :show-edit-buttons="false"
+      />
+      <h1 class="my-5">
         {{ title }}
       </h1>
       <b-row class="justify-content-center">
@@ -58,12 +64,14 @@ import Vue from 'vue';
 import RoundedAvatar from '../components/RoundedAvatar.vue';
 import MemberVoteCard from '../components/MemberVoteCard.vue';
 import Constants from '../constants';
+import UserStoriesSidebar from '../components/UserStoriesSidebar.vue';
 
 export default Vue.extend({
   name: 'MemberVotePage',
   components: {
     RoundedAvatar,
     MemberVoteCard,
+    UserStoriesSidebar,
   },
   props: {
     memberID: { type: String, default: undefined },
@@ -81,6 +89,9 @@ export default Vue.extend({
     };
   },
   computed: {
+    userStories() {
+      return this.$store.state.userStories;
+    },
     memberUpdates() {
       return this.$store.state.memberUpdates;
     },

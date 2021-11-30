@@ -81,12 +81,11 @@ public class WebsocketController {
 		webSocketService.sendSessionStateToMembers(session);
 	}
 
-	@MessageMapping("/userStoriesUpdated")
-	public synchronized void userStoriesUpdated(AdminPrincipal principal, @Payload List<UserStory> userStories) {
+	@MessageMapping("/adminUpdatedUserStories")
+	public synchronized void adminUpdatedUserStories(AdminPrincipal principal, @Payload List<UserStory> userStories) {
 		val session = ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID())
-				.updateUserStories(userStories).updateSessionState(SessionState.UPDATED_USER_STORIES);
+				.updateUserStories(userStories);
 		databaseService.saveSession(session);
-		webSocketService.sendMembersUpdate(session);
-		webSocketService.sendSessionStateToMembers(session);
+		webSocketService.sendUpdatedUserStoriesToMembers(session);
 	}
 }

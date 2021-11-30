@@ -223,7 +223,7 @@ export default Vue.extend({
     onUserStoriesChanged($event) {
       this.$store.commit('setUserStories', { stories: $event });
       if (this.connectionEstablished) {
-        const endPoint = `${Constants.webSocketUpdatedUserStoriesRoute}`;
+        const endPoint = `${Constants.webSocketAdminUpdatedUserStoriesRoute}`;
         this.$store.commit('sendViaBackendWS', { endPoint, data: JSON.stringify($event) });
       }
     },

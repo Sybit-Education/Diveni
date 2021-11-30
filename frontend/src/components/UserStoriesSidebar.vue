@@ -6,7 +6,7 @@
       </b-button>
     </div>
     <div class="sidenav" :style="`width: ${sideBarOpen? '400px': '0px'};` ">
-      <div>
+      <div v-if="showEditButtons">
         <b-button size="lg" variant="success" @click="addUserStory()">
           Add <b-icon-plus />
         </b-button>
@@ -14,7 +14,7 @@
           {{ editEnabled ? 'Save' : 'Edit' }} <b-icon-pencil />
         </b-button>
       </div>
-      <div class="list-group">
+      <div class="list-group" :style="!showEditButtons ? 'margin-top: 66px;' : ''">
         <div v-if="userStories.length < 1" class="text-center">
           No stories yet...
           Add a story to start estimating.
@@ -23,9 +23,11 @@
           v-for="(story, index) of userStories"
           :key="story.name"
           variant="outline-secondary"
+          :active="!showEditButtons && story.isActive"
         >
           <b-input-group>
             <b-button
+              v-if="showEditButtons"
               :variant="story.isActive ? 'success' : 'outline-success'"
               @click="setUserStoryAsActive(index)"
             >
@@ -94,6 +96,7 @@ export default Vue.extend({
     cardSet: { type: Array, required: true },
     initialStories: { type: Array, required: true },
     showEstimations: { type: Boolean, required: true },
+    showEditButtons: { type: Boolean, required: false, default: true },
   },
   data() {
     return {
@@ -105,6 +108,9 @@ export default Vue.extend({
   watch: {
     userStories() {
       this.publishChanges();
+    },
+    initialStories() {
+      this.userStories = this.initialStories as Array<{title:string, description:string, estimation:string|null, isActive:boolean}>;
     },
     editEnabled() {
       this.publishChanges();
