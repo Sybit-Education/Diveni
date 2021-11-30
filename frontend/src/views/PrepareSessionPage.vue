@@ -13,7 +13,7 @@
       </b-row>
       <card-set-component
         class="mt-3"
-        @selectedCardSetNumbers="setCardSetNumbers"
+        @selectedCardSetOptions="setCardSetOptions"
       />
       <b-row class="mt-4">
         <b-col>
@@ -79,7 +79,8 @@ export default Vue.extend({
     return {
       title: 'Prepare session',
       password: '',
-      selectedCardSetNumbers: [],
+      selectedCardSetOptions: [],
+      userStories: [],
       timer: 60,
       warningWhenUnderZero: '',
     };
@@ -104,17 +105,19 @@ export default Vue.extend({
   methods: {
     async sendCreateSessionRequest() {
       const url = Constants.backendURL + Constants.createSessionRoute;
-      const payload = {
-        set: this.selectedCardSetNumbers,
+      const sessionConfig = {
+        set: this.selectedCardSetOptions,
         password: this.password === '' ? null : this.password,
+        userStories: this.userStories,
       };
       try {
-        const session: Session = (await this.axios.post(url, payload)).data as {
+        const session: Session = (await this.axios.post(url, sessionConfig)).data as {
           sessionID: string,
           adminID: string,
           membersID: string,
           sessionConfig: {
             set: Array<string>,
+            userStories: Array<{title:string, description:string, estimation:string|null }>,
           },
         };
         this.goToSessionPage(session);
@@ -132,14 +135,15 @@ export default Vue.extend({
         },
       });
     },
-    setCardSetNumbers($event) {
-      this.selectedCardSetNumbers = $event;
+    setCardSetOptions($event) {
+      this.selectedCardSetOptions = $event;
     },
     buttonDisabled() {
-      return this.selectedCardSetNumbers.length < 1;
+      return this.selectedCardSetOptions.length < 1;
     },
     onUserStoriesChanged(newUserStories) {
       console.log('user stories changed', newUserStories);
+      this.userStories = newUserStories;
     },
     setTimerUp() {
       console.log(this.timer);

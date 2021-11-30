@@ -3,7 +3,11 @@
     <span v-if="!planningStart">
       <h1 class="my-5 mx-2"> {{ titleWaiting }} </h1>
       <h4 id="popover-link" class="mt-4 mx-2">
-        Share the code <b-link href="" @click="copyLinkToClipboard()"> {{ sessionID }} </b-link> with your team mates. <b-icon-unlock />
+        Share the code <b-link
+          href=""
+          @click="copyLinkToClipboard()"
+        > {{ sessionID }}
+        </b-link> with your team mates. <b-icon-unlock />
         <b-popover target="popover-link" triggers="hover" placement="top">
           <b-button class="mx-1" variant="success" @click="copyIdToClipboard()">Copy ID </b-button>
           <b-button class="mx-1" variant="success" @click="copyLinkToClipboard()"> Copy link </b-button>
@@ -44,6 +48,12 @@
             <h1 class="mt-5 mb-3 mx-2">
               {{ titleEstimate }}
             </h1>
+            <estimate-timer
+              :timer-triggered="triggerTimer"
+              :timer="timerCountdownNumber"
+              :start-timer-on-component-creation="startTimerOnComponentCreation"
+              :initial-timer="60"
+            />
             <b-button
               variant="outline-dark"
               class="ml-5 pl-5"
@@ -121,12 +131,14 @@ import Constants from '../constants';
 import SessionMemberCircle from '../components/SessionMemberCircle.vue';
 import Member from '../model/Member';
 import SessionMemberCard from '../components/SessionMemberCard.vue';
+import EstimateTimer from '../components/EstimateTimer.vue';
 
 export default Vue.extend({
   name: 'SessionPage',
   components: {
     SessionMemberCircle,
     SessionMemberCard,
+    EstimateTimer,
   },
   props: {
     adminID: {
@@ -151,6 +163,9 @@ export default Vue.extend({
       grid: 5,
       planningStart: false,
       voteSet: [] as string[],
+      timerCountdownNumber: 60,
+      triggerTimer: 0,
+      startTimerOnComponentCreation: true,
     };
   },
   computed: {
@@ -259,9 +274,13 @@ export default Vue.extend({
       const endPoint = Constants.webSocketRestartPlanningRoute;
       this.$store.commit('sendViaBackendWS', { endPoint });
       this.updateNumberOfCardColumns();
+      this.retriggerTimer();
     },
     goToLandingPage() {
       this.$router.push({ name: 'LandingPage' });
+    },
+    retriggerTimer() {
+      this.triggerTimer = (this.triggerTimer + 1) % 5;
     },
   },
 });
