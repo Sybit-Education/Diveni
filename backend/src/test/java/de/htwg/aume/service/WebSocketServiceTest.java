@@ -113,7 +113,7 @@ public class WebSocketServiceTest {
     @Test
     public void sendMembersUpdate_sendsUpdate() throws Exception {
         setDefaultAdminPrincipal(Set.of(defaultMemberPrincipal));
-        val session = new Session(defaultAdminPrincipal.getSessionID(), defaultAdminPrincipal.getAdminID(), null, null,
+        val session = new Session(defaultAdminPrincipal.getSessionID(), defaultAdminPrincipal.getAdminID(), null,
                 List.of(new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null)), null);
 
         webSocketService.sendMembersUpdate(session);
@@ -125,7 +125,7 @@ public class WebSocketServiceTest {
     @Test
     public void sendSessionState_sendsState() throws Exception {
         setDefaultAdminPrincipal(Set.of(defaultMemberPrincipal));
-        val session = new Session(defaultAdminPrincipal.getSessionID(), defaultAdminPrincipal.getAdminID(), null, null,
+        val session = new Session(defaultAdminPrincipal.getSessionID(), defaultAdminPrincipal.getAdminID(), null,
                 List.of(new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null)),
                 SessionState.WAITING_FOR_MEMBERS);
 
@@ -139,7 +139,7 @@ public class WebSocketServiceTest {
     public void sendSessionStates_sendsToAll() throws Exception {
         val memberPrincipal = new MemberPrincipal(defaultAdminPrincipal.getSessionID(), UUID.randomUUID());
         setDefaultAdminPrincipal(Set.of(defaultMemberPrincipal, memberPrincipal));
-        val session = new Session(defaultAdminPrincipal.getSessionID(), defaultAdminPrincipal.getAdminID(), null, null,
+        val session = new Session(defaultAdminPrincipal.getSessionID(), defaultAdminPrincipal.getAdminID(), null,
                 List.of(new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null),
                         new Member(memberPrincipal.getMemberID(), null, null, null, null)),
                 SessionState.WAITING_FOR_MEMBERS);
@@ -155,7 +155,7 @@ public class WebSocketServiceTest {
     @Test
     public void removeSession_isRemoved() throws Exception {
         setDefaultAdminPrincipal(Set.of(defaultMemberPrincipal));
-        val session = new Session(defaultAdminPrincipal.getSessionID(), defaultAdminPrincipal.getAdminID(), null, null,
+        val session = new Session(defaultAdminPrincipal.getSessionID(), defaultAdminPrincipal.getAdminID(), null,
                 List.of(new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null)),
                 SessionState.WAITING_FOR_MEMBERS);
 

@@ -5,8 +5,6 @@ interface Session {
 
     adminID: string;
 
-    membersID: string;
-
     sessionConfig: SessionConfig;
 }
 

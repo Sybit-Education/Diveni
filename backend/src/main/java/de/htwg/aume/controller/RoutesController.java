@@ -2,6 +2,7 @@ package de.htwg.aume.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -37,11 +38,12 @@ public class RoutesController {
 	@PostMapping(value = "/sessions")
 	public ResponseEntity<Session> createSession(@RequestBody SessionConfig sessionConfig) {
 		val usedUuids = databaseService.getSessions().stream().map(s -> s.getSessionID()).collect(Collectors.toSet());
-		val sessionUuids = Stream.generate(UUID::randomUUID).filter(s -> !usedUuids.contains(s)).limit(3)
+		val sessionUuids = Stream.generate(UUID::randomUUID).filter(s -> !usedUuids.contains(s)).limit(2)
 				.collect(Collectors.toList());
-		val session = new Session(sessionUuids.get(0), sessionUuids.get(1), sessionUuids.get(2), sessionConfig,
-				new ArrayList<Member>(), SessionState.WAITING_FOR_MEMBERS);
+		val session = new Session(sessionUuids.get(0), sessionUuids.get(1), sessionConfig, new ArrayList<Member>(),
+				SessionState.WAITING_FOR_MEMBERS);
 		databaseService.saveSession(session);
+		// val responseMap = Map.of("session", session, "cookie", v2);
 		return new ResponseEntity<Session>(session, HttpStatus.CREATED);
 	}
 

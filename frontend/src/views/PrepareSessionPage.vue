@@ -76,7 +76,6 @@ export default Vue.extend({
         const session: Session = (await this.axios.post(url, sessionConfig)).data as {
           sessionID: string,
           adminID: string,
-          membersID: string,
           sessionConfig: {
             set: Array<string>,
             userStories: Array<{title:string, description:string, estimation:string|null }>,
