@@ -11,6 +11,7 @@
           :timer-triggered="triggerTimer"
           :timer="timerCountdownNumber"
           :start-timer-on-component-creation="false"
+          :initial-timer="60"
         />
       </b-col>
     </b-row>

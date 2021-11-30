@@ -52,6 +52,7 @@
               :timer-triggered="triggerTimer"
               :timer="timerCountdownNumber"
               :start-timer-on-component-creation="startTimerOnComponentCreation"
+              :initial-timer="60"
             />
             <b-button
               variant="outline-dark"

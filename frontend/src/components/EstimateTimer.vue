@@ -15,6 +15,7 @@ export default Vue.extend({
     timer: { type: Number, required: true },
     timerTriggered: { type: Number, required: true },
     startTimerOnComponentCreation: { type: Boolean, required: false },
+    initialTimer: { type: Number, required: true },
   },
   data() {
     return {
@@ -41,12 +42,12 @@ export default Vue.extend({
       const seconds = (this.timerCount % 60).toString().padStart(2, '0');
       return `${minutes}:${seconds}`;
     },
-    resetTimer(time) {
-      this.timerCount = time;
+    resetTimer() {
+      this.timerCount = this.initialTimer;
     },
     countdown() {
       clearInterval(this.intervalHandler);
-      this.resetTimer(this.timerCount);
+      this.resetTimer();
       this.intervalHandler = setInterval(() => {
         if (this.timerCount > 0) {
           this.timerCount -= 1;
