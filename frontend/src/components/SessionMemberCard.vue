@@ -33,7 +33,7 @@ export default Vue.extend({
     assetName: { type: String, required: true },
     altAttribute: { type: String, required: false, default: 'animal' },
     color: { type: String, required: true },
-    estimation: { type: Number, required: false, default: null },
+    estimation: { type: String, required: false, default: null },
     name: { type: String, required: true },
     estimateFinished: { type: Boolean, required: false, default: false },
     highest: { type: Boolean, required: false, default: false },

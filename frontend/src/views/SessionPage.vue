@@ -1,25 +1,21 @@
 <template>
   <div>
     <span v-if="!planningStart">
-      <h1 class="my-5 mx-2">
-        {{ titleWaiting }}
-      </h1>
-      <h4 class="mt-4 mx-2">
-        Share the code
-        <b-link
+      <h1 class="my-5 mx-2"> {{ titleWaiting }} </h1>
+      <h4 id="popover-link" class="mt-4 mx-2">
+        Share the code <b-link
           href=""
-          @click="copyLinkToClipboard"
-        >
-          {{ sessionID }}
-        </b-link>
-        with your team mates.
-        <b-icon-unlock />
+          @click="copyLinkToClipboard()"
+        > {{ sessionID }}
+        </b-link> with your team mates. <b-icon-unlock />
+        <b-popover target="popover-link" triggers="hover" placement="top">
+          <b-button class="mx-1" variant="success" @click="copyIdToClipboard()">Copy ID </b-button>
+          <b-button class="mx-1" variant="success" @click="copyLinkToClipboard()"> Copy link </b-button>
+        </b-popover>
       </h4>
+
       <b-container class="my-5">
-        <b-row
-          class="d-flex justify-content-center border rounded"
-          style="min-height: 200px;"
-        >
+        <b-row class="d-flex justify-content-center border rounded" style="min-height: 200px;">
           <SessionMemberCircle
             v-for="member of members"
             :key="member.memberID"
@@ -52,6 +48,12 @@
             <h1 class="mt-5 mb-3 mx-2">
               {{ titleEstimate }}
             </h1>
+            <estimate-timer
+              :timer-triggered="triggerTimer"
+              :timer="timerCountdownNumber"
+              :start-timer-on-component-creation="startTimerOnComponentCreation"
+              :initial-timer="60"
+            />
             <b-button
               variant="outline-dark"
               class="ml-5 pl-5"
@@ -61,14 +63,13 @@
             </b-button>
           </b-col>
           <b-col>
-            <h4
-              class="session-link"
-            >
-              <b-link
-                href=""
-                @click="copyLinkToClipboard"
-              >
+            <h4 class="session-link">
+              <b-link href="" @click="copyLinkToClipboard()">
                 {{ sessionID }}
+                <b-popover target="popover-link" triggers="hover" placement="top">
+                  <b-button class="mx-1" variant="success" @click="copyIdToClipboard()">Copy ID </b-button>
+                  <b-button class="mx-1" variant="success" @click="copyLinkToClipboard()"> Copy link </b-button>
+                </b-popover>
               </b-link>
             </h4>
           </b-col>
@@ -101,7 +102,7 @@
           />
         </b-row>
         <b-row v-if="!estimateFinished">
-          <hr class="m-0" />
+          <hr class="m-0">
           <h4 class="pl-2 pt-2">{{ stageLabelWaiting }}</h4>
         </b-row>
         <b-row
@@ -130,12 +131,14 @@ import Constants from '../constants';
 import SessionMemberCircle from '../components/SessionMemberCircle.vue';
 import Member from '../model/Member';
 import SessionMemberCard from '../components/SessionMemberCard.vue';
+import EstimateTimer from '../components/EstimateTimer.vue';
 
 export default Vue.extend({
   name: 'SessionPage',
   components: {
     SessionMemberCircle,
     SessionMemberCard,
+    EstimateTimer,
   },
   props: {
     adminID: {
@@ -143,6 +146,10 @@ export default Vue.extend({
       default: undefined,
     },
     sessionID: {
+      type: String,
+      default: undefined,
+    },
+    voteSetJson: {
       type: String,
       default: undefined,
     },
@@ -155,6 +162,10 @@ export default Vue.extend({
       stageLabelWaiting: 'Waiting room',
       grid: 5,
       planningStart: false,
+      voteSet: [] as string[],
+      timerCountdownNumber: 60,
+      triggerTimer: 0,
+      startTimerOnComponentCreation: true,
     };
   },
   computed: {
@@ -175,12 +186,12 @@ export default Vue.extend({
     },
     estimateHighest(): Member {
       return this.membersEstimated.reduce((prev, current) => (
-        (prev.currentEstimation! > current.currentEstimation!) ? prev : current
+        this.voteSet.indexOf(prev.currentEstimation!) > this.voteSet.indexOf(current.currentEstimation!) ? prev : current
       ));
     },
     estimateLowest(): Member {
       return this.membersEstimated.reduce((prev, current) => (
-        (prev.currentEstimation! < current.currentEstimation!) ? prev : current
+        this.voteSet.indexOf(prev.currentEstimation!) < this.voteSet.indexOf(current.currentEstimation!) ? prev : current
       ));
     },
   },
@@ -200,6 +211,7 @@ export default Vue.extend({
     if (this.sessionID === undefined || this.adminID === undefined) {
       this.goToLandingPage();
     }
+    this.voteSet = JSON.parse(this.voteSetJson);
     this.connectToWebSocket();
   },
   created() {
@@ -232,9 +244,15 @@ export default Vue.extend({
       this.planningStart = true;
       this.updateNumberOfCardColumns();
     },
-    copyLinkToClipboard() {
-      // `${document.URL.toString().replace('session', 'join?sessionID=')}${this.sessionID}`;
+    copyIdToClipboard() {
       navigator.clipboard.writeText(this.sessionID).then(() => {
+        console.log('Copying to clipboard was successful!');
+      }, (err) => {
+        console.error('Could not copy text: ', err);
+      });
+    },
+    copyLinkToClipboard() {
+      navigator.clipboard.writeText(`${document.URL.toString().replace('session', 'join?sessionID=')}${this.sessionID}`).then(() => {
         console.log('Copying to clipboard was successful!');
       }, (err) => {
         console.error('Could not copy text: ', err);
@@ -256,9 +274,13 @@ export default Vue.extend({
       const endPoint = Constants.webSocketRestartPlanningRoute;
       this.$store.commit('sendViaBackendWS', { endPoint });
       this.updateNumberOfCardColumns();
+      this.retriggerTimer();
     },
     goToLandingPage() {
       this.$router.push({ name: 'LandingPage' });
+    },
+    retriggerTimer() {
+      this.triggerTimer = (this.triggerTimer + 1) % 5;
     },
   },
 });

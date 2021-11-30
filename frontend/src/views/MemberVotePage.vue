@@ -1,53 +1,56 @@
 <template>
   <b-container>
-    <div>
-      <h1 class="my-5 mx-2">
-        {{ title }}
-      </h1>
-      <b-row class="justify-content-center">
-        <rounded-avatar
-          :color="hexColor"
-          :asset-name="avatarAnimalAssetName"
-          :show-name="true"
-          :name="name"
+    <b-row class="my-5 mx-2">
+      <b-col>
+        <h1>
+          {{ title }}
+        </h1>
+      </b-col>
+      <b-col>
+        <estimate-timer
+          :timer-triggered="triggerTimer"
+          :timer="timerCountdownNumber"
+          :start-timer-on-component-creation="false"
+          :initial-timer="60"
         />
-      </b-row>
-    </div>
-    <b-row
-      v-if="isStartVoting"
-      class="my-5"
-    >
+      </b-col>
+    </b-row>
+    <b-row class="justify-content-center">
+      <rounded-avatar
+        :color="hexColor"
+        :asset-name="avatarAnimalAssetName"
+        :show-name="true"
+        :name="name"
+      />
+    </b-row>
+    <b-row v-if="isStartVoting" class="my-5">
       <flicking
         id="flicking"
-        :options="{ renderOnlyVisible: false,
-                    horizontal:true,
-                    align: 'center',
-                    bound: false,
-                    defaultIndex: 0,
-                    deceleration: 0.0005 }"
+        :options="{
+          renderOnlyVisible: false,
+          horizontal: true,
+          align: 'center',
+          bound: false,
+          defaultIndex: 0,
+          deceleration: 0.0005,
+        }"
       >
         <member-vote-card
-          v-for="number in numbers"
-          :key="number"
-          :ref="`memberCard${number}`"
+          v-for="(voteOption, index) in voteSet"
+          :key="voteOption"
+          :ref="`memberCard${voteOption}`"
           class="flicking-panel mx-2"
-          :number="number"
+          :vote-option="voteOption"
+          :index="index"
           :hex-color="hexColor"
-          :dragged="number == draggedNumber"
+          :dragged="voteOption == draggedVote"
           @sentVote="onSendVote"
         />
       </flicking>
     </b-row>
-    <b-row
-      v-else
-      class="my-5 text-center"
-    >
-      <b-icon-three-dots
-        animation="fade"
-        class="my-5"
-        font-scale="4"
-      />
-      <h1>{{ waitingText }} </h1>
+    <b-row v-else class="my-5 text-center">
+      <b-icon-three-dots animation="fade" class="my-5" font-scale="4" />
+      <h1>{{ waitingText }}</h1>
     </b-row>
   </b-container>
 </template>
@@ -57,28 +60,31 @@ import Vue from 'vue';
 import RoundedAvatar from '../components/RoundedAvatar.vue';
 import MemberVoteCard from '../components/MemberVoteCard.vue';
 import Constants from '../constants';
+import EstimateTimer from '../components/EstimateTimer.vue';
 
 export default Vue.extend({
   name: 'MemberVotePage',
   components: {
     RoundedAvatar,
     MemberVoteCard,
+    EstimateTimer,
   },
   props: {
     memberID: { type: String, default: undefined },
     name: { type: String, default: undefined },
     hexColor: { type: String, default: undefined },
     avatarAnimalAssetName: { type: String, default: undefined },
-  },
-  created() {
-    window.addEventListener('beforeunload', this.sendUnregisterCommand);
+    voteSetJson: { type: String, default: undefined },
   },
   data() {
     return {
       title: 'Estimate!',
-      numbers: [1, 2, 3, 5, 8, 13, 21, 34],
-      draggedNumber: null,
+      draggedVote: null,
       waitingText: 'Waiting for Host to start ...',
+      voteSet: [] as string[],
+      timerCountdownNumber: 60,
+      triggerTimer: 0,
+
     };
   },
   computed: {
@@ -92,21 +98,26 @@ export default Vue.extend({
   watch: {
     memberUpdates(updates) {
       if (updates.at(-1) === Constants.memberUpdateCommandStartVoting) {
-        this.draggedNumber = null;
+        this.draggedVote = null;
+        this.triggerTimer = (this.triggerTimer + 1) % 5;
       } else if (updates.at(-1) === Constants.memberUpdateCloseSession) {
         this.goToJoinPage();
       }
     },
+  },
+  created() {
+    window.addEventListener('beforeunload', this.sendUnregisterCommand);
   },
   mounted() {
     if (this.memberID === undefined || this.name === undefined
           || this.hexColor === undefined || this.avatarAnimalAssetName === undefined) {
       this.goToJoinPage();
     }
+    this.voteSet = JSON.parse(this.voteSetJson);
   },
   methods: {
     onSendVote({ vote }) {
-      this.draggedNumber = vote;
+      this.draggedVote = vote;
       const endPoint = `${Constants.webSocketVoteRoute}`;
       this.$store.commit('sendViaBackendWS', { endPoint, data: vote });
     },

@@ -27,7 +27,7 @@
       <b-row class="mt-4">
         <b-col
           cols="12"
-          :md="showPassword ? '6' : '12'"
+          :md="'6'"
         >
           <h6>Session id</h6>
           <b-form-input
@@ -37,7 +37,6 @@
           />
         </b-col>
         <b-col
-          v-if="showPassword"
           class="mt-2 mt-md-0"
           cols="12"
           md="6"
@@ -46,7 +45,8 @@
           <b-form-input
             v-model="password"
             class="mt-3"
-            type="text"
+            type="password"
+            placeholder="(optional)"
           />
         </b-col>
       </b-row>
@@ -77,7 +77,6 @@ export default Vue.extend({
     RoundedAvatar,
   },
   props: {
-    showPassword: { type: Boolean, required: true },
     color: { type: String, required: true },
     animalAssetName: { type: String, required: true },
     buttonText: { type: String, required: true },
@@ -98,9 +97,9 @@ export default Vue.extend({
   methods: {
     onClickButton() {
       const data: JoinCommand = {
-        sessionID: this.sessionID,
+        sessionID: this.sessionID.split(' ').join(''),
         password: this.password,
-        name: this.name,
+        name: this.name.trim(),
       };
       this.$emit('clicked', data);
     },
