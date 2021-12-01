@@ -1,19 +1,12 @@
 <template>
-  <div>
+  <b-container>
     <span v-if="!planningStart">
       <h1 class="my-5 mx-2"> {{ titleWaiting }} </h1>
-      <h4 id="popover-link" class="mt-4 mx-2">
-        Share the code <b-link
-          href=""
-          @click="copyLinkToClipboard()"
-        > {{ sessionID }}
-        </b-link> with your team mates. <b-icon-unlock />
-        <b-popover target="popover-link" triggers="hover" placement="top">
-          <b-button class="mx-1" variant="success" @click="copyIdToClipboard()">Copy ID </b-button>
-          <b-button class="mx-1" variant="success" @click="copyLinkToClipboard()"> Copy link </b-button>
-        </b-popover>
-      </h4>
-
+      <copy-session-id-popup
+        :text-before-session-i-d="'Share the code'"
+        :session-id="sessionID"
+        :text-after-session-i-d="'with your team mates'"
+      />
       <b-container class="my-5">
         <b-row class="d-flex justify-content-center border rounded" style="min-height: 200px;">
           <SessionMemberCircle
@@ -63,15 +56,9 @@
             </b-button>
           </b-col>
           <b-col>
-            <h4 class="session-link">
-              <b-link href="" @click="copyLinkToClipboard()">
-                {{ sessionID }}
-                <b-popover target="popover-link" triggers="hover" placement="top">
-                  <b-button class="mx-1" variant="success" @click="copyIdToClipboard()">Copy ID </b-button>
-                  <b-button class="mx-1" variant="success" @click="copyLinkToClipboard()"> Copy link </b-button>
-                </b-popover>
-              </b-link>
-            </h4>
+            <copy-session-id-popup
+              :session-id="sessionID"
+            />
           </b-col>
         </b-row>
       </b-container>
@@ -122,7 +109,7 @@
         </b-row>
       </b-container>
     </span>
-  </div>
+  </b-container>
 </template>
 
 <script lang="ts">
@@ -132,6 +119,7 @@ import SessionMemberCircle from '../components/SessionMemberCircle.vue';
 import Member from '../model/Member';
 import SessionMemberCard from '../components/SessionMemberCard.vue';
 import EstimateTimer from '../components/EstimateTimer.vue';
+import CopySessionIdPopup from '../components/CopySessionIdPopup.vue';
 
 export default Vue.extend({
   name: 'SessionPage',
@@ -139,6 +127,7 @@ export default Vue.extend({
     SessionMemberCircle,
     SessionMemberCard,
     EstimateTimer,
+    CopySessionIdPopup,
   },
   props: {
     adminID: {
@@ -244,20 +233,6 @@ export default Vue.extend({
       this.planningStart = true;
       this.updateNumberOfCardColumns();
     },
-    copyIdToClipboard() {
-      navigator.clipboard.writeText(this.sessionID).then(() => {
-        console.log('Copying to clipboard was successful!');
-      }, (err) => {
-        console.error('Could not copy text: ', err);
-      });
-    },
-    copyLinkToClipboard() {
-      navigator.clipboard.writeText(`${document.URL.toString().replace('session', 'join?sessionID=')}${this.sessionID}`).then(() => {
-        console.log('Copying to clipboard was successful!');
-      }, (err) => {
-        console.error('Could not copy text: ', err);
-      });
-    },
     backendAnimalToAssetName(animal: string) {
       return Constants.avatarAnimalToAssetName(animal);
     },
@@ -288,13 +263,4 @@ export default Vue.extend({
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.session-link {
-  margin-top: 3.8rem!important;
-  text-align: center;
-}
-@media (min-width: 341px) {
-  .session-link {
-    text-align: right;
-  }
-}
 </style>
