@@ -161,7 +161,7 @@ export default Vue.extend({
   height: 100%; /* 100% Full-height */
   width: 0; /* 0 width - change this with JavaScript */
   position: fixed; /* Stay in place */
-  z-index: 1; /* Stay on top */
+  z-index: 2; /* Stay on top */
   top: 0; /* Stay at the top */
   right:0;
   background-color: white;
@@ -173,7 +173,7 @@ export default Vue.extend({
    margin: 8px;
   float: right;
   position: fixed;
-  z-index: 2;
+  z-index: 3;
   top: 0;
   right:0;
   overflow-x: hidden;
