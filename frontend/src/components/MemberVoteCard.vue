@@ -16,7 +16,7 @@
         class="flicking-panel swipe-card"
         :style="swipeableCardBackgroundColor"
       >
-        <div id="text">
+        <div class="text">
           {{ dragged ? '💪' : voteOption }}
         </div>
       </div>

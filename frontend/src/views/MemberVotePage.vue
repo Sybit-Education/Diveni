@@ -32,12 +32,12 @@
           :key="voteOption"
           :ref="`memberCard${voteOption}`"
           class="flicking-panel mx-2"
-          :voteOption="voteOption"
+          :vote-option="voteOption"
           :index="index"
           :hex-color="hexColor"
           :dragged="voteOption == draggedVote"
-          @sentVote="onSendVote"
           :is-mobile="true"
+          @sentVote="onSendVote"
         />
       </flicking>
       <b-row v-else class="d-flex justify-content-between flex-wrap">
@@ -52,8 +52,8 @@
             :index="index"
             :hex-color="hexColor"
             :dragged="voteOption == draggedVote"
-            @sentVote="onSendVote"
             :is-mobile="false"
+            @sentVote="onSendVote"
           />
         </b-col>
       </b-row>
