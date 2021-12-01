@@ -1,5 +1,9 @@
 <template>
   <div>
+    <desktop-card
+    :cardName="name"
+    :cardSet="[1, 2, 4]"
+    />
     <b-container>
       <h1 class="my-5">
         {{ title }}
@@ -43,11 +47,13 @@ import Vue from 'vue';
 import Session from '../model/Session';
 import Constants from '../constants';
 import CardSetComponent from '../components/CardSetComponent.vue';
+import DesktopCard from '../components/DesktopCard.vue';
 
 export default Vue.extend({
   name: 'PrepareSessionPage',
   components: {
     CardSetComponent,
+    DesktopCard,
   },
   data() {
     return {
