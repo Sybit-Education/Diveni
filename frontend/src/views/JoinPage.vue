@@ -53,7 +53,7 @@ export default Vue.extend({
     },
   },
   created() {
-    const id = this.$route.query as unknown as {sessionID: string};
+    const id = this.$route.query as unknown as { sessionID: string };
     if (id.sessionID) {
       this.sessionID = id.sessionID;
     }
@@ -75,7 +75,7 @@ export default Vue.extend({
       try {
         const sessionConfig = (await this.axios.post(url, joinInfo)).data as {
           set: Array<string>,
-          userStories: Array<{title:string, description:string, estimation:string|null }>,
+          userStories: Array<{ title: string, description: string, estimation: string | null }>,
         };
         this.voteSet = JSON.stringify(sessionConfig.set);
         this.userStories = JSON.stringify(sessionConfig.userStories);

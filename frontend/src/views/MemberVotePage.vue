@@ -84,7 +84,6 @@ export default Vue.extend({
       voteSet: [] as string[],
       timerCountdownNumber: 60,
       triggerTimer: 0,
-
     };
   },
   computed: {

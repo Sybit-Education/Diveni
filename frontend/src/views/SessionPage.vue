@@ -1,114 +1,103 @@
 <template>
   <b-container>
-    <span v-if="!planningStart">
-      <h1 class="my-5 mx-2"> {{ titleWaiting }} </h1>
-      <copy-session-id-popup
-        :text-before-session-i-d="'Share the code'"
-        :session-id="sessionID"
-        :text-after-session-i-d="'with your team mates'"
-      />
-      <b-container class="my-5">
-        <b-row class="d-flex justify-content-center border rounded" style="min-height: 200px;">
-          <SessionMemberCircle
-            v-for="member of members"
-            :key="member.memberID"
-            class="m-4"
-            :color="member.hexColor"
-            :asset-name="backendAnimalToAssetName(member.avatarAnimal)"
-            :alt-attribute="member.avatarAnimal"
-            :name="member.name"
+    <b-row class="mt-5 mb-3">
+      <b-col><h1> {{ planningStart ? titleEstimate : titleWaiting }} </h1></b-col>
+      <b-col v-if="planningStart">
+        <copy-session-id-popup :session-id="sessionID" />
+      </b-col>
+    </b-row>
+    <div v-if="!planningStart">
+      <b-row class="align-items-center">
+        <copy-session-id-popup
+          :text-before-session-i-d="'Share the code'"
+          :session-id="sessionID"
+          :text-after-session-i-d="'with your team mates'"
+        />
+      </b-row>
+      <b-row class="mt-5">
+        <h4 class="text-center">
+          Waiting for members to join
+        </h4>
+        <b-icon-three-dots animation="fade" class="" font-scale="3" />
+      </b-row>
+      <b-row class=" d-flex justify-content-center">
+        <SessionMemberCircle
+          v-for="member of members"
+          :key="member.memberID"
+          class="m-4"
+          :color="member.hexColor"
+          :asset-name="backendAnimalToAssetName(member.avatarAnimal)"
+          :alt-attribute="member.avatarAnimal"
+          :name="member.name"
+        />
+      </b-row>
+      <b-row>
+        <b-col class="text-center">
+          <b-button
+            variant="success"
+            :disabled="!members || members.length < 1"
+            @click="sendStartEstimationMessages"
+          >
+            Start Planning
+          </b-button>
+        </b-col>
+      </b-row>
+    </div>
+    <div v-else>
+      <b-row class="d-flex justify-content-start pb-3">
+        <b-col>
+          <b-button variant="outline-dark" class="ml-5 pl-5" @click="sendRestartMessage">
+            <b-icon-arrow-clockwise />
+            New
+          </b-button>
+        </b-col>
+        <b-col>
+          <estimate-timer
+            :timer-triggered="triggerTimer"
+            :timer="timerCountdownNumber"
+            :start-timer-on-component-creation="startTimerOnComponentCreation"
+            :initial-timer="60"
           />
-        </b-row>
-        <b-row>
-          <b-col class="text-center mt-5 mb-5">
-            <b-button
-              variant="success"
-              :disabled="!members || members.length < 1"
-              @click="sendStartEstimationMessages"
-            >
-              Start Planning
-            </b-button>
-          </b-col>
-        </b-row>
-      </b-container>
-    </span>
-    <span
-      v-if="planningStart"
-    >
-      <b-container>
-        <b-row>
-          <b-col>
-            <h1 class="mt-5 mb-3 mx-2">
-              {{ titleEstimate }}
-            </h1>
-            <estimate-timer
-              :timer-triggered="triggerTimer"
-              :timer="timerCountdownNumber"
-              :start-timer-on-component-creation="startTimerOnComponentCreation"
-              :initial-timer="60"
-            />
-            <b-button
-              variant="outline-dark"
-              class="ml-5 pl-5"
-              @click="sendRestartMessage"
-            >
-              <b-icon-arrow-clockwise /> New
-            </b-button>
-          </b-col>
-          <b-col>
-            <copy-session-id-popup
-              :session-id="sessionID"
-            />
-          </b-col>
-        </b-row>
-      </b-container>
-      <b-container
-        class="my-5 border rounded"
-      >
-        <b-row
-          class="d-flex justify-content-center pb-3"
-        >
-          <h4 class="pl-2 pt-2">{{ stageLabelReady }}</h4>
-          <b-icon-three-dots
-            v-if="membersEstimated.length === 0"
-            animation="fade"
-            class="my-5"
-            font-scale="4"
-          />
-          <SessionMemberCard
-            v-for="member of membersEstimated"
-            :key="member.memberID"
-            :color="member.hexColor"
-            :asset-name="backendAnimalToAssetName(member.avatarAnimal)"
-            :alt-attribute="member.avatarAnimal"
-            :name="member.name"
-            :estimation="member.currentEstimation"
-            :estimate-finished="estimateFinished"
-            :highest="estimateHighest.memberID === member.memberID"
-            :lowest="estimateLowest.memberID === member.memberID"
-          />
-        </b-row>
-        <b-row v-if="!estimateFinished">
-          <hr class="m-0">
-          <h4 class="pl-2 pt-2">{{ stageLabelWaiting }}</h4>
-        </b-row>
-        <b-row
-          ref="grid"
-          class="d-flex justify-content-center pb-3"
-        >
-          <SessionMemberCard
-            v-for="(member, index) of membersPending"
-            :key="member.memberID"
-            :style="{top: -1 * ((Math.trunc(index/grid))) * 200+'px', zIndex: -1*index}"
-            :color="member.hexColor"
-            :asset-name="backendAnimalToAssetName(member.avatarAnimal)"
-            :alt-attribute="member.avatarAnimal"
-            :name="member.name"
-            :estimation="member.currentEstimation"
-          />
-        </b-row>
-      </b-container>
-    </span>
+        </b-col>
+      </b-row>
+      <b-row v-if="membersPending.length > 0">
+        <h4 class="d-inline">
+          Waiting for {{ membersPending.length }} /
+          {{ membersPending.length + membersEstimated.length }}
+        </h4>
+      </b-row>
+      <b-row class="my-1 d-flex justify-content-center flex-wrap ">
+        <rounded-avatar
+          v-for="member of membersPending"
+          :key="member.memberID"
+          class="mx-2"
+          :asset-name="backendAnimalToAssetName(member.avatarAnimal)"
+          :color="member.hexColor"
+          :show-name="true"
+          :name="member.name"
+        />
+      </b-row>
+      <hr>
+      <b-row v-if="membersEstimated.length > 0">
+        <h4 class="d-inline">
+          Estimating finished {{ membersEstimated.length }} /
+          {{ membersPending.length + membersEstimated.length }}
+        </h4>
+      </b-row>
+      <b-row class="my-1 d-flex justify-content-center flex-wrap ">
+        <SessionMemberCard
+          v-for="member of membersEstimated"
+          :key="member.memberID"
+          :color="member.hexColor"
+          :asset-name="backendAnimalToAssetName(member.avatarAnimal)"
+          :name="member.name"
+          :estimation="member.currentEstimation"
+          :estimate-finished="estimateFinished"
+          :highest="estimateHighest.memberID === member.memberID"
+          :lowest="estimateLowest.memberID === member.memberID"
+        />
+      </b-row>
+    </div>
   </b-container>
 </template>
 
@@ -120,6 +109,7 @@ import Member from '../model/Member';
 import SessionMemberCard from '../components/SessionMemberCard.vue';
 import EstimateTimer from '../components/EstimateTimer.vue';
 import CopySessionIdPopup from '../components/CopySessionIdPopup.vue';
+import RoundedAvatar from '../components/RoundedAvatar.vue';
 
 export default Vue.extend({
   name: 'SessionPage',
@@ -128,6 +118,7 @@ export default Vue.extend({
     SessionMemberCard,
     EstimateTimer,
     CopySessionIdPopup,
+    RoundedAvatar,
   },
   props: {
     adminID: {
@@ -149,7 +140,6 @@ export default Vue.extend({
       titleEstimate: 'Estimtate!',
       stageLabelReady: 'Ready',
       stageLabelWaiting: 'Waiting room',
-      grid: 5,
       planningStart: false,
       voteSet: [] as string[],
       timerCountdownNumber: 60,
@@ -185,9 +175,6 @@ export default Vue.extend({
     },
   },
   watch: {
-    members() {
-      this.updateNumberOfCardColumns();
-    },
     webSocketIsConnected(isConnected) {
       if (isConnected) {
         console.debug('SessionPage: member connected to websocket');
@@ -204,11 +191,9 @@ export default Vue.extend({
     this.connectToWebSocket();
   },
   created() {
-    window.addEventListener('resize', this.updateNumberOfCardColumns);
     window.addEventListener('beforeunload', this.sendUnregisterCommand);
   },
   destroyed() {
-    window.removeEventListener('resize', this.updateNumberOfCardColumns);
     window.removeEventListener('beforeunload', this.sendUnregisterCommand);
   },
   methods: {
@@ -231,24 +216,13 @@ export default Vue.extend({
       const endPoint = Constants.webSocketStartPlanningRoute;
       this.$store.commit('sendViaBackendWS', { endPoint });
       this.planningStart = true;
-      this.updateNumberOfCardColumns();
     },
     backendAnimalToAssetName(animal: string) {
       return Constants.avatarAnimalToAssetName(animal);
     },
-    updateNumberOfCardColumns() {
-      setTimeout(() => {
-        const grid = Array.from((this.$refs.grid as HTMLElement).children);
-        const baseOffset = (grid[0] as HTMLElement).offsetTop;
-        const breakIndex = grid.findIndex((item) => (item as HTMLElement).offsetTop > baseOffset);
-        this.grid = (breakIndex === -1 ? grid.length : breakIndex);
-        window.scrollTo({ top: 0 });
-      }, 30);
-    },
     sendRestartMessage() {
       const endPoint = Constants.webSocketRestartPlanningRoute;
       this.$store.commit('sendViaBackendWS', { endPoint });
-      this.updateNumberOfCardColumns();
       this.retriggerTimer();
     },
     goToLandingPage() {
