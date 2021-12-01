@@ -1,7 +1,9 @@
-interface SessionConfig {
-    set: Array<String>,
+import UserStory from "./UserStory";
 
-    password?: string,
+interface SessionConfig {
+    set: Array<String>;
+    password?: string;
+    userStories: Array<UserStory>;
 }
 
 export default SessionConfig;

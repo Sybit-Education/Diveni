@@ -13,7 +13,7 @@
       </b-row>
       <card-set-component
         class="mt-3"
-        @selectedCardSetNumbers="setCardSetNumbers"
+        @selectedCardSetOptions="setCardSetOptions"
       />
       <b-row class="mt-4">
         <b-col>
@@ -31,6 +31,11 @@
           </b-form>
         </b-col>
       </b-row>
+      <user-stories-sidebar
+        :card-set="['1', '2', 'A', '4', '5', '6']"
+        :show-estimations="false"
+        @userStoriesChanged="onUserStoriesChanged($event)"
+      />
       <b-button class="mt-5" variant="success" :disabled="buttonDisabled()" @click="sendCreateSessionRequest">
         Start session
       </b-button>
@@ -43,33 +48,38 @@ import Vue from 'vue';
 import Session from '../model/Session';
 import Constants from '../constants';
 import CardSetComponent from '../components/CardSetComponent.vue';
+import UserStoriesSidebar from '../components/UserStoriesSidebar.vue';
 
 export default Vue.extend({
   name: 'PrepareSessionPage',
   components: {
     CardSetComponent,
+    UserStoriesSidebar,
   },
   data() {
     return {
       title: 'Prepare session',
       password: '',
-      selectedCardSetNumbers: [],
+      selectedCardSetOptions: [],
+      userStories: [],
     };
   },
   methods: {
     async sendCreateSessionRequest() {
       const url = Constants.backendURL + Constants.createSessionRoute;
-      const payload = {
-        set: this.selectedCardSetNumbers,
+      const sessionConfig = {
+        set: this.selectedCardSetOptions,
         password: this.password === '' ? null : this.password,
+        userStories: this.userStories,
       };
       try {
-        const session: Session = (await this.axios.post(url, payload)).data as {
+        const session: Session = (await this.axios.post(url, sessionConfig)).data as {
           sessionID: string,
           adminID: string,
           membersID: string,
           sessionConfig: {
             set: Array<string>,
+            userStories: Array<{title:string, description:string, estimation:string|null }>,
           },
         };
         this.goToSessionPage(session);
@@ -87,11 +97,15 @@ export default Vue.extend({
         },
       });
     },
-    setCardSetNumbers($event) {
-      this.selectedCardSetNumbers = $event;
+    setCardSetOptions($event) {
+      this.selectedCardSetOptions = $event;
     },
     buttonDisabled() {
-      return this.selectedCardSetNumbers.length < 1;
+      return this.selectedCardSetOptions.length < 1;
+    },
+    onUserStoriesChanged(newUserStories) {
+      console.log('user stories changed', newUserStories);
+      this.userStories = newUserStories;
     },
   },
 });
