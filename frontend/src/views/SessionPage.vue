@@ -1,5 +1,8 @@
 <template>
   <div>
+    <b-button @click="endEstimation()">
+      End Estimation
+    </b-button>
     <span v-if="!planningStart">
       <h1 class="my-5 mx-2"> {{ titleWaiting }} </h1>
       <h4 id="popover-link" class="mt-4 mx-2">
@@ -281,6 +284,11 @@ export default Vue.extend({
     },
     retriggerTimer() {
       this.triggerTimer = (this.triggerTimer + 1) % 5;
+    },
+    endEstimation() {
+      const endPoint = `${Constants.webSocketUnregisterRoute}`;
+      this.$store.commit('sendViaBackendWS', { endPoint, data: null });
+      this.$router.push({ name: 'ResultPage' });
     },
   },
 });
