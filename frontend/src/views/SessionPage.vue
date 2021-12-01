@@ -1,7 +1,7 @@
 <template>
   <div>
     <user-stories-sidebar
-      :card-set="['1', '2', 'A', '4', '5', '6']"
+      :card-set="voteSet"
       :show-estimations="planningStart"
       :initial-stories="userStories"
       @userStoriesChanged="onUserStoriesChanged($event)"
