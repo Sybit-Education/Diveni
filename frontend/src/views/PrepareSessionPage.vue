@@ -1,8 +1,5 @@
 <template>
   <div>
-    <desktop-grid
-    :cardSet="[1, 2, 4]"
-    />
     <b-container>
       <h1 class="my-5">
         {{ title }}
@@ -51,13 +48,11 @@ import Vue from 'vue';
 import Session from '../model/Session';
 import Constants from '../constants';
 import CardSetComponent from '../components/CardSetComponent.vue';
-import DesktopGrid from '../components/DesktopGrid.vue';
 
 export default Vue.extend({
   name: 'PrepareSessionPage',
   components: {
     CardSetComponent,
-    DesktopGrid,
   },
   data() {
     return {
