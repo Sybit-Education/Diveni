@@ -52,7 +52,7 @@ export default Vue.extend({
     },
   },
   created() {
-    const id = this.$route.query as unknown as {sessionID: string};
+    const id = this.$route.query as unknown as { sessionID: string };
     if (id.sessionID) {
       this.sessionID = id.sessionID;
     }
