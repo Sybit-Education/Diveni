@@ -1,5 +1,11 @@
 <template>
   <div>
+    <user-stories-sidebar
+      :card-set="voteSet"
+      :show-estimations="planningStart"
+      :initial-stories="userStories"
+      @userStoriesChanged="onUserStoriesChanged($event)"
+    />
     <span v-if="!planningStart">
       <h1 class="my-5 mx-2"> {{ titleWaiting }} </h1>
       <h4 id="popover-link" class="mt-4 mx-2">
@@ -131,6 +137,7 @@ import Constants from '../constants';
 import SessionMemberCircle from '../components/SessionMemberCircle.vue';
 import Member from '../model/Member';
 import SessionMemberCard from '../components/SessionMemberCard.vue';
+import UserStoriesSidebar from '../components/UserStoriesSidebar.vue';
 import EstimateTimer from '../components/EstimateTimer.vue';
 
 export default Vue.extend({
@@ -138,6 +145,7 @@ export default Vue.extend({
   components: {
     SessionMemberCircle,
     SessionMemberCard,
+    UserStoriesSidebar,
     EstimateTimer,
   },
   props: {
@@ -157,11 +165,12 @@ export default Vue.extend({
   data() {
     return {
       titleWaiting: 'Waiting for members ...',
-      titleEstimate: 'Estimtate!',
+      titleEstimate: 'Estimate!',
       stageLabelReady: 'Ready',
       stageLabelWaiting: 'Waiting room',
       grid: 5,
       planningStart: false,
+      connectionEstablished: false,
       voteSet: [] as string[],
       timerCountdownNumber: 60,
       triggerTimer: 0,
@@ -169,6 +178,9 @@ export default Vue.extend({
     };
   },
   computed: {
+    userStories() {
+      return this.$store.state.userStories;
+    },
     members() {
       return this.$store.state.members;
     },
@@ -223,9 +235,17 @@ export default Vue.extend({
     window.removeEventListener('beforeunload', this.sendUnregisterCommand);
   },
   methods: {
+    onUserStoriesChanged($event) {
+      this.$store.commit('setUserStories', { stories: $event });
+      if (this.connectionEstablished) {
+        const endPoint = `${Constants.webSocketAdminUpdatedUserStoriesRoute}`;
+        this.$store.commit('sendViaBackendWS', { endPoint, data: JSON.stringify($event) });
+      }
+    },
     connectToWebSocket() {
       const url = `${Constants.backendURL}/connect?sessionID=${this.sessionID}&adminID=${this.adminID}`;
       this.$store.commit('connectToBackendWS', url);
+      this.connectionEstablished = true;
     },
     registerAdminPrincipalOnBackend() {
       const endPoint = Constants.webSocketRegisterAdminUserRoute;

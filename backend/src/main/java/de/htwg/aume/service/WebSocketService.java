@@ -65,9 +65,18 @@ public class WebSocketService {
 		getSessionEntry(session.getSessionID()).getValue().stream()
 				.forEach(member -> sendSessionStateToMember(session, member.getMemberID().toString()));
 	}
+	
+	public void sendUpdatedUserStoriesToMembers(Session session) {
+		getSessionEntry(session.getSessionID()).getValue().stream()
+				.forEach(member -> sendUpdatedUserStoriesToMember(session, member.getMemberID().toString()));
+	}
 
 	public void sendSessionStateToMember(Session session, String memberID) {
 		simpMessagingTemplate.convertAndSendToUser(memberID, "/updates/member", session.getSessionState().toString());
+	}
+
+	public void sendUpdatedUserStoriesToMember(Session session, String memberID) {
+		simpMessagingTemplate.convertAndSendToUser(memberID, "/updates/userStories", session.getSessionConfig().getUserStories());
 	}
 
 	public void removeSession(Session session) {

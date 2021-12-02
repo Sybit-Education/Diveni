@@ -17,11 +17,17 @@ class Constants {
 
   webSocketVoteRoute = '/ws/vote';
 
+  webSocketAdminUpdatedUserStoriesRoute = '/ws/adminUpdatedUserStories';
+
+  webSocketMemberListenUserStoriesRoute = '/users/updates/userStories';
+
   webSocketMemberListenRoute = '/users/updates/member';
 
   memberUpdateCommandStartVoting = 'START_VOTING';
 
   memberUpdateCloseSession = 'SESSION_CLOSED';
+
+  memberUpdateUpdatedUserStories = 'UPDATED_USER_STORIES';
 
   // eslint-disable-next-line class-methods-use-this
   public joinSessionRoute(sessionID: string) {

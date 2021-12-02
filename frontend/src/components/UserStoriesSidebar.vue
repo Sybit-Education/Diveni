@@ -6,7 +6,7 @@
       </b-button>
     </div>
     <div class="sidenav" :style="`width: ${sideBarOpen? '400px': '0px'};` ">
-      <div>
+      <div v-if="showEditButtons">
         <b-button size="lg" variant="success" @click="addUserStory()">
           Add <b-icon-plus />
         </b-button>
@@ -14,22 +14,24 @@
           {{ editEnabled ? 'Save' : 'Edit' }} <b-icon-pencil />
         </b-button>
       </div>
-      <div class="list-group">
+      <div class="list-group" :style="!showEditButtons ? 'margin-top: 66px;' : ''">
         <div v-if="userStories.length < 1" class="text-center">
           No stories yet...
           Add a story to start estimating.
         </div>
-        <div
+        <b-list-group-item
           v-for="(story, index) of userStories"
           :key="story.name"
-          class="list-group-item"
+          variant="outline-secondary"
+          :active="!showEditButtons && story.isActive"
         >
           <b-input-group>
             <b-button
-              v-b-toggle="`collapse-${index}`"
-              variant="outline-secondary"
+              v-if="showEditButtons"
+              :variant="story.isActive ? 'success' : 'outline-success'"
+              @click="setUserStoryAsActive(index)"
             >
-              <b-icon-caret-down />
+              <b-icon-check2 />
             </b-button>
             <b-form-input
               v-model="userStories[index].title"
@@ -65,6 +67,9 @@
             <b-button v-if="editEnabled" variant="danger" @click="deleteStory(index)">
               <b-icon-trash />
             </b-button>
+            <b-button v-b-toggle="`collapse-${index}`" variant="light">
+              <b-icon-caret-down />
+            </b-button>
           </b-input-group>
 
           <b-collapse :id="`collapse-${index}`" class="mt-4">
@@ -76,7 +81,7 @@
               max-rows="6"
             />
           </b-collapse>
-        </div>
+        </b-list-group-item>
       </div>
     </div>
   </div>
@@ -89,26 +94,43 @@ export default Vue.extend({
   name: 'UserStoriesSidebar',
   props: {
     cardSet: { type: Array, required: true },
+    initialStories: { type: Array, required: true },
     showEstimations: { type: Boolean, required: true },
+    showEditButtons: { type: Boolean, required: false, default: true },
   },
   data() {
     return {
       sideBarOpen: false,
       editEnabled: false,
-      userStories: [] as Array<{title:string, description:string, estimation:string|null }>,
+      userStories: [] as Array<{title:string, description:string, estimation:string|null, isActive:boolean}>,
     };
   },
   watch: {
     userStories() {
       this.publishChanges();
     },
+    initialStories() {
+      this.userStories = this.initialStories as Array<{title:string, description:string, estimation:string|null, isActive:boolean}>;
+    },
     editEnabled() {
       this.publishChanges();
     },
   },
+  mounted() {
+    this.userStories = this.initialStories as Array<{title:string, description:string, estimation:string|null, isActive:boolean}>;
+  },
   methods: {
+    setUserStoryAsActive(index) {
+      const stories = this.userStories.map((s) => ({
+        title: s.title, description: s.description, estimation: s.estimation, isActive: false,
+      }));
+      stories[index].isActive = true;
+      this.userStories = stories;
+    },
     addUserStory() {
-      this.userStories.push({ title: '', description: '', estimation: null });
+      this.userStories.push({
+        title: '', description: '', estimation: null, isActive: false,
+      });
     },
     deleteStory(index) {
       this.userStories.splice(index, 1);
@@ -139,7 +161,7 @@ export default Vue.extend({
   height: 100%; /* 100% Full-height */
   width: 0; /* 0 width - change this with JavaScript */
   position: fixed; /* Stay in place */
-  z-index: 1; /* Stay on top */
+  z-index: 2; /* Stay on top */
   top: 0; /* Stay at the top */
   right:0;
   background-color: white;
@@ -151,7 +173,7 @@ export default Vue.extend({
    margin: 8px;
   float: right;
   position: fixed;
-  z-index: 2;
+  z-index: 3;
   top: 0;
   right:0;
   overflow-x: hidden;

@@ -48,11 +48,15 @@
         </b-col>
       </b-row>
       <user-stories-sidebar
-        :card-set="['1', '2', 'A', '4', '5', '6']"
+        :card-set="selectedCardSetOptions"
         :show-estimations="false"
+        :initial-stories="userStories"
         @userStoriesChanged="onUserStoriesChanged($event)"
       />
-      <b-button class="mt-5" variant="success" :disabled="buttonDisabled()" @click="sendCreateSessionRequest">
+      <b-button
+        class="mt-5"
+        variant="success" :disabled="buttonDisabled()"
+        @click="sendCreateSessionRequest">
         Start session
       </b-button>
     </b-container>
@@ -64,24 +68,28 @@ import Vue from 'vue';
 import Session from '../model/Session';
 import Constants from '../constants';
 import CardSetComponent from '../components/CardSetComponent.vue';
+import UserStoriesSidebar from '../components/UserStoriesSidebar.vue';
 
 export default Vue.extend({
   name: 'PrepareSessionPage',
   components: {
     CardSetComponent,
+    UserStoriesSidebar,
   },
   data() {
     return {
       title: 'Prepare session',
       password: '',
       selectedCardSetOptions: [],
-      userStories: [],
       timer: 60,
       warningWhenUnderZero: '',
     };
   },
   computed: {
-    formatTimer() : string {
+    userStories() {
+      return this.$store.state.userStories;
+    },
+    formatTimer(): string {
       const minutes = Math.floor(this.timer / 60);
       const seconds = (this.timer % 60).toString().padStart(2, '0');
       return `${minutes}:${seconds}`;
@@ -112,7 +120,7 @@ export default Vue.extend({
           membersID: string,
           sessionConfig: {
             set: Array<string>,
-            userStories: Array<{title:string, description:string, estimation:string|null }>,
+            userStories: Array<{ title: string, description: string, estimation: string | null, isActive: false }>,
           },
         };
         this.goToSessionPage(session);
@@ -136,8 +144,8 @@ export default Vue.extend({
     buttonDisabled() {
       return this.selectedCardSetOptions.length < 1;
     },
-    onUserStoriesChanged(newUserStories) {
-      this.userStories = newUserStories;
+    onUserStoriesChanged(stories) {
+      this.$store.commit('setUserStories', { stories });
     },
     setTimerUp() {
       if (this.timer === 4 * 60 + 15) {
