@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +36,10 @@ public class Session {
 		val updatedMembers = members.stream().map(m -> m.getMemberID().equals(memberID) ? m.updateEstimation(vote) : m)
 				.collect(Collectors.toList());
 		return new Session(sessionID, adminID, membersID, sessionConfig, updatedMembers, sessionState);
+	}
+	public Session updateUserStories(List<UserStory> userStories) {
+		val updatedSessionConfig = new SessionConfig(sessionConfig.getSet(), userStories, sessionConfig.getPassword());
+		return new Session(sessionID, adminID, membersID, updatedSessionConfig, members, sessionState);
 	}
 
 	public Session resetEstimations() {
