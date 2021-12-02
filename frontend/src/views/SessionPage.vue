@@ -122,7 +122,7 @@
         </b-row>
       </b-container>
     </span>
-    <b-button @click="endSession"> End Session </b-button>
+    <b-button class="btn btn-danger" @click="endSession"> End Session </b-button>
   </div>
 </template>
 
