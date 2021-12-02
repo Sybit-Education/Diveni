@@ -13,6 +13,8 @@ class Constants {
 
   webSocketStartPlanningRoute = '/ws/startVoting';
 
+  webSocketVotingFinishedRoute = '/ws/votingFinished';
+
   webSocketRestartPlanningRoute = '/ws/restart';
 
   webSocketVoteRoute = '/ws/vote';
@@ -25,9 +27,9 @@ class Constants {
 
   memberUpdateCommandStartVoting = 'START_VOTING';
 
-  memberUpdateCloseSession = 'SESSION_CLOSED';
+  memberUpdateCommandVotingFinished = 'VOTING_FINISHED';
 
-  memberUpdateUpdatedUserStories = 'UPDATED_USER_STORIES';
+  memberUpdateCloseSession = 'SESSION_CLOSED';
 
   // eslint-disable-next-line class-methods-use-this
   public joinSessionRoute(sessionID: string) {

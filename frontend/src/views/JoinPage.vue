@@ -48,6 +48,7 @@ export default Vue.extend({
         this.registerMemberPrincipalOnBackend();
         this.subscribeWSMemberUpdates();
         this.subscribeWSadminUpdatedUserStories();
+        this.subscribeWSMemberUpdated();
         this.goToEstimationPage();
       }
     },
@@ -104,6 +105,9 @@ export default Vue.extend({
     },
     subscribeWSadminUpdatedUserStories() {
       this.$store.commit('subscribeOnBackendWSStoriesUpdated');
+    },
+    subscribeWSMemberUpdated() {
+      this.$store.commit('subscribeOnBackendWSAdminUpdate');
     },
     goToEstimationPage() {
       this.$router.push({
