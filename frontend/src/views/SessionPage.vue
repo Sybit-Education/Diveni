@@ -56,6 +56,16 @@
             <b-icon-arrow-clockwise />
             New
           </b-button>
+          <b-button v-b-modal.close-session-modal variant="danger" class="mx-2">
+            <b-icon-x />
+            Close session
+          </b-button>
+          <b-modal id="close-session-modal" title="Are you sure" @ok="closeSession">
+            <p class="my-4">
+              Closing this session removes you and all members.
+              You can download the user stories thereafter.
+            </p>
+          </b-modal>
         </b-col>
         <b-col>
           <estimate-timer
@@ -240,15 +250,19 @@ export default Vue.extend({
     backendAnimalToAssetName(animal: string) {
       return Constants.avatarAnimalToAssetName(animal);
     },
+    closeSession() {
+      this.sendUnregisterCommand();
+      this.$router.push({ name: 'ResultPage' });
+    },
     sendRestartMessage() {
       const endPoint = Constants.webSocketRestartPlanningRoute;
       this.$store.commit('sendViaBackendWS', { endPoint });
-      this.retriggerTimer();
+      this.reTriggerTime();
     },
     goToLandingPage() {
       this.$router.push({ name: 'LandingPage' });
     },
-    retriggerTimer() {
+    reTriggerTime() {
       this.triggerTimer = (this.triggerTimer + 1) % 5;
     },
   },
