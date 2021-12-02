@@ -17,6 +17,7 @@ import java.util.concurrent.TimeUnit;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.json.JsonWriteFeature;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.junit.jupiter.api.AfterEach;
@@ -369,4 +370,33 @@ public class WebsocketControllerTest {
         val newMembers = sessionRepo.findBySessionID(oldSession.getSessionID()).getMembers();
         assertTrue(newMembers.stream().allMatch(m -> m.getCurrentEstimation().isEmpty()));
     }
+
+    @Test
+    // TODO: fix this test
+    public void adminUpdatedUserStories_updatesUserStories() throws Exception {
+        val sessionID = UUID.randomUUID();
+        val adminID = UUID.randomUUID();
+        val adminPrincipal = new AdminPrincipal(sessionID, adminID);
+        val oldSession = new Session(sessionID, adminID, UUID.randomUUID(),
+                new SessionConfig(new ArrayList<>(), List.of(), null), List.of(),
+                SessionState.WAITING_FOR_MEMBERS);
+        sessionRepo.save(oldSession);
+        webSocketService.setAdminUser(adminPrincipal);
+        StompSession adminSession = getAdminSession(sessionID, adminID);
+
+        // val userStoriesJson = "[ { \"title\": \"test\", \"description\": \"descr\",
+        // \"estimation\": null, \"isActive\": false } ]";
+        // adminSession.send(UPDATE_USER_STORIES, objectMapper.writeValueAsString(List.of(new
+        // UserStory("title", "desc", "3", false))));
+        // adminSession.send(UPDATE_USER_STORIES, List.of(new UserStory("title", "desc", "3",
+        // false)));
+        // adminSession.send(UPDATE_USER_STORIES, userStoriesJson.getBytes("UTF-8"));
+        // Wait for server-side handling
+        TimeUnit.MILLISECONDS.sleep(TIMEOUT);
+
+        val config = sessionRepo.findBySessionID(oldSession.getSessionID()).getSessionConfig();
+        // assertEquals(config.getUserStories().size(), 1);
+    }
+
+
 }

@@ -34,7 +34,6 @@ export default Vue.extend({
       name: '',
       sessionID: '',
       voteSet: '',
-      userStories: '',
     };
   },
   computed: {
@@ -47,7 +46,8 @@ export default Vue.extend({
       if (isConnected) {
         console.debug('JoinPage: member connected to websocket');
         this.registerMemberPrincipalOnBackend();
-        this.subscribeWSStartEstimating();
+        this.subscribeWSMemberUpdates();
+        this.subscribeWSadminUpdatedUserStories();
         this.goToEstimationPage();
       }
     },
@@ -78,7 +78,9 @@ export default Vue.extend({
           userStories: Array<{ title: string, description: string, estimation: string | null }>,
         };
         this.voteSet = JSON.stringify(sessionConfig.set);
-        this.userStories = JSON.stringify(sessionConfig.userStories);
+        console.log('session page');
+        console.log(sessionConfig);
+        this.$store.commit('setUserStories', { stories: sessionConfig.userStories });
         this.connectToWebSocket(data.sessionID, joinInfo.member.memberID);
       } catch (e) {
         console.error(`Response of ${url} is invalid: ${e}`);
@@ -97,8 +99,11 @@ export default Vue.extend({
       const endPoint = Constants.webSocketRegisterMemberRoute;
       this.$store.commit('sendViaBackendWS', { endPoint });
     },
-    subscribeWSStartEstimating() {
-      this.$store.commit('subscribeOnBackendWSStartPlanningListenRoute');
+    subscribeWSMemberUpdates() {
+      this.$store.commit('subscribeOnBackendWSMemberUpdates');
+    },
+    subscribeWSadminUpdatedUserStories() {
+      this.$store.commit('subscribeOnBackendWSStoriesUpdated');
     },
     goToEstimationPage() {
       this.$router.push({
