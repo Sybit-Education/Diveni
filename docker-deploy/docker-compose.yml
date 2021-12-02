@@ -3,18 +3,18 @@ version: "3.8"
 services:
   database:
     image: aume2021-team-2_database
-    container_name: database
+    container_name: aume2021-team-2_database
     restart: always
   backend:
     depends_on:
       - database
     image: aume2021-team-2_backend
-    container_name: backend
+    container_name: aume2021-team2_backend
     restart: always
   frontend:
     depends_on:
       - backend
-    container_name: frontend
+    container_name: aume2021-team-2_frontend
     image: aume2021-team-2_frontend
     restart: always
   proxy:
@@ -22,8 +22,8 @@ services:
         - frontend
         - backend
         - database
-    container_name: proxy
+    container_name: aume2021-team2_proxy
     image: aume2021-team-2_proxy
     restart: always
     ports:
-        - 80:80
+        - 8182:80
