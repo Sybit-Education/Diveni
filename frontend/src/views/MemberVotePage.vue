@@ -25,6 +25,7 @@
     </b-row>
     <b-row v-if="isStartVoting" class="my-5">
       <flicking
+        v-if="isMobile"
         id="flicking"
         :options="{
           renderOnlyVisible: false,
@@ -44,9 +45,27 @@
           :index="index"
           :hex-color="hexColor"
           :dragged="voteOption == draggedVote"
+          :is-mobile="true"
           @sentVote="onSendVote"
         />
       </flicking>
+      <b-row v-else class="d-flex justify-content-between flex-wrap">
+        <b-col>
+          <member-vote-card
+            v-for="(voteOption, index) in voteSet"
+            :key="voteOption"
+            :ref="`memberCard${voteOption}`"
+            style="display:inline-block"
+            class="flicking-panel m-2"
+            :vote-option="voteOption"
+            :index="index"
+            :hex-color="hexColor"
+            :dragged="voteOption == draggedVote"
+            :is-mobile="false"
+            @sentVote="onSendVote"
+          />
+        </b-col>
+      </b-row>
     </b-row>
     <b-row v-else class="my-5 text-center">
       <b-icon-three-dots animation="fade" class="my-5" font-scale="4" />
@@ -88,6 +107,9 @@ export default Vue.extend({
     };
   },
   computed: {
+    isMobile() {
+      return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    },
     memberUpdates() {
       return this.$store.state.memberUpdates;
     },
