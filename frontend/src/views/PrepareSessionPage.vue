@@ -53,8 +53,10 @@
         :initial-stories="userStories"
         @userStoriesChanged="onUserStoriesChanged($event)"
       />
-      <b-button class="mt-5" variant="success" :disabled="buttonDisabled()"
-                @click="sendCreateSessionRequest">
+      <b-button
+        class="mt-5"
+        variant="success" :disabled="buttonDisabled()"
+        @click="sendCreateSessionRequest">
         Start session
       </b-button>
     </b-container>
@@ -143,7 +145,7 @@ export default Vue.extend({
       return this.selectedCardSetOptions.length < 1;
     },
     onUserStoriesChanged(stories) {
-      this.$store.commit('setUserStories', {stories});
+      this.$store.commit('setUserStories', { stories });
     },
     setTimerUp() {
       if (this.timer === 4 * 60 + 15) {
