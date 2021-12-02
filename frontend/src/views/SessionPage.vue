@@ -122,6 +122,7 @@
         </b-row>
       </b-container>
     </span>
+    <b-button @click="endSession"> End Session </b-button>
   </div>
 </template>
 
@@ -281,6 +282,10 @@ export default Vue.extend({
     },
     retriggerTimer() {
       this.triggerTimer = (this.triggerTimer + 1) % 5;
+    },
+    endSession() {
+      this.sendUnregisterCommand();
+      this.$router.push({ name: 'LandingPage' });
     },
   },
 });

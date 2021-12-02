@@ -21,6 +21,7 @@
           </b-button>
         </b-col>
         <b-col class="text-center">
+          <b-modal v-model="modalShow">Blaze It!</b-modal>
           <h4>
             {{ timer == 0 ? '∞' : formatTimer }}
           </h4>
@@ -80,6 +81,7 @@ export default Vue.extend({
       userStories: [],
       timer: 60,
       warningWhenUnderZero: '',
+      modalShow: false,
     };
   },
   computed: {
@@ -96,6 +98,11 @@ export default Vue.extend({
       }
       if (newTimer > 0) {
         this.warningWhenUnderZero = '';
+      }
+      if (newTimer === 260) {
+        this.modalShow = true;
+      } else {
+        this.modalShow = false;
       }
     },
   },
