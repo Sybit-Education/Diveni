@@ -75,7 +75,7 @@ export default Vue.extend({
       try {
         const sessionConfig = (await this.axios.post(url, joinInfo)).data as {
           set: Array<string>,
-          userStories: Array<{title:string, description:string, estimation:string|null }>,
+          userStories: Array<{ title: string, description: string, estimation: string | null }>,
         };
         this.voteSet = JSON.stringify(sessionConfig.set);
         console.log('session page');
