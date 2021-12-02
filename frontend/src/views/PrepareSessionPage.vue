@@ -46,6 +46,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import Session from '../model/Session';
+import Member from '../model/Member';
 import Constants from '../constants';
 import CardSetComponent from '../components/CardSetComponent.vue';
 import UserStoriesSidebar from '../components/UserStoriesSidebar.vue';
@@ -64,7 +65,37 @@ export default Vue.extend({
       userStories: [],
     };
   },
+  created() {
+    this.checkAdminCookie();
+  },
   methods: {
+    async checkAdminCookie() {
+      const cookie = window.localStorage.getItem('adminCookie');
+      if (cookie !== null) {
+        console.log(`Found admin cookie: '${cookie}'`);
+        const url = Constants.backendURL + Constants.createSessionRoute;
+        try {
+          const session = (await this.axios.get(url, {
+            params: {
+              adminCookie: cookie,
+            },
+          })).data as {
+            sessionID: string,
+            adminID: string,
+            sessionConfig: {
+              set: Array<string>,
+              userStories: Array<{title:string, description:string, estimation:string|null }>,
+            },
+            sessionState: string,
+          };
+          // this.$store.commit('setMembers', JSON.stringify(session.members));
+          this.goToSessionPage(session);
+        } catch (e) {
+          console.log(`got error: ${e}`);
+          window.localStorage.removeItem('adminCookie');
+        }
+      }
+    },
     async sendCreateSessionRequest() {
       const url = Constants.backendURL + Constants.createSessionRoute;
       const sessionConfig = {
@@ -73,15 +104,20 @@ export default Vue.extend({
         userStories: this.userStories,
       };
       try {
-        const session: Session = (await this.axios.post(url, sessionConfig)).data as {
-          sessionID: string,
-          adminID: string,
-          sessionConfig: {
-            set: Array<string>,
-            userStories: Array<{title:string, description:string, estimation:string|null }>,
+        const response = (await this.axios.post(url, sessionConfig)).data as {
+          session: {
+            sessionID: string,
+            adminID: string,
+            sessionConfig: {
+              set: Array<string>,
+              userStories: Array<{title:string, description:string, estimation:string|null }>,
+            },
+            sessionState: string,
           },
+          adminCookie: string,
         };
-        this.goToSessionPage(session);
+        window.localStorage.setItem('adminCookie', response.adminCookie);
+        this.goToSessionPage(response.session as Session);
       } catch (e) {
         console.error(`Response of ${url} is invalid: ${e}`);
       }
@@ -93,6 +129,7 @@ export default Vue.extend({
           sessionID: session.sessionID,
           adminID: session.adminID,
           voteSetJson: JSON.stringify(session.sessionConfig.set),
+          sessionState: session.sessionState,
         },
       });
     },

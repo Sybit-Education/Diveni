@@ -141,6 +141,10 @@ export default Vue.extend({
       type: String,
       default: undefined,
     },
+    sessionState: {
+      type: String,
+      default: undefined,
+    },
   },
   data() {
     return {
@@ -189,6 +193,7 @@ export default Vue.extend({
         console.debug('SessionPage: member connected to websocket');
         this.registerAdminPrincipalOnBackend();
         this.subscribeWSMemberUpdated();
+        this.requestMemberUpdate();
       }
     },
   },
@@ -197,6 +202,9 @@ export default Vue.extend({
       this.goToLandingPage();
     }
     this.voteSet = JSON.parse(this.voteSetJson);
+    if (this.sessionState === Constants.memberUpdateCommandStartVoting) {
+      this.planningStart = true;
+    }
     this.connectToWebSocket();
   },
   created() {
@@ -218,6 +226,10 @@ export default Vue.extend({
     },
     subscribeWSMemberUpdated() {
       this.$store.commit('subscribeOnBackendWSAdminUpdate');
+    },
+    requestMemberUpdate() {
+      const endPoint = Constants.webSocketGetMemberUpdateRoute;
+      this.$store.commit('sendViaBackendWS', { endPoint });
     },
     sendUnregisterCommand() {
       const endPoint = `${Constants.webSocketUnregisterRoute}`;

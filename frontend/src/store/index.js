@@ -11,9 +11,12 @@ export default new Vuex.Store({
     stompClient: undefined,
     webSocketConnected: false,
     memberUpdates: [],
-    members: null,
+    members: [],
   },
   mutations: {
+    setMembers(state, members) {
+      state.members = members;
+    },
     connectToBackendWS(state, url) {
       state.stompClient = webstomp.over(new SockJS(url));
       state.stompClient.connect({},

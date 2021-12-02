@@ -12,12 +12,16 @@ import de.htwg.aume.repository.SessionRepository;
 
 @Service
 public class DatabaseService {
-    
+
     @Autowired
     SessionRepository sessionRepo;
 
     public Optional<Session> getSessionByID(UUID sessionID) {
         return Optional.ofNullable(sessionRepo.findBySessionID(sessionID));
+    }
+
+    public Optional<Session> getSessionByAdminCookie(UUID adminCookie) {
+        return Optional.ofNullable(sessionRepo.findByAdminCookie(adminCookie));
     }
 
     public Optional<Session> getSessionByMemberID(UUID memberID) {
@@ -35,7 +39,5 @@ public class DatabaseService {
     public void deleteSession(Session session) {
         sessionRepo.delete(session);
     }
-
-    
 
 }

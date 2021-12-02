@@ -26,6 +26,7 @@ import de.htwg.aume.model.Session;
 import de.htwg.aume.model.SessionState;
 import de.htwg.aume.principals.AdminPrincipal;
 import de.htwg.aume.principals.MemberPrincipal;
+import de.htwg.aume.principals.SessionPrincipals;
 import lombok.val;
 
 public class WebSocketServiceTest {
@@ -51,11 +52,11 @@ public class WebSocketServiceTest {
     }
 
     void setDefaultAdminPrincipal(Set<MemberPrincipal> members) throws Exception {
-        val memberMapField = WebSocketService.class.getDeclaredField("memberMap");
-        memberMapField.setAccessible(true);
-        val memberMap = new HashMap<AdminPrincipal, Set<MemberPrincipal>>();
-        memberMap.put(defaultAdminPrincipal, members);
-        memberMapField.set(webSocketService, memberMap);
+        val sessionPrincipalsField = WebSocketService.class.getDeclaredField("sessionPrincipalList");
+        sessionPrincipalsField.setAccessible(true);
+        val sessionPrincipals = List
+                .of(new SessionPrincipals(defaultAdminPrincipal.getSessionID(), defaultAdminPrincipal, members));
+        sessionPrincipalsField.set(webSocketService, sessionPrincipals);
     }
 
     @Test
@@ -64,22 +65,36 @@ public class WebSocketServiceTest {
 
         webSocketService.setAdminUser(adminPrincipal);
 
-        assertTrue(webSocketService.getMemberMap().containsKey(adminPrincipal));
+        assertTrue(webSocketService.getSessionPrincipalList().stream()
+                .anyMatch(p -> p.adminPrincipal() == adminPrincipal));
     }
 
     @Test
-    public void getSessionEntry_isCorrect() throws Exception {
+    public void setExistingAdmin_isOverwritten() throws Exception {
+        setDefaultAdminPrincipal(new HashSet<>());
+        val adminPrincipal = new AdminPrincipal(defaultAdminPrincipal.getSessionID(),
+                defaultAdminPrincipal.getAdminID());
+
+        webSocketService.setAdminUser(adminPrincipal);
+
+        assertTrue(webSocketService.getSessionPrincipalList().stream()
+                .anyMatch(p -> p.adminPrincipal() == adminPrincipal));
+    }
+
+    @Test
+    public void getSessionPrincipals_isCorrect() throws Exception {
         setDefaultAdminPrincipal(new HashSet<>());
 
-        val entry = webSocketService.getSessionEntry(defaultAdminPrincipal.getSessionID());
+        val sessionPrincipals = webSocketService.getSessionPrincipals(defaultAdminPrincipal.getSessionID());
 
-        assertEquals(Map.entry(defaultAdminPrincipal, Set.of()), entry);
+        assertEquals(new SessionPrincipals(defaultAdminPrincipal.getSessionID(), defaultAdminPrincipal, Set.of()),
+                sessionPrincipals);
     }
 
     @Test
     public void getMissingSessionEntry_isError() throws Exception {
         assertThrows(ResponseStatusException.class,
-                () -> webSocketService.getSessionEntry(defaultAdminPrincipal.getSessionID()));
+                () -> webSocketService.getSessionPrincipals(defaultAdminPrincipal.getSessionID()));
     }
 
     @Test
@@ -89,7 +104,8 @@ public class WebSocketServiceTest {
 
         webSocketService.addMemberIfNew(memberPrincipal);
 
-        assertTrue(webSocketService.getMemberMap().get(defaultAdminPrincipal).contains(memberPrincipal));
+        assertTrue(webSocketService.getSessionPrincipals(defaultAdminPrincipal.getSessionID()).memberPrincipals()
+                .contains(memberPrincipal));
     }
 
     @Test
@@ -98,7 +114,8 @@ public class WebSocketServiceTest {
 
         webSocketService.addMemberIfNew(defaultMemberPrincipal);
 
-        assertEquals(1, webSocketService.getMemberMap().size());
+        assertEquals(1,
+                webSocketService.getSessionPrincipals(defaultAdminPrincipal.getSessionID()).memberPrincipals().size());
     }
 
     @Test
@@ -107,13 +124,15 @@ public class WebSocketServiceTest {
 
         webSocketService.removeMember(defaultMemberPrincipal);
 
-        assertTrue(webSocketService.getMemberMap().get(defaultAdminPrincipal).isEmpty());
+        assertTrue(
+                webSocketService.getSessionPrincipals(defaultAdminPrincipal.getSessionID()).memberPrincipals()
+                        .isEmpty());
     }
 
     @Test
     public void sendMembersUpdate_sendsUpdate() throws Exception {
         setDefaultAdminPrincipal(Set.of(defaultMemberPrincipal));
-        val session = new Session(defaultAdminPrincipal.getSessionID(), defaultAdminPrincipal.getAdminID(), null,
+        val session = new Session(defaultAdminPrincipal.getSessionID(), defaultAdminPrincipal.getAdminID(), null, null,
                 List.of(new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null)), null);
 
         webSocketService.sendMembersUpdate(session);
@@ -125,7 +144,7 @@ public class WebSocketServiceTest {
     @Test
     public void sendSessionState_sendsState() throws Exception {
         setDefaultAdminPrincipal(Set.of(defaultMemberPrincipal));
-        val session = new Session(defaultAdminPrincipal.getSessionID(), defaultAdminPrincipal.getAdminID(), null,
+        val session = new Session(defaultAdminPrincipal.getSessionID(), defaultAdminPrincipal.getAdminID(), null, null,
                 List.of(new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null)),
                 SessionState.WAITING_FOR_MEMBERS);
 
@@ -139,7 +158,7 @@ public class WebSocketServiceTest {
     public void sendSessionStates_sendsToAll() throws Exception {
         val memberPrincipal = new MemberPrincipal(defaultAdminPrincipal.getSessionID(), UUID.randomUUID());
         setDefaultAdminPrincipal(Set.of(defaultMemberPrincipal, memberPrincipal));
-        val session = new Session(defaultAdminPrincipal.getSessionID(), defaultAdminPrincipal.getAdminID(), null,
+        val session = new Session(defaultAdminPrincipal.getSessionID(), defaultAdminPrincipal.getAdminID(), null, null,
                 List.of(new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null),
                         new Member(memberPrincipal.getMemberID(), null, null, null, null)),
                 SessionState.WAITING_FOR_MEMBERS);
@@ -155,12 +174,12 @@ public class WebSocketServiceTest {
     @Test
     public void removeSession_isRemoved() throws Exception {
         setDefaultAdminPrincipal(Set.of(defaultMemberPrincipal));
-        val session = new Session(defaultAdminPrincipal.getSessionID(), defaultAdminPrincipal.getAdminID(), null,
+        val session = new Session(defaultAdminPrincipal.getSessionID(), defaultAdminPrincipal.getAdminID(), null, null,
                 List.of(new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null)),
                 SessionState.WAITING_FOR_MEMBERS);
 
         webSocketService.removeSession(session);
 
-        assertTrue(webSocketService.getMemberMap().isEmpty());
+        assertTrue(webSocketService.getSessionPrincipalList().isEmpty());
     }
 }

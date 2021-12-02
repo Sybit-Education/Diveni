@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
@@ -36,15 +37,25 @@ public class RoutesController {
 	DatabaseService databaseService;
 
 	@PostMapping(value = "/sessions")
-	public ResponseEntity<Session> createSession(@RequestBody SessionConfig sessionConfig) {
+	public ResponseEntity<Map<String, Object>> createSession(@RequestBody SessionConfig sessionConfig) {
 		val usedUuids = databaseService.getSessions().stream().map(s -> s.getSessionID()).collect(Collectors.toSet());
-		val sessionUuids = Stream.generate(UUID::randomUUID).filter(s -> !usedUuids.contains(s)).limit(2)
+		val sessionUuids = Stream.generate(UUID::randomUUID).filter(s -> !usedUuids.contains(s)).limit(3)
 				.collect(Collectors.toList());
-		val session = new Session(sessionUuids.get(0), sessionUuids.get(1), sessionConfig, new ArrayList<Member>(),
-				SessionState.WAITING_FOR_MEMBERS);
+		val session = new Session(sessionUuids.get(0), sessionUuids.get(1), sessionConfig, sessionUuids.get(2),
+				new ArrayList<Member>(), SessionState.WAITING_FOR_MEMBERS);
 		databaseService.saveSession(session);
-		// val responseMap = Map.of("session", session, "cookie", v2);
-		return new ResponseEntity<Session>(session, HttpStatus.CREATED);
+		val responseMap = Map.of("session", session, "adminCookie", session.getAdminCookie());
+		return new ResponseEntity<>(responseMap, HttpStatus.CREATED);
+	}
+
+	@GetMapping(value = "/sessions")
+	public ResponseEntity<Session> getExistingSession(@RequestParam("adminCookie") UUID adminCookie) {
+		val session = databaseService.getSessionByAdminCookie(adminCookie);
+		if (session.isPresent()) {
+			return new ResponseEntity<>(session.get(), HttpStatus.OK);
+		} else {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessages.sessionNotFoundErrorMessage);
+		}
 	}
 
 	@PostMapping(value = "/sessions/{sessionID}/join")

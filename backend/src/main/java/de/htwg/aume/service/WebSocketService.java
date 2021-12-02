@@ -1,12 +1,12 @@
 package de.htwg.aume.service;
 
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +18,7 @@ import de.htwg.aume.controller.ErrorMessages;
 import de.htwg.aume.model.Session;
 import de.htwg.aume.principals.AdminPrincipal;
 import de.htwg.aume.principals.MemberPrincipal;
+import de.htwg.aume.principals.SessionPrincipals;
 import lombok.Getter;
 import lombok.val;
 
@@ -27,42 +28,67 @@ public class WebSocketService {
 	@Autowired
 	private SimpMessagingTemplate simpMessagingTemplate;
 
-	@Getter
-	private Map<AdminPrincipal, Set<MemberPrincipal>> memberMap = new HashMap<>();
+	// @Getter
+	// private Map<AdminPrincipal, Set<MemberPrincipal>> memberMap = new
+	// HashMap<>();
 
-	Entry<AdminPrincipal, Set<MemberPrincipal>> getSessionEntry(UUID sessionID) {
-		return memberMap.entrySet().stream().filter(e -> e.getKey().getSessionID().equals(sessionID)).findFirst()
-				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-						ErrorMessages.sessionNotFoundErrorMessage));
+	@Getter
+	private List<SessionPrincipals> sessionPrincipalList = List.of();
+
+	public SessionPrincipals getSessionPrincipals(UUID sessionID) {
+		return sessionPrincipalList.stream().filter(s -> s.sessionID().equals(sessionID)).findFirst().orElseThrow(
+				() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessages.sessionNotFoundErrorMessage));
 	}
 
 	public synchronized void addMemberIfNew(MemberPrincipal member) {
-		val sessionEntry = getSessionEntry(member.getSessionID());
-		val members = sessionEntry.getValue().stream().filter(m -> !m.getName().equals(member.getName()))
+		val sessionPrincipals = getSessionPrincipals(member.getSessionID());
+		val updatedMembers = Stream
+				.concat(sessionPrincipals.memberPrincipals().stream()
+						.filter(m -> !m.getName().equals(member.getName())), Stream.of(member))
 				.collect(Collectors.toSet());
-		members.add(member);
-		memberMap.put(sessionEntry.getKey(), members);
+		sessionPrincipalList = sessionPrincipalList.stream().map(p -> {
+			if (p == sessionPrincipals)
+				return p.memberPrincipals(updatedMembers);
+			else
+				return p;
+		}).collect(Collectors.toList());
 	}
 
 	public synchronized void removeMember(MemberPrincipal member) {
-		val sessionEntry = getSessionEntry(member.getSessionID());
-		val members = sessionEntry.getValue().stream().filter(m -> !m.getMemberID().equals(member.getMemberID()))
-				.collect(Collectors.toSet());
-		memberMap.put(sessionEntry.getKey(), members);
+		val sessionPrincipals = getSessionPrincipals(member.getSessionID());
+		val updatedMembers = sessionPrincipals.memberPrincipals().stream()
+				.filter(m -> !m.getMemberID().equals(member.getMemberID())).collect(Collectors.toSet());
+		sessionPrincipalList = sessionPrincipalList.stream().map(p -> {
+			if (p == sessionPrincipals)
+				return p.memberPrincipals(updatedMembers);
+			else
+				return p;
+		}).collect(Collectors.toList());
 	}
 
-	public void setAdminUser(AdminPrincipal principal) {
-		memberMap.putIfAbsent(principal, new HashSet<>());
+	public synchronized void setAdminUser(AdminPrincipal principal) {
+		if (sessionPrincipalList.stream().anyMatch(p -> p.sessionID().equals(principal.getSessionID()))) {
+			sessionPrincipalList = sessionPrincipalList.stream().map(p -> {
+				if (p.sessionID().equals(principal.getSessionID()))
+					return p.adminPrincipal(principal);
+				else
+					return p;
+			}).collect(Collectors.toList());
+		} else {
+			sessionPrincipalList = Stream.concat(sessionPrincipalList.stream(),
+					Stream.of(new SessionPrincipals(principal.getSessionID(), principal, Set.of())))
+					.collect(Collectors.toList());
+		}
 	}
 
 	public void sendMembersUpdate(Session session) {
-		val sessionEntry = getSessionEntry(session.getSessionID());
-		simpMessagingTemplate.convertAndSendToUser(sessionEntry.getKey().getName(), "/updates/membersUpdated",
-				session.getMembers());
+		val sessionPrincipals = getSessionPrincipals(session.getSessionID());
+		simpMessagingTemplate.convertAndSendToUser(sessionPrincipals.adminPrincipal().getName(),
+				"/updates/membersUpdated", session.getMembers());
 	}
 
 	public void sendSessionStateToMembers(Session session) {
-		getSessionEntry(session.getSessionID()).getValue().stream()
+		getSessionPrincipals(session.getSessionID()).memberPrincipals().stream()
 				.forEach(member -> sendSessionStateToMember(session, member.getMemberID().toString()));
 	}
 
@@ -71,6 +97,7 @@ public class WebSocketService {
 	}
 
 	public void removeSession(Session session) {
-		memberMap.remove(getSessionEntry(session.getSessionID()).getKey());
+		sessionPrincipalList = sessionPrincipalList.stream().filter(p -> !p.sessionID().equals(session.getSessionID()))
+				.collect(Collectors.toList());
 	}
 }
