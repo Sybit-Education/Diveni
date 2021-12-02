@@ -23,6 +23,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import de.htwg.aume.model.Member;
 import de.htwg.aume.model.Session;
+import de.htwg.aume.model.SessionConfig;
 import de.htwg.aume.model.SessionState;
 import de.htwg.aume.principals.AdminPrincipal;
 import de.htwg.aume.principals.MemberPrincipal;
@@ -33,6 +34,8 @@ public class WebSocketServiceTest {
     private static final String ADMIN_UPDATES = "/updates/membersUpdated";
 
     private static final String MEMBER_UPDATES = "/updates/member";
+    
+    private static final String USER_STORIES_UPDATES = "/updates/userStories";
 
     @Mock
     SimpMessagingTemplate simpMessagingTemplateMock;
@@ -151,6 +154,32 @@ public class WebSocketServiceTest {
         verify(simpMessagingTemplateMock, times(1)).convertAndSendToUser(memberPrincipal.getMemberID().toString(),
                 MEMBER_UPDATES, session.getSessionState().toString());
     }
+
+
+    @Test
+    public void sendUpdatedUserStoriesToMembers_sendsToAll() throws Exception {
+            val memberPrincipal = new MemberPrincipal(defaultAdminPrincipal.getSessionID(),
+                            UUID.randomUUID());
+            setDefaultAdminPrincipal(Set.of(defaultMemberPrincipal, memberPrincipal));
+            val session = new Session(defaultAdminPrincipal.getSessionID(),
+                            defaultAdminPrincipal.getAdminID(), null,
+                            new SessionConfig(List.of(), List.of(), "password"),
+                            List.of(new Member(defaultMemberPrincipal.getMemberID(), null, null,
+                                            null, null),
+                                            new Member(memberPrincipal.getMemberID(), null,
+                                                            null, null, null)),
+                            SessionState.WAITING_FOR_MEMBERS);
+
+            webSocketService.sendUpdatedUserStoriesToMembers(session);
+
+            verify(simpMessagingTemplateMock, times(1)).convertAndSendToUser(
+                            defaultMemberPrincipal.getMemberID().toString(),
+                            USER_STORIES_UPDATES, session.getSessionConfig().getUserStories());
+            verify(simpMessagingTemplateMock, times(1)).convertAndSendToUser(
+                            defaultMemberPrincipal.getMemberID().toString(),
+                            USER_STORIES_UPDATES, session.getSessionConfig().getUserStories());
+    }
+
 
     @Test
     public void removeSession_isRemoved() throws Exception {
