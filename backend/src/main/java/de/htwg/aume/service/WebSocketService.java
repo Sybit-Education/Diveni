@@ -1,8 +1,6 @@
 package de.htwg.aume.service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -27,10 +25,6 @@ public class WebSocketService {
 
 	@Autowired
 	private SimpMessagingTemplate simpMessagingTemplate;
-
-	// @Getter
-	// private Map<AdminPrincipal, Set<MemberPrincipal>> memberMap = new
-	// HashMap<>();
 
 	@Getter
 	private List<SessionPrincipals> sessionPrincipalList = List.of();
@@ -75,8 +69,9 @@ public class WebSocketService {
 					return p;
 			}).collect(Collectors.toList());
 		} else {
-			sessionPrincipalList = Stream.concat(sessionPrincipalList.stream(),
-					Stream.of(new SessionPrincipals(principal.getSessionID(), principal, Set.of())))
+			sessionPrincipalList = Stream
+					.concat(sessionPrincipalList.stream(),
+							Stream.of(new SessionPrincipals(principal.getSessionID(), principal, Set.of())))
 					.collect(Collectors.toList());
 		}
 	}
