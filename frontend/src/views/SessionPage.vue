@@ -52,9 +52,13 @@
     <div v-else>
       <b-row class="d-flex justify-content-start pb-3">
         <b-col>
-          <b-button variant="outline-dark" class="ml-5 pl-5" @click="sendRestartMessage">
+          <b-button variant="outline-dark" @click="sendRestartMessage">
             <b-icon-arrow-clockwise />
             New
+          </b-button>
+          <b-button variant="outline-dark" class="mx-1" @click="sendVotingFinishedMessage">
+            <b-icon-bar-chart />
+            Show result
           </b-button>
           <b-button v-b-modal.close-session-modal variant="danger" class="mx-2">
             <b-icon-x />
@@ -164,6 +168,7 @@ export default Vue.extend({
       timerCountdownNumber: 60,
       triggerTimer: 0,
       startTimerOnComponentCreation: true,
+      estimateFinished: false,
     };
   },
   computed: {
@@ -181,9 +186,6 @@ export default Vue.extend({
     },
     membersEstimated(): Member[] {
       return this.members.filter((member: Member) => member.currentEstimation !== null);
-    },
-    estimateFinished(): boolean {
-      return !this.members.map((elem) => elem.currentEstimation).includes(null);
     },
     estimateHighest(): Member {
       return this.membersEstimated.reduce((prev, current) => (
@@ -247,6 +249,13 @@ export default Vue.extend({
       this.$store.commit('sendViaBackendWS', { endPoint });
       this.planningStart = true;
     },
+    sendVotingFinishedMessage() {
+      if (!this.estimateFinished) {
+        const endPoint = Constants.webSocketVotingFinishedRoute;
+        this.$store.commit('sendViaBackendWS', { endPoint });
+        this.estimateFinished = true;
+      }
+    },
     backendAnimalToAssetName(animal: string) {
       return Constants.avatarAnimalToAssetName(animal);
     },
@@ -255,6 +264,7 @@ export default Vue.extend({
       this.$router.push({ name: 'ResultPage' });
     },
     sendRestartMessage() {
+      this.estimateFinished = false;
       const endPoint = Constants.webSocketRestartPlanningRoute;
       this.$store.commit('sendViaBackendWS', { endPoint });
       this.reTriggerTime();

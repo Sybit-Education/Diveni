@@ -59,13 +59,22 @@ public class WebSocketService {
 		val sessionEntry = getSessionEntry(session.getSessionID());
 		simpMessagingTemplate.convertAndSendToUser(sessionEntry.getKey().getName(), "/updates/membersUpdated",
 				session.getMembers());
+		sendMembersUpdateToMembers(session);
+	}
+
+	public void sendMembersUpdateToMembers(Session session) {
+		getSessionEntry(session.getSessionID()).getValue().stream()
+				.forEach(member -> simpMessagingTemplate.convertAndSendToUser(
+						member.getMemberID().toString(), "/updates/membersUpdated",
+						session.getMembers())
+				);
 	}
 
 	public void sendSessionStateToMembers(Session session) {
 		getSessionEntry(session.getSessionID()).getValue().stream()
 				.forEach(member -> sendSessionStateToMember(session, member.getMemberID().toString()));
 	}
-	
+
 	public void sendUpdatedUserStoriesToMembers(Session session) {
 		getSessionEntry(session.getSessionID()).getValue().stream()
 				.forEach(member -> sendUpdatedUserStoriesToMember(session, member.getMemberID().toString()));
