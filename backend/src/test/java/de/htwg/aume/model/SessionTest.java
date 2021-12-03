@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.UUID;
 
+import de.htwg.aume.Utils;
+import org.bson.types.ObjectId;
 import org.junit.jupiter.api.Test;
 
 import lombok.val;
@@ -16,14 +18,14 @@ public class SessionTest {
 
 	@Test
 	public void equal_works() {
-		val sessionIdBefore = UUID.randomUUID();
-		val adminIdBefore = UUID.randomUUID();
-		val membersIdBefore = UUID.randomUUID();
-		val session = new Session(sessionIdBefore, adminIdBefore, membersIdBefore, null, new ArrayList<Member>(),
+		val adminIdBefore = Utils.generateRandomID();
+		val membersIdBefore = Utils.generateRandomID();
+		val sessionID = new ObjectId();
+		val session = new Session(sessionID, adminIdBefore, membersIdBefore, null, new ArrayList<>(),
 				SessionState.WAITING_FOR_MEMBERS);
-		val sameSession = new Session(sessionIdBefore, adminIdBefore, membersIdBefore, null, new ArrayList<Member>(),
+		val sameSession = new Session(sessionID, adminIdBefore, membersIdBefore, null, new ArrayList<>(),
 				SessionState.WAITING_FOR_MEMBERS);
-		val otherSession = new Session(UUID.randomUUID(), adminIdBefore, membersIdBefore, null, new ArrayList<Member>(),
+		val otherSession = new Session(new ObjectId(), adminIdBefore, membersIdBefore, null, new ArrayList<>(),
 				SessionState.WAITING_FOR_MEMBERS);
 
 		assertEquals(session, sameSession);
@@ -33,8 +35,8 @@ public class SessionTest {
 
 	@Test
 	public void updateEstimation_works() {
-		val memberID1 = UUID.randomUUID();
-		val memberID2 = UUID.randomUUID();
+		val memberID1 = Utils.generateRandomID();
+		val memberID2 = Utils.generateRandomID();
 		val member1 = new Member(memberID1, null, null, null, null);
 		val member2 = new Member(memberID2, null, null, null, null);
 		val members = Arrays.asList(member1, member2);
@@ -51,8 +53,8 @@ public class SessionTest {
 
 	@Test
 	public void resetEstimations_works() {
-		val memberID1 = UUID.randomUUID();
-		val memberID2 = UUID.randomUUID();
+		val memberID1 = Utils.generateRandomID();
+		val memberID2 = Utils.generateRandomID();
 		val member1 = new Member(memberID1, null, null, null, "3");
 		val member2 = new Member(memberID2, null, null, null, "5");
 		val members = Arrays.asList(member1, member2);
@@ -76,11 +78,11 @@ public class SessionTest {
 
 	@Test
 	public void addMember_works() {
-		val memberID1 = UUID.randomUUID();
+		val memberID1 = Utils.generateRandomID();
 		val member1 = new Member(memberID1, null, null, null, "3");
 		val members = Arrays.asList(member1);
 		val session = new Session(null, null, null, null, members, SessionState.WAITING_FOR_MEMBERS);
-		val memberID2 = UUID.randomUUID();
+		val memberID2 = Utils.generateRandomID();
 		val member2 = new Member(memberID2, null, null, null, "5");
 
 		val result = session.addMember(member2);
@@ -91,8 +93,8 @@ public class SessionTest {
 
 	@Test
 	public void removeMember_works() {
-		val memberID1 = UUID.randomUUID();
-		val memberID2 = UUID.randomUUID();
+		val memberID1 = Utils.generateRandomID();
+		val memberID2 = Utils.generateRandomID();
 		val member1 = new Member(memberID1, null, null, null, "3");
 		val member2 = new Member(memberID2, null, null, null, "5");
 		val members = Arrays.asList(member1, member2);
