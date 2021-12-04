@@ -3,10 +3,11 @@ package de.htwg.aume.controller;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import de.htwg.aume.Utils;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,27 +37,30 @@ public class RoutesController {
 
 	@PostMapping(value = "/sessions")
 	public ResponseEntity<Session> createSession(@RequestBody SessionConfig sessionConfig) {
-		val usedUuids = databaseService.getSessions().stream().map(s -> s.getSessionID()).collect(Collectors.toSet());
-		val sessionUuids = Stream.generate(UUID::randomUUID).filter(s -> !usedUuids.contains(s)).limit(3)
+		val usedSessionIDs = databaseService.getSessions().stream().map(Session::getSessionID).collect(Collectors.toSet());
+		val usedDatabaseIDs = databaseService.getSessions().stream().map(Session::getDatabaseID).collect(Collectors.toSet());
+		ObjectId databaseID = Stream.generate(ObjectId::new).filter(s -> !usedDatabaseIDs.contains(s)).limit(1)
+				.collect(Collectors.toList()).get(0);
+		List<String> sessionIds = Stream.generate(Utils::generateRandomID).filter(s -> !usedSessionIDs.contains(s)).limit(2)
 				.collect(Collectors.toList());
-		val session = new Session(sessionUuids.get(0), sessionUuids.get(1), sessionUuids.get(2), sessionConfig,
-				new ArrayList<Member>(), SessionState.WAITING_FOR_MEMBERS);
+		val session = new Session(databaseID, sessionIds.get(0), sessionIds.get(1), sessionConfig,
+				new ArrayList<>(), SessionState.WAITING_FOR_MEMBERS);
 		databaseService.saveSession(session);
-		return new ResponseEntity<Session>(session, HttpStatus.CREATED);
+		return new ResponseEntity<>(session, HttpStatus.CREATED);
 	}
 
 	@PostMapping(value = "/sessions/{sessionID}/join")
-	public ResponseEntity<SessionConfig> joinSession(@PathVariable UUID sessionID, @RequestBody JoinInfo joinInfo) {
+	public ResponseEntity<SessionConfig> joinSession(@PathVariable String sessionID, @RequestBody JoinInfo joinInfo) {
 		val session = addMemberToSession(sessionID, joinInfo.getMember(), joinInfo.getPassword());
 		return new ResponseEntity<SessionConfig>(session.getSessionConfig(), HttpStatus.OK);
 	}
 
 	@GetMapping(value = "/sessions/{sessionID}")
-	public @ResponseBody Session getSession(@PathVariable UUID sessionID) {
+	public @ResponseBody Session getSession(@PathVariable String sessionID) {
 		return ControllerUtils.getSessionOrThrowResponse(databaseService, sessionID);
 	}
 
-	private synchronized Session addMemberToSession(UUID sessionID, Member member, Optional<String> password) {
+	private synchronized Session addMemberToSession(String sessionID, Member member, Optional<String> password) {
 		val session = databaseService.getSessionByID(sessionID).orElseThrow(
 				() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessages.sessionNotFoundErrorMessage));
 		List<Member> members = session.getMembers().stream().map(m -> m).collect(Collectors.toList());

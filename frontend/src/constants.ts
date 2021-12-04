@@ -1,5 +1,5 @@
 class Constants {
-  backendURL = 'http://localhost:9090';
+  backendURL = process.env.NODE_ENV === 'development' ? 'http://localhost:9090' : '/api';
 
   createSessionRoute = '/sessions';
 

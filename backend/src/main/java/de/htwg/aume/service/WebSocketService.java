@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +29,7 @@ public class WebSocketService {
 	@Getter
 	private Map<AdminPrincipal, Set<MemberPrincipal>> memberMap = new HashMap<>();
 
-	Entry<AdminPrincipal, Set<MemberPrincipal>> getSessionEntry(UUID sessionID) {
+	Entry<AdminPrincipal, Set<MemberPrincipal>> getSessionEntry(String sessionID) {
 		return memberMap.entrySet().stream().filter(e -> e.getKey().getSessionID().equals(sessionID)).findFirst()
 				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
 						ErrorMessages.sessionNotFoundErrorMessage));

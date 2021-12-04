@@ -1,7 +1,6 @@
 package de.htwg.aume.model;
 
 import java.util.Optional;
-import java.util.UUID;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -14,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Member {
 
-	private UUID memberID;
+	private String memberID;
 
 	private String name;
 

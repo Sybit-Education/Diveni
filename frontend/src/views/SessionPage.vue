@@ -8,8 +8,11 @@
     />
     <b-row class="mt-5 mb-3">
       <b-col><h1> {{ planningStart ? titleEstimate : titleWaiting }} </h1></b-col>
-      <b-col v-if="planningStart">
-        <copy-session-id-popup :session-id="sessionID" />
+      <b-col v-if="planningStart" align-self="center">
+        <copy-session-id-popup
+          class="float-end"
+          :session-id="sessionID"
+        />
       </b-col>
     </b-row>
     <div v-if="!planningStart">
@@ -60,7 +63,7 @@
             <b-icon-bar-chart />
             Show result
           </b-button>
-          <b-button v-b-modal.close-session-modal variant="danger" class="mx-2">
+          <b-button v-b-modal.close-session-modal variant="danger">
             <b-icon-x />
             Close session
           </b-button>
