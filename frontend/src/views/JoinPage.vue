@@ -34,6 +34,7 @@ export default Vue.extend({
       name: '',
       sessionID: '',
       voteSet: '',
+      timerSeconds: 0,
     };
   },
   computed: {
@@ -76,9 +77,11 @@ export default Vue.extend({
       try {
         const sessionConfig = (await this.axios.post(url, joinInfo)).data as {
           set: Array<string>,
+          timerSeconds: number,
           userStories: Array<{ title: string, description: string, estimation: string | null }>,
         };
         this.voteSet = JSON.stringify(sessionConfig.set);
+        this.timerSeconds = parseInt(JSON.stringify(sessionConfig.timerSeconds), 10);
         console.log('session page');
         console.log(sessionConfig);
         this.$store.commit('setUserStories', { stories: sessionConfig.userStories });
@@ -118,6 +121,7 @@ export default Vue.extend({
           hexColor: this.hexColor,
           avatarAnimalAssetName: this.avatarAnimalAssetName,
           voteSetJson: this.voteSet,
+          timerSecondsString: this.timerSeconds.toString(),
         },
       });
     },

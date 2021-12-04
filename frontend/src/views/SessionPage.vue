@@ -76,20 +76,21 @@
         </b-col>
         <b-col>
           <estimate-timer
+            :pause-timer="estimateFinished"
             :timer-triggered="triggerTimer"
             :timer="timerCountdownNumber"
             :start-timer-on-component-creation="startTimerOnComponentCreation"
-            :initial-timer="60"
+            :initial-timer="timerCountdownNumber"
           />
         </b-col>
       </b-row>
-      <b-row v-if="membersPending.length > 0">
+      <b-row v-if="membersPending.length > 0 && !estimateFinished">
         <h4 class="d-inline">
           Waiting for {{ membersPending.length }} /
           {{ membersPending.length + membersEstimated.length }}
         </h4>
       </b-row>
-      <b-row class="my-1 d-flex justify-content-center flex-wrap ">
+      <b-row v-if="!estimateFinished" class="my-1 d-flex justify-content-center flex-wrap">
         <rounded-avatar
           v-for="member of membersPending"
           :key="member.memberID"
@@ -101,7 +102,7 @@
         />
       </b-row>
       <hr>
-      <b-row v-if="membersEstimated.length > 0">
+      <b-row>
         <h4 class="d-inline">
           Estimating finished {{ membersEstimated.length }} /
           {{ membersPending.length + membersEstimated.length }}
@@ -109,15 +110,15 @@
       </b-row>
       <b-row class="my-1 d-flex justify-content-center flex-wrap ">
         <SessionMemberCard
-          v-for="member of membersEstimated"
+          v-for="member of (estimateFinished ? members : membersEstimated)"
           :key="member.memberID"
           :color="member.hexColor"
           :asset-name="backendAnimalToAssetName(member.avatarAnimal)"
           :name="member.name"
           :estimation="member.currentEstimation"
           :estimate-finished="estimateFinished"
-          :highest="estimateHighest.memberID === member.memberID"
-          :lowest="estimateLowest.memberID === member.memberID"
+          :highest="estimateHighest ? estimateHighest.memberID === member.memberID: false"
+          :lowest="estimateHighest ? estimateLowest.memberID === member.memberID: false"
         />
       </b-row>
     </div>
@@ -146,18 +147,10 @@ export default Vue.extend({
     RoundedAvatar,
   },
   props: {
-    adminID: {
-      type: String,
-      default: undefined,
-    },
-    sessionID: {
-      type: String,
-      default: undefined,
-    },
-    voteSetJson: {
-      type: String,
-      default: undefined,
-    },
+    adminID: { type: String, required: true },
+    sessionID: { type: String, required: true },
+    voteSetJson: { type: String, required: true },
+    timerSecondsString: { type: String, required: true },
   },
   data() {
     return {
@@ -168,7 +161,7 @@ export default Vue.extend({
       planningStart: false,
       connectionEstablished: false,
       voteSet: [] as string[],
-      timerCountdownNumber: 60,
+      timerCountdownNumber: 0,
       triggerTimer: 0,
       startTimerOnComponentCreation: true,
       estimateFinished: false,
@@ -190,12 +183,18 @@ export default Vue.extend({
     membersEstimated(): Member[] {
       return this.members.filter((member: Member) => member.currentEstimation !== null);
     },
-    estimateHighest(): Member {
+    estimateHighest(): Member | null {
+      if (this.membersEstimated.length < 1) {
+        return null;
+      }
       return this.membersEstimated.reduce((prev, current) => (
         this.voteSet.indexOf(prev.currentEstimation!) > this.voteSet.indexOf(current.currentEstimation!) ? prev : current
       ));
     },
-    estimateLowest(): Member {
+    estimateLowest(): Member | null {
+      if (this.membersEstimated.length < 1) {
+        return null;
+      }
       return this.membersEstimated.reduce((prev, current) => (
         this.voteSet.indexOf(prev.currentEstimation!) < this.voteSet.indexOf(current.currentEstimation!) ? prev : current
       ));
@@ -211,13 +210,17 @@ export default Vue.extend({
     },
   },
   mounted() {
-    if (this.sessionID === undefined || this.adminID === undefined) {
+    if (!this.sessionID || !this.adminID) {
       this.goToLandingPage();
     }
+    console.log('--------------------------------------------------');
+    console.log(this.timerCountdownNumber);
+    console.log('--------------------------------------------------');
     this.voteSet = JSON.parse(this.voteSetJson);
     this.connectToWebSocket();
   },
   created() {
+    this.timerCountdownNumber = parseInt(this.timerSecondsString, 10);
     window.addEventListener('beforeunload', this.sendUnregisterCommand);
   },
   destroyed() {

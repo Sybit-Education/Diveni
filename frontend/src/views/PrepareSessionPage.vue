@@ -81,7 +81,7 @@ export default Vue.extend({
       title: 'Prepare session',
       password: '',
       selectedCardSetOptions: [],
-      timer: 60,
+      timer: 30,
       warningWhenUnderZero: '',
     };
   },
@@ -110,6 +110,7 @@ export default Vue.extend({
       const url = Constants.backendURL + Constants.createSessionRoute;
       const sessionConfig = {
         set: this.selectedCardSetOptions,
+        timerSeconds: this.timer,
         password: this.password === '' ? null : this.password,
         userStories: this.userStories,
       };
@@ -120,6 +121,7 @@ export default Vue.extend({
           membersID: string,
           sessionConfig: {
             set: Array<string>,
+            timerSeconds: number,
             userStories: Array<{ title: string, description: string, estimation: string | null, isActive: false }>,
           },
         };
@@ -134,6 +136,7 @@ export default Vue.extend({
         params: {
           sessionID: session.sessionID,
           adminID: session.adminID,
+          timerSecondsString: this.timer.toString(),
           voteSetJson: JSON.stringify(session.sessionConfig.set),
         },
       });

@@ -12,10 +12,11 @@
       </b-col>
       <b-col>
         <estimate-timer
+          :pause-timer="estimateFinished"
           :timer-triggered="triggerTimer"
           :timer="timerCountdownNumber"
           :start-timer-on-component-creation="false"
-          :initial-timer="60"
+          :initial-timer="timerCountdownNumber"
         />
       </b-col>
     </b-row>
@@ -84,8 +85,8 @@
         :name="member.name"
         :estimation="member.currentEstimation"
         :estimate-finished="votingFinished"
-        :highest="estimateHighest.memberID === member.memberID"
-        :lowest="estimateLowest.memberID === member.memberID"
+        :highest="estimateHighest ? estimateHighest.memberID === member.memberID: false"
+        :lowest="estimateHighest ? estimateLowest.memberID === member.memberID: false"
       />
     </b-row>
   </b-container>
@@ -116,6 +117,7 @@ export default Vue.extend({
     hexColor: { type: String, default: undefined },
     avatarAnimalAssetName: { type: String, default: undefined },
     voteSetJson: { type: String, default: undefined },
+    timerSecondsString: { type: String, default: undefined },
   },
   data() {
     return {
@@ -123,8 +125,9 @@ export default Vue.extend({
       draggedVote: null,
       waitingText: 'Waiting for Host to start ...',
       voteSet: [] as string[],
-      timerCountdownNumber: 60,
+      timerCountdownNumber: 0,
       triggerTimer: 0,
+      estimateFinished: false,
     };
   },
   computed: {
@@ -149,12 +152,18 @@ export default Vue.extend({
     membersEstimated(): Member[] {
       return this.members.filter((member: Member) => member.currentEstimation !== null);
     },
-    estimateHighest(): Member {
+    estimateHighest(): Member | null {
+      if (this.membersEstimated.length < 1) {
+        return null;
+      }
       return this.membersEstimated.reduce((prev, current) => (
         this.voteSet.indexOf(prev.currentEstimation!) > this.voteSet.indexOf(current.currentEstimation!) ? prev : current
       ));
     },
-    estimateLowest(): Member {
+    estimateLowest(): Member | null {
+      if (this.membersEstimated.length < 1) {
+        return null;
+      }
       return this.membersEstimated.reduce((prev, current) => (
         this.voteSet.indexOf(prev.currentEstimation!) < this.voteSet.indexOf(current.currentEstimation!) ? prev : current
       ));
@@ -164,9 +173,10 @@ export default Vue.extend({
     memberUpdates(updates) {
       if (updates.at(-1) === Constants.memberUpdateCommandStartVoting) {
         this.draggedVote = null;
+        this.estimateFinished = false;
         this.triggerTimer = (this.triggerTimer + 1) % 5;
       } else if (updates.at(-1) === Constants.memberUpdateCommandVotingFinished) {
-        console.log('voting finished');
+        this.estimateFinished = true;
       } else if (updates.at(-1) === Constants.memberUpdateCloseSession) {
         this.goToJoinPage();
       }
@@ -174,6 +184,7 @@ export default Vue.extend({
   },
   created() {
     window.addEventListener('beforeunload', this.sendUnregisterCommand);
+    this.timerCountdownNumber = JSON.parse(this.timerSecondsString);
   },
   mounted() {
     if (this.memberID === undefined || this.name === undefined
