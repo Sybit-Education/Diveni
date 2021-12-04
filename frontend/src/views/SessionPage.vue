@@ -81,13 +81,13 @@
           />
         </b-col>
       </b-row>
-      <b-row v-if="membersPending.length > 0">
+      <b-row v-if="membersPending.length > 0 && !estimateFinished">
         <h4 class="d-inline">
           Waiting for {{ membersPending.length }} /
           {{ membersPending.length + membersEstimated.length }}
         </h4>
       </b-row>
-      <b-row class="my-1 d-flex justify-content-center flex-wrap ">
+      <b-row v-if="!estimateFinished" class="my-1 d-flex justify-content-center flex-wrap">
         <rounded-avatar
           v-for="member of membersPending"
           :key="member.memberID"
@@ -99,7 +99,7 @@
         />
       </b-row>
       <hr>
-      <b-row v-if="membersEstimated.length > 0">
+      <b-row>
         <h4 class="d-inline">
           Estimating finished {{ membersEstimated.length }} /
           {{ membersPending.length + membersEstimated.length }}
@@ -110,7 +110,7 @@
           No users voted ...
         </h4>
         <SessionMemberCard
-          v-for="member of membersEstimated"
+          v-for="member of (estimateFinished ? members : membersEstimated)"
           :key="member.memberID"
           :color="member.hexColor"
           :asset-name="backendAnimalToAssetName(member.avatarAnimal)"
