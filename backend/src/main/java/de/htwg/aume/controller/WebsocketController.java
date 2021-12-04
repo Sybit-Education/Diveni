@@ -47,14 +47,16 @@ public class WebsocketController {
 			databaseService.saveSession(session);
 			webSocketService.sendMembersUpdate(session);
 		} else {
-			// val session = ControllerUtils
-			// .getSessionOrThrowResponse(databaseService, ((AdminPrincipal)
-			// principal).getSessionID())
-			// .updateSessionState(SessionState.SESSION_CLOSED);
-			// webSocketService.sendSessionStateToMembers(session);
-			// webSocketService.removeSession(session);
-			// databaseService.deleteSession(session);
+			webSocketService.removeAdmin((AdminPrincipal) principal);
 		}
+	}
+
+	@MessageMapping("/closeSession")
+	public void closeSession(AdminPrincipal principal) {
+		val session = ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID());
+		webSocketService.sendSessionStateToMembers(session.updateSessionState(SessionState.SESSION_CLOSED));
+		webSocketService.removeSession(session);
+		databaseService.deleteSession(session);
 	}
 
 	@MessageMapping("/memberUpdate")
@@ -90,8 +92,7 @@ public class WebsocketController {
 	@MessageMapping("/restart")
 	public synchronized void restartVote(AdminPrincipal principal) {
 		val session = ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID())
-				.updateSessionState(SessionState.START_VOTING)
-				.resetEstimations();
+				.updateSessionState(SessionState.START_VOTING).resetEstimations();
 		databaseService.saveSession(session);
 		webSocketService.sendMembersUpdate(session);
 		webSocketService.sendSessionStateToMembers(session);

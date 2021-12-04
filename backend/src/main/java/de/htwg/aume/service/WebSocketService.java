@@ -60,6 +60,16 @@ public class WebSocketService {
 		}).collect(Collectors.toList());
 	}
 
+	public synchronized void removeAdmin(AdminPrincipal admin) {
+		sessionPrincipalList = sessionPrincipalList.stream().map(p -> {
+			if (p.adminPrincipal() == admin) {
+				return p.adminPrincipal(null);
+			} else {
+				return p;
+			}
+		}).collect(Collectors.toList());
+	}
+
 	public synchronized void setAdminUser(AdminPrincipal principal) {
 		if (sessionPrincipalList.stream().anyMatch(p -> p.sessionID().equals(principal.getSessionID()))) {
 			sessionPrincipalList = sessionPrincipalList.stream().map(p -> {

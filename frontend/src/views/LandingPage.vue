@@ -73,6 +73,7 @@ export default Vue.extend({
           };
           this.sessionWrapper = { session };
         } catch (e) {
+          console.clear();
           console.log(`got error: ${e}`);
           window.localStorage.removeItem('adminCookie');
         }

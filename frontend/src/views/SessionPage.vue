@@ -216,11 +216,11 @@ export default Vue.extend({
     if (this.sessionID === undefined || this.adminID === undefined) {
       this.goToLandingPage();
     }
+    this.connectToWebSocket();
     this.voteSet = JSON.parse(this.voteSetJson);
     if (this.sessionState === Constants.memberUpdateCommandStartVoting) {
       this.planningStart = true;
     }
-    this.connectToWebSocket();
   },
   created() {
     window.addEventListener('beforeunload', this.sendUnregisterCommand);
@@ -256,6 +256,10 @@ export default Vue.extend({
       const endPoint = `${Constants.webSocketUnregisterRoute}`;
       this.$store.commit('sendViaBackendWS', { endPoint, data: null });
     },
+    sendCloseSessionCommand() {
+      const endPoint = `${Constants.webSocketCloseSessionRoute}`;
+      this.$store.commit('sendViaBackendWS', { endPoint });
+    },
     sendStartEstimationMessages() {
       const endPoint = Constants.webSocketStartPlanningRoute;
       this.$store.commit('sendViaBackendWS', { endPoint });
@@ -272,7 +276,8 @@ export default Vue.extend({
       return Constants.avatarAnimalToAssetName(animal);
     },
     closeSession() {
-      this.sendUnregisterCommand();
+      this.sendCloseSessionCommand();
+      window.localStorage.removeItem('adminCookie');
       this.$router.push({ name: 'ResultPage' });
     },
     sendRestartMessage() {
