@@ -39,7 +39,7 @@ public class RoutesControllerTest {
 	private static String sessionConfigToJson(SessionConfig config) {
 		val set = config.getSet().stream().map(s -> "\"" + s + "\"").collect(Collectors.joining(","));
 		val password = config.getPassword() == null ? "null" : "\"" + config.getPassword() + "\"";
-		return String.format("{ \"set\": [%s], \"password\": %s }", set, password);
+		return String.format("{ \"set\": [%s], \"timerSeconds\": 10, \"password\": %s }", set, password);
 	}
 
 	@Test
