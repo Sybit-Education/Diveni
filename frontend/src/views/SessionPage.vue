@@ -106,9 +106,6 @@
         </h4>
       </b-row>
       <b-row class="my-1 d-flex justify-content-center flex-wrap ">
-        <h4 v-if="estimateFinished && membersEstimated.length < 1" class="text-center mt-3">
-          No users voted ...
-        </h4>
         <SessionMemberCard
           v-for="member of (estimateFinished ? members : membersEstimated)"
           :key="member.memberID"
@@ -117,8 +114,8 @@
           :name="member.name"
           :estimation="member.currentEstimation"
           :estimate-finished="estimateFinished"
-          :highest="estimateHighest.memberID === member.memberID"
-          :lowest="estimateLowest.memberID === member.memberID"
+          :highest="estimateHighest ? estimateHighest.memberID === member.memberID: false"
+          :lowest="estimateHighest ? estimateLowest.memberID === member.memberID: false"
         />
       </b-row>
     </div>
@@ -183,12 +180,18 @@ export default Vue.extend({
     membersEstimated(): Member[] {
       return this.members.filter((member: Member) => member.currentEstimation !== null);
     },
-    estimateHighest(): Member {
+    estimateHighest(): Member | null {
+      if (this.membersEstimated.length < 1) {
+        return null;
+      }
       return this.membersEstimated.reduce((prev, current) => (
         this.voteSet.indexOf(prev.currentEstimation!) > this.voteSet.indexOf(current.currentEstimation!) ? prev : current
       ));
     },
-    estimateLowest(): Member {
+    estimateLowest(): Member | null {
+      if (this.membersEstimated.length < 1) {
+        return null;
+      }
       return this.membersEstimated.reduce((prev, current) => (
         this.voteSet.indexOf(prev.currentEstimation!) < this.voteSet.indexOf(current.currentEstimation!) ? prev : current
       ));

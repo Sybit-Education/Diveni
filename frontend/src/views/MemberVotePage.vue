@@ -175,11 +175,7 @@ export default Vue.extend({
         this.draggedVote = null;
         this.estimateFinished = false;
         this.triggerTimer = (this.triggerTimer + 1) % 5;
-        console.log('-------------------------------------');
-        console.log('start voting came in');
       } else if (updates.at(-1) === Constants.memberUpdateCommandVotingFinished) {
-        console.log('*************************************');
-        console.log('stop voting came in');
         this.estimateFinished = true;
       } else if (updates.at(-1) === Constants.memberUpdateCloseSession) {
         this.goToJoinPage();
