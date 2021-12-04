@@ -12,10 +12,11 @@
       </b-col>
       <b-col>
         <estimate-timer
+          :pause-timer="estimateFinished"
           :timer-triggered="triggerTimer"
           :timer="timerCountdownNumber"
           :start-timer-on-component-creation="false"
-          :initial-timer="60"
+          :initial-timer="timerCountdownNumber"
         />
       </b-col>
     </b-row>
@@ -116,6 +117,7 @@ export default Vue.extend({
     hexColor: { type: String, default: undefined },
     avatarAnimalAssetName: { type: String, default: undefined },
     voteSetJson: { type: String, default: undefined },
+    timerSecondsString: { type: String, default: undefined },
   },
   data() {
     return {
@@ -123,8 +125,9 @@ export default Vue.extend({
       draggedVote: null,
       waitingText: 'Waiting for Host to start ...',
       voteSet: [] as string[],
-      timerCountdownNumber: 60,
+      timerCountdownNumber: 0,
       triggerTimer: 0,
+      estimateFinished: false,
     };
   },
   computed: {
@@ -164,9 +167,10 @@ export default Vue.extend({
     memberUpdates(updates) {
       if (updates.at(-1) === Constants.memberUpdateCommandStartVoting) {
         this.draggedVote = null;
+        this.estimateFinished = false;
         this.triggerTimer = (this.triggerTimer + 1) % 5;
       } else if (updates.at(-1) === Constants.memberUpdateCommandVotingFinished) {
-        console.log('voting finished');
+        this.estimateFinished = true;
       } else if (updates.at(-1) === Constants.memberUpdateCloseSession) {
         this.goToJoinPage();
       }
@@ -174,6 +178,7 @@ export default Vue.extend({
   },
   created() {
     window.addEventListener('beforeunload', this.sendUnregisterCommand);
+    this.timerCountdownNumber = JSON.parse(this.timerSecondsString);
   },
   mounted() {
     if (this.memberID === undefined || this.name === undefined

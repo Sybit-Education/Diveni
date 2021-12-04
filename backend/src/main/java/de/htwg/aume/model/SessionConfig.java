@@ -1,6 +1,7 @@
 package de.htwg.aume.model;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -14,6 +15,13 @@ public class SessionConfig {
     private final List<String> set;
 
     private final List<UserStory> userStories;
+
+    private final Integer timerSeconds;
+
+    public Optional<Integer> getTimerSeconds() {
+        return Optional.of(timerSeconds);
+    }
+
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private final String password;

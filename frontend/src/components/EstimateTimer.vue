@@ -16,10 +16,11 @@ export default Vue.extend({
     timerTriggered: { type: Number, required: true },
     startTimerOnComponentCreation: { type: Boolean, required: false },
     initialTimer: { type: Number, required: true },
+    pauseTimer: { type: Boolean, required: true },
   },
   data() {
     return {
-      timerCount: 60,
+      timerCount: 0,
       intervalHandler: -1,
     };
   },
@@ -27,8 +28,14 @@ export default Vue.extend({
     timerTriggered() {
       this.countdown();
     },
+    pauseTimer(newValue) {
+      if (newValue) {
+        clearInterval(this.intervalHandler);
+      }
+    },
   },
   created() {
+    this.timerCount = this.initialTimer;
     if (this.startTimerOnComponentCreation) {
       this.countdown();
     }
@@ -64,6 +71,7 @@ export default Vue.extend({
 #estimate-timer {
   border-radius: 20px;
 }
+
 h3 {
   font-weight: 500;
 }

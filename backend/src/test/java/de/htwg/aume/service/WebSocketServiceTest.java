@@ -6,12 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -163,7 +158,7 @@ public class WebSocketServiceTest {
             setDefaultAdminPrincipal(Set.of(defaultMemberPrincipal, memberPrincipal));
             val session = new Session(defaultAdminPrincipal.getSessionID(),
                             defaultAdminPrincipal.getAdminID(), null,
-                            new SessionConfig(List.of(), List.of(), "password"),
+                            new SessionConfig(List.of(), List.of(), 10, "password"),
                             List.of(new Member(defaultMemberPrincipal.getMemberID(), null, null,
                                             null, null),
                                             new Member(memberPrincipal.getMemberID(), null,

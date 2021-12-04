@@ -73,10 +73,11 @@
         </b-col>
         <b-col>
           <estimate-timer
+            :pause-timer="estimateFinished"
             :timer-triggered="triggerTimer"
             :timer="timerCountdownNumber"
             :start-timer-on-component-creation="startTimerOnComponentCreation"
-            :initial-timer="60"
+            :initial-timer="timerCountdownNumber"
           />
         </b-col>
       </b-row>
@@ -143,18 +144,10 @@ export default Vue.extend({
     RoundedAvatar,
   },
   props: {
-    adminID: {
-      type: String,
-      default: undefined,
-    },
-    sessionID: {
-      type: String,
-      default: undefined,
-    },
-    voteSetJson: {
-      type: String,
-      default: undefined,
-    },
+    adminID: { type: String, required: true },
+    sessionID: { type: String, required: true },
+    voteSetJson: { type: String, required: true },
+    timerSecondsString: { type: String, required: true },
   },
   data() {
     return {
@@ -165,7 +158,7 @@ export default Vue.extend({
       planningStart: false,
       connectionEstablished: false,
       voteSet: [] as string[],
-      timerCountdownNumber: 60,
+      timerCountdownNumber: 0,
       triggerTimer: 0,
       startTimerOnComponentCreation: true,
       estimateFinished: false,
@@ -208,13 +201,17 @@ export default Vue.extend({
     },
   },
   mounted() {
-    if (this.sessionID === undefined || this.adminID === undefined) {
+    if (!this.sessionID || !this.adminID) {
       this.goToLandingPage();
     }
+    console.log('--------------------------------------------------');
+    console.log(this.timerCountdownNumber);
+    console.log('--------------------------------------------------');
     this.voteSet = JSON.parse(this.voteSetJson);
     this.connectToWebSocket();
   },
   created() {
+    this.timerCountdownNumber = parseInt(this.timerSecondsString, 10);
     window.addEventListener('beforeunload', this.sendUnregisterCommand);
   },
   destroyed() {

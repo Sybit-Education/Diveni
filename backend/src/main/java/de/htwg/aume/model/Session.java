@@ -38,7 +38,7 @@ public class Session {
 		return new Session(sessionID, adminID, membersID, sessionConfig, updatedMembers, sessionState);
 	}
 	public Session updateUserStories(List<UserStory> userStories) {
-		val updatedSessionConfig = new SessionConfig(sessionConfig.getSet(), userStories, sessionConfig.getPassword());
+		val updatedSessionConfig = new SessionConfig(sessionConfig.getSet(), userStories, sessionConfig.getTimerSeconds().orElse(null), sessionConfig.getPassword());
 		return new Session(sessionID, adminID, membersID, updatedSessionConfig, members, sessionState);
 	}
 
