@@ -1,7 +1,6 @@
 package de.htwg.aume.principals;
 
 import java.security.Principal;
-import java.util.UUID;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -10,18 +9,18 @@ import lombok.Getter;
 @Getter
 public class AdminPrincipal implements Principal {
 
-	private final UUID sessionID;
+	private final String sessionID;
 
-	private final UUID adminID;
+	private final String adminID;
 
-	public AdminPrincipal(UUID sessionID, UUID adminID) {
+	public AdminPrincipal(String sessionID, String adminID) {
 		this.adminID = adminID;
 		this.sessionID = sessionID;
 	}
 
 	@Override
 	public String getName() {
-		return adminID.toString();
+		return adminID;
 	}
 
 }

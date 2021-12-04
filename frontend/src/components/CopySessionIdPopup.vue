@@ -1,11 +1,10 @@
 <template>
-  <h4 id="popover-link">
-    {{ textBeforeSessionID }} <b-link
-      href=""
-      @click="copyLinkToClipboard()"
-    >
+  <h4>
+    {{ textBeforeSessionID }}
+    <b-link id="popover-link" href="" @click="copyLinkToClipboard()">
       {{ sessionId }}
-    </b-link> {{ textAfterSessionID }}
+    </b-link>
+    {{ textAfterSessionID }}
     <b-popover target="popover-link" triggers="hover" placement="top">
       <b-button class="mx-1" variant="success" @click="copyIdToClipboard()">
         Copy ID

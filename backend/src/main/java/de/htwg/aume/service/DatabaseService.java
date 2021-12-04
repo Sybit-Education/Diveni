@@ -2,7 +2,6 @@ package de.htwg.aume.service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,11 +15,11 @@ public class DatabaseService {
     @Autowired
     SessionRepository sessionRepo;
 
-    public Optional<Session> getSessionByID(UUID sessionID) {
+    public Optional<Session> getSessionByID(String sessionID) {
         return Optional.ofNullable(sessionRepo.findBySessionID(sessionID));
     }
 
-    public Optional<Session> getSessionByMemberID(UUID memberID) {
+    public Optional<Session> getSessionByMemberID(String memberID) {
         return sessionRepo.findByMemberID(memberID);
     }
 

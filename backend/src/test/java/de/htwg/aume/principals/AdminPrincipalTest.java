@@ -5,35 +5,36 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import java.util.UUID;
 
+import de.htwg.aume.Utils;
 import org.junit.jupiter.api.Test;
 
 import lombok.val;
 
 public class AdminPrincipalTest {
 
-	@Test
-	public void principal_creationWorks() throws Exception {
-		val sessionID = UUID.randomUUID();
-		val adminID = UUID.randomUUID();
-		val principal = new AdminPrincipal(sessionID, adminID);
-		assertEquals(principal.getSessionID(), sessionID);
-		assertEquals(principal.getAdminID(), adminID);
-		assertEquals(principal.getName(), adminID.toString());
-	}
+    @Test
+    public void principal_creationWorks() {
+        val sessionID = Utils.generateRandomID();
+        val adminID = Utils.generateRandomID();
+        val principal = new AdminPrincipal(sessionID, adminID);
+        assertEquals(principal.getSessionID(), sessionID);
+        assertEquals(principal.getAdminID(), adminID);
+        assertEquals(principal.getName(), adminID.toString());
+    }
 
-	@Test
-	public void principal_equalsAnother() throws Exception {
-		val sessionID = UUID.randomUUID();
-		val adminID = UUID.randomUUID();
+    @Test
+    public void principal_equalsAnother() {
+        val sessionID = Utils.generateRandomID();
+        val adminID = Utils.generateRandomID();
 
-		val principal = new AdminPrincipal(sessionID, adminID);
-		val samePrincipal = new AdminPrincipal(sessionID, adminID);
+        val principal = new AdminPrincipal(sessionID, adminID);
+        val samePrincipal = new AdminPrincipal(sessionID, adminID);
 
-		val otherPrincipal = new AdminPrincipal(UUID.randomUUID(), UUID.randomUUID());
+        val otherPrincipal = new AdminPrincipal(Utils.generateRandomID(), Utils.generateRandomID());
 
-		assertNotEquals(principal, otherPrincipal);
-		assertEquals(principal, samePrincipal);
-		assertEquals(principal.hashCode(), samePrincipal.hashCode());
-	}
+        assertNotEquals(principal, otherPrincipal);
+        assertEquals(principal, samePrincipal);
+        assertEquals(principal.hashCode(), samePrincipal.hashCode());
+    }
 
 }
