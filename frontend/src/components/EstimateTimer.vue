@@ -45,6 +45,9 @@ export default Vue.extend({
   },
   methods: {
     formatTimer() {
+      if (this.initialTimer === 0) {
+        return '';
+      }
       const minutes = Math.floor(this.timerCount / 60);
       const seconds = (this.timerCount % 60).toString().padStart(2, '0');
       return `${minutes}:${seconds}`;
