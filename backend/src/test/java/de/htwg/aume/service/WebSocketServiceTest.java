@@ -166,7 +166,7 @@ public class WebSocketServiceTest {
         val session = new Session(new ObjectId(),
                 defaultAdminPrincipal.getSessionID(),
                 defaultAdminPrincipal.getAdminID(),
-                new SessionConfig(List.of(), List.of(), "password"),
+                new SessionConfig(List.of(), List.of(), 10,"password"),
                 List.of(new Member(defaultMemberPrincipal.getMemberID(), null, null,
                                 null, null),
                         new Member(memberPrincipal.getMemberID(), null,

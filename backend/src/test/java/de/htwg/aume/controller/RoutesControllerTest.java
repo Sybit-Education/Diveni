@@ -76,7 +76,7 @@ public class RoutesControllerTest {
 	public void joinMember_addsMemberToSession() throws Exception {
 		val sessionUUID = Utils.generateRandomID();
 		sessionRepo.save(new Session(new ObjectId(), sessionUUID,Utils.generateRandomID(),
-				new SessionConfig(new ArrayList<>(), List.of(), null), new ArrayList<>(),
+				new SessionConfig(new ArrayList<>(), List.of(), 10,null), new ArrayList<>(),
 				SessionState.WAITING_FOR_MEMBERS));
 
 		// @formatter:off
@@ -193,7 +193,7 @@ public class RoutesControllerTest {
 	public void joinMember_failsToAddMemberDueToFalseEstimation() throws Exception {
 		val sessionUUID = UUID.randomUUID();
 		sessionRepo.save(new Session(new ObjectId(), Utils.generateRandomID(), Utils.generateRandomID(),
-				new SessionConfig(new ArrayList<>(), List.of(), 10null), new ArrayList<Member>(),
+				new SessionConfig(new ArrayList<>(), List.of(), 10,null), new ArrayList<Member>(),
 				SessionState.WAITING_FOR_MEMBERS));
 
 		// @formatter:off
