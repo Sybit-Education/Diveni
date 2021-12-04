@@ -65,37 +65,7 @@ export default Vue.extend({
       userStories: [],
     };
   },
-  created() {
-    this.checkAdminCookie();
-  },
   methods: {
-    async checkAdminCookie() {
-      const cookie = window.localStorage.getItem('adminCookie');
-      if (cookie !== null) {
-        console.log(`Found admin cookie: '${cookie}'`);
-        const url = Constants.backendURL + Constants.createSessionRoute;
-        try {
-          const session = (await this.axios.get(url, {
-            params: {
-              adminCookie: cookie,
-            },
-          })).data as {
-            sessionID: string,
-            adminID: string,
-            sessionConfig: {
-              set: Array<string>,
-              userStories: Array<{title:string, description:string, estimation:string|null }>,
-            },
-            sessionState: string,
-          };
-          // this.$store.commit('setMembers', JSON.stringify(session.members));
-          this.goToSessionPage(session);
-        } catch (e) {
-          console.log(`got error: ${e}`);
-          window.localStorage.removeItem('adminCookie');
-        }
-      }
-    },
     async sendCreateSessionRequest() {
       const url = Constants.backendURL + Constants.createSessionRoute;
       const sessionConfig = {
