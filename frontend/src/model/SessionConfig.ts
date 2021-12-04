@@ -1,7 +1,7 @@
-import UserStory from "./UserStory";
+import UserStory from './UserStory';
 
 interface SessionConfig {
-    set: Array<String>;
+    set: Array<string>;
     password?: string;
     userStories: Array<UserStory>;
 }

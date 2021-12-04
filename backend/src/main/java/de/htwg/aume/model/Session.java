@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -39,6 +39,11 @@ public class Session {
 		val updatedMembers = members.stream().map(m -> m.getMemberID().equals(memberID) ? m.updateEstimation(vote) : m)
 				.collect(Collectors.toList());
 		return new Session(sessionID, adminID, sessionConfig, adminCookie, updatedMembers, sessionState);
+	}
+
+	public Session updateUserStories(List<UserStory> userStories) {
+		val updatedSessionConfig = new SessionConfig(sessionConfig.getSet(), userStories, sessionConfig.getPassword());
+		return new Session(sessionID, adminID, updatedSessionConfig, adminCookie, members, sessionState);
 	}
 
 	public Session resetEstimations() {
