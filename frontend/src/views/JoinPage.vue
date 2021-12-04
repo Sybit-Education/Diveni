@@ -4,7 +4,6 @@
       {{ title }}
     </h1>
     <join-page-card
-      :show-password="false"
       :color="hexColor"
       :animal-asset-name="avatarAnimalAssetName"
       :button-text="'GO'"
@@ -34,6 +33,7 @@ export default Vue.extend({
       memberID: uuidv4(),
       name: '',
       sessionID: '',
+      voteSet: '',
     };
   },
   computed: {
@@ -46,13 +46,15 @@ export default Vue.extend({
       if (isConnected) {
         console.debug('JoinPage: member connected to websocket');
         this.registerMemberPrincipalOnBackend();
-        this.subscribeWSStartEstimating();
+        this.subscribeWSMemberUpdates();
+        this.subscribeWSadminUpdatedUserStories();
+        this.subscribeWSMemberUpdated();
         this.goToEstimationPage();
       }
     },
   },
   created() {
-    const id = this.$route.query as unknown as {sessionID: string};
+    const id = this.$route.query as unknown as { sessionID: string };
     if (id.sessionID) {
       this.sessionID = id.sessionID;
     }
@@ -61,16 +63,26 @@ export default Vue.extend({
     async sendJoinSessionRequest(data: JoinCommand) {
       this.name = data.name;
       const url = `${Constants.backendURL}${Constants.joinSessionRoute(data.sessionID)}`;
-      const member = {
-        memberID: this.memberID,
-        name: this.name,
-        hexColor: this.hexColor,
-        avatarAnimal: this.convertAvatarAssetNameToBackendAnimal(),
-        currentEstimation: null,
+      const joinInfo = {
+        password: data.password,
+        member: {
+          memberID: this.memberID,
+          name: this.name,
+          hexColor: this.hexColor,
+          avatarAnimal: this.convertAvatarAssetNameToBackendAnimal(),
+          currentEstimation: null,
+        },
       };
       try {
-        await this.axios.post(url, member);
-        this.connectToWebSocket(data.sessionID, member.memberID);
+        const sessionConfig = (await this.axios.post(url, joinInfo)).data as {
+          set: Array<string>,
+          userStories: Array<{ title: string, description: string, estimation: string | null }>,
+        };
+        this.voteSet = JSON.stringify(sessionConfig.set);
+        console.log('session page');
+        console.log(sessionConfig);
+        this.$store.commit('setUserStories', { stories: sessionConfig.userStories });
+        this.connectToWebSocket(data.sessionID, joinInfo.member.memberID);
       } catch (e) {
         console.error(`Response of ${url} is invalid: ${e}`);
       }
@@ -88,8 +100,14 @@ export default Vue.extend({
       const endPoint = Constants.webSocketRegisterMemberRoute;
       this.$store.commit('sendViaBackendWS', { endPoint });
     },
-    subscribeWSStartEstimating() {
-      this.$store.commit('subscribeOnBackendWSStartPlanningListenRoute');
+    subscribeWSMemberUpdates() {
+      this.$store.commit('subscribeOnBackendWSMemberUpdates');
+    },
+    subscribeWSadminUpdatedUserStories() {
+      this.$store.commit('subscribeOnBackendWSStoriesUpdated');
+    },
+    subscribeWSMemberUpdated() {
+      this.$store.commit('subscribeOnBackendWSAdminUpdate');
     },
     goToEstimationPage() {
       this.$router.push({
@@ -99,6 +117,7 @@ export default Vue.extend({
           name: this.name,
           hexColor: this.hexColor,
           avatarAnimalAssetName: this.avatarAnimalAssetName,
+          voteSetJson: this.voteSet,
         },
       });
     },

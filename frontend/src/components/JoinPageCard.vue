@@ -1,5 +1,5 @@
 <template>
-  <b-row>
+  <b-row ref="card">
     <div class="col-lg-3 col-md-2 col-sm-1 " />
     <div
       id="join-card"
@@ -27,7 +27,7 @@
       <b-row class="mt-4">
         <b-col
           cols="12"
-          :md="showPassword ? '6' : '12'"
+          :md="'6'"
         >
           <h6>Session id</h6>
           <b-form-input
@@ -37,7 +37,6 @@
           />
         </b-col>
         <b-col
-          v-if="showPassword"
           class="mt-2 mt-md-0"
           cols="12"
           md="6"
@@ -46,7 +45,8 @@
           <b-form-input
             v-model="password"
             class="mt-3"
-            type="text"
+            type="password"
+            placeholder="(optional)"
           />
         </b-col>
       </b-row>
@@ -54,6 +54,7 @@
         <b-button
           class="mt-5"
           variant="success"
+          type="submit"
           :disabled="name.length < 1 || sessionID.length < 1"
           @click="onClickButton"
         >
@@ -77,7 +78,6 @@ export default Vue.extend({
     RoundedAvatar,
   },
   props: {
-    showPassword: { type: Boolean, required: true },
     color: { type: String, required: true },
     animalAssetName: { type: String, required: true },
     buttonText: { type: String, required: true },
@@ -94,15 +94,22 @@ export default Vue.extend({
     if (this.sessionIdFromUrl) {
       this.sessionID = this.sessionIdFromUrl;
     }
+    window.addEventListener('keyup', (event) => {
+      if (event.keyCode === 13) {
+        this.onClickButton();
+      }
+    });
   },
   methods: {
     onClickButton() {
-      const data: JoinCommand = {
-        sessionID: this.sessionID,
-        password: this.password,
-        name: this.name,
-      };
-      this.$emit('clicked', data);
+      if (this.name.length > 1 && this.sessionID.length > 1) {
+        const data: JoinCommand = {
+          sessionID: this.sessionID.split(' ').join(''),
+          password: this.password,
+          name: this.name.trim(),
+        };
+        this.$emit('clicked', data);
+      }
     },
   },
 });
@@ -112,7 +119,8 @@ export default Vue.extend({
 #join-card {
   border-radius: 20px;
 }
+
 h6 {
-  font-weight:700;
+  font-weight: 700;
 }
 </style>

@@ -1,3 +1,1 @@
-FROM mongo:4.4.10
-
-EXPOSE 27017
+FROM mongo:4.4.11

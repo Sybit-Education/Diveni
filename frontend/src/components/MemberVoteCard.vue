@@ -1,6 +1,7 @@
 <template>
   <div>
     <Vue2InteractDraggable
+      v-if="isMobile"
       :key="dragged"
       :interact-max-rotation="0"
       :interact-out-of-sight-x-coordinate="0"
@@ -12,15 +13,25 @@
       @draggedUp="draggedUp"
     >
       <div
-        id="swipe-card"
-        class="flicking-panel"
+        class="flicking-panel swipe-card"
         :style="swipeableCardBackgroundColor"
       >
-        <div id="text">
-          {{ dragged ? '💪' : number }}
+        <div class="text">
+          {{ dragged ? '💪' : voteOption }}
         </div>
       </div>
     </Vue2InteractDraggable>
+    <div v-else>
+      <div
+        class="flicking-panel swipe-card"
+        :style="swipeableCardBackgroundColor"
+        @click="onCardClicked()"
+      >
+        <div class="text">
+          {{ dragged ? '💪' : voteOption }}
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -36,9 +47,11 @@ export default Vue.extend({
     Vue2InteractDraggable,
   },
   props: {
-    number: { type: Number, required: true },
+    voteOption: { type: String, required: true },
+    index: { type: Number, required: true },
     hexColor: { type: String, required: true },
     dragged: { type: Boolean, required: true },
+    isMobile: { type: Boolean, required: true },
   },
   computed: {
     swipeableCardBackgroundColor():string {
@@ -46,18 +59,21 @@ export default Vue.extend({
       r = !this.dragged ? r : 230;
       g = !this.dragged ? g : 225;
       b = !this.dragged ? b : 228;
-      return `background-color: rgb(${r - this.number * 2}, ${g}, ${b});`;
+      return `background-color: rgb(${r - this.index ** 2}, ${g}, ${b});`;
     },
   },
   methods: {
+    onCardClicked() {
+      this.draggedUp();
+    },
     draggedUp() {
       confetti({
-        particleCount: 300,
-        startVelocity: 30,
-        spread: 360,
+        particleCount: 50,
+        startVelocity: 50,
+        spread: 100,
       });
       this.$emit('sentVote', {
-        vote: this.number,
+        vote: this.voteOption,
       });
     },
   },
@@ -66,7 +82,7 @@ export default Vue.extend({
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-#swipe-card{
+.swipe-card{
   width: 280px;
   height: 370px;
   justify-content: center;  /* Centering y-axis */
@@ -75,8 +91,8 @@ export default Vue.extend({
   display: flex;
   flex-direction: column;
 }
-#text {
-  font-size: 200px;
+.text {
+  font-size: 7rem;
   font-weight: 500;
 }
 </style>

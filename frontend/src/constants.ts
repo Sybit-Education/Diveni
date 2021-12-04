@@ -13,13 +13,21 @@ class Constants {
 
   webSocketStartPlanningRoute = '/ws/startVoting';
 
+  webSocketVotingFinishedRoute = '/ws/votingFinished';
+
   webSocketRestartPlanningRoute = '/ws/restart';
 
   webSocketVoteRoute = '/ws/vote';
 
+  webSocketAdminUpdatedUserStoriesRoute = '/ws/adminUpdatedUserStories';
+
+  webSocketMemberListenUserStoriesRoute = '/users/updates/userStories';
+
   webSocketMemberListenRoute = '/users/updates/member';
 
   memberUpdateCommandStartVoting = 'START_VOTING';
+
+  memberUpdateCommandVotingFinished = 'VOTING_FINISHED';
 
   memberUpdateCloseSession = 'SESSION_CLOSED';
 

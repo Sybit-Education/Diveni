@@ -1,13 +1,13 @@
 package de.htwg.aume.controller;
 
 import java.security.Principal;
-
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Controller;
 import de.htwg.aume.model.SessionState;
-
+import de.htwg.aume.model.UserStory;
 import de.htwg.aume.principals.AdminPrincipal;
 import de.htwg.aume.principals.MemberPrincipal;
 import de.htwg.aume.service.DatabaseService;
@@ -40,36 +40,41 @@ public class WebsocketController {
 	@MessageMapping("/unregister")
 	public void removeMember(Principal principal) {
 		if (principal instanceof MemberPrincipal) {
-			webSocketService.removeMember((MemberPrincipal)principal);
+			webSocketService.removeMember((MemberPrincipal) principal);
 			val session = ControllerUtils
-				.getSessionByMemberIDOrThrowResponse(databaseService, ((MemberPrincipal)principal).getMemberID())
-				.removeMember(((MemberPrincipal)principal).getMemberID());
+					.getSessionByMemberIDOrThrowResponse(databaseService, ((MemberPrincipal) principal).getMemberID())
+					.removeMember(((MemberPrincipal) principal).getMemberID());
 			databaseService.saveSession(session);
 			webSocketService.sendMembersUpdate(session);
 		} else {
 			val session = ControllerUtils
-				.getSessionOrThrowResponse(databaseService, ((AdminPrincipal)principal).getSessionID())
-				.updateSessionState(SessionState.SESSION_CLOSED);
+					.getSessionOrThrowResponse(databaseService, ((AdminPrincipal) principal).getSessionID())
+					.updateSessionState(SessionState.SESSION_CLOSED);
 			webSocketService.sendSessionStateToMembers(session);
 			webSocketService.removeSession(session);
 			databaseService.deleteSession(session);
 		}
 	}
 
-
 	@MessageMapping("/startVoting")
 	public void startEstimation(AdminPrincipal principal) {
-		val session = ControllerUtils
-				.getSessionOrThrowResponse(databaseService, principal.getSessionID())
-				.updateSessionState(SessionState.START_VOTING );
+		val session = ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID())
+				.updateSessionState(SessionState.START_VOTING);
+		databaseService.saveSession(session);
+		webSocketService.sendSessionStateToMembers(session);
+	}
+
+	@MessageMapping("/votingFinished")
+	public void votingFinished(AdminPrincipal principal) {
+		val session = ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID())
+				.updateSessionState(SessionState.VOTING_FINISHED);
 		databaseService.saveSession(session);
 		webSocketService.sendSessionStateToMembers(session);
 	}
 
 	@MessageMapping("/vote")
-	public synchronized void processVote(@Payload int vote, MemberPrincipal member) {
-		val session = ControllerUtils
-				.getSessionByMemberIDOrThrowResponse(databaseService, member.getMemberID())
+	public synchronized void processVote(@Payload String vote, MemberPrincipal member) {
+		val session = ControllerUtils.getSessionByMemberIDOrThrowResponse(databaseService, member.getMemberID())
 				.updateEstimation(member.getMemberID(), vote);
 		databaseService.saveSession(session);
 		webSocketService.sendMembersUpdate(session);
@@ -77,11 +82,19 @@ public class WebsocketController {
 
 	@MessageMapping("/restart")
 	public synchronized void restartVote(AdminPrincipal principal) {
-		val session =
-				ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID())
-						.resetEstimations();
+		val session = ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID())
+				.updateSessionState(SessionState.START_VOTING)
+				.resetEstimations();
 		databaseService.saveSession(session);
 		webSocketService.sendMembersUpdate(session);
 		webSocketService.sendSessionStateToMembers(session);
+	}
+
+	@MessageMapping("/adminUpdatedUserStories")
+	public synchronized void adminUpdatedUserStories(AdminPrincipal principal, @Payload List<UserStory> userStories) {
+		val session = ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID())
+				.updateUserStories(userStories);
+		databaseService.saveSession(session);
+		webSocketService.sendUpdatedUserStoriesToMembers(session);
 	}
 }

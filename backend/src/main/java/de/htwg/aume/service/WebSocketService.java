@@ -18,6 +18,7 @@ import de.htwg.aume.controller.ErrorMessages;
 import de.htwg.aume.model.Session;
 import de.htwg.aume.principals.AdminPrincipal;
 import de.htwg.aume.principals.MemberPrincipal;
+import lombok.Getter;
 import lombok.val;
 
 @Service
@@ -26,12 +27,13 @@ public class WebSocketService {
 	@Autowired
 	private SimpMessagingTemplate simpMessagingTemplate;
 
+	@Getter
 	private Map<AdminPrincipal, Set<MemberPrincipal>> memberMap = new HashMap<>();
 
 	Entry<AdminPrincipal, Set<MemberPrincipal>> getSessionEntry(UUID sessionID) {
 		return memberMap.entrySet().stream().filter(e -> e.getKey().getSessionID().equals(sessionID)).findFirst()
-				.orElseThrow(
-						() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessages.sessionNotFoundErrorMessage));
+				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+						ErrorMessages.sessionNotFoundErrorMessage));
 	}
 
 	public synchronized void addMemberIfNew(MemberPrincipal member) {
@@ -57,6 +59,15 @@ public class WebSocketService {
 		val sessionEntry = getSessionEntry(session.getSessionID());
 		simpMessagingTemplate.convertAndSendToUser(sessionEntry.getKey().getName(), "/updates/membersUpdated",
 				session.getMembers());
+		sendMembersUpdateToMembers(session);
+	}
+
+	public void sendMembersUpdateToMembers(Session session) {
+		getSessionEntry(session.getSessionID()).getValue().stream()
+				.forEach(member -> simpMessagingTemplate.convertAndSendToUser(
+						member.getMemberID().toString(), "/updates/membersUpdated",
+						session.getMembers())
+				);
 	}
 
 	public void sendSessionStateToMembers(Session session) {
@@ -64,8 +75,17 @@ public class WebSocketService {
 				.forEach(member -> sendSessionStateToMember(session, member.getMemberID().toString()));
 	}
 
+	public void sendUpdatedUserStoriesToMembers(Session session) {
+		getSessionEntry(session.getSessionID()).getValue().stream()
+				.forEach(member -> sendUpdatedUserStoriesToMember(session, member.getMemberID().toString()));
+	}
+
 	public void sendSessionStateToMember(Session session, String memberID) {
 		simpMessagingTemplate.convertAndSendToUser(memberID, "/updates/member", session.getSessionState().toString());
+	}
+
+	public void sendUpdatedUserStoriesToMember(Session session, String memberID) {
+		simpMessagingTemplate.convertAndSendToUser(memberID, "/updates/userStories", session.getSessionConfig().getUserStories());
 	}
 
 	public void removeSession(Session session) {

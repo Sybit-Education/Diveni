@@ -10,6 +10,7 @@ public class ErrorMessages {
 
 	public static String memberNotExistsErrorMessage = "member does not exist";
 
+	public static String wrongPasswordMessage = "no or wrong password given";
 
 	private ErrorMessages() {
 	}
