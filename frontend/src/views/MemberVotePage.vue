@@ -85,8 +85,8 @@
         :name="member.name"
         :estimation="member.currentEstimation"
         :estimate-finished="votingFinished"
-        :highest="estimateHighest.memberID === member.memberID"
-        :lowest="estimateLowest.memberID === member.memberID"
+        :highest="estimateHighest ? estimateHighest.memberID === member.memberID: false"
+        :lowest="estimateHighest ? estimateLowest.memberID === member.memberID: false"
       />
     </b-row>
   </b-container>
@@ -152,12 +152,18 @@ export default Vue.extend({
     membersEstimated(): Member[] {
       return this.members.filter((member: Member) => member.currentEstimation !== null);
     },
-    estimateHighest(): Member {
+    estimateHighest(): Member | null {
+      if (this.membersEstimated.length < 1) {
+        return null;
+      }
       return this.membersEstimated.reduce((prev, current) => (
         this.voteSet.indexOf(prev.currentEstimation!) > this.voteSet.indexOf(current.currentEstimation!) ? prev : current
       ));
     },
-    estimateLowest(): Member {
+    estimateLowest(): Member | null {
+      if (this.membersEstimated.length < 1) {
+        return null;
+      }
       return this.membersEstimated.reduce((prev, current) => (
         this.voteSet.indexOf(prev.currentEstimation!) < this.voteSet.indexOf(current.currentEstimation!) ? prev : current
       ));
@@ -169,7 +175,11 @@ export default Vue.extend({
         this.draggedVote = null;
         this.estimateFinished = false;
         this.triggerTimer = (this.triggerTimer + 1) % 5;
+        console.log('-------------------------------------');
+        console.log('start voting came in');
       } else if (updates.at(-1) === Constants.memberUpdateCommandVotingFinished) {
+        console.log('*************************************');
+        console.log('stop voting came in');
         this.estimateFinished = true;
       } else if (updates.at(-1) === Constants.memberUpdateCloseSession) {
         this.goToJoinPage();

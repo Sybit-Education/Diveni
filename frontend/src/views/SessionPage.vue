@@ -106,6 +106,9 @@
         </h4>
       </b-row>
       <b-row class="my-1 d-flex justify-content-center flex-wrap ">
+        <h4 v-if="estimateFinished && membersEstimated.length < 1" class="text-center mt-3">
+          No users voted ...
+        </h4>
         <SessionMemberCard
           v-for="member of membersEstimated"
           :key="member.memberID"
