@@ -68,7 +68,7 @@ export default Vue.extend({
         },
         {
           name: 'Numbers',
-          description: 'Integer numbers. What do you want more?.',
+          description: 'Integer numbers. What do you want more?',
           values: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
           activeValues: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
         },
