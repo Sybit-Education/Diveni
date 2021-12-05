@@ -29,7 +29,7 @@
           cols="12"
           :md="'6'"
         >
-          <h6>Session id</h6>
+          <h6>Invitation code</h6>
           <b-form-input
             v-model="sessionID"
             class="mt-3"
