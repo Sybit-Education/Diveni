@@ -81,6 +81,7 @@
             :timer="timerCountdownNumber"
             :start-timer-on-component-creation="startTimerOnComponentCreation"
             :initial-timer="timerCountdownNumber"
+            @timerFinished="sendVotingFinishedMessage"
           />
         </b-col>
       </b-row>
