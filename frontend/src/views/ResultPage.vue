@@ -26,6 +26,9 @@
         >
           Download as CSV
         </b-button>
+        <b-button variant="secondary" class="mx-2" @click="goHome()">
+          Go to Home
+        </b-button>
       </b-col>
     </b-row>
   </b-container>
@@ -58,6 +61,9 @@ export default Vue.extend({
       link.download = 'userStories.csv';
       link.click();
       URL.revokeObjectURL(link.href);
+    },
+    goHome() {
+      this.$router.push({ name: 'LandingPage' });
     },
   },
 });
