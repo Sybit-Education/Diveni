@@ -6,13 +6,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
 
+import org.bson.types.ObjectId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -21,6 +19,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.server.ResponseStatusException;
 
+import de.htwg.aume.Utils;
 import de.htwg.aume.model.Member;
 import de.htwg.aume.model.Session;
 import de.htwg.aume.model.SessionConfig;
@@ -44,10 +43,11 @@ public class WebSocketServiceTest {
         @InjectMocks
         private WebSocketService webSocketService;
 
-        private AdminPrincipal defaultAdminPrincipal = new AdminPrincipal(UUID.randomUUID(), UUID.randomUUID());
+        private AdminPrincipal defaultAdminPrincipal = new AdminPrincipal(Utils.generateRandomID(),
+                        Utils.generateRandomID());
 
         private MemberPrincipal defaultMemberPrincipal = new MemberPrincipal(defaultAdminPrincipal.getSessionID(),
-                        UUID.randomUUID());
+                        Utils.generateRandomID());
 
         @BeforeEach
         public void initEach() {
@@ -64,7 +64,7 @@ public class WebSocketServiceTest {
 
         @Test
         public void setAdmin_isAdded() throws Exception {
-                val adminPrincipal = new AdminPrincipal(UUID.randomUUID(), UUID.randomUUID());
+                val adminPrincipal = new AdminPrincipal(Utils.generateRandomID(), Utils.generateRandomID());
 
                 webSocketService.setAdminUser(adminPrincipal);
 
@@ -103,7 +103,8 @@ public class WebSocketServiceTest {
         @Test
         public void addMember_isAdded() throws Exception {
                 setDefaultAdminPrincipal(new HashSet<>());
-                val memberPrincipal = new MemberPrincipal(defaultAdminPrincipal.getSessionID(), UUID.randomUUID());
+                val memberPrincipal = new MemberPrincipal(defaultAdminPrincipal.getSessionID(),
+                                Utils.generateRandomID());
 
                 webSocketService.addMemberIfNew(memberPrincipal);
 
@@ -134,8 +135,8 @@ public class WebSocketServiceTest {
         @Test
         public void sendMembersUpdate_sendsUpdate() throws Exception {
                 setDefaultAdminPrincipal(Set.of(defaultMemberPrincipal));
-                val session = new Session(defaultAdminPrincipal.getSessionID(), defaultAdminPrincipal.getAdminID(),
-                                null, null,
+                val session = new Session(new ObjectId(), defaultAdminPrincipal.getSessionID(),
+                                defaultAdminPrincipal.getAdminID(), null, null,
                                 List.of(new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null)),
                                 null);
 
@@ -148,8 +149,8 @@ public class WebSocketServiceTest {
         @Test
         public void sendSessionState_sendsState() throws Exception {
                 setDefaultAdminPrincipal(Set.of(defaultMemberPrincipal));
-                val session = new Session(defaultAdminPrincipal.getSessionID(), defaultAdminPrincipal.getAdminID(),
-                                null, null,
+                val session = new Session(new ObjectId(), defaultAdminPrincipal.getSessionID(),
+                                defaultAdminPrincipal.getAdminID(), null, null,
                                 List.of(new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null)),
                                 SessionState.WAITING_FOR_MEMBERS);
 
@@ -162,10 +163,11 @@ public class WebSocketServiceTest {
 
         @Test
         public void sendSessionStates_sendsToAll() throws Exception {
-                val memberPrincipal = new MemberPrincipal(defaultAdminPrincipal.getSessionID(), UUID.randomUUID());
+                val memberPrincipal = new MemberPrincipal(defaultAdminPrincipal.getSessionID(),
+                                Utils.generateRandomID());
                 setDefaultAdminPrincipal(Set.of(defaultMemberPrincipal, memberPrincipal));
-                val session = new Session(defaultAdminPrincipal.getSessionID(), defaultAdminPrincipal.getAdminID(),
-                                null, null,
+                val session = new Session(new ObjectId(), defaultAdminPrincipal.getSessionID(),
+                                defaultAdminPrincipal.getAdminID(), null, null,
                                 List.of(new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null),
                                                 new Member(memberPrincipal.getMemberID(), null, null, null, null)),
                                 SessionState.WAITING_FOR_MEMBERS);
@@ -182,10 +184,12 @@ public class WebSocketServiceTest {
 
         @Test
         public void sendUpdatedUserStoriesToMembers_sendsToAll() throws Exception {
-                val memberPrincipal = new MemberPrincipal(defaultAdminPrincipal.getSessionID(), UUID.randomUUID());
+                val memberPrincipal = new MemberPrincipal(defaultAdminPrincipal.getSessionID(),
+                                Utils.generateRandomID());
                 setDefaultAdminPrincipal(Set.of(defaultMemberPrincipal, memberPrincipal));
-                val session = new Session(defaultAdminPrincipal.getSessionID(), defaultAdminPrincipal.getAdminID(),
-                                new SessionConfig(List.of(), List.of(), "password"), null,
+                val session = new Session(new ObjectId(), defaultAdminPrincipal.getSessionID(),
+                                defaultAdminPrincipal.getAdminID(),
+                                new SessionConfig(List.of(), List.of(), null, "password"), null,
                                 List.of(new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null),
                                                 new Member(memberPrincipal.getMemberID(), null, null, null, null)),
                                 SessionState.WAITING_FOR_MEMBERS);
@@ -203,8 +207,8 @@ public class WebSocketServiceTest {
         @Test
         public void removeSession_isRemoved() throws Exception {
                 setDefaultAdminPrincipal(Set.of(defaultMemberPrincipal));
-                val session = new Session(defaultAdminPrincipal.getSessionID(), defaultAdminPrincipal.getAdminID(),
-                                null, null,
+                val session = new Session(new ObjectId(), defaultAdminPrincipal.getSessionID(),
+                                defaultAdminPrincipal.getAdminID(), null, null,
                                 List.of(new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null)),
                                 SessionState.WAITING_FOR_MEMBERS);
 

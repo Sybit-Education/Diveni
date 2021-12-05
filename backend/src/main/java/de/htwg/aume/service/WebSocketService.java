@@ -2,7 +2,6 @@ package de.htwg.aume.service;
 
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -29,7 +28,7 @@ public class WebSocketService {
 	@Getter
 	private List<SessionPrincipals> sessionPrincipalList = List.of();
 
-	public SessionPrincipals getSessionPrincipals(UUID sessionID) {
+	public SessionPrincipals getSessionPrincipals(String sessionID) {
 		return sessionPrincipalList.stream().filter(s -> s.sessionID().equals(sessionID)).findFirst().orElseThrow(
 				() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessages.sessionNotFoundErrorMessage));
 	}

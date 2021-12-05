@@ -3,23 +3,20 @@ package de.htwg.aume.controller;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.TimeUnit;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.json.JsonWriteFeature;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.bson.types.ObjectId;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,6 +36,7 @@ import org.springframework.web.socket.sockjs.client.SockJsClient;
 import org.springframework.web.socket.sockjs.client.Transport;
 import org.springframework.web.socket.sockjs.client.WebSocketTransport;
 
+import de.htwg.aume.Utils;
 import de.htwg.aume.model.Member;
 import de.htwg.aume.model.Session;
 import de.htwg.aume.model.SessionConfig;
@@ -52,349 +50,368 @@ import lombok.val;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class WebsocketControllerTest {
 
-    private static final Integer TIMEOUT = 250;
+        private static final Integer TIMEOUT = 250;
 
-    private static final String WS_ADMIN_PATH = "ws://localhost:%d/connect?sessionID=%s&adminID=%s";
+        private static final String WS_ADMIN_PATH = "ws://localhost:%d/connect?sessionID=%s&adminID=%s";
 
-    private static final String WS_MEMBER_PATH = "ws://localhost:%d/connect?sessionID=%s&memberID=%s";
+        private static final String WS_MEMBER_PATH = "ws://localhost:%d/connect?sessionID=%s&memberID=%s";
 
-    private static final String REGISTER_ADMIN = "/ws/registerAdminUser";
+        private static final String REGISTER_ADMIN = "/ws/registerAdminUser";
 
-    private static final String REGISTER_MEMBER = "/ws/registerMember";
+        private static final String REGISTER_MEMBER = "/ws/registerMember";
 
-    private static final String START_VOTING = "/ws/startVoting";
+        private static final String START_VOTING = "/ws/startVoting";
 
-    private static final String RESTART = "/ws/restart";
+        private static final String RESTART = "/ws/restart";
 
-    private static final String VOTE = "/ws/vote";
+        private static final String VOTE = "/ws/vote";
 
-    private static final String UNREGISTER = "/ws/unregister";
+        private static final String UNREGISTER = "/ws/unregister";
 
-    private static final String ADMIN_MEMBER_UPDATES = "/users/updates/membersUpdated";
+        private static final String ADMIN_MEMBER_UPDATES = "/users/updates/membersUpdated";
 
-    private static final String MEMBER_UPDATES = "/users/updates/member";
+        private static final String MEMBER_UPDATES = "/users/updates/member";
 
-    private static final ObjectMapper objectMapper = new ObjectMapper();
+        private static final ObjectMapper objectMapper = new ObjectMapper();
 
-    @Autowired
-    SessionRepository sessionRepo;
+        @Autowired
+        SessionRepository sessionRepo;
 
-    @Autowired
-    private WebSocketService webSocketService;
+        @Autowired
+        private WebSocketService webSocketService;
 
-    @LocalServerPort
-    private Integer port;
+        @LocalServerPort
+        private Integer port;
 
-    private WebSocketStompClient webSocketStompClient;
-    private BlockingQueue<String> blockingQueue;
+        private WebSocketStompClient webSocketStompClient;
+        private BlockingQueue<String> blockingQueue;
 
-    private final StompFrameHandler stompFrameHandler = new StompFrameHandler() {
-        @Override
-        public Type getPayloadType(StompHeaders stompHeaders) {
-            return List.class;
+        private final StompFrameHandler stompFrameHandler = new StompFrameHandler() {
+                @Override
+                public Type getPayloadType(StompHeaders stompHeaders) {
+                        return List.class;
+                }
+
+                @Override
+                public void handleFrame(StompHeaders stompHeaders, Object o) {
+                        try {
+                                blockingQueue.offer(objectMapper.writeValueAsString(o));
+                        } catch (JsonProcessingException e) {
+                                throw new RuntimeException("Failed to handle frame", e);
+                        }
+                }
+        };
+
+        private String getWsPath(String format, String sessionID, String principalID) {
+                return String.format(format, port, sessionID, principalID);
         }
 
-        @Override
-        public void handleFrame(StompHeaders stompHeaders, Object o) {
-            try {
-                blockingQueue.offer(objectMapper.writeValueAsString(o));
-            } catch (JsonProcessingException e) {
-                throw new RuntimeException("Failed to handle frame", e);
-            }
+        private StompSession getAdminSession(String sessionID, String adminID) throws Exception {
+                return webSocketStompClient.connect(getWsPath(WS_ADMIN_PATH, sessionID, adminID),
+                                new StompSessionHandlerAdapter() {
+                                        @Override
+                                        public void handleException(StompSession session, StompCommand command,
+                                                        StompHeaders headers, byte[] payload, Throwable exception) {
+                                                throw new RuntimeException("Failure in WebSocket handling", exception);
+                                        }
+                                }).get();
         }
-    };
 
-    private String getWsPath(String format, UUID sessionID, UUID principalID) {
-        return String.format(format, port, sessionID, principalID);
-    }
+        private StompSession getMemberSession(String sessionID, String memberID) throws Exception {
+                return webSocketStompClient.connect(getWsPath(WS_MEMBER_PATH, sessionID, memberID),
+                                new StompSessionHandlerAdapter() {
+                                }).get();
+        }
 
-    private StompSession getAdminSession(UUID sessionID, UUID adminID) throws Exception {
-        return webSocketStompClient
-                .connect(getWsPath(WS_ADMIN_PATH, sessionID, adminID), new StompSessionHandlerAdapter() {
-                    @Override
-                    public void handleException(StompSession session, StompCommand command, StompHeaders headers,
-                            byte[] payload, Throwable exception) {
-                        throw new RuntimeException("Failure in WebSocket handling", exception);
-                    }
-                }).get();
-    }
+        private List<Transport> transports = Collections
+                        .<Transport>singletonList(new WebSocketTransport(new StandardWebSocketClient()));
 
-    private StompSession getMemberSession(UUID sessionID, UUID memberID) throws Exception {
-        return webSocketStompClient
-                .connect(getWsPath(WS_MEMBER_PATH, sessionID, memberID), new StompSessionHandlerAdapter() {
-                }).get();
-    }
+        @BeforeAll
+        public static void init() {
+                objectMapper.configure(JsonWriteFeature.QUOTE_FIELD_NAMES.mappedFeature(), true);
+        }
 
-    private List<Transport> transports = Collections
-            .<Transport>singletonList(new WebSocketTransport(new StandardWebSocketClient()));
+        @BeforeEach
+        public void initEach() {
+                this.webSocketStompClient = new WebSocketStompClient(new SockJsClient(transports));
+                this.webSocketStompClient.setMessageConverter(new MappingJackson2MessageConverter());
+                this.blockingQueue = new LinkedBlockingDeque<>();
+        }
 
-    @BeforeAll
-    public static void init() {
-        objectMapper.configure(JsonWriteFeature.QUOTE_FIELD_NAMES.mappedFeature(), true);
-    }
+        @AfterEach
+        public void cleanUpEach() throws Exception {
+                val sessionPrincipalsField = WebSocketService.class.getDeclaredField("sessionPrincipalList");
+                sessionPrincipalsField.setAccessible(true);
+                val sessionPrincipals = List.of();
+                sessionPrincipalsField.set(webSocketService, sessionPrincipals);
+                sessionRepo.deleteAll();
+        }
 
-    @BeforeEach
-    public void initEach() {
-        this.webSocketStompClient = new WebSocketStompClient(new SockJsClient(transports));
-        this.webSocketStompClient.setMessageConverter(new MappingJackson2MessageConverter());
-        this.blockingQueue = new LinkedBlockingDeque<String>();
-    }
+        @Test
+        public void registerAdminPrincipal_isRegistered() throws Exception {
+                val dbID = new ObjectId();
+                val sessionID = Utils.generateRandomID();
+                val adminID = Utils.generateRandomID();
+                sessionRepo.save(new Session(dbID, sessionID, adminID,
+                                new SessionConfig(new ArrayList<>(), List.of(), 10, null), null,
+                                new ArrayList<Member>(), SessionState.WAITING_FOR_MEMBERS));
+                val adminPrincipal = new AdminPrincipal(sessionID, adminID);
+                StompSession session = getAdminSession(sessionID, adminID);
 
-    @AfterEach
-    public void cleanUpEach() throws Exception {
-        val sessionPrincipalsField = WebSocketService.class.getDeclaredField("sessionPrincipalList");
-        sessionPrincipalsField.setAccessible(true);
-        val sessionPrincipals = List.of();
-        sessionPrincipalsField.set(webSocketService, sessionPrincipals);
-        sessionRepo.deleteAll();
-    }
+                session.send(REGISTER_ADMIN, null);
 
-    @Test
-    public void registerAdminPrincipal_isRegistered() throws Exception {
-        val sessionID = UUID.randomUUID();
-        val adminID = UUID.randomUUID();
-        sessionRepo.save(new Session(sessionID, adminID, new SessionConfig(new ArrayList<>(), List.of(), null), null,
-                new ArrayList<Member>(), SessionState.WAITING_FOR_MEMBERS));
-        val adminPrincipal = new AdminPrincipal(sessionID, adminID);
-        StompSession session = getAdminSession(sessionID, adminID);
+                // Wait for server-side handling
+                TimeUnit.MILLISECONDS.sleep(TIMEOUT);
 
-        session.send(REGISTER_ADMIN, null);
+                assertEquals(1, webSocketService.getSessionPrincipalList().size());
 
-        // Wait for server-side handling
-        TimeUnit.MILLISECONDS.sleep(TIMEOUT);
+                assertTrue(webSocketService.getSessionPrincipals(sessionID).adminPrincipal().equals(adminPrincipal));
+        }
 
-        assertEquals(1, webSocketService.getSessionPrincipalList().size());
+        @Test
+        public void registerMemberPrincipal_isRegistered() throws Exception {
+                val dbID = new ObjectId();
+                val sessionID = Utils.generateRandomID();
+                val adminID = Utils.generateRandomID();
+                val memberID = Utils.generateRandomID();
+                val member = new Member(memberID, null, null, null, null);
+                val adminPrincipal = new AdminPrincipal(sessionID, adminID);
+                sessionRepo.save(new Session(dbID, sessionID, adminID,
+                                new SessionConfig(new ArrayList<>(), List.of(), 10, null), null, List.of(member),
+                                SessionState.WAITING_FOR_MEMBERS));
+                webSocketService.setAdminUser(adminPrincipal);
+                val memberPrincipal = new MemberPrincipal(sessionID, memberID);
+                StompSession session = getMemberSession(sessionID, memberID);
 
-        assertTrue(webSocketService.getSessionPrincipals(sessionID).adminPrincipal().equals(adminPrincipal));
-    }
+                session.send(REGISTER_MEMBER, null);
 
-    @Test
-    public void registerMemberPrincipal_isRegistered() throws Exception {
-        val sessionID = UUID.randomUUID();
-        val adminID = UUID.randomUUID();
-        val memberID = UUID.randomUUID();
-        val member = new Member(memberID, null, null, null, null);
-        val adminPrincipal = new AdminPrincipal(sessionID, adminID);
-        sessionRepo.save(new Session(sessionID, adminID, new SessionConfig(new ArrayList<>(), List.of(), null), null,
-                List.of(member), SessionState.WAITING_FOR_MEMBERS));
-        webSocketService.setAdminUser(adminPrincipal);
-        val memberPrincipal = new MemberPrincipal(sessionID, memberID);
-        StompSession session = getMemberSession(sessionID, memberID);
+                // Wait for server-side handling
+                TimeUnit.MILLISECONDS.sleep(TIMEOUT);
 
-        session.send(REGISTER_MEMBER, null);
+                assertEquals(1, webSocketService.getSessionPrincipals(sessionID).memberPrincipals().size());
+                assertTrue(webSocketService.getSessionPrincipals(sessionID).memberPrincipals()
+                                .contains(memberPrincipal));
+        }
 
-        // Wait for server-side handling
-        TimeUnit.MILLISECONDS.sleep(TIMEOUT);
+        @Test
+        public void registerMemberPrincipal_sendsMembersUpdates() throws Exception {
+                val dbID = new ObjectId();
+                val sessionID = Utils.generateRandomID();
+                val adminID = Utils.generateRandomID();
+                val memberID = Utils.generateRandomID();
+                val memberList = List.of(new Member(memberID, null, null, null, null));
+                val adminPrincipal = new AdminPrincipal(sessionID, adminID);
+                sessionRepo.save(new Session(dbID, sessionID, adminID,
+                                new SessionConfig(new ArrayList<>(), List.of(), 10, null), null, memberList,
+                                SessionState.WAITING_FOR_MEMBERS));
+                webSocketService.setAdminUser(adminPrincipal);
+                StompSession session = getMemberSession(sessionID, memberID);
+                StompSession adminSession = getAdminSession(sessionID, adminID);
 
-        assertEquals(1, webSocketService.getSessionPrincipals(sessionID).memberPrincipals().size());
-        assertTrue(webSocketService.getSessionPrincipals(sessionID).memberPrincipals().contains(memberPrincipal));
-    }
+                adminSession.subscribe(ADMIN_MEMBER_UPDATES, stompFrameHandler);
+                session.send(REGISTER_MEMBER, null);
 
-    @Test
-    public void registerMemberPrincipal_sendsMembersUpdates() throws Exception {
-        val sessionID = UUID.randomUUID();
-        val adminID = UUID.randomUUID();
-        val memberID = UUID.randomUUID();
-        val memberList = List.of(new Member(memberID, null, null, null, null));
-        val adminPrincipal = new AdminPrincipal(sessionID, adminID);
-        sessionRepo.save(new Session(sessionID, adminID, new SessionConfig(new ArrayList<>(), List.of(), null), null,
-                memberList, SessionState.WAITING_FOR_MEMBERS));
-        webSocketService.setAdminUser(adminPrincipal);
-        StompSession session = getMemberSession(sessionID, memberID);
-        StompSession adminSession = getAdminSession(sessionID, adminID);
+                // Wait for server-side handling
+                TimeUnit.MILLISECONDS.sleep(TIMEOUT);
 
-        adminSession.subscribe(ADMIN_MEMBER_UPDATES, stompFrameHandler);
-        session.send(REGISTER_MEMBER, null);
+                Member[] result = objectMapper.readValue(blockingQueue.poll(), Member[].class);
+                assertEquals(Arrays.asList(result), memberList);
+        }
 
-        // Wait for server-side handling
-        TimeUnit.MILLISECONDS.sleep(TIMEOUT);
+        // @Test
+        // public void registerMemberPrincipal_sendsSessionUpdates() throws Exception {
+        // val sessionID = UUID.randomUUID();
+        // val adminID = UUID.randomUUID();
+        // val memberID = UUID.randomUUID();
+        // val memberList = List.of(new Member(memberID, null, null, null, null));
+        // val adminPrincipal = new AdminPrincipal(sessionID, adminID);
+        // sessionRepo.save(new Session(sessionID, adminID, UUID.randomUUID(), new
+        // SessionConfig(new ArrayList<>(), null),
+        // memberList, SessionState.WAITING_FOR_MEMBERS));
+        // webSocketService.setAdminUser(adminPrincipal);
+        // StompSession session = getMemberSession(sessionID, memberID);
 
-        Member[] result = objectMapper.readValue(blockingQueue.poll(), Member[].class);
-        assertEquals(Arrays.asList(result), memberList);
-    }
+        // session.subscribe(MEMBER_UPDATES, stompFrameHandler);
+        // session.send(REGISTER_MEMBER, null);
 
-    // @Test
-    // public void registerMemberPrincipal_sendsSessionUpdates() throws Exception {
-    // val sessionID = UUID.randomUUID();
-    // val adminID = UUID.randomUUID();
-    // val memberID = UUID.randomUUID();
-    // val memberList = List.of(new Member(memberID, null, null, null, null));
-    // val adminPrincipal = new AdminPrincipal(sessionID, adminID);
-    // sessionRepo.save(new Session(sessionID, adminID, UUID.randomUUID(), new
-    // SessionConfig(new ArrayList<>(), null),
-    // memberList, SessionState.WAITING_FOR_MEMBERS));
-    // webSocketService.setAdminUser(adminPrincipal);
-    // StompSession session = getMemberSession(sessionID, memberID);
+        // // Wait for server-side handling
+        // TimeUnit.MILLISECONDS.sleep(TIMEOUT);
 
-    // session.subscribe(MEMBER_UPDATES, stompFrameHandler);
-    // session.send(REGISTER_MEMBER, null);
+        // SessionState result = objectMapper.readValue(blockingQueue.poll(),
+        // SessionState.class);
+        // assertEquals(result, SessionState.WAITING_FOR_MEMBERS);
+        // }
 
-    // // Wait for server-side handling
-    // TimeUnit.MILLISECONDS.sleep(TIMEOUT);
+        @Test
+        public void unregisterAdminPrincipal_isUnregistered() throws Exception {
+                val dbID = new ObjectId();
+                val sessionID = Utils.generateRandomID();
+                val adminID = Utils.generateRandomID();
+                sessionRepo.save(new Session(dbID, sessionID, adminID,
+                                new SessionConfig(new ArrayList<>(), List.of(), 10, null), null,
+                                new ArrayList<Member>(), SessionState.WAITING_FOR_MEMBERS));
+                val adminPrincipal = new AdminPrincipal(sessionID, adminID);
+                webSocketService.setAdminUser(adminPrincipal);
+                StompSession session = getAdminSession(sessionID, adminID);
 
-    // SessionState result = objectMapper.readValue(blockingQueue.poll(),
-    // SessionState.class);
-    // assertEquals(result, SessionState.WAITING_FOR_MEMBERS);
-    // }
+                session.send(UNREGISTER, null);
 
-    @Test
-    public void unregisterAdminPrincipal_isUnregistered() throws Exception {
-        val sessionID = UUID.randomUUID();
-        val adminID = UUID.randomUUID();
-        sessionRepo.save(new Session(sessionID, adminID, new SessionConfig(new ArrayList<>(), List.of(), null), null,
-                new ArrayList<Member>(), SessionState.WAITING_FOR_MEMBERS));
-        val adminPrincipal = new AdminPrincipal(sessionID, adminID);
-        webSocketService.setAdminUser(adminPrincipal);
-        StompSession session = getAdminSession(sessionID, adminID);
+                // Wait for server-side handling
+                TimeUnit.MILLISECONDS.sleep(TIMEOUT);
+                assertTrue(webSocketService.getSessionPrincipals(sessionID).memberPrincipals().isEmpty());
+        }
 
-        session.send(UNREGISTER, null);
+        @Test
+        public void unregisterMemberPrincipal_isUnregistered() throws Exception {
+                val sessionID = Utils.generateRandomID();
+                val adminID = Utils.generateRandomID();
+                val memberID = Utils.generateRandomID();
+                val member = new Member(memberID, null, null, null, null);
+                sessionRepo.save(new Session(new ObjectId(), adminID, Utils.generateRandomID(),
+                                new SessionConfig(new ArrayList<>(), List.of(), 10, null), null, List.of(member),
+                                SessionState.WAITING_FOR_MEMBERS));
+                val adminPrincipal = new AdminPrincipal(sessionID, adminID);
+                val memberPrincipal = new MemberPrincipal(sessionID, memberID);
+                webSocketService.setAdminUser(adminPrincipal);
+                webSocketService.addMemberIfNew(memberPrincipal);
+                StompSession session = getMemberSession(sessionID, memberID);
 
-        // Wait for server-side handling
-        TimeUnit.MILLISECONDS.sleep(TIMEOUT);
-        assertTrue(webSocketService.getSessionPrincipals(sessionID).memberPrincipals().isEmpty());
-    }
+                session.send(UNREGISTER, null);
 
-    @Test
-    public void unregisterMemberPrincipal_isUnregistered() throws Exception {
-        val sessionID = UUID.randomUUID();
-        val adminID = UUID.randomUUID();
-        val memberID = UUID.randomUUID();
-        val member = new Member(memberID, null, null, null, null);
-        sessionRepo.save(new Session(sessionID, adminID, new SessionConfig(new ArrayList<>(), List.of(), null), null,
-                List.of(member), SessionState.WAITING_FOR_MEMBERS));
-        val adminPrincipal = new AdminPrincipal(sessionID, adminID);
-        val memberPrincipal = new MemberPrincipal(sessionID, memberID);
-        webSocketService.setAdminUser(adminPrincipal);
-        webSocketService.addMemberIfNew(memberPrincipal);
-        StompSession session = getMemberSession(sessionID, memberID);
+                // Wait for server-side handling
+                TimeUnit.MILLISECONDS.sleep(TIMEOUT);
 
-        session.send(UNREGISTER, null);
+                assertEquals(1, webSocketService.getSessionPrincipalList().size());
+                assertTrue(webSocketService.getSessionPrincipals(sessionID).memberPrincipals().isEmpty());
+        }
 
-        // Wait for server-side handling
-        TimeUnit.MILLISECONDS.sleep(TIMEOUT);
+        @Test
+        public void vote_setsVote() throws Exception {
+                val dbID = new ObjectId();
+                val sessionID = Utils.generateRandomID();
+                val adminID = Utils.generateRandomID();
+                val memberID = Utils.generateRandomID();
+                val member = new Member(memberID, null, null, null, null);
+                val memberList = List.of(member);
+                val adminPrincipal = new AdminPrincipal(sessionID, adminID);
+                sessionRepo.save(new Session(dbID, sessionID, adminID,
+                                new SessionConfig(new ArrayList<>(), List.of(), 10, null), null, memberList,
+                                SessionState.WAITING_FOR_MEMBERS));
+                webSocketService.setAdminUser(adminPrincipal);
+                StompSession session = getMemberSession(sessionID, memberID);
+                val vote = "5";
 
-        assertEquals(1, webSocketService.getSessionPrincipalList().size());
-        assertTrue(webSocketService.getSessionPrincipals(sessionID).memberPrincipals().isEmpty());
-    }
+                session.send(VOTE, vote);
 
-    @Test
-    public void vote_setsVote() throws Exception {
-        val sessionID = UUID.randomUUID();
-        val adminID = UUID.randomUUID();
-        val memberID = UUID.randomUUID();
-        val member = new Member(memberID, null, null, null, null);
-        val memberList = List.of(member);
-        val adminPrincipal = new AdminPrincipal(sessionID, adminID);
-        sessionRepo.save(new Session(sessionID, adminID, new SessionConfig(new ArrayList<>(), List.of(), null), null,
-                memberList, SessionState.WAITING_FOR_MEMBERS));
-        webSocketService.setAdminUser(adminPrincipal);
-        StompSession session = getMemberSession(sessionID, memberID);
-        val vote = "5";
+                // Wait for server-side handling
+                TimeUnit.MILLISECONDS.sleep(TIMEOUT);
 
-        session.send(VOTE, vote);
+                val newMemmbers = sessionRepo.findBySessionID(sessionID).getMembers();
+                assertEquals(newMemmbers, List.of(member.updateEstimation(vote)));
+        }
 
-        // Wait for server-side handling
-        TimeUnit.MILLISECONDS.sleep(TIMEOUT);
+        @Test
+        public void vote_sendsUpdate() throws Exception {
+                val dbID = new ObjectId();
+                val sessionID = Utils.generateRandomID();
+                val adminID = Utils.generateRandomID();
+                val memberID = Utils.generateRandomID();
+                val member = new Member(memberID, null, null, null, null);
+                val memberList = List.of(member);
+                val adminPrincipal = new AdminPrincipal(sessionID, adminID);
+                sessionRepo.save(new Session(dbID, sessionID, adminID,
+                                new SessionConfig(new ArrayList<>(), List.of(), 10, null), null, memberList,
+                                SessionState.WAITING_FOR_MEMBERS));
+                webSocketService.setAdminUser(adminPrincipal);
+                StompSession session = getMemberSession(sessionID, memberID);
+                StompSession adminSession = getAdminSession(sessionID, adminID);
+                val vote = "5";
 
-        val newMemmbers = sessionRepo.findBySessionID(sessionID).getMembers();
-        assertEquals(newMemmbers, List.of(member.updateEstimation(vote)));
-    }
+                adminSession.subscribe(ADMIN_MEMBER_UPDATES, stompFrameHandler);
 
-    @Test
-    public void vote_sendsUpdate() throws Exception {
-        val sessionID = UUID.randomUUID();
-        val adminID = UUID.randomUUID();
-        val memberID = UUID.randomUUID();
-        val member = new Member(memberID, null, null, null, null);
-        val memberList = List.of(member);
-        val adminPrincipal = new AdminPrincipal(sessionID, adminID);
-        sessionRepo.save(new Session(sessionID, adminID, new SessionConfig(new ArrayList<>(), List.of(), null), null,
-                memberList, SessionState.WAITING_FOR_MEMBERS));
-        webSocketService.setAdminUser(adminPrincipal);
-        StompSession session = getMemberSession(sessionID, memberID);
-        StompSession adminSession = getAdminSession(sessionID, adminID);
-        val vote = "5";
+                session.send(VOTE, vote);
+                // Wait for server-side handling
+                TimeUnit.MILLISECONDS.sleep(TIMEOUT);
 
-        adminSession.subscribe(ADMIN_MEMBER_UPDATES, stompFrameHandler);
+                Member[] result = objectMapper.readValue(blockingQueue.poll(), Member[].class);
+                assertEquals(Arrays.asList(result), List.of(member.updateEstimation(vote)));
+        }
 
-        session.send(VOTE, vote);
-        // Wait for server-side handling
-        TimeUnit.MILLISECONDS.sleep(TIMEOUT);
+        @Test
+        public void startVoting_updatesState() throws Exception {
+                val dbID = new ObjectId();
+                val sessionID = Utils.generateRandomID();
+                val adminID = Utils.generateRandomID();
+                val memberID = Utils.generateRandomID();
+                val member = new Member(memberID, null, null, null, null);
+                val memberList = List.of(member);
+                val adminPrincipal = new AdminPrincipal(sessionID, adminID);
+                val oldSession = new Session(dbID, sessionID, adminID,
+                                new SessionConfig(new ArrayList<>(), List.of(), 10, null), null, memberList,
+                                SessionState.WAITING_FOR_MEMBERS);
+                sessionRepo.save(oldSession);
+                webSocketService.setAdminUser(adminPrincipal);
+                StompSession adminSession = getAdminSession(sessionID, adminID);
 
-        Member[] result = objectMapper.readValue(blockingQueue.poll(), Member[].class);
-        assertEquals(Arrays.asList(result), List.of(member.updateEstimation(vote)));
-    }
+                adminSession.send(START_VOTING, null);
+                // Wait for server-side handling
+                TimeUnit.MILLISECONDS.sleep(TIMEOUT);
 
-    @Test
-    public void startVoting_updatesState() throws Exception {
-        val sessionID = UUID.randomUUID();
-        val adminID = UUID.randomUUID();
-        val memberID = UUID.randomUUID();
-        val member = new Member(memberID, null, null, null, null);
-        val memberList = List.of(member);
-        val adminPrincipal = new AdminPrincipal(sessionID, adminID);
-        val oldSession = new Session(sessionID, adminID, new SessionConfig(new ArrayList<>(), List.of(), null), null,
-                memberList, SessionState.WAITING_FOR_MEMBERS);
-        sessionRepo.save(oldSession);
-        webSocketService.setAdminUser(adminPrincipal);
-        StompSession adminSession = getAdminSession(sessionID, adminID);
+                val newSession = sessionRepo.findBySessionID(oldSession.getSessionID());
+                assertEquals(SessionState.START_VOTING, newSession.getSessionState());
+        }
 
-        adminSession.send(START_VOTING, null);
-        // Wait for server-side handling
-        TimeUnit.MILLISECONDS.sleep(TIMEOUT);
+        @Test
+        public void restartVoting_resetsEstimations() throws Exception {
+                val dbID = new ObjectId();
+                val sessionID = Utils.generateRandomID();
+                val adminID = Utils.generateRandomID();
+                val memberID = Utils.generateRandomID();
+                val member = new Member(memberID, null, null, null, "5");
+                val memberList = List.of(member);
+                val adminPrincipal = new AdminPrincipal(sessionID, adminID);
+                val oldSession = new Session(dbID, sessionID, adminID,
+                                new SessionConfig(new ArrayList<>(), List.of(), 10, null), null, memberList,
+                                SessionState.WAITING_FOR_MEMBERS);
+                sessionRepo.save(oldSession);
+                webSocketService.setAdminUser(adminPrincipal);
+                StompSession adminSession = getAdminSession(sessionID, adminID);
 
-        val newSession = sessionRepo.findBySessionID(oldSession.getSessionID());
-        assertEquals(SessionState.START_VOTING, newSession.getSessionState());
-    }
+                adminSession.send(RESTART, null);
+                // Wait for server-side handling
+                TimeUnit.MILLISECONDS.sleep(TIMEOUT);
 
-    @Test
-    public void restartVoting_resetsEstimations() throws Exception {
-        val sessionID = UUID.randomUUID();
-        val adminID = UUID.randomUUID();
-        val memberID = UUID.randomUUID();
-        val member = new Member(memberID, null, null, null, "5");
-        val memberList = List.of(member);
-        val adminPrincipal = new AdminPrincipal(sessionID, adminID);
-        val oldSession = new Session(sessionID, adminID, new SessionConfig(new ArrayList<>(), List.of(), null), null,
-                memberList, SessionState.WAITING_FOR_MEMBERS);
-        sessionRepo.save(oldSession);
-        webSocketService.setAdminUser(adminPrincipal);
-        StompSession adminSession = getAdminSession(sessionID, adminID);
+                val newMembers = sessionRepo.findBySessionID(oldSession.getSessionID()).getMembers();
+                assertTrue(newMembers.stream().allMatch(m -> m.getCurrentEstimation().isEmpty()));
+        }
 
-        adminSession.send(RESTART, null);
-        // Wait for server-side handling
-        TimeUnit.MILLISECONDS.sleep(TIMEOUT);
+        @Test
+        // TODO: fix this test
+        public void adminUpdatedUserStories_updatesUserStories() throws Exception {
+                val sessionID = Utils.generateRandomID();
+                val adminID = Utils.generateRandomID();
+                val adminPrincipal = new AdminPrincipal(sessionID, adminID);
+                val oldSession = new Session(new ObjectId(), adminID, Utils.generateRandomID(),
+                                new SessionConfig(new ArrayList<>(), List.of(), 10, null), null, List.of(),
+                                SessionState.WAITING_FOR_MEMBERS);
+                sessionRepo.save(oldSession);
+                webSocketService.setAdminUser(adminPrincipal);
+                StompSession adminSession = getAdminSession(sessionID, adminID);
 
-        val newMembers = sessionRepo.findBySessionID(oldSession.getSessionID()).getMembers();
-        assertTrue(newMembers.stream().allMatch(m -> m.getCurrentEstimation().isEmpty()));
-    }
+                // val userStoriesJson = "[ { \"title\": \"test\", \"description\": \"descr\",
+                // \"estimation\": null, \"isActive\": false } ]";
+                // adminSession.send(UPDATE_USER_STORIES,
+                // objectMapper.writeValueAsString(List.of(new
+                // UserStory("title", "desc", "3", false))));
+                // adminSession.send(UPDATE_USER_STORIES, List.of(new UserStory("title", "desc",
+                // "3",
+                // false)));
+                // adminSession.send(UPDATE_USER_STORIES, userStoriesJson.getBytes("UTF-8"));
+                // Wait for server-side handling
+                TimeUnit.MILLISECONDS.sleep(TIMEOUT);
 
-    @Test
-    // TODO: fix this test
-    public void adminUpdatedUserStories_updatesUserStories() throws Exception {
-        val sessionID = UUID.randomUUID();
-        val adminID = UUID.randomUUID();
-        val adminPrincipal = new AdminPrincipal(sessionID, adminID);
-        val oldSession = new Session(sessionID, adminID, new SessionConfig(new ArrayList<>(), List.of(), null),
-                UUID.randomUUID(), List.of(), SessionState.WAITING_FOR_MEMBERS);
-        sessionRepo.save(oldSession);
-        webSocketService.setAdminUser(adminPrincipal);
-        StompSession adminSession = getAdminSession(sessionID, adminID);
-
-        // val userStoriesJson = "[ { \"title\": \"test\", \"description\": \"descr\",
-        // \"estimation\": null, \"isActive\": false } ]";
-        // adminSession.send(UPDATE_USER_STORIES,
-        // objectMapper.writeValueAsString(List.of(new
-        // UserStory("title", "desc", "3", false))));
-        // adminSession.send(UPDATE_USER_STORIES, List.of(new UserStory("title", "desc",
-        // "3",
-        // false)));
-        // adminSession.send(UPDATE_USER_STORIES, userStoriesJson.getBytes("UTF-8"));
-        // Wait for server-side handling
-        TimeUnit.MILLISECONDS.sleep(TIMEOUT);
-
-        val config = sessionRepo.findBySessionID(oldSession.getSessionID()).getSessionConfig();
-        // assertEquals(config.getUserStories().size(), 1);
-    }
+                val config = sessionRepo.findBySessionID(oldSession.getSessionID()).getSessionConfig();
+                // assertEquals(config.getUserStories().size(), 1);
+        }
 
 }

@@ -9,11 +9,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+import org.bson.types.ObjectId;
 
 @Getter
 @RequiredArgsConstructor
@@ -22,9 +22,11 @@ import lombok.val;
 public class Session {
 
 	@Id
-	private final UUID sessionID;
+	private final ObjectId databaseID;
 
-	private final UUID adminID;
+	private final String sessionID;
+
+	private final String adminID;
 
 	private final SessionConfig sessionConfig;
 
@@ -35,40 +37,41 @@ public class Session {
 
 	private final SessionState sessionState;
 
-	public Session updateEstimation(UUID memberID, String vote) {
+	public Session updateEstimation(String memberID, String vote) {
 		val updatedMembers = members.stream().map(m -> m.getMemberID().equals(memberID) ? m.updateEstimation(vote) : m)
 				.collect(Collectors.toList());
-		return new Session(sessionID, adminID, sessionConfig, adminCookie, updatedMembers, sessionState);
+		return new Session(databaseID, sessionID, adminID, sessionConfig, adminCookie, updatedMembers, sessionState);
 	}
 
 	public Session updateUserStories(List<UserStory> userStories) {
-		val updatedSessionConfig = new SessionConfig(sessionConfig.getSet(), userStories, sessionConfig.getPassword());
-		return new Session(sessionID, adminID, updatedSessionConfig, adminCookie, members, sessionState);
+		val updatedSessionConfig = new SessionConfig(sessionConfig.getSet(), userStories,
+				sessionConfig.getTimerSeconds().orElse(null), sessionConfig.getPassword());
+		return new Session(databaseID, sessionID, adminID, updatedSessionConfig, adminCookie, members, sessionState);
 	}
 
 	public Session resetEstimations() {
 		val updatedMembers = members.stream().map(m -> m.resetEstimation()).collect(Collectors.toList());
-		return new Session(sessionID, adminID, sessionConfig, adminCookie, updatedMembers, sessionState);
+		return new Session(databaseID, sessionID, adminID, sessionConfig, adminCookie, updatedMembers, sessionState);
 	}
 
 	public Session updateMembers(List<Member> updatedMembers) {
-		return new Session(sessionID, adminID, sessionConfig, adminCookie, updatedMembers, sessionState);
+		return new Session(databaseID, sessionID, adminID, sessionConfig, adminCookie, updatedMembers, sessionState);
 	}
 
 	public Session updateSessionState(SessionState updatedSessionState) {
-		return new Session(sessionID, adminID, sessionConfig, adminCookie, members, updatedSessionState);
+		return new Session(databaseID, sessionID, adminID, sessionConfig, adminCookie, members, updatedSessionState);
 	}
 
 	public Session addMember(Member member) {
 		var updatedMembers = new ArrayList<>(members);
 		updatedMembers.add(member);
-		return new Session(sessionID, adminID, sessionConfig, adminCookie, updatedMembers, sessionState);
+		return new Session(databaseID, sessionID, adminID, sessionConfig, adminCookie, updatedMembers, sessionState);
 	}
 
-	public Session removeMember(UUID memberID) {
+	public Session removeMember(String memberID) {
 		val updatedMembers = members.stream().filter(m -> !m.getMemberID().equals(memberID))
 				.collect(Collectors.toList());
-		return new Session(sessionID, adminID, sessionConfig, adminCookie, updatedMembers, sessionState);
+		return new Session(databaseID, sessionID, adminID, sessionConfig, adminCookie, updatedMembers, sessionState);
 	}
 
 }

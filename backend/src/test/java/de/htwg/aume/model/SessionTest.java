@@ -6,8 +6,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.UUID;
 
+import de.htwg.aume.Utils;
+import org.bson.types.ObjectId;
 import org.junit.jupiter.api.Test;
 
 import lombok.val;
@@ -16,13 +17,14 @@ public class SessionTest {
 
 	@Test
 	public void equal_works() {
-		val sessionIdBefore = UUID.randomUUID();
-		val adminIdBefore = UUID.randomUUID();
-		val session = new Session(sessionIdBefore, adminIdBefore, null, null, new ArrayList<Member>(),
+		val sessionIdBefore = Utils.generateRandomID();
+		val adminIdBefore = Utils.generateRandomID();
+		val dbId = new ObjectId();
+		val session = new Session(dbId, sessionIdBefore, adminIdBefore, null, null, new ArrayList<>(),
 				SessionState.WAITING_FOR_MEMBERS);
-		val sameSession = new Session(sessionIdBefore, adminIdBefore, null, null, new ArrayList<Member>(),
+		val sameSession = new Session(dbId, sessionIdBefore, adminIdBefore, null, null, new ArrayList<>(),
 				SessionState.WAITING_FOR_MEMBERS);
-		val otherSession = new Session(UUID.randomUUID(), adminIdBefore, null, null, new ArrayList<Member>(),
+		val otherSession = new Session(new ObjectId(), sessionIdBefore, adminIdBefore, null, null, new ArrayList<>(),
 				SessionState.WAITING_FOR_MEMBERS);
 
 		assertEquals(session, sameSession);
@@ -32,14 +34,14 @@ public class SessionTest {
 
 	@Test
 	public void updateEstimation_works() {
-		val memberID1 = UUID.randomUUID();
-		val memberID2 = UUID.randomUUID();
+		val memberID1 = Utils.generateRandomID();
+		val memberID2 = Utils.generateRandomID();
 		val member1 = new Member(memberID1, null, null, null, null);
 		val member2 = new Member(memberID2, null, null, null, null);
 		val members = Arrays.asList(member1, member2);
 		val vote = "5";
 
-		val session = new Session(null, null, null, null, members, SessionState.WAITING_FOR_MEMBERS);
+		val session = new Session(null, null, null, null, null, members, SessionState.WAITING_FOR_MEMBERS);
 		val result = session.updateEstimation(member1.getMemberID(), vote);
 
 		val resultMember = result.getMembers().stream().filter(m -> m.getMemberID().equals(member1.getMemberID()))
@@ -50,12 +52,12 @@ public class SessionTest {
 
 	@Test
 	public void resetEstimations_works() {
-		val memberID1 = UUID.randomUUID();
-		val memberID2 = UUID.randomUUID();
+		val memberID1 = Utils.generateRandomID();
+		val memberID2 = Utils.generateRandomID();
 		val member1 = new Member(memberID1, null, null, null, "3");
 		val member2 = new Member(memberID2, null, null, null, "5");
 		val members = Arrays.asList(member1, member2);
-		val session = new Session(null, null, null, null, members, SessionState.WAITING_FOR_MEMBERS);
+		val session = new Session(null, null, null, null, null, members, SessionState.WAITING_FOR_MEMBERS);
 
 		val result = session.resetEstimations();
 
@@ -67,7 +69,7 @@ public class SessionTest {
 		val oldSessionState = SessionState.WAITING_FOR_MEMBERS;
 		val newSessionState = SessionState.START_VOTING;
 
-		val session = new Session(null, null, null, null, new ArrayList<Member>(), oldSessionState);
+		val session = new Session(null, null, null, null, null, new ArrayList<Member>(), oldSessionState);
 		val result = session.updateSessionState(newSessionState);
 
 		assertEquals(result.getSessionState(), newSessionState);
@@ -75,11 +77,11 @@ public class SessionTest {
 
 	@Test
 	public void addMember_works() {
-		val memberID1 = UUID.randomUUID();
+		val memberID1 = Utils.generateRandomID();
 		val member1 = new Member(memberID1, null, null, null, "3");
 		val members = Arrays.asList(member1);
-		val session = new Session(null, null, null, null, members, SessionState.WAITING_FOR_MEMBERS);
-		val memberID2 = UUID.randomUUID();
+		val session = new Session(null, null, null, null, null, members, SessionState.WAITING_FOR_MEMBERS);
+		val memberID2 = Utils.generateRandomID();
 		val member2 = new Member(memberID2, null, null, null, "5");
 
 		val result = session.addMember(member2);
@@ -90,12 +92,12 @@ public class SessionTest {
 
 	@Test
 	public void removeMember_works() {
-		val memberID1 = UUID.randomUUID();
-		val memberID2 = UUID.randomUUID();
+		val memberID1 = Utils.generateRandomID();
+		val memberID2 = Utils.generateRandomID();
 		val member1 = new Member(memberID1, null, null, null, "3");
 		val member2 = new Member(memberID2, null, null, null, "5");
 		val members = Arrays.asList(member1, member2);
-		val session = new Session(null, null, null, null, members, SessionState.WAITING_FOR_MEMBERS);
+		val session = new Session(null, null, null, null, null, members, SessionState.WAITING_FOR_MEMBERS);
 
 		val result = session.removeMember(memberID1);
 

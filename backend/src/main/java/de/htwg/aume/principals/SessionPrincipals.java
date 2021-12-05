@@ -1,7 +1,6 @@
 package de.htwg.aume.principals;
 
 import java.util.Set;
-import java.util.UUID;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -16,7 +15,7 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode
 public class SessionPrincipals {
 
-    private UUID sessionID;
+    private String sessionID;
 
     private AdminPrincipal adminPrincipal;
 

@@ -3,8 +3,9 @@ package de.htwg.aume.repository;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
+import de.htwg.aume.Utils;
+import org.bson.types.ObjectId;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,21 +27,23 @@ public class SessionRepositoryTest {
 
 	@Test
 	public void saveSession_returnsSession() {
-		val sessionID = UUID.randomUUID();
-		val adminID = UUID.randomUUID();
-		val session = new Session(sessionID, adminID, null, null, new ArrayList<Member>(), SessionState.WAITING_FOR_MEMBERS);
+		val adminID = Utils.generateRandomID();
+		val membersID = Utils.generateRandomID();
+		val session = new Session(new ObjectId(), adminID, membersID, null, null, new ArrayList<Member>(),
+				SessionState.WAITING_FOR_MEMBERS);
 
 		assertEquals(session, sessionRepo.save(session));
 	}
 
 	@Test
 	public void addMemberToSession_addsMember() {
-		val sessionID = UUID.randomUUID();
-		val adminID = UUID.randomUUID();
-		val member = new Member(UUID.randomUUID(), "John", "0x0a0a0a", AvatarAnimal.CAMEL, null);
+		val adminID = Utils.generateRandomID();
+		val membersID = Utils.generateRandomID();
+		val member = new Member(Utils.generateRandomID(), "John", "0x0a0a0a", AvatarAnimal.CAMEL, null);
 		val members = new ArrayList<Member>();
 		members.add(member);
-		val session = new Session(sessionID, adminID, null, null, members, SessionState.WAITING_FOR_MEMBERS);
+		val session = new Session(new ObjectId(), adminID, membersID, null, null, members,
+				SessionState.WAITING_FOR_MEMBERS);
 
 		assertEquals(session, sessionRepo.save(session));
 	}

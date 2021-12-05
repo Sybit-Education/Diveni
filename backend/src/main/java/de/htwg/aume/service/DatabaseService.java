@@ -16,7 +16,7 @@ public class DatabaseService {
     @Autowired
     SessionRepository sessionRepo;
 
-    public Optional<Session> getSessionByID(UUID sessionID) {
+    public Optional<Session> getSessionByID(String sessionID) {
         return Optional.ofNullable(sessionRepo.findBySessionID(sessionID));
     }
 
@@ -24,7 +24,7 @@ public class DatabaseService {
         return Optional.ofNullable(sessionRepo.findByAdminCookie(adminCookie));
     }
 
-    public Optional<Session> getSessionByMemberID(UUID memberID) {
+    public Optional<Session> getSessionByMemberID(String memberID) {
         return sessionRepo.findByMemberID(memberID);
     }
 

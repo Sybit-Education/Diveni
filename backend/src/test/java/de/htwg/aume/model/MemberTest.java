@@ -5,8 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Optional;
-import java.util.UUID;
 
+import de.htwg.aume.Utils;
 import org.junit.jupiter.api.Test;
 
 import lombok.val;
@@ -15,14 +15,14 @@ public class MemberTest {
 
 	@Test
 	public void equal_works() {
-		val memberID = UUID.randomUUID();
+		val memberID = Utils.generateRandomID();
 		val name = "John";
 		val hexColor = "#ffffff";
 		val avatar = AvatarAnimal.WOLF;
 		String estimation = null;
 		val member = new Member(memberID, name, hexColor, avatar, estimation);
 		val sameMember = new Member(memberID, name, hexColor, avatar, estimation);
-		val otherMember = new Member(UUID.randomUUID(), name, hexColor, avatar, estimation);
+		val otherMember = new Member(Utils.generateRandomID(), name, hexColor, avatar, estimation);
 
 		assertEquals(member, sameMember);
 		assertNotEquals(member, otherMember);
