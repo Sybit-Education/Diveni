@@ -11,7 +11,7 @@ Usage of Agile poker
 
 Create a meeting:
 
-1. Click on the left GO button to create a new meeting.
+1. Click on the left "GO" button to create a new meeting.
 2. You will be send to the Prepare session page where you can customize the upcoming voting session for your team.
     - 1. In the first row you can decide which poker card set will be used for the upcoming voting session.
     You can chose between 3 sets, Fibonacci, T-shirt sizes and Hours. You can also select individually the values of each card set.
@@ -47,7 +47,9 @@ the host of the meeting can at any given time add new stories for the Agile poge
 6. Download your results as a CSV file by clicking on the green button after ending the meeting.
 
 
+Join a meeting:
 
+1. Click on the right "GO" button to join an existing meeting.
 
 
 
