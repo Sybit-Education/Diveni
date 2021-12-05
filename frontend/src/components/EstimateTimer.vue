@@ -1,6 +1,6 @@
 <template>
   <div id="estimate-timer" class="d-flex justify-content-end">
-    <h2>
+    <h2 :style="`color: ${textColor}`">
       {{ formatTimer() }}
     </h2>
   </div>
@@ -23,6 +23,20 @@ export default Vue.extend({
       timerCount: 0,
       intervalHandler: -1,
     };
+  },
+  computed: {
+    textColor(): string {
+      if (this.timerCount > ((this.initialTimer / 3) * 2)) {
+        return '#229954';
+      }
+      if (this.timerCount > ((this.initialTimer / 3))) {
+        return '#D4AC0D';
+      }
+      if (this.timerCount === 0) {
+        return 'black';
+      }
+      return '#CB4335';
+    },
   },
   watch: {
     timerTriggered() {
@@ -62,6 +76,7 @@ export default Vue.extend({
         if (this.timerCount > 0) {
           this.timerCount -= 1;
         } else {
+          this.$emit('timerFinished');
           clearInterval(this.intervalHandler);
         }
       }, 1000);
