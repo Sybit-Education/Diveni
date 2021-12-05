@@ -1,13 +1,13 @@
 package de.htwg.aume.controller;
 
 import java.security.Principal;
-
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Controller;
 import de.htwg.aume.model.SessionState;
-
+import de.htwg.aume.model.UserStory;
 import de.htwg.aume.principals.AdminPrincipal;
 import de.htwg.aume.principals.MemberPrincipal;
 import de.htwg.aume.service.DatabaseService;
@@ -64,6 +64,14 @@ public class WebsocketController {
 		webSocketService.sendSessionStateToMembers(session);
 	}
 
+	@MessageMapping("/votingFinished")
+	public void votingFinished(AdminPrincipal principal) {
+		val session = ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID())
+				.updateSessionState(SessionState.VOTING_FINISHED);
+		databaseService.saveSession(session);
+		webSocketService.sendSessionStateToMembers(session);
+	}
+
 	@MessageMapping("/vote")
 	public synchronized void processVote(@Payload String vote, MemberPrincipal member) {
 		val session = ControllerUtils.getSessionByMemberIDOrThrowResponse(databaseService, member.getMemberID())
@@ -75,9 +83,18 @@ public class WebsocketController {
 	@MessageMapping("/restart")
 	public synchronized void restartVote(AdminPrincipal principal) {
 		val session = ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID())
+				.updateSessionState(SessionState.START_VOTING)
 				.resetEstimations();
 		databaseService.saveSession(session);
 		webSocketService.sendMembersUpdate(session);
 		webSocketService.sendSessionStateToMembers(session);
+	}
+
+	@MessageMapping("/adminUpdatedUserStories")
+	public synchronized void adminUpdatedUserStories(AdminPrincipal principal, @Payload List<UserStory> userStories) {
+		val session = ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID())
+				.updateUserStories(userStories);
+		databaseService.saveSession(session);
+		webSocketService.sendUpdatedUserStoriesToMembers(session);
 	}
 }

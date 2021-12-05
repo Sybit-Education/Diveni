@@ -1,5 +1,5 @@
 <template>
-  <b-row>
+  <b-row ref="card">
     <div class="col-lg-3 col-md-2 col-sm-1 " />
     <div
       id="join-card"
@@ -54,6 +54,7 @@
         <b-button
           class="mt-5"
           variant="success"
+          type="submit"
           :disabled="name.length < 1 || sessionID.length < 1"
           @click="onClickButton"
         >
@@ -93,15 +94,22 @@ export default Vue.extend({
     if (this.sessionIdFromUrl) {
       this.sessionID = this.sessionIdFromUrl;
     }
+    window.addEventListener('keyup', (event) => {
+      if (event.keyCode === 13) {
+        this.onClickButton();
+      }
+    });
   },
   methods: {
     onClickButton() {
-      const data: JoinCommand = {
-        sessionID: this.sessionID.split(' ').join(''),
-        password: this.password,
-        name: this.name.trim(),
-      };
-      this.$emit('clicked', data);
+      if (this.name.length > 1 && this.sessionID.length > 1) {
+        const data: JoinCommand = {
+          sessionID: this.sessionID.split(' ').join(''),
+          password: this.password,
+          name: this.name.trim(),
+        };
+        this.$emit('clicked', data);
+      }
     },
   },
 });
@@ -111,7 +119,8 @@ export default Vue.extend({
 #join-card {
   border-radius: 20px;
 }
+
 h6 {
-  font-weight:700;
+  font-weight: 700;
 }
 </style>

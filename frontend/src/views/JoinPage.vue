@@ -34,7 +34,7 @@ export default Vue.extend({
       name: '',
       sessionID: '',
       voteSet: '',
-      userStories: '',
+      timerSeconds: 0,
     };
   },
   computed: {
@@ -47,13 +47,15 @@ export default Vue.extend({
       if (isConnected) {
         console.debug('JoinPage: member connected to websocket');
         this.registerMemberPrincipalOnBackend();
-        this.subscribeWSStartEstimating();
+        this.subscribeWSMemberUpdates();
+        this.subscribeWSadminUpdatedUserStories();
+        this.subscribeWSMemberUpdated();
         this.goToEstimationPage();
       }
     },
   },
   created() {
-    const id = this.$route.query as unknown as {sessionID: string};
+    const id = this.$route.query as unknown as { sessionID: string };
     if (id.sessionID) {
       this.sessionID = id.sessionID;
     }
@@ -75,10 +77,14 @@ export default Vue.extend({
       try {
         const sessionConfig = (await this.axios.post(url, joinInfo)).data as {
           set: Array<string>,
-          userStories: Array<{title:string, description:string, estimation:string|null }>,
+          timerSeconds: number,
+          userStories: Array<{ title: string, description: string, estimation: string | null }>,
         };
         this.voteSet = JSON.stringify(sessionConfig.set);
-        this.userStories = JSON.stringify(sessionConfig.userStories);
+        this.timerSeconds = parseInt(JSON.stringify(sessionConfig.timerSeconds), 10);
+        console.log('session page');
+        console.log(sessionConfig);
+        this.$store.commit('setUserStories', { stories: sessionConfig.userStories });
         this.connectToWebSocket(data.sessionID, joinInfo.member.memberID);
       } catch (e) {
         console.error(`Response of ${url} is invalid: ${e}`);
@@ -97,8 +103,14 @@ export default Vue.extend({
       const endPoint = Constants.webSocketRegisterMemberRoute;
       this.$store.commit('sendViaBackendWS', { endPoint });
     },
-    subscribeWSStartEstimating() {
-      this.$store.commit('subscribeOnBackendWSStartPlanningListenRoute');
+    subscribeWSMemberUpdates() {
+      this.$store.commit('subscribeOnBackendWSMemberUpdates');
+    },
+    subscribeWSadminUpdatedUserStories() {
+      this.$store.commit('subscribeOnBackendWSStoriesUpdated');
+    },
+    subscribeWSMemberUpdated() {
+      this.$store.commit('subscribeOnBackendWSAdminUpdate');
     },
     goToEstimationPage() {
       this.$router.push({
@@ -109,6 +121,7 @@ export default Vue.extend({
           hexColor: this.hexColor,
           avatarAnimalAssetName: this.avatarAnimalAssetName,
           voteSetJson: this.voteSet,
+          timerSecondsString: this.timerSeconds.toString(),
         },
       });
     },

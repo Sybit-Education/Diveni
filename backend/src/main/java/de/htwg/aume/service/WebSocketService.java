@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +29,7 @@ public class WebSocketService {
 	@Getter
 	private Map<AdminPrincipal, Set<MemberPrincipal>> memberMap = new HashMap<>();
 
-	Entry<AdminPrincipal, Set<MemberPrincipal>> getSessionEntry(UUID sessionID) {
+	Entry<AdminPrincipal, Set<MemberPrincipal>> getSessionEntry(String sessionID) {
 		return memberMap.entrySet().stream().filter(e -> e.getKey().getSessionID().equals(sessionID)).findFirst()
 				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
 						ErrorMessages.sessionNotFoundErrorMessage));
@@ -59,6 +58,15 @@ public class WebSocketService {
 		val sessionEntry = getSessionEntry(session.getSessionID());
 		simpMessagingTemplate.convertAndSendToUser(sessionEntry.getKey().getName(), "/updates/membersUpdated",
 				session.getMembers());
+		sendMembersUpdateToMembers(session);
+	}
+
+	public void sendMembersUpdateToMembers(Session session) {
+		getSessionEntry(session.getSessionID()).getValue().stream()
+				.forEach(member -> simpMessagingTemplate.convertAndSendToUser(
+						member.getMemberID().toString(), "/updates/membersUpdated",
+						session.getMembers())
+				);
 	}
 
 	public void sendSessionStateToMembers(Session session) {
@@ -66,8 +74,17 @@ public class WebSocketService {
 				.forEach(member -> sendSessionStateToMember(session, member.getMemberID().toString()));
 	}
 
+	public void sendUpdatedUserStoriesToMembers(Session session) {
+		getSessionEntry(session.getSessionID()).getValue().stream()
+				.forEach(member -> sendUpdatedUserStoriesToMember(session, member.getMemberID().toString()));
+	}
+
 	public void sendSessionStateToMember(Session session, String memberID) {
 		simpMessagingTemplate.convertAndSendToUser(memberID, "/updates/member", session.getSessionState().toString());
+	}
+
+	public void sendUpdatedUserStoriesToMember(Session session, String memberID) {
+		simpMessagingTemplate.convertAndSendToUser(memberID, "/updates/userStories", session.getSessionConfig().getUserStories());
 	}
 
 	public void removeSession(Session session) {

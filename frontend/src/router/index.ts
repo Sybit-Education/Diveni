@@ -5,6 +5,7 @@ import JoinPage from '../views/JoinPage.vue';
 import SessionPage from '../views/SessionPage.vue';
 import MemberVotePage from '../views/MemberVotePage.vue';
 import PrepareSessionPage from '../views/PrepareSessionPage.vue';
+import ResultPage from '../views/ResultPage.vue';
 
 Vue.use(VueRouter);
 
@@ -19,6 +20,12 @@ const routes: Array<RouteConfig> = [
     name: 'SessionPage',
     props: true,
     component: SessionPage,
+  },
+  {
+    path: '/result',
+    name: 'ResultPage',
+    props: true,
+    component: ResultPage,
   },
   {
     path: '/join',
