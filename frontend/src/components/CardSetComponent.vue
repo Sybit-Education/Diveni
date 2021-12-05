@@ -63,7 +63,13 @@ export default Vue.extend({
         {
           name: 'Hours',
           description: 'Simply hours. Great for sub tasks.',
-          values: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '12', '16'],
+          values: ['1', '2', '3', '4', '5', '6', '8', '10', '12', '16'],
+          activeValues: ['1', '2', '3', '4', '5', '6', '8', '10', '12', '16'],
+        },
+        {
+          name: 'Numbers',
+          description: 'Integer numbers. What do you want more?.',
+          values: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
           activeValues: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
         },
       ],
