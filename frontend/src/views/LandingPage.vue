@@ -14,7 +14,7 @@
       <landing-page-card
         class="col-md-4 m-2 col-12"
         :title="'Join meeting'"
-        :description="'Join a existing meeting and help your team estimating'"
+        :description="'Join an existing meeting and help your team estimating'"
         :button-text="'GO'"
         :on-click="goToJoinPage"
       />
