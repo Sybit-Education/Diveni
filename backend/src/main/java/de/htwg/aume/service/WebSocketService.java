@@ -89,6 +89,15 @@ public class WebSocketService {
 		val sessionPrincipals = getSessionPrincipals(session.getSessionID());
 		simpMessagingTemplate.convertAndSendToUser(sessionPrincipals.adminPrincipal().getName(),
 				"/updates/membersUpdated", session.getMembers());
+		sendMembersUpdateToMembers(session);
+	}
+
+	public void sendMembersUpdateToMembers(Session session) {
+		getSessionPrincipals(session.getSessionID()).memberPrincipals()
+				.forEach(member -> simpMessagingTemplate.convertAndSendToUser(
+						member.getMemberID().toString(), "/updates/membersUpdated",
+						session.getMembers())
+				);
 	}
 
 	public void sendSessionStateToMembers(Session session) {
