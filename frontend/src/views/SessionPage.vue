@@ -65,7 +65,7 @@
           </b-button>
           <b-button v-b-modal.close-session-modal variant="danger">
             <b-icon-x />
-            Close session
+            End meeting
           </b-button>
           <b-modal id="close-session-modal" title="Are you sure" @ok="closeSession">
             <p class="my-4">
