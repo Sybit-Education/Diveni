@@ -67,6 +67,7 @@ export default Vue.extend({
             adminID: string,
             sessionConfig: {
               set: Array<string>,
+              timerSeconds: number,
               userStories: Array<{title:string, description:string, estimation:string|null, isActive: false }>,
             },
             sessionState: string,
