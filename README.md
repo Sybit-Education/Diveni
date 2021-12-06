@@ -12,7 +12,7 @@ Usage of Planning-Poker
 Create a meeting:
 
 1. Click on the left "GO" button to create a new meeting.
-2. You will be send to the Prepare session page where you can customize the upcoming voting session for your team.
+2. You will be sent to the Prepare session page where you can customize the upcoming voting session for your team.
     - 1. In the first row you can decide which poker card set will be used for the upcoming voting session.
     You can chose between 3 sets, Fibonacci, T-shirt sizes and Hours. You can also select individually the values of each card set.
     - 2. In the second row, you can specify a timer for the voting session. The timer will automaticly be initialized when you start the voting session. The value of the timer can be changed by clicking on the two buttons on the left and right.
@@ -32,7 +32,7 @@ the host of the meeting can at any given time add new stories for the Planning-P
     
     After you prepared your session, start the meeting.
 
-3. You will be send to a waiting room where you can see which members already joined the meeting.
+3. You will be sent to a waiting room where you can see which members already joined the meeting.
     -invite members by hovering over the blue code and copy the Session-ID or a direct link which you can send to your team members.
 
     After your members have joined, start the planning.
@@ -65,6 +65,7 @@ Depending on your device, you can see the results of the other members.
 
 6. The planning can be restarted at any given time by the host.
 
+----------------------------------------------------
 
 Application Instructions and Requirements:
 
@@ -95,4 +96,11 @@ If an error message appears with "could not convert UUID to String", delete the 
 
 to start the frontend.
 
+----------------------------------------------------
 
+Technical Information:
+
+The frontend is written in Vue.js and the backend in Node.js.
+
+The initial communication between frontend and backend happens through REST
+After the session is initialized the communication will be switched to websockets, therefore after something has changed (eg. a client voted) the server updates the clients. (take a look at WebSocketConfig.java for more information)
