@@ -2,16 +2,19 @@
   <div>
     <div class="sidenavButton">
       <b-button size="lg" variant="info" @click="toggleSideBar()">
-        <b-icon-card-list /> Stories
+        <b-icon-card-list />
+        Stories
       </b-button>
     </div>
     <div class="sidenav" :style="`width: ${sideBarOpen? '400px': '0px'};` ">
       <div v-if="showEditButtons">
         <b-button size="lg" variant="success" @click="addUserStory()">
-          Add <b-icon-plus />
+          Add
+          <b-icon-plus />
         </b-button>
         <b-button size="lg" class="m-2" variant="warning" @click="editOrSave()">
-          {{ editEnabled ? 'Save' : 'Edit' }} <b-icon-pencil />
+          {{ editEnabled ? 'Save' : 'Edit' }}
+          <b-icon-pencil />
         </b-button>
       </div>
       <div class="list-group" :style="!showEditButtons ? 'margin-top: 66px;' : ''">
@@ -61,7 +64,7 @@
               class="mx-2"
               pill variant="info"
             >
-              {{ story.estimation ? story.estimation: '?' }}
+              {{ story.estimation ? story.estimation : '?' }}
             </b-button>
 
             <b-button v-if="editEnabled" variant="danger" @click="deleteStory(index)">
@@ -102,7 +105,7 @@ export default Vue.extend({
     return {
       sideBarOpen: false,
       editEnabled: false,
-      userStories: [] as Array<{title:string, description:string, estimation:string|null, isActive:boolean}>,
+      userStories: [] as Array<{ title: string, description: string, estimation: string | null, isActive: boolean }>,
     };
   },
   watch: {
@@ -110,14 +113,14 @@ export default Vue.extend({
       this.publishChanges();
     },
     initialStories() {
-      this.userStories = this.initialStories as Array<{title:string, description:string, estimation:string|null, isActive:boolean}>;
+      this.userStories = this.initialStories as Array<{ title: string, description: string, estimation: string | null, isActive: boolean }>;
     },
     editEnabled() {
       this.publishChanges();
     },
   },
-  mounted() {
-    this.userStories = this.initialStories as Array<{title:string, description:string, estimation:string|null, isActive:boolean}>;
+  created() {
+    this.userStories = this.initialStories as Array<{ title: string, description: string, estimation: string | null, isActive: boolean }>;
   },
   methods: {
     setUserStoryAsActive(index) {
@@ -163,25 +166,30 @@ export default Vue.extend({
   position: fixed; /* Stay in place */
   z-index: 2; /* Stay on top */
   top: 0; /* Stay at the top */
-  right:0;
+  right: 0;
   background-color: white;
   overflow-x: hidden; /* Disable horizontal scroll */
   transition: 0.2s; /* 0.5 second transition effect to slide in the sidenav */
 }
 
- .sidenavButton {
-   margin: 8px;
+.sidenavButton {
+  margin: 8px;
   float: right;
   position: fixed;
   z-index: 3;
   top: 0;
-  right:0;
+  right: 0;
   overflow-x: hidden;
 }
 
 /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
 @media screen and (max-height: 450px) {
-  .sidenav {padding-top: 15px;}
-  .sidenav a {font-size: 18px;}
+  .sidenav {
+    padding-top: 15px;
+  }
+
+  .sidenav a {
+    font-size: 18px;
+  }
 }
 </style>

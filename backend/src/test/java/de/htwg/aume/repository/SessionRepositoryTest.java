@@ -3,7 +3,6 @@ package de.htwg.aume.repository;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 import de.htwg.aume.Utils;
 import org.bson.types.ObjectId;
@@ -28,9 +27,9 @@ public class SessionRepositoryTest {
 
 	@Test
 	public void saveSession_returnsSession() {
-		val adminID =  Utils.generateRandomID();
-		val membersID =  Utils.generateRandomID();
-		val session = new Session(new ObjectId(), adminID, membersID, null, new ArrayList<Member>(),
+		val adminID = Utils.generateRandomID();
+		val membersID = Utils.generateRandomID();
+		val session = new Session(new ObjectId(), adminID, membersID, null, null, new ArrayList<Member>(),
 				SessionState.WAITING_FOR_MEMBERS);
 
 		assertEquals(session, sessionRepo.save(session));
@@ -38,12 +37,13 @@ public class SessionRepositoryTest {
 
 	@Test
 	public void addMemberToSession_addsMember() {
-		val adminID =  Utils.generateRandomID();
-		val membersID =  Utils.generateRandomID();
+		val adminID = Utils.generateRandomID();
+		val membersID = Utils.generateRandomID();
 		val member = new Member(Utils.generateRandomID(), "John", "0x0a0a0a", AvatarAnimal.CAMEL, null);
 		val members = new ArrayList<Member>();
 		members.add(member);
-		val session = new Session(new ObjectId(), adminID, membersID, null, members, SessionState.WAITING_FOR_MEMBERS);
+		val session = new Session(new ObjectId(), adminID, membersID, null, null, members,
+				SessionState.WAITING_FOR_MEMBERS);
 
 		assertEquals(session, sessionRepo.save(session));
 	}

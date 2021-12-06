@@ -2,7 +2,9 @@ package de.htwg.aume.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
@@ -36,17 +39,30 @@ public class RoutesController {
 	DatabaseService databaseService;
 
 	@PostMapping(value = "/sessions")
-	public ResponseEntity<Session> createSession(@RequestBody SessionConfig sessionConfig) {
-		val usedSessionIDs = databaseService.getSessions().stream().map(Session::getSessionID).collect(Collectors.toSet());
-		val usedDatabaseIDs = databaseService.getSessions().stream().map(Session::getDatabaseID).collect(Collectors.toSet());
-		ObjectId databaseID = Stream.generate(ObjectId::new).filter(s -> !usedDatabaseIDs.contains(s)).limit(1)
-				.collect(Collectors.toList()).get(0);
-		List<String> sessionIds = Stream.generate(Utils::generateRandomID).filter(s -> !usedSessionIDs.contains(s)).limit(2)
-				.collect(Collectors.toList());
-		val session = new Session(databaseID, sessionIds.get(0), sessionIds.get(1), sessionConfig,
+	public ResponseEntity<Map<String, Object>> createSession(@RequestBody SessionConfig sessionConfig) {
+		val usedSessionIDs = databaseService.getSessions().stream().map(Session::getSessionID)
+				.collect(Collectors.toSet());
+		val usedDatabaseIDs = databaseService.getSessions().stream().map(Session::getDatabaseID)
+				.collect(Collectors.toSet());
+		ObjectId databaseID = Stream.generate(ObjectId::new).filter(s -> !usedDatabaseIDs.contains(s)).findFirst()
+				.get();
+		List<String> sessionIds = Stream.generate(Utils::generateRandomID).filter(s -> !usedSessionIDs.contains(s))
+				.limit(2).collect(Collectors.toList());
+		val session = new Session(databaseID, sessionIds.get(0), sessionIds.get(1), sessionConfig, UUID.randomUUID(),
 				new ArrayList<>(), SessionState.WAITING_FOR_MEMBERS);
 		databaseService.saveSession(session);
-		return new ResponseEntity<>(session, HttpStatus.CREATED);
+		val responseMap = Map.of("session", session, "adminCookie", session.getAdminCookie());
+		return new ResponseEntity<>(responseMap, HttpStatus.CREATED);
+	}
+
+	@GetMapping(value = "/sessions")
+	public ResponseEntity<Session> getExistingSession(@RequestParam("adminCookie") UUID adminCookie) {
+		val session = databaseService.getSessionByAdminCookie(adminCookie);
+		if (session.isPresent()) {
+			return new ResponseEntity<>(session.get(), HttpStatus.OK);
+		} else {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessages.sessionNotFoundErrorMessage);
+		}
 	}
 
 	@PostMapping(value = "/sessions/{sessionID}/join")
