@@ -2,6 +2,7 @@ package de.htwg.aume.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,12 +12,16 @@ import de.htwg.aume.repository.SessionRepository;
 
 @Service
 public class DatabaseService {
-    
+
     @Autowired
     SessionRepository sessionRepo;
 
     public Optional<Session> getSessionByID(String sessionID) {
         return Optional.ofNullable(sessionRepo.findBySessionID(sessionID));
+    }
+
+    public Optional<Session> getSessionByAdminCookie(UUID adminCookie) {
+        return Optional.ofNullable(sessionRepo.findByAdminCookie(adminCookie));
     }
 
     public Optional<Session> getSessionByMemberID(String memberID) {
@@ -34,7 +39,5 @@ public class DatabaseService {
     public void deleteSession(Session session) {
         sessionRepo.delete(session);
     }
-
-    
 
 }

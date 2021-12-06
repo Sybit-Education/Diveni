@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Optional;
-import java.util.UUID;
 
 import de.htwg.aume.Utils;
 import org.junit.jupiter.api.Test;
