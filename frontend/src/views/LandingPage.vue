@@ -45,6 +45,7 @@ export default Vue.extend({
     return {
       title: 'Agile poker',
       sessionWrapper: {} as { session: Session },
+      startNewSessionOnMounted: false,
     };
   },
   created() {
@@ -73,6 +74,7 @@ export default Vue.extend({
             sessionState: string,
           };
           this.sessionWrapper = { session };
+          this.startNewSessionOnMounted = true;
         } catch (e) {
           console.clear();
           console.log(`got error: ${e}`);
@@ -94,6 +96,8 @@ export default Vue.extend({
           adminID: this.sessionWrapper.session.adminID,
           voteSetJson: JSON.stringify(this.sessionWrapper.session.sessionConfig.set),
           sessionState: this.sessionWrapper.session.sessionState,
+          timerSecondsString: this.sessionWrapper.session.sessionConfig.timerSeconds.toString(),
+          startNewSessionOnMountedString: this.startNewSessionOnMounted.toString(),
         },
       });
     },
