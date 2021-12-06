@@ -12,7 +12,7 @@ export default new Vuex.Store({
     webSocketConnected: false,
     memberUpdates: [],
     userStories: [],
-    members: null,
+    members: [],
   },
   mutations: {
     setMembers(state, members) {
