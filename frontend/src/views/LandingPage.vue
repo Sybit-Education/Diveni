@@ -48,7 +48,7 @@ export default Vue.extend({
       startNewSessionOnMounted: false,
     };
   },
-  created() {
+  mounted() {
     this.checkAdminCookie();
   },
   methods: {
@@ -75,6 +75,7 @@ export default Vue.extend({
           };
           this.sessionWrapper = { session };
           this.startNewSessionOnMounted = true;
+          this.$store.commit('setUserStories', { stories: session.sessionConfig.userStories });
         } catch (e) {
           console.clear();
           console.log(`got error: ${e}`);
