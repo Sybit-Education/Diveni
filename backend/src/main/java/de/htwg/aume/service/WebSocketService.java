@@ -87,9 +87,12 @@ public class WebSocketService {
 
 	public void sendMembersUpdate(Session session) {
 		val sessionPrincipals = getSessionPrincipals(session.getSessionID());
-		simpMessagingTemplate.convertAndSendToUser(sessionPrincipals.adminPrincipal().getName(),
-				"/updates/membersUpdated", session.getMembers());
+		if (sessionPrincipals.adminPrincipal() != null) {
+			simpMessagingTemplate.convertAndSendToUser(sessionPrincipals.adminPrincipal().getName(),
+					"/updates/membersUpdated", session.getMembers());
+		}  // else the admin left the session
 		sendMembersUpdateToMembers(session);
+
 	}
 
 	public void sendMembersUpdateToMembers(Session session) {
