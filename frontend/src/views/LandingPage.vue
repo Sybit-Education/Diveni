@@ -48,7 +48,7 @@ export default Vue.extend({
       startNewSessionOnMounted: false,
     };
   },
-  mounted() {
+  created() {
     this.checkAdminCookie();
   },
   methods: {
@@ -75,7 +75,6 @@ export default Vue.extend({
           };
           this.sessionWrapper = { session };
           this.startNewSessionOnMounted = true;
-          this.$store.commit('setUserStories', { stories: session.sessionConfig.userStories });
         } catch (e) {
           console.clear();
           console.log(`got error: ${e}`);
@@ -90,6 +89,7 @@ export default Vue.extend({
       this.$router.push({ name: 'PrepareSessionPage' });
     },
     goToSessionPage() {
+      this.$store.commit('setUserStories', { stories: this.sessionWrapper.session.sessionConfig.userStories });
       this.$router.push({
         name: 'SessionPage',
         params: {

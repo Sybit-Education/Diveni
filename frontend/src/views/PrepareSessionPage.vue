@@ -106,6 +106,9 @@ export default Vue.extend({
       }
     },
   },
+  mounted() {
+    this.$store.commit('setUserStories', { stories: [] });
+  },
   methods: {
     async sendCreateSessionRequest() {
       const url = Constants.backendURL + Constants.createSessionRoute;
@@ -123,7 +126,7 @@ export default Vue.extend({
             sessionConfig: {
               set: Array<string>,
               timerSeconds: number,
-              userStories: Array<{title:string, description:string, estimation:string|null, isActive: false }>,
+              userStories: Array<{ title: string, description: string, estimation: string | null, isActive: false }>,
             },
             sessionState: string,
           },
