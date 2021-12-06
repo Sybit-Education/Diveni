@@ -7,7 +7,7 @@ icons from https://www.iconfinder.com/iconsets/animals-105
 
 
 
-Usage of Agile poker
+Usage of Planning-Poker
 
 Create a meeting:
 
@@ -20,7 +20,7 @@ Create a meeting:
     - 3. In the third row, you can secure your meeting through an optional password.
 
 Befor you start the session by clicking on the "Start session" button, you can add your User Stories. Although the Prepare session is a good place to prepare and add your User Stories for the upcoming vote session,
-the host of the meeting can at any given time add new stories for the Agile poker meeting by clicking on the blue button at the upper right corner of the application.
+the host of the meeting can at any given time add new stories for the Planning-Poker meeting by clicking on the blue button at the upper right corner of the application.
 
     After clicking on the blue "Stories" button
         - add new stories with a title by clicking the "Add".
@@ -66,11 +66,33 @@ Depending on your device, you can see the results of the other members.
 6. The planning can be restarted at any given time by the host.
 
 
+Application Instructions and Requirements:
 
+Make sure you have:
 
+npm
+VueJs (the application was build in vue 2)
+Java 11
+Docker
 
+To run the application
 
+1. Run an docker-image with local host port 27017
+2. Move in your terminal into the backend folder and run:
 
+    ./mvnw clean spring-boot:run
 
+to start the backend.
+If an error message appears with "could not convert UUID to String", delete the created docker container from step 1 and do step 1 again.
+
+3. open a second terminal, move into the frontend folder and run:
+
+    npm install
+
+4. If npm install was successful run:
+
+    npm run serve
+
+to start the frontend.
 
 
