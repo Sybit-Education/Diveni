@@ -76,7 +76,9 @@ export default Vue.extend({
         if (this.timerCount > 0) {
           this.timerCount -= 1;
         } else {
-          this.$emit('timerFinished');
+          if (this.initialTimer !== 0) {
+            this.$emit('timerFinished');
+          }
           clearInterval(this.intervalHandler);
         }
       }, 1000);
