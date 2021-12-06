@@ -43,7 +43,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      title: 'Agile poker',
+      title: 'Planning-Poker',
       sessionWrapper: {} as { session: Session },
       startNewSessionOnMounted: false,
     };
