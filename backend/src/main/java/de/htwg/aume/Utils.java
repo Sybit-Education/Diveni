@@ -6,7 +6,6 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
-import lombok.val;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -19,10 +18,7 @@ public class Utils {
 		Random random = ThreadLocalRandom.current();
 		byte[] randomBytes = new byte[64];
 		random.nextBytes(randomBytes);
-		return Base64.getUrlEncoder()
-				.encodeToString(randomBytes)
-				.replace("-", "")
-				.replace("_", "").substring(0,8);
+		return Base64.getUrlEncoder().encodeToString(randomBytes).replace("-", "").replace("_", "").substring(0, 8);
 	}
 
 	public static Optional<String> getSessionIDfromUri(URI uri) {
@@ -41,8 +37,7 @@ public class Utils {
 		try {
 			MultiValueMap<String, String> parameters = UriComponentsBuilder.fromUri(uri).build().getQueryParams();
 			return Optional.of(parameters.get(queryParam).get(0));
-		}
-		catch (NullPointerException | IndexOutOfBoundsException | IllegalArgumentException e) {
+		} catch (NullPointerException | IndexOutOfBoundsException | IllegalArgumentException e) {
 			return Optional.empty();
 		}
 	}

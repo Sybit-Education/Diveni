@@ -1,3 +1,4 @@
+import Member from './Member';
 import SessionConfig from './SessionConfig';
 
 interface Session {
@@ -5,9 +6,9 @@ interface Session {
 
     adminID: string;
 
-    membersID: string;
-
     sessionConfig: SessionConfig;
+
+    sessionState: string;
 }
 
 export default Session;
