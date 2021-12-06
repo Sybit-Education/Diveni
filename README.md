@@ -7,7 +7,7 @@ icons from https://www.iconfinder.com/iconsets/animals-105
 
 
 
-Usage of Planning-Poker
+# Usage of Planning-Poker
 
 Create a meeting:
 
@@ -65,42 +65,25 @@ Depending on your device, you can see the results of the other members.
 
 6. The planning can be restarted at any given time by the host.
 
-----------------------------------------------------
 
-Application Instructions and Requirements:
+#Application Instructions and Requirements:
 
-Make sure you have:
+##Technologies:
+Frontend communicates via REST and WebSockets with the backend.
+It uses Spring boot and communicates directly with the mongoDb in a docker container.
+Run the docker container first, then the backend.
+###Frontend
+- npm, vue2
+```shell
+npm install
+npm run serve
+```
+ 
+###Backend
+- maven, springboot, java11
+```shell
+mvn sping-boot:run
+```
 
-npm
-VueJs (the application was build in vue 2)
-Java 11
-Docker
-
-To run the application
-
-1. Run an docker-image with local host port 27017
-2. Move in your terminal into the backend folder and run:
-
-    ./mvnw clean spring-boot:run
-
-to start the backend.
-If an error message appears with "could not convert UUID to String", delete the created docker container from step 1 and do step 1 again.
-
-3. open a second terminal, move into the frontend folder and run:
-
-    npm install
-
-4. If npm install was successful run:
-
-    npm run serve
-
-to start the frontend.
-
-----------------------------------------------------
-
-Technical Information:
-
-The frontend is written in Vue.js and the backend in Node.js.
-
-The initial communication between frontend and backend happens through REST
-After the session is initialized the communication will be switched to websockets, therefore after something has changed (eg. a client voted) the server updates the clients. (take a look at WebSocketConfig.java for more information)
+###Database
+- Mongodb in docker on port 27017, no credentials (Run via docker desktop)
