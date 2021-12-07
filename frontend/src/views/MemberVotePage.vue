@@ -193,6 +193,9 @@ export default Vue.extend({
     }
     this.voteSet = JSON.parse(this.voteSetJson);
   },
+  beforeDestroy() {
+    this.sendUnregisterCommand();
+  },
   methods: {
     onSendVote({ vote }) {
       this.draggedVote = vote;
