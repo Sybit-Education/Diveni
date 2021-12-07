@@ -64,6 +64,7 @@ export default Vue.extend({
     },
     goHome() {
       this.$store.commit('setUserStories', { stories: [] });
+      this.$store.commit('clearStore');
       this.$router.push({ name: 'LandingPage' });
     },
   },
