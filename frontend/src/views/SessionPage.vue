@@ -261,6 +261,7 @@ export default Vue.extend({
     sendUnregisterCommand() {
       const endPoint = `${Constants.webSocketUnregisterRoute}`;
       this.$store.commit('sendViaBackendWS', { endPoint, data: null });
+      this.$store.commit('clearStore');
     },
     sendCloseSessionCommand() {
       const endPoint = `${Constants.webSocketCloseSessionRoute}`;

@@ -202,6 +202,7 @@ export default Vue.extend({
     sendUnregisterCommand() {
       const endPoint = `${Constants.webSocketUnregisterRoute}`;
       this.$store.commit('sendViaBackendWS', { endPoint, data: null });
+      this.$store.commit('clearStore');
     },
     goToJoinPage() {
       this.$router.push({ name: 'JoinPage' });
