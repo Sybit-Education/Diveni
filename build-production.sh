@@ -6,5 +6,5 @@ cd ../backend
 mvn package -DskipTests -Dspring.profiles.active=prod
 cd ..
 docker compose build
-docker compose up
+docker compose up -d
 
