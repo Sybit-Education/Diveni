@@ -4,5 +4,5 @@ for f in *.tar; do
 	cat $f | docker load
 done
 # Start containers
-docker-compose up &
+docker-compose up -d
 

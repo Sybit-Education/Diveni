@@ -12,7 +12,6 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 
 import java.util.Optional;
-import java.util.UUID;
 
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.server.ResponseStatusException;
@@ -38,7 +37,8 @@ public class ControllerUtilsTest {
     public void getEmptySession_isError() {
         doReturn(Optional.empty()).when(databaseServiceMock).getSessionByID(any());
 
-        assertThrows(ResponseStatusException.class, () -> ControllerUtils.getSessionOrThrowResponse(databaseServiceMock, Utils.generateRandomID()));
+        assertThrows(ResponseStatusException.class,
+                () -> ControllerUtils.getSessionOrThrowResponse(databaseServiceMock, Utils.generateRandomID()));
     }
 
     @Test
@@ -46,13 +46,15 @@ public class ControllerUtilsTest {
         Session session = mock(Session.class);
         doReturn(Optional.of(session)).when(databaseServiceMock).getSessionByMemberID(any());
 
-        assertEquals(session, ControllerUtils.getSessionByMemberIDOrThrowResponse(databaseServiceMock, Utils.generateRandomID()));
+        assertEquals(session,
+                ControllerUtils.getSessionByMemberIDOrThrowResponse(databaseServiceMock, Utils.generateRandomID()));
     }
 
     @Test
     public void getEmptyMemberSession_isError() {
         doReturn(Optional.empty()).when(databaseServiceMock).getSessionByMemberID(any());
 
-        assertThrows(ResponseStatusException.class, () -> ControllerUtils.getSessionByMemberIDOrThrowResponse(databaseServiceMock, Utils.generateRandomID()));
+        assertThrows(ResponseStatusException.class, () -> ControllerUtils
+                .getSessionByMemberIDOrThrowResponse(databaseServiceMock, Utils.generateRandomID()));
     }
 }

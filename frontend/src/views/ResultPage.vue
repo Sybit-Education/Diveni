@@ -27,7 +27,7 @@
           Download as CSV
         </b-button>
         <b-button variant="secondary" class="mx-2" @click="goHome()">
-          Go to Home
+          Go Home
         </b-button>
       </b-col>
     </b-row>
@@ -63,6 +63,8 @@ export default Vue.extend({
       URL.revokeObjectURL(link.href);
     },
     goHome() {
+      this.$store.commit('setUserStories', { stories: [] });
+      this.$store.commit('clearStore');
       this.$router.push({ name: 'LandingPage' });
     },
   },

@@ -3,8 +3,6 @@ package de.htwg.aume.principals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
-import java.util.UUID;
-
 import de.htwg.aume.Utils;
 import org.junit.jupiter.api.Test;
 

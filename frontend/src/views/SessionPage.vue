@@ -151,7 +151,9 @@ export default Vue.extend({
     adminID: { type: String, required: true },
     sessionID: { type: String, required: true },
     voteSetJson: { type: String, required: true },
+    sessionState: { type: String, required: true },
     timerSecondsString: { type: String, required: true },
+    startNewSessionOnMountedString: { type: String, required: false, default: 'false' },
   },
   data() {
     return {
@@ -160,7 +162,6 @@ export default Vue.extend({
       stageLabelReady: 'Ready',
       stageLabelWaiting: 'Waiting room',
       planningStart: false,
-      connectionEstablished: false,
       voteSet: [] as string[],
       timerCountdownNumber: 0,
       triggerTimer: 0,
@@ -207,22 +208,29 @@ export default Vue.extend({
         console.debug('SessionPage: member connected to websocket');
         this.registerAdminPrincipalOnBackend();
         this.subscribeWSMemberUpdated();
+        this.requestMemberUpdate();
+        if (this.startNewSessionOnMountedString === 'true') {
+          this.sendRestartMessage();
+        }
       }
     },
   },
-  mounted() {
+  created() {
     if (!this.sessionID || !this.adminID) {
       this.goToLandingPage();
     }
-    console.log('--------------------------------------------------');
-    console.log(this.timerCountdownNumber);
-    console.log('--------------------------------------------------');
-    this.voteSet = JSON.parse(this.voteSetJson);
-    this.connectToWebSocket();
-  },
-  created() {
     this.timerCountdownNumber = parseInt(this.timerSecondsString, 10);
     window.addEventListener('beforeunload', this.sendUnregisterCommand);
+  },
+  mounted() {
+    this.voteSet = JSON.parse(this.voteSetJson);
+    this.connectToWebSocket();
+    if (this.sessionState === Constants.memberUpdateCommandStartVoting) {
+      this.planningStart = true;
+      if (this.planningStart) {
+        this.sendRestartMessage();
+      }
+    }
   },
   destroyed() {
     window.removeEventListener('beforeunload', this.sendUnregisterCommand);
@@ -230,7 +238,7 @@ export default Vue.extend({
   methods: {
     onUserStoriesChanged($event) {
       this.$store.commit('setUserStories', { stories: $event });
-      if (this.connectionEstablished) {
+      if (this.webSocketIsConnected) {
         const endPoint = `${Constants.webSocketAdminUpdatedUserStoriesRoute}`;
         this.$store.commit('sendViaBackendWS', { endPoint, data: JSON.stringify($event) });
       }
@@ -238,7 +246,6 @@ export default Vue.extend({
     connectToWebSocket() {
       const url = `${Constants.backendURL}/connect?sessionID=${this.sessionID}&adminID=${this.adminID}`;
       this.$store.commit('connectToBackendWS', url);
-      this.connectionEstablished = true;
     },
     registerAdminPrincipalOnBackend() {
       const endPoint = Constants.webSocketRegisterAdminUserRoute;
@@ -247,9 +254,18 @@ export default Vue.extend({
     subscribeWSMemberUpdated() {
       this.$store.commit('subscribeOnBackendWSAdminUpdate');
     },
+    requestMemberUpdate() {
+      const endPoint = Constants.webSocketGetMemberUpdateRoute;
+      this.$store.commit('sendViaBackendWS', { endPoint });
+    },
     sendUnregisterCommand() {
       const endPoint = `${Constants.webSocketUnregisterRoute}`;
       this.$store.commit('sendViaBackendWS', { endPoint, data: null });
+      this.$store.commit('clearStore');
+    },
+    sendCloseSessionCommand() {
+      const endPoint = `${Constants.webSocketCloseSessionRoute}`;
+      this.$store.commit('sendViaBackendWS', { endPoint });
     },
     sendStartEstimationMessages() {
       const endPoint = Constants.webSocketStartPlanningRoute;
@@ -267,7 +283,8 @@ export default Vue.extend({
       return Constants.avatarAnimalToAssetName(animal);
     },
     closeSession() {
-      this.sendUnregisterCommand();
+      this.sendCloseSessionCommand();
+      window.localStorage.removeItem('adminCookie');
       this.$router.push({ name: 'ResultPage' });
     },
     sendRestartMessage() {

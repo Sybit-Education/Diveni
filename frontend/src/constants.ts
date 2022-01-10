@@ -9,6 +9,10 @@ class Constants {
 
   webSocketUnregisterRoute = '/ws/unregister'
 
+  webSocketCloseSessionRoute = '/ws/closeSession';
+
+  webSocketGetMemberUpdateRoute = '/ws/memberUpdate';
+
   webSocketMembersUpdatedRoute = '/users/updates/membersUpdated';
 
   webSocketStartPlanningRoute = '/ws/startVoting';
@@ -40,7 +44,7 @@ class Constants {
   public getRandomPastelColor() {
     const l2 = (85 + 10 * Math.random()) / 100;
     const a = ((25 + 70 * Math.random()) * Math.min(l2, 1 - l2)) / 100;
-    const f = (n:number) => {
+    const f = (n: number) => {
       const k = (n + (360 * Math.random()) / 30) % 12;
       const color = l2 - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
       return Math.round(255 * color).toString(16).padStart(2, '0');
@@ -71,12 +75,12 @@ class Constants {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  public avatarAnimalAssetNameToBackendEnum(assetName:string) {
+  public avatarAnimalAssetNameToBackendEnum(assetName: string) {
     return assetName.split('.')[0].toUpperCase();
   }
 
   // eslint-disable-next-line class-methods-use-this
-  public avatarAnimalToAssetName(animal:string) {
+  public avatarAnimalToAssetName(animal: string) {
     return `${animal.toLowerCase()}.png`;
   }
 }

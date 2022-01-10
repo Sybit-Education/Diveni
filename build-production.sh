@@ -6,5 +6,5 @@ cd ../backend
 ./../mvnw package -DskipTests -D"spring.profiles.active=prod"
 cd ..
 docker compose build
-docker compose up
+docker compose up -d
 

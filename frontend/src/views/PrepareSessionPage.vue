@@ -66,6 +66,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import Session from '../model/Session';
+import Member from '../model/Member';
 import Constants from '../constants';
 import CardSetComponent from '../components/CardSetComponent.vue';
 import UserStoriesSidebar from '../components/UserStoriesSidebar.vue';
@@ -105,6 +106,9 @@ export default Vue.extend({
       }
     },
   },
+  mounted() {
+    this.$store.commit('setUserStories', { stories: [] });
+  },
   methods: {
     async sendCreateSessionRequest() {
       const url = Constants.backendURL + Constants.createSessionRoute;
@@ -115,17 +119,21 @@ export default Vue.extend({
         userStories: this.userStories,
       };
       try {
-        const session: Session = (await this.axios.post(url, sessionConfig)).data as {
-          sessionID: string,
-          adminID: string,
-          membersID: string,
-          sessionConfig: {
-            set: Array<string>,
-            timerSeconds: number,
-            userStories: Array<{ title: string, description: string, estimation: string | null, isActive: false }>,
+        const response = (await this.axios.post(url, sessionConfig)).data as {
+          session: {
+            sessionID: string,
+            adminID: string,
+            sessionConfig: {
+              set: Array<string>,
+              timerSeconds: number,
+              userStories: Array<{ title: string, description: string, estimation: string | null, isActive: false }>,
+            },
+            sessionState: string,
           },
+          adminCookie: string,
         };
-        this.goToSessionPage(session);
+        window.localStorage.setItem('adminCookie', response.adminCookie);
+        this.goToSessionPage(response.session as Session);
       } catch (e) {
         console.error(`Response of ${url} is invalid: ${e}`);
       }
@@ -138,6 +146,7 @@ export default Vue.extend({
           adminID: session.adminID,
           timerSecondsString: this.timer.toString(),
           voteSetJson: JSON.stringify(session.sessionConfig.set),
+          sessionState: session.sessionState,
         },
       });
     },

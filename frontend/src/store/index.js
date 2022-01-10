@@ -12,9 +12,12 @@ export default new Vuex.Store({
     webSocketConnected: false,
     memberUpdates: [],
     userStories: [],
-    members: null,
+    members: [],
   },
   mutations: {
+    setMembers(state, members) {
+      state.members = members;
+    },
     connectToBackendWS(state, url) {
       state.stompClient = webstomp.over(new SockJS(url));
       state.stompClient.connect({},
@@ -51,12 +54,17 @@ export default new Vuex.Store({
     sendViaBackendWS(state, { endPoint, data }) {
       state.stompClient.send(endPoint, data);
     },
+    clearStore(state) {
+      state.members = [];
+      state.userStories = [];
+      state.memberUpdates = [];
+      state.webSocketConnected = false;
+      state.stompClient = undefined;
+    },
     setUserStories(state, { stories }) {
       state.userStories = stories;
     },
   },
-  actions: {
-  },
-  modules: {
-  },
+  actions: {},
+  modules: {},
 });
