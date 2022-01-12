@@ -16,7 +16,7 @@ env:
 
 jobs:
   build:
-    name: Build assets
+    name: Build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -28,7 +28,7 @@ jobs:
       - name: Install Node.js dependencies
         working-directory: frontend
         run: npm ci
-      - name: Build assets
+      - name: Build
         working-directory: frontend
         run: npm run build
       - name: Upload artifacts
@@ -56,7 +56,7 @@ jobs:
     name: Deploy to server
     runs-on: ubuntu-latest
     needs: [build]
-    if: github.ref == 'refs/heads/main'
+    # if: github.ref == 'refs/heads/main'
     steps:
       - name: Checkout
         uses: actions/checkout@v2
