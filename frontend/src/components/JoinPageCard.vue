@@ -1,6 +1,6 @@
 <template>
   <b-row ref="card">
-    <div class="col-lg-3 col-md-2 col-sm-1 " />
+    <div class="col-lg-3 col-md-2 col-sm-1" />
     <div
       id="join-card"
       :style="`background-color: ${color};`"
@@ -17,37 +17,17 @@
       <b-row class="mt-2">
         <b-col>
           <h6>Name</h6>
-          <b-form-input
-            v-model="name"
-            class="mt-3"
-            type="text"
-          />
+          <b-form-input v-model="name" class="mt-3" type="text" />
         </b-col>
       </b-row>
       <b-row class="mt-4">
-        <b-col
-          cols="12"
-          :md="'6'"
-        >
+        <b-col cols="12" :md="'6'">
           <h6>Invitation code</h6>
-          <b-form-input
-            v-model="sessionID"
-            class="mt-3"
-            type="text"
-          />
+          <b-form-input v-model="sessionID" class="mt-3" type="text" />
         </b-col>
-        <b-col
-          class="mt-2 mt-md-0"
-          cols="12"
-          md="6"
-        >
+        <b-col class="mt-2 mt-md-0" cols="12" md="6">
           <h6>Password</h6>
-          <b-form-input
-            v-model="password"
-            class="mt-3"
-            type="password"
-            placeholder="(optional)"
-          />
+          <b-form-input v-model="password" class="mt-3" type="password" placeholder="(optional)" />
         </b-col>
       </b-row>
       <b-row>
@@ -68,12 +48,12 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import JoinCommand from '../model/JoinCommand';
-import RoundedAvatar from './RoundedAvatar.vue';
+import Vue from "vue";
+import JoinCommand from "../model/JoinCommand";
+import RoundedAvatar from "./RoundedAvatar.vue";
 
 export default Vue.extend({
-  name: 'JoinPageCard',
+  name: "JoinPageCard",
   components: {
     RoundedAvatar,
   },
@@ -85,16 +65,16 @@ export default Vue.extend({
   },
   data() {
     return {
-      sessionID: '',
-      password: '',
-      name: '',
+      sessionID: "",
+      password: "",
+      name: "",
     };
   },
   created() {
     if (this.sessionIdFromUrl) {
       this.sessionID = this.sessionIdFromUrl;
     }
-    window.addEventListener('keyup', (event) => {
+    window.addEventListener("keyup", (event) => {
       if (event.keyCode === 13) {
         this.onClickButton();
       }
@@ -104,11 +84,11 @@ export default Vue.extend({
     onClickButton() {
       if (this.name.length > 1 && this.sessionID.length > 1) {
         const data: JoinCommand = {
-          sessionID: this.sessionID.split(' ').join(''),
+          sessionID: this.sessionID.split(" ").join(""),
           password: this.password,
           name: this.name.trim(),
         };
-        this.$emit('clicked', data);
+        this.$emit("clicked", data);
       }
     },
   },

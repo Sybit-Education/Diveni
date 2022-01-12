@@ -1,19 +1,19 @@
 <template>
   <b-container>
-    <router-view/>
+    <router-view />
   </b-container>
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import Vue from "vue";
 
 export default Vue.extend({
-  name: 'App',
+  name: "App",
   data: () => ({
     //
   }),
   mounted() {
-    document.title = 'Planning-Poker';
+    document.title = "Planning-Poker";
   },
 });
 </script>

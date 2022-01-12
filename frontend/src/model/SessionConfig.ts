@@ -1,4 +1,4 @@
-import UserStory from './UserStory';
+import UserStory from "./UserStory";
 
 interface SessionConfig {
   set: Array<string>;

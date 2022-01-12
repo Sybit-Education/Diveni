@@ -1,21 +1,8 @@
 <template>
-  <div
-    id="parent"
-    class="rounded-circle"
-    :style="`background-color: ${color}`"
-  >
-    <div
-      id="column"
-      class="text-center"
-    >
-      <img
-        :src="require(`@/assets/${assetName}`)"
-        width="44"
-      >
-      <div
-        v-if="showName"
-        id="name"
-      >
+  <div id="parent" class="rounded-circle" :style="`background-color: ${color}`">
+    <div id="column" class="text-center">
+      <img :src="require(`@/assets/${assetName}`)" width="44" />
+      <div v-if="showName" id="name">
         {{ name }}
       </div>
     </div>
@@ -23,10 +10,10 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import Vue from "vue";
 
 export default Vue.extend({
-  name: 'RoundedAvatar',
+  name: "RoundedAvatar",
   props: {
     color: { type: String, required: true },
     assetName: { type: String, required: true },
@@ -41,7 +28,7 @@ export default Vue.extend({
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-#parent{
+#parent {
   width: 90px;
   height: 90px;
   padding-left: 8px;
@@ -49,9 +36,9 @@ export default Vue.extend({
   padding-right: 8px;
   padding-top: 8px;
   display: flex;
-  justify-content: center;  /* Centering y-axis */
-  align-items :center; /* Centering x-axis */
+  justify-content: center; /* Centering y-axis */
+  align-items: center; /* Centering x-axis */
 }
-#name{
+#name {
 }
 </style>
