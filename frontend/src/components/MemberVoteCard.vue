@@ -12,12 +12,9 @@
       :interact-lock-swipe-down="true"
       @draggedUp="draggedUp"
     >
-      <div
-        class="flicking-panel swipe-card"
-        :style="swipeableCardBackgroundColor"
-      >
+      <div class="flicking-panel swipe-card" :style="swipeableCardBackgroundColor">
         <div class="text">
-          {{ dragged ? '💪' : voteOption }}
+          {{ dragged ? "💪" : voteOption }}
         </div>
       </div>
     </Vue2InteractDraggable>
@@ -28,7 +25,7 @@
         @click="onCardClicked()"
       >
         <div class="text">
-          {{ dragged ? '💪' : voteOption }}
+          {{ dragged ? "💪" : voteOption }}
         </div>
       </div>
     </div>
@@ -36,13 +33,13 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import { Vue2InteractDraggable } from 'vue2-interact';
-import confetti from 'canvas-confetti';
-import Constants from '../constants';
+import Vue from "vue";
+import { Vue2InteractDraggable } from "vue2-interact";
+import confetti from "canvas-confetti";
+import Constants from "../constants";
 
 export default Vue.extend({
-  name: 'MemberVoteCard',
+  name: "MemberVoteCard",
   components: {
     Vue2InteractDraggable,
   },
@@ -54,7 +51,7 @@ export default Vue.extend({
     isMobile: { type: Boolean, required: true },
   },
   computed: {
-    swipeableCardBackgroundColor():string {
+    swipeableCardBackgroundColor(): string {
       let { r, g, b } = Constants.hexToRgb(this.hexColor);
       r = !this.dragged ? r : 230;
       g = !this.dragged ? g : 225;
@@ -72,7 +69,7 @@ export default Vue.extend({
         startVelocity: 50,
         spread: 100,
       });
-      this.$emit('sentVote', {
+      this.$emit("sentVote", {
         vote: this.voteOption,
       });
     },
@@ -82,11 +79,11 @@ export default Vue.extend({
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.swipe-card{
+.swipe-card {
   width: 280px;
   height: 370px;
-  justify-content: center;  /* Centering y-axis */
-  align-items :center; /* Centering x-axis */
+  justify-content: center; /* Centering y-axis */
+  align-items: center; /* Centering x-axis */
   border-radius: 5%;
   display: flex;
   flex-direction: column;

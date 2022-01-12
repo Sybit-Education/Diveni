@@ -1,14 +1,13 @@
-import Member from './Member';
-import SessionConfig from './SessionConfig';
+import SessionConfig from "./SessionConfig";
 
 interface Session {
-    sessionID: string;
+  sessionID: string;
 
-    adminID: string;
+  adminID: string;
 
-    sessionConfig: SessionConfig;
+  sessionConfig: SessionConfig;
 
-    sessionState: string;
+  sessionState: string;
 }
 
 export default Session;

@@ -1,32 +1,22 @@
 <template>
-  <b-card
-    id="landing-page-card"
-    class="p-3 text-center"
-  >
+  <b-card id="landing-page-card" class="p-3 text-center">
     <h3 class="text-center">
       {{ title }}
     </h3>
-    <div
-      class="mt-5"
-    >
+    <div class="mt-5">
       {{ description }}
     </div>
-    <b-button
-      class="mt-5"
-      variant="success"
-      :disabled="false"
-      @click="onClick"
-    >
+    <b-button class="mt-5" variant="success" :disabled="false" @click="onClick">
       {{ buttonText }}
     </b-button>
   </b-card>
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import Vue from "vue";
 
 export default Vue.extend({
-  name: 'LandingPageCard',
+  name: "LandingPageCard",
   props: {
     title: { type: String, required: true },
     description: { type: String, required: true },
@@ -41,6 +31,6 @@ export default Vue.extend({
   border-radius: 20px;
 }
 h3 {
-  font-weight:500;
+  font-weight: 500;
 }
 </style>
