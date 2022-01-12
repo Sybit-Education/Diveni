@@ -23,7 +23,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 	@Override
 	public void registerStompEndpoints(StompEndpointRegistry registry) {
 		registry.addEndpoint("/connect").setHandshakeHandler(new PrincipalWebSocketHandler())
-				.setAllowedOrigins("http://localhost:8080").withSockJS();
+				.setAllowedOrigins("http://localhost:8080", "https://pp.vnmz.de").withSockJS();
 	}
 
 }
