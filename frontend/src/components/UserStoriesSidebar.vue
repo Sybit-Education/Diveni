@@ -6,21 +6,20 @@
         Stories
       </b-button>
     </div>
-    <div class="sidenav" :style="`width: ${sideBarOpen? '400px': '0px'};` ">
+    <div class="sidenav" :style="`width: ${sideBarOpen ? '400px' : '0px'};`">
       <div v-if="showEditButtons">
         <b-button size="lg" variant="success" @click="addUserStory()">
           Add
           <b-icon-plus />
         </b-button>
         <b-button size="lg" class="m-2" variant="warning" @click="editOrSave()">
-          {{ editEnabled ? 'Save' : 'Edit' }}
+          {{ editEnabled ? "Save" : "Edit" }}
           <b-icon-pencil />
         </b-button>
       </div>
       <div class="list-group" :style="!showEditButtons ? 'margin-top: 66px;' : ''">
         <div v-if="userStories.length < 1" class="text-center">
-          No stories yet...
-          Add a story to start estimating.
+          No stories yet... Add a story to start estimating.
         </div>
         <b-list-group-item
           v-for="(story, index) of userStories"
@@ -44,27 +43,22 @@
             />
             <b-dropdown
               v-if="editEnabled && showEstimations"
-              :text="(userStories[index].estimation ? userStories[index].estimation : '?') + '    ' "
+              :text="(userStories[index].estimation ? userStories[index].estimation : '?') + '    '"
               variant="info"
             >
               <b-dropdown-item
-                v-for="num in cardSet" :key="num"
+                v-for="num in cardSet"
+                :key="num"
                 :value="num == null ? '?' : num"
                 @click="userStories[index].estimation = num"
               >
                 {{ num }}
               </b-dropdown-item>
-              <b-dropdown-item @click="userStories[index].estimation = null">
-                ?
-              </b-dropdown-item>
+              <b-dropdown-item @click="userStories[index].estimation = null"> ? </b-dropdown-item>
             </b-dropdown>
 
-            <b-button
-              v-if="!editEnabled && showEstimations"
-              class="mx-2"
-              pill variant="info"
-            >
-              {{ story.estimation ? story.estimation : '?' }}
+            <b-button v-if="!editEnabled && showEstimations" class="mx-2" pill variant="info">
+              {{ story.estimation ? story.estimation : "?" }}
             </b-button>
 
             <b-button v-if="editEnabled" variant="danger" @click="deleteStory(index)">
@@ -91,10 +85,10 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import Vue from "vue";
 
 export default Vue.extend({
-  name: 'UserStoriesSidebar',
+  name: "UserStoriesSidebar",
   props: {
     cardSet: { type: Array, required: true },
     initialStories: { type: Array, required: true },
@@ -105,7 +99,12 @@ export default Vue.extend({
     return {
       sideBarOpen: false,
       editEnabled: false,
-      userStories: [] as Array<{ title: string, description: string, estimation: string | null, isActive: boolean }>,
+      userStories: [] as Array<{
+        title: string;
+        description: string;
+        estimation: string | null;
+        isActive: boolean;
+      }>,
     };
   },
   watch: {
@@ -113,26 +112,42 @@ export default Vue.extend({
       this.publishChanges();
     },
     initialStories() {
-      this.userStories = this.initialStories as Array<{ title: string, description: string, estimation: string | null, isActive: boolean }>;
+      this.userStories = this.initialStories as Array<{
+        title: string;
+        description: string;
+        estimation: string | null;
+        isActive: boolean;
+      }>;
     },
     editEnabled() {
       this.publishChanges();
     },
   },
   created() {
-    this.userStories = this.initialStories as Array<{ title: string, description: string, estimation: string | null, isActive: boolean }>;
+    this.userStories = this.initialStories as Array<{
+      title: string;
+      description: string;
+      estimation: string | null;
+      isActive: boolean;
+    }>;
   },
   methods: {
     setUserStoryAsActive(index) {
       const stories = this.userStories.map((s) => ({
-        title: s.title, description: s.description, estimation: s.estimation, isActive: false,
+        title: s.title,
+        description: s.description,
+        estimation: s.estimation,
+        isActive: false,
       }));
       stories[index].isActive = true;
       this.userStories = stories;
     },
     addUserStory() {
       this.userStories.push({
-        title: '', description: '', estimation: null, isActive: false,
+        title: "",
+        description: "",
+        estimation: null,
+        isActive: false,
       });
     },
     deleteStory(index) {
@@ -145,7 +160,7 @@ export default Vue.extend({
       this.editEnabled = !this.editEnabled;
     },
     publishChanges() {
-      this.$emit('userStoriesChanged', this.userStories);
+      this.$emit("userStoriesChanged", this.userStories);
     },
     toggleSideBar() {
       this.sideBarOpen = !this.sideBarOpen;
