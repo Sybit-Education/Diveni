@@ -117,7 +117,7 @@ export default Vue.extend({
 #swipe-card {
   width: 168px;
   height: 202px;
-  justify-content: start; /* Centering y-axis */
+  justify-content: flex-start; /* Centering y-axis */
   align-items: center; /* Centering x-axis */
   border-radius: 5%;
   display: flex;
