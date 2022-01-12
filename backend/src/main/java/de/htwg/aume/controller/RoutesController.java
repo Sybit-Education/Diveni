@@ -31,7 +31,7 @@ import de.htwg.aume.model.SessionState;
 import de.htwg.aume.service.DatabaseService;
 import lombok.val;
 
-@CrossOrigin(origins = "http://localhost:8080")
+@CrossOrigin(origins = {"http://localhost:8080", "https://pp.vnmz.de"})
 @RestController
 public class RoutesController {
 
