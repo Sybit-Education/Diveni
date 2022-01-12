@@ -45,19 +45,23 @@
 
       <b-tabs v-model="tabIndex" content-class="mt-3" fill>
         <b-tab
-          class="mg_top_5_per"
+          class="mg_top_2_per"
           title="Planning with Story Points"
           active
           :title-link-class="linkClass(0)"
         >
-          <h5>Start your planning only with Story Points</h5>
+          <h5>Start your planning with Story Points</h5>
+          <ul>
+            <li>You will vote with your selected Cards</li>
+            <li>You will not be able to add User Stories once you've started the session</li>
+          </ul>
         </b-tab>
         <b-tab title="Planning with User Stories" :title-link-class="linkClass(1)">
-          <user-story-component class="mg_top_5_per" />
+          <user-story-component class="mg_top_2_per" />
           <!--TODO: Implement session config with US-->
         </b-tab>
         <b-tab title="Planning with Jira" :title-link-class="linkClass(2)">
-          <jira-component class="mg_top_5_per" />
+          <jira-component class="mg_top_2_per" />
           <!--TODO: Implement session config with Jira-->
         </b-tab>
       </b-tabs>
@@ -207,7 +211,7 @@ export default Vue.extend({
 </script>
 
 <style scoped>
-.mg_top_5_per {
-  margin-top: 5%;
+.mg_top_2_per {
+  margin-top: 2%;
 }
 </style>
