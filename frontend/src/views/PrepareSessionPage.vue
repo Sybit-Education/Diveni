@@ -40,6 +40,22 @@
         :initial-stories="userStories"
         @userStoriesChanged="onUserStoriesChanged($event)"
       />
+      <b-tabs v-model="tabIndex" content-class="mt-3 tabs" fill>
+        <b-tab
+          class="tabs"
+          title="Planning with Story Points"
+          active
+          :title-link-class="linkClass(0)"
+        >
+          <h5>Start your planning only with Story Points</h5>
+        </b-tab>
+        <b-tab title="Planning with User Stories" :title-link-class="linkClass(1)">
+          <!--TODO: Implement session config with US-->
+        </b-tab>
+        <b-tab title="Planning with Jira" :title-link-class="linkClass(2)">
+          <!--TODO: Implement session config with Jira-->
+        </b-tab>
+      </b-tabs>
       <b-button
         class="mt-5"
         variant="success"
@@ -72,6 +88,7 @@ export default Vue.extend({
       selectedCardSetOptions: [],
       timer: 30,
       warningWhenUnderZero: "",
+      tabIndex: 0,
     };
   },
   computed: {
@@ -98,6 +115,13 @@ export default Vue.extend({
     this.$store.commit("setUserStories", { stories: [] });
   },
   methods: {
+    linkClass(idx) {
+      if (this.tabIndex === idx) {
+        return ["bg-success", "text-light"];
+      } else {
+        return ["bg-light", "text-dark"];
+      }
+    },
     async sendCreateSessionRequest() {
       const url = Constants.backendURL + Constants.createSessionRoute;
       const sessionConfig = {
@@ -172,3 +196,9 @@ export default Vue.extend({
   },
 });
 </script>
+
+<style scoped>
+.tabs {
+  margin-top: 5%;
+}
+</style>
