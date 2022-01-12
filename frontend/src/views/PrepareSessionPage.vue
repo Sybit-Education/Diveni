@@ -40,9 +40,12 @@
         :initial-stories="userStories"
         @userStoriesChanged="onUserStoriesChanged($event)"
       />
-      <b-tabs v-model="tabIndex" content-class="mt-3 tabs" fill>
+
+      <h4 class="mt-3">4. Select mode</h4>
+
+      <b-tabs v-model="tabIndex" content-class="mt-3" fill>
         <b-tab
-          class="tabs"
+          class="mg_top_5_per"
           title="Planning with Story Points"
           active
           :title-link-class="linkClass(0)"
@@ -50,9 +53,11 @@
           <h5>Start your planning only with Story Points</h5>
         </b-tab>
         <b-tab title="Planning with User Stories" :title-link-class="linkClass(1)">
+          <user-story-component class="mg_top_5_per" />
           <!--TODO: Implement session config with US-->
         </b-tab>
         <b-tab title="Planning with Jira" :title-link-class="linkClass(2)">
+          <jira-component class="mg_top_5_per" />
           <!--TODO: Implement session config with Jira-->
         </b-tab>
       </b-tabs>
@@ -74,12 +79,16 @@ import Session from "../model/Session";
 import Constants from "../constants";
 import CardSetComponent from "../components/CardSetComponent.vue";
 import UserStoriesSidebar from "../components/UserStoriesSidebar.vue";
+import UserStoryComponent from "../components/UserStoryComponent.vue";
+import JiraComponent from "../components/JiraComponent.vue";
 
 export default Vue.extend({
   name: "PrepareSessionPage",
   components: {
     CardSetComponent,
     UserStoriesSidebar,
+    UserStoryComponent,
+    JiraComponent,
   },
   data() {
     return {
@@ -198,7 +207,7 @@ export default Vue.extend({
 </script>
 
 <style scoped>
-.tabs {
+.mg_top_5_per {
   margin-top: 5%;
 }
 </style>
