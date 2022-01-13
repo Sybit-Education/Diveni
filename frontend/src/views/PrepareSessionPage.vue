@@ -46,7 +46,7 @@
       <b-tabs v-model="tabIndex" content-class="mt-3" fill>
         <b-tab
           class="mg_top_2_per"
-          title="Planning with Story Points"
+          title="Planning without User Stories"
           active
           :title-link-class="linkClass(0)"
         >
