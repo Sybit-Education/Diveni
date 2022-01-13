@@ -62,6 +62,7 @@ export default Vue.extend({
   },
   methods: {
     async sendJoinSessionRequest(data: JoinCommand) {
+      this.$store.commit("clearStore");
       this.name = data.name;
       const url = `${Constants.backendURL}${Constants.joinSessionRoute(data.sessionID)}`;
       const joinInfo = {
