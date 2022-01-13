@@ -6,7 +6,7 @@
     <b-row class="justify-content-center">
       <landing-page-card
         class="col-md-4 m-2 col-12"
-        :title="'New meeting'"
+        :title="$t('meeting.new')"
         :description="'Start a new meeting, invite colleagues and start estimating'"
         :button-text="'GO'"
         :on-click="goToPrepareSessionPage"
