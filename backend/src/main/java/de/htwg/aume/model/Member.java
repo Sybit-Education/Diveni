@@ -2,6 +2,8 @@ package de.htwg.aume.model;
 
 import java.util.Optional;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
