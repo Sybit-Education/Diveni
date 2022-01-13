@@ -50,11 +50,7 @@
           active
           :title-link-class="linkClass(0)"
         >
-          <h5>Start your planning with Story Points</h5>
-          <ul>
-            <li>You will vote with your selected Cards</li>
-            <li>You will not be able to add User Stories once you've started the session</li>
-          </ul>
+          <stroy-points-component />
         </b-tab>
         <b-tab title="Planning with User Stories" :title-link-class="linkClass(1)">
           <user-story-component class="mg_top_2_per" />
@@ -85,6 +81,7 @@ import CardSetComponent from "../components/CardSetComponent.vue";
 import UserStoriesSidebar from "../components/UserStoriesSidebar.vue";
 import UserStoryComponent from "../components/UserStoryComponent.vue";
 import JiraComponent from "../components/JiraComponent.vue";
+import StroyPointsComponent from "@/components/StroyPointsComponent.vue";
 
 export default Vue.extend({
   name: "PrepareSessionPage",
@@ -93,6 +90,7 @@ export default Vue.extend({
     UserStoriesSidebar,
     UserStoryComponent,
     JiraComponent,
+    StroyPointsComponent,
   },
   data() {
     return {
