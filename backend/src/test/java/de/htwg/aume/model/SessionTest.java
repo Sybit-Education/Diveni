@@ -54,8 +54,8 @@ public class SessionTest {
 
 		val resultMember = result.getMembers().stream().filter(m -> m.getMemberID().equals(member1.getMemberID()))
 				.findFirst().get();
-		assertTrue(resultMember.getCurrentEstimation().isPresent());
-		assertEquals(resultMember.getCurrentEstimation().get(), vote);
+		assertTrue(resultMember.getCurrentEstimation() != null);
+		assertEquals(resultMember.getCurrentEstimation(), vote);
 	}
 
 	@Test
@@ -70,7 +70,7 @@ public class SessionTest {
 
 		val result = session.resetEstimations();
 
-		assertTrue(result.getMembers().stream().allMatch(m -> m.getCurrentEstimation().isEmpty()));
+		assertTrue(result.getMembers().stream().allMatch(m -> m.getCurrentEstimation() == null));
 	}
 
 	@Test
@@ -166,25 +166,4 @@ public class SessionTest {
 
 		assertTrue(result.getCurrentHighlights().isEmpty());
 	}
-
-	// @Test
-	// public void aaaaa() throws Exception {
-	// 	List<String> set = List.of("XS", "S", "M", "L", "XL");
-	// 	val member1 = new Member(Utils.generateRandomID(), null, null, null, "L");
-	// 	val member2 = new Member(Utils.generateRandomID(), null, null, null, "L");
-	// 	val member3 = new Member(Utils.generateRandomID(), null, null, null, "XS");
-	// 	val map = new HashMap<String, Integer>();
-	// 	map.put(member1.getMemberID(), 1);
-	// 	map.put(member2.getMemberID(), 0);
-	// 	map.put(member3.getMemberID(), 0);
-	// 	val session = new Session(null, null, null, new SessionConfig(set, List.of(), 30, null), null,
-	// 			List.of(member1, member2, member3), map, new ArrayList<>(), null);
-
-	// 	ObjectMapper mapper = new ObjectMapper();
-
-	// 	mapper.readValue(mapper.writeValueAsString(session.getMembers()), Member[].class);
-	// 	val str = mapper.writeValueAsString(new MemberUpdate(session.getMembers(), session.getCurrentHighlights()));
-	// 	val update = mapper.readValue(str, MemberUpdate.class);
-	// 	// assertEquals("asdf", update);
-	// }
 }

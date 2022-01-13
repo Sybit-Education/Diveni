@@ -15,7 +15,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -62,8 +61,7 @@ public class Session {
 	}
 
 	static Stream<String> getFilteredEstimationStream(List<Member> members) {
-		return members.stream().map(Member::getCurrentEstimation)
-				.filter((estimation) -> estimation.isPresent() && !estimation.get().equals("?")).map(Optional::get);
+		return members.stream().map(Member::getCurrentEstimation).filter((estimation) -> estimation != null);
 	}
 
 	public Session selectHighlightedMembers() {
@@ -78,16 +76,16 @@ public class Session {
 			return new Session(databaseID, sessionID, adminID, sessionConfig, adminCookie, members, memberVoted,
 					new ArrayList<>(), sessionState);
 		}
-		val maxEstimationMembers = this.members.stream()
-				.filter((member) -> member.getCurrentEstimation().equals(maxEstimation)).collect(Collectors.toList());
+		val maxEstimationMembers = this.members.stream().filter((member) -> member.getCurrentEstimation() != null
+				&& member.getCurrentEstimation().equals(maxEstimation.get())).collect(Collectors.toList());
 		val maxOptions = memberVoted.entrySet().stream()
 				.filter((entry) -> maxEstimationMembers.stream()
 						.anyMatch((member) -> member.getMemberID().equals(entry.getKey())))
 				.collect(Collectors.toList());
 		val maxMemberID = Collections.max(maxOptions, Comparator.comparingInt(Map.Entry::getValue)).getKey();
 
-		val minEstimationMembers = this.members.stream()
-				.filter((member) -> member.getCurrentEstimation().equals(minEstimation)).collect(Collectors.toList());
+		val minEstimationMembers = this.members.stream().filter((member) -> member.getCurrentEstimation() != null
+				&& member.getCurrentEstimation().equals(minEstimation.get())).collect(Collectors.toList());
 		val minOptions = memberVoted.entrySet().stream()
 				.filter((entry) -> minEstimationMembers.stream()
 						.anyMatch((member) -> member.getMemberID().equals(entry.getKey())))
