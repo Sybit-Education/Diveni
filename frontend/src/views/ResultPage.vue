@@ -29,6 +29,7 @@
 
 <script lang="ts">
 import Vue from "vue";
+import papaparse from "papaparse";
 
 export default Vue.extend({
   name: "SessionPage",
@@ -46,11 +47,12 @@ export default Vue.extend({
   methods: {
     downloadUserStoriesAsCSV() {
       const fileType = "data:text/csv;charset=utf-8,";
-      const header = "Title;Description;Estimation\n";
-      const csv = this.userStories
-        .map((e) => `${e.title};${e.description};${e.estimation ? e.estimation : "?"}`)
-        .join("\n");
-      const blob = new Blob([header + csv], { type: fileType });
+      const csv = papaparse.unparse(this.userStories, {
+        columns: ["title", "description", "estimation"],
+        header: false,
+        delimiter: ";",
+      });
+      const blob = new Blob([csv], { type: fileType });
       const link = document.createElement("a");
       link.href = URL.createObjectURL(blob);
       link.download = "userStories.csv";
