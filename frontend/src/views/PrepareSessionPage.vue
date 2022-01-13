@@ -40,6 +40,27 @@
         :initial-stories="userStories"
         @userStoriesChanged="onUserStoriesChanged($event)"
       />
+
+      <h4 class="mt-3">4. Select mode</h4>
+
+      <b-tabs v-model="tabIndex" content-class="mt-3" fill>
+        <b-tab
+          class="mg_top_2_per"
+          title="Planning without User Stories"
+          active
+          :title-link-class="linkClass(0)"
+        >
+          <stroy-points-component />
+        </b-tab>
+        <b-tab title="Planning with User Stories" :title-link-class="linkClass(1)">
+          <user-story-component class="mg_top_2_per" />
+          <!--TODO: Implement session config with US-->
+        </b-tab>
+        <b-tab title="Planning with Jira" :title-link-class="linkClass(2)">
+          <jira-component class="mg_top_2_per" />
+          <!--TODO: Implement session config with Jira-->
+        </b-tab>
+      </b-tabs>
       <b-button
         class="mt-5"
         variant="success"
@@ -58,12 +79,18 @@ import Session from "../model/Session";
 import Constants from "../constants";
 import CardSetComponent from "../components/CardSetComponent.vue";
 import UserStoriesSidebar from "../components/UserStoriesSidebar.vue";
+import UserStoryComponent from "../components/UserStoryComponent.vue";
+import JiraComponent from "../components/JiraComponent.vue";
+import StroyPointsComponent from "@/components/StroyPointsComponent.vue";
 
 export default Vue.extend({
   name: "PrepareSessionPage",
   components: {
     CardSetComponent,
     UserStoriesSidebar,
+    UserStoryComponent,
+    JiraComponent,
+    StroyPointsComponent,
   },
   data() {
     return {
@@ -72,6 +99,7 @@ export default Vue.extend({
       selectedCardSetOptions: [],
       timer: 30,
       warningWhenUnderZero: "",
+      tabIndex: 0,
     };
   },
   computed: {
@@ -98,6 +126,13 @@ export default Vue.extend({
     this.$store.commit("setUserStories", { stories: [] });
   },
   methods: {
+    linkClass(idx) {
+      if (this.tabIndex === idx) {
+        return ["bg-success", "text-light"];
+      } else {
+        return ["bg-light", "text-dark"];
+      }
+    },
     async sendCreateSessionRequest() {
       const url = Constants.backendURL + Constants.createSessionRoute;
       const sessionConfig = {
@@ -172,3 +207,9 @@ export default Vue.extend({
   },
 });
 </script>
+
+<style scoped>
+.mg_top_2_per {
+  margin-top: 2%;
+}
+</style>
