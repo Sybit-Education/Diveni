@@ -8,14 +8,6 @@
     </div>
     <div class="sidenav" :style="`width: ${sideBarOpen ? '400px' : '0px'};`">
       <div v-if="showEditButtons">
-        <input
-          id="fileUpload"
-          type="file"
-          hidden
-          accept="text/csv"
-          @change="importStory($event.target.files)"
-        />
-        <b-button block color="primary" elevation="2" @click="openFileUploader()">Import</b-button>
         <b-button size="lg" variant="success" @click="addUserStory()">
           Add
           <b-icon-plus />
@@ -94,8 +86,6 @@
 
 <script lang="ts">
 import Vue from "vue";
-import papaparse from "papaparse";
-import UserStory from "@/model/UserStory";
 
 export default Vue.extend({
   name: "UserStoriesSidebar",
@@ -176,36 +166,6 @@ export default Vue.extend({
       this.sideBarOpen = !this.sideBarOpen;
       this.editEnabled = false;
       this.publishChanges();
-    },
-    openFileUploader() {
-      const fileUpload = document.getElementById("fileUpload");
-      if (fileUpload != null) {
-        fileUpload.click();
-      }
-    },
-    importStory(files: FileList) {
-      if (!files || !files[0]) {
-        return;
-      }
-      papaparse.parse(files[0], {
-        header: true,
-        complete: (file: { data }) => {
-          let stories: UserStory[] = [];
-
-          file.data.forEach((story) => {
-            stories.push({
-              title: story.Title,
-              description: story.Description,
-              estimation: story.Estimation,
-              isActive: false,
-            });
-          });
-
-          this.$store.commit("setUserStories", {
-            stories: stories,
-          });
-        },
-      });
     },
   },
 });
