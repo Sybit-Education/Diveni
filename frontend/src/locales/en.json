@@ -1,43 +1,49 @@
 {
-  "general": {
-    "copy": {
-      "id": "Copy ID",
-      "link": "Copy link"
+  "page": {
+    "session": {
+      "copy": {
+        "id": "Copy ID",
+        "link": "Copy link"
+      }
     },
-    "meeting": {
-      "new": {
-        "title": "New meeting",
-        "description": "Prepare a new session, invite team members and start estimating",
-        "startbutton": "GO"
-      },
-      "join": {
-        "title": "Join meeting",
-        "description": "Join an existing meeting and help your team estimate",
-        "startbutton": "GO"
-      },
-      "reconnect": {
-        "title": "Reconnect to meeting",
-        "description": "Reconnect to existing session as host",
-        "startbutton": "GO"
+    "landing": {
+      "meeting": {
+        "new": {
+          "title": "New meeting",
+          "description": "Prepare a new session, invite team members and start estimating",
+          "startbutton": "GO"
+        },
+        "join": {
+          "title": "Join meeting",
+          "description": "Join an existing meeting and help your team estimate",
+          "startbutton": "GO"
+        },
+        "reconnect": {
+          "title": "Reconnect to meeting",
+          "description": "Reconnect to existing session as host",
+          "startbutton": "GO"
+        }
       }
     }
   },
-  "cardSets": {
-    "fibonacci": {
-      "label": "Fibonacci",
-      "description": "Each number is the sum of the two preceding ones"
-    },
-    "tShirtSizes": {
-      "label": "T-shirt sizes",
-      "description": "Basic T-shirt sizes. Simple and effective"
-    },
-    "hours": {
-      "label": "Hours",
-      "description": "Simply hours. Great for sub tasks."
-    },
-    "numbers": {
-      "label": "Numbers",
-      "description": "Integer numbers. What do you want more?"
+  "prepare": {
+    "cardSets": {
+      "fibonacci": {
+        "label": "Fibonacci",
+        "description": "Each number is the sum of the two preceding ones"
+      },
+      "tShirtSizes": {
+        "label": "T-shirt sizes",
+        "description": "Basic T-shirt sizes. Simple and effective"
+      },
+      "hours": {
+        "label": "Hours",
+        "description": "Simply hours. Great for sub tasks."
+      },
+      "numbers": {
+        "label": "Numbers",
+        "description": "Integer numbers. What do you want more?"
+      }
     }
   }
 }

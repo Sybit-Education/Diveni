@@ -6,24 +6,24 @@
     <b-row class="justify-content-center">
       <landing-page-card
         class="col-md-4 m-2 col-12"
-        :title="$t('general.meeting.new.title')"
-        :description="$t('general.meeting.new.description')"
-        :button-text="$t('general.meeting.new.startbutton')"
+        :title="$t('page.landing.meeting.new.title')"
+        :description="$t('page.landing.meeting.new.description')"
+        :button-text="$t('page.landing.meeting.new.startbutton')"
         :on-click="goToPrepareSessionPage"
       />
       <landing-page-card
         class="col-md-4 m-2 col-12"
-        :title="$t('general.meeting.join.title')"
-        :description="$t('general.meeting.join.description')"
-        :button-text="$t('general.meeting.join.startbutton')"
+        :title="$t('page.landing.meeting.join.title')"
+        :description="$t('page.landing.meeting.join.description')"
+        :button-text="$t('page.landing.meeting.join.startbutton')"
         :on-click="goToJoinPage"
       />
       <landing-page-card
         v-if="sessionWrapper.session"
         class="col-md-4 m-2 col-12"
-        :title="$t('general.meeting.reconnect.title')"
-        :description="$t('general.meeting.reconnect.description')"
-        :button-text="$t('general.meeting.reconnect.startbutton')"
+        :title="$t('page.landing.meeting.reconnect.title')"
+        :description="$t('page.landing.meeting.reconnect.description')"
+        :button-text="$t('page.landing.meeting.reconnect.startbutton')"
         :on-click="goToSessionPage"
       />
     </b-row>
