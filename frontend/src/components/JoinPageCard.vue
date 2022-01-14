@@ -16,17 +16,17 @@
       </b-row>
       <b-row class="mt-2">
         <b-col>
-          <h6>Name</h6>
+          <h6>{{$t("page.join.input.name")}}</h6>
           <b-form-input v-model="name" class="mt-3" type="text" />
         </b-col>
       </b-row>
       <b-row class="mt-4">
         <b-col cols="12" :md="'6'">
-          <h6>Invitation code</h6>
+          <h6>{{$t("page.join.input.code")}}</h6>
           <b-form-input v-model="sessionID" class="mt-3" type="text" />
         </b-col>
         <b-col class="mt-2 mt-md-0" cols="12" md="6">
-          <h6>Password</h6>
+          <h6>{{$t("page.join.input.password")}}</h6>
           <b-form-input v-model="password" class="mt-3" type="password" placeholder="(optional)" />
         </b-col>
       </b-row>

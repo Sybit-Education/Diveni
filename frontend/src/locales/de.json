@@ -24,25 +24,34 @@
           "startbutton": "LOS"
         }
       }
+    },
+    "join": {
+      "title": "Trete der Session bei",
+      "input": {
+        "code": "Invitation code"
+      }
     }
   },
-  "prepare": {
-    "cardSets": {
-      "fibonacci": {
-        "label": "Fibonacci",
-        "description": "Jede Zahl ist die Summe der beiden vorherigen Zahlen"
-      },
-      "tShirtSizes": {
-        "label": "T-Shirt Größen",
-        "description": "Basic T-shirt sizes. Simple and effective"
-      },
-      "hours": {
-        "label": "Hours",
-        "description": "Simply hours. Great for sub tasks."
-      },
-      "numbers": {
-        "label": "Numbers",
-        "description": "Integer numbers. What do you want more?"
+  "session": {
+    "prepare": {
+      "title": "Bereite die Session vor:",
+      "cardSets": {
+        "fibonacci": {
+          "label": "Fibonacci",
+          "description": "Jede Zahl ist die Summe der beiden vorherigen Zahlen"
+        },
+        "tShirtSizes": {
+          "label": "T-Shirt Größen",
+          "description": "T-Shirt Größen - einfach und effektiv"
+        },
+        "hours": {
+          "label": "Stunden",
+          "description": "Einfach nur Stunden. Perfekt für Subtasks"
+        },
+        "numbers": {
+          "label": "Zahlen",
+          "description": "Integer Werte - was braucht man mehr?"
+        }
       }
     }
   }

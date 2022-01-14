@@ -2,7 +2,7 @@
   "page": {
     "session": {
       "copy": {
-        "id": "Copy ID",
+        "id": "Copy code",
         "link": "Copy link"
       }
     },
@@ -11,38 +11,81 @@
         "new": {
           "title": "New meeting",
           "description": "Prepare a new session, invite team members and start estimating",
-          "startbutton": "GO"
+          "buttons": {
+            "start": {
+              "label": "GO"
+            }
+          }
         },
         "join": {
           "title": "Join meeting",
           "description": "Join an existing meeting and help your team estimate",
-          "startbutton": "GO"
+          "buttons": {
+            "start": {
+              "label": "GO"
+            }
+          }
         },
         "reconnect": {
           "title": "Reconnect to meeting",
           "description": "Reconnect to existing session as host",
-          "startbutton": "GO"
+          "buttons": {
+            "start": {
+              "label": "GO"
+            }
+          }
         }
+      }
+    },
+    "join": {
+      "title": "Join the session",
+      "input": {
+        "code": "Invitation code",
+        "password": "Password",
+        "name": "Name"
       }
     }
   },
-  "prepare": {
-    "cardSets": {
-      "fibonacci": {
-        "label": "Fibonacci",
-        "description": "Each number is the sum of the two preceding ones"
+  "session": {
+    "prepare": {
+      "title": "Prepare your session:",
+      "step": {
+        "selection": {
+          "cardSet": "1. Select a card set and its values",
+          "time": "2. Adjust the time per estimation",
+          "password": "3. Choose a password if needed",
+          "mode": {
+            "title": "4. Select the mode for your User Stories",
+            "description": {
+            "withoutUS": {
+              "button": {
+                "label": "Planning without User Stories"
+              },
+              "subtitle": "Planning without User Stories",
+              "descriptionLine1": "You will vote with your selected cards"
+            },
+            "withUS": "Planning with User Stories",
+            "withJira": "Planning with Jira"}
+          }
+        }
       },
-      "tShirtSizes": {
-        "label": "T-shirt sizes",
-        "description": "Basic T-shirt sizes. Simple and effective"
-      },
-      "hours": {
-        "label": "Hours",
-        "description": "Simply hours. Great for sub tasks."
-      },
-      "numbers": {
-        "label": "Numbers",
-        "description": "Integer numbers. What do you want more?"
+      "cardSets": {
+        "fibonacci": {
+          "label": "Fibonacci",
+          "description": "Each number is the sum of the two preceding ones"
+        },
+        "tShirtSizes": {
+          "label": "T-shirt sizes",
+          "description": "Basic T-shirt sizes. Simple and effective"
+        },
+        "hours": {
+          "label": "Hours",
+          "description": "Simply hours. Great for sub tasks."
+        },
+        "numbers": {
+          "label": "Numbers",
+          "description": "Integer numbers. What else do you want?"
+        }
       }
     }
   }

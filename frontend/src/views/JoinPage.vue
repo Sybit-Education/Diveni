@@ -27,7 +27,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      title: "Join a meeting ...",
+      title: this.$t("page.join.title"),
       hexColor: Constants.getRandomPastelColor(),
       avatarAnimalAssetName: Constants.getRandomAvatarAnimalAssetName(),
       memberID: uuidv4(),
