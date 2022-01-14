@@ -1,7 +1,43 @@
 {
   "general": {
+    "copy": {
+      "id": "ID kopieren",
+      "link": "Link kopieren"
+    },
     "meeting": {
-      "new": "Neue Sitzung"
+      "new": {
+        "title": "Neue Session",
+        "description": "Bereite eine neue Session vor, lade Teammitglieder ein und starte das Schätzen",
+        "startbutton": "LOS"
+      },
+      "join": {
+        "title": "Session beitreten",
+        "description": "Trete einer bestehenden Session bei und schätze mit deinem Team",
+        "startbutton": "LOS"
+      },
+      "reconnect": {
+        "title": "Zurück zur Session",
+        "description": "Verbinde dich als Organisator erneut mit einer bestehenden Session",
+        "startbutton": "LOS"
+      }
+    }
+  },
+  "cardSets": {
+    "fibonacci": {
+      "label": "Fibonacci",
+      "description": "Jede Zahl ist die Summe der beiden vorherigen Zahlen"
+    },
+    "tShirtSizes": {
+      "label": "T-Shirt Größen",
+      "description": "Basic T-shirt sizes. Simple and effective"
+    },
+    "hours": {
+      "label": "Hours",
+      "description": "Simply hours. Great for sub tasks."
+    },
+    "numbers": {
+      "label": "Numbers",
+      "description": "Integer numbers. What do you want more?"
     }
   }
 }

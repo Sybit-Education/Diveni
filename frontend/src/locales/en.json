@@ -5,9 +5,21 @@
       "link": "Copy link"
     },
     "meeting": {
-      "new": "New meeting",
-      "join": "Join meeting",
-      "reconnect": "Reconnect to meeting"
+      "new": {
+        "title": "New meeting",
+        "description": "Prepare a new session, invite team members and start estimating",
+        "startbutton": "GO"
+      },
+      "join": {
+        "title": "Join meeting",
+        "description": "Join an existing meeting and help your team estimate",
+        "startbutton": "GO"
+      },
+      "reconnect": {
+        "title": "Reconnect to meeting",
+        "description": "Reconnect to existing session as host",
+        "startbutton": "GO"
+      }
     }
   },
   "cardSets": {
