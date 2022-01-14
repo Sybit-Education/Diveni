@@ -1,6 +1,29 @@
 {
+  "general": {
+    "copy": {
+      "id": "Copy ID",
+      "link": "Copy link"
+    },
     "meeting": {
       "new": "New meeting"
     }
+  },
+  "cardSets": {
+    "fibonacci": {
+      "label": "Fibonacci",
+      "description": "Each number is the sum of the two preceding ones"
+    },
+    "tShirtSizes": {
+      "label": "T-shirt sizes",
+      "description": "Basic T-shirt sizes. Simple and effective"
+    },
+    "hours": {
+      "label": "Hours",
+      "description": "Simply hours. Great for sub tasks."
+    },
+    "numbers": {
+      "label": "Numbers",
+      "description": "Integer numbers. What do you want more?"
+    }
   }
-  
+}
