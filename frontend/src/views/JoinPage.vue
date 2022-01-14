@@ -35,6 +35,7 @@ export default Vue.extend({
       sessionID: "",
       voteSet: "",
       timerSeconds: 0,
+      userStoryMode: "",
     };
   },
   computed: {
@@ -80,9 +81,11 @@ export default Vue.extend({
           set: Array<string>;
           timerSeconds: number;
           userStories: Array<{ title: string; description: string; estimation: string | null }>;
+          userStoryMode: string;
         };
         this.voteSet = JSON.stringify(sessionConfig.set);
         this.timerSeconds = parseInt(JSON.stringify(sessionConfig.timerSeconds), 10);
+        this.userStoryMode = sessionConfig.userStoryMode;
         console.log("session page");
         console.log(sessionConfig);
         this.$store.commit("setUserStories", { stories: sessionConfig.userStories });
@@ -121,6 +124,7 @@ export default Vue.extend({
           avatarAnimalAssetName: this.avatarAnimalAssetName,
           voteSetJson: this.voteSet,
           timerSecondsString: this.timerSeconds.toString(),
+          userStoryMode: this.userStoryMode,
         },
       });
     },

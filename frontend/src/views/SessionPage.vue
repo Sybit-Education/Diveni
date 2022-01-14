@@ -1,15 +1,16 @@
 <template>
   <b-container>
     <user-stories-sidebar
+      v-if="userStoryMode !== 'NO_US'"
       :card-set="voteSet"
       :show-estimations="planningStart"
       :initial-stories="userStories"
       @userStoriesChanged="onUserStoriesChanged($event)"
     />
     <b-row class="mt-5 mb-3">
-      <b-col
-        ><h1>{{ planningStart ? titleEstimate : titleWaiting }}</h1></b-col
-      >
+      <b-col>
+        <h1>{{ planningStart ? titleEstimate : titleWaiting }}</h1>
+      </b-col>
       <b-col v-if="planningStart" align-self="center">
         <copy-session-id-popup class="float-end" :session-id="sessionID" />
       </b-col>
@@ -151,6 +152,7 @@ export default Vue.extend({
     sessionState: { type: String, required: true },
     timerSecondsString: { type: String, required: true },
     startNewSessionOnMountedString: { type: String, required: false, default: "false" },
+    userStoryMode: { type: String, required: true },
   },
   data() {
     return {

@@ -45,7 +45,7 @@ public class Session {
 
 	public Session updateUserStories(List<UserStory> userStories) {
 		val updatedSessionConfig = new SessionConfig(sessionConfig.getSet(), userStories,
-				sessionConfig.getTimerSeconds().orElse(null), sessionConfig.getPassword());
+				sessionConfig.getTimerSeconds().orElse(null), sessionConfig.getUserStoryMode(), sessionConfig.getPassword());
 		return new Session(databaseID, sessionID, adminID, updatedSessionConfig, adminCookie, members, sessionState);
 	}
 

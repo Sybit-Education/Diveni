@@ -77,6 +77,7 @@ export default Vue.extend({
                 estimation: string | null;
                 isActive: false;
               }>;
+              userStoryMode: string;
             };
             sessionState: string;
           };

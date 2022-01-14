@@ -35,6 +35,7 @@
         </b-col>
       </b-row>
       <user-stories-sidebar
+        v-if="tabIndex !== 0"
         :card-set="selectedCardSetOptions"
         :show-estimations="false"
         :initial-stories="userStories"
@@ -72,7 +73,7 @@
         </b-tab>
       </b-tabs>
       <b-button
-        class="mt-5"
+        class="my-5"
         variant="success"
         :disabled="buttonDisabled()"
         @click="sendCreateSessionRequest"
@@ -152,6 +153,7 @@ export default Vue.extend({
         timerSeconds: this.timer,
         password: this.password === "" ? null : this.password,
         userStories: this.userStories,
+        userStoryMode: ["NO_US", "US_MANUALLY", "US_JIRA"][this.tabIndex],
       };
       try {
         const response = (await this.axios.post(url, sessionConfig)).data as {
@@ -167,6 +169,7 @@ export default Vue.extend({
                 estimation: string | null;
                 isActive: false;
               }>;
+              userStoryMode: string;
             };
             sessionState: string;
           };
@@ -187,6 +190,7 @@ export default Vue.extend({
           timerSecondsString: this.timer.toString(),
           voteSetJson: JSON.stringify(session.sessionConfig.set),
           sessionState: session.sessionState,
+          userStoryMode: session.sessionConfig.userStoryMode,
         },
       });
     },
