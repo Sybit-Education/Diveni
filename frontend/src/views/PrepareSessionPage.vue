@@ -4,9 +4,9 @@
       <h1 class="my-5">
         {{ title }}
       </h1>
-      <h4>{{$t("session.prepare.step.selection.cardSet")}}</h4>
+      <h4>{{ $t("session.prepare.step.selection.cardSet") }}</h4>
       <card-set-component class="mt-3" @selectedCardSetOptions="setCardSetOptions" />
-      <h4 class="mt-3">{{$t("session.prepare.step.selection.time")}}</h4>
+      <h4 class="mt-3">{{ $t("session.prepare.step.selection.time") }}</h4>
       <b-row class="mt-3 text-center">
         <b-col>
           <b-button variant="outline-secondary" @click="setTimerDown()"> - </b-button>
@@ -20,7 +20,7 @@
           <b-button variant="outline-secondary" @click="setTimerUp()"> + </b-button>
         </b-col>
       </b-row>
-      <h4 class="mt-3">{{$t("session.prepare.step.selection.password")}}</h4>
+      <h4 class="mt-3">{{ $t("session.prepare.step.selection.password") }}</h4>
       <b-row class="mt-3">
         <b-col>
           <b-form>
@@ -41,7 +41,7 @@
         @userStoriesChanged="onUserStoriesChanged($event)"
       />
 
-      <h4 class="mt-3">{{$t("session.prepare.step.selection.mode.title")}}</h4>
+      <h4 class="mt-3">{{ $t("session.prepare.step.selection.mode.title") }}</h4>
 
       <b-tabs v-model="tabIndex" content-class="mt-3" fill>
         <b-tab
