@@ -1,11 +1,5 @@
 <template>
   <b-container>
-    <user-stories-sidebar
-      :card-set="voteSet"
-      :show-estimations="planningStart"
-      :initial-stories="userStories"
-      @userStoriesChanged="onUserStoriesChanged($event)"
-    />
     <b-row class="mt-5 mb-3">
       <b-col
         ><h1>{{ planningStart ? titleEstimate : titleWaiting }}</h1></b-col
@@ -56,7 +50,11 @@
             <b-icon-arrow-clockwise />
             New
           </b-button>
-          <b-button variant="outline-dark" class="mx-1" @click="sendVotingFinishedMessage">
+          <b-button
+            variant="outline-dark"
+            class="mx-1"
+            @click="sendVotingFinishedMessage"
+          >
             <b-icon-bar-chart />
             Show result
           </b-button>
@@ -64,10 +62,14 @@
             <b-icon-x />
             End meeting
           </b-button>
-          <b-modal id="close-session-modal" title="Are you sure" @ok="closeSession">
+          <b-modal
+            id="close-session-modal"
+            title="Are you sure"
+            @ok="closeSession"
+          >
             <p class="my-4">
-              Closing this session removes you and all members. You can download the user stories
-              thereafter.
+              Closing this session removes you and all members. You can download
+              the user stories thereafter.
             </p>
           </b-modal>
         </b-col>
@@ -88,7 +90,10 @@
           {{ membersPending.length + membersEstimated.length }}
         </h4>
       </b-row>
-      <b-row v-if="!estimateFinished" class="my-1 d-flex justify-content-center flex-wrap">
+      <b-row
+        v-if="!estimateFinished"
+        class="my-1 d-flex justify-content-center flex-wrap"
+      >
         <rounded-avatar
           v-for="member of membersPending"
           :key="member.memberID"
@@ -115,11 +120,31 @@
           :name="member.name"
           :estimation="member.currentEstimation"
           :estimate-finished="estimateFinished"
-          :highest="estimateHighest ? estimateHighest.memberID === member.memberID : false"
-          :lowest="estimateHighest ? estimateLowest.memberID === member.memberID : false"
+          :highest="
+            estimateHighest
+              ? estimateHighest.memberID === member.memberID
+              : false
+          "
+          :lowest="
+            estimateHighest
+              ? estimateLowest.memberID === member.memberID
+              : false
+          "
         />
       </b-row>
     </div>
+    <user-stories-sidebar
+      :card-set="voteSet"
+      :show-estimations="planningStart"
+      :initial-stories="userStories"
+      @userStoriesChanged="onUserStoriesChanged($event)"
+    />
+    <user-story-descriptions
+      :card-set="voteSet"
+      :initial-stories="userStories"
+      :editDescription="true"
+      @userStoriesChanged="onUserStoriesChanged($event)"
+    />
   </b-container>
 </template>
 
@@ -129,10 +154,11 @@ import Constants from "../constants";
 import SessionMemberCircle from "../components/SessionMemberCircle.vue";
 import Member from "../model/Member";
 import SessionMemberCard from "../components/SessionMemberCard.vue";
-import UserStoriesSidebar from "../components/UserStoriesSidebar.vue";
+import UserStoriesSidebar from "../components/UserStories.vue";
 import EstimateTimer from "../components/EstimateTimer.vue";
 import CopySessionIdPopup from "../components/CopySessionIdPopup.vue";
 import RoundedAvatar from "../components/RoundedAvatar.vue";
+import UserStoryDescriptions from "../components/UserStoryDescriptions.vue";
 
 export default Vue.extend({
   name: "SessionPage",
@@ -143,6 +169,7 @@ export default Vue.extend({
     EstimateTimer,
     CopySessionIdPopup,
     RoundedAvatar,
+    UserStoryDescriptions,
   },
   props: {
     adminID: { type: String, required: true },
@@ -150,7 +177,11 @@ export default Vue.extend({
     voteSetJson: { type: String, required: true },
     sessionState: { type: String, required: true },
     timerSecondsString: { type: String, required: true },
-    startNewSessionOnMountedString: { type: String, required: false, default: "false" },
+    startNewSessionOnMountedString: {
+      type: String,
+      required: false,
+      default: "false",
+    },
   },
   data() {
     return {
@@ -177,10 +208,14 @@ export default Vue.extend({
       return this.$store.state.webSocketConnected;
     },
     membersPending(): Member[] {
-      return this.members.filter((member: Member) => member.currentEstimation === null);
+      return this.members.filter(
+        (member: Member) => member.currentEstimation === null
+      );
     },
     membersEstimated(): Member[] {
-      return this.members.filter((member: Member) => member.currentEstimation !== null);
+      return this.members.filter(
+        (member: Member) => member.currentEstimation !== null
+      );
     },
     estimateHighest(): Member | null {
       if (this.membersEstimated.length < 1) {
@@ -243,7 +278,10 @@ export default Vue.extend({
       this.$store.commit("setUserStories", { stories: $event });
       if (this.webSocketIsConnected) {
         const endPoint = `${Constants.webSocketAdminUpdatedUserStoriesRoute}`;
-        this.$store.commit("sendViaBackendWS", { endPoint, data: JSON.stringify($event) });
+        this.$store.commit("sendViaBackendWS", {
+          endPoint,
+          data: JSON.stringify($event),
+        });
       }
     },
     connectToWebSocket() {
