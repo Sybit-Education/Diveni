@@ -18,7 +18,7 @@
       <b-row class="align-items-center">
         <copy-session-id-popup
           :text-before-session-i-d="'Share the code'"
-          :session-id="sessionID"
+          :session-id="session_sessionID"
           :text-after-session-i-d="'with your team mates'"
         />
       </b-row>
@@ -154,6 +154,13 @@ export default Vue.extend({
   },
   data() {
     return {
+      //props copy
+      session_adminID: "",
+      session_sessionID: "",
+      session_voteSetJson: "",
+      session_sessionState: "",
+      session_timerSecondsString: "",
+      //data
       titleWaiting: "Waiting for members ...",
       titleEstimate: "Estimate!",
       stageLabelReady: "Ready",
@@ -218,9 +225,19 @@ export default Vue.extend({
       }
     },
   },
-  created() {
+  async created() {
+    this.session_adminID = this.adminID;
+    this.session_sessionID = this.sessionID;
+    this.session_sessionState = this.sessionState;
+    this.session_timerSecondsString = this.timerSecondsString;
+    this.session_voteSetJson = this.voteSetJson;
     if (!this.sessionID || !this.adminID) {
-      this.goToLandingPage();
+      await this.checkAdminCookie();
+      if (this.session_sessionID.length === 0) {
+        this.goToLandingPage();
+      } else {
+        alert("sessionWrapper is availbale");
+      }
     }
     this.timerCountdownNumber = parseInt(this.timerSecondsString, 10);
     window.addEventListener("beforeunload", this.sendUnregisterCommand);
@@ -239,6 +256,47 @@ export default Vue.extend({
     window.removeEventListener("beforeunload", this.sendUnregisterCommand);
   },
   methods: {
+    async checkAdminCookie() {
+      console.log("checking admin cookie");
+      const cookie = window.localStorage.getItem("adminCookie");
+      if (cookie !== null) {
+        console.log(`Found admin cookie: '${cookie}'`);
+        const url = Constants.backendURL + Constants.createSessionRoute;
+        try {
+          const session = (
+            await this.axios.get(url, {
+              params: {
+                adminCookie: cookie,
+              },
+            })
+          ).data as {
+            sessionID: string;
+            adminID: string;
+            sessionConfig: {
+              set: Array<string>;
+              timerSeconds: number;
+              userStories: Array<{
+                title: string;
+                description: string;
+                estimation: string | null;
+                isActive: false;
+              }>;
+              userStoryMode: string;
+            };
+            sessionState: string;
+          };
+          this.session_adminID = session.adminID;
+          this.session_sessionID = session.sessionID;
+          this.session_sessionState = session.sessionState;
+          this.session_timerSecondsString = session.sessionConfig.timerSeconds.toString();
+          this.session_voteSetJson = JSON.stringify(session.sessionConfig.set);
+        } catch (e) {
+          console.clear();
+          console.log(`got error: ${e}`);
+          window.localStorage.removeItem("adminCookie");
+        }
+      }
+    },
     onUserStoriesChanged($event) {
       this.$store.commit("setUserStories", { stories: $event });
       if (this.webSocketIsConnected) {
