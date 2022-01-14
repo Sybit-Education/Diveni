@@ -14,26 +14,26 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import { v4 as uuidv4 } from 'uuid';
-import JoinPageCard from '../components/JoinPageCard.vue';
-import JoinCommand from '../model/JoinCommand';
-import Constants from '../constants';
+import Vue from "vue";
+import { v4 as uuidv4 } from "uuid";
+import JoinPageCard from "../components/JoinPageCard.vue";
+import JoinCommand from "../model/JoinCommand";
+import Constants from "../constants";
 
 export default Vue.extend({
-  name: 'JoinPage',
+  name: "JoinPage",
   components: {
     JoinPageCard,
   },
   data() {
     return {
-      title: 'Join a meeting ...',
+      title: "Join a meeting ...",
       hexColor: Constants.getRandomPastelColor(),
       avatarAnimalAssetName: Constants.getRandomAvatarAnimalAssetName(),
       memberID: uuidv4(),
-      name: '',
-      sessionID: '',
-      voteSet: '',
+      name: "",
+      sessionID: "",
+      voteSet: "",
       timerSeconds: 0,
     };
   },
@@ -45,7 +45,7 @@ export default Vue.extend({
   watch: {
     webSocketIsConnected(isConnected) {
       if (isConnected) {
-        console.debug('JoinPage: member connected to websocket');
+        console.debug("JoinPage: member connected to websocket");
         this.registerMemberPrincipalOnBackend();
         this.subscribeWSMemberUpdates();
         this.subscribeWSadminUpdatedUserStories();
@@ -62,6 +62,7 @@ export default Vue.extend({
   },
   methods: {
     async sendJoinSessionRequest(data: JoinCommand) {
+      this.$store.commit("clearStore");
       this.name = data.name;
       const url = `${Constants.backendURL}${Constants.joinSessionRoute(data.sessionID)}`;
       const joinInfo = {
@@ -76,45 +77,43 @@ export default Vue.extend({
       };
       try {
         const sessionConfig = (await this.axios.post(url, joinInfo)).data as {
-          set: Array<string>,
-          timerSeconds: number,
-          userStories: Array<{ title: string, description: string, estimation: string | null }>,
+          set: Array<string>;
+          timerSeconds: number;
+          userStories: Array<{ title: string; description: string; estimation: string | null }>;
         };
         this.voteSet = JSON.stringify(sessionConfig.set);
         this.timerSeconds = parseInt(JSON.stringify(sessionConfig.timerSeconds), 10);
-        console.log('session page');
+        console.log("session page");
         console.log(sessionConfig);
-        this.$store.commit('setUserStories', { stories: sessionConfig.userStories });
+        this.$store.commit("setUserStories", { stories: sessionConfig.userStories });
         this.connectToWebSocket(data.sessionID, joinInfo.member.memberID);
       } catch (e) {
         console.error(`Response of ${url} is invalid: ${e}`);
       }
     },
     convertAvatarAssetNameToBackendAnimal() {
-      return Constants.avatarAnimalAssetNameToBackendEnum(
-        this.avatarAnimalAssetName,
-      );
+      return Constants.avatarAnimalAssetNameToBackendEnum(this.avatarAnimalAssetName);
     },
     connectToWebSocket(sessionID: string, memberID: string) {
       const url = `${Constants.backendURL}/connect?sessionID=${sessionID}&memberID=${memberID}`;
-      this.$store.commit('connectToBackendWS', url);
+      this.$store.commit("connectToBackendWS", url);
     },
     registerMemberPrincipalOnBackend() {
       const endPoint = Constants.webSocketRegisterMemberRoute;
-      this.$store.commit('sendViaBackendWS', { endPoint });
+      this.$store.commit("sendViaBackendWS", { endPoint });
     },
     subscribeWSMemberUpdates() {
-      this.$store.commit('subscribeOnBackendWSMemberUpdates');
+      this.$store.commit("subscribeOnBackendWSMemberUpdates");
     },
     subscribeWSadminUpdatedUserStories() {
-      this.$store.commit('subscribeOnBackendWSStoriesUpdated');
+      this.$store.commit("subscribeOnBackendWSStoriesUpdated");
     },
     subscribeWSMemberUpdated() {
-      this.$store.commit('subscribeOnBackendWSAdminUpdate');
+      this.$store.commit("subscribeOnBackendWSAdminUpdate");
     },
     goToEstimationPage() {
       this.$router.push({
-        name: 'MemberVotePage',
+        name: "MemberVotePage",
         params: {
           memberID: this.memberID,
           name: this.name,

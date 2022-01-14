@@ -1,39 +1,39 @@
 class Constants {
-  backendURL = process.env.NODE_ENV === 'development' ? 'http://localhost:9090' : '/api';
+  backendURL = process.env.VUE_APP_SERVER_API_URL;
 
-  createSessionRoute = '/sessions';
+  createSessionRoute = "/sessions";
 
-  webSocketRegisterAdminUserRoute = '/ws/registerAdminUser';
+  webSocketRegisterAdminUserRoute = "/ws/registerAdminUser";
 
-  webSocketRegisterMemberRoute = '/ws/registerMember';
+  webSocketRegisterMemberRoute = "/ws/registerMember";
 
-  webSocketUnregisterRoute = '/ws/unregister'
+  webSocketUnregisterRoute = "/ws/unregister";
 
-  webSocketCloseSessionRoute = '/ws/closeSession';
+  webSocketCloseSessionRoute = "/ws/closeSession";
 
-  webSocketGetMemberUpdateRoute = '/ws/memberUpdate';
+  webSocketGetMemberUpdateRoute = "/ws/memberUpdate";
 
-  webSocketMembersUpdatedRoute = '/users/updates/membersUpdated';
+  webSocketMembersUpdatedRoute = "/users/updates/membersUpdated";
 
-  webSocketStartPlanningRoute = '/ws/startVoting';
+  webSocketStartPlanningRoute = "/ws/startVoting";
 
-  webSocketVotingFinishedRoute = '/ws/votingFinished';
+  webSocketVotingFinishedRoute = "/ws/votingFinished";
 
-  webSocketRestartPlanningRoute = '/ws/restart';
+  webSocketRestartPlanningRoute = "/ws/restart";
 
-  webSocketVoteRoute = '/ws/vote';
+  webSocketVoteRoute = "/ws/vote";
 
-  webSocketAdminUpdatedUserStoriesRoute = '/ws/adminUpdatedUserStories';
+  webSocketAdminUpdatedUserStoriesRoute = "/ws/adminUpdatedUserStories";
 
-  webSocketMemberListenUserStoriesRoute = '/users/updates/userStories';
+  webSocketMemberListenUserStoriesRoute = "/users/updates/userStories";
 
-  webSocketMemberListenRoute = '/users/updates/member';
+  webSocketMemberListenRoute = "/users/updates/member";
 
-  memberUpdateCommandStartVoting = 'START_VOTING';
+  memberUpdateCommandStartVoting = "START_VOTING";
 
-  memberUpdateCommandVotingFinished = 'VOTING_FINISHED';
+  memberUpdateCommandVotingFinished = "VOTING_FINISHED";
 
-  memberUpdateCloseSession = 'SESSION_CLOSED';
+  memberUpdateCloseSession = "SESSION_CLOSED";
 
   // eslint-disable-next-line class-methods-use-this
   public joinSessionRoute(sessionID: string) {
@@ -47,7 +47,9 @@ class Constants {
     const f = (n: number) => {
       const k = (n + (360 * Math.random()) / 30) % 12;
       const color = l2 - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
-      return Math.round(255 * color).toString(16).padStart(2, '0');
+      return Math.round(255 * color)
+        .toString(16)
+        .padStart(2, "0");
     };
     return `#${f(0)}${f(8)}${f(4)}`;
   }
@@ -67,16 +69,35 @@ class Constants {
 
   // eslint-disable-next-line class-methods-use-this
   public getRandomAvatarAnimalAssetName() {
-    const animals = ['bull', 'camel', 'cat', 'cow', 'dog', 'duck', 'elephant',
-      'fish', 'giraffe', 'goose', 'horse', 'lion', 'monkey',
-      'mouse', 'pigeon', 'rabbit', 'tiger', 'turtle', 'wolf', 'zebra'];
+    const animals = [
+      "bull",
+      "camel",
+      "cat",
+      "cow",
+      "dog",
+      "duck",
+      "elephant",
+      "fish",
+      "giraffe",
+      "goose",
+      "horse",
+      "lion",
+      "monkey",
+      "mouse",
+      "pigeon",
+      "rabbit",
+      "tiger",
+      "turtle",
+      "wolf",
+      "zebra",
+    ];
     const num = Math.random() * (animals.length - 0);
     return `${animals[parseInt(num.toString(), 10)]}.png`;
   }
 
   // eslint-disable-next-line class-methods-use-this
   public avatarAnimalAssetNameToBackendEnum(assetName: string) {
-    return assetName.split('.')[0].toUpperCase();
+    return assetName.split(".")[0].toUpperCase();
   }
 
   // eslint-disable-next-line class-methods-use-this

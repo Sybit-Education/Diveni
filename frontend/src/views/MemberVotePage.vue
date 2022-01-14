@@ -8,7 +8,7 @@
     />
     <b-row class="my-5 mx-2">
       <b-col>
-        <h1> {{ title }} </h1>
+        <h1>{{ title }}</h1>
       </b-col>
       <b-col>
         <estimate-timer
@@ -60,7 +60,7 @@
             v-for="(voteOption, index) in voteSet"
             :key="voteOption"
             :ref="`memberCard${voteOption}`"
-            style="display:inline-block"
+            style="display: inline-block"
             class="flicking-panel m-2"
             :vote-option="voteOption"
             :index="index"
@@ -76,7 +76,7 @@
       <b-icon-three-dots animation="fade" class="my-5" font-scale="4" />
       <h1>{{ waitingText }}</h1>
     </b-row>
-    <b-row v-if="votingFinished" class="my-1 d-flex justify-content-center flex-wrap ">
+    <b-row v-if="votingFinished" class="my-1 d-flex justify-content-center flex-wrap">
       <SessionMemberCard
         v-for="member of members"
         :key="member.memberID"
@@ -85,25 +85,25 @@
         :name="member.name"
         :estimation="member.currentEstimation"
         :estimate-finished="votingFinished"
-        :highest="estimateHighest ? estimateHighest.memberID === member.memberID: false"
-        :lowest="estimateHighest ? estimateLowest.memberID === member.memberID: false"
+        :highest="estimateHighest ? estimateHighest.memberID === member.memberID : false"
+        :lowest="estimateHighest ? estimateLowest.memberID === member.memberID : false"
       />
     </b-row>
   </b-container>
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import RoundedAvatar from '../components/RoundedAvatar.vue';
-import MemberVoteCard from '../components/MemberVoteCard.vue';
-import Constants from '../constants';
-import UserStoriesSidebar from '../components/UserStoriesSidebar.vue';
-import EstimateTimer from '../components/EstimateTimer.vue';
-import SessionMemberCard from '../components/SessionMemberCard.vue';
-import Member from '../model/Member';
+import Vue from "vue";
+import RoundedAvatar from "../components/RoundedAvatar.vue";
+import MemberVoteCard from "../components/MemberVoteCard.vue";
+import Constants from "../constants";
+import UserStoriesSidebar from "../components/UserStoriesSidebar.vue";
+import EstimateTimer from "../components/EstimateTimer.vue";
+import SessionMemberCard from "../components/SessionMemberCard.vue";
+import Member from "../model/Member";
 
 export default Vue.extend({
-  name: 'MemberVotePage',
+  name: "MemberVotePage",
   components: {
     RoundedAvatar,
     MemberVoteCard,
@@ -121,9 +121,9 @@ export default Vue.extend({
   },
   data() {
     return {
-      title: 'Estimate!',
+      title: "Estimate!",
       draggedVote: null,
-      waitingText: 'Waiting for Host to start ...',
+      waitingText: "Waiting for Host to start ...",
       voteSet: [] as string[],
       timerCountdownNumber: 0,
       triggerTimer: 0,
@@ -132,7 +132,9 @@ export default Vue.extend({
   },
   computed: {
     isMobile() {
-      return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent
+      );
     },
     userStories() {
       return this.$store.state.userStories;
@@ -156,17 +158,23 @@ export default Vue.extend({
       if (this.membersEstimated.length < 1) {
         return null;
       }
-      return this.membersEstimated.reduce((prev, current) => (
-        this.voteSet.indexOf(prev.currentEstimation!) > this.voteSet.indexOf(current.currentEstimation!) ? prev : current
-      ));
+      return this.membersEstimated.reduce((prev, current) =>
+        this.voteSet.indexOf(prev.currentEstimation!) >
+        this.voteSet.indexOf(current.currentEstimation!)
+          ? prev
+          : current
+      );
     },
     estimateLowest(): Member | null {
       if (this.membersEstimated.length < 1) {
         return null;
       }
-      return this.membersEstimated.reduce((prev, current) => (
-        this.voteSet.indexOf(prev.currentEstimation!) < this.voteSet.indexOf(current.currentEstimation!) ? prev : current
-      ));
+      return this.membersEstimated.reduce((prev, current) =>
+        this.voteSet.indexOf(prev.currentEstimation!) <
+        this.voteSet.indexOf(current.currentEstimation!)
+          ? prev
+          : current
+      );
     },
   },
   watch: {
@@ -183,12 +191,16 @@ export default Vue.extend({
     },
   },
   created() {
-    window.addEventListener('beforeunload', this.sendUnregisterCommand);
+    window.addEventListener("beforeunload", this.sendUnregisterCommand);
     this.timerCountdownNumber = JSON.parse(this.timerSecondsString);
   },
   mounted() {
-    if (this.memberID === undefined || this.name === undefined
-          || this.hexColor === undefined || this.avatarAnimalAssetName === undefined) {
+    if (
+      this.memberID === undefined ||
+      this.name === undefined ||
+      this.hexColor === undefined ||
+      this.avatarAnimalAssetName === undefined
+    ) {
       this.goToJoinPage();
     }
     this.voteSet = JSON.parse(this.voteSetJson);
@@ -200,15 +212,15 @@ export default Vue.extend({
     onSendVote({ vote }) {
       this.draggedVote = vote;
       const endPoint = `${Constants.webSocketVoteRoute}`;
-      this.$store.commit('sendViaBackendWS', { endPoint, data: vote });
+      this.$store.commit("sendViaBackendWS", { endPoint, data: vote });
     },
     sendUnregisterCommand() {
       const endPoint = `${Constants.webSocketUnregisterRoute}`;
-      this.$store.commit('sendViaBackendWS', { endPoint, data: null });
-      this.$store.commit('clearStore');
+      this.$store.commit("sendViaBackendWS", { endPoint, data: null });
+      this.$store.commit("clearStore");
     },
     goToJoinPage() {
-      this.$router.push({ name: 'JoinPage' });
+      this.$router.push({ name: "JoinPage" });
     },
     backendAnimalToAssetName(animal: string) {
       return Constants.avatarAnimalToAssetName(animal);

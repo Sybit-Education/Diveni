@@ -4,8 +4,11 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve --port 8080",
+    "serve:remote": "vue-cli-service serve --port 8080 --mode remote",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint --no-fix && npm run prettier -- --check",
+    "fmt": "vue-cli-service lint && npm run prettier -- --write",
+    "prettier": "prettier \"src/**/*.{vue,css,html,ts,js}\""
   },
   "dependencies": {
     "@egjs/vue-flicking": "^4.3.1",
@@ -20,12 +23,14 @@
     "uuid": "^8.3.2",
     "vue": "^2.6.14",
     "vue-axios": "^3.3.7",
+    "vue-i18n": "^8.26.8",
     "vue-router": "^3.2.0",
     "vue2-interact": "0.0.3",
     "vuex": "^3.4.0",
     "webstomp-client": "^1.2.6"
   },
   "devDependencies": {
+    "@crowdin/cli": "^3.7.6",
     "@types/uuid": "^8.3.1",
     "@typescript-eslint/eslint-plugin": "^4.18.0",
     "@typescript-eslint/parser": "^4.18.0",
@@ -36,10 +41,11 @@
     "@vue/cli-plugin-typescript": "~4.5.0",
     "@vue/cli-plugin-vuex": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
-    "@vue/eslint-config-airbnb": "^5.0.2",
+    "@vue/eslint-config-prettier": "^6.0.0",
     "@vue/eslint-config-typescript": "^7.0.0",
     "eslint": "^6.8.0",
     "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-prettier": "^3.3.1",
     "eslint-plugin-vue": "^6.2.2",
     "prettier": "^2.4.1",
     "sass": "~1.32.0",

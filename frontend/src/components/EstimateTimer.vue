@@ -7,10 +7,10 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import Vue from "vue";
 
 export default Vue.extend({
-  name: 'EstimateTimer',
+  name: "EstimateTimer",
   props: {
     timer: { type: Number, required: true },
     timerTriggered: { type: Number, required: true },
@@ -26,16 +26,16 @@ export default Vue.extend({
   },
   computed: {
     textColor(): string {
-      if (this.timerCount > ((this.initialTimer / 3) * 2)) {
-        return '#229954';
+      if (this.timerCount > (this.initialTimer / 3) * 2) {
+        return "#229954";
       }
-      if (this.timerCount > ((this.initialTimer / 3))) {
-        return '#D4AC0D';
+      if (this.timerCount > this.initialTimer / 3) {
+        return "#D4AC0D";
       }
       if (this.timerCount === 0) {
-        return 'black';
+        return "black";
       }
-      return '#CB4335';
+      return "#CB4335";
     },
   },
   watch: {
@@ -60,10 +60,10 @@ export default Vue.extend({
   methods: {
     formatTimer() {
       if (this.initialTimer === 0) {
-        return '';
+        return "";
       }
       const minutes = Math.floor(this.timerCount / 60);
-      const seconds = (this.timerCount % 60).toString().padStart(2, '0');
+      const seconds = (this.timerCount % 60).toString().padStart(2, "0");
       return `${minutes}:${seconds}`;
     },
     resetTimer() {
@@ -77,7 +77,7 @@ export default Vue.extend({
           this.timerCount -= 1;
         } else {
           if (this.initialTimer > 0) {
-            this.$emit('timerFinished');
+            this.$emit("timerFinished");
           }
           clearInterval(this.intervalHandler);
         }
