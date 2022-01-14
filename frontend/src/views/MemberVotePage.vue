@@ -1,11 +1,5 @@
 <template>
   <b-container>
-    <user-stories-sidebar
-      :card-set="voteSet"
-      :show-estimations="true"
-      :initial-stories="userStories"
-      :show-edit-buttons="false"
-    />
     <b-row class="my-5 mx-2">
       <b-col>
         <h1>{{ title }}</h1>
@@ -76,7 +70,10 @@
       <b-icon-three-dots animation="fade" class="my-5" font-scale="4" />
       <h1>{{ waitingText }}</h1>
     </b-row>
-    <b-row v-if="votingFinished" class="my-1 d-flex justify-content-center flex-wrap">
+    <b-row
+      v-if="votingFinished"
+      class="my-1 d-flex justify-content-center flex-wrap"
+    >
       <SessionMemberCard
         v-for="member of members"
         :key="member.memberID"
@@ -85,10 +82,20 @@
         :name="member.name"
         :estimation="member.currentEstimation"
         :estimate-finished="votingFinished"
-        :highest="estimateHighest ? estimateHighest.memberID === member.memberID : false"
-        :lowest="estimateHighest ? estimateLowest.memberID === member.memberID : false"
+        :highest="
+          estimateHighest ? estimateHighest.memberID === member.memberID : false
+        "
+        :lowest="
+          estimateHighest ? estimateLowest.memberID === member.memberID : false
+        "
       />
     </b-row>
+    <user-stories-sidebar
+      :card-set="voteSet"
+      :show-estimations="true"
+      :initial-stories="userStories"
+      :show-edit-buttons="false"
+    />
   </b-container>
 </template>
 
@@ -97,7 +104,7 @@ import Vue from "vue";
 import RoundedAvatar from "../components/RoundedAvatar.vue";
 import MemberVoteCard from "../components/MemberVoteCard.vue";
 import Constants from "../constants";
-import UserStoriesSidebar from "../components/UserStoriesSidebar.vue";
+import UserStoriesSidebar from "../components/UserStories.vue";
 import EstimateTimer from "../components/EstimateTimer.vue";
 import SessionMemberCard from "../components/SessionMemberCard.vue";
 import Member from "../model/Member";
@@ -143,16 +150,23 @@ export default Vue.extend({
       return this.$store.state.memberUpdates;
     },
     isStartVoting(): boolean {
-      return this.memberUpdates.at(-1) === Constants.memberUpdateCommandStartVoting;
+      return (
+        this.memberUpdates.at(-1) === Constants.memberUpdateCommandStartVoting
+      );
     },
     votingFinished(): boolean {
-      return this.memberUpdates.at(-1) === Constants.memberUpdateCommandVotingFinished;
+      return (
+        this.memberUpdates.at(-1) ===
+        Constants.memberUpdateCommandVotingFinished
+      );
     },
     members() {
       return this.$store.state.members;
     },
     membersEstimated(): Member[] {
-      return this.members.filter((member: Member) => member.currentEstimation !== null);
+      return this.members.filter(
+        (member: Member) => member.currentEstimation !== null
+      );
     },
     estimateHighest(): Member | null {
       if (this.membersEstimated.length < 1) {
@@ -183,7 +197,9 @@ export default Vue.extend({
         this.draggedVote = null;
         this.estimateFinished = false;
         this.triggerTimer = (this.triggerTimer + 1) % 5;
-      } else if (updates.at(-1) === Constants.memberUpdateCommandVotingFinished) {
+      } else if (
+        updates.at(-1) === Constants.memberUpdateCommandVotingFinished
+      ) {
         this.estimateFinished = true;
       } else if (updates.at(-1) === Constants.memberUpdateCloseSession) {
         this.goToJoinPage();
