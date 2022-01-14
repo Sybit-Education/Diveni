@@ -109,6 +109,7 @@ export default Vue.extend({
           sessionState: this.sessionWrapper.session.sessionState,
           timerSecondsString: this.sessionWrapper.session.sessionConfig.timerSeconds.toString(),
           startNewSessionOnMountedString: this.startNewSessionOnMounted.toString(),
+          userStoryMode: this.sessionWrapper.session.sessionConfig.userStoryMode,
         },
       });
     },
