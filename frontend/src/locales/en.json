@@ -5,7 +5,9 @@
       "link": "Copy link"
     },
     "meeting": {
-      "new": "New meeting"
+      "new": "New meeting",
+      "join": "Join meeting",
+      "reconnect": "Reconnect to meeting"
     }
   },
   "cardSets": {

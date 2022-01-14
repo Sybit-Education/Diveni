@@ -6,14 +6,14 @@
     <b-row class="justify-content-center">
       <landing-page-card
         class="col-md-4 m-2 col-12"
-        :title="$t('meeting.new')"
+        :title="$t('general.meeting.new')"
         :description="'Start a new meeting, invite colleagues and start estimating'"
         :button-text="'GO'"
         :on-click="goToPrepareSessionPage"
       />
       <landing-page-card
         class="col-md-4 m-2 col-12"
-        :title="'Join meeting'"
+        :title="$t('general.meeting.new')"
         :description="'Join an existing meeting and help your team estimate'"
         :button-text="'GO'"
         :on-click="goToJoinPage"
@@ -21,7 +21,7 @@
       <landing-page-card
         v-if="sessionWrapper.session"
         class="col-md-4 m-2 col-12"
-        :title="'Reconnect to meeting'"
+        :title="$t('general.meeting.reconnect')"
         :description="'Reconnect to existing session as host'"
         :button-text="'GO'"
         :on-click="goToSessionPage"

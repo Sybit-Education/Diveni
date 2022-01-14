@@ -1,5 +1,7 @@
 {
-  "meeting": {
-    "new": "Neue Sitzung"
+  "general": {
+    "meeting": {
+      "new": "Neue Sitzung"
+    }
   }
 }
