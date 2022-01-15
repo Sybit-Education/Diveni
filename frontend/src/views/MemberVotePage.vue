@@ -85,8 +85,10 @@
         :name="member.name"
         :estimation="member.currentEstimation"
         :estimate-finished="votingFinished"
-        :highest="estimateHighest ? estimateHighest.memberID === member.memberID : false"
-        :lowest="estimateHighest ? estimateLowest.memberID === member.memberID : false"
+        :highlight="
+          $store.state.highlightedMembers.includes(member.memberID) ||
+          $store.state.highlightedMembers.length === 0
+        "
       />
     </b-row>
   </b-container>
