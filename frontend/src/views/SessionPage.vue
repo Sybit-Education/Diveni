@@ -17,13 +17,13 @@
     <div v-if="!planningStart">
       <b-row class="align-items-center">
         <copy-session-id-popup
-          :text-before-session-i-d="'Share the code'"
+          :text-before-session-i-d="$t('page.session.before.text.beforeID')"
           :session-id="sessionID"
-          :text-after-session-i-d="'with your team mates'"
+          :text-after-session-i-d="$t('page.session.before.text.afterID')"
         />
       </b-row>
       <b-row class="mt-5">
-        <h4 class="text-center">Waiting for members to join</h4>
+        <h4 class="text-center">{{ $t("page.session.before.text.waiting") }}</h4>
         <b-icon-three-dots animation="fade" class="" font-scale="3" />
       </b-row>
       <b-row class="d-flex justify-content-center">
@@ -44,7 +44,7 @@
             :disabled="!members || members.length < 1"
             @click="sendStartEstimationMessages"
           >
-            Start Planning
+            {{ $t("page.session.before.button") }}
           </b-button>
         </b-col>
       </b-row>
@@ -154,7 +154,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      titleWaiting: "Waiting for members ...",
+      titleWaiting: this.$t("page.session.before.title"),
       titleEstimate: "Estimate!",
       stageLabelReady: "Ready",
       stageLabelWaiting: "Waiting room",

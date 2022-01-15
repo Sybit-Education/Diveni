@@ -1,9 +1,20 @@
 {
   "page": {
     "session": {
-      "copy": {
-        "id": "Copy code",
-        "link": "Copy link"
+      "before": {
+        "copy": {
+          "id": "Copy code",
+          "link": "Copy link"
+        },
+        "title": "Waiting for members ...",
+        "text": {
+          "beforeID": "Share the code",
+          "afterID": "with your team mates",
+          "waiting": "Waiting for members to join"
+        },
+        "button": "Start Planning"
+      },
+      "during": {
       }
     },
     "landing": {
@@ -51,41 +62,61 @@
       "title": "Prepare your session:",
       "step": {
         "selection": {
-          "cardSet": "1. Select a card set and its values",
-          "time": "2. Adjust the time per estimation",
-          "password": "3. Choose a password if needed",
+          "cardSet": {
+            "title": "1. Select a card set and its values",
+            "sets": {
+              "fibonacci": {
+                "label": "Fibonacci",
+                "description": "Each number is the sum of the two preceding ones"
+              },
+              "tShirtSizes": {
+                "label": "T-shirt sizes",
+                "description": "Basic T-shirt sizes. Simple and effective"
+              },
+              "hours": {
+                "label": "Hours",
+                "description": "Simply hours. Great for sub tasks."
+              },
+              "numbers": {
+                "label": "Numbers",
+                "description": "Integer numbers. What else do you want?"
+              }
+            }
+          },
+          "time": {
+            "title": "2. Adjust the time per estimation"
+          },
+          "password": {
+            "title": "3. Choose a password if needed",
+            "placeholder": "Password (leave empty for unprotected session)"
+          },
           "mode": {
             "title": "4. Select the mode for your User Stories",
             "description": {
-            "withoutUS": {
-              "button": {
-                "label": "Planning without User Stories"
+              "withoutUS": {
+                "tab": {
+                  "label": "Planning without User Stories"
+                },
+                "subtitle": "Planning without User Stories",
+                "descriptionLine1": "You will vote with your selected cards",
+                "descriptionLine2": "You will not be able to add User Stories once you've started the session"
               },
-              "subtitle": "Planning without User Stories",
-              "descriptionLine1": "You will vote with your selected cards"
-            },
-            "withUS": "Planning with User Stories",
-            "withJira": "Planning with Jira"}
+              "withUS": {
+                "tab": {
+                  "label": "Planning with User Stories"
+                }
+              },
+              "withJira": {
+                "tab": {
+                  "label": "Planning with Jira"
+                }
+              }
+            }
           }
         }
       },
-      "cardSets": {
-        "fibonacci": {
-          "label": "Fibonacci",
-          "description": "Each number is the sum of the two preceding ones"
-        },
-        "tShirtSizes": {
-          "label": "T-shirt sizes",
-          "description": "Basic T-shirt sizes. Simple and effective"
-        },
-        "hours": {
-          "label": "Hours",
-          "description": "Simply hours. Great for sub tasks."
-        },
-        "numbers": {
-          "label": "Numbers",
-          "description": "Integer numbers. What else do you want?"
-        }
+      "button": {
+        "start": "Start session"
       }
     }
   }

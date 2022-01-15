@@ -7,10 +7,10 @@
     {{ textAfterSessionID }}
     <b-popover target="popover-link" triggers="hover" placement="top">
       <b-button class="mx-1" variant="success" @click="copyIdToClipboard()">
-        {{ $t("page.session.copy.id") }}
+        {{ $t("page.session.before.copy.id") }}
       </b-button>
       <b-button class="mx-1" variant="success" @click="copyLinkToClipboard()">
-        {{ $t("page.session.copy.link") }}
+        {{ $t("page.session.before.copy.link") }}
       </b-button>
     </b-popover>
   </h4>
