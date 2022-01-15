@@ -1,101 +1,120 @@
 <template>
   <b-container>
-    <b-row class="my-5 mx-2">
+    <b-row>
       <b-col>
-        <h1>{{ title }}</h1>
-      </b-col>
-      <b-col>
-        <estimate-timer
-          :pause-timer="estimateFinished"
-          :timer-triggered="triggerTimer"
-          :timer="timerCountdownNumber"
-          :start-timer-on-component-creation="false"
-          :initial-timer="timerCountdownNumber"
-        />
-      </b-col>
-    </b-row>
-    <b-row class="justify-content-center">
-      <rounded-avatar
-        :color="hexColor"
-        :asset-name="avatarAnimalAssetName"
-        :show-name="true"
-        :name="name"
-      />
-    </b-row>
-    <b-row v-if="isStartVoting" class="my-5">
-      <flicking
-        v-if="isMobile"
-        id="flicking"
-        :options="{
-          renderOnlyVisible: false,
-          horizontal: true,
-          align: 'center',
-          bound: false,
-          defaultIndex: 0,
-          deceleration: 0.0005,
-        }"
-      >
-        <member-vote-card
-          v-for="(voteOption, index) in voteSet"
-          :key="voteOption"
-          :ref="`memberCard${voteOption}`"
-          class="flicking-panel mx-2"
-          :vote-option="voteOption"
-          :index="index"
-          :hex-color="hexColor"
-          :dragged="voteOption == draggedVote"
-          :is-mobile="true"
-          @sentVote="onSendVote"
-        />
-      </flicking>
-      <b-row v-else class="d-flex justify-content-between flex-wrap">
-        <b-col>
-          <member-vote-card
-            v-for="(voteOption, index) in voteSet"
-            :key="voteOption"
-            :ref="`memberCard${voteOption}`"
-            style="display: inline-block"
-            class="flicking-panel m-2"
-            :vote-option="voteOption"
-            :index="index"
-            :hex-color="hexColor"
-            :dragged="voteOption == draggedVote"
-            :is-mobile="false"
-            @sentVote="onSendVote"
+        <b-row class="my-5 mx-2">
+          <b-col>
+            <h1>{{ title }}</h1>
+          </b-col>
+          <b-col>
+            <estimate-timer
+              :pause-timer="estimateFinished"
+              :timer-triggered="triggerTimer"
+              :timer="timerCountdownNumber"
+              :start-timer-on-component-creation="false"
+              :initial-timer="timerCountdownNumber"
+            />
+          </b-col>
+        </b-row>
+        <b-row class="justify-content-center">
+          <rounded-avatar
+            :color="hexColor"
+            :asset-name="avatarAnimalAssetName"
+            :show-name="true"
+            :name="name"
           />
-        </b-col>
-      </b-row>
+        </b-row>
+        <b-row v-if="isStartVoting" class="my-5">
+          <flicking
+            v-if="isMobile"
+            id="flicking"
+            :options="{
+              renderOnlyVisible: false,
+              horizontal: true,
+              align: 'center',
+              bound: false,
+              defaultIndex: 0,
+              deceleration: 0.0005,
+            }"
+          >
+            <member-vote-card
+              v-for="(voteOption, index) in voteSet"
+              :key="voteOption"
+              :ref="`memberCard${voteOption}`"
+              class="flicking-panel mx-2"
+              :vote-option="voteOption"
+              :index="index"
+              :hex-color="hexColor"
+              :dragged="voteOption == draggedVote"
+              :is-mobile="true"
+              @sentVote="onSendVote"
+            />
+          </flicking>
+          <b-row v-else class="d-flex justify-content-between flex-wrap">
+            <b-col>
+              <member-vote-card
+                v-for="(voteOption, index) in voteSet"
+                :key="voteOption"
+                :ref="`memberCard${voteOption}`"
+                style="display: inline-block"
+                class="flicking-panel m-2"
+                :vote-option="voteOption"
+                :index="index"
+                :hex-color="hexColor"
+                :dragged="voteOption == draggedVote"
+                :is-mobile="false"
+                @sentVote="onSendVote"
+              />
+            </b-col>
+          </b-row>
+        </b-row>
+        <b-row
+          v-if="!isStartVoting && !votingFinished"
+          class="my-5 text-center"
+        >
+          <b-icon-three-dots animation="fade" class="my-5" font-scale="4" />
+          <h1>{{ waitingText }}</h1>
+        </b-row>
+        <b-row
+          v-if="votingFinished"
+          class="my-1 d-flex justify-content-center flex-wrap"
+        >
+          <SessionMemberCard
+            v-for="member of members"
+            :key="member.memberID"
+            :color="member.hexColor"
+            :asset-name="backendAnimalToAssetName(member.avatarAnimal)"
+            :name="member.name"
+            :estimation="member.currentEstimation"
+            :estimate-finished="votingFinished"
+            :highest="
+              estimateHighest
+                ? estimateHighest.memberID === member.memberID
+                : false
+            "
+            :lowest="
+              estimateHighest
+                ? estimateLowest.memberID === member.memberID
+                : false
+            "
+          />
+        </b-row>
+        <user-stories-sidebar
+          :card-set="voteSet"
+          :show-estimations="true"
+          :initial-stories="userStories"
+          :show-edit-buttons="false"
+        />
+      </b-col>
+      <b-col>
+        <user-story-descriptions
+          :card-set="voteSet"
+          :initial-stories="userStories"
+          :editDescription="false"
+          @userStoriesChanged="onUserStoriesChanged($event)"
+        />
+      </b-col>
     </b-row>
-    <b-row v-if="!isStartVoting && !votingFinished" class="my-5 text-center">
-      <b-icon-three-dots animation="fade" class="my-5" font-scale="4" />
-      <h1>{{ waitingText }}</h1>
-    </b-row>
-    <b-row
-      v-if="votingFinished"
-      class="my-1 d-flex justify-content-center flex-wrap"
-    >
-      <SessionMemberCard
-        v-for="member of members"
-        :key="member.memberID"
-        :color="member.hexColor"
-        :asset-name="backendAnimalToAssetName(member.avatarAnimal)"
-        :name="member.name"
-        :estimation="member.currentEstimation"
-        :estimate-finished="votingFinished"
-        :highest="
-          estimateHighest ? estimateHighest.memberID === member.memberID : false
-        "
-        :lowest="
-          estimateHighest ? estimateLowest.memberID === member.memberID : false
-        "
-      />
-    </b-row>
-    <user-stories-sidebar
-      :card-set="voteSet"
-      :show-estimations="true"
-      :initial-stories="userStories"
-      :show-edit-buttons="false"
-    />
   </b-container>
 </template>
 
@@ -105,6 +124,7 @@ import RoundedAvatar from "../components/RoundedAvatar.vue";
 import MemberVoteCard from "../components/MemberVoteCard.vue";
 import Constants from "../constants";
 import UserStoriesSidebar from "../components/UserStories.vue";
+import UserStoryDescriptions from "../components/UserStoryDescriptions.vue";
 import EstimateTimer from "../components/EstimateTimer.vue";
 import SessionMemberCard from "../components/SessionMemberCard.vue";
 import Member from "../model/Member";
@@ -117,6 +137,7 @@ export default Vue.extend({
     EstimateTimer,
     UserStoriesSidebar,
     SessionMemberCard,
+    UserStoryDescriptions,
   },
   props: {
     memberID: { type: String, default: undefined },

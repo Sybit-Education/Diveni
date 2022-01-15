@@ -5,19 +5,30 @@
         v-for="(story, index) of userStories"
         :key="story.name"
         variant="outline-secondary"
-        :active="!showEditButtons && story.isActive"
+        :active="story.isActive"
+        id="to-hover"
+        @click="setUserStoryAsActive(index)"
       >
+        <div
+          class="col position-absolute float-right"
+          id="to-show"
+          v-show="showEditButtons"
+        >
+          <b-button variant="danger" @click="deleteStory(index)">
+            <b-icon-trash />
+          </b-button>
+        </div>
         <div class="list-group list-group-horizontal">
           <b-form-input
+            :disabled="!showEditButtons"
+            class="border-0"
             v-model="userStories[index].title"
             size="lg"
             placeholder="Story title"
           />
-          <b-button variant="danger" @click="deleteStory(index)">
-            <b-icon-trash />
-          </b-button>
           <div v-if="showEstimations">
             <b-dropdown
+              :disabled="!showEditButtons"
               :text="
                 (userStories[index].estimation
                   ? userStories[index].estimation
@@ -113,8 +124,10 @@ export default Vue.extend({
         estimation: s.estimation,
         isActive: false,
       }));
-      stories[index].isActive = true;
-      this.userStories = stories;
+      if (this.showEditButtons) {
+        stories[index].isActive = true;
+        this.userStories = stories;
+      }
     },
     addUserStory() {
       this.userStories.push({
@@ -179,5 +192,11 @@ export default Vue.extend({
   .sidenav a {
     font-size: 18px;
   }
+}
+#to-show {
+  display: none;
+}
+#to-hover:hover > #to-show {
+  display: block;
 }
 </style>

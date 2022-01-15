@@ -1,150 +1,161 @@
 <template>
   <b-container>
-    <b-row class="mt-5 mb-3">
-      <b-col
-        ><h1>{{ planningStart ? titleEstimate : titleWaiting }}</h1></b-col
-      >
-      <b-col v-if="planningStart" align-self="center">
-        <copy-session-id-popup class="float-end" :session-id="sessionID" />
+    <b-row>
+      <b-col>
+        <b-row class="mt-5 mb-3">
+          <b-col
+            ><h1>{{ planningStart ? titleEstimate : titleWaiting }}</h1></b-col
+          >
+          <b-col v-if="planningStart" align-self="center">
+            <copy-session-id-popup class="float-end" :session-id="sessionID" />
+          </b-col>
+        </b-row>
+        <div v-if="!planningStart">
+          <b-row class="align-items-center">
+            <copy-session-id-popup
+              :text-before-session-i-d="'Share the code'"
+              :session-id="sessionID"
+              :text-after-session-i-d="'with your team mates'"
+            />
+          </b-row>
+          <b-row class="mt-5">
+            <h4 class="text-center">Waiting for members to join</h4>
+            <b-icon-three-dots animation="fade" class="" font-scale="3" />
+          </b-row>
+          <b-row class="d-flex justify-content-center">
+            <SessionMemberCircle
+              v-for="member of members"
+              :key="member.memberID"
+              class="m-4"
+              :color="member.hexColor"
+              :asset-name="backendAnimalToAssetName(member.avatarAnimal)"
+              :alt-attribute="member.avatarAnimal"
+              :name="member.name"
+            />
+          </b-row>
+          <b-row>
+            <b-col class="text-center">
+              <b-button
+                variant="success"
+                :disabled="!members || members.length < 1"
+                @click="sendStartEstimationMessages"
+              >
+                Start Planning
+              </b-button>
+            </b-col>
+          </b-row>
+        </div>
+        <div v-else>
+          <b-row class="d-flex justify-content-start pb-3">
+            <b-col>
+              <b-button variant="outline-dark" @click="sendRestartMessage">
+                <b-icon-arrow-clockwise />
+                New
+              </b-button>
+              <b-button
+                variant="outline-dark"
+                class="mx-1"
+                @click="sendVotingFinishedMessage"
+              >
+                <b-icon-bar-chart />
+                Show result
+              </b-button>
+              <b-button v-b-modal.close-session-modal variant="danger">
+                <b-icon-x />
+                End meeting
+              </b-button>
+              <b-modal
+                id="close-session-modal"
+                title="Are you sure"
+                @ok="closeSession"
+              >
+                <p class="my-4">
+                  Closing this session removes you and all members. You can
+                  download the user stories thereafter.
+                </p>
+              </b-modal>
+            </b-col>
+
+            <b-col>
+              <b-row>
+                <estimate-timer
+                  :pause-timer="estimateFinished"
+                  :timer-triggered="triggerTimer"
+                  :timer="timerCountdownNumber"
+                  :start-timer-on-component-creation="
+                    startTimerOnComponentCreation
+                  "
+                  :initial-timer="timerCountdownNumber"
+                  @timerFinished="sendVotingFinishedMessage"
+                />
+              </b-row>
+              <b-row
+                v-if="!estimateFinished"
+                class="my-1 d-flex justify-content-center flex-wrap"
+              >
+                <rounded-avatar
+                  v-for="member of membersPending"
+                  :key="member.memberID"
+                  class="mx-2"
+                  :asset-name="backendAnimalToAssetName(member.avatarAnimal)"
+                  :color="member.hexColor"
+                  :show-name="true"
+                  :name="member.name"
+                />
+              </b-row>
+            </b-col>
+          </b-row>
+          <b-row v-if="membersPending.length > 0 && !estimateFinished">
+            <h4 class="d-inline">
+              Waiting for {{ membersPending.length }} /
+              {{ membersPending.length + membersEstimated.length }}
+            </h4>
+          </b-row>
+          <hr />
+          <b-row>
+            <h4 class="d-inline">
+              Estimating finished {{ membersEstimated.length }} /
+              {{ membersPending.length + membersEstimated.length }}
+            </h4>
+          </b-row>
+          <b-row class="my-1 d-flex justify-content-center flex-wrap">
+            <SessionMemberCard
+              v-for="member of estimateFinished ? members : membersEstimated"
+              :key="member.memberID"
+              :color="member.hexColor"
+              :asset-name="backendAnimalToAssetName(member.avatarAnimal)"
+              :name="member.name"
+              :estimation="member.currentEstimation"
+              :estimate-finished="estimateFinished"
+              :highest="
+                estimateHighest
+                  ? estimateHighest.memberID === member.memberID
+                  : false
+              "
+              :lowest="
+                estimateHighest
+                  ? estimateLowest.memberID === member.memberID
+                  : false
+              "
+            />
+          </b-row>
+        </div>
+        <user-stories-sidebar
+          :card-set="voteSet"
+          :show-estimations="planningStart"
+          :initial-stories="userStories"
+          @userStoriesChanged="onUserStoriesChanged($event)"
+        />
+      </b-col>
+      <b-col>
+        <user-story-descriptions
+          :card-set="voteSet"
+          :initial-stories="userStories"
+          :editDescription="true"
+          @userStoriesChanged="onUserStoriesChanged($event)"
+        />
       </b-col>
     </b-row>
-    <div v-if="!planningStart">
-      <b-row class="align-items-center">
-        <copy-session-id-popup
-          :text-before-session-i-d="'Share the code'"
-          :session-id="sessionID"
-          :text-after-session-i-d="'with your team mates'"
-        />
-      </b-row>
-      <b-row class="mt-5">
-        <h4 class="text-center">Waiting for members to join</h4>
-        <b-icon-three-dots animation="fade" class="" font-scale="3" />
-      </b-row>
-      <b-row class="d-flex justify-content-center">
-        <SessionMemberCircle
-          v-for="member of members"
-          :key="member.memberID"
-          class="m-4"
-          :color="member.hexColor"
-          :asset-name="backendAnimalToAssetName(member.avatarAnimal)"
-          :alt-attribute="member.avatarAnimal"
-          :name="member.name"
-        />
-      </b-row>
-      <b-row>
-        <b-col class="text-center">
-          <b-button
-            variant="success"
-            :disabled="!members || members.length < 1"
-            @click="sendStartEstimationMessages"
-          >
-            Start Planning
-          </b-button>
-        </b-col>
-      </b-row>
-    </div>
-    <div v-else>
-      <b-row class="d-flex justify-content-start pb-3">
-        <b-col>
-          <b-button variant="outline-dark" @click="sendRestartMessage">
-            <b-icon-arrow-clockwise />
-            New
-          </b-button>
-          <b-button
-            variant="outline-dark"
-            class="mx-1"
-            @click="sendVotingFinishedMessage"
-          >
-            <b-icon-bar-chart />
-            Show result
-          </b-button>
-          <b-button v-b-modal.close-session-modal variant="danger">
-            <b-icon-x />
-            End meeting
-          </b-button>
-          <b-modal
-            id="close-session-modal"
-            title="Are you sure"
-            @ok="closeSession"
-          >
-            <p class="my-4">
-              Closing this session removes you and all members. You can download
-              the user stories thereafter.
-            </p>
-          </b-modal>
-        </b-col>
-        <b-col>
-          <estimate-timer
-            :pause-timer="estimateFinished"
-            :timer-triggered="triggerTimer"
-            :timer="timerCountdownNumber"
-            :start-timer-on-component-creation="startTimerOnComponentCreation"
-            :initial-timer="timerCountdownNumber"
-            @timerFinished="sendVotingFinishedMessage"
-          />
-        </b-col>
-      </b-row>
-      <b-row v-if="membersPending.length > 0 && !estimateFinished">
-        <h4 class="d-inline">
-          Waiting for {{ membersPending.length }} /
-          {{ membersPending.length + membersEstimated.length }}
-        </h4>
-      </b-row>
-      <b-row
-        v-if="!estimateFinished"
-        class="my-1 d-flex justify-content-center flex-wrap"
-      >
-        <rounded-avatar
-          v-for="member of membersPending"
-          :key="member.memberID"
-          class="mx-2"
-          :asset-name="backendAnimalToAssetName(member.avatarAnimal)"
-          :color="member.hexColor"
-          :show-name="true"
-          :name="member.name"
-        />
-      </b-row>
-      <hr />
-      <b-row>
-        <h4 class="d-inline">
-          Estimating finished {{ membersEstimated.length }} /
-          {{ membersPending.length + membersEstimated.length }}
-        </h4>
-      </b-row>
-      <b-row class="my-1 d-flex justify-content-center flex-wrap">
-        <SessionMemberCard
-          v-for="member of estimateFinished ? members : membersEstimated"
-          :key="member.memberID"
-          :color="member.hexColor"
-          :asset-name="backendAnimalToAssetName(member.avatarAnimal)"
-          :name="member.name"
-          :estimation="member.currentEstimation"
-          :estimate-finished="estimateFinished"
-          :highest="
-            estimateHighest
-              ? estimateHighest.memberID === member.memberID
-              : false
-          "
-          :lowest="
-            estimateHighest
-              ? estimateLowest.memberID === member.memberID
-              : false
-          "
-        />
-      </b-row>
-    </div>
-    <user-stories-sidebar
-      :card-set="voteSet"
-      :show-estimations="planningStart"
-      :initial-stories="userStories"
-      @userStoriesChanged="onUserStoriesChanged($event)"
-    />
-    <user-story-descriptions
-      :card-set="voteSet"
-      :initial-stories="userStories"
-      :editDescription="true"
-      @userStoriesChanged="onUserStoriesChanged($event)"
-    />
   </b-container>
 </template>
 
