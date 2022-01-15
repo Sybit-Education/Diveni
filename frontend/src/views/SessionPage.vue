@@ -54,15 +54,15 @@
         <b-col>
           <b-button variant="outline-dark" @click="sendRestartMessage">
             <b-icon-arrow-clockwise />
-            New
+            {{ $t("page.session.during.estimation.buttons.new") }}
           </b-button>
           <b-button variant="outline-dark" class="mx-1" @click="sendVotingFinishedMessage">
             <b-icon-bar-chart />
-            Show result
+            {{ $t("page.session.during.estimation.buttons.result") }}
           </b-button>
           <b-button v-b-modal.close-session-modal variant="danger">
             <b-icon-x />
-            End meeting
+            {{ $t("page.session.during.estimation.buttons.finish") }}
           </b-button>
           <b-modal id="close-session-modal" title="Are you sure" @ok="closeSession">
             <p class="my-4">
@@ -84,7 +84,8 @@
       </b-row>
       <b-row v-if="membersPending.length > 0 && !estimateFinished">
         <h4 class="d-inline">
-          Waiting for {{ membersPending.length }} /
+          {{ $t("page.session.during.estimation.message.waitingFor") }}
+          {{ membersPending.length }} /
           {{ membersPending.length + membersEstimated.length }}
         </h4>
       </b-row>
@@ -102,7 +103,8 @@
       <hr />
       <b-row>
         <h4 class="d-inline">
-          Estimating finished {{ membersEstimated.length }} /
+          {{ $t("page.session.during.estimation.message.finished") }}
+          {{ membersEstimated.length }} /
           {{ membersPending.length + membersEstimated.length }}
         </h4>
       </b-row>
@@ -155,7 +157,7 @@ export default Vue.extend({
   data() {
     return {
       titleWaiting: this.$t("page.session.before.title"),
-      titleEstimate: "Estimate!",
+      titleEstimate: this.$t("page.session.during.estimation.title"),
       stageLabelReady: "Ready",
       stageLabelWaiting: "Waiting room",
       planningStart: false,

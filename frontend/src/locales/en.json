@@ -15,6 +15,18 @@
         "button": "Start Planning"
       },
       "during": {
+        "estimation": {
+          "title": "Estimation",
+          "message": {
+            "waitingFor": "Waiting for",
+            "finished": "Estimation finished"
+          },
+          "buttons": {
+            "new": "New",
+            "result": "Show result",
+            "finish": "Finish session"
+          }
+        }
       }
     },
     "landing": {
@@ -104,12 +116,22 @@
               "withUS": {
                 "tab": {
                   "label": "Planning with User Stories"
-                }
+                },
+                "subtitle": "Integrate User Stories in your Poker-Planning",
+                "descriptionLine1": "Create your User Stories below",
+                "descriptionLine2": "Add title and description to each User Story",
+                "descriptionLine3": "Use the CSV-Import to integrate User Stories in your session",
+                "descriptionLine4": "You will be able to add and edit User Stories once you've started the session"
               },
               "withJira": {
                 "tab": {
                   "label": "Planning with Jira"
-                }
+                },
+                "subtitle": "Select Jira for your Poker-Planning",
+                "descriptionLine1": "Please authenticate with Jira",
+                "descriptionLine2": "Select your project",
+                "descriptionLine3": "After you have selected your project, you will be redirected to the next page to edit your user stories",
+                "descriptionLine4": "You will be able to add and edit User Stories once you've started the session"
               }
             }
           }
