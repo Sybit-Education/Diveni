@@ -5,10 +5,13 @@
         v-for="(story, index) of userStories"
         :key="story.name"
         variant="outline-secondary"
+        v-show="story.isActive"
       >
         <div>
           <b-form-textarea
-            v-on:click.native="setUserStoryAsActive(index)"
+            id="textarea-auto-height"
+            rows="10"
+            max-rows="40"
             v-model="userStories[index].description"
             :disabled="!editDescription"
             placeholder="Description and acceptance criteria..."
