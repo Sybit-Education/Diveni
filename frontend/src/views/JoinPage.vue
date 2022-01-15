@@ -64,9 +64,7 @@ export default Vue.extend({
     async sendJoinSessionRequest(data: JoinCommand) {
       this.$store.commit("clearStore");
       this.name = data.name;
-      const url = `${Constants.backendURL}${Constants.joinSessionRoute(
-        data.sessionID
-      )}`;
+      const url = `${Constants.backendURL}${Constants.joinSessionRoute(data.sessionID)}`;
       const joinInfo = {
         password: data.password,
         member: {
@@ -90,10 +88,7 @@ export default Vue.extend({
           }>;
         };
         this.voteSet = JSON.stringify(sessionConfig.set);
-        this.timerSeconds = parseInt(
-          JSON.stringify(sessionConfig.timerSeconds),
-          10
-        );
+        this.timerSeconds = parseInt(JSON.stringify(sessionConfig.timerSeconds), 10);
         console.log("session page");
         console.log(sessionConfig);
         this.$store.commit("setUserStories", {
@@ -106,9 +101,7 @@ export default Vue.extend({
       }
     },
     convertAvatarAssetNameToBackendAnimal() {
-      return Constants.avatarAnimalAssetNameToBackendEnum(
-        this.avatarAnimalAssetName
-      );
+      return Constants.avatarAnimalAssetNameToBackendEnum(this.avatarAnimalAssetName);
     },
     connectToWebSocket(sessionID: string, memberID: string) {
       const url = `${Constants.backendURL}/connect?sessionID=${sessionID}&memberID=${memberID}`;
