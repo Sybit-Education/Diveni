@@ -5,7 +5,7 @@
         {{ title }}
       </h1>
       <h4>{{ $t("session.prepare.step.selection.cardSet.title") }}</h4>
-      <card-set-component class="mt-3" @selectedCardSetOptions="setCardSetOptions"/>
+      <card-set-component class="mt-3" @selectedCardSetOptions="setCardSetOptions" />
       <h4 class="mt-3">{{ $t("session.prepare.step.selection.time.title") }}</h4>
       <b-row class="mt-3 text-center">
         <b-col>
@@ -50,18 +50,20 @@
           active
           :title-link-class="linkClass(0)"
         >
-          <stroy-points-component/>
+          <stroy-points-component />
         </b-tab>
         <b-tab
           :title="$t('session.prepare.step.selection.mode.description.withUS.tab.label')"
-          :title-link-class="linkClass(1)">
-          <user-story-component
-            class="mg_top_2_per"/>
+          :title-link-class="linkClass(1)"
+        >
+          <user-story-component class="mg_top_2_per" />
           <!--TODO: Implement session config with US-->
         </b-tab>
-        <b-tab :title="$t('session.prepare.step.selection.mode.description.withJira.tab.label')"
-               :title-link-class="linkClass(2)">
-          <jira-component class="mg_top_2_per"/>
+        <b-tab
+          :title="$t('session.prepare.step.selection.mode.description.withJira.tab.label')"
+          :title-link-class="linkClass(2)"
+        >
+          <jira-component class="mg_top_2_per" />
           <!--TODO: Implement session config with Jira-->
         </b-tab>
       </b-tabs>
@@ -127,7 +129,7 @@ export default Vue.extend({
     },
   },
   mounted() {
-    this.$store.commit("setUserStories", {stories: []});
+    this.$store.commit("setUserStories", { stories: [] });
   },
   methods: {
     linkClass(idx) {
@@ -189,7 +191,7 @@ export default Vue.extend({
       return this.selectedCardSetOptions.length < 1;
     },
     onUserStoriesChanged(stories) {
-      this.$store.commit("setUserStories", {stories});
+      this.$store.commit("setUserStories", { stories });
     },
     setTimerUp() {
       if (this.timer === 4 * 60 + 15) {

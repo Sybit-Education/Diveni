@@ -61,7 +61,9 @@ export default Vue.extend({
         },
         {
           name: this.$t("session.prepare.step.selection.cardSet.sets.tShirtSizes.label"),
-          description: this.$t("session.prepare.step.selection.cardSet.sets.tShirtSizes.description"),
+          description: this.$t(
+            "session.prepare.step.selection.cardSet.sets.tShirtSizes.description"
+          ),
           values: ["XXS", "XS", "S", "M", "L", "XL", "XXL", "XXXL"],
           activeValues: ["XS", "S", "M", "L", "XL"],
         },
