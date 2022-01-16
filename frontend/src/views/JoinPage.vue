@@ -76,19 +76,28 @@ export default Vue.extend({
         },
       };
       try {
-        const sessionConfig = (await this.axios.post(url, joinInfo)).data as {
+        const result = await this.axios.post(url, joinInfo);
+
+        const sessionConfig = result.data as {
           set: Array<string>;
           timerSeconds: number;
-          userStories: Array<{ title: string; description: string; estimation: string | null }>;
+          userStories: Array<{
+            title: string;
+            description: string;
+            estimation: string | null;
+          }>;
         };
         this.voteSet = JSON.stringify(sessionConfig.set);
         this.timerSeconds = parseInt(JSON.stringify(sessionConfig.timerSeconds), 10);
         console.log("session page");
         console.log(sessionConfig);
-        this.$store.commit("setUserStories", { stories: sessionConfig.userStories });
+        this.$store.commit("setUserStories", {
+          stories: sessionConfig.userStories,
+        });
         this.connectToWebSocket(data.sessionID, joinInfo.member.memberID);
       } catch (e) {
         console.error(`Response of ${url} is invalid: ${e}`);
+        this.showToast(e);
       }
     },
     convertAvatarAssetNameToBackendAnimal() {
@@ -123,6 +132,15 @@ export default Vue.extend({
           timerSecondsString: this.timerSeconds.toString(),
         },
       });
+    },
+    showToast(e) {
+      if (e.message == "Request failed with status code 404") {
+        this.$toast.error("Wrong ID");
+      }
+      if (e.message == "Request failed with status code 401") {
+        this.$toast.error("Wrong Password");
+      }
+      console.log(e);
     },
   },
 });
