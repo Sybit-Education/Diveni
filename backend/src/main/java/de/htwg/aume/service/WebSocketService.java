@@ -14,6 +14,7 @@ import org.springframework.web.server.ResponseStatusException;
 import de.htwg.aume.controller.ErrorMessages;
 import de.htwg.aume.model.MemberUpdate;
 import de.htwg.aume.model.Session;
+import de.htwg.aume.model.notification.Notification;
 import de.htwg.aume.principals.AdminPrincipal;
 import de.htwg.aume.principals.MemberPrincipal;
 import de.htwg.aume.principals.SessionPrincipals;
@@ -22,6 +23,14 @@ import lombok.val;
 
 @Service
 public class WebSocketService {
+
+	public static String MEMBERS_UPDATED_DESTINATION = "/updates/membersUpdated";
+
+	public static String MEMBER_UPDATES_DESTINATION = "/updates/member";
+
+	public static String US_UPDATES_DESTINATION = "/updates/userStories";
+
+	public static String NOTIFICATIONS_DESTINATION = "/notifications";
 
 	@Autowired
 	private SimpMessagingTemplate simpMessagingTemplate;
@@ -90,7 +99,8 @@ public class WebSocketService {
 		val sessionPrincipals = getSessionPrincipals(session.getSessionID());
 		if (sessionPrincipals.adminPrincipal() != null) {
 			simpMessagingTemplate.convertAndSendToUser(sessionPrincipals.adminPrincipal().getName(),
-					"/updates/membersUpdated", new MemberUpdate(session.getMembers(), session.getCurrentHighlights()));
+					MEMBERS_UPDATED_DESTINATION,
+					new MemberUpdate(session.getMembers(), session.getCurrentHighlights()));
 		} // else the admin left the session
 		sendMembersUpdateToMembers(session);
 
@@ -99,12 +109,11 @@ public class WebSocketService {
 	public void sendMembersUpdateToMembers(Session session) {
 		getSessionPrincipals(session.getSessionID()).memberPrincipals()
 				.forEach(member -> simpMessagingTemplate.convertAndSendToUser(member.getMemberID().toString(),
-						"/updates/membersUpdated",
+						MEMBERS_UPDATED_DESTINATION,
 						new MemberUpdate(session.getMembers(), session.getCurrentHighlights())));
 	}
 
 	public void sendSessionStateToMembers(Session session) {
-		// TODO: Send highlighted with it
 		getSessionPrincipals(session.getSessionID()).memberPrincipals().stream()
 				.forEach(member -> sendSessionStateToMember(session, member.getMemberID().toString()));
 	}
@@ -115,12 +124,17 @@ public class WebSocketService {
 	}
 
 	public void sendSessionStateToMember(Session session, String memberID) {
-		simpMessagingTemplate.convertAndSendToUser(memberID, "/updates/member", session.getSessionState().toString());
+		simpMessagingTemplate.convertAndSendToUser(memberID, MEMBER_UPDATES_DESTINATION,
+				session.getSessionState().toString());
 	}
 
 	public void sendUpdatedUserStoriesToMember(Session session, String memberID) {
-		simpMessagingTemplate.convertAndSendToUser(memberID, "/updates/userStories",
+		simpMessagingTemplate.convertAndSendToUser(memberID, US_UPDATES_DESTINATION,
 				session.getSessionConfig().getUserStories());
+	}
+
+	public void sendNotification(Notification notification) {
+		simpMessagingTemplate.convertAndSend(NOTIFICATIONS_DESTINATION, notification);
 	}
 
 	public void removeSession(Session session) {
