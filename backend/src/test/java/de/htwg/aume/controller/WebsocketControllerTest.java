@@ -43,7 +43,6 @@ import de.htwg.aume.model.MemberUpdate;
 import de.htwg.aume.model.Session;
 import de.htwg.aume.model.SessionConfig;
 import de.htwg.aume.model.SessionState;
-import de.htwg.aume.model.notification.Notification;
 import de.htwg.aume.principals.AdminPrincipal;
 import de.htwg.aume.principals.MemberPrincipal;
 import de.htwg.aume.repository.SessionRepository;
@@ -390,34 +389,4 @@ public class WebsocketControllerTest {
                 val newMembers = sessionRepo.findBySessionID(oldSession.getSessionID()).getMembers();
                 assertTrue(newMembers.stream().allMatch(m -> m.getCurrentEstimation() == null));
         }
-
-        @Test
-        // TODO: fix this test
-        public void adminUpdatedUserStories_updatesUserStories() throws Exception {
-                val sessionID = Utils.generateRandomID();
-                val adminID = Utils.generateRandomID();
-                val adminPrincipal = new AdminPrincipal(sessionID, adminID);
-                val oldSession = new Session(new ObjectId(), adminID, Utils.generateRandomID(),
-                                new SessionConfig(new ArrayList<>(), List.of(), 10, null), null, List.of(),
-                                new HashMap<>(), new ArrayList<>(), SessionState.WAITING_FOR_MEMBERS);
-                sessionRepo.save(oldSession);
-                webSocketService.setAdminUser(adminPrincipal);
-                StompSession adminSession = getAdminSession(sessionID, adminID);
-
-                // val userStoriesJson = "[ { \"title\": \"test\", \"description\": \"descr\",
-                // \"estimation\": null, \"isActive\": false } ]";
-                // adminSession.send(UPDATE_USER_STORIES,
-                // objectMapper.writeValueAsString(List.of(new
-                // UserStory("title", "desc", "3", false))));
-                // adminSession.send(UPDATE_USER_STORIES, List.of(new UserStory("title", "desc",
-                // "3",
-                // false)));
-                // adminSession.send(UPDATE_USER_STORIES, userStoriesJson.getBytes("UTF-8"));
-                // Wait for server-side handling
-                TimeUnit.MILLISECONDS.sleep(TIMEOUT);
-
-                val config = sessionRepo.findBySessionID(oldSession.getSessionID()).getSessionConfig();
-                // assertEquals(config.getUserStories().size(), 1);
-        }
-
 }

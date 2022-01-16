@@ -27,6 +27,8 @@ import de.htwg.aume.model.MemberUpdate;
 import de.htwg.aume.model.Session;
 import de.htwg.aume.model.SessionConfig;
 import de.htwg.aume.model.SessionState;
+import de.htwg.aume.model.notification.Notification;
+import de.htwg.aume.model.notification.NotificationType;
 import de.htwg.aume.principals.AdminPrincipal;
 import de.htwg.aume.principals.MemberPrincipal;
 import de.htwg.aume.principals.SessionPrincipals;
@@ -185,8 +187,7 @@ public class WebSocketServiceTest {
 
     @Test
     public void sendUpdatedUserStoriesToMembers_sendsToAll() throws Exception {
-        val memberPrincipal = new MemberPrincipal(defaultAdminPrincipal.getSessionID(),
-                Utils.generateRandomID());
+        val memberPrincipal = new MemberPrincipal(defaultAdminPrincipal.getSessionID(), Utils.generateRandomID());
         setDefaultAdminPrincipal(Set.of(defaultMemberPrincipal, memberPrincipal));
         val session = new Session(new ObjectId(), defaultAdminPrincipal.getSessionID(),
                 defaultAdminPrincipal.getAdminID(),
@@ -205,6 +206,16 @@ public class WebSocketServiceTest {
                 defaultMemberPrincipal.getMemberID().toString(),
                 WebSocketService.US_UPDATES_DESTINATION,
                 session.getSessionConfig().getUserStories());
+    }
+
+    @Test
+    public void adminLeft_sendsNotification() throws Exception {
+        val notification = new Notification(NotificationType.ADMIN_LEFT, null);
+
+        webSocketService.sendNotification(notification);
+
+        verify(simpMessagingTemplateMock, times(1)).convertAndSend(
+                WebSocketService.NOTIFICATIONS_DESTINATION, notification);
     }
 
     @Test
