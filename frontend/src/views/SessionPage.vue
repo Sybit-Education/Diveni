@@ -67,6 +67,8 @@
           <b-modal
             id="close-session-modal"
             :title="$t('page.session.close.popup')"
+            :cancel-title="$t('page.session.close.button.cancel')"
+            :ok-title="$t('page.session.close.button.ok')"
             @ok="closeSession"
           >
             <p class="my-4">

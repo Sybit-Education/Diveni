@@ -30,7 +30,11 @@
       },
       "close": {
         "popup": "Are you sure?",
-        "description": "Closing this session removes you and all members. You can download the user stories thereafter."
+        "description": "Closing this session removes you and all members. You can download the user stories thereafter.",
+        "button": {
+          "cancel": "Cancel",
+          "ok": "OK"
+        }
       }
     },
     "results": {

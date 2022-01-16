@@ -29,8 +29,12 @@
         }
       },
       "close": {
-        "popup": "Bist du dir sicher??",
-        "description": "Die Session wird für dich und alle Teammitlgieder beendet. Im Anschluss kannst du die User Stories herunterladen."
+        "popup": "Bist du dir sicher?",
+        "description": "Die Session wird für dich und alle Teammitglieder beendet. Im Anschluss kannst du die User Stories herunterladen.",
+        "button": {
+          "cancel": "Zurück",
+          "ok": "OK"
+        }
       }
     },
     "results": {
@@ -46,7 +50,7 @@
       "meeting": {
         "new": {
           "title": "Neue Session",
-          "description": "Bereite eine neue Session vor,lade Teammitglieder ein und starte das Schätzen",
+          "description": "Bereite eine neue Session vor, lade Teammitglieder ein und starte das Schätzen",
           "buttons": {
             "start": {
               "label": "LOS"
@@ -139,7 +143,7 @@
                 "subtitle": "Integriere User Stories in das Planning",
                 "descriptionLine1": "Erstelle deine eigenen User Stories",
                 "descriptionLine2": "Füge jeder User Story Titel und Beschreibung hinzu",
-                "descriptionLine3": "Du kannst auch einen CSV-Import nutzen um User Stories zu integrieren",
+                "descriptionLine3": "Du kannst auch einen CSV-Import nutzen, um User Stories zu integrieren",
                 "descriptionLine4": "Du kannst nach Start der Session User Stories bearbeiten oder neue hinzufügen"
               },
               "withJira": {
