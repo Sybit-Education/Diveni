@@ -121,9 +121,9 @@ export default Vue.extend({
   },
   data() {
     return {
-      title: "Estimate!",
+      title: this.$t("page.vote.title"),
       draggedVote: null,
-      waitingText: "Waiting for Host to start ...",
+      waitingText: this.$t("page.vote.waiting"),
       voteSet: [] as string[],
       timerCountdownNumber: 0,
       triggerTimer: 0,

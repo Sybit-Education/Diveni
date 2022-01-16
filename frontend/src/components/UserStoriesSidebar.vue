@@ -3,23 +3,25 @@
     <div class="sidenavButton">
       <b-button size="lg" variant="info" @click="toggleSideBar()">
         <b-icon-card-list />
-        Stories
+        {{ $t("session.userStory.button.title") }}
       </b-button>
     </div>
     <div class="sidenav" :style="`width: ${sideBarOpen ? '400px' : '0px'};`">
       <div v-if="showEditButtons">
         <b-button size="lg" variant="success" @click="addUserStory()">
-          Add
+          {{ $t("session.userStory.button.add") }}
           <b-icon-plus />
         </b-button>
         <b-button size="lg" class="m-2" variant="warning" @click="editOrSave()">
-          {{ editEnabled ? "Save" : "Edit" }}
+          {{
+            editEnabled ? $t("session.userStory.button.save") : $t("session.userStory.button.edit")
+          }}
           <b-icon-pencil />
         </b-button>
       </div>
       <div class="list-group" :style="!showEditButtons ? 'margin-top: 66px;' : ''">
         <div v-if="userStories.length < 1" class="text-center">
-          No stories yet... Add a story to start estimating.
+          {{ $t("session.userStory.button.add") }}
         </div>
         <b-list-group-item
           v-for="(story, index) of userStories"
@@ -39,7 +41,7 @@
               v-model="userStories[index].title"
               :readonly="!editEnabled"
               size="lg"
-              placeholder="Story title"
+              :placeholder="$t('session.userStory.placeholder.title')"
             />
             <b-dropdown
               v-if="editEnabled && showEstimations"
@@ -73,7 +75,7 @@
             <b-form-textarea
               v-model="userStories[index].description"
               :disabled="!editEnabled"
-              placeholder="Description and acceptance criteria..."
+              :placeholder="$t('session.userStory.placeholder.description')"
               rows="3"
               max-rows="6"
             />

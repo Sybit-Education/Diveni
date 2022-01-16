@@ -6,7 +6,7 @@
     <join-page-card
       :color="hexColor"
       :animal-asset-name="avatarAnimalAssetName"
-      :button-text="'GO'"
+      :button-text="$t('page.join.submit')"
       :session-id-from-url="sessionID"
       @clicked="sendJoinSessionRequest"
     />

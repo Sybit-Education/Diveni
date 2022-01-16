@@ -64,10 +64,13 @@
             <b-icon-x />
             {{ $t("page.session.during.estimation.buttons.finish") }}
           </b-button>
-          <b-modal id="close-session-modal" title="Are you sure" @ok="closeSession">
+          <b-modal
+            id="close-session-modal"
+            :title="$t('page.session.close.popup')"
+            @ok="closeSession"
+          >
             <p class="my-4">
-              Closing this session removes you and all members. You can download the user stories
-              thereafter.
+              {{ $t("page.session.close.description") }}
             </p>
           </b-modal>
         </b-col>

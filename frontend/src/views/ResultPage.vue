@@ -3,7 +3,9 @@
     <h1 class="my-5 mx-2">
       {{ titleResult }}
     </h1>
-    <div v-if="userStories.length === 0" class="text-center">No user stories defined ...</div>
+    <div v-if="userStories.length === 0" class="text-center">
+      {{ $t("page.results.noUserStories") }}
+    </div>
     <b-list-group v-else>
       <b-list-group-item v-for="(story, index) of userStories" :key="index" class="text-center">
         {{ story.title ? story.title : "No title ..." }}
@@ -19,9 +21,11 @@
           :disabled="userStories.length === 0"
           @click="downloadUserStoriesAsCSV()"
         >
-          Download as CSV
+          {{ $t("page.results.button.download") }}
         </b-button>
-        <b-button variant="secondary" class="mx-2" @click="goHome()"> Go Home </b-button>
+        <b-button variant="secondary" class="mx-2" @click="goHome()">
+          {{ $t("page.results.button.home") }}
+        </b-button>
       </b-col>
     </b-row>
   </b-container>
@@ -35,7 +39,7 @@ export default Vue.extend({
   components: {},
   data() {
     return {
-      titleResult: "Results",
+      titleResult: this.$t("page.results.title"),
     };
   },
   computed: {

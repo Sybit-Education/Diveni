@@ -27,6 +27,18 @@
             "finish": "Finish session"
           }
         }
+      },
+      "close": {
+        "popup": "Are you sure?",
+        "description": "Closing this session removes you and all members. You can download the user stories thereafter."
+      }
+    },
+    "results": {
+      "title": "Results",
+      "noUserStories": "No user stories defined ...",
+      "button": {
+        "download": "Download as CSV",
+        "home": "Go home"
       }
     },
     "landing": {
@@ -66,7 +78,12 @@
         "code": "Invitation code",
         "password": "Password",
         "name": "Name"
-      }
+      },
+      "submit": "GO"
+    },
+    "vote": {
+      "title": "Estimate!",
+      "waiting": "Waiting for Host to start ..."
     }
   },
   "session": {
@@ -139,6 +156,19 @@
       },
       "button": {
         "start": "Start session"
+      }
+    },
+    "userStory": {
+      "button":{
+        "title": "Stories",
+        "add": "Add",
+        "edit": "Edit",
+        "save": "Save",
+        "noUserStories": "No stories yet... Add a story to start estimating.",
+        "placeholder": {
+          "title": "Story title",
+          "description": "Description and acceptance criteria..."
+        }
       }
     }
   }
