@@ -27,7 +27,12 @@
         </b-col>
         <b-col class="mt-2 mt-md-0" cols="12" md="6">
           <h6>{{ $t("page.join.input.password") }}</h6>
-          <b-form-input v-model="password" class="mt-3" type="password" placeholder="(optional)" />
+          <b-form-input
+            v-model="password"
+            class="mt-3"
+            type="password"
+            :placeholder="$t('page.join.input.passwordPlaceholder')"
+          />
         </b-col>
       </b-row>
       <b-row>

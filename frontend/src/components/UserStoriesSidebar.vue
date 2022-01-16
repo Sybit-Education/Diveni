@@ -41,7 +41,7 @@
               v-model="userStories[index].title"
               :readonly="!editEnabled"
               size="lg"
-              :placeholder="$t('session.userStory.placeholder.title')"
+              :placeholder="$t('session.userStory.button.placeholder.title')"
             />
             <b-dropdown
               v-if="editEnabled && showEstimations"
@@ -75,7 +75,7 @@
             <b-form-textarea
               v-model="userStories[index].description"
               :disabled="!editEnabled"
-              :placeholder="$t('session.userStory.placeholder.description')"
+              :placeholder="$t('session.userStory.button.placeholder.description')"
               rows="3"
               max-rows="6"
             />

@@ -42,9 +42,10 @@
       }
     },
     "landing": {
+      "productTitle": "Planning-Poker",
       "meeting": {
         "new": {
-          "title": "New meeting",
+          "title": "New session",
           "description": "Prepare a new session, invite team members and start estimating",
           "buttons": {
             "start": {
@@ -53,8 +54,8 @@
           }
         },
         "join": {
-          "title": "Join meeting",
-          "description": "Join an existing meeting and help your team estimate",
+          "title": "Join session",
+          "description": "Join an existing session and help your team estimate",
           "buttons": {
             "start": {
               "label": "GO"
@@ -62,7 +63,7 @@
           }
         },
         "reconnect": {
-          "title": "Reconnect to meeting",
+          "title": "Reconnect to session",
           "description": "Reconnect to existing session as host",
           "buttons": {
             "start": {
@@ -77,13 +78,14 @@
       "input": {
         "code": "Invitation code",
         "password": "Password",
+        "passwordPlaceholder": "(optional)",
         "name": "Name"
       },
       "submit": "GO"
     },
     "vote": {
       "title": "Estimate!",
-      "waiting": "Waiting for Host to start ..."
+      "waiting": "Waiting for your host to start ..."
     }
   },
   "session": {

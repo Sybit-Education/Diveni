@@ -43,7 +43,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      title: "Planning-Poker",
+      title: this.$t("page.landing.productTitle"),
       sessionWrapper: {} as { session: Session },
       startNewSessionOnMounted: false,
     };
