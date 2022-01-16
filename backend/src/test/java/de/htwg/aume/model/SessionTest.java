@@ -7,17 +7,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import de.htwg.aume.Utils;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.Test;
 
+import de.htwg.aume.Utils;
 import lombok.val;
 
 public class SessionTest {

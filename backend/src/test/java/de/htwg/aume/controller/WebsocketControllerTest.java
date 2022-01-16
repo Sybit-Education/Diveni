@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -72,8 +71,6 @@ public class WebsocketControllerTest {
         private static final String UNREGISTER = "/ws/unregister";
 
         private static final String ADMIN_MEMBER_UPDATES = "/users/updates/membersUpdated";
-
-        private static final String MEMBER_UPDATES = "/users/updates/member";
 
         private static final ObjectMapper objectMapper = new ObjectMapper();
 
