@@ -6,4 +6,5 @@ export interface StoreState {
   memberUpdates: string[];
   userStories: Record<string, unknown>[];
   members: Record<string, unknown>[];
+  highlightedMembers: Record<string, unknown>[];
 }

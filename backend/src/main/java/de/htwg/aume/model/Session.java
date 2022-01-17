@@ -1,6 +1,7 @@
 package de.htwg.aume.model;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -48,6 +49,9 @@ public class Session {
 	private final List<String> currentHighlights;
 
 	private final SessionState sessionState;
+
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+	private Date lastModified;
 
 	static Comparator<String> estimationByIndex(List<String> set) {
 		return Comparator.comparingInt((str) -> set.indexOf(str));
@@ -146,4 +150,10 @@ public class Session {
 				currentHighlights, sessionState);
 	}
 
+	public Session setLastModified(Date lastModified) {
+		val session = new Session(databaseID, sessionID, adminID, sessionConfig, adminCookie, members, memberVoted,
+				currentHighlights, sessionState);
+		session.lastModified = lastModified;
+		return session;
+	}
 }
