@@ -77,21 +77,24 @@ export default Vue.extend({
       try {
         const result = await this.axios.post(url, joinInfo);
 
-        const sessionConfig = result.data as {
-          set: Array<string>;
-          timerSeconds: number;
-          userStories: Array<{
-            title: string;
-            description: string;
-            estimation: string | null;
-          }>;
+        const response = result.data as {
+          sessionConfig: {
+            set: Array<string>;
+            timerSeconds: number;
+            userStories: Array<{
+              title: string;
+              description: string;
+              estimation: string | null;
+            }>;
+          };
+          memberCookie: string;
         };
-        this.voteSet = JSON.stringify(sessionConfig.set);
-        this.timerSeconds = parseInt(JSON.stringify(sessionConfig.timerSeconds), 10);
+        this.voteSet = JSON.stringify(response.sessionConfig.set);
+        this.timerSeconds = parseInt(JSON.stringify(response.sessionConfig.timerSeconds), 10);
         console.log("session page");
-        console.log(sessionConfig);
+        console.log(response);
         this.$store.commit("setUserStories", {
-          stories: sessionConfig.userStories,
+          stories: response.sessionConfig.userStories,
         });
         this.connectToWebSocket(data.sessionID, joinInfo.member.memberID);
       } catch (e) {
