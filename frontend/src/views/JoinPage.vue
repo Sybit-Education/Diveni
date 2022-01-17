@@ -1,12 +1,12 @@
 <template>
   <b-container>
     <h1 class="my-5 mx-2">
-      {{ title }}
+      {{ $t("page.join.title") }}
     </h1>
     <join-page-card
       :color="hexColor"
       :animal-asset-name="avatarAnimalAssetName"
-      :button-text="'GO'"
+      :button-text="$t('page.join.submit')"
       :session-id-from-url="sessionID"
       @clicked="sendJoinSessionRequest"
     />
@@ -27,7 +27,6 @@ export default Vue.extend({
   },
   data() {
     return {
-      title: "Join a meeting ...",
       hexColor: Constants.getRandomPastelColor(),
       avatarAnimalAssetName: Constants.getRandomAvatarAnimalAssetName(),
       memberID: uuidv4(),
