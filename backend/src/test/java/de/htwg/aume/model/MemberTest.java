@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.junit.jupiter.api.Test;
-
+import java.util.UUID;
 import de.htwg.aume.Utils;
 import lombok.val;
 
@@ -47,6 +47,16 @@ public class MemberTest {
 
 		assertEquals(member.getCurrentEstimation(), vote);
 		assertNull(result.getCurrentEstimation());
+	}
+
+	@Test
+	public void setCookie_works() {
+		val cookie = UUID.randomUUID();
+		val member = new Member(null, null, null, null, null, UUID.randomUUID());
+
+		val result = member.setMemberCookie(cookie);
+
+		assertEquals(cookie, result.getMemberCookie());
 	}
 
 }
