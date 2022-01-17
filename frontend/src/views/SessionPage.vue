@@ -116,8 +116,8 @@
           :estimation="member.currentEstimation"
           :estimate-finished="estimateFinished"
           :highlight="
-            $store.state.highlightedMembers.includes(member.memberID) ||
-            $store.state.highlightedMembers.length === 0
+            highlightedMembers.includes(member.memberID) ||
+            highlightedMembers.length === 0
           "
         />
       </b-row>
@@ -135,6 +135,7 @@ import UserStoriesSidebar from "../components/UserStoriesSidebar.vue";
 import EstimateTimer from "../components/EstimateTimer.vue";
 import CopySessionIdPopup from "../components/CopySessionIdPopup.vue";
 import RoundedAvatar from "../components/RoundedAvatar.vue";
+import confetti from "canvas-confetti";
 
 export default Vue.extend({
   name: "SessionPage",
@@ -177,6 +178,9 @@ export default Vue.extend({
     },
     webSocketIsConnected() {
       return this.$store.state.webSocketConnected;
+    },
+    highlightedMembers() {
+      return this.$store.state.highlightedMembers;
     },
     membersPending(): Member[] {
       return this.members.filter((member: Member) => member.currentEstimation === null);
@@ -260,6 +264,13 @@ export default Vue.extend({
         const endPoint = Constants.webSocketVotingFinishedRoute;
         this.$store.commit("sendViaBackendWS", { endPoint });
         this.estimateFinished = true;
+        if(this.highlightedMembers.length === 0) {
+          confetti({
+            particleCount: 100,
+            startVelocity: 50,
+            spread: 100,
+          });
+        }
       }
     },
     backendAnimalToAssetName(animal: string) {

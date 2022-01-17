@@ -86,8 +86,8 @@
         :estimation="member.currentEstimation"
         :estimate-finished="votingFinished"
         :highlight="
-          $store.state.highlightedMembers.includes(member.memberID) ||
-          $store.state.highlightedMembers.length === 0
+          highlightedMembers.includes(member.memberID) ||
+          highlightedMembers.length === 0
         "
       />
     </b-row>
@@ -103,6 +103,7 @@ import UserStoriesSidebar from "../components/UserStoriesSidebar.vue";
 import EstimateTimer from "../components/EstimateTimer.vue";
 import SessionMemberCard from "../components/SessionMemberCard.vue";
 import Member from "../model/Member";
+import confetti from "canvas-confetti";
 
 export default Vue.extend({
   name: "MemberVotePage",
@@ -156,6 +157,8 @@ export default Vue.extend({
     membersEstimated(): Member[] {
       return this.members.filter((member: Member) => member.currentEstimation !== null);
     },
+    highlightedMembers() {
+      return this.$store.state.highlightedMembers;
     },
   },
   watch: {
@@ -168,6 +171,15 @@ export default Vue.extend({
         this.estimateFinished = true;
       } else if (updates.at(-1) === Constants.memberUpdateCloseSession) {
         this.goToJoinPage();
+      }
+    },
+    votingFinished(isFinished) {
+      if(isFinished && this.highlightedMembers.length === 0) {
+        confetti({
+          particleCount: 100,
+          startVelocity: 50,
+          spread: 100,
+        });
       }
     },
   },
