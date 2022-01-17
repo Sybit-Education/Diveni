@@ -38,6 +38,7 @@ public class Session {
 
 	private final SessionState sessionState;
 
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private Date lastModified;
 
 	public Session updateEstimation(String memberID, String vote) {
