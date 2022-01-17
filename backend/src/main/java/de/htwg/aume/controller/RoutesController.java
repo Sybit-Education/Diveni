@@ -1,6 +1,7 @@
 package de.htwg.aume.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -31,7 +32,7 @@ import de.htwg.aume.model.SessionState;
 import de.htwg.aume.service.DatabaseService;
 import lombok.val;
 
-@CrossOrigin(origins = {"http://localhost:8080", "https://pp.vnmz.de"})
+@CrossOrigin(origins = { "http://localhost:8080", "https://pp.vnmz.de" })
 @RestController
 public class RoutesController {
 
@@ -49,7 +50,7 @@ public class RoutesController {
 		List<String> sessionIds = Stream.generate(Utils::generateRandomID).filter(s -> !usedSessionIDs.contains(s))
 				.limit(2).collect(Collectors.toList());
 		val session = new Session(databaseID, sessionIds.get(0), sessionIds.get(1), sessionConfig, UUID.randomUUID(),
-				new ArrayList<>(), SessionState.WAITING_FOR_MEMBERS);
+				new ArrayList<>(), new HashMap<>(), new ArrayList<>(), SessionState.WAITING_FOR_MEMBERS);
 		databaseService.saveSession(session);
 		val responseMap = Map.of("session", session, "adminCookie", session.getAdminCookie());
 		return new ResponseEntity<>(responseMap, HttpStatus.CREATED);
