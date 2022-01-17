@@ -116,8 +116,7 @@
           :estimation="member.currentEstimation"
           :estimate-finished="estimateFinished"
           :highlight="
-            highlightedMembers.includes(member.memberID) ||
-            highlightedMembers.length === 0
+            highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0
           "
         />
       </b-row>
@@ -264,7 +263,7 @@ export default Vue.extend({
         const endPoint = Constants.webSocketVotingFinishedRoute;
         this.$store.commit("sendViaBackendWS", { endPoint });
         this.estimateFinished = true;
-        if(this.highlightedMembers.length === 0) {
+        if (this.highlightedMembers.length === 0) {
           confetti({
             particleCount: 100,
             startVelocity: 50,

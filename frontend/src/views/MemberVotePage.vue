@@ -85,10 +85,7 @@
         :name="member.name"
         :estimation="member.currentEstimation"
         :estimate-finished="votingFinished"
-        :highlight="
-          highlightedMembers.includes(member.memberID) ||
-          highlightedMembers.length === 0
-        "
+        :highlight="highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0"
       />
     </b-row>
   </b-container>
@@ -174,7 +171,7 @@ export default Vue.extend({
       }
     },
     votingFinished(isFinished) {
-      if(isFinished && this.highlightedMembers.length === 0) {
+      if (isFinished && this.highlightedMembers.length === 0) {
         confetti({
           particleCount: 100,
           startVelocity: 50,
