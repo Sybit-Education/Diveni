@@ -156,27 +156,6 @@ export default Vue.extend({
     membersEstimated(): Member[] {
       return this.members.filter((member: Member) => member.currentEstimation !== null);
     },
-    estimateHighest(): Member | null {
-      if (this.membersEstimated.length < 1) {
-        return null;
-      }
-      return this.membersEstimated.reduce((prev, current) =>
-        this.voteSet.indexOf(prev.currentEstimation!) >
-        this.voteSet.indexOf(current.currentEstimation!)
-          ? prev
-          : current
-      );
-    },
-    estimateLowest(): Member | null {
-      if (this.membersEstimated.length < 1) {
-        return null;
-      }
-      return this.membersEstimated.reduce((prev, current) =>
-        this.voteSet.indexOf(prev.currentEstimation!) <
-        this.voteSet.indexOf(current.currentEstimation!)
-          ? prev
-          : current
-      );
     },
   },
   watch: {
