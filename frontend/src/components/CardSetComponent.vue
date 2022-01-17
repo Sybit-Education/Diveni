@@ -52,33 +52,39 @@ export default Vue.extend({
         values: [],
         activeValues: [] as string[],
       },
-      allCardSets: [
+    };
+  },
+  computed: {
+    allCardSets() {
+      return [
         {
-          name: "Fibonacci",
-          description: "Each number is the sum of the two preceding ones",
+          name: this.$t("session.prepare.step.selection.cardSet.sets.fibonacci.label"),
+          description: this.$t("session.prepare.step.selection.cardSet.sets.fibonacci.description"),
           values: ["1", "2", "3", "5", "8", "13", "21", "34", "55"],
           activeValues: ["1", "2", "3", "5", "8", "13", "21"],
         },
         {
-          name: "T-shirt sizes",
-          description: "Basic T-shirt sizes. Simple and effective",
+          name: this.$t("session.prepare.step.selection.cardSet.sets.tShirtSizes.label"),
+          description: this.$t(
+            "session.prepare.step.selection.cardSet.sets.tShirtSizes.description"
+          ),
           values: ["XXS", "XS", "S", "M", "L", "XL", "XXL", "XXXL"],
           activeValues: ["XS", "S", "M", "L", "XL"],
         },
         {
-          name: "Hours",
-          description: "Simply hours. Great for sub tasks.",
+          name: this.$t("session.prepare.step.selection.cardSet.sets.hours.label"),
+          description: this.$t("session.prepare.step.selection.cardSet.sets.hours.description"),
           values: ["1", "2", "3", "4", "5", "6", "8", "10", "12", "16"],
           activeValues: ["1", "2", "3", "4", "5", "6", "8", "10", "12", "16"],
         },
         {
-          name: "Numbers",
-          description: "Integer numbers. What do you want more?",
+          name: this.$t("session.prepare.step.selection.cardSet.sets.numbers.label"),
+          description: this.$t("session.prepare.step.selection.cardSet.sets.numbers.description"),
           values: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
           activeValues: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
         },
-      ],
-    };
+      ];
+    },
   },
   methods: {
     isActiveCardSetNumber(num) {
