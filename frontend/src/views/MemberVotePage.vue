@@ -85,8 +85,7 @@
         :name="member.name"
         :estimation="member.currentEstimation"
         :estimate-finished="votingFinished"
-        :highest="estimateHighest ? estimateHighest.memberID === member.memberID : false"
-        :lowest="estimateHighest ? estimateLowest.memberID === member.memberID : false"
+        :highlight="highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0"
       />
     </b-row>
   </b-container>
@@ -101,6 +100,7 @@ import UserStoriesSidebar from "../components/UserStoriesSidebar.vue";
 import EstimateTimer from "../components/EstimateTimer.vue";
 import SessionMemberCard from "../components/SessionMemberCard.vue";
 import Member from "../model/Member";
+import confetti from "canvas-confetti";
 
 export default Vue.extend({
   name: "MemberVotePage",
@@ -152,27 +152,8 @@ export default Vue.extend({
     membersEstimated(): Member[] {
       return this.members.filter((member: Member) => member.currentEstimation !== null);
     },
-    estimateHighest(): Member | null {
-      if (this.membersEstimated.length < 1) {
-        return null;
-      }
-      return this.membersEstimated.reduce((prev, current) =>
-        this.voteSet.indexOf(prev.currentEstimation!) >
-        this.voteSet.indexOf(current.currentEstimation!)
-          ? prev
-          : current
-      );
-    },
-    estimateLowest(): Member | null {
-      if (this.membersEstimated.length < 1) {
-        return null;
-      }
-      return this.membersEstimated.reduce((prev, current) =>
-        this.voteSet.indexOf(prev.currentEstimation!) <
-        this.voteSet.indexOf(current.currentEstimation!)
-          ? prev
-          : current
-      );
+    highlightedMembers() {
+      return this.$store.state.highlightedMembers;
     },
   },
   watch: {
@@ -185,6 +166,15 @@ export default Vue.extend({
         this.estimateFinished = true;
       } else if (updates.at(-1) === Constants.memberUpdateCloseSession) {
         this.goToJoinPage();
+      }
+    },
+    votingFinished(isFinished) {
+      if (isFinished && this.highlightedMembers.length === 0) {
+        confetti({
+          particleCount: 100,
+          startVelocity: 50,
+          spread: 100,
+        });
       }
     },
   },
