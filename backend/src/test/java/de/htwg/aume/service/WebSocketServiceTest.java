@@ -27,7 +27,6 @@ import de.htwg.aume.model.MemberUpdate;
 import de.htwg.aume.model.Session;
 import de.htwg.aume.model.SessionConfig;
 import de.htwg.aume.model.SessionState;
-import de.htwg.aume.model.notification.MemberPayload;
 import de.htwg.aume.model.notification.Notification;
 import de.htwg.aume.model.notification.NotificationType;
 import de.htwg.aume.principals.AdminPrincipal;
@@ -212,28 +211,6 @@ public class WebSocketServiceTest {
     @Test
     public void adminLeft_sendsNotification() throws Exception {
         val notification = new Notification(NotificationType.ADMIN_LEFT, null);
-
-        webSocketService.sendNotification(notification);
-
-        verify(simpMessagingTemplateMock, times(1)).convertAndSend(
-                WebSocketService.NOTIFICATIONS_DESTINATION, notification);
-    }
-
-    @Test
-    public void memberLeft_sendsNotification() throws Exception {
-        val memberID = Utils.generateRandomID();
-        val notification = new Notification(NotificationType.MEMBER_LEFT, new MemberPayload(memberID));
-
-        webSocketService.sendNotification(notification);
-
-        verify(simpMessagingTemplateMock, times(1)).convertAndSend(
-                WebSocketService.NOTIFICATIONS_DESTINATION, notification);
-    }
-
-    @Test
-    public void memberJoined_sendsNotification() throws Exception {
-        val memberID = Utils.generateRandomID();
-        val notification = new Notification(NotificationType.MEMBER_JOINED, new MemberPayload(memberID));
 
         webSocketService.sendNotification(notification);
 

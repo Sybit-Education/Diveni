@@ -9,10 +9,11 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import java.util.Date;
+import de.htwg.aume.Utils;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.Test;
 
-import de.htwg.aume.Utils;
 import lombok.val;
 
 public class SessionTest {
@@ -78,6 +79,17 @@ public class SessionTest {
 		val result = session.updateSessionState(newSessionState);
 
 		assertEquals(result.getSessionState(), newSessionState);
+	}
+
+	@Test
+	public void setLastModified_works() {
+		val session = new Session(null, null, null, null, null, new ArrayList<Member>(), new HashMap<>(),
+				new ArrayList<>(), null);
+		val date = new Date();
+
+		val result = session.setLastModified(date);
+
+		assertEquals(result.getLastModified(), date);
 	}
 
 	@Test

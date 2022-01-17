@@ -1,6 +1,7 @@
 package de.htwg.aume.service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -114,6 +115,7 @@ public class WebSocketService {
 	}
 
 	public void sendSessionStateToMembers(Session session) {
+		// TODO: Send highlighted with it
 		getSessionPrincipals(session.getSessionID()).memberPrincipals().stream()
 				.forEach(member -> sendSessionStateToMember(session, member.getMemberID().toString()));
 	}

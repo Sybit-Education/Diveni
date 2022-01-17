@@ -1,12 +1,12 @@
 <template>
   <b-container>
     <h1 class="my-5 mx-2">
-      {{ title }}
+      {{ $t("page.join.title") }}
     </h1>
     <join-page-card
       :color="hexColor"
       :animal-asset-name="avatarAnimalAssetName"
-      :button-text="'GO'"
+      :button-text="$t('page.join.submit')"
       :session-id-from-url="sessionID"
       @clicked="sendJoinSessionRequest"
     />
@@ -27,7 +27,6 @@ export default Vue.extend({
   },
   data() {
     return {
-      title: "Join a meeting ...",
       hexColor: Constants.getRandomPastelColor(),
       avatarAnimalAssetName: Constants.getRandomAvatarAnimalAssetName(),
       memberID: uuidv4(),
@@ -76,19 +75,28 @@ export default Vue.extend({
         },
       };
       try {
-        const sessionConfig = (await this.axios.post(url, joinInfo)).data as {
+        const result = await this.axios.post(url, joinInfo);
+
+        const sessionConfig = result.data as {
           set: Array<string>;
           timerSeconds: number;
-          userStories: Array<{ title: string; description: string; estimation: string | null }>;
+          userStories: Array<{
+            title: string;
+            description: string;
+            estimation: string | null;
+          }>;
         };
         this.voteSet = JSON.stringify(sessionConfig.set);
         this.timerSeconds = parseInt(JSON.stringify(sessionConfig.timerSeconds), 10);
         console.log("session page");
         console.log(sessionConfig);
-        this.$store.commit("setUserStories", { stories: sessionConfig.userStories });
+        this.$store.commit("setUserStories", {
+          stories: sessionConfig.userStories,
+        });
         this.connectToWebSocket(data.sessionID, joinInfo.member.memberID);
       } catch (e) {
         console.error(`Response of ${url} is invalid: ${e}`);
+        this.showToast(e);
       }
     },
     convertAvatarAssetNameToBackendAnimal() {
@@ -123,6 +131,15 @@ export default Vue.extend({
           timerSecondsString: this.timerSeconds.toString(),
         },
       });
+    },
+    showToast(e) {
+      if (e.message == "Request failed with status code 404") {
+        this.$toast.error("Wrong ID");
+      }
+      if (e.message == "Request failed with status code 401") {
+        this.$toast.error("Wrong Password");
+      }
+      console.log(e);
     },
   },
 });
