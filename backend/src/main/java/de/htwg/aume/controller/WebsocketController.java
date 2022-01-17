@@ -8,6 +8,8 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Controller;
 import de.htwg.aume.model.SessionState;
 import de.htwg.aume.model.UserStory;
+import de.htwg.aume.model.notification.Notification;
+import de.htwg.aume.model.notification.NotificationType;
 import de.htwg.aume.principals.AdminPrincipal;
 import de.htwg.aume.principals.MemberPrincipal;
 import de.htwg.aume.service.DatabaseService;
@@ -48,6 +50,7 @@ public class WebsocketController {
 			webSocketService.sendMembersUpdate(session);
 		} else {
 			webSocketService.removeAdmin((AdminPrincipal) principal);
+			webSocketService.sendNotification(new Notification(NotificationType.ADMIN_LEFT, null));
 		}
 	}
 

@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -72,8 +71,6 @@ public class WebsocketControllerTest {
         private static final String UNREGISTER = "/ws/unregister";
 
         private static final String ADMIN_MEMBER_UPDATES = "/users/updates/membersUpdated";
-
-        private static final String MEMBER_UPDATES = "/users/updates/member";
 
         private static final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -392,34 +389,4 @@ public class WebsocketControllerTest {
                 val newMembers = sessionRepo.findBySessionID(oldSession.getSessionID()).getMembers();
                 assertTrue(newMembers.stream().allMatch(m -> m.getCurrentEstimation() == null));
         }
-
-        @Test
-        // TODO: fix this test
-        public void adminUpdatedUserStories_updatesUserStories() throws Exception {
-                val sessionID = Utils.generateRandomID();
-                val adminID = Utils.generateRandomID();
-                val adminPrincipal = new AdminPrincipal(sessionID, adminID);
-                val oldSession = new Session(new ObjectId(), adminID, Utils.generateRandomID(),
-                                new SessionConfig(new ArrayList<>(), List.of(), 10, null), null, List.of(),
-                                new HashMap<>(), new ArrayList<>(), SessionState.WAITING_FOR_MEMBERS);
-                sessionRepo.save(oldSession);
-                webSocketService.setAdminUser(adminPrincipal);
-                StompSession adminSession = getAdminSession(sessionID, adminID);
-
-                // val userStoriesJson = "[ { \"title\": \"test\", \"description\": \"descr\",
-                // \"estimation\": null, \"isActive\": false } ]";
-                // adminSession.send(UPDATE_USER_STORIES,
-                // objectMapper.writeValueAsString(List.of(new
-                // UserStory("title", "desc", "3", false))));
-                // adminSession.send(UPDATE_USER_STORIES, List.of(new UserStory("title", "desc",
-                // "3",
-                // false)));
-                // adminSession.send(UPDATE_USER_STORIES, userStoriesJson.getBytes("UTF-8"));
-                // Wait for server-side handling
-                TimeUnit.MILLISECONDS.sleep(TIMEOUT);
-
-                val config = sessionRepo.findBySessionID(oldSession.getSessionID()).getSessionConfig();
-                // assertEquals(config.getUserStories().size(), 1);
-        }
-
 }
