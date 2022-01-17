@@ -14,6 +14,7 @@ export default new Vuex.Store<StoreState>({
     memberUpdates: [],
     userStories: [],
     members: [],
+    highlightedMembers: [],
   },
   mutations: {
     setMembers(state, members) {
@@ -45,7 +46,8 @@ export default new Vuex.Store<StoreState>({
     subscribeOnBackendWSAdminUpdate(state) {
       state.stompClient?.subscribe(Constants.webSocketMembersUpdatedRoute, (frame) => {
         console.log(`web socket admin receive update: message ${frame}`);
-        state.members = JSON.parse(frame.body);
+        state.members = JSON.parse(frame.body).members;
+        state.highlightedMembers = JSON.parse(frame.body).highlightedMembers;
       });
     },
     sendViaBackendWS(state, { endPoint, data }) {

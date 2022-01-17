@@ -1,6 +1,7 @@
 package de.htwg.aume.service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import de.htwg.aume.controller.ErrorMessages;
+import de.htwg.aume.model.MemberUpdate;
 import de.htwg.aume.model.Session;
 import de.htwg.aume.principals.AdminPrincipal;
 import de.htwg.aume.principals.MemberPrincipal;
@@ -89,21 +91,21 @@ public class WebSocketService {
 		val sessionPrincipals = getSessionPrincipals(session.getSessionID());
 		if (sessionPrincipals.adminPrincipal() != null) {
 			simpMessagingTemplate.convertAndSendToUser(sessionPrincipals.adminPrincipal().getName(),
-					"/updates/membersUpdated", session.getMembers());
-		}  // else the admin left the session
+					"/updates/membersUpdated", new MemberUpdate(session.getMembers(), session.getCurrentHighlights()));
+		} // else the admin left the session
 		sendMembersUpdateToMembers(session);
 
 	}
 
 	public void sendMembersUpdateToMembers(Session session) {
 		getSessionPrincipals(session.getSessionID()).memberPrincipals()
-				.forEach(member -> simpMessagingTemplate.convertAndSendToUser(
-						member.getMemberID().toString(), "/updates/membersUpdated",
-						session.getMembers())
-				);
+				.forEach(member -> simpMessagingTemplate.convertAndSendToUser(member.getMemberID().toString(),
+						"/updates/membersUpdated",
+						new MemberUpdate(session.getMembers(), session.getCurrentHighlights())));
 	}
 
 	public void sendSessionStateToMembers(Session session) {
+		// TODO: Send highlighted with it
 		getSessionPrincipals(session.getSessionID()).memberPrincipals().stream()
 				.forEach(member -> sendSessionStateToMember(session, member.getMemberID().toString()));
 	}
