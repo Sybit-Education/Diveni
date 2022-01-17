@@ -39,8 +39,8 @@ public class SessionTest {
 	public void updateEstimation_works() {
 		val memberID1 = Utils.generateRandomID();
 		val memberID2 = Utils.generateRandomID();
-		val member1 = new Member(memberID1, null, null, null, null);
-		val member2 = new Member(memberID2, null, null, null, null);
+		val member1 = new Member(memberID1, null, null, null, null, null);
+		val member2 = new Member(memberID2, null, null, null, null, null);
 		val members = Arrays.asList(member1, member2);
 		val vote = "5";
 
@@ -58,8 +58,8 @@ public class SessionTest {
 	public void resetEstimations_works() {
 		val memberID1 = Utils.generateRandomID();
 		val memberID2 = Utils.generateRandomID();
-		val member1 = new Member(memberID1, null, null, null, "3");
-		val member2 = new Member(memberID2, null, null, null, "5");
+		val member1 = new Member(memberID1, null, null, null, "3", null);
+		val member2 = new Member(memberID2, null, null, null, "5", null);
 		val members = Arrays.asList(member1, member2);
 		val session = new Session(null, null, null, null, null, members, new HashMap<>(), new ArrayList<>(),
 				SessionState.WAITING_FOR_MEMBERS);
@@ -95,12 +95,12 @@ public class SessionTest {
 	@Test
 	public void addMember_works() {
 		val memberID1 = Utils.generateRandomID();
-		val member1 = new Member(memberID1, null, null, null, "3");
+		val member1 = new Member(memberID1, null, null, null, "3", null);
 		val members = Arrays.asList(member1);
 		val session = new Session(null, null, null, null, null, members, new HashMap<>(), new ArrayList<>(),
 				SessionState.WAITING_FOR_MEMBERS);
 		val memberID2 = Utils.generateRandomID();
-		val member2 = new Member(memberID2, null, null, null, "5");
+		val member2 = new Member(memberID2, null, null, null, "5", null);
 
 		val result = session.addMember(member2);
 
@@ -112,8 +112,8 @@ public class SessionTest {
 	public void removeMember_works() {
 		val memberID1 = Utils.generateRandomID();
 		val memberID2 = Utils.generateRandomID();
-		val member1 = new Member(memberID1, null, null, null, "3");
-		val member2 = new Member(memberID2, null, null, null, "5");
+		val member1 = new Member(memberID1, null, null, null, "3", null);
+		val member2 = new Member(memberID2, null, null, null, "5", null);
 		val members = Arrays.asList(member1, member2);
 		val session = new Session(null, null, null, null, null, members, new HashMap<>(), new ArrayList<>(),
 				SessionState.WAITING_FOR_MEMBERS);
@@ -127,9 +127,9 @@ public class SessionTest {
 	@Test
 	public void selectHighlightedMembers_works() {
 		List<String> set = List.of("XS", "S", "M", "L", "XL");
-		val member1 = new Member(Utils.generateRandomID(), null, null, null, "S");
-		val member2 = new Member(Utils.generateRandomID(), null, null, null, "L");
-		val member3 = new Member(Utils.generateRandomID(), null, null, null, "XS");
+		val member1 = new Member(Utils.generateRandomID(), null, null, null, "S", null);
+		val member2 = new Member(Utils.generateRandomID(), null, null, null, "L", null);
+		val member3 = new Member(Utils.generateRandomID(), null, null, null, "XS", null);
 		val session = new Session(null, null, null, new SessionConfig(set, List.of(), 30, null), null,
 				List.of(member1, member2, member3), new HashMap<>(), new ArrayList<>(), null);
 
@@ -145,9 +145,9 @@ public class SessionTest {
 	@Test
 	public void selectHighlightedMembersPrioritized_works() {
 		List<String> set = List.of("XS", "S", "M", "L", "XL");
-		val member1 = new Member(Utils.generateRandomID(), null, null, null, "L");
-		val member2 = new Member(Utils.generateRandomID(), null, null, null, "L");
-		val member3 = new Member(Utils.generateRandomID(), null, null, null, "XS");
+		val member1 = new Member(Utils.generateRandomID(), null, null, null, "L", null);
+		val member2 = new Member(Utils.generateRandomID(), null, null, null, "L", null);
+		val member3 = new Member(Utils.generateRandomID(), null, null, null, "XS", null);
 		val map = new HashMap<String, Integer>();
 		map.put(member1.getMemberID(), 1);
 		map.put(member2.getMemberID(), 0);

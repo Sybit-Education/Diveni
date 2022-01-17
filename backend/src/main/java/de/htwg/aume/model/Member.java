@@ -1,5 +1,9 @@
 package de.htwg.aume.model;
 
+import java.util.UUID;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -21,11 +25,18 @@ public class Member {
 
 	private String currentEstimation;
 
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+	private UUID memberCookie;
+
 	public Member updateEstimation(String estimation) {
-		return new Member(this.memberID, this.name, this.hexColor, this.avatarAnimal, estimation);
+		return new Member(this.memberID, this.name, this.hexColor, this.avatarAnimal, estimation, memberCookie);
 	}
 
 	public Member resetEstimation() {
-		return new Member(this.memberID, this.name, this.hexColor, this.avatarAnimal, null);
+		return new Member(this.memberID, this.name, this.hexColor, this.avatarAnimal, null, memberCookie);
+	}
+
+	public Member setMemberCookie(UUID cookie) {
+		return new Member(this.memberID, this.name, this.hexColor, this.avatarAnimal, this.currentEstimation, cookie);
 	}
 }

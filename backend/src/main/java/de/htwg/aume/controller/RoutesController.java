@@ -67,9 +67,13 @@ public class RoutesController {
 	}
 
 	@PostMapping(value = "/sessions/{sessionID}/join")
-	public ResponseEntity<SessionConfig> joinSession(@PathVariable String sessionID, @RequestBody JoinInfo joinInfo) {
-		val session = addMemberToSession(sessionID, joinInfo.getMember(), joinInfo.getPassword());
-		return new ResponseEntity<SessionConfig>(session.getSessionConfig(), HttpStatus.OK);
+	public ResponseEntity<Map<String, Object>> joinSession(@PathVariable String sessionID,
+			@RequestBody JoinInfo joinInfo) {
+		val memberCookie = UUID.randomUUID();
+		val session = addMemberToSession(sessionID, joinInfo.getMember().setMemberCookie(UUID.randomUUID()),
+				joinInfo.getPassword());
+		val responseMap = Map.of("sessionConfig", session.getSessionConfig(), "memberCookie", memberCookie);
+		return new ResponseEntity<>(responseMap, HttpStatus.OK);
 	}
 
 	@GetMapping(value = "/sessions/{sessionID}")
