@@ -2,7 +2,7 @@
   <div>
     <b-container>
       <h1 class="my-5">
-        {{ title }}
+        {{ $t("session.prepare.title") }}
       </h1>
       <h4>{{ $t("session.prepare.step.selection.cardSet.title") }}</h4>
       <card-set-component class="mt-3" @selectedCardSetOptions="setCardSetOptions" />
@@ -100,7 +100,6 @@ export default Vue.extend({
   },
   data() {
     return {
-      title: this.$t("session.prepare.title"),
       password: "",
       selectedCardSetOptions: [],
       timer: 30,

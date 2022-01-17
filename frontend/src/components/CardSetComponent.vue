@@ -52,7 +52,11 @@ export default Vue.extend({
         values: [],
         activeValues: [] as string[],
       },
-      allCardSets: [
+    };
+  },
+  computed: {
+    allCardSets() {
+      return [
         {
           name: this.$t("session.prepare.step.selection.cardSet.sets.fibonacci.label"),
           description: this.$t("session.prepare.step.selection.cardSet.sets.fibonacci.description"),
@@ -79,8 +83,8 @@ export default Vue.extend({
           values: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
           activeValues: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
         },
-      ],
-    };
+      ];
+    },
   },
   methods: {
     isActiveCardSetNumber(num) {

@@ -8,7 +8,7 @@
     />
     <b-row class="my-5 mx-2">
       <b-col>
-        <h1>{{ title }}</h1>
+        <h1>{{ $t("page.vote.title") }}</h1>
       </b-col>
       <b-col>
         <estimate-timer
@@ -74,7 +74,7 @@
     </b-row>
     <b-row v-if="!isStartVoting && !votingFinished" class="my-5 text-center">
       <b-icon-three-dots animation="fade" class="my-5" font-scale="4" />
-      <h1>{{ waitingText }}</h1>
+      <h1>{{ $t("page.vote.waiting") }}</h1>
     </b-row>
     <b-row v-if="votingFinished" class="my-1 d-flex justify-content-center flex-wrap">
       <SessionMemberCard
@@ -121,9 +121,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      title: this.$t("page.vote.title"),
       draggedVote: null,
-      waitingText: this.$t("page.vote.waiting"),
       voteSet: [] as string[],
       timerCountdownNumber: 0,
       triggerTimer: 0,

@@ -1,7 +1,7 @@
 <template>
   <b-container>
     <h1 class="my-5 mx-2">
-      {{ title }}
+      {{ $t("page.landing.productTitle") }}
     </h1>
     <b-row class="justify-content-center">
       <landing-page-card
@@ -43,7 +43,6 @@ export default Vue.extend({
   },
   data() {
     return {
-      title: this.$t("page.landing.productTitle"),
       sessionWrapper: {} as { session: Session },
       startNewSessionOnMounted: false,
     };

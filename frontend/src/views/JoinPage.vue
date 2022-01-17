@@ -1,7 +1,7 @@
 <template>
   <b-container>
     <h1 class="my-5 mx-2">
-      {{ title }}
+      {{ $t("page.join.title") }}
     </h1>
     <join-page-card
       :color="hexColor"
@@ -27,7 +27,6 @@ export default Vue.extend({
   },
   data() {
     return {
-      title: this.$t("page.join.title"),
       hexColor: Constants.getRandomPastelColor(),
       avatarAnimalAssetName: Constants.getRandomAvatarAnimalAssetName(),
       memberID: uuidv4(),

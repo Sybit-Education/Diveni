@@ -1,7 +1,7 @@
 <template>
   <b-container>
     <h1 class="my-5 mx-2">
-      {{ titleResult }}
+      {{ $t("page.results.title") }}
     </h1>
     <div v-if="userStories.length === 0" class="text-center">
       {{ $t("page.results.noUserStories") }}
@@ -37,11 +37,6 @@ import Vue from "vue";
 export default Vue.extend({
   name: "SessionPage",
   components: {},
-  data() {
-    return {
-      titleResult: this.$t("page.results.title"),
-    };
-  },
   computed: {
     userStories() {
       return this.$store.state.userStories;

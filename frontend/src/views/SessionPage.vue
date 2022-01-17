@@ -8,7 +8,13 @@
     />
     <b-row class="mt-5 mb-3">
       <b-col
-        ><h1>{{ planningStart ? titleEstimate : titleWaiting }}</h1></b-col
+        ><h1>
+          {{
+            planningStart
+              ? $t("page.session.during.estimation.title")
+              : $t("page.session.before.title")
+          }}
+        </h1></b-col
       >
       <b-col v-if="planningStart" align-self="center">
         <copy-session-id-popup class="float-end" :session-id="sessionID" />
@@ -161,8 +167,6 @@ export default Vue.extend({
   },
   data() {
     return {
-      titleWaiting: this.$t("page.session.before.title"),
-      titleEstimate: this.$t("page.session.during.estimation.title"),
       stageLabelReady: "Ready",
       stageLabelWaiting: "Waiting room",
       planningStart: false,
