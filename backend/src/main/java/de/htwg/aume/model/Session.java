@@ -1,6 +1,7 @@
 package de.htwg.aume.model;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -36,6 +37,8 @@ public class Session {
 	private final List<Member> members;
 
 	private final SessionState sessionState;
+
+	private Date lastModified;
 
 	public Session updateEstimation(String memberID, String vote) {
 		val updatedMembers = members.stream().map(m -> m.getMemberID().equals(memberID) ? m.updateEstimation(vote) : m)
@@ -74,4 +77,9 @@ public class Session {
 		return new Session(databaseID, sessionID, adminID, sessionConfig, adminCookie, updatedMembers, sessionState);
 	}
 
+	public Session setLastModified(Date lastModified){
+		val session = new Session(databaseID, sessionID, adminID, sessionConfig, adminCookie, members, sessionState);
+		session.lastModified = lastModified;
+		return session;
+	}
 }
