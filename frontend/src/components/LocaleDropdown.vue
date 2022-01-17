@@ -21,7 +21,7 @@ export default Vue.extend({
     return {
       locales: {
         de: "German",
-        en: "Englisch",
+        en: "English",
       },
     };
   },

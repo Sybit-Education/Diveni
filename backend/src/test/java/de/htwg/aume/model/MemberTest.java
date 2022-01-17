@@ -2,6 +2,7 @@ package de.htwg.aume.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Optional;
@@ -36,8 +37,8 @@ public class MemberTest {
 		val member = new Member(null, null, null, null, null);
 		val result = member.updateEstimation(vote);
 
-		assertEquals(result.getCurrentEstimation(), Optional.of(vote));
-		assertEquals(member.getCurrentEstimation(), Optional.empty());
+		assertEquals(result.getCurrentEstimation(), vote);
+		assertNull(member.getCurrentEstimation());
 	}
 
 	@Test
@@ -47,8 +48,8 @@ public class MemberTest {
 
 		val result = member.resetEstimation();
 
-		assertEquals(member.getCurrentEstimation(), Optional.of(vote));
-		assertTrue(result.getCurrentEstimation().isEmpty());
+		assertEquals(member.getCurrentEstimation(), vote);
+		assertNull(result.getCurrentEstimation());
 	}
 
 }

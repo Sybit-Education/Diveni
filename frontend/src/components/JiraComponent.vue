@@ -1,14 +1,13 @@
 <template>
   <div>
-    <h5>Select Jira for your Poker-Planning</h5>
+    <h5>{{ $t("session.prepare.step.selection.mode.description.withJira.subtitle") }}</h5>
     <ul>
-      <li>Please authenticate with Jira</li>
-      <li>Select your project</li>
+      <li>{{ $t("session.prepare.step.selection.mode.description.withJira.descriptionLine1") }}</li>
+      <li>{{ $t("session.prepare.step.selection.mode.description.withJira.descriptionLine2") }}</li>
       <li>
-        After you have selected your project, you will be redirected to the next page to edit your
-        user stories
+        {{ $t("session.prepare.step.selection.mode.description.withJira.descriptionLine3") }}
       </li>
-      <li>You will be able to add and edit User Stories once you've started the session</li>
+      <li>{{ $t("session.prepare.step.selection.mode.description.withJira.descriptionLine4") }}</li>
     </ul>
   </div>
 </template>

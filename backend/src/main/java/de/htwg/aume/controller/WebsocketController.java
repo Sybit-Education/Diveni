@@ -68,7 +68,7 @@ public class WebsocketController {
 	@MessageMapping("/startVoting")
 	public void startEstimation(AdminPrincipal principal) {
 		val session = ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID())
-				.updateSessionState(SessionState.START_VOTING);
+				.updateSessionState(SessionState.START_VOTING).resetCurrentHighlights();
 		databaseService.saveSession(session);
 		webSocketService.sendSessionStateToMembers(session);
 	}
@@ -76,8 +76,9 @@ public class WebsocketController {
 	@MessageMapping("/votingFinished")
 	public void votingFinished(AdminPrincipal principal) {
 		val session = ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID())
-				.updateSessionState(SessionState.VOTING_FINISHED);
+				.updateSessionState(SessionState.VOTING_FINISHED).selectHighlightedMembers();
 		databaseService.saveSession(session);
+		webSocketService.sendMembersUpdate(session);
 		webSocketService.sendSessionStateToMembers(session);
 	}
 

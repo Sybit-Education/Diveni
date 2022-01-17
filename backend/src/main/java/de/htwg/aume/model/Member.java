@@ -23,12 +23,6 @@ public class Member {
 
 	private String currentEstimation;
 
-	// Override because MongoRepository has a problem with Optional<String> as
-	// property
-	public Optional<String> getCurrentEstimation() {
-		return Optional.ofNullable(this.currentEstimation);
-	}
-
 	public Member updateEstimation(String estimation) {
 		return new Member(this.memberID, this.name, this.hexColor, this.avatarAnimal, estimation);
 	}

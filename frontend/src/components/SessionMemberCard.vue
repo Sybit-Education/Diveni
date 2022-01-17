@@ -2,7 +2,7 @@
   <div
     :style="`background-color: ${color};`"
     class="text-center card mt-4 mx-3"
-    :class="{ greyOut: !highest && !lowest && estimateFinished }"
+    :class="{ greyOut: !highlight && estimateFinished }"
   >
     <h1 class="mt-3 fs-3-rem">
       <strong v-if="!estimateFinished">?</strong>
@@ -27,8 +27,7 @@ export default Vue.extend({
     estimation: { type: String, required: false, default: null },
     name: { type: String, required: true },
     estimateFinished: { type: Boolean, required: false, default: false },
-    highest: { type: Boolean, required: false, default: false },
-    lowest: { type: Boolean, required: false, default: false },
+    highlight: { type: Boolean, required: false, default: false },
   },
 });
 </script>
