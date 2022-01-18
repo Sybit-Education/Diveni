@@ -52,6 +52,7 @@ export default Vue.extend({
   name: "SignInWithJiraButtonComponent",
   data() {
     return {
+      token: "",
       verificationCode: "",
       verificationCodeState: false,
     };
@@ -64,6 +65,7 @@ export default Vue.extend({
     },
     async openSignInWithJiraTab() {
       const tokenDto = await apiService.getJiraRequestToken();
+      this.token = tokenDto.token;
       window.open(tokenDto.url, "_blank")?.focus();
     },
     openModal() {
@@ -85,7 +87,7 @@ export default Vue.extend({
       if (!valid) {
         return;
       }
-      await apiService.sendJiraVerificationCode(this.verificationCode);
+      await apiService.sendJiraVerificationCode(this.verificationCode, this.token);
       this.$nextTick(() => {
         this.$bvModal.hide("modal-verification-code");
       });
