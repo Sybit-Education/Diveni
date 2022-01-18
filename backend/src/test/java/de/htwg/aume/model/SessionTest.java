@@ -145,9 +145,9 @@ public class SessionTest {
 	@Test
 	public void selectHighlightedMembersPrioritized_works() {
 		List<String> set = List.of("XS", "S", "M", "L", "XL");
-		val member1 = new Member(Utils.generateRandomID(), null, null, null, "L", null);
-		val member2 = new Member(Utils.generateRandomID(), null, null, null, "L", null);
-		val member3 = new Member(Utils.generateRandomID(), null, null, null, "XS", null);
+		val member1 = new Member(Utils.generateRandomID(), null, null, null, "L", null, false);
+		val member2 = new Member(Utils.generateRandomID(), null, null, null, "L", null, false);
+		val member3 = new Member(Utils.generateRandomID(), null, null, null, "XS", null, false);
 		val map = new HashMap<String, Integer>();
 		map.put(member1.getMemberID(), 1);
 		map.put(member2.getMemberID(), 0);

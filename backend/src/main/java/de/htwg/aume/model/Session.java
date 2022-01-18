@@ -143,8 +143,15 @@ public class Session {
 				currentHighlights, sessionState);
 	}
 
-	public Session removeMember(String memberID) {
-		val updatedMembers = members.stream().filter(m -> !m.getMemberID().equals(memberID))
+	public Session setMemberInactive(String memberID) {
+		val updatedMembers = members.stream().map(m -> m.getMemberID().equals(memberID) ? m.toggleActive(false) : m)
+				.collect(Collectors.toList());
+		return new Session(databaseID, sessionID, adminID, sessionConfig, adminCookie, updatedMembers, memberVoted,
+				currentHighlights, sessionState);
+	}
+
+	public Session setMemberActive(String memberID) {
+		val updatedMembers = members.stream().map(m -> m.getMemberID().equals(memberID) ? m.toggleActive(true) : m)
 				.collect(Collectors.toList());
 		return new Session(databaseID, sessionID, adminID, sessionConfig, adminCookie, updatedMembers, memberVoted,
 				currentHighlights, sessionState);

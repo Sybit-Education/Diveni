@@ -45,7 +45,7 @@ public class WebsocketController {
 			webSocketService.removeMember((MemberPrincipal) principal);
 			val session = ControllerUtils
 					.getSessionByMemberIDOrThrowResponse(databaseService, ((MemberPrincipal) principal).getMemberID())
-					.removeMember(((MemberPrincipal) principal).getMemberID());
+					.setMemberInactive(((MemberPrincipal) principal).getMemberID());
 			databaseService.saveSession(session);
 			webSocketService.sendMembersUpdate(session);
 		} else {

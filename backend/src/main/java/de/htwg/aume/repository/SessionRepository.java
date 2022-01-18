@@ -17,4 +17,10 @@ public interface SessionRepository extends MongoRepository<Session, String> {
 		return findAll().stream().filter(s -> s.getMembers().stream().anyMatch(m -> m.getMemberID().equals(memberID)))
 				.findFirst();
 	}
+
+	default Optional<Session> findByMemberCookie(UUID memberCookie) {
+		return findAll().stream()
+				.filter(s -> s.getMembers().stream().anyMatch(m -> m.getMemberCookie().equals(memberCookie)))
+				.findFirst();
+	}
 }

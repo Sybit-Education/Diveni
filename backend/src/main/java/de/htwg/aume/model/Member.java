@@ -28,15 +28,25 @@ public class Member {
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private UUID memberCookie;
 
+	private boolean isActive;
+
 	public Member updateEstimation(String estimation) {
-		return new Member(this.memberID, this.name, this.hexColor, this.avatarAnimal, estimation, memberCookie);
+		return new Member(this.memberID, this.name, this.hexColor, this.avatarAnimal, estimation, this.memberCookie,
+				this.isActive);
 	}
 
 	public Member resetEstimation() {
-		return new Member(this.memberID, this.name, this.hexColor, this.avatarAnimal, null, memberCookie);
+		return new Member(this.memberID, this.name, this.hexColor, this.avatarAnimal, null, this.memberCookie,
+				this.isActive);
 	}
 
 	public Member setMemberCookie(UUID cookie) {
-		return new Member(this.memberID, this.name, this.hexColor, this.avatarAnimal, this.currentEstimation, cookie);
+		return new Member(this.memberID, this.name, this.hexColor, this.avatarAnimal, this.currentEstimation, cookie,
+				this.isActive);
+	}
+
+	public Member toggleActive(boolean isActive) {
+		return new Member(this.memberID, this.name, this.hexColor, this.avatarAnimal, this.currentEstimation,
+				this.memberCookie, isActive);
 	}
 }

@@ -25,6 +25,10 @@ public class DatabaseService {
         return Optional.ofNullable(sessionRepo.findByAdminCookie(adminCookie));
     }
 
+    public Optional<Session> getSessionByMemberCookie(UUID memberCookie) {
+        return sessionRepo.findByMemberCookie(memberCookie);
+    }
+
     public Optional<Session> getSessionByMemberID(String memberID) {
         return sessionRepo.findByMemberID(memberID);
     }

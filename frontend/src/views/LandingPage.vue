@@ -88,6 +88,11 @@ export default Vue.extend({
         }
       }
     },
+    async checkMemberCookie() {
+      console.log('checking member cookie');
+      const cookie = window.localStorage.getItem("memberCookie");
+      
+    },
     goToJoinPage() {
       this.$router.push({ name: "JoinPage" });
     },

@@ -76,6 +76,16 @@ public class RoutesController {
 		return new ResponseEntity<>(responseMap, HttpStatus.OK);
 	}
 
+	@PostMapping(value = "/rejoinSession")
+	public ResponseEntity<SessionConfig> rejoinSession(@RequestParam("memberCookie") UUID memberCookie) {
+		val session = databaseService.getSessionByMemberCookie(memberCookie);
+		if (session.isPresent()) {
+			return new ResponseEntity<>(session.get().getSessionConfig(), HttpStatus.OK);
+		} else {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessages.sessionNotFoundErrorMessage);
+		}
+	}
+
 	@GetMapping(value = "/sessions/{sessionID}")
 	public @ResponseBody Session getSession(@PathVariable String sessionID) {
 		return ControllerUtils.getSessionOrThrowResponse(databaseService, sessionID);

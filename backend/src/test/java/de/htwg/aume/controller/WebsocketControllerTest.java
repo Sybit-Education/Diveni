@@ -175,7 +175,7 @@ public class WebsocketControllerTest {
                 val sessionID = Utils.generateRandomID();
                 val adminID = Utils.generateRandomID();
                 val memberID = Utils.generateRandomID();
-                val member = new Member(memberID, null, null, null, null, null);
+                val member = new Member(memberID, null, null, null, null, null, false);
                 val adminPrincipal = new AdminPrincipal(sessionID, adminID);
                 sessionRepo.save(new Session(dbID, sessionID, adminID,
                                 new SessionConfig(new ArrayList<>(), List.of(), 10, null), null, List.of(member),
@@ -202,7 +202,8 @@ public class WebsocketControllerTest {
                 val adminID = Utils.generateRandomID();
                 val memberID = Utils.generateRandomID();
                 val memberList = List.of(new Member(memberID, null, null, null, null,
-                                null), new Member(Utils.generateRandomID(), null, null, null, null, null));
+                                null, false),
+                                new Member(Utils.generateRandomID(), null, null, null, null, null, false));
                 val adminPrincipal = new AdminPrincipal(sessionID, adminID);
                 sessionRepo.save(new Session(dbID, sessionID, adminID,
                                 new SessionConfig(new ArrayList<>(), List.of(), 10, null), null, memberList,
@@ -246,7 +247,7 @@ public class WebsocketControllerTest {
                 val sessionID = Utils.generateRandomID();
                 val adminID = Utils.generateRandomID();
                 val memberID = Utils.generateRandomID();
-                val member = new Member(memberID, null, null, null, null, null);
+                val member = new Member(memberID, null, null, null, null, null, false);
                 sessionRepo.save(new Session(new ObjectId(), adminID, Utils.generateRandomID(),
                                 new SessionConfig(new ArrayList<>(), List.of(), 10, null), null, List.of(member),
                                 new HashMap<>(), new ArrayList<>(), SessionState.WAITING_FOR_MEMBERS));
@@ -271,7 +272,7 @@ public class WebsocketControllerTest {
                 val sessionID = Utils.generateRandomID();
                 val adminID = Utils.generateRandomID();
                 val memberID = Utils.generateRandomID();
-                val member = new Member(memberID, null, null, null, null, null);
+                val member = new Member(memberID, null, null, null, null, null, false);
                 val memberList = List.of(member);
                 val adminPrincipal = new AdminPrincipal(sessionID, adminID);
                 sessionRepo.save(new Session(dbID, sessionID, adminID,
@@ -297,7 +298,7 @@ public class WebsocketControllerTest {
                 val sessionID = Utils.generateRandomID();
                 val adminID = Utils.generateRandomID();
                 val memberID = Utils.generateRandomID();
-                val member = new Member(memberID, null, null, null, null, null);
+                val member = new Member(memberID, null, null, null, null, null, false);
                 val memberList = List.of(member);
                 val adminPrincipal = new AdminPrincipal(sessionID, adminID);
                 sessionRepo.save(new Session(dbID, sessionID, adminID,
@@ -324,7 +325,7 @@ public class WebsocketControllerTest {
                 val sessionID = Utils.generateRandomID();
                 val adminID = Utils.generateRandomID();
                 val memberID = Utils.generateRandomID();
-                val member = new Member(memberID, null, null, null, null, null);
+                val member = new Member(memberID, null, null, null, null, null, false);
                 val memberList = List.of(member);
                 val adminPrincipal = new AdminPrincipal(sessionID, adminID);
                 val oldSession = new Session(dbID, sessionID, adminID,
@@ -348,7 +349,7 @@ public class WebsocketControllerTest {
                 val sessionID = Utils.generateRandomID();
                 val adminID = Utils.generateRandomID();
                 val memberID = Utils.generateRandomID();
-                val member = new Member(memberID, null, null, null, "5", null);
+                val member = new Member(memberID, null, null, null, "5", null, false);
                 val memberList = List.of(member);
                 val adminPrincipal = new AdminPrincipal(sessionID, adminID);
                 val oldSession = new Session(dbID, sessionID, adminID,

@@ -18,9 +18,9 @@ public class MemberTest {
 		val hexColor = "#ffffff";
 		val avatar = AvatarAnimal.WOLF;
 		String estimation = null;
-		val member = new Member(memberID, name, hexColor, avatar, estimation, null);
-		val sameMember = new Member(memberID, name, hexColor, avatar, estimation, null);
-		val otherMember = new Member(Utils.generateRandomID(), name, hexColor, avatar, estimation, null);
+		val member = new Member(memberID, name, hexColor, avatar, estimation, null, false);
+		val sameMember = new Member(memberID, name, hexColor, avatar, estimation, null, false);
+		val otherMember = new Member(Utils.generateRandomID(), name, hexColor, avatar, estimation, null, false);
 
 		assertEquals(member, sameMember);
 		assertNotEquals(member, otherMember);
@@ -31,7 +31,7 @@ public class MemberTest {
 	public void updateEstimation_works() {
 		val vote = "5";
 
-		val member = new Member(null, null, null, null, null, null);
+		val member = new Member(null, null, null, null, null, null, false);
 		val result = member.updateEstimation(vote);
 
 		assertEquals(result.getCurrentEstimation(), vote);
@@ -41,7 +41,7 @@ public class MemberTest {
 	@Test
 	public void resetEstimation_works() {
 		val vote = "5";
-		val member = new Member(null, null, null, null, vote, null);
+		val member = new Member(null, null, null, null, vote, null, false);
 
 		val result = member.resetEstimation();
 
@@ -52,7 +52,7 @@ public class MemberTest {
 	@Test
 	public void setCookie_works() {
 		val cookie = UUID.randomUUID();
-		val member = new Member(null, null, null, null, null, UUID.randomUUID());
+		val member = new Member(null, null, null, null, null, UUID.randomUUID(), false);
 
 		val result = member.setMemberCookie(cookie);
 
