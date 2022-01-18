@@ -49,6 +49,7 @@ export default Vue.extend({
         this.subscribeWSMemberUpdates();
         this.subscribeWSadminUpdatedUserStories();
         this.subscribeWSMemberUpdated();
+        this.subscribeWSNotification();
         this.goToEstimationPage();
       }
     },
@@ -112,6 +113,9 @@ export default Vue.extend({
     },
     subscribeWSMemberUpdates() {
       this.$store.commit("subscribeOnBackendWSMemberUpdates");
+    },
+    subscribeWSNotification() {
+      this.$store.commit("subscribeOnBackendWSNotify");
     },
     subscribeWSadminUpdatedUserStories() {
       this.$store.commit("subscribeOnBackendWSStoriesUpdated");

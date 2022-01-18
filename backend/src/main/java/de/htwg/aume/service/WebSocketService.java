@@ -31,7 +31,7 @@ public class WebSocketService {
 
 	public static String US_UPDATES_DESTINATION = "/updates/userStories";
 
-	public static String NOTIFICATIONS_DESTINATION = "/notifications";
+	public static String NOTIFICATIONS_DESTINATION = "/updates/notifications";
 
 	@Autowired
 	private SimpMessagingTemplate simpMessagingTemplate;
@@ -135,9 +135,25 @@ public class WebSocketService {
 				session.getSessionConfig().getUserStories());
 	}
 
-	public void sendNotification(Notification notification) {
-		simpMessagingTemplate.convertAndSend(NOTIFICATIONS_DESTINATION, notification);
+	public void sendNotification(Session session, Notification notification) {
+		System.out.println("NOTIFICATION");
+		getSessionPrincipals(session.getSessionID()).memberPrincipals()
+				.forEach(member -> {
+					simpMessagingTemplate.convertAndSendToUser(member.getMemberID().toString(),
+							NOTIFICATIONS_DESTINATION, notification);
+					System.out.println("NOTIFY SEND");
+				});
+		if (getSessionPrincipals(session.getSessionID()).adminPrincipal() != null) {
+			simpMessagingTemplate.convertAndSendToUser(
+					getSessionPrincipals(session.getSessionID()).adminPrincipal().getAdminID().toString(),
+					NOTIFICATIONS_DESTINATION, notification);
+		}
 	}
+	// public void sendNotification(Notification notification) {
+	// System.out.println("NOTIFICATION");
+	// simpMessagingTemplate.convertAndSend(NOTIFICATIONS_DESTINATION,
+	// notification);
+	// }
 
 	public void removeSession(Session session) {
 		sessionPrincipalList = sessionPrincipalList.stream().filter(p -> !p.sessionID().equals(session.getSessionID()))

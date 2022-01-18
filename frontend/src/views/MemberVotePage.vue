@@ -155,6 +155,9 @@ export default Vue.extend({
     highlightedMembers() {
       return this.$store.state.highlightedMembers;
     },
+    notification() {
+      return this.$store.state.notification;
+    },
   },
   watch: {
     memberUpdates(updates) {
@@ -176,6 +179,9 @@ export default Vue.extend({
           spread: 100,
         });
       }
+    },
+    notification(message) {
+      this.showToast(message);
     },
   },
   created() {
@@ -212,6 +218,11 @@ export default Vue.extend({
     },
     backendAnimalToAssetName(animal: string) {
       return Constants.avatarAnimalToAssetName(animal);
+    },
+    showToast(message) {
+      if (message.type == "ADMIN_LEFT") {
+        this.$toast.warning("Host left the session");
+      }
     },
   },
 });

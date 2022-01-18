@@ -29,6 +29,7 @@ public class WebsocketController {
 	public void registerAdminUser(AdminPrincipal principal) {
 		ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID());
 		webSocketService.setAdminUser(principal);
+
 	}
 
 	@MessageMapping("/registerMember")
@@ -37,6 +38,7 @@ public class WebsocketController {
 		webSocketService.addMemberIfNew(principal);
 		webSocketService.sendMembersUpdate(session);
 		webSocketService.sendSessionStateToMember(session, principal.getName());
+
 	}
 
 	@MessageMapping("/unregister")
@@ -49,8 +51,11 @@ public class WebsocketController {
 			databaseService.saveSession(session);
 			webSocketService.sendMembersUpdate(session);
 		} else {
+			val session = ControllerUtils
+					.getSessionOrThrowResponse(databaseService, ((AdminPrincipal) principal).getSessionID());
+			System.out.println("NOTIFICATION-BACKEND-UNREGISTER");
+			webSocketService.sendNotification(session, new Notification(NotificationType.ADMIN_LEFT, null));
 			webSocketService.removeAdmin((AdminPrincipal) principal);
-			webSocketService.sendNotification(new Notification(NotificationType.ADMIN_LEFT, null));
 		}
 	}
 
