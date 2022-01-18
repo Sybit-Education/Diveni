@@ -1,26 +1,10 @@
 package de.htwg.aume.service.jira;
 
-import java.io.IOException;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
 
 import com.google.api.client.auth.oauth.OAuthAuthorizeTemporaryTokenUrl;
-import com.google.api.client.auth.oauth.OAuthCredentialsResponse;
-import com.google.api.client.auth.oauth.OAuthGetTemporaryToken;
-import com.google.api.client.auth.oauth.OAuthHmacSigner;
-import com.google.api.client.http.javanet.NetHttpTransport;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import de.htwg.aume.model.JiraRequestToken;
-import de.htwg.aume.model.Session;
-import de.htwg.aume.repository.SessionRepository;
-
-
 
 
 @Service
