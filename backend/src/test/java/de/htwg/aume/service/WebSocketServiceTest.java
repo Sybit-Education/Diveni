@@ -191,7 +191,7 @@ public class WebSocketServiceTest {
         setDefaultAdminPrincipal(Set.of(defaultMemberPrincipal, memberPrincipal));
         val session = new Session(new ObjectId(), defaultAdminPrincipal.getSessionID(),
                 defaultAdminPrincipal.getAdminID(),
-                new SessionConfig(List.of(), List.of(), null, "password"), null,
+                new SessionConfig(List.of(), List.of(), null, "US_MANUALLY", "password"), null,
                 List.of(new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null),
                         new Member(memberPrincipal.getMemberID(), null, null, null, null)),
                 new HashMap<>(), new ArrayList<>(), SessionState.WAITING_FOR_MEMBERS);

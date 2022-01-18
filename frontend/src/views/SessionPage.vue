@@ -293,7 +293,11 @@ export default Vue.extend({
     closeSession() {
       this.sendCloseSessionCommand();
       window.localStorage.removeItem("adminCookie");
-      this.$router.push({ name: "ResultPage" });
+      if(this.userStoryMode !== "NO_US") {
+        this.$router.push({name: "ResultPage"});
+      }else{
+        this.$router.push({name: "LandingPage"});
+      }
     },
     sendRestartMessage() {
       this.estimateFinished = false;
