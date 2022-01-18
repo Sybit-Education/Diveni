@@ -1,29 +1,30 @@
 <template>
   <b-container>
+    <b-row class="my-5 mx-2">
+      <b-col>
+        <h1>{{ title }}</h1>
+      </b-col>
+      <b-col>
+        <estimate-timer
+          :pause-timer="estimateFinished"
+          :timer-triggered="triggerTimer"
+          :timer="timerCountdownNumber"
+          :start-timer-on-component-creation="false"
+          :initial-timer="timerCountdownNumber"
+        />
+      </b-col>
+
+      <b-col class="justify-content-center">
+        <rounded-avatar
+          :color="hexColor"
+          :asset-name="avatarAnimalAssetName"
+          :show-name="true"
+          :name="name"
+        />
+      </b-col>
+    </b-row>
     <b-row>
       <b-col>
-        <b-row class="my-5 mx-2">
-          <b-col>
-            <h1>{{ title }}</h1>
-          </b-col>
-          <b-col>
-            <estimate-timer
-              :pause-timer="estimateFinished"
-              :timer-triggered="triggerTimer"
-              :timer="timerCountdownNumber"
-              :start-timer-on-component-creation="false"
-              :initial-timer="timerCountdownNumber"
-            />
-          </b-col>
-        </b-row>
-        <b-row class="justify-content-center">
-          <rounded-avatar
-            :color="hexColor"
-            :asset-name="avatarAnimalAssetName"
-            :show-name="true"
-            :name="name"
-          />
-        </b-row>
         <b-row v-if="isStartVoting" class="my-5">
           <flicking
             v-if="isMobile"
@@ -99,12 +100,15 @@
             "
           />
         </b-row>
-        <user-stories-sidebar
-          :card-set="voteSet"
-          :show-estimations="true"
-          :initial-stories="userStories"
-          :show-edit-buttons="false"
-        />
+
+        <b-row>
+          <user-stories-sidebar
+            :card-set="voteSet"
+            :show-estimations="true"
+            :initial-stories="userStories"
+            :show-edit-buttons="false"
+          />
+        </b-row>
       </b-col>
       <b-col>
         <user-story-descriptions

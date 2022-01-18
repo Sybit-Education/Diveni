@@ -1,15 +1,15 @@
 <template>
   <b-container>
     <b-row>
+      <b-row class="mt-5 mb-3">
+        <b-col
+          ><h1>{{ planningStart ? titleEstimate : titleWaiting }}</h1></b-col
+        >
+        <b-col v-if="planningStart" align-self="center">
+          <copy-session-id-popup class="float-end" :session-id="sessionID" />
+        </b-col>
+      </b-row>
       <b-col>
-        <b-row class="mt-5 mb-3">
-          <b-col
-            ><h1>{{ planningStart ? titleEstimate : titleWaiting }}</h1></b-col
-          >
-          <b-col v-if="planningStart" align-self="center">
-            <copy-session-id-popup class="float-end" :session-id="sessionID" />
-          </b-col>
-        </b-row>
         <div v-if="!planningStart">
           <b-row class="align-items-center">
             <copy-session-id-popup
@@ -140,14 +140,18 @@
             />
           </b-row>
         </div>
-        <user-stories-sidebar
-          :card-set="voteSet"
-          :show-estimations="planningStart"
-          :initial-stories="userStories"
-          @userStoriesChanged="onUserStoriesChanged($event)"
-        />
+        <b-col class="mt-4">
+          <user-stories-sidebar
+            :card-set="voteSet"
+            :show-estimations="planningStart"
+            :initial-stories="userStories"
+            :showEditButtons="true"
+            :selectStory="true"
+            @userStoriesChanged="onUserStoriesChanged($event)"
+          />
+        </b-col>
       </b-col>
-      <b-col>
+      <b-col class="mt-4">
         <user-story-descriptions
           :card-set="voteSet"
           :initial-stories="userStories"

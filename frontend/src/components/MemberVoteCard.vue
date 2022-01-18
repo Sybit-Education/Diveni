@@ -12,7 +12,10 @@
       :interact-lock-swipe-down="true"
       @draggedUp="draggedUp"
     >
-      <div class="flicking-panel swipe-card" :style="swipeableCardBackgroundColor">
+      <div
+        class="flicking-panel swipe-card"
+        :style="swipeableCardBackgroundColor"
+      >
         <div class="text">
           {{ dragged ? "💪" : voteOption }}
         </div>
@@ -80,8 +83,8 @@ export default Vue.extend({
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .swipe-card {
-  width: 280px;
-  height: 370px;
+  width: 168px;
+  height: 222px;
   justify-content: center; /* Centering y-axis */
   align-items: center; /* Centering x-axis */
   border-radius: 5%;
