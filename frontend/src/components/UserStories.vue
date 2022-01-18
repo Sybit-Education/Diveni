@@ -4,6 +4,7 @@
       <b-list-group-item
         v-for="(story, index) of userStories"
         :key="story.name"
+        class="border"
         variant="outline-secondary"
         :active="story.isActive"
         id="to-hover"
@@ -20,36 +21,23 @@
         </div>
         <div class="list-group list-group-horizontal">
           <b-form-input
+          :active="story.isActive"
             :disabled="true"
             class="border-0"
             v-model="userStories[index].title"
             size="lg"
+            :style="{'background-color': story.isActive ? 'rgb(202, 202, 202)': 'white' }"
             placeholder="Story title"
             @blur="publishChanges"
           />
-          <div v-if="showEstimations">
-            <b-dropdown
-              :text="
-                (userStories[index].estimation
-                  ? userStories[index].estimation
-                  : '?') + '    '
-              "
-              variant="info"
-              :disabled="true"
-            >
-              <b-dropdown-item
-                v-for="num in cardSet"
-                :key="num"
-                :value="num == null ? '?' : num"
-                @click="userStories[index].estimation = num"
-                :disabled="true"
+          <div >
+              <div
+              v-show="userStories[index].estimation"
+                class="card-body rounded"
+                :style="{'background-color': userStories[index].estimation == null ? 'white': 'RGB(13, 202, 240)' }"
               >
-                {{ num }}
-              </b-dropdown-item>
-              <b-dropdown-item @click="userStories[index].estimation = null">
-                ?
-              </b-dropdown-item>
-            </b-dropdown>
+                {{ story.estimation }}
+              </div>
           </div>
         </div>
       </b-list-group-item>
@@ -163,8 +151,13 @@ export default Vue.extend({
 
 <style scoped>
 .list-group-item.active {
-  background-color: gray !important;
+  background-color: rgb(202, 202, 202) !important;
 }
+.active {
+
+  color: rgb(202, 202, 202);
+  background-color: gray;
+  }
 /* The side navigation menu */
 .sidenav {
   float: right;
