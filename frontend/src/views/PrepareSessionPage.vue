@@ -248,15 +248,19 @@ export default Vue.extend({
               isActive: false,
             });
           });
-
           this.$store.commit("setUserStories", {
             stories: stories,
           });
+          this.$toast.success(
+            this.$t('session.prepare.step.selection.mode.description.withUS.toastSuccessNotification')
+          );
+        },
+        error: function(err, file, inputElem, reason) {
+          this.$toast.error(
+            this.$t('session.prepare.step.selection.mode.description.withUS.toastErrorNotification')
+          );
         },
       });
-      this.$toast.success(
-        this.$t('session.prepare.step.selection.mode.description.withUS.toastSuccessNotification')
-      );
     },
   },
 });

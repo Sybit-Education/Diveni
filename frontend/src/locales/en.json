@@ -146,7 +146,8 @@
                 "descriptionLine3": "Use the CSV-Import to integrate User Stories in your session",
                 "descriptionLine4": "You will be able to add and edit User Stories once you've started the session",
                 "importButton": "Import User Stories",
-                "toastSuccessNotification": "User Stories imported"
+                "toastSuccessNotification": "User Stories imported",
+                "toastErrorNotification": "Error when trying to import"
               },
               "withJira": {
                 "tab": {
