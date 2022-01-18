@@ -144,7 +144,9 @@
                 "descriptionLine1": "Erstelle deine eigenen User Stories",
                 "descriptionLine2": "Füge jeder User Story Titel und Beschreibung hinzu",
                 "descriptionLine3": "Du kannst auch einen CSV-Import nutzen, um User Stories zu integrieren",
-                "descriptionLine4": "Du kannst nach Start der Session User Stories bearbeiten oder neue hinzufügen"
+                "descriptionLine4": "Du kannst nach Start der Session User Stories bearbeiten oder neue hinzufügen",
+                "importButton": "User Stories importieren",
+                "toastSuccessNotification": "User Stories importiert"
               },
               "withJira": {
                 "tab": {

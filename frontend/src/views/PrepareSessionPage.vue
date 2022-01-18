@@ -65,9 +65,9 @@
             accept="text/csv"
             @change="importStory($event.target.files)"
           />
-          <b-button block color="primary" elevation="2" @click="openFileUploader()"
-            >Import</b-button
-          >
+          <b-button block color="primary" elevation="2" @click="openFileUploader()">
+            {{ $t('session.prepare.step.selection.mode.description.withUS.importButton') }}
+          </b-button>
           <!--TODO: Implement session config with US-->
         </b-tab>
         <b-tab
@@ -254,6 +254,9 @@ export default Vue.extend({
           });
         },
       });
+      this.$toast.success(
+        this.$t('session.prepare.step.selection.mode.description.withUS.toastSuccessNotification')
+      );
     },
   },
 });
