@@ -151,10 +151,23 @@
                   "label": "Planning mit Jira"
                 },
                 "subtitle": "Wähle die Jira-Integration für das Planning",
-                "descriptionLine1": "Bitte authentifiziere dich mit Jira",
+                "descriptionLine1": "Bitte melde dich mit Jira an",
                 "descriptionLine2": "Wähle dein Projekt",
                 "descriptionLine3": "Nach der Wahl des Projekts wirst du auf die nächste Seite gelangen um die user Stories ggf. zu bearbeiten",
-                "descriptionLine4": "Du kannst nach Start der Session User Stories bearbeiten oder neue hinzufügen"
+                "descriptionLine4": "Du kannst nach Start der Session User Stories bearbeiten oder neue hinzufügen",
+                "inputs": {
+                  "verificationCode": {
+                    "placeholder": "Verification code"
+                  }
+                },
+                "buttons": {
+                  "signInWithJira": {
+                    "label": "Sign in with Jira"
+                  },
+                  "submit": {
+                    "label": "Submit"
+                  }
+                }
               }
             }
           }
