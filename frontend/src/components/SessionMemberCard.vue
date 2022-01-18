@@ -7,9 +7,16 @@
     <h1 class="mt-3 fs-3-rem">
       <strong v-if="!estimateFinished">?</strong>
       <strong v-if="estimation === null && estimateFinished">-</strong>
-      <strong v-if="estimation !== null && estimateFinished">{{ estimation }}</strong>
+      <strong v-if="estimation !== null && estimateFinished">{{
+        estimation
+      }}</strong>
     </h1>
-    <img :src="require(`@/assets/${assetName}`)" width="50" class="mt-4" alt="image" />
+    <img
+      :src="require(`@/assets/${assetName}`)"
+      width="50"
+      class="mt-4"
+      alt="image"
+    />
     <h4 class="mt-2">
       <strong>{{ name }}</strong>
     </h4>
@@ -40,8 +47,8 @@ export default Vue.extend({
 }
 .card {
   position: relative;
-  width: 224px;
-  height: 296px;
+  width: 168px;
+  height: 222px;
   justify-content: center; /* Centering y-axis */
   align-items: center; /* Centering x-axis */
   border-radius: 5%;

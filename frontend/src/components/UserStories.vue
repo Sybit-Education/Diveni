@@ -10,7 +10,7 @@
         @click="setUserStoryAsActive(index)"
       >
         <div
-          class="col position-absolute float-right"
+          class="position-absolute top-50 start-0 translate-middle"
           id="to-show"
           v-show="showEditButtons"
         >
@@ -20,27 +20,29 @@
         </div>
         <div class="list-group list-group-horizontal">
           <b-form-input
-            :disabled="!showEditButtons"
+            :disabled="true"
             class="border-0"
             v-model="userStories[index].title"
             size="lg"
             placeholder="Story title"
+            @blur="publishChanges"
           />
           <div v-if="showEstimations">
             <b-dropdown
-              :disabled="!showEditButtons"
               :text="
                 (userStories[index].estimation
                   ? userStories[index].estimation
                   : '?') + '    '
               "
               variant="info"
+              :disabled="true"
             >
               <b-dropdown-item
                 v-for="num in cardSet"
                 :key="num"
                 :value="num == null ? '?' : num"
                 @click="userStories[index].estimation = num"
+                :disabled="true"
               >
                 {{ num }}
               </b-dropdown-item>
@@ -79,6 +81,7 @@ export default Vue.extend({
     initialStories: { type: Array, required: true },
     showEstimations: { type: Boolean, required: true },
     showEditButtons: { type: Boolean, required: false, default: true },
+    selectStory: { type: Boolean, required: false, default: false },
   },
   data() {
     return {
@@ -124,7 +127,7 @@ export default Vue.extend({
         estimation: s.estimation,
         isActive: false,
       }));
-      if (this.showEditButtons) {
+      if (this.selectStory) {
         stories[index].isActive = true;
         this.userStories = stories;
       }
@@ -159,6 +162,9 @@ export default Vue.extend({
 </script>
 
 <style scoped>
+.list-group-item.active {
+  background-color: gray !important;
+}
 /* The side navigation menu */
 .sidenav {
   float: right;
@@ -193,6 +199,7 @@ export default Vue.extend({
     font-size: 18px;
   }
 }
+
 #to-show {
   display: none;
 }

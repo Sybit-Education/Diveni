@@ -4,13 +4,49 @@
       <b-list-group-item
         v-for="(story, index) of userStories"
         :key="story.name"
+        class="border-0"
         variant="outline-secondary"
         v-show="story.isActive"
       >
+        <div class="list-group list-group-horizontal">
+          <b-form-input
+            :disabled="!editDescription"
+            class="border"
+            v-model="userStories[index].title"
+            size="lg"
+            placeholder="Story title"
+            @blur="publishChanges"
+          />
+          <b-dropdown
+            :text="
+              (userStories[index].estimation
+                ? userStories[index].estimation
+                : '?') + '    '
+            "
+            variant="info"
+          >
+            <b-dropdown-item
+              :disabled="!editDescription"
+              v-for="num in cardSet"
+              :key="num"
+              :value="num == null ? '?' : num"
+              @click="userStories[index].estimation = num"
+            >
+              {{ num }}
+            </b-dropdown-item>
+            <b-dropdown-item
+              @click="userStories[index].estimation = null"
+              :disabled="!editDescription"
+            >
+              ?
+            </b-dropdown-item>
+          </b-dropdown>
+        </div>
         <div>
           <b-form-textarea
+            @blur="publishChanges"
             id="textarea-auto-height"
-            rows="10"
+            rows="30"
             max-rows="40"
             v-model="userStories[index].description"
             :disabled="!editDescription"
@@ -31,7 +67,7 @@ export default Vue.extend({
     cardSet: { type: Array, required: true },
     initialStories: { type: Array, required: true },
     editDescription: { type: Boolean, required: true, default: false },
-    showEstimations: { type: Boolean, required: true },
+    showEstimations: { type: Boolean, required: false },
     showEditButtons: { type: Boolean, required: false, default: true },
   },
   data() {
