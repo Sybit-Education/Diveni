@@ -155,17 +155,20 @@
                 "descriptionLine2": "Wähle dein Projekt",
                 "descriptionLine3": "Nach der Wahl des Projekts wirst du auf die nächste Seite gelangen um die user Stories ggf. zu bearbeiten",
                 "descriptionLine4": "Du kannst nach Start der Session User Stories bearbeiten oder neue hinzufügen",
+                "dialog": {
+                  "description": "Es öffnet sich gleich ein neuer Tab. Bitte gewähre dieser Anwendung in diesem Tab den Zugriff und trage den Verifizierungscode hier ein."
+                },
                 "inputs": {
                   "verificationCode": {
-                    "placeholder": "Verification code"
+                    "placeholder": "Verifizierungscode"
                   }
                 },
                 "buttons": {
                   "signInWithJira": {
-                    "label": "Sign in with Jira"
+                    "label": "Mit Jira anmelden"
                   },
                   "submit": {
-                    "label": "Submit"
+                    "label": "Senden"
                   }
                 }
               }
