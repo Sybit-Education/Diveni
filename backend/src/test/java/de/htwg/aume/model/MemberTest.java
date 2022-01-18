@@ -3,13 +3,10 @@ package de.htwg.aume.model;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Optional;
-
-import de.htwg.aume.Utils;
 import org.junit.jupiter.api.Test;
 
+import de.htwg.aume.Utils;
 import lombok.val;
 
 public class MemberTest {

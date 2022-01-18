@@ -213,6 +213,15 @@ export default Vue.extend({
         }
       }
     },
+    highlightedMembers(highlights) {
+      if (this.estimateFinished && highlights.length === 0) {
+        confetti({
+          particleCount: 100,
+          startVelocity: 50,
+          spread: 100,
+        });
+      }
+    },
   },
   created() {
     if (!this.sessionID || !this.adminID) {
@@ -276,13 +285,6 @@ export default Vue.extend({
         const endPoint = Constants.webSocketVotingFinishedRoute;
         this.$store.commit("sendViaBackendWS", { endPoint });
         this.estimateFinished = true;
-        if (this.highlightedMembers.length === 0) {
-          confetti({
-            particleCount: 100,
-            startVelocity: 50,
-            spread: 100,
-          });
-        }
       }
     },
     backendAnimalToAssetName(animal: string) {

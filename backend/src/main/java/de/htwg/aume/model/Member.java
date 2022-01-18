@@ -1,7 +1,5 @@
 package de.htwg.aume.model;
 
-import java.util.Optional;
-
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
