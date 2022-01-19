@@ -13,10 +13,11 @@ public class UtilsTest {
 
     @Test
     public void getISOTimestamp_works() {
-        val date = Date.from(Instant.parse("2022-01-18T16:52:50Z"));
+        val timestamp = "2022-01-18T16:52:50.823Z";
+        val date = Date.from(Instant.parse(timestamp));
 
         val result = Utils.getTimestampISO8601(date);
 
-        assertEquals(result, "2022-01-18T16:52:50Z");
+        assertEquals(result, timestamp);
     }
 }

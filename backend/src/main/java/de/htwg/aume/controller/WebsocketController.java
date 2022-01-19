@@ -105,6 +105,7 @@ public class WebsocketController {
 		databaseService.saveSession(session);
 		webSocketService.sendMembersUpdate(session);
 		webSocketService.sendSessionStateToMembers(session);
+		webSocketService.sendTimerStartMessage(session, Utils.getTimestampISO8601(new Date()));
 	}
 
 	@MessageMapping("/adminUpdatedUserStories")
