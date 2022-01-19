@@ -88,6 +88,7 @@
         :highlight="highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0"
       />
     </b-row>
+    <notify-member-component />
   </b-container>
 </template>
 
@@ -99,6 +100,7 @@ import Constants from "../constants";
 import UserStoriesSidebar from "../components/UserStoriesSidebar.vue";
 import EstimateTimer from "../components/EstimateTimer.vue";
 import SessionMemberCard from "../components/SessionMemberCard.vue";
+import NotifyMemberComponent from "../components/NotifyMemberComponent.vue";
 import Member from "../model/Member";
 import confetti from "canvas-confetti";
 
@@ -110,6 +112,7 @@ export default Vue.extend({
     EstimateTimer,
     UserStoriesSidebar,
     SessionMemberCard,
+    NotifyMemberComponent,
   },
   props: {
     memberID: { type: String, default: undefined },
@@ -179,7 +182,7 @@ export default Vue.extend({
     },
   },
   created() {
-    window.addEventListener("beforeunload", this.sendUnregisterCommand);
+    // window.addEventListener("beforeunload", this.sendUnregisterCommand);
     this.timerCountdownNumber = JSON.parse(this.timerSecondsString);
   },
   mounted() {
