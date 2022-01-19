@@ -7,7 +7,7 @@ export interface StoreState {
   userStories: Record<string, unknown>[];
   members: Record<string, unknown>[];
   highlightedMembers: Record<string, unknown>[];
-  timerTimestamp: String | undefined;
+  timerTimestamp: string | undefined;
 }
 
 export interface JiraRequestTokenDto {
