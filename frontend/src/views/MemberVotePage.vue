@@ -155,8 +155,8 @@ export default Vue.extend({
     highlightedMembers() {
       return this.$store.state.highlightedMembers;
     },
-    notification() {
-      return this.$store.state.notification;
+    notifications() {
+      return this.$store.state.notifications;
     },
   },
   watch: {
@@ -180,8 +180,8 @@ export default Vue.extend({
         });
       }
     },
-    notification(message) {
-      this.showToast(message);
+    notifications(notifications) {
+      this.showToast(notifications.at(-1));
     },
   },
   created() {

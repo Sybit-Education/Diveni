@@ -136,12 +136,10 @@ public class WebSocketService {
 	}
 
 	public void sendNotification(Session session, Notification notification) {
-		System.out.println("NOTIFICATION");
 		getSessionPrincipals(session.getSessionID()).memberPrincipals()
 				.forEach(member -> {
 					simpMessagingTemplate.convertAndSendToUser(member.getMemberID().toString(),
 							NOTIFICATIONS_DESTINATION, notification);
-					System.out.println("NOTIFY SEND");
 				});
 		if (getSessionPrincipals(session.getSessionID()).adminPrincipal() != null) {
 			simpMessagingTemplate.convertAndSendToUser(
@@ -149,11 +147,6 @@ public class WebSocketService {
 					NOTIFICATIONS_DESTINATION, notification);
 		}
 	}
-	// public void sendNotification(Notification notification) {
-	// System.out.println("NOTIFICATION");
-	// simpMessagingTemplate.convertAndSend(NOTIFICATIONS_DESTINATION,
-	// notification);
-	// }
 
 	public void removeSession(Session session) {
 		sessionPrincipalList = sessionPrincipalList.stream().filter(p -> !p.sessionID().equals(session.getSessionID()))

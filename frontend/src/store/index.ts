@@ -13,7 +13,7 @@ export default new Vuex.Store<StoreState>({
     memberUpdates: [],
     userStories: [],
     members: [],
-    notification: [],
+    notifications: [],
     highlightedMembers: [],
   },
   mutations: {
@@ -52,7 +52,7 @@ export default new Vuex.Store<StoreState>({
     },
     subscribeOnBackendWSNotify(state) {
       state.stompClient?.subscribe(Constants.websocketNotification, (frame) => {
-        state.notification = JSON.parse(frame.body).notification;
+        state.notifications = state.notifications.concat([JSON.parse(frame.body)]);
       });
     },
     sendViaBackendWS(state, { endPoint, data }) {

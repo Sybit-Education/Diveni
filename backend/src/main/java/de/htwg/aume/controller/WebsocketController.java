@@ -53,7 +53,6 @@ public class WebsocketController {
 		} else {
 			val session = ControllerUtils
 					.getSessionOrThrowResponse(databaseService, ((AdminPrincipal) principal).getSessionID());
-			System.out.println("NOTIFICATION-BACKEND-UNREGISTER");
 			webSocketService.sendNotification(session, new Notification(NotificationType.ADMIN_LEFT, null));
 			webSocketService.removeAdmin((AdminPrincipal) principal);
 		}
