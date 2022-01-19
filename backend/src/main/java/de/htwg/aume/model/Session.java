@@ -65,17 +65,19 @@ public class Session {
 	}
 
 	static Stream<String> getFilteredEstimationStream(List<Member> members) {
-		return members.stream().map(Member::getCurrentEstimation).filter((estimation) -> estimation != null);
+		return members.stream().map(Member::getCurrentEstimation).filter((estimation) -> estimation != null && !estimation.equals("?"));
 	}
 
 	public Session selectHighlightedMembers() {
 		for (Member member : this.members) {
 			memberVoted.putIfAbsent(member.getMemberID(), 0);
 		}
-		Optional<String> maxEstimation = getFilteredEstimationStream(this.members)
-				.max(estimationByIndex(sessionConfig.getSet()));
-		Optional<String> minEstimation = getFilteredEstimationStream(this.members)
-				.min(estimationByIndex(sessionConfig.getSet()));
+
+		val filteredSet = sessionConfig.getSet().stream().filter((string) -> !string.equals("?")).collect(Collectors.toList());
+
+		Optional<String> maxEstimation = getFilteredEstimationStream(this.members).max(estimationByIndex(filteredSet));
+		Optional<String> minEstimation = getFilteredEstimationStream(this.members).min(estimationByIndex(filteredSet));
+
 		if (maxEstimation.equals(minEstimation)) {
 			return new Session(databaseID, sessionID, adminID, sessionConfig, adminCookie, members, memberVoted,
 					new ArrayList<>(), sessionState);
