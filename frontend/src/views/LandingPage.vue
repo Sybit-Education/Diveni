@@ -84,7 +84,7 @@ export default Vue.extend({
           this.sessionWrapper = { session };
           this.startNewSessionOnMounted = true;
         } catch (e) {
-          console.clear();
+          // console.clear();
           console.log(`got error: ${e}`);
           window.localStorage.removeItem("adminCookie");
         }
@@ -106,7 +106,7 @@ export default Vue.extend({
           console.log(memberRejoinInfo);
           this.goToMemberVotePage(memberRejoinInfo);
         } catch (e) {
-          console.clear();
+          // console.clear();
           console.log(`got error: ${e}`);
           window.localStorage.removeItem("memberCookie");
         }
@@ -141,9 +141,7 @@ export default Vue.extend({
           memberID: rejoinInfo.member.memberID,
           name: rejoinInfo.member.name,
           hexColor: rejoinInfo.member.hexColor,
-          avatarAnimalAssetName: Constants.avatarAnimalToAssetName(
-            rejoinInfo.member.avatarAnimalAssetName
-          ),
+          avatarAnimalAssetName: Constants.avatarAnimalToAssetName(rejoinInfo.member.avatarAnimal),
           voteSetJson: JSON.stringify(rejoinInfo.sessionConfig.set),
           timerSecondsString: rejoinInfo.sessionConfig.timerSeconds.toString(),
         },
