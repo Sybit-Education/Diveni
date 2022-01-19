@@ -192,6 +192,16 @@
           "description": "Description and acceptance criteria..."
         }
       }
+    },
+    "notification": {
+      "messages": {
+        "hostLeft": "Host left the session",
+        "memberLeft": "Member left the session",
+        "memberJoined": "Member joined the session",
+        "jiraCredentials": "Wrong credentials",
+        "wrongID": "Wrong invitation code",
+        "password": "Wrong password"
+      }
     }
   }
 }

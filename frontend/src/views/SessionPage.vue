@@ -134,6 +134,7 @@
         />
       </b-row>
     </div>
+    <notify-host-component />
   </b-container>
 </template>
 
@@ -148,6 +149,7 @@ import EstimateTimer from "../components/EstimateTimer.vue";
 import CopySessionIdPopup from "../components/CopySessionIdPopup.vue";
 import RoundedAvatar from "../components/RoundedAvatar.vue";
 import confetti from "canvas-confetti";
+import NotifyHostComponent from "../components/NotifyHostComponent.vue";
 
 export default Vue.extend({
   name: "SessionPage",
@@ -158,6 +160,7 @@ export default Vue.extend({
     EstimateTimer,
     CopySessionIdPopup,
     RoundedAvatar,
+    NotifyHostComponent,
   },
   props: {
     adminID: { type: String, required: true },
@@ -206,6 +209,7 @@ export default Vue.extend({
         this.registerAdminPrincipalOnBackend();
         this.subscribeWSMemberUpdated();
         this.requestMemberUpdate();
+        this.subscribeWSNotification();
         if (this.startNewSessionOnMountedString === "true") {
           this.sendRestartMessage();
         }
@@ -263,6 +267,9 @@ export default Vue.extend({
     requestMemberUpdate() {
       const endPoint = Constants.webSocketGetMemberUpdateRoute;
       this.$store.commit("sendViaBackendWS", { endPoint });
+    },
+    subscribeWSNotification() {
+      this.$store.commit("subscribeOnBackendWSNotify");
     },
     sendUnregisterCommand() {
       const endPoint = `${Constants.webSocketUnregisterRoute}`;
