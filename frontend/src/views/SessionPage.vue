@@ -60,7 +60,11 @@
                 <b-icon-bar-chart />
                 Show result
               </b-button>
-              <b-button v-b-modal.close-session-modal variant="danger">
+              <b-button
+                v-b-modal.close-session-modal
+                variant="danger"
+                class="mt-1"
+              >
                 <b-icon-x />
                 End meeting
               </b-button>
@@ -140,25 +144,30 @@
             />
           </b-row>
         </div>
-        <b-col class="mt-4">
-          <user-stories-sidebar
+      </b-col>
+      <b-row>
+        <b-col class="mt-2">
+          <div class="overflow-auto" style="height: 700px">
+            <user-stories-sidebar
+              :card-set="voteSet"
+              :show-estimations="planningStart"
+              :initial-stories="userStories"
+              :showEditButtons="true"
+              :selectStory="true"
+              @userStoriesChanged="onUserStoriesChanged($event)"
+            />
+          </div>
+        </b-col>
+
+        <b-col>
+          <user-story-descriptions
             :card-set="voteSet"
-            :show-estimations="planningStart"
             :initial-stories="userStories"
-            :showEditButtons="true"
-            :selectStory="true"
+            :editDescription="true"
             @userStoriesChanged="onUserStoriesChanged($event)"
           />
         </b-col>
-      </b-col>
-      <b-col class="mt-4">
-        <user-story-descriptions
-          :card-set="voteSet"
-          :initial-stories="userStories"
-          :editDescription="true"
-          @userStoriesChanged="onUserStoriesChanged($event)"
-        />
-      </b-col>
+      </b-row>
     </b-row>
   </b-container>
 </template>

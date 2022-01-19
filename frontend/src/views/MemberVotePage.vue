@@ -4,7 +4,7 @@
       <b-col>
         <h1>{{ title }}</h1>
       </b-col>
-      <b-col>
+      <b-col class="d-flex justify-content-center">
         <estimate-timer
           :pause-timer="estimateFinished"
           :timer-triggered="triggerTimer"
@@ -14,7 +14,7 @@
         />
       </b-col>
 
-      <b-col class="justify-content-center">
+      <b-col class="d-flex justify-content-end">
         <rounded-avatar
           :color="hexColor"
           :asset-name="avatarAnimalAssetName"
@@ -102,12 +102,14 @@
         </b-row>
 
         <b-row>
-          <user-stories-sidebar
-            :card-set="voteSet"
-            :show-estimations="true"
-            :initial-stories="userStories"
-            :show-edit-buttons="false"
-          />
+          <div class="overflow-auto" style="height: 700px">
+            <user-stories-sidebar
+              :card-set="voteSet"
+              :show-estimations="true"
+              :initial-stories="userStories"
+              :show-edit-buttons="false"
+            />
+          </div>
         </b-row>
       </b-col>
       <b-col>

@@ -4,19 +4,14 @@
     class="text-center card mt-4 mx-3"
     :class="{ greyOut: !highest && !lowest && estimateFinished }"
   >
-    <h1 class="mt-3 fs-3-rem">
+    <h1 class="fs-3-rem">
       <strong v-if="!estimateFinished">?</strong>
       <strong v-if="estimation === null && estimateFinished">-</strong>
       <strong v-if="estimation !== null && estimateFinished">{{
         estimation
       }}</strong>
     </h1>
-    <img
-      :src="require(`@/assets/${assetName}`)"
-      width="50"
-      class="mt-4"
-      alt="image"
-    />
+    <img :src="require(`@/assets/${assetName}`)" width="40" alt="image" />
     <h4 class="mt-2">
       <strong>{{ name }}</strong>
     </h4>
@@ -43,7 +38,7 @@ export default Vue.extend({
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .fs-3-rem {
-  font-size: 5rem;
+  font-size: 4rem;
 }
 .card {
   position: relative;
