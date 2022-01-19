@@ -11,33 +11,42 @@
         @click="setUserStoryAsActive(index)"
       >
         <div
-          class="position-absolute top-50 start-0 translate-middle"
-          id="to-show"
-          v-show="showEditButtons"
+          class="list-group list-group-horizontal"
+          @mouseover="hover = true"
+          @mouseleave="hover = false"
         >
-          <b-button variant="danger" @click="deleteStory(index)">
-            <b-icon-trash />
-          </b-button>
-        </div>
-        <div class="list-group list-group-horizontal">
           <b-form-input
-          :active="story.isActive"
+            :active="story.isActive"
             :disabled="true"
             class="border-0"
             v-model="userStories[index].title"
             size="lg"
-            :style="{'background-color': story.isActive ? 'rgb(202, 202, 202)': 'white' }"
+            :style="{
+              'background-color': story.isActive
+                ? 'rgb(202, 202, 202)'
+                : 'white',
+            }"
             placeholder="Story title"
             @blur="publishChanges"
           />
-          <div >
-              <div
+          <div v-show="showEditButtons && hover">
+            <b-button variant="danger" @click="deleteStory(index)">
+              <b-icon-trash />
+            </b-button>
+          </div>
+          <div>
+            <div
               v-show="userStories[index].estimation"
-                class="card-body rounded"
-                :style="{'background-color': userStories[index].estimation == null ? 'white': 'RGB(13, 202, 240)' }"
-              >
-                {{ story.estimation }}
-              </div>
+              class="card-body rounded"
+              :style="{
+                'background-color':
+                  userStories[index].estimation == null
+                    ? 'white'
+                    : 'RGB(13, 202, 240)',
+              }"
+            >
+              {{ story.estimation }}
+            </div>
           </div>
         </div>
       </b-list-group-item>
@@ -50,8 +59,13 @@
         No stories yet... Add a story to start estimating.
       </b-button>
       <div v-if="userStories.length > 0 && showEditButtons">
-        <b-button size="lg" variant="success" @click="addUserStory()">
-          Add
+        <b-button
+          class="w-100 h-100"
+          size="lg"
+          variant="success"
+          @click="addUserStory()"
+        >
+          Add Story
           <b-icon-plus />
         </b-button>
       </div>
@@ -81,6 +95,7 @@ export default Vue.extend({
         estimation: string | null;
         isActive: boolean;
       }>,
+      hover: false,
     };
   },
   watch: {
@@ -154,10 +169,9 @@ export default Vue.extend({
   background-color: rgb(202, 202, 202) !important;
 }
 .active {
-
   color: rgb(202, 202, 202);
   background-color: gray;
-  }
+}
 /* The side navigation menu */
 .sidenav {
   float: right;

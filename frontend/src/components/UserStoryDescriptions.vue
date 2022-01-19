@@ -18,6 +18,7 @@
             @blur="publishChanges"
           />
           <b-dropdown
+            v-show="editDescription"
             :text="
               (userStories[index].estimation
                 ? userStories[index].estimation
@@ -41,9 +42,22 @@
               ?
             </b-dropdown-item>
           </b-dropdown>
+          <div
+            v-show="!editDescription"
+            class="card-body rounded"
+            :style="{
+              'background-color':
+                userStories[index].estimation == null
+                  ? 'white'
+                  : 'RGB(13, 202, 240)',
+            }"
+          >
+            {{ story.estimation }}
+          </div>
         </div>
         <div>
           <b-form-textarea
+            class="mt-1"
             @blur="publishChanges"
             id="textarea-auto-height"
             rows="30"
