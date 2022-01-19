@@ -199,7 +199,7 @@
         "memberLeft": "Member left the session",
         "memberJoined": "Member joined the session",
         "jiraCredentials": "Wrong credentials",
-        "wrongID": "Wrong ID",
+        "wrongID": "Wrong invitation code",
         "password": "Wrong password"
       }
     }
