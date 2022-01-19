@@ -159,6 +159,7 @@
               :showEditButtons="true"
               :selectStory="true"
               @userStoriesChanged="onUserStoriesChanged($event)"
+              @selectedStory="onSelectedStory($event)"
             />
           </div>
         </b-col>
@@ -168,6 +169,7 @@
             :card-set="voteSet"
             :initial-stories="userStories"
             :editDescription="true"
+            :index="index"
             @userStoriesChanged="onUserStoriesChanged($event)"
           />
         </b-col>
@@ -213,6 +215,7 @@ export default Vue.extend({
   },
   data() {
     return {
+      index: 0,
       titleWaiting: "Waiting for members ...",
       titleEstimate: "Estimate!",
       stageLabelReady: "Ready",
@@ -311,6 +314,9 @@ export default Vue.extend({
           data: JSON.stringify($event),
         });
       }
+    },
+    onSelectedStory($event) {
+      this.index = $event;
     },
     connectToWebSocket() {
       const url = `${Constants.backendURL}/connect?sessionID=${this.sessionID}&adminID=${this.adminID}`;
