@@ -2,6 +2,7 @@ package de.htwg.aume.service.jira;
 
 import com.google.api.client.auth.oauth.OAuthAuthorizeTemporaryTokenUrl;
 import com.google.api.client.auth.oauth.OAuthCredentialsResponse;
+import com.google.api.client.auth.oauth.OAuthParameters;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
@@ -56,5 +57,20 @@ public class JiraOAuthClient {
         OAuthCredentialsResponse response = oAuthAccessToken.execute();
 
         return response.token;
+    }
+
+    /**
+     * Creates OAuthParameters used to make authorized request to JIRA
+     *
+     * @param tmpToken
+     * @param consumerKey
+     * @param privateKey
+     * @return
+     * @throws NoSuchAlgorithmException
+     * @throws InvalidKeySpecException
+     */
+    public OAuthParameters getParameters(String tmpToken, String consumerKey, String privateKey) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        JiraOAuthGetAccessToken oAuthAccessToken = oAuthGetAccessTokenFactory.getJiraOAuthGetAccessToken(tmpToken, consumerKey, privateKey);
+        return oAuthAccessToken.createParameters();
     }
 }

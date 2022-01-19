@@ -44,6 +44,27 @@ public class JiraOAuthTokenFactory {
         return accessToken;
     }
 
+        /**
+     * Initialize JiraOAuthGetAccessToken
+     * by setting it to use POST method, secret, request token
+     * and setting consumer and private keys.
+     *
+     * @param tmpToken    request token
+     * @param consumerKey consumer ey
+     * @param privateKey  private key in PKCS8 format
+     * @return JiraOAuthGetAccessToken request
+     * @throws NoSuchAlgorithmException
+     * @throws InvalidKeySpecException
+     */
+    public JiraOAuthGetAccessToken getJiraOAuthGetAccessToken(String tmpToken, String consumerKey, String privateKey) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        JiraOAuthGetAccessToken accessToken = new JiraOAuthGetAccessToken(accessTokenUrl);
+        accessToken.consumerKey = consumerKey;
+        accessToken.signer = getOAuthRsaSigner(privateKey);
+        accessToken.transport = new ApacheHttpTransport();
+        accessToken.temporaryToken = tmpToken;
+        return accessToken;
+    }
+
 
     /**
      * Initialize JiraOAuthGetTemporaryToken

@@ -7,14 +7,13 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 import de.htwg.aume.model.JiraRequestToken;
 import de.htwg.aume.model.VerificationCode;
 import de.htwg.aume.service.DatabaseService;
 import de.htwg.aume.service.jira.JiraServerService;
-import lombok.val;
 
 @CrossOrigin(origins = { "http://localhost:8080", "https://pp.vnmz.de" })
 @RestController
@@ -32,7 +31,8 @@ public class JiraServerController {
 	}
 
 	@PostMapping(value = "/jira/oauth1/verificationCode")
-	public void getAccessToken(@RequestBody VerificationCode verificationCode) {
-		jiraServerService.getAccessToken(verificationCode.getCode(), verificationCode.getToken());
+	public ResponseEntity<String> getAccessToken(@RequestBody VerificationCode verificationCode) {
+		return new ResponseEntity<>(jiraServerService.getAccessToken(verificationCode.getCode(), verificationCode.getToken()), HttpStatus.OK);
 	}
+
 }
