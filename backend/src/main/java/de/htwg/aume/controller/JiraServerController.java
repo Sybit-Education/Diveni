@@ -35,4 +35,10 @@ public class JiraServerController {
 		return new ResponseEntity<>(jiraServerService.getAccessToken(verificationCode.getCode(), verificationCode.getToken()), HttpStatus.OK);
 	}
 
+	@GetMapping(value = "/jira/project")
+	public ResponseEntity<String> getProjects(@RequestParam("tokenIdentifier") String tokenIdentifier) {
+		return new ResponseEntity<>(jiraServerService.getProjects(tokenIdentifier), HttpStatus.OK);
+	}
+	
+
 }

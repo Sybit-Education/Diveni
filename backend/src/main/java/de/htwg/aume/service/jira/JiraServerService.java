@@ -69,5 +69,31 @@ public class JiraServerService {
         }
     }
 
+    public String getProjects(String tokenIdentifier){
+        try {
+            val accessToken = accessTokens.get(tokenIdentifier);
+            JiraOAuthClient jiraOAuthClient = new JiraOAuthClient(JIRA_HOME);
+            OAuthParameters parameters = jiraOAuthClient.getParameters(accessToken, CONSUMER_KEY, PRIVATE_KEY);
+            HttpResponse response = getResponseFromUrl(parameters, new GenericUrl(JIRA_HOME + "/rest/api/latest/project"));
+            return response.parseAsString();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToRetrieveProjectsErrorMessage);
+        }
+    }
+
+    /**
+     * Authanticates to JIRA with given OAuthParameters and makes request to url
+     *
+     * @param parameters
+     * @param jiraUrl
+     * @return
+     * @throws IOException
+     */
+    private static HttpResponse getResponseFromUrl(OAuthParameters parameters, GenericUrl jiraUrl) throws IOException {
+        HttpRequestFactory requestFactory = new NetHttpTransport().createRequestFactory(parameters);
+        HttpRequest request = requestFactory.buildGetRequest(jiraUrl);
+        return request.execute();
+    }
 
 }
