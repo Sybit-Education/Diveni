@@ -4,16 +4,20 @@
       v-model="userStories"
       class="list"
       group="people"
+      :options="{ disabled: !showEditButtons }"
       @start="drag = true"
       @end="drag = false"
     >
       <b-list-group-item
+        class="rounded"
         v-for="(story, index) of userStories"
         :key="story.name"
         @mouseover="hover = index"
         @mouseleave="hover = null"
-        class="border"
         variant="outline-secondary"
+        :style="{
+          'border-color': index === 0 ? 'RGB(202, 202, 202)' : 'white',
+        }"
         :active="index === 0"
         @click="setUserStoryAsActive(index)"
       >
@@ -21,11 +25,12 @@
           <b-form-input
             :active="index === 0"
             :disabled="true"
-            class="border-0"
+            class="border-1"
             v-model="userStories[index].title"
             size="lg"
             :style="{
-              'background-color': index === 0 ? 'rgb(202, 202, 202)' : 'white',
+              'background-color':
+                index === number ? 'RGB(202, 202, 202)' : 'white',
             }"
             placeholder="Story title"
             @blur="publishChanges"
@@ -94,6 +99,7 @@ export default Vue.extend({
   },
   data() {
     return {
+      number: null,
       sideBarOpen: false,
       editEnabled: false,
       userStories: [] as Array<{
@@ -131,6 +137,7 @@ export default Vue.extend({
   },
   methods: {
     setUserStoryAsActive(index) {
+      this.number = index;
       this.$emit("selectedStory", index);
     },
     addUserStory() {
@@ -159,12 +166,8 @@ export default Vue.extend({
 
 <style scoped>
 .list-group-item.active {
-  background-color: rgb(202, 202, 202) !important;
-}
-
-.active {
-  color: rgb(202, 202, 202);
-  background-color: gray;
+  background-color: white !important;
+  border-width: 3px;
 }
 
 /* The side navigation menu */
