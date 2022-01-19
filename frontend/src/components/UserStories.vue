@@ -4,17 +4,14 @@
       <b-list-group-item
         v-for="(story, index) of userStories"
         :key="story.name"
+        @mouseover="hover = index"
+        @mouseleave="hover = null"
         class="border"
         variant="outline-secondary"
         :active="story.isActive"
-        id="to-hover"
         @click="setUserStoryAsActive(index)"
       >
-        <div
-          class="list-group list-group-horizontal"
-          @mouseover="hover = true"
-          @mouseleave="hover = false"
-        >
+        <div class="list-group list-group-horizontal">
           <b-form-input
             :active="story.isActive"
             :disabled="true"
@@ -29,11 +26,13 @@
             placeholder="Story title"
             @blur="publishChanges"
           />
-          <div v-show="showEditButtons && hover">
-            <b-button variant="danger" @click="deleteStory(index)">
-              <b-icon-trash />
-            </b-button>
-          </div>
+          <b-button
+            v-show="showEditButtons && hover === index"
+            variant="danger"
+            @click="deleteStory(index)"
+          >
+            <b-icon-trash />
+          </b-button>
           <div>
             <div
               v-show="userStories[index].estimation"
@@ -95,7 +94,7 @@ export default Vue.extend({
         estimation: string | null;
         isActive: boolean;
       }>,
-      hover: false,
+      hover: null,
     };
   },
   watch: {
@@ -205,12 +204,5 @@ export default Vue.extend({
   .sidenav a {
     font-size: 18px;
   }
-}
-
-#to-show {
-  display: none;
-}
-#to-hover:hover > #to-show {
-  display: block;
 }
 </style>
