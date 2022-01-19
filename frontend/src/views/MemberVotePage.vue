@@ -112,6 +112,7 @@ export default Vue.extend({
     SessionMemberCard,
   },
   props: {
+    sessionID: { type: String, default: undefined },
     memberID: { type: String, default: undefined },
     name: { type: String, default: undefined },
     hexColor: { type: String, default: undefined },
@@ -129,6 +130,9 @@ export default Vue.extend({
     };
   },
   computed: {
+    webSocketIsConnected() {
+      return this.$store.state.webSocketConnected;
+    },
     isMobile() {
       return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
         navigator.userAgent
@@ -157,6 +161,15 @@ export default Vue.extend({
     },
   },
   watch: {
+    webSocketIsConnected(isConnected) {
+      if (isConnected) {
+        console.debug("JoinPage: member connected to websocket");
+        this.registerMemberPrincipalOnBackend();
+        this.subscribeWSMemberUpdates();
+        this.subscribeWSadminUpdatedUserStories();
+        this.subscribeWSMemberUpdated();
+      }
+    },
     memberUpdates(updates) {
       if (updates.at(-1) === Constants.memberUpdateCommandStartVoting) {
         this.draggedVote = null;
@@ -180,6 +193,7 @@ export default Vue.extend({
     },
   },
   created() {
+    this.connectToWebSocket(this.sessionID, this.memberID);
     window.addEventListener("beforeunload", this.sendUnregisterCommand);
     this.timerCountdownNumber = JSON.parse(this.timerSecondsString);
   },
@@ -198,6 +212,23 @@ export default Vue.extend({
     this.sendUnregisterCommand();
   },
   methods: {
+    connectToWebSocket(sessionID: string, memberID: string) {
+      const url = `${Constants.backendURL}/connect?sessionID=${sessionID}&memberID=${memberID}`;
+      this.$store.commit("connectToBackendWS", url);
+    },
+    registerMemberPrincipalOnBackend() {
+      const endPoint = Constants.webSocketRegisterMemberRoute;
+      this.$store.commit("sendViaBackendWS", { endPoint });
+    },
+    subscribeWSMemberUpdates() {
+      this.$store.commit("subscribeOnBackendWSMemberUpdates");
+    },
+    subscribeWSadminUpdatedUserStories() {
+      this.$store.commit("subscribeOnBackendWSStoriesUpdated");
+    },
+    subscribeWSMemberUpdated() {
+      this.$store.commit("subscribeOnBackendWSAdminUpdate");
+    },
     onSendVote({ vote }) {
       this.draggedVote = vote;
       const endPoint = `${Constants.webSocketVoteRoute}`;
