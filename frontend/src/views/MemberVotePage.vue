@@ -112,6 +112,7 @@
                 :show-estimations="true"
                 :initial-stories="userStories"
                 :show-edit-buttons="false"
+                @selectedStory="onSelectedStory($event)"
               />
             </div>
           </b-col>
@@ -119,6 +120,7 @@
           <b-col>
             <user-story-descriptions
               :card-set="voteSet"
+              :index="index"
               :initial-stories="userStories"
               :editDescription="false"
               @userStoriesChanged="onUserStoriesChanged($event)"
@@ -161,6 +163,7 @@ export default Vue.extend({
   },
   data() {
     return {
+      index: 0,
       title: "Estimate!",
       draggedVote: null,
       waitingText: "Waiting for Host to start ...",
@@ -225,6 +228,13 @@ export default Vue.extend({
     },
   },
   watch: {
+    userStories(newValue, oldvalue) {
+      const selectedStoryBefore = oldvalue[this.index];
+      const newSelectedStory = newValue.find(
+        (story) => story.title === selectedStoryBefore.title
+      );
+      this.index = newValue.indexOf(newSelectedStory);
+    },
     memberUpdates(updates) {
       if (updates.at(-1) === Constants.memberUpdateCommandStartVoting) {
         this.draggedVote = null;
@@ -258,6 +268,9 @@ export default Vue.extend({
     this.sendUnregisterCommand();
   },
   methods: {
+    onSelectedStory($event) {
+      this.index = $event;
+    },
     onSendVote({ vote }) {
       this.draggedVote = vote;
       const endPoint = `${Constants.webSocketVoteRoute}`;

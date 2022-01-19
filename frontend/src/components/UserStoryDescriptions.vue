@@ -2,17 +2,17 @@
   <div>
     <div class="list">
       <b-list-group-item
-        v-for="(story, index) of userStories"
+        v-for="(story, idx) of userStories"
         :key="story.name"
         class="border-0"
         variant="outline-secondary"
-        v-show="story.isActive"
+        v-show="idx === index"
       >
         <div class="list-group list-group-horizontal">
           <b-form-input
             :disabled="!editDescription"
             class="border"
-            v-model="userStories[index].title"
+            v-model="userStories[idx].title"
             size="lg"
             placeholder="Story title"
             @blur="publishChanges"
@@ -20,8 +20,8 @@
           <b-dropdown
             v-show="editDescription"
             :text="
-              (userStories[index].estimation
-                ? userStories[index].estimation
+              (userStories[idx].estimation
+                ? userStories[idx].estimation
                 : '?') + '    '
             "
             variant="info"
@@ -31,12 +31,12 @@
               v-for="num in cardSet"
               :key="num"
               :value="num == null ? '?' : num"
-              @click="userStories[index].estimation = num"
+              @click="userStories[idx].estimation = num"
             >
               {{ num }}
             </b-dropdown-item>
             <b-dropdown-item
-              @click="userStories[index].estimation = null"
+              @click="userStories[idx].estimation = null"
               :disabled="!editDescription"
             >
               ?
@@ -47,7 +47,7 @@
             class="card-body rounded"
             :style="{
               'background-color':
-                userStories[index].estimation == null
+                userStories[idx].estimation == null
                   ? 'white'
                   : 'RGB(13, 202, 240)',
             }"
@@ -62,7 +62,7 @@
             id="textarea-auto-height"
             rows="27"
             max-rows="40"
-            v-model="userStories[index].description"
+            v-model="userStories[idx].description"
             :disabled="!editDescription"
             placeholder="Description and acceptance criteria..."
           />
@@ -78,6 +78,7 @@ import Vue from "vue";
 export default Vue.extend({
   name: "UserStoryDescriptions",
   props: {
+    index: { type: Number, required: true },
     cardSet: { type: Array, required: true },
     initialStories: { type: Array, required: true },
     editDescription: { type: Boolean, required: true, default: false },

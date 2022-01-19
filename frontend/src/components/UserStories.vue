@@ -1,6 +1,12 @@
 <template>
   <div>
-    <div class="list">
+    <draggable
+      v-model="userStories"
+      class="list"
+      group="people"
+      @start="drag = true"
+      @end="drag = false"
+    >
       <b-list-group-item
         v-for="(story, index) of userStories"
         :key="story.name"
@@ -8,20 +14,18 @@
         @mouseleave="hover = null"
         class="border"
         variant="outline-secondary"
-        :active="story.isActive"
+        :active="index === 0"
         @click="setUserStoryAsActive(index)"
       >
         <div class="list-group list-group-horizontal">
           <b-form-input
-            :active="story.isActive"
+            :active="index === 0"
             :disabled="true"
             class="border-0"
             v-model="userStories[index].title"
             size="lg"
             :style="{
-              'background-color': story.isActive
-                ? 'rgb(202, 202, 202)'
-                : 'white',
+              'background-color': index === 0 ? 'rgb(202, 202, 202)' : 'white',
             }"
             placeholder="Story title"
             @blur="publishChanges"
@@ -68,15 +72,19 @@
           <b-icon-plus />
         </b-button>
       </div>
-    </div>
+    </draggable>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
+import draggable from "vuedraggable";
 
 export default Vue.extend({
   name: "UserStoryTitles",
+  components: {
+    draggable,
+  },
   props: {
     cardSet: { type: Array, required: true },
     initialStories: { type: Array, required: true },
@@ -123,16 +131,7 @@ export default Vue.extend({
   },
   methods: {
     setUserStoryAsActive(index) {
-      const stories = this.userStories.map((s) => ({
-        title: s.title,
-        description: s.description,
-        estimation: s.estimation,
-        isActive: false,
-      }));
-      if (this.selectStory) {
-        stories[index].isActive = true;
-        this.userStories = stories;
-      }
+      this.$emit("selectedStory", index);
     },
     addUserStory() {
       this.userStories.push({
@@ -154,11 +153,6 @@ export default Vue.extend({
     publishChanges() {
       this.$emit("userStoriesChanged", this.userStories);
     },
-    toggleSideBar() {
-      this.sideBarOpen = !this.sideBarOpen;
-      this.editEnabled = false;
-      this.publishChanges();
-    },
   },
 });
 </script>
@@ -167,10 +161,12 @@ export default Vue.extend({
 .list-group-item.active {
   background-color: rgb(202, 202, 202) !important;
 }
+
 .active {
   color: rgb(202, 202, 202);
   background-color: gray;
 }
+
 /* The side navigation menu */
 .sidenav {
   float: right;
