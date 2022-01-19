@@ -206,6 +206,7 @@ export default Vue.extend({
         this.registerAdminPrincipalOnBackend();
         this.subscribeWSMemberUpdated();
         this.requestMemberUpdate();
+        this.subscribeOnTimerStart();
         if (this.startNewSessionOnMountedString === "true") {
           this.sendRestartMessage();
         }
@@ -259,6 +260,9 @@ export default Vue.extend({
     },
     subscribeWSMemberUpdated() {
       this.$store.commit("subscribeOnBackendWSAdminUpdate");
+    },
+    subscribeOnTimerStart() {
+      this.$store.commit("subscribeOnBackendWSStartTimer");
     },
     requestMemberUpdate() {
       const endPoint = Constants.webSocketGetMemberUpdateRoute;

@@ -1,11 +1,15 @@
 package de.htwg.aume.controller;
 
 import java.security.Principal;
+import java.util.Date;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Controller;
+
+import de.htwg.aume.Utils;
 import de.htwg.aume.model.SessionState;
 import de.htwg.aume.model.UserStory;
 import de.htwg.aume.model.notification.Notification;
@@ -74,6 +78,7 @@ public class WebsocketController {
 				.updateSessionState(SessionState.START_VOTING).resetCurrentHighlights();
 		databaseService.saveSession(session);
 		webSocketService.sendSessionStateToMembers(session);
+		webSocketService.sendTimerStartMessage(session, Utils.getTimestampISO8601(new Date()));
 	}
 
 	@MessageMapping("/votingFinished")
