@@ -241,10 +241,14 @@ export default Vue.extend({
           let stories: UserStory[] = [];
 
           file.data.forEach((story) => {
+            let title = story.title ? story.title : story.Title;
+            let description = story.description ? story.description : story.Description;
+            let estimation = story.estimation ? story.estimation : story.Estimation;
+
             stories.push({
-              title: story.Title,
-              description: story.Description,
-              estimation: story.Estimation,
+              title: title,
+              description: description,
+              estimation: estimation,
               isActive: false,
             });
           });

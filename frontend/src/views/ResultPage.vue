@@ -48,7 +48,7 @@ export default Vue.extend({
       const fileType = "data:text/csv;charset=utf-8,";
       const csv = papaparse.unparse(this.userStories, {
         columns: ["title", "description", "estimation"],
-        header: false,
+        header: true,
         delimiter: ";",
       });
       const blob = new Blob([csv], { type: fileType });
