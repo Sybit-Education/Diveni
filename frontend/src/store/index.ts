@@ -62,6 +62,7 @@ export default new Vuex.Store<StoreState>({
       state.members = [];
       state.userStories = [];
       state.memberUpdates = [];
+      state.notifications = [];
       state.webSocketConnected = false;
       state.stompClient = undefined;
     },

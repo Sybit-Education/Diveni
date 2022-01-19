@@ -88,6 +88,7 @@
         :highlight="highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0"
       />
     </b-row>
+    <notify-member-component />
   </b-container>
 </template>
 
@@ -99,6 +100,7 @@ import Constants from "../constants";
 import UserStoriesSidebar from "../components/UserStoriesSidebar.vue";
 import EstimateTimer from "../components/EstimateTimer.vue";
 import SessionMemberCard from "../components/SessionMemberCard.vue";
+import NotifyMemberComponent from "../components/NotifyMemberComponent.vue";
 import Member from "../model/Member";
 import confetti from "canvas-confetti";
 
@@ -110,6 +112,7 @@ export default Vue.extend({
     EstimateTimer,
     UserStoriesSidebar,
     SessionMemberCard,
+    NotifyMemberComponent,
   },
   props: {
     memberID: { type: String, default: undefined },
@@ -155,9 +158,6 @@ export default Vue.extend({
     highlightedMembers() {
       return this.$store.state.highlightedMembers;
     },
-    notifications() {
-      return this.$store.state.notifications;
-    },
   },
   watch: {
     memberUpdates(updates) {
@@ -180,12 +180,9 @@ export default Vue.extend({
         });
       }
     },
-    notifications(notifications) {
-      this.showToast(notifications.at(-1));
-    },
   },
   created() {
-    window.addEventListener("beforeunload", this.sendUnregisterCommand);
+    // window.addEventListener("beforeunload", this.sendUnregisterCommand);
     this.timerCountdownNumber = JSON.parse(this.timerSecondsString);
   },
   mounted() {
@@ -218,11 +215,6 @@ export default Vue.extend({
     },
     backendAnimalToAssetName(animal: string) {
       return Constants.avatarAnimalToAssetName(animal);
-    },
-    showToast(message) {
-      if (message.type == "ADMIN_LEFT") {
-        this.$toast.warning("Host left the session");
-      }
     },
   },
 });
