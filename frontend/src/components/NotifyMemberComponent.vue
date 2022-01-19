@@ -1,6 +1,5 @@
 <script lang="ts">
 import Vue from "vue";
-import NotificationService from "@/services/notification.service";
 
 export default Vue.extend({
   name: "NotifyMemberComponent",
@@ -17,7 +16,10 @@ export default Vue.extend({
   },
   methods: {
     showToast(message) {
-      return NotificationService.showToastificationMember(message);
+      if (message.type == "ADMIN_LEFT") {
+        const hostLeft = this.$t("session.notification.messages.hostLeft");
+        this.$toast.warning(hostLeft);
+      }
     },
   },
 });
