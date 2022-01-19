@@ -25,9 +25,10 @@ public class Member {
 
 	private String currentEstimation;
 
-	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+	// @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private UUID memberCookie;
 
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private boolean isActive;
 
 	public Member updateEstimation(String estimation) {

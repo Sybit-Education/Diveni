@@ -70,17 +70,22 @@ public class RoutesController {
 	public ResponseEntity<Map<String, Object>> joinSession(@PathVariable String sessionID,
 			@RequestBody JoinInfo joinInfo) {
 		val memberCookie = UUID.randomUUID();
-		val session = addMemberToSession(sessionID, joinInfo.getMember().setMemberCookie(UUID.randomUUID()),
+		val session = addMemberToSession(sessionID, joinInfo.getMember().setMemberCookie(UUID.randomUUID()).toggleActive(true),
 				joinInfo.getPassword());
 		val responseMap = Map.of("sessionConfig", session.getSessionConfig(), "memberCookie", memberCookie);
 		return new ResponseEntity<>(responseMap, HttpStatus.OK);
 	}
 
-	@PostMapping(value = "/rejoinSession")
-	public ResponseEntity<SessionConfig> rejoinSession(@RequestParam("memberCookie") UUID memberCookie) {
+	@GetMapping(value = "/rejoinSession")
+	public ResponseEntity<Map<String,Object>> rejoinSession(@RequestParam("memberCookie") UUID memberCookie) {
 		val session = databaseService.getSessionByMemberCookie(memberCookie);
 		if (session.isPresent()) {
-			return new ResponseEntity<>(session.get().getSessionConfig(), HttpStatus.OK);
+			val member = session.get().getMemberByCookie(memberCookie).orElseThrow(
+				() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessages.memberNotExistsErrorMessage));
+			val updatedSession = session.get().setMemberActive(member.getMemberID());
+			databaseService.saveSession(updatedSession);
+			val responseMap = Map.of("sessionConfig", updatedSession.getSessionConfig(), "member", updatedSession.getMemberByCookie(memberCookie).get());
+			return new ResponseEntity<>(responseMap, HttpStatus.OK);
 		} else {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessages.sessionNotFoundErrorMessage);
 		}

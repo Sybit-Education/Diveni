@@ -136,7 +136,7 @@ public class WebSocketServiceTest {
                 setDefaultAdminPrincipal(Set.of(defaultMemberPrincipal));
                 val session = new Session(new ObjectId(), defaultAdminPrincipal.getSessionID(),
                                 defaultAdminPrincipal.getAdminID(), null, null,
-                                List.of(new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null, null)),
+                                List.of(new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null, null, false)),
                                 new HashMap<>(), new ArrayList<>(), null);
 
                 webSocketService.sendMembersUpdate(session);
@@ -151,7 +151,7 @@ public class WebSocketServiceTest {
                 setDefaultAdminPrincipal(Set.of(defaultMemberPrincipal));
                 val session = new Session(new ObjectId(), defaultAdminPrincipal.getSessionID(),
                                 defaultAdminPrincipal.getAdminID(), null, null,
-                                List.of(new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null, null)),
+                                List.of(new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null, null, false)),
                                 new HashMap<>(), new ArrayList<>(), SessionState.WAITING_FOR_MEMBERS);
 
                 webSocketService.sendSessionStateToMember(session, defaultMemberPrincipal.getMemberID().toString());
@@ -169,9 +169,9 @@ public class WebSocketServiceTest {
                 setDefaultAdminPrincipal(Set.of(defaultMemberPrincipal, memberPrincipal));
                 val session = new Session(new ObjectId(), defaultAdminPrincipal.getSessionID(),
                                 defaultAdminPrincipal.getAdminID(), null, null,
-                                List.of(new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null, null),
+                                List.of(new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null, null, false),
                                                 new Member(memberPrincipal.getMemberID(), null, null, null, null,
-                                                                null)),
+                                                                null, false)),
                                 new HashMap<>(), new ArrayList<>(), SessionState.WAITING_FOR_MEMBERS);
 
                 webSocketService.sendSessionStateToMembers(session);
@@ -194,9 +194,9 @@ public class WebSocketServiceTest {
                 val session = new Session(new ObjectId(), defaultAdminPrincipal.getSessionID(),
                                 defaultAdminPrincipal.getAdminID(),
                                 new SessionConfig(List.of(), List.of(), null, "password"), null,
-                                List.of(new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null, null),
+                                List.of(new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null, null, false),
                                                 new Member(memberPrincipal.getMemberID(), null, null, null, null,
-                                                                null)),
+                                                                null, false)),
                                 new HashMap<>(), new ArrayList<>(), SessionState.WAITING_FOR_MEMBERS);
 
                 webSocketService.sendUpdatedUserStoriesToMembers(session);
@@ -227,7 +227,7 @@ public class WebSocketServiceTest {
                 val session = new Session(new ObjectId(), defaultAdminPrincipal.getSessionID(),
                                 defaultAdminPrincipal.getAdminID(), null, null,
                                 List.of(new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null,
-                                                null)),
+                                                null, false)),
                                 new HashMap<>(), new ArrayList<>(), SessionState.WAITING_FOR_MEMBERS);
 
                 webSocketService.removeSession(session);

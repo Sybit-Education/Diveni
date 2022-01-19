@@ -35,6 +35,7 @@ import Vue from "vue";
 import LandingPageCard from "../components/LandingPageCard.vue";
 import Constants from "../constants";
 import Session from "../model/Session";
+import MemberRejoinInfo from "../model/MemberRejoinInfo";
 
 export default Vue.extend({
   name: "LandingPage",
@@ -49,6 +50,7 @@ export default Vue.extend({
   },
   created() {
     this.checkAdminCookie();
+    this.checkMemberCookie();
   },
   methods: {
     async checkAdminCookie() {
@@ -89,9 +91,26 @@ export default Vue.extend({
       }
     },
     async checkMemberCookie() {
-      console.log('checking member cookie');
+      console.log("checking member cookie");
       const cookie = window.localStorage.getItem("memberCookie");
-      
+      if (cookie != null) {
+        console.log(`Found member cookie: '${cookie}'`);
+        const url = Constants.backendURL + Constants.rejoinSessionRoute;
+        try {
+          const response = await this.axios.get<MemberRejoinInfo>(url, {
+            params: {
+              memberCookie: cookie,
+            },
+          });
+          const memberRejoinInfo = response.data;
+          console.log(memberRejoinInfo);
+          this.goToMemberVotePage(memberRejoinInfo);
+        } catch (e) {
+          console.clear();
+          console.log(`got error: ${e}`);
+          window.localStorage.removeItem("memberCookie");
+        }
+      }
     },
     goToJoinPage() {
       this.$router.push({ name: "JoinPage" });
@@ -112,6 +131,21 @@ export default Vue.extend({
           sessionState: this.sessionWrapper.session.sessionState,
           timerSecondsString: this.sessionWrapper.session.sessionConfig.timerSeconds.toString(),
           startNewSessionOnMountedString: this.startNewSessionOnMounted.toString(),
+        },
+      });
+    },
+    goToMemberVotePage(rejoinInfo: MemberRejoinInfo) {
+      this.$router.push({
+        name: "MemberVotePage",
+        params: {
+          memberID: rejoinInfo.member.memberID,
+          name: rejoinInfo.member.name,
+          hexColor: rejoinInfo.member.hexColor,
+          avatarAnimalAssetName: Constants.avatarAnimalToAssetName(
+            rejoinInfo.member.avatarAnimalAssetName
+          ),
+          voteSetJson: JSON.stringify(rejoinInfo.sessionConfig.set),
+          timerSecondsString: rejoinInfo.sessionConfig.timerSeconds.toString(),
         },
       });
     },

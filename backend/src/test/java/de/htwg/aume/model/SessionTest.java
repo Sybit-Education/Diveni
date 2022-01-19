@@ -1,6 +1,7 @@
 package de.htwg.aume.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -39,8 +40,8 @@ public class SessionTest {
 	public void updateEstimation_works() {
 		val memberID1 = Utils.generateRandomID();
 		val memberID2 = Utils.generateRandomID();
-		val member1 = new Member(memberID1, null, null, null, null, null);
-		val member2 = new Member(memberID2, null, null, null, null, null);
+		val member1 = new Member(memberID1, null, null, null, null, null, false);
+		val member2 = new Member(memberID2, null, null, null, null, null, false);
 		val members = Arrays.asList(member1, member2);
 		val vote = "5";
 
@@ -58,8 +59,8 @@ public class SessionTest {
 	public void resetEstimations_works() {
 		val memberID1 = Utils.generateRandomID();
 		val memberID2 = Utils.generateRandomID();
-		val member1 = new Member(memberID1, null, null, null, "3", null);
-		val member2 = new Member(memberID2, null, null, null, "5", null);
+		val member1 = new Member(memberID1, null, null, null, "3", null, false);
+		val member2 = new Member(memberID2, null, null, null, "5", null, false);
 		val members = Arrays.asList(member1, member2);
 		val session = new Session(null, null, null, null, null, members, new HashMap<>(), new ArrayList<>(),
 				SessionState.WAITING_FOR_MEMBERS);
@@ -95,12 +96,12 @@ public class SessionTest {
 	@Test
 	public void addMember_works() {
 		val memberID1 = Utils.generateRandomID();
-		val member1 = new Member(memberID1, null, null, null, "3", null);
+		val member1 = new Member(memberID1, null, null, null, "3", null, false);
 		val members = Arrays.asList(member1);
 		val session = new Session(null, null, null, null, null, members, new HashMap<>(), new ArrayList<>(),
 				SessionState.WAITING_FOR_MEMBERS);
 		val memberID2 = Utils.generateRandomID();
-		val member2 = new Member(memberID2, null, null, null, "5", null);
+		val member2 = new Member(memberID2, null, null, null, "5", null, false);
 
 		val result = session.addMember(member2);
 
@@ -109,27 +110,43 @@ public class SessionTest {
 	}
 
 	@Test
-	public void removeMember_works() {
+	public void setMemberActive_works() {
 		val memberID1 = Utils.generateRandomID();
 		val memberID2 = Utils.generateRandomID();
-		val member1 = new Member(memberID1, null, null, null, "3", null);
-		val member2 = new Member(memberID2, null, null, null, "5", null);
+		val member1 = new Member(memberID1, null, null, null, "3", null, false);
+		val member2 = new Member(memberID2, null, null, null, "5", null, false);
 		val members = Arrays.asList(member1, member2);
 		val session = new Session(null, null, null, null, null, members, new HashMap<>(), new ArrayList<>(),
 				SessionState.WAITING_FOR_MEMBERS);
 
-		val result = session.removeMember(memberID1);
+		val result = session.setMemberActive(memberID1);
 
-		assertTrue(result.getMembers().stream().noneMatch(m -> m.getMemberID().equals(memberID1)));
-		assertEquals(result.getMembers().size(), 1);
+		assertTrue(result.getMembers().stream().filter(m -> m.getMemberID().equals(memberID1)).findFirst().get().isActive());
+		assertEquals(result.getMembers().size(), 2);
+	}
+
+	@Test
+	public void setMemberInactive_works() {
+		val memberID1 = Utils.generateRandomID();
+		val memberID2 = Utils.generateRandomID();
+		val member1 = new Member(memberID1, null, null, null, "3", null, true);
+		val member2 = new Member(memberID2, null, null, null, "5", null, true);
+		val members = Arrays.asList(member1, member2);
+		val session = new Session(null, null, null, null, null, members, new HashMap<>(), new ArrayList<>(),
+				SessionState.WAITING_FOR_MEMBERS);
+
+		val result = session.setMemberInactive(memberID1);
+
+		assertFalse(result.getMembers().stream().filter(m -> m.getMemberID().equals(memberID1)).findFirst().get().isActive());
+		assertEquals(result.getMembers().size(), 2);
 	}
 
 	@Test
 	public void selectHighlightedMembers_works() {
 		List<String> set = List.of("XS", "S", "M", "L", "XL");
-		val member1 = new Member(Utils.generateRandomID(), null, null, null, "S", null);
-		val member2 = new Member(Utils.generateRandomID(), null, null, null, "L", null);
-		val member3 = new Member(Utils.generateRandomID(), null, null, null, "XS", null);
+		val member1 = new Member(Utils.generateRandomID(), null, null, null, "S", null, false);
+		val member2 = new Member(Utils.generateRandomID(), null, null, null, "L", null, false);
+		val member3 = new Member(Utils.generateRandomID(), null, null, null, "XS", null, false);
 		val session = new Session(null, null, null, new SessionConfig(set, List.of(), 30, null), null,
 				List.of(member1, member2, member3), new HashMap<>(), new ArrayList<>(), null);
 

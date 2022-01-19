@@ -165,6 +165,7 @@ export default Vue.extend({
       } else if (updates.at(-1) === Constants.memberUpdateCommandVotingFinished) {
         this.estimateFinished = true;
       } else if (updates.at(-1) === Constants.memberUpdateCloseSession) {
+        window.localStorage.removeItem("memberCookie");
         this.goToJoinPage();
       }
     },

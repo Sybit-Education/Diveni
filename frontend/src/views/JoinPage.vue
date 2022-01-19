@@ -89,6 +89,7 @@ export default Vue.extend({
           };
           memberCookie: string;
         };
+        window.localStorage.setItem("memberCookie", response.memberCookie);
         this.voteSet = JSON.stringify(response.sessionConfig.set);
         this.timerSeconds = parseInt(JSON.stringify(response.sessionConfig.timerSeconds), 10);
         console.log("session page");

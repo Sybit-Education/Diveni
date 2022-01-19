@@ -100,7 +100,7 @@ public class WebSocketService {
 		if (sessionPrincipals.adminPrincipal() != null) {
 			simpMessagingTemplate.convertAndSendToUser(sessionPrincipals.adminPrincipal().getName(),
 					MEMBERS_UPDATED_DESTINATION,
-					new MemberUpdate(session.getMembers(), session.getCurrentHighlights()));
+					new MemberUpdate(session.getActiveMembers(), session.getCurrentHighlights()));
 		} // else the admin left the session
 		sendMembersUpdateToMembers(session);
 
@@ -110,7 +110,7 @@ public class WebSocketService {
 		getSessionPrincipals(session.getSessionID()).memberPrincipals()
 				.forEach(member -> simpMessagingTemplate.convertAndSendToUser(member.getMemberID().toString(),
 						MEMBERS_UPDATED_DESTINATION,
-						new MemberUpdate(session.getMembers(), session.getCurrentHighlights())));
+						new MemberUpdate(session.getActiveMembers(), session.getCurrentHighlights())));
 	}
 
 	public void sendSessionStateToMembers(Session session) {

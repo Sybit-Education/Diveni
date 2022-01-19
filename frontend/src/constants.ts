@@ -3,6 +3,8 @@ class Constants {
 
   createSessionRoute = "/sessions";
 
+  rejoinSessionRoute = "/rejoinSession";
+
   webSocketRegisterAdminUserRoute = "/ws/registerAdminUser";
 
   webSocketRegisterMemberRoute = "/ws/registerMember";

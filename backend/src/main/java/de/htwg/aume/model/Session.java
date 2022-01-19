@@ -57,6 +57,10 @@ public class Session {
 		return Comparator.comparingInt((str) -> set.indexOf(str));
 	}
 
+	public List<Member> getActiveMembers() {
+		return this.members.stream().filter(Member::isActive).collect(Collectors.toList());
+	}
+
 	public Session updateEstimation(String memberID, String vote) {
 		val updatedMembers = members.stream().map(m -> m.getMemberID().equals(memberID) ? m.updateEstimation(vote) : m)
 				.collect(Collectors.toList());
@@ -162,5 +166,9 @@ public class Session {
 				currentHighlights, sessionState);
 		session.lastModified = lastModified;
 		return session;
+	}
+
+	public Optional<Member> getMemberByCookie(UUID memberCookie) {
+		return this.getMembers().stream().filter(m -> m.getMemberCookie().equals(memberCookie)).findFirst();
 	}
 }
