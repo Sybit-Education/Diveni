@@ -15,6 +15,7 @@ export default new Vuex.Store<StoreState>({
     userStories: [],
     members: [],
     highlightedMembers: [],
+    timerTimestamp: undefined,
   },
   mutations: {
     setMembers(state, members) {
@@ -53,6 +54,7 @@ export default new Vuex.Store<StoreState>({
     subscribeOnBackendWSTimerStart(state) {
       state.stompClient?.subscribe(Constants.webSocketTimerStartRoute, (frame) => {
         console.log(`Got timer start ${frame.body}`);
+        state.timerTimestamp = frame.body;
       });
     },
     sendViaBackendWS(state, { endPoint, data }) {

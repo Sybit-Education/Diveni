@@ -12,10 +12,8 @@ import Vue from "vue";
 export default Vue.extend({
   name: "EstimateTimer",
   props: {
-    timer: { type: Number, required: true },
-    timerTriggered: { type: Number, required: true },
-    startTimerOnComponentCreation: { type: Boolean, required: false },
-    initialTimer: { type: Number, required: true },
+    startTimestamp: { type: String, required: true },
+    duration: { type: Number, required: true },
     pauseTimer: { type: Boolean, required: true },
   },
   data() {
@@ -26,10 +24,10 @@ export default Vue.extend({
   },
   computed: {
     textColor(): string {
-      if (this.timerCount > (this.initialTimer / 3) * 2) {
+      if (this.timerCount > (this.duration / 3) * 2) {
         return "#229954";
       }
-      if (this.timerCount > this.initialTimer / 3) {
+      if (this.timerCount > this.duration / 3) {
         return "#D4AC0D";
       }
       if (this.timerCount === 0) {
@@ -39,8 +37,8 @@ export default Vue.extend({
     },
   },
   watch: {
-    timerTriggered() {
-      this.countdown();
+    startTimestamp(newVal) {
+      this.startInterval();
     },
     pauseTimer(newValue) {
       if (newValue) {
@@ -49,9 +47,9 @@ export default Vue.extend({
     },
   },
   created() {
-    this.timerCount = this.initialTimer;
-    if (this.startTimerOnComponentCreation) {
-      this.countdown();
+    this.timerCount = this.duration;
+    if (this.startTimestamp) {
+      this.startInterval();
     }
   },
   beforeDestroy() {
@@ -59,7 +57,7 @@ export default Vue.extend({
   },
   methods: {
     formatTimer() {
-      if (this.initialTimer === 0) {
+      if (this.startTimestamp === "" || this.duration === 0) {
         return "";
       }
       const minutes = Math.floor(this.timerCount / 60);
@@ -67,21 +65,23 @@ export default Vue.extend({
       return `${minutes}:${seconds}`;
     },
     resetTimer() {
-      this.timerCount = this.initialTimer;
+      this.timerCount = this.duration;
     },
-    countdown() {
+    startInterval() {
       clearInterval(this.intervalHandler);
-      this.resetTimer();
+      if(this.duration === 0) {
+        return;
+      }
       this.intervalHandler = setInterval(() => {
         if (this.timerCount > 0) {
-          this.timerCount -= 1;
+          let startTime = new Date(this.startTimestamp).getTime();
+          let currentTime = new Date().getTime();
+          this.timerCount = Math.ceil(this.duration - ((currentTime - startTime) / 1000));
         } else {
-          if (this.initialTimer > 0) {
-            this.$emit("timerFinished");
-          }
+          this.$emit("timerFinished");
           clearInterval(this.intervalHandler);
         }
-      }, 1000);
+      }, 100);
     },
   },
 });
