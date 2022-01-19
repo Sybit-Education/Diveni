@@ -1,15 +1,21 @@
 package de.htwg.aume;
 
 import java.net.URI;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Base64;
+import java.util.Date;
 import java.util.Optional;
 import java.util.Random;
+import java.util.TimeZone;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.util.UriComponentsBuilder;
 
 public class Utils {
+
+	private static final DateFormat dateFormatISO8601 = getDateFormatISO();
 
 	private Utils() {
 	}
@@ -40,6 +46,17 @@ public class Utils {
 		} catch (NullPointerException | IndexOutOfBoundsException | IllegalArgumentException e) {
 			return Optional.empty();
 		}
+	}
+
+	private static final DateFormat getDateFormatISO() {
+		TimeZone tz = TimeZone.getTimeZone("UTC");
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+		df.setTimeZone(tz);
+		return df;
+	}
+
+	public static String getTimestampISO8601(Date date) {
+		return dateFormatISO8601.format(date);
 	}
 
 }

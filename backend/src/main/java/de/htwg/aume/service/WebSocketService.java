@@ -33,6 +33,8 @@ public class WebSocketService {
 
 	public static String NOTIFICATIONS_DESTINATION = "/notifications";
 
+	public static String START_TIMER_DESTINATION = "/updates/startTimer";
+
 	@Autowired
 	private SimpMessagingTemplate simpMessagingTemplate;
 
@@ -133,6 +135,17 @@ public class WebSocketService {
 	public void sendUpdatedUserStoriesToMember(Session session, String memberID) {
 		simpMessagingTemplate.convertAndSendToUser(memberID, US_UPDATES_DESTINATION,
 				session.getSessionConfig().getUserStories());
+	}
+
+	public void sendTimerStartMessage(Session session, String timestamp) {
+		val sessionPrincipals = getSessionPrincipals(session.getSessionID());
+		if (sessionPrincipals.adminPrincipal() != null) {
+			simpMessagingTemplate.convertAndSendToUser(sessionPrincipals.adminPrincipal().getName(),
+					START_TIMER_DESTINATION, timestamp);
+		} // else the admin left the session
+		sessionPrincipals.memberPrincipals()
+				.forEach(member -> simpMessagingTemplate.convertAndSendToUser(member.getMemberID().toString(),
+						START_TIMER_DESTINATION, timestamp));
 	}
 
 	public void sendNotification(Notification notification) {

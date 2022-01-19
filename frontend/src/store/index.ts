@@ -50,6 +50,11 @@ export default new Vuex.Store<StoreState>({
         state.highlightedMembers = JSON.parse(frame.body).highlightedMembers;
       });
     },
+    subscribeOnBackendWSTimerStart(state) {
+      state.stompClient?.subscribe(Constants.webSocketTimerStartRoute, (frame) => {
+        console.log(`Got timer start ${frame.body}`);
+      });
+    },
     sendViaBackendWS(state, { endPoint, data }) {
       state.stompClient?.send(endPoint, data);
     },
