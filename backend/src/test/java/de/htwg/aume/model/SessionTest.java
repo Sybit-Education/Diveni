@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-
+import java.util.UUID;
 import java.util.Date;
 import de.htwg.aume.Utils;
 import org.bson.types.ObjectId;
@@ -121,7 +121,8 @@ public class SessionTest {
 
 		val result = session.setMemberActive(memberID1);
 
-		assertTrue(result.getMembers().stream().filter(m -> m.getMemberID().equals(memberID1)).findFirst().get().isActive());
+		assertTrue(result.getMembers().stream().filter(m -> m.getMemberID().equals(memberID1)).findFirst().get()
+				.isActive());
 		assertEquals(result.getMembers().size(), 2);
 	}
 
@@ -137,7 +138,8 @@ public class SessionTest {
 
 		val result = session.setMemberInactive(memberID1);
 
-		assertFalse(result.getMembers().stream().filter(m -> m.getMemberID().equals(memberID1)).findFirst().get().isActive());
+		assertFalse(result.getMembers().stream().filter(m -> m.getMemberID().equals(memberID1)).findFirst().get()
+				.isActive());
 		assertEquals(result.getMembers().size(), 2);
 	}
 
@@ -189,5 +191,18 @@ public class SessionTest {
 		val result = session.resetCurrentHighlights();
 
 		assertTrue(result.getCurrentHighlights().isEmpty());
+	}
+
+	@Test
+	public void getMemberByCookie_works() {
+		val member1 = new Member(Utils.generateRandomID(), null, null, null, "L", UUID.randomUUID(), false);
+		val member2 = new Member(Utils.generateRandomID(), null, null, null, "L", UUID.randomUUID(), false);
+		val member3 = new Member(Utils.generateRandomID(), null, null, null, "XS", UUID.randomUUID(), false);
+		val session = new Session(null, null, null, null, null, List.of(member1, member2, member3), null,
+				new ArrayList<>(), null);
+
+		val result = session.getMemberByCookie(member2.getMemberCookie()).get();
+
+		assertEquals(member2, result);
 	}
 }

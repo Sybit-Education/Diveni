@@ -136,14 +136,15 @@ public class WebSocketServiceTest {
                 setDefaultAdminPrincipal(Set.of(defaultMemberPrincipal));
                 val session = new Session(new ObjectId(), defaultAdminPrincipal.getSessionID(),
                                 defaultAdminPrincipal.getAdminID(), null, null,
-                                List.of(new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null, null, false)),
+                                List.of(new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null, null,
+                                                true)),
                                 new HashMap<>(), new ArrayList<>(), null);
 
                 webSocketService.sendMembersUpdate(session);
 
                 verify(simpMessagingTemplateMock, times(1)).convertAndSendToUser(defaultAdminPrincipal.getName(),
                                 WebSocketService.MEMBERS_UPDATED_DESTINATION,
-                                new MemberUpdate(session.getMembers(), session.getCurrentHighlights()));
+                                new MemberUpdate(session.getActiveMembers(), session.getCurrentHighlights()));
         }
 
         @Test
@@ -151,7 +152,8 @@ public class WebSocketServiceTest {
                 setDefaultAdminPrincipal(Set.of(defaultMemberPrincipal));
                 val session = new Session(new ObjectId(), defaultAdminPrincipal.getSessionID(),
                                 defaultAdminPrincipal.getAdminID(), null, null,
-                                List.of(new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null, null, false)),
+                                List.of(new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null, null,
+                                                false)),
                                 new HashMap<>(), new ArrayList<>(), SessionState.WAITING_FOR_MEMBERS);
 
                 webSocketService.sendSessionStateToMember(session, defaultMemberPrincipal.getMemberID().toString());
@@ -169,7 +171,8 @@ public class WebSocketServiceTest {
                 setDefaultAdminPrincipal(Set.of(defaultMemberPrincipal, memberPrincipal));
                 val session = new Session(new ObjectId(), defaultAdminPrincipal.getSessionID(),
                                 defaultAdminPrincipal.getAdminID(), null, null,
-                                List.of(new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null, null, false),
+                                List.of(new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null, null,
+                                                false),
                                                 new Member(memberPrincipal.getMemberID(), null, null, null, null,
                                                                 null, false)),
                                 new HashMap<>(), new ArrayList<>(), SessionState.WAITING_FOR_MEMBERS);
@@ -194,7 +197,8 @@ public class WebSocketServiceTest {
                 val session = new Session(new ObjectId(), defaultAdminPrincipal.getSessionID(),
                                 defaultAdminPrincipal.getAdminID(),
                                 new SessionConfig(List.of(), List.of(), null, "password"), null,
-                                List.of(new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null, null, false),
+                                List.of(new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null, null,
+                                                false),
                                                 new Member(memberPrincipal.getMemberID(), null, null, null, null,
                                                                 null, false)),
                                 new HashMap<>(), new ArrayList<>(), SessionState.WAITING_FOR_MEMBERS);
