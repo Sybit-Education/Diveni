@@ -5,7 +5,7 @@
       :alt="altAttribute.toLowerCase() + ' image'"
       width="70"
     />
-    <h4 class="mt-2">
+    <h4 class="m-2">
       <strong>{{ name }}</strong>
     </h4>
   </div>

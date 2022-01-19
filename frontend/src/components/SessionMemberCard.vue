@@ -1,7 +1,7 @@
 <template>
   <div
     :style="`background-color: ${color};`"
-    class="text-center card mt-4 mx-3"
+    class="text-center card"
     :class="{ greyOut: !highest && !lowest && estimateFinished }"
   >
     <h1 class="fs-3-rem">

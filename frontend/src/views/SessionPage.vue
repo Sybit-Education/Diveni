@@ -48,13 +48,17 @@
         <div v-else>
           <b-row class="d-flex justify-content-start pb-3">
             <b-col>
-              <b-button variant="outline-dark" @click="sendRestartMessage">
+              <b-button
+                variant="outline-dark"
+                @click="sendRestartMessage"
+                class="m-1"
+              >
                 <b-icon-arrow-clockwise />
                 New
               </b-button>
               <b-button
                 variant="outline-dark"
-                class="mx-1"
+                class="m-1"
                 @click="sendVotingFinishedMessage"
               >
                 <b-icon-bar-chart />
@@ -63,7 +67,7 @@
               <b-button
                 v-b-modal.close-session-modal
                 variant="danger"
-                class="mt-1"
+                class="m-1"
               >
                 <b-icon-x />
                 End meeting

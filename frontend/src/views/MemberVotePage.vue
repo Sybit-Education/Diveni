@@ -51,7 +51,10 @@
               @sentVote="onSendVote"
             />
           </flicking>
-          <b-row v-else class="d-flex justify-content-between flex-wrap">
+          <b-row
+            v-else
+            class="d-flex justify-content-between flex-wrap text-center"
+          >
             <b-col>
               <member-vote-card
                 v-for="(voteOption, index) in voteSet"
@@ -102,23 +105,26 @@
         </b-row>
 
         <b-row>
-          <div class="overflow-auto" style="height: 700px">
-            <user-stories-sidebar
+          <b-col class="mt-2">
+            <div class="overflow-auto" style="height: 700px">
+              <user-stories-sidebar
+                :card-set="voteSet"
+                :show-estimations="true"
+                :initial-stories="userStories"
+                :show-edit-buttons="false"
+              />
+            </div>
+          </b-col>
+
+          <b-col>
+            <user-story-descriptions
               :card-set="voteSet"
-              :show-estimations="true"
               :initial-stories="userStories"
-              :show-edit-buttons="false"
+              :editDescription="false"
+              @userStoriesChanged="onUserStoriesChanged($event)"
             />
-          </div>
+          </b-col>
         </b-row>
-      </b-col>
-      <b-col>
-        <user-story-descriptions
-          :card-set="voteSet"
-          :initial-stories="userStories"
-          :editDescription="false"
-          @userStoriesChanged="onUserStoriesChanged($event)"
-        />
       </b-col>
     </b-row>
   </b-container>
