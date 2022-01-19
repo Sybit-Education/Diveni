@@ -60,7 +60,7 @@
             class="mt-1"
             @blur="publishChanges"
             id="textarea-auto-height"
-            rows="30"
+            rows="27"
             max-rows="40"
             v-model="userStories[index].description"
             :disabled="!editDescription"
