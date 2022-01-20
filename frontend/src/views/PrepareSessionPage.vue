@@ -8,9 +8,7 @@
       <card-set-component class="mt-3" @selectedCardSetOptions="setCardSetOptions" />
       <h4 class="mt-3">{{ $t("session.prepare.step.selection.time.title") }}</h4>
       <b-row class="mt-3 text-center">
-        <b-col>
-          <b-button variant="outline-secondary" @click="setTimerDown()"> -</b-button>
-        </b-col>
+        <b-col> <b-button variant="outline-secondary" @click="setTimerDown()"> -</b-button> </b-col>
         <b-col class="text-center">
           <h4>
             {{ timer == 0 ? "∞" : formatTimer }}
