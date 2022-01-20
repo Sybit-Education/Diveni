@@ -8,7 +8,7 @@
       "
     >
       {{
-        $t("session.prepare.step.selection.mode.description.withJira.buttons.signInWithJira.label")
+        $t("session.prepare.step.selection.mode.description.withJira.buttons.signInWithJiraServer.label")
       }}
     </b-button>
     <b-modal
@@ -49,7 +49,7 @@ import Vue from "vue";
 import apiService from "@/services/api.service";
 
 export default Vue.extend({
-  name: "SignInWithJiraButtonComponent",
+  name: "SignInWithJiraServerButtonComponent",
   data() {
     return {
       token: "",

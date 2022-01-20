@@ -164,8 +164,11 @@
                   }
                 },
                 "buttons": {
-                  "signInWithJira": {
-                    "label": "Sign in with Jira"
+                  "signInWithJiraCloud": {
+                    "label": "Sign in with Jira Cloud"
+                  },
+                  "signInWithJiraServer": {
+                    "label": "Sign in with Jira Server"
                   },
                   "submit": {
                     "label": "Submit"

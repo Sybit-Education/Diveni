@@ -62,6 +62,7 @@
         <b-tab
           :title="$t('session.prepare.step.selection.mode.description.withJira.tab.label')"
           :title-link-class="linkClass(2)"
+          v-if="isJiraEnabled"
         >
           <jira-component class="mg_top_2_per" />
           <!--TODO: Implement session config with Jira-->
@@ -88,6 +89,7 @@ import UserStoriesSidebar from "../components/UserStoriesSidebar.vue";
 import UserStoryComponent from "../components/UserStoryComponent.vue";
 import JiraComponent from "../components/JiraComponent.vue";
 import StroyPointsComponent from "@/components/StroyPointsComponent.vue";
+import constants from "../constants";
 
 export default Vue.extend({
   name: "PrepareSessionPage",
@@ -105,6 +107,7 @@ export default Vue.extend({
       timer: 30,
       warningWhenUnderZero: "",
       tabIndex: 0,
+      isJiraEnabled: constants.isJiraEnabled
     };
   },
   computed: {

@@ -164,8 +164,11 @@
                   }
                 },
                 "buttons": {
-                  "signInWithJira": {
-                    "label": "Mit Jira anmelden"
+                  "signInWithJiraCloud": {
+                    "label": "Mit Jira Cloud anmelden"
+                  },
+                  "signInWithJiraServer": {
+                    "label": "Mit Jira Server anmelden"
                   },
                   "submit": {
                     "label": "Senden"
