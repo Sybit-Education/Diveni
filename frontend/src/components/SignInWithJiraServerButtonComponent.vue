@@ -64,7 +64,7 @@ export default Vue.extend({
       return valid;
     },
     async openSignInWithJiraTab() {
-      const tokenDto = await apiService.getJiraRequestToken();
+      const tokenDto = await apiService.getJiraOauth1RequestToken();
       this.token = tokenDto.token;
       window.open(tokenDto.url, "_blank")?.focus();
     },
@@ -87,7 +87,7 @@ export default Vue.extend({
         return;
       }
       try {
-        await apiService.sendJiraVerificationCode(this.verificationCode, this.token);
+        await apiService.sendJiraOauth1VerificationCode(this.verificationCode, this.token);
       } catch (e) {
         this.showToast(e);
       }
@@ -95,11 +95,13 @@ export default Vue.extend({
         this.$bvModal.hide("modal-verification-code");
       });
     },
-    showToast(e) {
-      if (e.message == "failed to retrieve access token") {
+    showToast(error) {
+      if (error.message == "failed to retrieve access token") {
         this.$toast.error(this.$t("session.notification.messages.jiraCredentials"));
+      } else {
+        this.$toast.error(this.$t("session.notification.messages.jiraLoginFailed"));
       }
-      console.log(e);
+      console.log(error);
     },
   },
 });

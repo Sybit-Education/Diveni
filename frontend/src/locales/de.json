@@ -1,4 +1,7 @@
 {
+  "general": {
+    "pleaseWait": "Bitte warten..."
+  },
   "page": {
     "session": {
       "before": {
@@ -202,6 +205,7 @@
         "memberLeft": "Teilnehmer hat die Sitzung verlassen",
         "memberJoined": "Teilnehmer ist der Sitzung beigetreten",
         "jiraCredentials": "Falsche Login-Daten",
+        "jiraLoginFailed": "Login fehlgeschlagen",
         "wrongID": "Falscher Einladungscode",
         "password": "Falsches Passwort"
       }

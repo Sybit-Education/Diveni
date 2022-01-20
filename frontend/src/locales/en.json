@@ -1,4 +1,7 @@
 {
+  "general": {
+    "pleaseWait": "Please wait..."
+  },
   "page": {
     "session": {
       "before": {
@@ -202,6 +205,7 @@
         "memberLeft": "Member left the session",
         "memberJoined": "Member joined the session",
         "jiraCredentials": "Wrong credentials",
+        "jiraLoginFailed": "Login failed",
         "wrongID": "Wrong invitation code",
         "password": "Wrong password"
       }
