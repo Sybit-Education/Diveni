@@ -6,7 +6,6 @@ import webstomp from "webstomp-client";
 import Constants from "../constants";
 
 Vue.use(Vuex);
-
 export default new Vuex.Store<StoreState>({
   state: {
     stompClient: undefined,
@@ -14,6 +13,7 @@ export default new Vuex.Store<StoreState>({
     memberUpdates: [],
     userStories: [],
     members: [],
+    notifications: [],
     highlightedMembers: [],
   },
   mutations: {
@@ -50,6 +50,11 @@ export default new Vuex.Store<StoreState>({
         state.highlightedMembers = JSON.parse(frame.body).highlightedMembers;
       });
     },
+    subscribeOnBackendWSNotify(state) {
+      state.stompClient?.subscribe(Constants.websocketNotification, (frame) => {
+        state.notifications = state.notifications.concat([JSON.parse(frame.body)]);
+      });
+    },
     sendViaBackendWS(state, { endPoint, data }) {
       state.stompClient?.send(endPoint, data);
     },
@@ -57,6 +62,7 @@ export default new Vuex.Store<StoreState>({
       state.members = [];
       state.userStories = [];
       state.memberUpdates = [];
+      state.notifications = [];
       state.webSocketConnected = false;
       state.stompClient = undefined;
     },

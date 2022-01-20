@@ -154,10 +154,26 @@
                   "label": "Planning with Jira"
                 },
                 "subtitle": "Select Jira for your Poker-Planning",
-                "descriptionLine1": "Please authenticate with Jira",
+                "descriptionLine1": "Please sign in with Jira",
                 "descriptionLine2": "Select your project",
                 "descriptionLine3": "After you have selected your project, you will be redirected to the next page to edit your user stories",
-                "descriptionLine4": "You will be able to add and edit User Stories once you've started the session"
+                "descriptionLine4": "You will be able to add and edit User Stories once you've started the session",
+                "dialog": {
+                  "description": "A new tab will open immediately, please grant access to this application in this tab and enter the verification code here."
+                },
+                "inputs": {
+                  "verificationCode": {
+                    "placeholder": "Verification code"
+                  }
+                },
+                "buttons": {
+                  "signInWithJira": {
+                    "label": "Sign in with Jira"
+                  },
+                  "submit": {
+                    "label": "Submit"
+                  }
+                }
               }
             }
           }
@@ -168,7 +184,7 @@
       }
     },
     "userStory": {
-      "button":{
+      "button": {
         "title": "Stories",
         "add": "Add",
         "edit": "Edit",
@@ -178,6 +194,16 @@
           "title": "Story title",
           "description": "Description and acceptance criteria..."
         }
+      }
+    },
+    "notification": {
+      "messages": {
+        "hostLeft": "Host left the session",
+        "memberLeft": "Member left the session",
+        "memberJoined": "Member joined the session",
+        "jiraCredentials": "Wrong credentials",
+        "wrongID": "Wrong invitation code",
+        "password": "Wrong password"
       }
     }
   }

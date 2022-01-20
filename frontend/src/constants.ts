@@ -29,6 +29,8 @@ class Constants {
 
   webSocketMemberListenRoute = "/users/updates/member";
 
+  websocketNotification = "/users/updates/notifications";
+
   memberUpdateCommandStartVoting = "START_VOTING";
 
   memberUpdateCommandVotingFinished = "VOTING_FINISHED";
