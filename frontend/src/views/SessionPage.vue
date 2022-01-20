@@ -79,7 +79,10 @@
             @ok="closeSession"
           >
             <p class="my-4">
-              {{ $t("page.session.close.description") }}
+              {{ $t("page.session.close.description1") }}
+            </p>
+            <p v-if="userStoryMode !== 'NO_US'">
+              {{ $t("page.session.close.description2") }}
             </p>
           </b-modal>
         </b-col>

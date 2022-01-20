@@ -30,7 +30,8 @@
       },
       "close": {
         "popup": "Bist du dir sicher?",
-        "description": "Die Session wird für dich und alle Teammitglieder beendet. Im Anschluss kannst du die User Stories herunterladen.",
+        "description1": "Die Session wird für dich und alle Teammitglieder beendet.",
+        "description2": "Im Anschluss kannst du die User Stories herunterladen.",
         "button": {
           "cancel": "Zurück",
           "ok": "OK"
