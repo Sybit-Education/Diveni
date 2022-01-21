@@ -8,12 +8,17 @@
         openModal();
       "
     >
-      Project selection
+      {{
+        $t("session.prepare.step.selection.mode.description.withJira.buttons.selectProject.label")
+      }}
     </b-button>
     <p v-if="project">{{ project }}</p>
     <b-modal id="modal-project-selection" ref="modal" title="Project Selection" @ok="handleOk">
-      <p>Select your Project</p>
-
+      <p>
+        {{
+          $t("session.prepare.step.selection.mode.description.withJira.buttons.selectProject.label")
+        }}
+      </p>
       <section v-if="projects" class="drop-down">
         <b-dropdown text="Projects" class="m-md-2">
           <b-dropdown-item v-for="(item, key) in projects" :key="key" @click="project = item.name">
@@ -41,7 +46,6 @@ export default Vue.extend({
   data() {
     return {
       item: "",
-      //   projects: [{ name: "test" }, { name: "test1" }, { name: "test2" }],
       projects: [],
       project: "",
     };
@@ -49,7 +53,6 @@ export default Vue.extend({
   methods: {
     async getProjects() {
       this.projects = await apiService.getAllProjects();
-      console.log(this.projects);
     },
     openModal() {
       this.$nextTick(() => {
@@ -64,7 +67,6 @@ export default Vue.extend({
     async handleSubmit(project) {
       const response = await apiService.getUserStoriesFromProject(project);
       this.$store.commit("setUserStories", response);
-      // this.$store.commit("setProject", response.project);
       this.$nextTick(() => {
         this.$bvModal.hide("modal-project-selection");
       });
