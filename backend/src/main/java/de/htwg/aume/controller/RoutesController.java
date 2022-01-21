@@ -50,7 +50,7 @@ public class RoutesController {
 		List<String> sessionIds = Stream.generate(Utils::generateRandomID).filter(s -> !usedSessionIDs.contains(s))
 				.limit(2).collect(Collectors.toList());
 		val session = new Session(databaseID, sessionIds.get(0), sessionIds.get(1), sessionConfig, UUID.randomUUID(),
-				new ArrayList<>(), new HashMap<>(), new ArrayList<>(), SessionState.WAITING_FOR_MEMBERS);
+				new ArrayList<>(), new HashMap<>(), new ArrayList<>(), SessionState.WAITING_FOR_MEMBERS, null, null);
 		databaseService.saveSession(session);
 		val responseMap = Map.of("session", session, "adminCookie", session.getAdminCookie());
 		return new ResponseEntity<>(responseMap, HttpStatus.CREATED);

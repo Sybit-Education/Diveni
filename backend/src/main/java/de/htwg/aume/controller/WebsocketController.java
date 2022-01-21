@@ -31,8 +31,11 @@ public class WebsocketController {
 
 	@MessageMapping("/registerAdminUser")
 	public void registerAdminUser(AdminPrincipal principal) {
-		ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID());
+		val session = ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID());
 		webSocketService.setAdminUser(principal);
+		if (session.getTimerTimestamp() != null) {
+			webSocketService.sendTimerStartMessageToUser(session, session.getTimerTimestamp(), principal.getName());
+		}
 	}
 
 	@MessageMapping("/registerMember")
@@ -41,6 +44,10 @@ public class WebsocketController {
 		webSocketService.addMemberIfNew(principal);
 		webSocketService.sendMembersUpdate(session);
 		webSocketService.sendSessionStateToMember(session, principal.getName());
+		System.out.println("Timestamp: " + session.getTimerTimestamp());
+		if (session.getTimerTimestamp() != null) {
+			webSocketService.sendTimerStartMessageToUser(session, session.getTimerTimestamp(), principal.getMemberID());
+		}
 	}
 
 	@MessageMapping("/unregister")
@@ -75,16 +82,21 @@ public class WebsocketController {
 	@MessageMapping("/startVoting")
 	public void startEstimation(AdminPrincipal principal) {
 		val session = ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID())
-				.updateSessionState(SessionState.START_VOTING).resetCurrentHighlights();
+				.updateSessionState(SessionState.START_VOTING).resetCurrentHighlights()
+				.setTimerTimestamp(Utils.getTimestampISO8601(new Date()));
+		System.out.println("Set timestamp to " + session.getTimerTimestamp());
 		databaseService.saveSession(session);
 		webSocketService.sendSessionStateToMembers(session);
-		webSocketService.sendTimerStartMessage(session, Utils.getTimestampISO8601(new Date()));
+		webSocketService.sendTimerStartMessage(session, session.getTimerTimestamp());
 	}
 
 	@MessageMapping("/votingFinished")
 	public void votingFinished(AdminPrincipal principal) {
 		val session = ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID())
-				.updateSessionState(SessionState.VOTING_FINISHED).selectHighlightedMembers();
+				.updateSessionState(SessionState.VOTING_FINISHED)
+				.selectHighlightedMembers()
+				.resetTimerTimestamp();
+		System.out.println("Reset timestamp to " + session.getTimerTimestamp());
 		databaseService.saveSession(session);
 		webSocketService.sendMembersUpdate(session);
 		webSocketService.sendSessionStateToMembers(session);

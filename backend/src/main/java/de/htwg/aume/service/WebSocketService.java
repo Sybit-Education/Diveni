@@ -140,12 +140,14 @@ public class WebSocketService {
 	public void sendTimerStartMessage(Session session, String timestamp) {
 		val sessionPrincipals = getSessionPrincipals(session.getSessionID());
 		if (sessionPrincipals.adminPrincipal() != null) {
-			simpMessagingTemplate.convertAndSendToUser(sessionPrincipals.adminPrincipal().getName(),
-					START_TIMER_DESTINATION, timestamp);
+			sendTimerStartMessageToUser(session, timestamp, sessionPrincipals.adminPrincipal().getName());
 		} // else the admin left the session
 		sessionPrincipals.memberPrincipals()
-				.forEach(member -> simpMessagingTemplate.convertAndSendToUser(member.getMemberID().toString(),
-						START_TIMER_DESTINATION, timestamp));
+				.forEach(member -> sendTimerStartMessageToUser(session, timestamp, member.getMemberID()));
+	}
+
+	public void sendTimerStartMessageToUser(Session session, String timestamp, String userID) {
+		simpMessagingTemplate.convertAndSendToUser(userID, START_TIMER_DESTINATION, timestamp);
 	}
 
 	public void sendNotification(Notification notification) {
