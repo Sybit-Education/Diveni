@@ -17,7 +17,6 @@
       </li>
       <li>
         {{ $t("session.prepare.step.selection.mode.description.withJira.descriptionLine2") }}
-
         <project-selection-component />
       </li>
       <li>

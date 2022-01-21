@@ -66,7 +66,7 @@ export default Vue.extend({
     },
     async handleSubmit(project) {
       const response = await apiService.getUserStoriesFromProject(project);
-      this.$store.commit("setUserStories", response);
+      this.$store.commit("setUserStories", { stories: response });
       this.$nextTick(() => {
         this.$bvModal.hide("modal-project-selection");
       });
