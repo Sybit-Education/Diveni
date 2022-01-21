@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.api.client.auth.oauth.OAuthAuthorizeTemporaryTokenUrl;
@@ -25,6 +26,7 @@ import de.htwg.aume.controller.ErrorMessages;
 import de.htwg.aume.model.JiraRequestToken;
 import de.htwg.aume.model.Project;
 import de.htwg.aume.model.TokenIdentifier;
+import de.htwg.aume.model.UserStory;
 import de.htwg.aume.Utils;
 
 import lombok.val;
@@ -67,7 +69,7 @@ public class JiraServerService {
             val accessToken = jiraOAuthClient.getAccessToken(requestToken, verificationCode, CONSUMER_KEY, PRIVATE_KEY);
             val id = Utils.generateRandomID();
             accessTokens.put(id, accessToken);
-            return new TokenIdentifier(accessToken);
+            return new TokenIdentifier(id);
         } catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToRetrieveAccessTokenErrorMessage);
         }
@@ -76,9 +78,9 @@ public class JiraServerService {
     public List<Project> getProjects(String tokenIdentifier){
         try {
             List<Project> projects = new ArrayList<>();
-            //val accessToken = accessTokens.get(tokenIdentifier);
+            val accessToken = accessTokens.get(tokenIdentifier);
             JiraOAuthClient jiraOAuthClient = new JiraOAuthClient(JIRA_HOME);
-            OAuthParameters parameters = jiraOAuthClient.getParameters(tokenIdentifier, CONSUMER_KEY, PRIVATE_KEY);
+            OAuthParameters parameters = jiraOAuthClient.getParameters(accessToken, CONSUMER_KEY, PRIVATE_KEY);
             HttpResponse response = getResponseFromUrl(parameters, new GenericUrl(JIRA_HOME + "/rest/api/latest/project"));
             ObjectNode[] node = new ObjectMapper().readValue(response.parseAsString(), ObjectNode[].class);
 
@@ -89,6 +91,31 @@ public class JiraServerService {
             }
        
             return projects;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToRetrieveProjectsErrorMessage);
+        }
+    }
+
+    public List<UserStory> getIssues(String tokenIdentifier, String projectName) {
+        try {
+            List<UserStory> userStories = new ArrayList<>();
+            val accessToken = accessTokens.get(tokenIdentifier);
+            JiraOAuthClient jiraOAuthClient = new JiraOAuthClient(JIRA_HOME);
+            OAuthParameters parameters = jiraOAuthClient.getParameters(accessToken, CONSUMER_KEY, PRIVATE_KEY);
+            HttpResponse response = getResponseFromUrl(parameters, new GenericUrl(JIRA_HOME + "/rest/api/latest/search?jql=project=" + projectName + " ORDER BY RANK"));
+            //The reply from the Jira API is no correct JSON, therefore [ and ] have to be added
+            val test = "[" + response.parseAsString() + "]";
+            ObjectNode[] node = new ObjectMapper().readValue(test, ObjectNode[].class);
+
+            for (ObjectNode objectNode : node) {
+                for (JsonNode jsonNode : objectNode.get("issues")){
+                    val fields = jsonNode.get("fields");
+                    userStories.add(new UserStory(jsonNode.get("id").asText(), fields.get("summary").asText(), fields.get("description").asText(), fields.get("customfield_10111").asText(), false));
+                }
+            }
+       
+            return userStories;
         } catch (Exception e) {
             e.printStackTrace();
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToRetrieveProjectsErrorMessage);
@@ -108,5 +135,7 @@ public class JiraServerService {
         HttpRequest request = requestFactory.buildGetRequest(jiraUrl);
         return request.execute();
     }
+
+    
 
 }
