@@ -47,7 +47,8 @@ export default Vue.extend({
   },
   methods: {
     async getProjects() {
-      //   this.projects = await apiService.getAllProjects();
+      this.projects = await apiService.getAllProjects();
+      console.log(this.projects);
     },
     openModal() {
       this.$nextTick(() => {
