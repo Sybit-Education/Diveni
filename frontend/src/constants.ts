@@ -7,6 +7,7 @@ class Constants {
   isJiraCloudEnabled = process.env.VUE_APP_ENABLE_JIRA_CLOUD === "true";
   isJiraServerEnabled = process.env.VUE_APP_ENABLE_JIRA_SERVER === "true";
   isJiraEnabled = this.isJiraCloudEnabled || this.isJiraServerEnabled;
+  jiraCloudAuthorizeUrl = process.env.VUE_APP_JIRA_CLOUD_AUTHORIZE_URL;
 
   createSessionRoute = "/sessions";
 
