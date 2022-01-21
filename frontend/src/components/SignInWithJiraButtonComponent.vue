@@ -82,15 +82,24 @@ export default Vue.extend({
       this.handleSubmit();
     },
     async handleSubmit() {
-      console.log(this.verificationCode);
       const valid = this.checkFormValidity();
       if (!valid) {
         return;
       }
-      await apiService.sendJiraVerificationCode(this.verificationCode, this.token);
+      try {
+        await apiService.sendJiraVerificationCode(this.verificationCode, this.token);
+      } catch (e) {
+        this.showToast(e);
+      }
       this.$nextTick(() => {
         this.$bvModal.hide("modal-verification-code");
       });
+    },
+    showToast(e) {
+      if (e.message == "failed to retrieve access token") {
+        this.$toast.error(this.$t("session.notification.messages.jiraCredentials"));
+      }
+      console.log(e);
     },
   },
 });

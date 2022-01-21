@@ -60,7 +60,7 @@ export default Vue.extend({
         {
           name: this.$t("session.prepare.step.selection.cardSet.sets.fibonacci.label"),
           description: this.$t("session.prepare.step.selection.cardSet.sets.fibonacci.description"),
-          values: ["1", "2", "3", "5", "8", "13", "21", "34", "55"],
+          values: ["1", "2", "3", "5", "8", "13", "21", "34", "55", "?"],
           activeValues: ["1", "2", "3", "5", "8", "13", "21"],
         },
         {
@@ -68,19 +68,19 @@ export default Vue.extend({
           description: this.$t(
             "session.prepare.step.selection.cardSet.sets.tShirtSizes.description"
           ),
-          values: ["XXS", "XS", "S", "M", "L", "XL", "XXL", "XXXL"],
+          values: ["XXS", "XS", "S", "M", "L", "XL", "XXL", "XXXL", "?"],
           activeValues: ["XS", "S", "M", "L", "XL"],
         },
         {
           name: this.$t("session.prepare.step.selection.cardSet.sets.hours.label"),
           description: this.$t("session.prepare.step.selection.cardSet.sets.hours.description"),
-          values: ["1", "2", "3", "4", "5", "6", "8", "10", "12", "16"],
+          values: ["1", "2", "3", "4", "5", "6", "8", "10", "12", "16", "?"],
           activeValues: ["1", "2", "3", "4", "5", "6", "8", "10", "12", "16"],
         },
         {
           name: this.$t("session.prepare.step.selection.cardSet.sets.numbers.label"),
           description: this.$t("session.prepare.step.selection.cardSet.sets.numbers.description"),
-          values: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
+          values: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "?"],
           activeValues: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
         },
       ];

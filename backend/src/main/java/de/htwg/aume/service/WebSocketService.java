@@ -1,7 +1,6 @@
 package de.htwg.aume.service;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -31,7 +30,7 @@ public class WebSocketService {
 
 	public static String US_UPDATES_DESTINATION = "/updates/userStories";
 
-	public static String NOTIFICATIONS_DESTINATION = "/notifications";
+	public static String NOTIFICATIONS_DESTINATION = "/updates/notifications";
 
 	public static String START_TIMER_DESTINATION = "/updates/startTimer";
 
@@ -150,8 +149,17 @@ public class WebSocketService {
 		simpMessagingTemplate.convertAndSendToUser(userID, START_TIMER_DESTINATION, timestamp);
 	}
 
-	public void sendNotification(Notification notification) {
-		simpMessagingTemplate.convertAndSend(NOTIFICATIONS_DESTINATION, notification);
+	public void sendNotification(Session session, Notification notification) {
+		getSessionPrincipals(session.getSessionID()).memberPrincipals()
+				.forEach(member -> {
+					simpMessagingTemplate.convertAndSendToUser(member.getMemberID().toString(),
+							NOTIFICATIONS_DESTINATION, notification);
+				});
+		if (getSessionPrincipals(session.getSessionID()).adminPrincipal() != null) {
+			simpMessagingTemplate.convertAndSendToUser(
+					getSessionPrincipals(session.getSessionID()).adminPrincipal().getAdminID().toString(),
+					NOTIFICATIONS_DESTINATION, notification);
+		}
 	}
 
 	public void removeSession(Session session) {

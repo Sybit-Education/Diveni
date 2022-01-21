@@ -1,0 +1,26 @@
+<script lang="ts">
+import Vue from "vue";
+
+export default Vue.extend({
+  name: "NotifyMemberComponent",
+
+  computed: {
+    notifications() {
+      return this.$store.state.notifications;
+    },
+  },
+  watch: {
+    notifications(notifications) {
+      this.showToast(notifications.at(-1));
+    },
+  },
+  methods: {
+    showToast(message) {
+      if (message.type == "ADMIN_LEFT") {
+        const hostLeft = this.$t("session.notification.messages.hostLeft");
+        this.$toast.warning(hostLeft);
+      }
+    },
+  },
+});
+</script>

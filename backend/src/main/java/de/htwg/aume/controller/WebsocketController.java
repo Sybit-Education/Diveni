@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import de.htwg.aume.Utils;
 import de.htwg.aume.model.SessionState;
 import de.htwg.aume.model.UserStory;
+import de.htwg.aume.model.notification.MemberPayload;
 import de.htwg.aume.model.notification.Notification;
 import de.htwg.aume.model.notification.NotificationType;
 import de.htwg.aume.principals.AdminPrincipal;
@@ -44,10 +45,11 @@ public class WebsocketController {
 		webSocketService.addMemberIfNew(principal);
 		webSocketService.sendMembersUpdate(session);
 		webSocketService.sendSessionStateToMember(session, principal.getName());
-		System.out.println("Timestamp: " + session.getTimerTimestamp());
 		if (session.getTimerTimestamp() != null) {
 			webSocketService.sendTimerStartMessageToUser(session, session.getTimerTimestamp(), principal.getMemberID());
 		}
+		webSocketService.sendNotification(session, new Notification(NotificationType.MEMBER_JOINED, new MemberPayload(
+				((MemberPrincipal) principal).getMemberID())));
 	}
 
 	@MessageMapping("/unregister")
@@ -59,9 +61,13 @@ public class WebsocketController {
 					.removeMember(((MemberPrincipal) principal).getMemberID());
 			databaseService.saveSession(session);
 			webSocketService.sendMembersUpdate(session);
+			webSocketService.sendNotification(session, new Notification(NotificationType.MEMBER_LEFT, new MemberPayload(
+					((MemberPrincipal) principal).getMemberID())));
 		} else {
+			val session = ControllerUtils
+					.getSessionOrThrowResponse(databaseService, ((AdminPrincipal) principal).getSessionID());
+			webSocketService.sendNotification(session, new Notification(NotificationType.ADMIN_LEFT, null));
 			webSocketService.removeAdmin((AdminPrincipal) principal);
-			webSocketService.sendNotification(new Notification(NotificationType.ADMIN_LEFT, null));
 		}
 	}
 
@@ -84,7 +90,6 @@ public class WebsocketController {
 		val session = ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID())
 				.updateSessionState(SessionState.START_VOTING).resetCurrentHighlights()
 				.setTimerTimestamp(Utils.getTimestampISO8601(new Date()));
-		System.out.println("Set timestamp to " + session.getTimerTimestamp());
 		databaseService.saveSession(session);
 		webSocketService.sendSessionStateToMembers(session);
 		webSocketService.sendTimerStartMessage(session, session.getTimerTimestamp());
@@ -96,7 +101,6 @@ public class WebsocketController {
 				.updateSessionState(SessionState.VOTING_FINISHED)
 				.selectHighlightedMembers()
 				.resetTimerTimestamp();
-		System.out.println("Reset timestamp to " + session.getTimerTimestamp());
 		databaseService.saveSession(session);
 		webSocketService.sendMembersUpdate(session);
 		webSocketService.sendSessionStateToMembers(session);
