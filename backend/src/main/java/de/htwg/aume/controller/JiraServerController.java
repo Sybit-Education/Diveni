@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -40,7 +41,7 @@ public class JiraServerController {
 	}
 
 	@GetMapping(value = "/jira/projects")
-	public ResponseEntity<List<Project>> getProjects(@RequestParam("tokenIdentifier") String tokenIdentifier) {
+	public ResponseEntity<List<Project>> getProjects(@RequestHeader("X-Token-ID") String tokenIdentifier) {
 		return new ResponseEntity<>(jiraServerService.getProjects(tokenIdentifier), HttpStatus.OK);
 	}
 	
