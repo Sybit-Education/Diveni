@@ -105,8 +105,8 @@ public class JiraServerService {
             OAuthParameters parameters = jiraOAuthClient.getParameters(accessToken, CONSUMER_KEY, PRIVATE_KEY);
             HttpResponse response = getResponseFromUrl(parameters, new GenericUrl(JIRA_HOME + "/rest/api/latest/search?jql=project=" + projectName + " ORDER BY RANK"));
             //The reply from the Jira API is no correct JSON, therefore [ and ] have to be added
-            val test = "[" + response.parseAsString() + "]";
-            ObjectNode[] node = new ObjectMapper().readValue(test, ObjectNode[].class);
+            val json = "[" + response.parseAsString() + "]";
+            ObjectNode[] node = new ObjectMapper().readValue(json, ObjectNode[].class);
 
             for (ObjectNode objectNode : node) {
                 for (JsonNode jsonNode : objectNode.get("issues")){
