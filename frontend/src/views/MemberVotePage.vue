@@ -56,19 +56,21 @@
             class="d-flex justify-content-between flex-wrap text-center"
           >
             <b-col>
-              <member-vote-card
-                v-for="(voteOption, index) in voteSet"
-                :key="voteOption"
-                :ref="`memberCard${voteOption}`"
-                style="display: inline-block"
-                class="flicking-panel m-2"
-                :vote-option="voteOption"
-                :index="index"
-                :hex-color="hexColor"
-                :dragged="voteOption == draggedVote"
-                :is-mobile="false"
-                @sentVote="onSendVote"
-              />
+              <div class="overflow-auto" style="max-height: 500px">
+                <member-vote-card
+                  v-for="(voteOption, index) in voteSet"
+                  :key="voteOption"
+                  :ref="`memberCard${voteOption}`"
+                  style="display: inline-block"
+                  class="flicking-panel m-2"
+                  :vote-option="voteOption"
+                  :index="index"
+                  :hex-color="hexColor"
+                  :dragged="voteOption == draggedVote"
+                  :is-mobile="false"
+                  @sentVote="onSendVote"
+                />
+              </div>
             </b-col>
           </b-row>
         </b-row>

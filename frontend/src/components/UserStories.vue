@@ -16,12 +16,19 @@
         @mouseleave="hover = null"
         variant="outline-secondary"
         :style="{
-          'border-color': index === 0 ? 'RGB(202, 202, 202)' : 'white',
+          'border-color': story.isActive ? 'RGB(202, 202, 202)' : 'white',
         }"
-        :active="index === 0"
+        :active="story.isActive"
         @click="setUserStoryAsActive(index)"
       >
         <div class="list-group list-group-horizontal">
+          <b-button
+            v-if="showEditButtons"
+            :variant="story.isActive ? 'success' : 'outline-success'"
+            @click="markUserStory(index)"
+          >
+            <b-icon-check2 />
+          </b-button>
           <b-form-input
             :active="index === 0"
             :disabled="true"
@@ -159,6 +166,16 @@ export default Vue.extend({
     },
     publishChanges() {
       this.$emit("userStoriesChanged", this.userStories);
+    },
+    markUserStory(index) {
+      const stories = this.userStories.map((s) => ({
+        title: s.title,
+        description: s.description,
+        estimation: s.estimation,
+        isActive: false,
+      }));
+      stories[index].isActive = true;
+      this.userStories = stories;
     },
   },
 });
