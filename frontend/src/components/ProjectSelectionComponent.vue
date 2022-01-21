@@ -10,6 +10,7 @@
     >
       Project selection
     </b-button>
+    <p v-if="project">{{ project }}</p>
     <b-modal id="modal-project-selection" ref="modal" title="Project Selection" @ok="handleOk">
       <p>Select your Project</p>
 
@@ -62,7 +63,8 @@ export default Vue.extend({
     },
     async handleSubmit(project) {
       const response = await apiService.getUserStoriesFromProject(project);
-      this.$store.commit("setProject", response.project);
+      this.$store.commit("setUserStories", response);
+      // this.$store.commit("setProject", response.project);
       this.$nextTick(() => {
         this.$bvModal.hide("modal-project-selection");
       });

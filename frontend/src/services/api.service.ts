@@ -39,7 +39,7 @@ class ApiService {
     return response.data;
   }
   public async getUserStoriesFromProject(project): Promise<any> {
-    const response = await axios.post(`${constants.backendURL}/jira/projects/${project}/issues`);
+    const response = await axios.get(`${constants.backendURL}/jira/projects/${project}/issues`);
     return response.data;
   }
 }
