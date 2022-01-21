@@ -60,9 +60,9 @@
           <!--TODO: Implement session config with US-->
         </b-tab>
         <b-tab
+          v-if="isJiraEnabled"
           :title="$t('session.prepare.step.selection.mode.description.withJira.tab.label')"
           :title-link-class="linkClass(2)"
-          v-if="isJiraEnabled"
         >
           <jira-component class="mg_top_2_per" />
           <!--TODO: Implement session config with Jira-->
@@ -107,7 +107,7 @@ export default Vue.extend({
       timer: 30,
       warningWhenUnderZero: "",
       tabIndex: 0,
-      isJiraEnabled: constants.isJiraEnabled
+      isJiraEnabled: constants.isJiraEnabled,
     };
   },
   computed: {

@@ -8,7 +8,9 @@
       "
     >
       {{
-        $t("session.prepare.step.selection.mode.description.withJira.buttons.signInWithJiraServer.label")
+        $t(
+          "session.prepare.step.selection.mode.description.withJira.buttons.signInWithJiraServer.label"
+        )
       }}
     </b-button>
     <b-modal

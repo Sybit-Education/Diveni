@@ -4,8 +4,14 @@
     <ul>
       <li>
         {{ $t("session.prepare.step.selection.mode.description.withJira.descriptionLine1") }}
-        <sign-in-with-jira-cloud-button-component v-if="isJiraCloudEnabled" class="my-1"></sign-in-with-jira-cloud-button-component>
-        <sign-in-with-jira-server-button-component v-if="isJiraServerEnabled" class="my-1"></sign-in-with-jira-server-button-component>
+        <sign-in-with-jira-cloud-button-component
+          v-if="isJiraCloudEnabled"
+          class="my-1"
+        ></sign-in-with-jira-cloud-button-component>
+        <sign-in-with-jira-server-button-component
+          v-if="isJiraServerEnabled"
+          class="my-1"
+        ></sign-in-with-jira-server-button-component>
       </li>
       <li>{{ $t("session.prepare.step.selection.mode.description.withJira.descriptionLine2") }}</li>
       <li>
@@ -28,8 +34,8 @@ export default Vue.extend({
   data() {
     return {
       isJiraCloudEnabled: constants.isJiraCloudEnabled,
-      isJiraServerEnabled: constants.isJiraServerEnabled
-    }
-  }
+      isJiraServerEnabled: constants.isJiraServerEnabled,
+    };
+  },
 });
 </script>

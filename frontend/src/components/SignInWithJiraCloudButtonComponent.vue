@@ -1,13 +1,10 @@
 <template>
   <div>
-    <b-button
-      variant="success"
-      @click="
-        redirectToJira();
-      "
-    >
+    <b-button variant="success" @click="redirectToJira()">
       {{
-        $t("session.prepare.step.selection.mode.description.withJira.buttons.signInWithJiraCloud.label")
+        $t(
+          "session.prepare.step.selection.mode.description.withJira.buttons.signInWithJiraCloud.label"
+        )
       }}
     </b-button>
   </div>

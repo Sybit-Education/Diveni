@@ -4,8 +4,8 @@ class Constants {
   i18nLocale = process.env.VUE_APP_I18N_LOCALE;
   i18nFallbackLocale = process.env.VUE_APP_I18N_FALLBACK_LOCALE;
 
-  isJiraCloudEnabled = process.env.VUE_APP_ENABLE_JIRA_CLOUD === 'true';
-  isJiraServerEnabled = process.env.VUE_APP_ENABLE_JIRA_SERVER === 'true';
+  isJiraCloudEnabled = process.env.VUE_APP_ENABLE_JIRA_CLOUD === "true";
+  isJiraServerEnabled = process.env.VUE_APP_ENABLE_JIRA_SERVER === "true";
   isJiraEnabled = this.isJiraCloudEnabled || this.isJiraServerEnabled;
 
   createSessionRoute = "/sessions";
