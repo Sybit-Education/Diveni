@@ -3,10 +3,12 @@ package de.htwg.aume.service.jira;
 
 import java.util.Map;
 import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.api.client.auth.oauth.OAuthAuthorizeTemporaryTokenUrl;
 import com.google.api.client.auth.oauth.OAuthParameters;
 import com.google.api.client.http.GenericUrl;
@@ -21,6 +23,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import de.htwg.aume.controller.ErrorMessages;
 import de.htwg.aume.model.JiraRequestToken;
+import de.htwg.aume.model.Project;
+import de.htwg.aume.model.TokenIdentifier;
 import de.htwg.aume.Utils;
 
 import lombok.val;
@@ -57,25 +61,34 @@ public class JiraServerService {
         }
     }
 
-    public String getAccessToken(String verificationCode, String requestToken){
+    public TokenIdentifier getAccessToken(String verificationCode, String requestToken){
         try {
             JiraOAuthClient jiraOAuthClient = new JiraOAuthClient(JIRA_HOME);
             val accessToken = jiraOAuthClient.getAccessToken(requestToken, verificationCode, CONSUMER_KEY, PRIVATE_KEY);
             val id = Utils.generateRandomID();
             accessTokens.put(id, accessToken);
-            return id;
+            return new TokenIdentifier(accessToken);
         } catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToRetrieveAccessTokenErrorMessage);
         }
     }
 
-    public String getProjects(String tokenIdentifier){
+    public List<Project> getProjects(String tokenIdentifier){
         try {
-            val accessToken = accessTokens.get(tokenIdentifier);
+            List<Project> projects = new ArrayList<>();
+            //val accessToken = accessTokens.get(tokenIdentifier);
             JiraOAuthClient jiraOAuthClient = new JiraOAuthClient(JIRA_HOME);
-            OAuthParameters parameters = jiraOAuthClient.getParameters(accessToken, CONSUMER_KEY, PRIVATE_KEY);
+            OAuthParameters parameters = jiraOAuthClient.getParameters(tokenIdentifier, CONSUMER_KEY, PRIVATE_KEY);
             HttpResponse response = getResponseFromUrl(parameters, new GenericUrl(JIRA_HOME + "/rest/api/latest/project"));
-            return response.parseAsString();
+            ObjectNode[] node = new ObjectMapper().readValue(response.parseAsString(), ObjectNode[].class);
+
+            for (ObjectNode objectNode : node) {
+                if (objectNode.has("name")){
+                    projects.add(new Project(objectNode.get("name").asText()));
+                }
+            }
+       
+            return projects;
         } catch (Exception e) {
             e.printStackTrace();
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToRetrieveProjectsErrorMessage);

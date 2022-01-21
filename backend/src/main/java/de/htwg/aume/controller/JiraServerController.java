@@ -1,5 +1,7 @@
 package de.htwg.aume.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -7,10 +9,13 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import de.htwg.aume.model.JiraRequestToken;
+import de.htwg.aume.model.Project;
+import de.htwg.aume.model.TokenIdentifier;
 import de.htwg.aume.model.VerificationCode;
 import de.htwg.aume.service.DatabaseService;
 import de.htwg.aume.service.jira.JiraServerService;
@@ -31,12 +36,12 @@ public class JiraServerController {
 	}
 
 	@PostMapping(value = "/jira/oauth1/verificationCode")
-	public ResponseEntity<String> getAccessToken(@RequestBody VerificationCode verificationCode) {
+	public ResponseEntity<TokenIdentifier> getAccessToken(@RequestBody VerificationCode verificationCode) {
 		return new ResponseEntity<>(jiraServerService.getAccessToken(verificationCode.getCode(), verificationCode.getToken()), HttpStatus.OK);
 	}
 
-	@GetMapping(value = "/jira/project")
-	public ResponseEntity<String> getProjects(@RequestParam("tokenIdentifier") String tokenIdentifier) {
+	@GetMapping(value = "/jira/projects")
+	public ResponseEntity<List<Project>> getProjects(@RequestHeader("X-Token-ID") String tokenIdentifier) {
 		return new ResponseEntity<>(jiraServerService.getProjects(tokenIdentifier), HttpStatus.OK);
 	}
 	
