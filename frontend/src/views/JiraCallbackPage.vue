@@ -33,7 +33,7 @@ export default Vue.extend({
       } catch (e) {
         this.showToast(e);
       }
-      this.$router.push({ name: "PrepareSessionPage" });
+      this.$router.push({ name: "PrepareSessionPage", query: { tabIndex: "2" } });
     },
     showToast(error) {
       if (error.message == "failed to retrieve access token") {
