@@ -1,19 +1,37 @@
-import { JiraRequestTokenDto } from "@/types";
+import constants from "@/constants";
+import { JiraRequestTokenDto, JiraResponseCodeDto } from "@/types";
 import axios from "axios";
 
 class ApiService {
-  public async getJiraRequestToken(): Promise<JiraRequestTokenDto> {
+  public async getJiraOauth1RequestToken(): Promise<JiraRequestTokenDto> {
     const response = await axios.get<JiraRequestTokenDto>(
-      `${process.env.VUE_APP_SERVER_API_URL}/jira/oauth1/requestToken`
+      `${constants.backendURL}/jira/oauth1/requestToken`
     );
     return response.data;
   }
 
-  public async sendJiraVerificationCode(code: string, token: string): Promise<void> {
-    await axios.post<void>(`${process.env.VUE_APP_SERVER_API_URL}/jira/oauth1/verificationCode`, {
-      code,
-      token,
-    });
+  public async sendJiraOauth1VerificationCode(
+    code: string,
+    token: string
+  ): Promise<JiraResponseCodeDto> {
+    const response = await axios.post<JiraResponseCodeDto>(
+      `${constants.backendURL}/jira/oauth1/verificationCode`,
+      {
+        code,
+        token,
+      }
+    );
+    return response.data;
+  }
+
+  public async sendJiraOauth2AuthorizationCode(code: string): Promise<JiraResponseCodeDto> {
+    const response = await axios.post<JiraResponseCodeDto>(
+      `${constants.backendURL}/jira/oauth2/authorizationCode`,
+      {
+        code,
+      }
+    );
+    return response.data;
   }
 }
 

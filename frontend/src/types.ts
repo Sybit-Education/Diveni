@@ -8,9 +8,14 @@ export interface StoreState {
   members: Record<string, unknown>[];
   notifications: Record<string, unknown>[];
   highlightedMembers: Record<string, unknown>[];
+  tokenId: string | undefined;
 }
 
 export interface JiraRequestTokenDto {
   token: string;
   url: string;
+}
+
+export interface JiraResponseCodeDto {
+  tokenId: string;
 }
