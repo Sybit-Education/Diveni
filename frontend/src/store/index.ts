@@ -16,6 +16,7 @@ export default new Vuex.Store<StoreState>({
     notifications: [],
     highlightedMembers: [],
     tokenId: undefined,
+    project: undefined,
   },
   mutations: {
     setMembers(state, members) {
@@ -72,6 +73,10 @@ export default new Vuex.Store<StoreState>({
     },
     setTokenId(state, tokenId) {
       state.tokenId = tokenId;
+    },
+
+    setProject(state, project) {
+      state.project = project;
     },
   },
   actions: {},

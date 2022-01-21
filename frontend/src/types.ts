@@ -9,6 +9,7 @@ export interface StoreState {
   notifications: Record<string, unknown>[];
   highlightedMembers: Record<string, unknown>[];
   tokenId: string | undefined;
+  project: string | undefined;
 }
 
 export interface JiraRequestTokenDto {

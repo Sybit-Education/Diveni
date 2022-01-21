@@ -33,6 +33,15 @@ class ApiService {
     );
     return response.data;
   }
+
+  public async getAllProjects(): Promise<any> {
+    const response = await axios.post(`${constants.backendURL}/projects`);
+    return response.data;
+  }
+  public async getUserStoriesFromProject(project): Promise<any> {
+    const response = await axios.post(`${constants.backendURL}/projects/${project}/issues`);
+    return response.data;
+  }
 }
 
 export default new ApiService();
