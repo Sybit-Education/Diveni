@@ -7,10 +7,12 @@
         <sign-in-with-jira-cloud-button-component
           v-if="isJiraCloudEnabled"
           class="my-1"
+          :disabled="isLoggedInWithJira"
         ></sign-in-with-jira-cloud-button-component>
         <sign-in-with-jira-server-button-component
           v-if="isJiraServerEnabled"
           class="my-1"
+          :disabled="isLoggedInWithJira"
         ></sign-in-with-jira-server-button-component>
       </li>
       <li>{{ $t("session.prepare.step.selection.mode.description.withJira.descriptionLine2") }}</li>
@@ -35,6 +37,7 @@ export default Vue.extend({
     return {
       isJiraCloudEnabled: constants.isJiraCloudEnabled,
       isJiraServerEnabled: constants.isJiraServerEnabled,
+      isLoggedInWithJira: !!this.$store.state.tokenId,
     };
   },
 });

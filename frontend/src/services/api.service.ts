@@ -1,5 +1,5 @@
 import constants from "@/constants";
-import { JiraRequestTokenDto } from "@/types";
+import { JiraRequestTokenDto, JiraResponseCodeDto } from "@/types";
 import axios from "axios";
 
 class ApiService {
@@ -10,17 +10,28 @@ class ApiService {
     return response.data;
   }
 
-  public async sendJiraOauth1VerificationCode(code: string, token: string): Promise<void> {
-    await axios.post<void>(`${constants.backendURL}/jira/oauth1/verificationCode`, {
-      code,
-      token,
-    });
+  public async sendJiraOauth1VerificationCode(
+    code: string,
+    token: string
+  ): Promise<JiraResponseCodeDto> {
+    const response = await axios.post<JiraResponseCodeDto>(
+      `${constants.backendURL}/jira/oauth1/verificationCode`,
+      {
+        code,
+        token,
+      }
+    );
+    return response.data;
   }
 
-  public async sendJiraOauth2AuthorizationCode(code: string): Promise<void> {
-    await axios.post<void>(`${constants.backendURL}/jira/oauth2/authorizationCode`, {
-      code,
-    });
+  public async sendJiraOauth2AuthorizationCode(code: string): Promise<JiraResponseCodeDto> {
+    const response = await axios.post<JiraResponseCodeDto>(
+      `${constants.backendURL}/jira/oauth2/authorizationCode`,
+      {
+        code,
+      }
+    );
+    return response.data;
   }
 }
 

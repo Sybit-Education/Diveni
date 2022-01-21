@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-button variant="success" @click="redirectToJira()">
+    <b-button variant="success" :disabled="disabled" @click="redirectToJira()">
       {{
         $t(
           "session.prepare.step.selection.mode.description.withJira.buttons.signInWithJiraCloud.label"
@@ -16,6 +16,13 @@ import { v4 as uuidv4 } from "uuid";
 
 export default Vue.extend({
   name: "SignInWithJiraCloudButtonComponent",
+  props: {
+    disabled: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+  },
   methods: {
     async redirectToJira() {
       const stateId = uuidv4();

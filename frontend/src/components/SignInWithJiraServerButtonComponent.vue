@@ -2,6 +2,7 @@
   <div>
     <b-button
       variant="success"
+      :disabled="disabled"
       @click="
         openSignInWithJiraTab();
         openModal();
@@ -52,6 +53,13 @@ import apiService from "@/services/api.service";
 
 export default Vue.extend({
   name: "SignInWithJiraServerButtonComponent",
+  props: {
+    disabled: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+  },
   data() {
     return {
       token: "",
@@ -89,7 +97,11 @@ export default Vue.extend({
         return;
       }
       try {
-        await apiService.sendJiraOauth1VerificationCode(this.verificationCode, this.token);
+        const response = await apiService.sendJiraOauth1VerificationCode(
+          this.verificationCode,
+          this.token
+        );
+        this.$store.commit("setTokenId", response.tokenId);
       } catch (e) {
         this.showToast(e);
       }
