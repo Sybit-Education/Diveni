@@ -2,13 +2,16 @@
   <div>
     <b-button
       variant="success"
+      :disabled="disabled"
       @click="
         openSignInWithJiraTab();
         openModal();
       "
     >
       {{
-        $t("session.prepare.step.selection.mode.description.withJira.buttons.signInWithJira.label")
+        $t(
+          "session.prepare.step.selection.mode.description.withJira.buttons.signInWithJiraServer.label"
+        )
       }}
     </b-button>
     <b-modal
@@ -49,7 +52,14 @@ import Vue from "vue";
 import apiService from "@/services/api.service";
 
 export default Vue.extend({
-  name: "SignInWithJiraButtonComponent",
+  name: "SignInWithJiraServerButtonComponent",
+  props: {
+    disabled: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+  },
   data() {
     return {
       token: "",
@@ -64,7 +74,7 @@ export default Vue.extend({
       return valid;
     },
     async openSignInWithJiraTab() {
-      const tokenDto = await apiService.getJiraRequestToken();
+      const tokenDto = await apiService.getJiraOauth1RequestToken();
       this.token = tokenDto.token;
       window.open(tokenDto.url, "_blank")?.focus();
     },
@@ -87,7 +97,11 @@ export default Vue.extend({
         return;
       }
       try {
-        await apiService.sendJiraVerificationCode(this.verificationCode, this.token);
+        const response = await apiService.sendJiraOauth1VerificationCode(
+          this.verificationCode,
+          this.token
+        );
+        this.$store.commit("setTokenId", response.tokenId);
       } catch (e) {
         this.showToast(e);
       }
@@ -95,11 +109,13 @@ export default Vue.extend({
         this.$bvModal.hide("modal-verification-code");
       });
     },
-    showToast(e) {
-      if (e.message == "failed to retrieve access token") {
+    showToast(error) {
+      if (error.message == "failed to retrieve access token") {
         this.$toast.error(this.$t("session.notification.messages.jiraCredentials"));
+      } else {
+        this.$toast.error(this.$t("session.notification.messages.jiraLoginFailed"));
       }
-      console.log(e);
+      console.log(error);
     },
   },
 });
