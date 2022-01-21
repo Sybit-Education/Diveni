@@ -18,6 +18,7 @@
             @blur="publishChanges"
           />
           <b-dropdown
+            class="m-1"
             v-show="editDescription"
             :text="
               (userStories[idx].estimation

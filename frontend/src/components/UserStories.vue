@@ -23,6 +23,7 @@
       >
         <div class="list-group list-group-horizontal">
           <b-button
+            class="m-1"
             v-if="showEditButtons"
             :variant="story.isActive ? 'success' : 'outline-success'"
             @click="markUserStory(index)"
@@ -58,6 +59,8 @@
                   userStories[index].estimation == null
                     ? 'white'
                     : 'RGB(13, 202, 240)',
+                width: '48px',
+                'font-size': 'larger',
               }"
             >
               {{ story.estimation }}
