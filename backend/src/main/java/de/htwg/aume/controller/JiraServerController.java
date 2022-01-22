@@ -39,16 +39,19 @@ public class JiraServerController {
 
 	@PostMapping(value = "/jira/oauth1/verificationCode")
 	public ResponseEntity<TokenIdentifier> getAccessToken(@RequestBody VerificationCode verificationCode) {
-		return new ResponseEntity<>(jiraServerService.getAccessToken(verificationCode.getCode(), verificationCode.getToken()), HttpStatus.OK);
+		return new ResponseEntity<>(
+				jiraServerService.getAccessToken(verificationCode.getCode(), verificationCode.getToken()),
+				HttpStatus.OK);
 	}
 
 	@GetMapping(value = "/jira/projects")
-	public ResponseEntity<List<Project>> getProjects(@RequestHeader("X-Token-ID") String tokenIdentifier) {
+	public ResponseEntity<List<String>> getProjects(@RequestHeader("X-Token-ID") String tokenIdentifier) {
 		return new ResponseEntity<>(jiraServerService.getProjects(tokenIdentifier), HttpStatus.OK);
 	}
-	
+
 	@GetMapping(value = "/jira/projects/{projectName}/issues")
-	public ResponseEntity<List<UserStory>> getIssues(@RequestHeader("X-Token-ID") String tokenIdentifier, @PathVariable String projectName) {
+	public ResponseEntity<List<UserStory>> getIssues(@RequestHeader("X-Token-ID") String tokenIdentifier,
+			@PathVariable String projectName) {
 		return new ResponseEntity<>(jiraServerService.getIssues(tokenIdentifier, projectName), HttpStatus.OK);
 	}
 
