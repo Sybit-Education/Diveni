@@ -53,6 +53,9 @@ public class Session {
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private Date lastModified;
 
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+	private String accessToken;
+
 	static Comparator<String> estimationByIndex(List<String> set) {
 		return Comparator.comparingInt((str) -> set.indexOf(str));
 	}
@@ -156,6 +159,12 @@ public class Session {
 		val session = new Session(databaseID, sessionID, adminID, sessionConfig, adminCookie, members, memberVoted,
 				currentHighlights, sessionState);
 		session.lastModified = lastModified;
+		return session;
+	}
+
+	public Session setAccessToken(String token) {
+		val session = new Session(databaseID,sessionID, adminID, sessionConfig, adminCookie, members, memberVoted, currentHighlights, sessionState);
+		session.accessToken = token;
 		return session;
 	}
 }
