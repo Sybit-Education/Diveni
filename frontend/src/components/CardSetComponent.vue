@@ -5,8 +5,8 @@
         <div class="d-flex justify-content-around">
           <div
             v-for="item of allCardSets"
-            id="swipe-card"
             :key="item.name"
+            class="swipe-card"
             :style="`background-color: ${
               selectedCardSet.name === item.name ? '#198754' : 'lightgrey'
             }`"
@@ -120,7 +120,7 @@ export default Vue.extend({
   border-radius: 25px;
   cursor: pointer;
 }
-#swipe-card {
+.swipe-card {
   width: 168px;
   height: 202px;
   justify-content: flex-start; /* Centering y-axis */
@@ -128,6 +128,7 @@ export default Vue.extend({
   border-radius: 5%;
   display: flex;
   flex-direction: column;
+  cursor: pointer;
 }
 #text {
   font-size: 20px;

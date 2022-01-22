@@ -1,4 +1,7 @@
 {
+  "general": {
+    "pleaseWait": "Please wait..."
+  },
   "page": {
     "session": {
       "before": {
@@ -98,36 +101,8 @@
       "title": "Prepare your session:",
       "step": {
         "selection": {
-          "cardSet": {
-            "title": "1. Select a card set and its values",
-            "sets": {
-              "fibonacci": {
-                "label": "Fibonacci",
-                "description": "Each number is the sum of the two preceding ones"
-              },
-              "tShirtSizes": {
-                "label": "T-shirt sizes",
-                "description": "Basic T-shirt sizes. Simple and effective"
-              },
-              "hours": {
-                "label": "Hours",
-                "description": "Simply hours. Great for sub tasks."
-              },
-              "numbers": {
-                "label": "Numbers",
-                "description": "Integer numbers. What else do you want?"
-              }
-            }
-          },
-          "time": {
-            "title": "2. Adjust the time per estimation"
-          },
-          "password": {
-            "title": "3. Choose a password if needed",
-            "placeholder": "Password (leave empty for unprotected session)"
-          },
           "mode": {
-            "title": "4. Select the mode for your User Stories",
+            "title": "1. Select the mode for your User Stories",
             "description": {
               "withoutUS": {
                 "tab": {
@@ -168,8 +143,11 @@
                   }
                 },
                 "buttons": {
-                  "signInWithJira": {
-                    "label": "Sign in with Jira"
+                  "signInWithJiraCloud": {
+                    "label": "Sign in with Jira Cloud"
+                  },
+                  "signInWithJiraServer": {
+                    "label": "Sign in with Jira Server"
                   },
                   "submit": {
                     "label": "Submit"
@@ -177,6 +155,34 @@
                 }
               }
             }
+          },
+          "cardSet": {
+            "title": "2. Select a card set and its values",
+            "sets": {
+              "fibonacci": {
+                "label": "Fibonacci",
+                "description": "Each number is the sum of the two preceding ones"
+              },
+              "tShirtSizes": {
+                "label": "T-shirt sizes",
+                "description": "Basic T-shirt sizes. Simple and effective"
+              },
+              "hours": {
+                "label": "Hours",
+                "description": "Simply hours. Great for sub tasks."
+              },
+              "numbers": {
+                "label": "Numbers",
+                "description": "Integer numbers. What else do you want?"
+              }
+            }
+          },
+          "time": {
+            "title": "3. Adjust the time per estimation"
+          },
+          "password": {
+            "title": "4. Choose a password if needed",
+            "placeholder": "Password (leave empty for unprotected session)"
           }
         }
       },
@@ -203,6 +209,7 @@
         "memberLeft": "Member left the session",
         "memberJoined": "Member joined the session",
         "jiraCredentials": "Wrong credentials",
+        "jiraLoginFailed": "Login failed",
         "wrongID": "Wrong invitation code",
         "password": "Wrong password"
       }

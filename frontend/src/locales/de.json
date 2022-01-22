@@ -1,4 +1,7 @@
 {
+  "general": {
+    "pleaseWait": "Bitte warten..."
+  },
   "page": {
     "session": {
       "before": {
@@ -98,36 +101,8 @@
       "title": "Bereite deine Session vor:",
       "step": {
         "selection": {
-          "cardSet": {
-            "title": "1. Wähle ein Kartenset mit den entsprechenden Werten",
-            "sets": {
-              "fibonacci": {
-                "label": "Fibonacci-Folge",
-                "description": "Jede Zahl ist die Summe der beiden vorherigen Zahlen"
-              },
-              "tShirtSizes": {
-                "label": "T-Shirt Größen",
-                "description": "T-Shirt Größen - einfach und effektiv"
-              },
-              "hours": {
-                "label": "Stunden",
-                "description": "Einfach nur Stunden. Perfekt für Subtasks"
-              },
-              "numbers": {
-                "label": "Zahlen",
-                "description": "Integer-Werte - was braucht man mehr?"
-              }
-            }
-          },
-          "time": {
-            "title": "2. Bestimme die Zeit pro Schätzrunde"
-          },
-          "password": {
-            "title": "3. Wähle ein Passwort, falls gewünscht",
-            "placeholder": "Passwort (leer lassen für eine offene Session)"
-          },
           "mode": {
-            "title": "4. Wähle den Modus für die User Stories",
+            "title": "1. Wähle den Modus für die User Stories",
             "description": {
               "withoutUS": {
                 "tab": {
@@ -168,8 +143,11 @@
                   }
                 },
                 "buttons": {
-                  "signInWithJira": {
-                    "label": "Mit Jira anmelden"
+                  "signInWithJiraCloud": {
+                    "label": "Mit Jira Cloud anmelden"
+                  },
+                  "signInWithJiraServer": {
+                    "label": "Mit Jira Server anmelden"
                   },
                   "submit": {
                     "label": "Senden"
@@ -177,6 +155,34 @@
                 }
               }
             }
+          },
+          "cardSet": {
+            "title": "2. Wähle ein Kartenset mit den entsprechenden Werten",
+            "sets": {
+              "fibonacci": {
+                "label": "Fibonacci-Folge",
+                "description": "Jede Zahl ist die Summe der beiden vorherigen Zahlen"
+              },
+              "tShirtSizes": {
+                "label": "T-Shirt Größen",
+                "description": "T-Shirt Größen - einfach und effektiv"
+              },
+              "hours": {
+                "label": "Stunden",
+                "description": "Einfach nur Stunden. Perfekt für Subtasks"
+              },
+              "numbers": {
+                "label": "Zahlen",
+                "description": "Integer-Werte - was braucht man mehr?"
+              }
+            }
+          },
+          "time": {
+            "title": "3. Bestimme die Zeit pro Schätzrunde"
+          },
+          "password": {
+            "title": "4. Wähle ein Passwort, falls gewünscht",
+            "placeholder": "Passwort (leer lassen für eine offene Session)"
           }
         }
       },
@@ -203,6 +209,7 @@
         "memberLeft": "Teilnehmer hat die Sitzung verlassen",
         "memberJoined": "Teilnehmer ist der Sitzung beigetreten",
         "jiraCredentials": "Falsche Login-Daten",
+        "jiraLoginFailed": "Login fehlgeschlagen",
         "wrongID": "Falscher Einladungscode",
         "password": "Falsches Passwort"
       }

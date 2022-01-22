@@ -12,6 +12,10 @@ public class ErrorMessages {
 
 	public static String wrongPasswordMessage = "no or wrong password given";
 
+	public static String failedToRetrieveRequestTokenErrorMessage = "failed to retrieve request token";
+
+	public static String failedToRetrieveAccessTokenErrorMessage = "failed to retrieve access token";
+
 	private ErrorMessages() {
 	}
 

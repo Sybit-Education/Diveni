@@ -137,7 +137,7 @@ public class WebSocketServiceTest {
         val session = new Session(new ObjectId(), defaultAdminPrincipal.getSessionID(),
                 defaultAdminPrincipal.getAdminID(), null, null,
                 List.of(new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null)),
-                new HashMap<>(), new ArrayList<>(), null);
+                new HashMap<>(), new ArrayList<>(), null, null, null);
 
         webSocketService.sendMembersUpdate(session);
 
@@ -152,7 +152,7 @@ public class WebSocketServiceTest {
         val session = new Session(new ObjectId(), defaultAdminPrincipal.getSessionID(),
                 defaultAdminPrincipal.getAdminID(), null, null,
                 List.of(new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null)),
-                new HashMap<>(), new ArrayList<>(), SessionState.WAITING_FOR_MEMBERS);
+                new HashMap<>(), new ArrayList<>(), SessionState.WAITING_FOR_MEMBERS, null, null);
 
         webSocketService.sendSessionStateToMember(session, defaultMemberPrincipal.getMemberID().toString());
 
@@ -171,7 +171,7 @@ public class WebSocketServiceTest {
                 defaultAdminPrincipal.getAdminID(), null, null,
                 List.of(new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null),
                         new Member(memberPrincipal.getMemberID(), null, null, null, null)),
-                new HashMap<>(), new ArrayList<>(), SessionState.WAITING_FOR_MEMBERS);
+                new HashMap<>(), new ArrayList<>(), SessionState.WAITING_FOR_MEMBERS, null, null);
 
         webSocketService.sendSessionStateToMembers(session);
 
@@ -187,14 +187,15 @@ public class WebSocketServiceTest {
 
     @Test
     public void sendUpdatedUserStoriesToMembers_sendsToAll() throws Exception {
-        val memberPrincipal = new MemberPrincipal(defaultAdminPrincipal.getSessionID(), Utils.generateRandomID());
+        val memberPrincipal = new MemberPrincipal(defaultAdminPrincipal.getSessionID(),
+                Utils.generateRandomID());
         setDefaultAdminPrincipal(Set.of(defaultMemberPrincipal, memberPrincipal));
         val session = new Session(new ObjectId(), defaultAdminPrincipal.getSessionID(),
                 defaultAdminPrincipal.getAdminID(),
                 new SessionConfig(List.of(), List.of(), null, "US_MANUALLY", "password"), null,
                 List.of(new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null),
                         new Member(memberPrincipal.getMemberID(), null, null, null, null)),
-                new HashMap<>(), new ArrayList<>(), SessionState.WAITING_FOR_MEMBERS);
+                new HashMap<>(), new ArrayList<>(), SessionState.WAITING_FOR_MEMBERS, null, null);
 
         webSocketService.sendUpdatedUserStoriesToMembers(session);
 
@@ -217,7 +218,7 @@ public class WebSocketServiceTest {
                 new SessionConfig(List.of(), List.of(), null, "US_MANUALLY", "password"), null,
                 List.of(new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null),
                         new Member(memberPrincipal.getMemberID(), null, null, null, null)),
-                new HashMap<>(), new ArrayList<>(), SessionState.WAITING_FOR_MEMBERS);
+                new HashMap<>(), new ArrayList<>(), SessionState.WAITING_FOR_MEMBERS, null, null);
         val notification = new Notification(NotificationType.ADMIN_LEFT, null);
 
         webSocketService.sendNotification(session, notification);
@@ -233,7 +234,7 @@ public class WebSocketServiceTest {
         val session = new Session(new ObjectId(), defaultAdminPrincipal.getSessionID(),
                 defaultAdminPrincipal.getAdminID(), null, null,
                 List.of(new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null)),
-                new HashMap<>(), new ArrayList<>(), SessionState.WAITING_FOR_MEMBERS);
+                new HashMap<>(), new ArrayList<>(), SessionState.WAITING_FOR_MEMBERS, null, null);
 
         webSocketService.removeSession(session);
 

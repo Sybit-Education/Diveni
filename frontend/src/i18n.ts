@@ -1,5 +1,6 @@
 import Vue from "vue";
 import VueI18n from "vue-i18n";
+import constants from "./constants";
 
 Vue.use(VueI18n);
 
@@ -16,10 +17,10 @@ function loadLocaleMessages() {
   return messages;
 }
 
-const locale = localStorage.getItem("locale") || process.env.VUE_APP_I18N_LOCALE || "de";
+const locale = localStorage.getItem("locale") || constants.i18nLocale || "de";
 
 export default new VueI18n({
   locale,
-  fallbackLocale: process.env.VUE_APP_I18N_FALLBACK_LOCALE || "de",
+  fallbackLocale: constants.i18nFallbackLocale || "de",
   messages: loadLocaleMessages(),
 });
