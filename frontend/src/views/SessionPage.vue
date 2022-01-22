@@ -1,7 +1,7 @@
 <template>
   <b-container>
     <user-stories-sidebar
-      v-if="userStoryMode !== 'NO_US'"
+      v-if="session_userStoryMode !== 'NO_US'"
       :card-set="voteSet"
       :show-estimations="planningStart"
       :initial-stories="userStories"
@@ -18,14 +18,14 @@
         </h1></b-col
       >
       <b-col v-if="planningStart" align-self="center">
-        <copy-session-id-popup class="float-end" :session-id="sessionID" />
+        <copy-session-id-popup class="float-end" :session-id="session_sessionID" />
       </b-col>
     </b-row>
     <div v-if="!planningStart">
       <b-row class="align-items-center">
         <copy-session-id-popup
           :text-before-session-i-d="$t('page.session.before.text.beforeID')"
-          :session-id="sessionID"
+          :session-id="session_sessionID"
           :text-after-session-i-d="$t('page.session.before.text.afterID')"
         />
       </b-row>
@@ -81,7 +81,7 @@
             <p class="my-4">
               {{ $t("page.session.close.description1") }}
             </p>
-            <p v-if="userStoryMode !== 'NO_US'">
+            <p v-if="session_userStoryMode !== 'NO_US'">
               {{ $t("page.session.close.description2") }}
             </p>
           </b-modal>
@@ -181,17 +181,14 @@ export default Vue.extend({
       session_voteSetJson: "",
       session_sessionState: "",
       session_timerSecondsString: "",
+      session_userStoryMode: "",
       //data
-      titleWaiting: "Waiting for members ...",
-      titleEstimate: "Estimate!",
-      stageLabelReady: "Ready",
-      stageLabelWaiting: "Waiting room",
       planningStart: false,
       voteSet: [] as string[],
       timerCountdownNumber: 0,
-      triggerTimer: 0,
       startTimerOnComponentCreation: true,
       estimateFinished: false,
+      session: {},
     };
   },
   computed: {
@@ -242,30 +239,26 @@ export default Vue.extend({
     },
   },
   async created() {
-    this.session_adminID = this.adminID;
-    this.session_sessionID = this.sessionID;
-    this.session_sessionState = this.sessionState;
-    this.session_timerSecondsString = this.timerSecondsString;
-    this.session_voteSetJson = this.voteSetJson;
-    if (!this.sessionID || !this.adminID) {
+    this.copyPropsToData();
+    if (!this.session_sessionID || !this.session_adminID) {
+      //check for cookie
       await this.checkAdminCookie();
+      this.assignSessionToData(this.session);
       if (this.session_sessionID.length === 0) {
         this.goToLandingPage();
       } else {
-        alert("sessionWrapper is availbale");
+        this.handleReload();
       }
     }
-    this.timerCountdownNumber = parseInt(this.timerSecondsString, 10);
+    this.timerCountdownNumber = parseInt(this.session_timerSecondsString, 10);
     window.addEventListener("beforeunload", this.sendUnregisterCommand);
   },
   mounted() {
-    this.voteSet = JSON.parse(this.voteSetJson);
+    this.voteSet = JSON.parse(this.session_voteSetJson);
     this.connectToWebSocket();
-    if (this.sessionState === Constants.memberUpdateCommandStartVoting) {
+    if (this.session_sessionState === Constants.memberUpdateCommandStartVoting) {
       this.planningStart = true;
-      if (this.planningStart) {
-        this.sendRestartMessage();
-      }
+      this.sendRestartMessage();
     }
   },
   destroyed() {
@@ -301,17 +294,46 @@ export default Vue.extend({
             };
             sessionState: string;
           };
-          this.session_adminID = session.adminID;
-          this.session_sessionID = session.sessionID;
-          this.session_sessionState = session.sessionState;
-          this.session_timerSecondsString = session.sessionConfig.timerSeconds.toString();
-          this.session_voteSetJson = JSON.stringify(session.sessionConfig.set);
+          this.session = session;
         } catch (e) {
           console.clear();
           console.log(`got error: ${e}`);
           window.localStorage.removeItem("adminCookie");
         }
       }
+    },
+    copyPropsToData() {
+      this.session_adminID = this.adminID;
+      this.session_sessionID = this.sessionID;
+      this.session_sessionState = this.sessionState;
+      this.session_timerSecondsString = this.timerSecondsString;
+      this.session_voteSetJson = this.voteSetJson;
+      this.session_userStoryMode = this.userStoryMode;
+    },
+    assignSessionToData(session) {
+      if (Object.keys(session).length !== 0) {
+        this.session_adminID = session.adminID;
+        this.session_sessionID = session.sessionID;
+        this.session_sessionState = session.sessionState;
+        this.session_timerSecondsString = session.sessionConfig.timerSeconds.toString();
+        this.session_voteSetJson = JSON.stringify(session.sessionConfig.set);
+        this.session_userStoryMode = session.sessionConfig.userStoryMode;
+      }
+    },
+    handleReload() {
+      if (
+        this.session_sessionState === Constants.memberUpdateCommandStartVoting ||
+        this.session_sessionState === Constants.memberUpdateCommandVotingFinished
+      ) {
+        this.planningStart = true;
+      }
+      if (this.session_sessionState === Constants.memberUpdateCommandVotingFinished) {
+        this.estimateFinished = true;
+      }
+      this.timerCountdownNumber = parseInt(this.session_timerSecondsString, 10);
+      //reconnect and reload member
+      this.connectToWebSocket();
+      this.requestMemberUpdate();
     },
     onUserStoriesChanged($event) {
       this.$store.commit("setUserStories", { stories: $event });
@@ -321,7 +343,7 @@ export default Vue.extend({
       }
     },
     connectToWebSocket() {
-      const url = `${Constants.backendURL}/connect?sessionID=${this.sessionID}&adminID=${this.adminID}`;
+      const url = `${Constants.backendURL}/connect?sessionID=${this.session_sessionID}&adminID=${this.session_adminID}`;
       this.$store.commit("connectToBackendWS", url);
     },
     registerAdminPrincipalOnBackend() {
@@ -368,7 +390,7 @@ export default Vue.extend({
     closeSession() {
       this.sendCloseSessionCommand();
       window.localStorage.removeItem("adminCookie");
-      if (this.userStoryMode !== "NO_US") {
+      if (this.session_userStoryMode !== "NO_US") {
         this.$router.push({ name: "ResultPage" });
       } else {
         this.$router.push({ name: "LandingPage" });
