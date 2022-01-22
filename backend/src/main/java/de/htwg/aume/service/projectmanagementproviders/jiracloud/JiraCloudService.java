@@ -100,8 +100,7 @@ public class JiraCloudService implements ProjectManagementProviderOAuth2 {
 
     @Override
     public boolean containsToken(String token) {
-        // TODO Auto-generated method stub
-        return false;
+        return accessTokens.containsKey(token);
     }
 
 }

@@ -204,4 +204,9 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
         return request.execute();
     }
 
+    @Override
+    public boolean containsToken(String token) {
+        return accessTokens.containsKey(token);
+    }
+
 }
