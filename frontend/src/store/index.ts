@@ -15,6 +15,7 @@ export default new Vuex.Store<StoreState>({
     members: [],
     notifications: [],
     highlightedMembers: [],
+    timerTimestamp: undefined,
     tokenId: undefined,
   },
   mutations: {
@@ -49,6 +50,12 @@ export default new Vuex.Store<StoreState>({
         console.log(`web socket admin receive update: message ${frame}`);
         state.members = JSON.parse(frame.body).members;
         state.highlightedMembers = JSON.parse(frame.body).highlightedMembers;
+      });
+    },
+    subscribeOnBackendWSTimerStart(state) {
+      state.stompClient?.subscribe(Constants.webSocketTimerStartRoute, (frame) => {
+        console.log(`Got timer start ${frame.body}`);
+        state.timerTimestamp = frame.body;
       });
     },
     subscribeOnBackendWSNotify(state) {

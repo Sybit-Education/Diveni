@@ -49,6 +49,7 @@ export default Vue.extend({
         this.subscribeWSMemberUpdates();
         this.subscribeWSadminUpdatedUserStories();
         this.subscribeWSMemberUpdated();
+        this.subscribeOnTimerStart();
         this.subscribeWSNotification();
         this.goToEstimationPage();
       }
@@ -122,6 +123,9 @@ export default Vue.extend({
     },
     subscribeWSMemberUpdated() {
       this.$store.commit("subscribeOnBackendWSAdminUpdate");
+    },
+    subscribeOnTimerStart() {
+      this.$store.commit("subscribeOnBackendWSTimerStart");
     },
     goToEstimationPage() {
       this.$router.push({
