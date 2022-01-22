@@ -37,7 +37,7 @@ export default Vue.extend({
     },
   },
   watch: {
-    startTimestamp(newVal) {
+    startTimestamp() {
       this.resetTimer();
       this.startInterval();
     },
