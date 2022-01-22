@@ -24,7 +24,8 @@
           "placeholder": {
             "userStoryTitle": "User Story Titel",
             "userStoryDescription": "Beschreibung und Akzeptanzkriterien..."
-          }
+          },
+          "text": "Klicke auf ein User Story Titel um die Beschreibung zu sehen"
         }
       },
       "during": {

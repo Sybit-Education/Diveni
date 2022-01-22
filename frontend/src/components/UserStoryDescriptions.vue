@@ -14,19 +14,13 @@
             :disabled="!editDescription"
             class="border"
             size="lg"
-            :placeholder="
-              $t('page.session.before.userStories.placeholder.userStoryTitle')
-            "
+            :placeholder="$t('page.session.before.userStories.placeholder.userStoryTitle')"
             @blur="publishChanges"
           />
           <b-dropdown
             v-show="editDescription"
             class="m-1"
-            :text="
-              (userStories[idx].estimation
-                ? userStories[idx].estimation
-                : '?') + '    '
-            "
+            :text="(userStories[idx].estimation ? userStories[idx].estimation : '?') + '    '"
             variant="info"
           >
             <b-dropdown-item
@@ -50,9 +44,7 @@
             class="card-body rounded"
             :style="{
               'background-color':
-                userStories[idx].estimation == null
-                  ? 'white'
-                  : 'RGB(13, 202, 240)',
+                userStories[idx].estimation == null ? 'white' : 'RGB(13, 202, 240)',
             }"
           >
             {{ story.estimation }}
@@ -66,17 +58,13 @@
             rows="27"
             max-rows="40"
             :disabled="!editDescription"
-            :placeholder="
-              $t(
-                'page.session.before.userStories.placeholder.userStoryDescription'
-              )
-            "
+            :placeholder="$t('page.session.before.userStories.placeholder.userStoryDescription')"
             @blur="publishChanges"
           />
         </div>
       </b-list-group-item>
-      <div v-if="userStories.length <= index" class="border text-center">
-        <b-card title="textextextextextextext" />
+      <div v-if="userStories.length <= index && userStories.length" class="border text-center">
+        <b-card :title="$t('page.session.before.userStories.text')" />
       </div>
     </div>
   </div>

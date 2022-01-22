@@ -203,7 +203,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      index: null,
+      index: 0,
       stageLabelReady: "Ready",
       stageLabelWaiting: "Waiting room",
       planningStart: false,
