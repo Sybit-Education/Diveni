@@ -25,5 +25,4 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 		registry.addEndpoint("/connect").setHandshakeHandler(new PrincipalWebSocketHandler())
 				.setAllowedOrigins("http://localhost:8080", "https://pp.vnmz.de").withSockJS();
 	}
-
 }
