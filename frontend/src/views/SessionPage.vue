@@ -318,6 +318,9 @@ export default Vue.extend({
         this.session_timerSecondsString = session.sessionConfig.timerSeconds.toString();
         this.session_voteSetJson = JSON.stringify(session.sessionConfig.set);
         this.session_userStoryMode = session.sessionConfig.userStoryMode;
+        this.$store.commit("setUserStories", {
+          stories: session.sessionConfig.userStories,
+        });
       }
     },
     handleReload() {
