@@ -117,11 +117,12 @@ public class WebsocketController {
 	@MessageMapping("/restart")
 	public synchronized void restartVote(AdminPrincipal principal) {
 		val session = ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID())
-				.updateSessionState(SessionState.START_VOTING).resetEstimations();
+				.updateSessionState(SessionState.START_VOTING).resetEstimations()
+				.setTimerTimestamp(Utils.getTimestampISO8601(new Date()));
 		databaseService.saveSession(session);
 		webSocketService.sendMembersUpdate(session);
 		webSocketService.sendSessionStateToMembers(session);
-		webSocketService.sendTimerStartMessage(session, Utils.getTimestampISO8601(new Date()));
+		webSocketService.sendTimerStartMessage(session, session.getTimerTimestamp());
 	}
 
 	@MessageMapping("/adminUpdatedUserStories")
