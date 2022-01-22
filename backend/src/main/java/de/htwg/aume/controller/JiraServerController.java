@@ -23,7 +23,9 @@ import de.htwg.aume.model.TokenIdentifier;
 import de.htwg.aume.model.UserStory;
 import de.htwg.aume.model.VerificationCode;
 import de.htwg.aume.service.DatabaseService;
-import de.htwg.aume.service.jira.JiraServerService;
+import de.htwg.aume.service.projectmanagementproviders.ProjectManagementProvider;
+import de.htwg.aume.service.projectmanagementproviders.jiracloud.JiraCloudService;
+import de.htwg.aume.service.projectmanagementproviders.jiraserver.JiraServerService;
 import lombok.val;
 
 @CrossOrigin(origins = { "http://localhost:8080", "https://pp.vnmz.de" })
@@ -37,27 +39,49 @@ public class JiraServerController {
 	@Autowired
 	JiraServerService jiraServerService;
 
+	@Autowired
+	JiraCloudService jiraCloudService;
+
 	@GetMapping(value = "/oauth1/requestToken")
 	public ResponseEntity<JiraRequestToken> getRequestToken() {
 		return new ResponseEntity<>(jiraServerService.getRequestToken(), HttpStatus.OK);
 	}
 
 	@PostMapping(value = "/oauth1/verificationCode")
-	public ResponseEntity<TokenIdentifier> getAccessToken(@RequestBody VerificationCode verificationCode) {
+	public ResponseEntity<TokenIdentifier> getOauth1AccessToken(@RequestBody VerificationCode verificationCode) {
 		return new ResponseEntity<>(
 				jiraServerService.getAccessToken(verificationCode.getCode(), verificationCode.getToken()),
 				HttpStatus.OK);
 	}
 
+	@PostMapping(value = "/oauth2/authorizationCode")
+	public ResponseEntity<TokenIdentifier> getOAuth2AccessToken(@RequestBody VerificationCode authorizationCode) {
+		return new ResponseEntity<>(
+				jiraCloudService.getAccessToken(authorizationCode.getCode()),
+				HttpStatus.OK);
+	}
+
 	@GetMapping(value = "/projects")
 	public ResponseEntity<List<String>> getProjects(@RequestHeader("X-Token-ID") String tokenIdentifier) {
-		return new ResponseEntity<>(jiraServerService.getProjects(tokenIdentifier), HttpStatus.OK);
+		val projectManagementProvider = getProjectManagementProvider(tokenIdentifier);
+
+		if (projectManagementProvider == null) {
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		}
+
+		return new ResponseEntity<>(projectManagementProvider.getProjects(tokenIdentifier), HttpStatus.OK);
 	}
 
 	@GetMapping(value = "/projects/{projectName}/issues")
 	public ResponseEntity<List<UserStory>> getIssues(@RequestHeader("X-Token-ID") String tokenIdentifier,
 			@PathVariable String projectName) {
-		return new ResponseEntity<>(jiraServerService.getIssues(tokenIdentifier, projectName), HttpStatus.OK);
+		val projectManagementProvider = getProjectManagementProvider(tokenIdentifier);
+
+		if (projectManagementProvider == null) {
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		}
+
+		return new ResponseEntity<>(projectManagementProvider.getIssues(tokenIdentifier, projectName), HttpStatus.OK);
 	}
 
 	// TODO: For testing with postman at the moment, will be changed when
@@ -67,12 +91,31 @@ public class JiraServerController {
 	public void updateIssue(@RequestHeader("X-Token-ID") String tokenIdentifier, @RequestBody UserStory userStory) {
 		// val session = ControllerUtils.getSessionOrThrowResponse(databaseService,
 		// sessionID);
-		jiraServerService.updateIssue(tokenIdentifier, userStory);
+		val projectManagementProvider = getProjectManagementProvider(tokenIdentifier);
+
+		if (projectManagementProvider != null) {
+			projectManagementProvider.updateIssue(tokenIdentifier, userStory);
+		}
 	}
 
 	@DeleteMapping(value = "/issue/{jiraID}")
 	public void deleteIssue(@RequestHeader("X-Token-ID") String tokenIdentifier, @PathVariable String jiraID) {
-		jiraServerService.deleteIssue(tokenIdentifier, jiraID);
+		val projectManagementProvider = getProjectManagementProvider(tokenIdentifier);
+
+		if (projectManagementProvider != null) {
+			projectManagementProvider.deleteIssue(tokenIdentifier, jiraID);
+		}
+	}
+
+	private ProjectManagementProvider getProjectManagementProvider(String tokenIdentifier) {
+		if (jiraServerService.containsToken(tokenIdentifier)) {
+			return jiraServerService;
+		} else if (jiraCloudService.containsToken(tokenIdentifier)) {
+			return jiraCloudService;
+		}
+		// If a new project management provider should be implemented, it can just be added here
+
+		return null;
 	}
 
 }
