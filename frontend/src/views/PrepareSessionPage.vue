@@ -26,7 +26,7 @@
             @change="importStory($event.target.files)"
           />
           <b-button block color="primary" elevation="2" @click="openFileUploader()">
-            {{ $t('session.prepare.step.selection.mode.description.withUS.importButton') }}
+            {{ $t("session.prepare.step.selection.mode.description.withUS.importButton") }}
           </b-button>
         </b-tab>
         <b-tab
@@ -258,12 +258,14 @@ export default Vue.extend({
             stories: stories,
           });
           this.$toast.success(
-            this.$t('session.prepare.step.selection.mode.description.withUS.toastSuccessNotification')
+            this.$t(
+              "session.prepare.step.selection.mode.description.withUS.toastSuccessNotification"
+            )
           );
         },
-        error: function(err, file, inputElem, reason) {
+        error: function (err, file, inputElem, reason) {
           this.$toast.error(
-            this.$t('session.prepare.step.selection.mode.description.withUS.toastErrorNotification')
+            this.$t("session.prepare.step.selection.mode.description.withUS.toastErrorNotification")
           );
         },
       });
