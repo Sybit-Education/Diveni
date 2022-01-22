@@ -1,6 +1,8 @@
 <template>
   <div>
-    <h5><i>{{ $t("session.prepare.step.selection.mode.description.withJira.subtitle") }}</i></h5>
+    <h5>
+      <i>{{ $t("session.prepare.step.selection.mode.description.withJira.subtitle") }}</i>
+    </h5>
     <ul>
       <li>
         {{ $t("session.prepare.step.selection.mode.description.withJira.descriptionLine1") }}
@@ -32,7 +34,10 @@ import SignInWithJiraServerButtonComponent from "./SignInWithJiraServerButtonCom
 
 export default Vue.extend({
   name: "JiraComponent",
-  components: { SignInWithJiraCloudButtonComponent, SignInWithJiraServerButtonComponent },
+  components: {
+    SignInWithJiraCloudButtonComponent,
+    SignInWithJiraServerButtonComponent,
+  },
   data() {
     return {
       isJiraCloudEnabled: constants.isJiraCloudEnabled,

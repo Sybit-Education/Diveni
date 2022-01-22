@@ -16,6 +16,8 @@ public class ErrorMessages {
 
 	public static String failedToRetrieveAccessTokenErrorMessage = "failed to retrieve access token";
 
+	public static String failedToRetrieveProjectsErrorMessage = "failed to retrieve projects";
+
 	private ErrorMessages() {
 	}
 

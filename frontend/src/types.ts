@@ -25,3 +25,8 @@ export interface JiraRequestTokenDto {
   token: string;
   url: string;
 }
+
+export interface JiraRequestTokenDto {
+  token: string;
+  url: string;
+}
