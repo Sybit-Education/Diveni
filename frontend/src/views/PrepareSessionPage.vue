@@ -18,7 +18,16 @@
           :title-link-class="linkClass(1)"
         >
           <user-story-component class="mg_top_2_per" />
-          <!--TODO: Implement session config with US-->
+          <input
+            id="fileUpload"
+            type="file"
+            hidden
+            accept="text/csv"
+            @change="importStory($event.target.files)"
+          />
+          <b-button block color="primary" elevation="2" @click="openFileUploader()">
+            {{ $t('session.prepare.step.selection.mode.description.withUS.importButton') }}
+          </b-button>
         </b-tab>
         <b-tab
           v-if="isJiraEnabled"
@@ -26,14 +35,15 @@
           :title-link-class="linkClass(2)"
         >
           <jira-component class="mg_top_2_per" />
-          <!--TODO: Implement session config with Jira-->
         </b-tab>
       </b-tabs>
-      <h4>{{ $t("session.prepare.step.selection.cardSet.title") }}</h4>
+      <h4 class="mt-4">{{ $t("session.prepare.step.selection.cardSet.title") }}</h4>
       <card-set-component class="mt-3" @selectedCardSetOptions="setCardSetOptions" />
       <h4 class="mt-3">{{ $t("session.prepare.step.selection.time.title") }}</h4>
       <b-row class="mt-3 text-center">
-        <b-col> <b-button variant="outline-secondary" @click="setTimerDown()"> -</b-button> </b-col>
+        <b-col>
+          <b-button variant="outline-secondary" @click="setTimerDown()"> -</b-button>
+        </b-col>
         <b-col class="text-center">
           <h4>
             {{ timer == 0 ? "∞" : formatTimer }}
@@ -58,13 +68,14 @@
         </b-col>
       </b-row>
       <user-stories-sidebar
+        v-if="tabIndex !== 0"
         :card-set="selectedCardSetOptions"
         :show-estimations="false"
         :initial-stories="userStories"
         @userStoriesChanged="onUserStoriesChanged($event)"
       />
       <b-button
-        class="mt-5"
+        class="my-5"
         variant="success"
         :disabled="buttonDisabled()"
         @click="sendCreateSessionRequest"
@@ -85,6 +96,8 @@ import UserStoryComponent from "../components/UserStoryComponent.vue";
 import JiraComponent from "../components/JiraComponent.vue";
 import StroyPointsComponent from "@/components/StroyPointsComponent.vue";
 import constants from "../constants";
+import UserStory from "@/model/UserStory";
+import papaparse from "papaparse";
 
 export default Vue.extend({
   name: "PrepareSessionPage",
@@ -147,6 +160,7 @@ export default Vue.extend({
         timerSeconds: this.timer,
         password: this.password === "" ? null : this.password,
         userStories: this.userStories,
+        userStoryMode: ["NO_US", "US_MANUALLY", "US_JIRA"][this.tabIndex],
       };
       try {
         const response = (await this.axios.post(url, sessionConfig)).data as {
@@ -162,6 +176,7 @@ export default Vue.extend({
                 estimation: string | null;
                 isActive: false;
               }>;
+              userStoryMode: string;
             };
             sessionState: string;
           };
@@ -182,6 +197,7 @@ export default Vue.extend({
           timerSecondsString: this.timer.toString(),
           voteSetJson: JSON.stringify(session.sessionConfig.set),
           sessionState: session.sessionState,
+          userStoryMode: session.sessionConfig.userStoryMode,
         },
       });
     },
@@ -210,6 +226,47 @@ export default Vue.extend({
       if (this.timer > 0) {
         this.timer -= 15;
       }
+    },
+    openFileUploader() {
+      const fileUpload = document.getElementById("fileUpload");
+      if (fileUpload != null) {
+        fileUpload.click();
+      }
+    },
+    importStory(files: FileList) {
+      if (!files || !files[0]) {
+        return;
+      }
+      papaparse.parse(files[0], {
+        header: true,
+        complete: (file: { data }) => {
+          let stories: UserStory[] = [];
+
+          file.data.forEach((story) => {
+            let title = story.title ? story.title : story.Title;
+            let description = story.description ? story.description : story.Description;
+            let estimation = story.estimation ? story.estimation : story.Estimation;
+
+            stories.push({
+              title: title,
+              description: description,
+              estimation: estimation,
+              isActive: false,
+            });
+          });
+          this.$store.commit("setUserStories", {
+            stories: stories,
+          });
+          this.$toast.success(
+            this.$t('session.prepare.step.selection.mode.description.withUS.toastSuccessNotification')
+          );
+        },
+        error: function(err, file, inputElem, reason) {
+          this.$toast.error(
+            this.$t('session.prepare.step.selection.mode.description.withUS.toastErrorNotification')
+          );
+        },
+      });
     },
   },
 });
