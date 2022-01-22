@@ -189,7 +189,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      index: 0,
+      index: null,
       titleWaiting: "Waiting for members ...",
       titleEstimate: "Estimate!",
       stageLabelReady: "Ready",
