@@ -263,7 +263,7 @@ export default Vue.extend({
             )
           );
         },
-        error: function (err, file, inputElem, reason) {
+        error: () => {
           this.$toast.error(
             this.$t("session.prepare.step.selection.mode.description.withUS.toastErrorNotification")
           );
