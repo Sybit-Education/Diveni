@@ -15,7 +15,17 @@
           "afterID": "mit deinen Teammitgliedern",
           "waiting": "Warte auf den Beitritt des Teams"
         },
-        "button": "Starte das Planning"
+        "button": "Starte das Planning",
+        "userStories": {
+          "button": {
+            "addFirstUserStory": "Noch keine Stories... Klicke um eine Story hinzuzufügen",
+            "addUserStory": "User Story hinzufügen"
+          },
+          "placeholder": {
+            "userStoryTitle": "User Story Titel",
+            "userStoryDescription": "Beschreibung und Akzeptanzkriterien..."
+          }
+        }
       },
       "during": {
         "estimation": {
@@ -92,7 +102,12 @@
     },
     "vote": {
       "title": "Schätze!",
-      "waiting": "Warte, bis der Organisator die Schätzrunde startet ..."
+      "waiting": "Warte, bis der Organisator die Schätzrunde startet ...",
+      "button": {
+        "leave": {
+          "label": "Session verlassen"
+        }
+      }
     }
   },
   "session": {
