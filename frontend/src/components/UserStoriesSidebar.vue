@@ -158,6 +158,8 @@ export default Vue.extend({
     editOrSave() {
       if (!this.editEnabled) {
         this.publishChanges();
+      } else {
+        this.$toast.success("User stories synchronized");
       }
       this.editEnabled = !this.editEnabled;
     },

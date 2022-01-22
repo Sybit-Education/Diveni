@@ -27,7 +27,7 @@ jobs:
           java-version: ${{ env.JAVA_VERSION }}
       - name: Install Maven dependencies
         working-directory: backend
-        run: mvn install
+        run: mvn install -DskipTests
       - name: Package server
         working-directory: backend
         run: ./mvnw -B package -DskipTests --file pom.xml
@@ -48,7 +48,7 @@ jobs:
           java-version: ${{ env.JAVA_VERSION }}
       - name: Install Maven dependencies
         working-directory: backend
-        run: mvn install
+        run: mvn install -DskipTests
       - name: Run unit and integration tests
         working-directory: backend
         run: ./mvnw test --file pom.xml
