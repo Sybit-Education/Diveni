@@ -5,8 +5,8 @@
         <div class="d-flex justify-content-around">
           <div
             v-for="item of allCardSets"
-            id="swipe-card"
             :key="item.name"
+            class="swipe-card"
             :style="`background-color: ${
               selectedCardSet.name === item.name ? '#198754' : 'lightgrey'
             }`"
@@ -52,33 +52,39 @@ export default Vue.extend({
         values: [],
         activeValues: [] as string[],
       },
-      allCardSets: [
+    };
+  },
+  computed: {
+    allCardSets() {
+      return [
         {
-          name: "Fibonacci",
-          description: "Each number is the sum of the two preceding ones",
-          values: ["1", "2", "3", "5", "8", "13", "21", "34", "55"],
+          name: this.$t("session.prepare.step.selection.cardSet.sets.fibonacci.label"),
+          description: this.$t("session.prepare.step.selection.cardSet.sets.fibonacci.description"),
+          values: ["1", "2", "3", "5", "8", "13", "21", "34", "55", "?"],
           activeValues: ["1", "2", "3", "5", "8", "13", "21"],
         },
         {
-          name: "T-shirt sizes",
-          description: "Basic T-shirt sizes. Simple and effective",
-          values: ["XXS", "XS", "S", "M", "L", "XL", "XXL", "XXXL"],
+          name: this.$t("session.prepare.step.selection.cardSet.sets.tShirtSizes.label"),
+          description: this.$t(
+            "session.prepare.step.selection.cardSet.sets.tShirtSizes.description"
+          ),
+          values: ["XXS", "XS", "S", "M", "L", "XL", "XXL", "XXXL", "?"],
           activeValues: ["XS", "S", "M", "L", "XL"],
         },
         {
-          name: "Hours",
-          description: "Simply hours. Great for sub tasks.",
-          values: ["1", "2", "3", "4", "5", "6", "8", "10", "12", "16"],
+          name: this.$t("session.prepare.step.selection.cardSet.sets.hours.label"),
+          description: this.$t("session.prepare.step.selection.cardSet.sets.hours.description"),
+          values: ["1", "2", "3", "4", "5", "6", "8", "10", "12", "16", "?"],
           activeValues: ["1", "2", "3", "4", "5", "6", "8", "10", "12", "16"],
         },
         {
-          name: "Numbers",
-          description: "Integer numbers. What do you want more?",
-          values: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
+          name: this.$t("session.prepare.step.selection.cardSet.sets.numbers.label"),
+          description: this.$t("session.prepare.step.selection.cardSet.sets.numbers.description"),
+          values: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "?"],
           activeValues: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
         },
-      ],
-    };
+      ];
+    },
   },
   methods: {
     isActiveCardSetNumber(num) {
@@ -114,7 +120,7 @@ export default Vue.extend({
   border-radius: 25px;
   cursor: pointer;
 }
-#swipe-card {
+.swipe-card {
   width: 168px;
   height: 202px;
   justify-content: flex-start; /* Centering y-axis */
@@ -122,6 +128,7 @@ export default Vue.extend({
   border-radius: 5%;
   display: flex;
   flex-direction: column;
+  cursor: pointer;
 }
 #text {
   font-size: 20px;
