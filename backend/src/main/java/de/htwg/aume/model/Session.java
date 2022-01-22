@@ -56,6 +56,9 @@ public class Session {
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private final Date lastModified;
 
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+	private String accessToken;
+
 	static Comparator<String> estimationByIndex(List<String> set) {
 		return Comparator.comparingInt((str) -> set.indexOf(str));
 	}
@@ -68,7 +71,8 @@ public class Session {
 	}
 
 	static Stream<String> getFilteredEstimationStream(List<Member> members) {
-		return members.stream().map(Member::getCurrentEstimation).filter((estimation) -> estimation != null && !estimation.equals("?"));
+		return members.stream().map(Member::getCurrentEstimation)
+				.filter((estimation) -> estimation != null && !estimation.equals("?"));
 	}
 
 	public Session selectHighlightedMembers() {
@@ -76,7 +80,8 @@ public class Session {
 			memberVoted.putIfAbsent(member.getMemberID(), 0);
 		}
 
-		val filteredSet = sessionConfig.getSet().stream().filter((string) -> !string.equals("?")).collect(Collectors.toList());
+		val filteredSet = sessionConfig.getSet().stream().filter((string) -> !string.equals("?"))
+				.collect(Collectors.toList());
 
 		Optional<String> maxEstimation = getFilteredEstimationStream(this.members).max(estimationByIndex(filteredSet));
 		Optional<String> minEstimation = getFilteredEstimationStream(this.members).min(estimationByIndex(filteredSet));
@@ -168,5 +173,12 @@ public class Session {
 	public Session resetTimerTimestamp() {
 		return new Session(databaseID, sessionID, adminID, sessionConfig, adminCookie, members, memberVoted,
 				currentHighlights, sessionState, null, lastModified);
+	}
+
+	public Session setAccessToken(String token) {
+		val session = new Session(databaseID, sessionID, adminID, sessionConfig, adminCookie, members, memberVoted,
+				currentHighlights, sessionState, timerTimestamp, lastModified);
+		session.accessToken = token;
+		return session;
 	}
 }
