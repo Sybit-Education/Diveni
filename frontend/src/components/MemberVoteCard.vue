@@ -87,6 +87,7 @@ export default Vue.extend({
   border-radius: 5%;
   display: flex;
   flex-direction: column;
+  cursor: pointer;
 }
 .text {
   font-size: 5rem;

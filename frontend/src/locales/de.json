@@ -1,0 +1,214 @@
+{
+  "general": {
+    "pleaseWait": "Bitte warten..."
+  },
+  "page": {
+    "session": {
+      "before": {
+        "copy": {
+          "id": "Code kopieren",
+          "link": "Link kopieren"
+        },
+        "title": "Warte auf die Teammitglieder...",
+        "text": {
+          "beforeID": "Teile den Code",
+          "afterID": "mit deinen Teammitgliedern",
+          "waiting": "Warte auf den Beitritt des Teams"
+        },
+        "button": "Starte das Planning"
+      },
+      "during": {
+        "estimation": {
+          "title": "Schätzrunde",
+          "message": {
+            "waitingFor": "Warte auf die Schätzungen",
+            "finished": "Schätzrunde beendet"
+          },
+          "buttons": {
+            "new": "Neu",
+            "result": "Ergebnisse anzeigen",
+            "finish": "Beende die Session"
+          }
+        }
+      },
+      "close": {
+        "popup": "Bist du dir sicher?",
+        "description": "Die Session wird für dich und alle Teammitglieder beendet. Im Anschluss kannst du die User Stories herunterladen.",
+        "button": {
+          "cancel": "Zurück",
+          "ok": "OK"
+        }
+      }
+    },
+    "results": {
+      "title": "Ergebnisse",
+      "noUserStories": "Keine User Stories sind definiert...",
+      "button": {
+        "download": "Download als CSV-Datei",
+        "home": "Zur Startseite"
+      }
+    },
+    "landing": {
+      "productTitle": "Planning-Poker",
+      "meeting": {
+        "new": {
+          "title": "Neue Session",
+          "description": "Bereite eine neue Session vor, lade Teammitglieder ein und starte das Schätzen",
+          "buttons": {
+            "start": {
+              "label": "LOS"
+            }
+          }
+        },
+        "join": {
+          "title": "Session beitreten",
+          "description": "Trete einer bestehenden Session bei und schätze mit deinem Team",
+          "buttons": {
+            "start": {
+              "label": "LOS"
+            }
+          }
+        },
+        "reconnect": {
+          "title": "Zurück zur Session",
+          "description": "Verbinde dich als Organisator erneut mit einer bestehenden Session",
+          "buttons": {
+            "start": {
+              "label": "LOS"
+            }
+          }
+        }
+      }
+    },
+    "join": {
+      "title": "Trete der Session bei",
+      "input": {
+        "code": "Einladungscode",
+        "password": "Passwort",
+        "passwordPlaceholder": "(optional)",
+        "name": "Name"
+      },
+      "submit": "LOS"
+    },
+    "vote": {
+      "title": "Schätze!",
+      "waiting": "Warte, bis der Organisator die Schätzrunde startet ..."
+    }
+  },
+  "session": {
+    "prepare": {
+      "title": "Bereite deine Session vor:",
+      "step": {
+        "selection": {
+          "mode": {
+            "title": "1. Wähle den Modus für die User Stories",
+            "description": {
+              "withoutUS": {
+                "tab": {
+                  "label": "Planning ohne User Stories"
+                },
+                "subtitle": "Planning ohne User Stories",
+                "descriptionLine1": "Ihr werdet mit den gewählten Karten schätzen",
+                "descriptionLine2": "Du wirst keine User Stories hinzufügen können, wenn die Session gestartet wurde."
+              },
+              "withUS": {
+                "tab": {
+                  "label": "Planning mit User Stories"
+                },
+                "subtitle": "Integriere User Stories in das Planning",
+                "descriptionLine1": "Erstelle deine eigenen User Stories",
+                "descriptionLine2": "Füge jeder User Story Titel und Beschreibung hinzu",
+                "descriptionLine3": "Du kannst auch einen CSV-Import nutzen, um User Stories zu integrieren",
+                "descriptionLine4": "Du kannst nach Start der Session User Stories bearbeiten oder neue hinzufügen"
+              },
+              "withJira": {
+                "tab": {
+                  "label": "Planning mit Jira"
+                },
+                "subtitle": "Wähle die Jira-Integration für das Planning",
+                "descriptionLine1": "Bitte melde dich mit Jira an",
+                "descriptionLine2": "Wähle dein Projekt",
+                "descriptionLine3": "Nach der Wahl des Projekts wirst du auf die nächste Seite gelangen um die user Stories ggf. zu bearbeiten",
+                "descriptionLine4": "Du kannst nach Start der Session User Stories bearbeiten oder neue hinzufügen",
+                "dialog": {
+                  "description": "Es öffnet sich gleich ein neuer Tab. Bitte gewähre dieser Anwendung in diesem Tab den Zugriff und trage den Verifizierungscode hier ein."
+                },
+                "inputs": {
+                  "verificationCode": {
+                    "placeholder": "Verifizierungscode"
+                  }
+                },
+                "buttons": {
+                  "signInWithJiraCloud": {
+                    "label": "Mit Jira Cloud anmelden"
+                  },
+                  "signInWithJiraServer": {
+                    "label": "Mit Jira Server anmelden"
+                  },
+                  "submit": {
+                    "label": "Senden"
+                  }
+                }
+              }
+            }
+          },
+          "cardSet": {
+            "title": "2. Wähle ein Kartenset mit den entsprechenden Werten",
+            "sets": {
+              "fibonacci": {
+                "label": "Fibonacci-Folge",
+                "description": "Jede Zahl ist die Summe der beiden vorherigen Zahlen"
+              },
+              "tShirtSizes": {
+                "label": "T-Shirt Größen",
+                "description": "T-Shirt Größen - einfach und effektiv"
+              },
+              "hours": {
+                "label": "Stunden",
+                "description": "Einfach nur Stunden. Perfekt für Subtasks"
+              },
+              "numbers": {
+                "label": "Zahlen",
+                "description": "Integer-Werte - was braucht man mehr?"
+              }
+            }
+          },
+          "time": {
+            "title": "3. Bestimme die Zeit pro Schätzrunde"
+          },
+          "password": {
+            "title": "4. Wähle ein Passwort, falls gewünscht",
+            "placeholder": "Passwort (leer lassen für eine offene Session)"
+          }
+        }
+      },
+      "button": {
+        "start": "Starte die Session"
+      }
+    },
+    "userStory": {
+      "button": {
+        "title": "User Stories",
+        "add": "Hinzufügen",
+        "edit": "Bearbeiten",
+        "save": "Speichern",
+        "noUserStories": "Noch keine User Stories... Füge eine Story hinzu um die Session zu starten.",
+        "placeholder": {
+          "title": "Story-Überschrift",
+          "description": "Beschreibung und Akzeptanzkriterien..."
+        }
+      }
+    },
+    "notification": {
+      "messages": {
+        "hostLeft": "Host hat die Sitzung verlassen",
+        "memberLeft": "Teilnehmer hat die Sitzung verlassen",
+        "memberJoined": "Teilnehmer ist der Sitzung beigetreten",
+        "jiraCredentials": "Falsche Login-Daten",
+        "jiraLoginFailed": "Login fehlgeschlagen",
+        "wrongID": "Falscher Einladungscode",
+        "password": "Falsches Passwort"
+      }
+    }
+  }
+}

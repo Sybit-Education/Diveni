@@ -1,0 +1,214 @@
+{
+  "general": {
+    "pleaseWait": "Please wait..."
+  },
+  "page": {
+    "session": {
+      "before": {
+        "copy": {
+          "id": "Copy code",
+          "link": "Copy link"
+        },
+        "title": "Waiting for members ...",
+        "text": {
+          "beforeID": "Share the code",
+          "afterID": "with your team mates",
+          "waiting": "Waiting for members to join"
+        },
+        "button": "Start Planning"
+      },
+      "during": {
+        "estimation": {
+          "title": "Estimation",
+          "message": {
+            "waitingFor": "Waiting for",
+            "finished": "Estimation finished"
+          },
+          "buttons": {
+            "new": "New",
+            "result": "Show result",
+            "finish": "Finish session"
+          }
+        }
+      },
+      "close": {
+        "popup": "Are you sure?",
+        "description": "Closing this session removes you and all members. You can download the user stories thereafter.",
+        "button": {
+          "cancel": "Cancel",
+          "ok": "OK"
+        }
+      }
+    },
+    "results": {
+      "title": "Results",
+      "noUserStories": "No user stories defined ...",
+      "button": {
+        "download": "Download as CSV",
+        "home": "Go home"
+      }
+    },
+    "landing": {
+      "productTitle": "Planning-Poker",
+      "meeting": {
+        "new": {
+          "title": "New session",
+          "description": "Prepare a new session, invite team members and start estimating",
+          "buttons": {
+            "start": {
+              "label": "GO"
+            }
+          }
+        },
+        "join": {
+          "title": "Join session",
+          "description": "Join an existing session and help your team estimate",
+          "buttons": {
+            "start": {
+              "label": "GO"
+            }
+          }
+        },
+        "reconnect": {
+          "title": "Reconnect to session",
+          "description": "Reconnect to existing session as host",
+          "buttons": {
+            "start": {
+              "label": "GO"
+            }
+          }
+        }
+      }
+    },
+    "join": {
+      "title": "Join the session",
+      "input": {
+        "code": "Invitation code",
+        "password": "Password",
+        "passwordPlaceholder": "(optional)",
+        "name": "Name"
+      },
+      "submit": "GO"
+    },
+    "vote": {
+      "title": "Estimate!",
+      "waiting": "Waiting for your host to start ..."
+    }
+  },
+  "session": {
+    "prepare": {
+      "title": "Prepare your session:",
+      "step": {
+        "selection": {
+          "mode": {
+            "title": "1. Select the mode for your User Stories",
+            "description": {
+              "withoutUS": {
+                "tab": {
+                  "label": "Planning without User Stories"
+                },
+                "subtitle": "Planning without User Stories",
+                "descriptionLine1": "You will vote with your selected cards",
+                "descriptionLine2": "You will not be able to add User Stories once you've started the session"
+              },
+              "withUS": {
+                "tab": {
+                  "label": "Planning with User Stories"
+                },
+                "subtitle": "Integrate User Stories in your Poker-Planning",
+                "descriptionLine1": "Create your User Stories below",
+                "descriptionLine2": "Add title and description to each User Story",
+                "descriptionLine3": "Use the CSV-Import to integrate User Stories in your session",
+                "descriptionLine4": "You will be able to add and edit User Stories once you've started the session"
+              },
+              "withJira": {
+                "tab": {
+                  "label": "Planning with Jira"
+                },
+                "subtitle": "Select Jira for your Poker-Planning",
+                "descriptionLine1": "Please sign in with Jira",
+                "descriptionLine2": "Select your project",
+                "descriptionLine3": "After you have selected your project, you will be redirected to the next page to edit your user stories",
+                "descriptionLine4": "You will be able to add and edit User Stories once you've started the session",
+                "dialog": {
+                  "description": "A new tab will open immediately, please grant access to this application in this tab and enter the verification code here."
+                },
+                "inputs": {
+                  "verificationCode": {
+                    "placeholder": "Verification code"
+                  }
+                },
+                "buttons": {
+                  "signInWithJiraCloud": {
+                    "label": "Sign in with Jira Cloud"
+                  },
+                  "signInWithJiraServer": {
+                    "label": "Sign in with Jira Server"
+                  },
+                  "submit": {
+                    "label": "Submit"
+                  }
+                }
+              }
+            }
+          },
+          "cardSet": {
+            "title": "2. Select a card set and its values",
+            "sets": {
+              "fibonacci": {
+                "label": "Fibonacci",
+                "description": "Each number is the sum of the two preceding ones"
+              },
+              "tShirtSizes": {
+                "label": "T-shirt sizes",
+                "description": "Basic T-shirt sizes. Simple and effective"
+              },
+              "hours": {
+                "label": "Hours",
+                "description": "Simply hours. Great for sub tasks."
+              },
+              "numbers": {
+                "label": "Numbers",
+                "description": "Integer numbers. What else do you want?"
+              }
+            }
+          },
+          "time": {
+            "title": "3. Adjust the time per estimation"
+          },
+          "password": {
+            "title": "4. Choose a password if needed",
+            "placeholder": "Password (leave empty for unprotected session)"
+          }
+        }
+      },
+      "button": {
+        "start": "Start session"
+      }
+    },
+    "userStory": {
+      "button": {
+        "title": "Stories",
+        "add": "Add",
+        "edit": "Edit",
+        "save": "Save",
+        "noUserStories": "No stories yet... Add a story to start estimating.",
+        "placeholder": {
+          "title": "Story title",
+          "description": "Description and acceptance criteria..."
+        }
+      }
+    },
+    "notification": {
+      "messages": {
+        "hostLeft": "Host left the session",
+        "memberLeft": "Member left the session",
+        "memberJoined": "Member joined the session",
+        "jiraCredentials": "Wrong credentials",
+        "jiraLoginFailed": "Login failed",
+        "wrongID": "Wrong invitation code",
+        "password": "Wrong password"
+      }
+    }
+  }
+}

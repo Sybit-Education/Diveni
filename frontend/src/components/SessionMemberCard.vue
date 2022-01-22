@@ -2,12 +2,14 @@
   <div
     :style="`background-color: ${color};`"
     class="text-center card m-2"
-    :class="{ greyOut: !highest && !lowest && estimateFinished }"
+    :class="{ greyOut: !highlight && estimateFinished }"
   >
     <h1 class="fs-3-rem">
       <strong v-if="!estimateFinished">?</strong>
       <strong v-if="estimation === null && estimateFinished">-</strong>
-      <strong v-if="estimation !== null && estimateFinished">{{ estimation }}</strong>
+      <strong v-if="estimation !== null && estimateFinished">{{
+        estimation
+      }}</strong>
     </h1>
     <img :src="require(`@/assets/${assetName}`)" width="40" alt="image" />
     <h4 class="mt-2">
@@ -27,8 +29,7 @@ export default Vue.extend({
     estimation: { type: String, required: false, default: null },
     name: { type: String, required: true },
     estimateFinished: { type: Boolean, required: false, default: false },
-    highest: { type: Boolean, required: false, default: false },
-    lowest: { type: Boolean, required: false, default: false },
+    highlight: { type: Boolean, required: false, default: false },
   },
 });
 </script>
