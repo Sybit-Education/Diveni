@@ -165,6 +165,22 @@ public class JiraServerService {
         }
     }
 
+    public void deleteIssue(String tokenIdentifier, String jiraID) {
+        try {
+            JiraOAuthClient jiraOAuthClient = new JiraOAuthClient(JIRA_HOME);
+            OAuthParameters parameters = jiraOAuthClient.getParameters(accessTokens.get(tokenIdentifier),
+                    CONSUMER_KEY, PRIVATE_KEY);
+            HttpResponse response = getResponseFromUrl(parameters, new GenericUrl(
+                    JIRA_HOME + "/rest/api/latest/issue/" + jiraID), "DELETE", null);
+
+            System.out.print(response.parseAsString());
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                    ErrorMessages.failedToEditIssueErrorMessage);
+        }
+    }
+
     /**
      * Authanticates to JIRA with given OAuthParameters and makes request to url
      *
