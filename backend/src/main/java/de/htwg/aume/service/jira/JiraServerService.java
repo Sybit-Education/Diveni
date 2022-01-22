@@ -1,11 +1,10 @@
 package de.htwg.aume.service.jira;
 
-import java.util.Map;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,29 +19,26 @@ import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.http.json.JsonHttpContent;
 import com.google.api.client.json.gson.GsonFactory;
-import com.google.gson.GsonBuilder;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.converter.json.GsonFactoryBean;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import de.htwg.aume.Utils;
 import de.htwg.aume.controller.ErrorMessages;
 import de.htwg.aume.model.JiraRequestToken;
-import de.htwg.aume.model.Project;
-import de.htwg.aume.model.Session;
 import de.htwg.aume.model.TokenIdentifier;
 import de.htwg.aume.model.UserStory;
-import de.htwg.aume.Utils;
-
-import lombok.val;
 import lombok.Getter;
+import lombok.val;
 
 @Service
 public class JiraServerService {
     private final String JIRA_HOME = "http://5.189.185.210:8080";
     private final String CONSUMER_KEY = "OauthKey";
     private final String PRIVATE_KEY = "MIICeAIBADANBgkqhkiG9w0BAQEFAASCAmIwggJeAgEAAoGBAOMj4i7WeH+0OYkgr7+fhc2qJbdaOUh4JmnHBnVqQMwpZDotsyr7HCWZXlvTjbQCr2NQxq424yEbFitcK1ZuNfS8zTp8vm4Ch4u/FTQBm5nPP3fM4FkLYzZQmQqnStirzUFrGSK4jtqS5wh+lfgXCPOp3mSoDp7KVizHSBQTBtXbAgMBAAECgYEAqx83og3WTm+bASJtBbLK/Xz4WUBR87UBS6Ozy/W2x5lPdz1CxFjWhcUb/5ZMJZf4RpxucoXLa/+aHiScSctSPZo7GgOUL1rEVi/POdht8w67N/KWA57VQy9n087MaMCOWf3ezfxcUMv4fzolgF3TxIMM+cYnFULydl8yzMGnBRECQQDzw1m1al/qYCfBtUeuQVd98i+QPLRvFcTCvo0848NT/Cl81iUCymr2LY/dvJEx2xJ3eC4xPw1UlIwt9RN7JQpFAkEA7oromA0e3igxyeQ7zUBBEdZLk7RbrNZ7FJ1ShdRqMcD3Ln+nwkLr0g9o/2XGkh2+EexyKEk4P4iwrIXoddlxnwJAYQ5Q86itE/bBHaF+LuWZXm5FfdqNxQUX2KpiNfJB3XizVB83kUrjF63AcHsaHI2rZqIVUkpWlmym+81uukNfOQJBALZejKRyo37EzAvF6dJppVW1t+IcqVniQAbqoASg+O9Az7lE70SdVR0rmuJnNQDQrFeXpU8Xa2FnZ2r+lVJEA5ECQQC6fPxR9WBpaJM2hfEBDFxaggbTNwoPA3uOLOGSTYkHXBZ98idjesfu3ZOq06IsVaLZEuIz/hIvvrdzjYRnugFA";
+
+    private final String ESTIMATION_FIELD = "customfield_10111";
 
     @Getter
     private final Map<String, String> accessTokens = new HashMap<>();
@@ -79,6 +75,7 @@ public class JiraServerService {
             accessTokens.put(id, accessToken);
             return new TokenIdentifier(id);
         } catch (Exception e) {
+            e.printStackTrace();
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
                     ErrorMessages.failedToRetrieveAccessTokenErrorMessage);
         }
@@ -99,7 +96,6 @@ public class JiraServerService {
                     projects.add(objectNode.get("name").asText());
                 }
             }
-
             return projects;
         } catch (Exception e) {
             e.printStackTrace();
@@ -142,10 +138,18 @@ public class JiraServerService {
 
     public void updateIssue(String tokenIdentifier, UserStory story) {
         Map<String, Map<String, Object>> content = new HashMap<>();
-        content.put("fields", Map.of(
-                "summary", story.getTitle(),
-                "description", story.getDescription(),
-                "customfield_10111", story.getEstimation()));
+        Map<String, Object> fields = new HashMap<>();
+        fields.put("summary", story.getTitle());
+        fields.put("description", story.getDescription());
+        if (story.getEstimation() != null) {
+            try {
+                fields.put(ESTIMATION_FIELD, Double.parseDouble(story.getEstimation()));
+            } catch (NumberFormatException e) {
+                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                        ErrorMessages.failedToEditIssueErrorMessage);
+            }
+        }
+        content.put("fields", fields);
         try {
             JiraOAuthClient jiraOAuthClient = new JiraOAuthClient(JIRA_HOME);
             OAuthParameters parameters = jiraOAuthClient.getParameters(accessTokens.get(tokenIdentifier),
