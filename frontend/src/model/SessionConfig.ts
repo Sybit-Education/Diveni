@@ -5,6 +5,7 @@ interface SessionConfig {
   password?: string;
   timerSeconds: number;
   userStories: Array<UserStory>;
+  userStoryMode: string;
 }
 
 export default SessionConfig;
