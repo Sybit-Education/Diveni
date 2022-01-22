@@ -28,7 +28,10 @@
         </h4>
         <b-icon-three-dots animation="fade" class="" font-scale="3" />
       </b-row>
-      <b-row class="d-flex justify-content-center">
+      <b-row
+        class="d-flex justify-content-center overflow-auto"
+        style="max-height: 500px"
+      >
         <SessionMemberCircle
           v-for="member of members"
           :key="member.memberID"
@@ -120,7 +123,10 @@
           {{ membersPending.length + membersEstimated.length }}
         </h4>
       </b-row>
-      <b-row class="my-1 d-flex justify-content-center flex-wrap">
+      <b-row
+        class="my-1 d-flex justify-content-center flex-wrap overflow-auto"
+        style="max-height: 500px"
+      >
         <SessionMemberCard
           v-for="member of estimateFinished ? members : membersEstimated"
           :key="member.memberID"
