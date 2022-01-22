@@ -84,11 +84,9 @@
         </b-col>
         <b-col>
           <estimate-timer
+            :start-timestamp="timerTimestamp"
             :pause-timer="estimateFinished"
-            :timer-triggered="triggerTimer"
-            :timer="timerCountdownNumber"
-            :start-timer-on-component-creation="startTimerOnComponentCreation"
-            :initial-timer="timerCountdownNumber"
+            :duration="timerCountdownNumber"
             @timerFinished="sendVotingFinishedMessage"
           />
         </b-col>
@@ -134,6 +132,7 @@
         />
       </b-row>
     </div>
+    <notify-host-component />
   </b-container>
 </template>
 
@@ -148,6 +147,7 @@ import EstimateTimer from "../components/EstimateTimer.vue";
 import CopySessionIdPopup from "../components/CopySessionIdPopup.vue";
 import RoundedAvatar from "../components/RoundedAvatar.vue";
 import confetti from "canvas-confetti";
+import NotifyHostComponent from "../components/NotifyHostComponent.vue";
 
 export default Vue.extend({
   name: "SessionPage",
@@ -158,6 +158,7 @@ export default Vue.extend({
     EstimateTimer,
     CopySessionIdPopup,
     RoundedAvatar,
+    NotifyHostComponent,
   },
   props: {
     adminID: { type: String, required: true },
@@ -198,6 +199,9 @@ export default Vue.extend({
     membersEstimated(): Member[] {
       return this.members.filter((member: Member) => member.currentEstimation !== null);
     },
+    timerTimestamp() {
+      return this.$store.state.timerTimestamp ? this.$store.state.timerTimestamp : "";
+    },
   },
   watch: {
     webSocketIsConnected(isConnected) {
@@ -206,6 +210,8 @@ export default Vue.extend({
         this.registerAdminPrincipalOnBackend();
         this.subscribeWSMemberUpdated();
         this.requestMemberUpdate();
+        this.subscribeOnTimerStart();
+        this.subscribeWSNotification();
         if (this.startNewSessionOnMountedString === "true") {
           this.sendRestartMessage();
         }
@@ -260,9 +266,15 @@ export default Vue.extend({
     subscribeWSMemberUpdated() {
       this.$store.commit("subscribeOnBackendWSAdminUpdate");
     },
+    subscribeOnTimerStart() {
+      this.$store.commit("subscribeOnBackendWSTimerStart");
+    },
     requestMemberUpdate() {
       const endPoint = Constants.webSocketGetMemberUpdateRoute;
       this.$store.commit("sendViaBackendWS", { endPoint });
+    },
+    subscribeWSNotification() {
+      this.$store.commit("subscribeOnBackendWSNotify");
     },
     sendUnregisterCommand() {
       const endPoint = `${Constants.webSocketUnregisterRoute}`;
@@ -297,13 +309,9 @@ export default Vue.extend({
       this.estimateFinished = false;
       const endPoint = Constants.webSocketRestartPlanningRoute;
       this.$store.commit("sendViaBackendWS", { endPoint });
-      this.reTriggerTime();
     },
     goToLandingPage() {
       this.$router.push({ name: "LandingPage" });
-    },
-    reTriggerTime() {
-      this.triggerTimer = (this.triggerTimer + 1) % 5;
     },
   },
 });

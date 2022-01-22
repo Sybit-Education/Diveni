@@ -58,7 +58,7 @@ public class RoutesController {
 		val accessToken = tokenIdentifier.map(token -> jiraServerService.getAccessTokens().remove(token)).orElse(null);
 		val session = new Session(databaseID, sessionIds.get(0), sessionIds.get(1), sessionConfig, UUID.randomUUID(),
 				new ArrayList<>(), new HashMap<>(), new ArrayList<>(), SessionState.WAITING_FOR_MEMBERS, null,
-				accessToken);
+				accessToken, null);
 		databaseService.saveSession(session);
 		val responseMap = Map.of("session", session, "adminCookie", session.getAdminCookie());
 		return new ResponseEntity<>(responseMap, HttpStatus.CREATED);

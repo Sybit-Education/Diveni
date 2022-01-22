@@ -49,6 +49,8 @@ export default Vue.extend({
         this.subscribeWSMemberUpdates();
         this.subscribeWSadminUpdatedUserStories();
         this.subscribeWSMemberUpdated();
+        this.subscribeOnTimerStart();
+        this.subscribeWSNotification();
         this.goToEstimationPage();
       }
     },
@@ -113,11 +115,17 @@ export default Vue.extend({
     subscribeWSMemberUpdates() {
       this.$store.commit("subscribeOnBackendWSMemberUpdates");
     },
+    subscribeWSNotification() {
+      this.$store.commit("subscribeOnBackendWSNotify");
+    },
     subscribeWSadminUpdatedUserStories() {
       this.$store.commit("subscribeOnBackendWSStoriesUpdated");
     },
     subscribeWSMemberUpdated() {
       this.$store.commit("subscribeOnBackendWSAdminUpdate");
+    },
+    subscribeOnTimerStart() {
+      this.$store.commit("subscribeOnBackendWSTimerStart");
     },
     goToEstimationPage() {
       this.$router.push({
@@ -134,10 +142,10 @@ export default Vue.extend({
     },
     showToast(e) {
       if (e.message == "Request failed with status code 404") {
-        this.$toast.error("Wrong ID");
+        this.$toast.error(this.$t("session.notification.messages.wrongID"));
       }
       if (e.message == "Request failed with status code 401") {
-        this.$toast.error("Wrong Password");
+        this.$toast.error(this.$t("session.notification.messages.password"));
       }
       console.log(e);
     },
