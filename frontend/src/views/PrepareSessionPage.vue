@@ -2,14 +2,47 @@
   <div>
     <b-container>
       <h1 class="my-5">
-        {{ title }}
+        {{ $t("session.prepare.title") }}
       </h1>
-      <h4>1. Select a card set and its values</h4>
+      <h4 class="mt-3">{{ $t("session.prepare.step.selection.mode.title") }}</h4>
+      <b-tabs v-model="tabIndex" content-class="mt-3" fill>
+        <b-tab
+          class="mg_top_2_per"
+          :title="$t('session.prepare.step.selection.mode.description.withoutUS.tab.label')"
+          :title-link-class="linkClass(0)"
+        >
+          <stroy-points-component />
+        </b-tab>
+        <b-tab
+          :title="$t('session.prepare.step.selection.mode.description.withUS.tab.label')"
+          :title-link-class="linkClass(1)"
+        >
+          <user-story-component class="mg_top_2_per" />
+          <input
+            id="fileUpload"
+            type="file"
+            hidden
+            accept="text/csv"
+            @change="importStory($event.target.files)"
+          />
+          <b-button block color="primary" elevation="2" @click="openFileUploader()">
+            {{ $t("session.prepare.step.selection.mode.description.withUS.importButton") }}
+          </b-button>
+        </b-tab>
+        <b-tab
+          v-if="isJiraEnabled"
+          :title="$t('session.prepare.step.selection.mode.description.withJira.tab.label')"
+          :title-link-class="linkClass(2)"
+        >
+          <jira-component class="mg_top_2_per" />
+        </b-tab>
+      </b-tabs>
+      <h4 class="mt-4">{{ $t("session.prepare.step.selection.cardSet.title") }}</h4>
       <card-set-component class="mt-3" @selectedCardSetOptions="setCardSetOptions" />
-      <h4 class="mt-3">2. Specify estimation duration</h4>
+      <h4 class="mt-3">{{ $t("session.prepare.step.selection.time.title") }}</h4>
       <b-row class="mt-3 text-center">
         <b-col>
-          <b-button variant="outline-secondary" @click="setTimerDown()"> - </b-button>
+          <b-button variant="outline-secondary" @click="setTimerDown()"> -</b-button>
         </b-col>
         <b-col class="text-center">
           <h4>
@@ -17,10 +50,10 @@
           </h4>
         </b-col>
         <b-col>
-          <b-button variant="outline-secondary" @click="setTimerUp()"> + </b-button>
+          <b-button variant="outline-secondary" @click="setTimerUp()"> +</b-button>
         </b-col>
       </b-row>
-      <h4 class="mt-3">3. Secure with password</h4>
+      <h4 class="mt-3">{{ $t("session.prepare.step.selection.password.title") }}</h4>
       <b-row class="mt-3">
         <b-col>
           <b-form>
@@ -28,46 +61,26 @@
               <b-form-input
                 id="input-password"
                 v-model="password"
-                placeholder="Password (leave empty for unprotected session)"
+                :placeholder="$t('session.prepare.step.selection.password.placeholder')"
               />
             </b-form-group>
           </b-form>
         </b-col>
       </b-row>
       <user-stories-sidebar
+        v-if="tabIndex !== 0"
         :card-set="selectedCardSetOptions"
         :show-estimations="false"
         :initial-stories="userStories"
         @userStoriesChanged="onUserStoriesChanged($event)"
       />
-
-      <h4 class="mt-3">4. Select mode</h4>
-
-      <b-tabs v-model="tabIndex" content-class="mt-3" fill>
-        <b-tab
-          class="mg_top_2_per"
-          title="Planning without User Stories"
-          active
-          :title-link-class="linkClass(0)"
-        >
-          <stroy-points-component />
-        </b-tab>
-        <b-tab title="Planning with User Stories" :title-link-class="linkClass(1)">
-          <user-story-component class="mg_top_2_per" />
-          <!--TODO: Implement session config with US-->
-        </b-tab>
-        <b-tab title="Planning with Jira" :title-link-class="linkClass(2)">
-          <jira-component class="mg_top_2_per" />
-          <!--TODO: Implement session config with Jira-->
-        </b-tab>
-      </b-tabs>
       <b-button
-        class="mt-5"
+        class="my-5"
         variant="success"
         :disabled="buttonDisabled()"
         @click="sendCreateSessionRequest"
       >
-        Start session
+        {{ $t("session.prepare.button.start") }}
       </b-button>
     </b-container>
   </div>
@@ -82,6 +95,9 @@ import UserStoriesSidebar from "../components/UserStoriesSidebar.vue";
 import UserStoryComponent from "../components/UserStoryComponent.vue";
 import JiraComponent from "../components/JiraComponent.vue";
 import StroyPointsComponent from "@/components/StroyPointsComponent.vue";
+import constants from "../constants";
+import UserStory from "@/model/UserStory";
+import papaparse from "papaparse";
 
 export default Vue.extend({
   name: "PrepareSessionPage",
@@ -94,12 +110,12 @@ export default Vue.extend({
   },
   data() {
     return {
-      title: "Prepare session",
       password: "",
       selectedCardSetOptions: [],
       timer: 30,
       warningWhenUnderZero: "",
       tabIndex: 0,
+      isJiraEnabled: constants.isJiraEnabled,
     };
   },
   computed: {
@@ -122,6 +138,10 @@ export default Vue.extend({
       }
     },
   },
+  created() {
+    const parsedTabIndex = parseInt(this.$route.query.tabIndex + "", 10);
+    this.tabIndex = isNaN(parsedTabIndex) ? 0 : parsedTabIndex;
+  },
   mounted() {
     this.$store.commit("setUserStories", { stories: [] });
   },
@@ -140,6 +160,7 @@ export default Vue.extend({
         timerSeconds: this.timer,
         password: this.password === "" ? null : this.password,
         userStories: this.userStories,
+        userStoryMode: ["NO_US", "US_MANUALLY", "US_JIRA"][this.tabIndex],
       };
       try {
         const response = (await this.axios.post(url, sessionConfig)).data as {
@@ -155,6 +176,7 @@ export default Vue.extend({
                 estimation: string | null;
                 isActive: false;
               }>;
+              userStoryMode: string;
             };
             sessionState: string;
           };
@@ -175,6 +197,7 @@ export default Vue.extend({
           timerSecondsString: this.timer.toString(),
           voteSetJson: JSON.stringify(session.sessionConfig.set),
           sessionState: session.sessionState,
+          userStoryMode: session.sessionConfig.userStoryMode,
         },
       });
     },
@@ -203,6 +226,49 @@ export default Vue.extend({
       if (this.timer > 0) {
         this.timer -= 15;
       }
+    },
+    openFileUploader() {
+      const fileUpload = document.getElementById("fileUpload");
+      if (fileUpload != null) {
+        fileUpload.click();
+      }
+    },
+    importStory(files: FileList) {
+      if (!files || !files[0]) {
+        return;
+      }
+      papaparse.parse(files[0], {
+        header: true,
+        complete: (file: { data }) => {
+          let stories: UserStory[] = [];
+
+          file.data.forEach((story) => {
+            let title = story.title ? story.title : story.Title;
+            let description = story.description ? story.description : story.Description;
+            let estimation = story.estimation ? story.estimation : story.Estimation;
+
+            stories.push({
+              title: title,
+              description: description,
+              estimation: estimation,
+              isActive: false,
+            });
+          });
+          this.$store.commit("setUserStories", {
+            stories: stories,
+          });
+          this.$toast.success(
+            this.$t(
+              "session.prepare.step.selection.mode.description.withUS.toastSuccessNotification"
+            )
+          );
+        },
+        error: function (err, file, inputElem, reason) {
+          this.$toast.error(
+            this.$t("session.prepare.step.selection.mode.description.withUS.toastErrorNotification")
+          );
+        },
+      });
     },
   },
 });

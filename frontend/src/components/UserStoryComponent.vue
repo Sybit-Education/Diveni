@@ -1,11 +1,13 @@
 <template>
   <div>
-    <h5>Integrate User Stories in your Poker-Planning</h5>
+    <h5>
+      <i>{{ $t("session.prepare.step.selection.mode.description.withUS.subtitle") }}</i>
+    </h5>
     <ul>
-      <li>Write your User Stories below</li>
-      <li>Add title and description to each User Story</li>
-      <li>Use the CSV-Import to integrate User Stories in your session</li>
-      <li>You will be able to add and edit User Stories once you've started the session</li>
+      <li>{{ $t("session.prepare.step.selection.mode.description.withUS.descriptionLine1") }}</li>
+      <li>{{ $t("session.prepare.step.selection.mode.description.withUS.descriptionLine2") }}</li>
+      <li>{{ $t("session.prepare.step.selection.mode.description.withUS.descriptionLine3") }}</li>
+      <li>{{ $t("session.prepare.step.selection.mode.description.withUS.descriptionLine4") }}</li>
     </ul>
   </div>
 </template>

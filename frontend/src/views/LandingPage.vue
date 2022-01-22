@@ -1,29 +1,29 @@
 <template>
   <b-container>
     <h1 class="my-5 mx-2">
-      {{ title }}
+      {{ $t("page.landing.productTitle") }}
     </h1>
     <b-row class="justify-content-center">
       <landing-page-card
         class="col-md-4 m-2 col-12"
-        :title="$t('meeting.new')"
-        :description="'Start a new meeting, invite colleagues and start estimating'"
-        :button-text="'GO'"
+        :title="$t('page.landing.meeting.new.title')"
+        :description="$t('page.landing.meeting.new.description')"
+        :button-text="$t('page.landing.meeting.new.buttons.start.label')"
         :on-click="goToPrepareSessionPage"
       />
       <landing-page-card
         class="col-md-4 m-2 col-12"
-        :title="'Join meeting'"
-        :description="'Join an existing meeting and help your team estimate'"
-        :button-text="'GO'"
+        :title="$t('page.landing.meeting.join.title')"
+        :description="$t('page.landing.meeting.join.description')"
+        :button-text="$t('page.landing.meeting.join.buttons.start.label')"
         :on-click="goToJoinPage"
       />
       <landing-page-card
         v-if="sessionWrapper.session"
         class="col-md-4 m-2 col-12"
-        :title="'Reconnect to meeting'"
-        :description="'Reconnect to existing session as host'"
-        :button-text="'GO'"
+        :title="$t('page.landing.meeting.reconnect.title')"
+        :description="$t('page.landing.meeting.reconnect.description')"
+        :button-text="$t('page.landing.meeting.reconnect.buttons.start.label')"
         :on-click="goToSessionPage"
       />
     </b-row>
@@ -43,7 +43,6 @@ export default Vue.extend({
   },
   data() {
     return {
-      title: "Planning-Poker",
       sessionWrapper: {} as { session: Session },
       startNewSessionOnMounted: false,
     };
@@ -77,6 +76,7 @@ export default Vue.extend({
                 estimation: string | null;
                 isActive: false;
               }>;
+              userStoryMode: string;
             };
             sessionState: string;
           };
@@ -108,6 +108,7 @@ export default Vue.extend({
           sessionState: this.sessionWrapper.session.sessionState,
           timerSecondsString: this.sessionWrapper.session.sessionConfig.timerSeconds.toString(),
           startNewSessionOnMountedString: this.startNewSessionOnMounted.toString(),
+          userStoryMode: this.sessionWrapper.session.sessionConfig.userStoryMode,
         },
       });
     },

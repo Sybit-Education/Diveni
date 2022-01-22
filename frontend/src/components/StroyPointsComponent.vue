@@ -1,9 +1,15 @@
 <template>
   <div>
-    <h5>Planning without User Stories</h5>
+    <h5>
+      <i>{{ $t("session.prepare.step.selection.mode.description.withoutUS.subtitle") }}</i>
+    </h5>
     <ul>
-      <li>You will vote with your selected cards</li>
-      <li>You will not be able to add User Stories once you've started the session</li>
+      <li>
+        {{ $t("session.prepare.step.selection.mode.description.withoutUS.descriptionLine1") }}
+      </li>
+      <li>
+        {{ $t("session.prepare.step.selection.mode.description.withoutUS.descriptionLine2") }}
+      </li>
     </ul>
   </div>
 </template>
