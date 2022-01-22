@@ -19,3 +19,8 @@ export interface JiraRequestTokenDto {
 export interface JiraResponseCodeDto {
   tokenId: string;
 }
+
+export interface JiraRequestTokenDto {
+  token: string;
+  url: string;
+}
