@@ -1,5 +1,13 @@
 class Constants {
-  backendURL = process.env.NODE_ENV === "development" ? "http://localhost:9090" : "/api";
+  backendURL = process.env.VUE_APP_SERVER_API_URL;
+
+  i18nLocale = process.env.VUE_APP_I18N_LOCALE;
+  i18nFallbackLocale = process.env.VUE_APP_I18N_FALLBACK_LOCALE;
+
+  isJiraCloudEnabled = process.env.VUE_APP_ENABLE_JIRA_CLOUD === "true";
+  isJiraServerEnabled = process.env.VUE_APP_ENABLE_JIRA_SERVER === "true";
+  isJiraEnabled = this.isJiraCloudEnabled || this.isJiraServerEnabled;
+  jiraCloudAuthorizeUrl = process.env.VUE_APP_JIRA_CLOUD_AUTHORIZE_URL;
 
   createSessionRoute = "/sessions";
 
@@ -28,6 +36,8 @@ class Constants {
   webSocketMemberListenUserStoriesRoute = "/users/updates/userStories";
 
   webSocketMemberListenRoute = "/users/updates/member";
+
+  websocketNotification = "/users/updates/notifications";
 
   memberUpdateCommandStartVoting = "START_VOTING";
 

@@ -8,7 +8,13 @@
     />
     <b-row class="mt-5 mb-3">
       <b-col
-        ><h1>{{ planningStart ? titleEstimate : titleWaiting }}</h1></b-col
+        ><h1>
+          {{
+            planningStart
+              ? $t("page.session.during.estimation.title")
+              : $t("page.session.before.title")
+          }}
+        </h1></b-col
       >
       <b-col v-if="planningStart" align-self="center">
         <copy-session-id-popup class="float-end" :session-id="sessionID" />
@@ -17,13 +23,13 @@
     <div v-if="!planningStart">
       <b-row class="align-items-center">
         <copy-session-id-popup
-          :text-before-session-i-d="'Share the code'"
+          :text-before-session-i-d="$t('page.session.before.text.beforeID')"
           :session-id="sessionID"
-          :text-after-session-i-d="'with your team mates'"
+          :text-after-session-i-d="$t('page.session.before.text.afterID')"
         />
       </b-row>
       <b-row class="mt-5">
-        <h4 class="text-center">Waiting for members to join</h4>
+        <h4 class="text-center">{{ $t("page.session.before.text.waiting") }}</h4>
         <b-icon-three-dots animation="fade" class="" font-scale="3" />
       </b-row>
       <b-row class="d-flex justify-content-center">
@@ -44,7 +50,7 @@
             :disabled="!members || members.length < 1"
             @click="sendStartEstimationMessages"
           >
-            Start Planning
+            {{ $t("page.session.before.button") }}
           </b-button>
         </b-col>
       </b-row>
@@ -54,20 +60,25 @@
         <b-col>
           <b-button variant="outline-dark" @click="sendRestartMessage">
             <b-icon-arrow-clockwise />
-            New
+            {{ $t("page.session.during.estimation.buttons.new") }}
           </b-button>
           <b-button variant="outline-dark" class="mx-1" @click="sendVotingFinishedMessage">
             <b-icon-bar-chart />
-            Show result
+            {{ $t("page.session.during.estimation.buttons.result") }}
           </b-button>
           <b-button v-b-modal.close-session-modal variant="danger">
             <b-icon-x />
-            End meeting
+            {{ $t("page.session.during.estimation.buttons.finish") }}
           </b-button>
-          <b-modal id="close-session-modal" title="Are you sure" @ok="closeSession">
+          <b-modal
+            id="close-session-modal"
+            :title="$t('page.session.close.popup')"
+            :cancel-title="$t('page.session.close.button.cancel')"
+            :ok-title="$t('page.session.close.button.ok')"
+            @ok="closeSession"
+          >
             <p class="my-4">
-              Closing this session removes you and all members. You can download the user stories
-              thereafter.
+              {{ $t("page.session.close.description") }}
             </p>
           </b-modal>
         </b-col>
@@ -84,7 +95,8 @@
       </b-row>
       <b-row v-if="membersPending.length > 0 && !estimateFinished">
         <h4 class="d-inline">
-          Waiting for {{ membersPending.length }} /
+          {{ $t("page.session.during.estimation.message.waitingFor") }}
+          {{ membersPending.length }} /
           {{ membersPending.length + membersEstimated.length }}
         </h4>
       </b-row>
@@ -102,7 +114,8 @@
       <hr />
       <b-row>
         <h4 class="d-inline">
-          Estimating finished {{ membersEstimated.length }} /
+          {{ $t("page.session.during.estimation.message.finished") }}
+          {{ membersEstimated.length }} /
           {{ membersPending.length + membersEstimated.length }}
         </h4>
       </b-row>
@@ -115,11 +128,13 @@
           :name="member.name"
           :estimation="member.currentEstimation"
           :estimate-finished="estimateFinished"
-          :highest="estimateHighest ? estimateHighest.memberID === member.memberID : false"
-          :lowest="estimateHighest ? estimateLowest.memberID === member.memberID : false"
+          :highlight="
+            highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0
+          "
         />
       </b-row>
     </div>
+    <notify-host-component />
   </b-container>
 </template>
 
@@ -133,6 +148,8 @@ import UserStoriesSidebar from "../components/UserStoriesSidebar.vue";
 import EstimateTimer from "../components/EstimateTimer.vue";
 import CopySessionIdPopup from "../components/CopySessionIdPopup.vue";
 import RoundedAvatar from "../components/RoundedAvatar.vue";
+import confetti from "canvas-confetti";
+import NotifyHostComponent from "../components/NotifyHostComponent.vue";
 
 export default Vue.extend({
   name: "SessionPage",
@@ -143,6 +160,7 @@ export default Vue.extend({
     EstimateTimer,
     CopySessionIdPopup,
     RoundedAvatar,
+    NotifyHostComponent,
   },
   props: {
     adminID: { type: String, required: true },
@@ -154,8 +172,6 @@ export default Vue.extend({
   },
   data() {
     return {
-      titleWaiting: "Waiting for members ...",
-      titleEstimate: "Estimate!",
       stageLabelReady: "Ready",
       stageLabelWaiting: "Waiting room",
       planningStart: false,
@@ -176,33 +192,14 @@ export default Vue.extend({
     webSocketIsConnected() {
       return this.$store.state.webSocketConnected;
     },
+    highlightedMembers() {
+      return this.$store.state.highlightedMembers;
+    },
     membersPending(): Member[] {
       return this.members.filter((member: Member) => member.currentEstimation === null);
     },
     membersEstimated(): Member[] {
       return this.members.filter((member: Member) => member.currentEstimation !== null);
-    },
-    estimateHighest(): Member | null {
-      if (this.membersEstimated.length < 1) {
-        return null;
-      }
-      return this.membersEstimated.reduce((prev, current) =>
-        this.voteSet.indexOf(prev.currentEstimation!) >
-        this.voteSet.indexOf(current.currentEstimation!)
-          ? prev
-          : current
-      );
-    },
-    estimateLowest(): Member | null {
-      if (this.membersEstimated.length < 1) {
-        return null;
-      }
-      return this.membersEstimated.reduce((prev, current) =>
-        this.voteSet.indexOf(prev.currentEstimation!) <
-        this.voteSet.indexOf(current.currentEstimation!)
-          ? prev
-          : current
-      );
     },
   },
   watch: {
@@ -212,9 +209,19 @@ export default Vue.extend({
         this.registerAdminPrincipalOnBackend();
         this.subscribeWSMemberUpdated();
         this.requestMemberUpdate();
+        this.subscribeWSNotification();
         if (this.startNewSessionOnMountedString === "true") {
           this.sendRestartMessage();
         }
+      }
+    },
+    highlightedMembers(highlights) {
+      if (this.estimateFinished && highlights.length === 0) {
+        confetti({
+          particleCount: 100,
+          startVelocity: 50,
+          spread: 100,
+        });
       }
     },
   },
@@ -260,6 +267,9 @@ export default Vue.extend({
     requestMemberUpdate() {
       const endPoint = Constants.webSocketGetMemberUpdateRoute;
       this.$store.commit("sendViaBackendWS", { endPoint });
+    },
+    subscribeWSNotification() {
+      this.$store.commit("subscribeOnBackendWSNotify");
     },
     sendUnregisterCommand() {
       const endPoint = `${Constants.webSocketUnregisterRoute}`;

@@ -1,0 +1,19 @@
+<template>
+  <div>
+    <h5>{{ $t("session.prepare.step.selection.mode.description.withUS.subtitle") }}</h5>
+    <ul>
+      <li>{{ $t("session.prepare.step.selection.mode.description.withUS.descriptionLine1") }}</li>
+      <li>{{ $t("session.prepare.step.selection.mode.description.withUS.descriptionLine2") }}</li>
+      <li>{{ $t("session.prepare.step.selection.mode.description.withUS.descriptionLine3") }}</li>
+      <li>{{ $t("session.prepare.step.selection.mode.description.withUS.descriptionLine4") }}</li>
+    </ul>
+  </div>
+</template>
+
+<script lang="ts">
+import Vue from "vue";
+
+export default Vue.extend({
+  name: "UserStoryComponent",
+});
+</script>

@@ -1,0 +1,21 @@
+<template>
+  <div>
+    <h5>{{ $t("session.prepare.step.selection.mode.description.withoutUS.subtitle") }}</h5>
+    <ul>
+      <li>
+        {{ $t("session.prepare.step.selection.mode.description.withoutUS.descriptionLine1") }}
+      </li>
+      <li>
+        {{ $t("session.prepare.step.selection.mode.description.withoutUS.descriptionLine2") }}
+      </li>
+    </ul>
+  </div>
+</template>
+
+<script lang="ts">
+import Vue from "vue";
+
+export default Vue.extend({
+  name: "StoryPointsComponent",
+});
+</script>
