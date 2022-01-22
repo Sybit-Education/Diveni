@@ -35,6 +35,8 @@ class Constants {
 
   webSocketMemberListenUserStoriesRoute = "/users/updates/userStories";
 
+  webSocketTimerStartRoute = "/users/updates/startTimer";
+
   webSocketMemberListenRoute = "/users/updates/member";
 
   websocketNotification = "/users/updates/notifications";

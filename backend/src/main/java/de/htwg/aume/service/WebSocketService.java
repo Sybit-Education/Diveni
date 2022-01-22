@@ -1,7 +1,6 @@
 package de.htwg.aume.service;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -32,6 +31,8 @@ public class WebSocketService {
 	public static String US_UPDATES_DESTINATION = "/updates/userStories";
 
 	public static String NOTIFICATIONS_DESTINATION = "/updates/notifications";
+
+	public static String START_TIMER_DESTINATION = "/updates/startTimer";
 
 	@Autowired
 	private SimpMessagingTemplate simpMessagingTemplate;
@@ -133,6 +134,19 @@ public class WebSocketService {
 	public void sendUpdatedUserStoriesToMember(Session session, String memberID) {
 		simpMessagingTemplate.convertAndSendToUser(memberID, US_UPDATES_DESTINATION,
 				session.getSessionConfig().getUserStories());
+	}
+
+	public void sendTimerStartMessage(Session session, String timestamp) {
+		val sessionPrincipals = getSessionPrincipals(session.getSessionID());
+		if (sessionPrincipals.adminPrincipal() != null) {
+			sendTimerStartMessageToUser(session, timestamp, sessionPrincipals.adminPrincipal().getName());
+		} // else the admin left the session
+		sessionPrincipals.memberPrincipals()
+				.forEach(member -> sendTimerStartMessageToUser(session, timestamp, member.getMemberID()));
+	}
+
+	public void sendTimerStartMessageToUser(Session session, String timestamp, String userID) {
+		simpMessagingTemplate.convertAndSendToUser(userID, START_TIMER_DESTINATION, timestamp);
 	}
 
 	public void sendNotification(Session session, Notification notification) {

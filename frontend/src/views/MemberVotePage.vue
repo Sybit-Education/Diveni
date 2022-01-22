@@ -12,11 +12,9 @@
       </b-col>
       <b-col>
         <estimate-timer
+          :start-timestamp="timerTimestamp"
           :pause-timer="estimateFinished"
-          :timer-triggered="triggerTimer"
-          :timer="timerCountdownNumber"
-          :start-timer-on-component-creation="false"
-          :initial-timer="timerCountdownNumber"
+          :duration="timerCountdownNumber"
         />
       </b-col>
     </b-row>
@@ -157,6 +155,9 @@ export default Vue.extend({
     },
     highlightedMembers() {
       return this.$store.state.highlightedMembers;
+    },
+    timerTimestamp() {
+      return this.$store.state.timerTimestamp ? this.$store.state.timerTimestamp : "";
     },
   },
   watch: {
