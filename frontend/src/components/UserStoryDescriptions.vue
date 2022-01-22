@@ -14,13 +14,19 @@
             :disabled="!editDescription"
             class="border"
             size="lg"
-            placeholder="Story title"
+            :placeholder="
+              $t('page.session.before.userStories.placeholder.userStoryTitle')
+            "
             @blur="publishChanges"
           />
           <b-dropdown
             v-show="editDescription"
             class="m-1"
-            :text="(userStories[idx].estimation ? userStories[idx].estimation : '?') + '    '"
+            :text="
+              (userStories[idx].estimation
+                ? userStories[idx].estimation
+                : '?') + '    '
+            "
             variant="info"
           >
             <b-dropdown-item
@@ -44,7 +50,9 @@
             class="card-body rounded"
             :style="{
               'background-color':
-                userStories[idx].estimation == null ? 'white' : 'RGB(13, 202, 240)',
+                userStories[idx].estimation == null
+                  ? 'white'
+                  : 'RGB(13, 202, 240)',
             }"
           >
             {{ story.estimation }}
@@ -58,7 +66,11 @@
             rows="27"
             max-rows="40"
             :disabled="!editDescription"
-            placeholder="Description and acceptance criteria..."
+            :placeholder="
+              $t(
+                'page.session.before.userStories.placeholder.userStoryDescription'
+              )
+            "
             @blur="publishChanges"
           />
         </div>

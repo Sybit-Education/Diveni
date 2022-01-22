@@ -15,7 +15,17 @@
           "afterID": "with your team mates",
           "waiting": "Waiting for members to join"
         },
-        "button": "Start Planning"
+        "button": "Start Planning",
+        "userStories": {
+          "button": {
+            "addFirstUserStory": "No stories yet... click to add stories",
+            "addUserStory": "Add User Story"
+          },
+          "placeholder": {
+            "userStoryTitle": "User Story Title",
+            "userStoryDescription": "Description and acceptance criteria..."
+          }
+        }
       },
       "during": {
         "estimation": {
@@ -92,7 +102,12 @@
     },
     "vote": {
       "title": "Estimate!",
-      "waiting": "Waiting for your host to start ..."
+      "waiting": "Waiting for your host to start ...",
+      "button": {
+        "leave": {
+          "label": "Leave session"
+        }
+      }
     }
   },
   "session": {
