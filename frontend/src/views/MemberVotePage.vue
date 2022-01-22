@@ -15,6 +15,16 @@
       </b-col>
 
       <b-col class="d-flex justify-content-end">
+        <b-button
+          v-b-modal.close-session-modal
+          style="height: 40px"
+          variant="danger"
+          class="m-1 mt-4"
+          @click="leaveMeeting"
+        >
+          <b-icon-x />
+          leave meeting
+        </b-button>
         <rounded-avatar
           :color="hexColor"
           :asset-name="avatarAnimalAssetName"
@@ -124,7 +134,7 @@
               :card-set="voteSet"
               :index="index"
               :initial-stories="userStories"
-              :editDescription="false"
+              :edit-description="false"
               @userStoriesChanged="onUserStoriesChanged($event)"
             />
           </b-col>
@@ -288,6 +298,13 @@ export default Vue.extend({
     },
     backendAnimalToAssetName(animal: string) {
       return Constants.avatarAnimalToAssetName(animal);
+    },
+    goToLandingPage() {
+      window.localStorage.removeItem("memberCookie");
+      this.$router.push({ name: "LandingPage" });
+    },
+    leaveMeeting() {
+      this.goToLandingPage();
     },
   },
 });
