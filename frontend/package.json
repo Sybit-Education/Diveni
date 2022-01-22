@@ -13,11 +13,13 @@
   "dependencies": {
     "@egjs/vue-flicking": "^4.3.1",
     "@types/sockjs-client": "^1.5.1",
+    "@vue/composition-api": "^1.4.4",
     "axios": "^0.23.0",
     "bootstrap": "^5.1.3",
     "bootstrap-vue": "^2.21.2",
     "canvas-confetti": "^1.4.0",
     "core-js": "^3.6.5",
+    "papaparse": "^5.3.1",
     "register-service-worker": "^1.7.1",
     "sockjs-client": "^1.5.2",
     "uuid": "^8.3.2",

@@ -1,6 +1,7 @@
 <template>
   <b-container>
     <user-stories-sidebar
+      v-if="userStoryMode !== 'NO_US'"
       :card-set="voteSet"
       :show-estimations="true"
       :initial-stories="userStories"
@@ -12,11 +13,9 @@
       </b-col>
       <b-col>
         <estimate-timer
+          :start-timestamp="timerTimestamp"
           :pause-timer="estimateFinished"
-          :timer-triggered="triggerTimer"
-          :timer="timerCountdownNumber"
-          :start-timer-on-component-creation="false"
-          :initial-timer="timerCountdownNumber"
+          :duration="timerCountdownNumber"
         />
       </b-col>
     </b-row>
@@ -88,6 +87,7 @@
         :highlight="highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0"
       />
     </b-row>
+    <notify-member-component />
   </b-container>
 </template>
 
@@ -99,6 +99,7 @@ import Constants from "../constants";
 import UserStoriesSidebar from "../components/UserStoriesSidebar.vue";
 import EstimateTimer from "../components/EstimateTimer.vue";
 import SessionMemberCard from "../components/SessionMemberCard.vue";
+import NotifyMemberComponent from "../components/NotifyMemberComponent.vue";
 import Member from "../model/Member";
 import confetti from "canvas-confetti";
 
@@ -110,6 +111,7 @@ export default Vue.extend({
     EstimateTimer,
     UserStoriesSidebar,
     SessionMemberCard,
+    NotifyMemberComponent,
   },
   props: {
     memberID: { type: String, default: undefined },
@@ -118,6 +120,7 @@ export default Vue.extend({
     avatarAnimalAssetName: { type: String, default: undefined },
     voteSetJson: { type: String, default: undefined },
     timerSecondsString: { type: String, default: undefined },
+    userStoryMode: { type: String, default: undefined },
   },
   data() {
     return {
@@ -155,6 +158,9 @@ export default Vue.extend({
     highlightedMembers() {
       return this.$store.state.highlightedMembers;
     },
+    timerTimestamp() {
+      return this.$store.state.timerTimestamp ? this.$store.state.timerTimestamp : "";
+    },
   },
   watch: {
     memberUpdates(updates) {
@@ -179,7 +185,7 @@ export default Vue.extend({
     },
   },
   created() {
-    window.addEventListener("beforeunload", this.sendUnregisterCommand);
+    // window.addEventListener("beforeunload", this.sendUnregisterCommand);
     this.timerCountdownNumber = JSON.parse(this.timerSecondsString);
   },
   mounted() {

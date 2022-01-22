@@ -112,7 +112,7 @@ public class JiraServerService {
             OAuthParameters parameters = jiraOAuthClient.getParameters(accessToken, CONSUMER_KEY, PRIVATE_KEY);
             HttpResponse response = getResponseFromUrl(parameters, new GenericUrl(
                     JIRA_HOME + "/rest/api/latest/search?jql=project=" + projectName
-                            + " ORDER BY RANK&fields=summary,description,customfield_10111&maxResults=1000"),
+                            + " and status != done ORDER BY RANK&fields=summary,description,customfield_10111&maxResults=1000"),
                     "GET", null);
             // The reply from the Jira API is no correct JSON, therefore [ and ] have to be
             // added

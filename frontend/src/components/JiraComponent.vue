@@ -1,10 +1,21 @@
 <template>
   <div>
-    <h5>{{ $t("session.prepare.step.selection.mode.description.withJira.subtitle") }}</h5>
+    <h5>
+      <i>{{ $t("session.prepare.step.selection.mode.description.withJira.subtitle") }}</i>
+    </h5>
     <ul>
       <li>
         {{ $t("session.prepare.step.selection.mode.description.withJira.descriptionLine1") }}
-        <sign-in-with-jira-button-component class="my-1"></sign-in-with-jira-button-component>
+        <sign-in-with-jira-cloud-button-component
+          v-if="isJiraCloudEnabled"
+          class="my-1"
+          :disabled="isLoggedInWithJira"
+        ></sign-in-with-jira-cloud-button-component>
+        <sign-in-with-jira-server-button-component
+          v-if="isJiraServerEnabled"
+          class="my-1"
+          :disabled="isLoggedInWithJira"
+        ></sign-in-with-jira-server-button-component>
       </li>
       <li>{{ $t("session.prepare.step.selection.mode.description.withJira.descriptionLine2") }}</li>
       <li>
@@ -16,11 +27,23 @@
 </template>
 
 <script lang="ts">
+import constants from "@/constants";
 import Vue from "vue";
-import SignInWithJiraButtonComponent from "./SignInWithJiraButtonComponent.vue";
+import SignInWithJiraCloudButtonComponent from "./SignInWithJiraCloudButtonComponent.vue";
+import SignInWithJiraServerButtonComponent from "./SignInWithJiraServerButtonComponent.vue";
 
 export default Vue.extend({
   name: "JiraComponent",
-  components: { SignInWithJiraButtonComponent },
+  components: {
+    SignInWithJiraCloudButtonComponent,
+    SignInWithJiraServerButtonComponent,
+  },
+  data() {
+    return {
+      isJiraCloudEnabled: constants.isJiraCloudEnabled,
+      isJiraServerEnabled: constants.isJiraServerEnabled,
+      isLoggedInWithJira: !!this.$store.state.tokenId,
+    };
+  },
 });
 </script>

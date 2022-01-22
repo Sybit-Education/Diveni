@@ -59,6 +59,8 @@ public class JiraServerController {
 		return new ResponseEntity<>(jiraServerService.getIssues(tokenIdentifier, projectName), HttpStatus.OK);
 	}
 
+	// TODO: For testing with postman at the moment, will be changed when
+	// implementing frontend for it
 	/* @RequestParam("sessionID") sessionID, */
 	@PutMapping(value = "/issue")
 	public void updateIssue(@RequestHeader("X-Token-ID") String tokenIdentifier, @RequestBody UserStory userStory) {

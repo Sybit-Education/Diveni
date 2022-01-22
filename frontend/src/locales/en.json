@@ -1,4 +1,7 @@
 {
+  "general": {
+    "pleaseWait": "Please wait..."
+  },
   "page": {
     "session": {
       "before": {
@@ -30,7 +33,8 @@
       },
       "close": {
         "popup": "Are you sure?",
-        "description": "Closing this session removes you and all members. You can download the user stories thereafter.",
+        "description1": "Closing this session removes you and all members.",
+        "description2": "You can download the user stories thereafter.",
         "button": {
           "cancel": "Cancel",
           "ok": "OK"
@@ -97,8 +101,63 @@
       "title": "Prepare your session:",
       "step": {
         "selection": {
+          "mode": {
+            "title": "1. Select the mode for your User Stories",
+            "description": {
+              "withoutUS": {
+                "tab": {
+                  "label": "Planning without User Stories"
+                },
+                "subtitle": "Planning without User Stories",
+                "descriptionLine1": "You will vote with your selected cards",
+                "descriptionLine2": "You will not be able to add User Stories once you've started the session"
+              },
+              "withUS": {
+                "tab": {
+                  "label": "Planning with User Stories"
+                },
+                "subtitle": "Integrate User Stories in your Poker-Planning",
+                "descriptionLine1": "Create your User Stories below",
+                "descriptionLine2": "Add title and description to each User Story",
+                "descriptionLine3": "Use the CSV-Import to integrate User Stories in your session",
+                "descriptionLine4": "You will be able to add and edit User Stories once you've started the session",
+                "importButton": "Import User Stories",
+                "toastSuccessNotification": "User Stories imported",
+                "toastErrorNotification": "Error when trying to import"
+              },
+              "withJira": {
+                "tab": {
+                  "label": "Planning with Jira"
+                },
+                "subtitle": "Select Jira for your Poker-Planning",
+                "descriptionLine1": "Please sign in with Jira",
+                "descriptionLine2": "Select your project",
+                "descriptionLine3": "After you have selected your project, you will be redirected to the next page to edit your user stories",
+                "descriptionLine4": "You will be able to add and edit User Stories once you've started the session",
+                "dialog": {
+                  "description": "A new tab will open immediately, please grant access to this application in this tab and enter the verification code here."
+                },
+                "inputs": {
+                  "verificationCode": {
+                    "placeholder": "Verification code"
+                  }
+                },
+                "buttons": {
+                  "signInWithJiraCloud": {
+                    "label": "Sign in with Jira Cloud"
+                  },
+                  "signInWithJiraServer": {
+                    "label": "Sign in with Jira Server"
+                  },
+                  "submit": {
+                    "label": "Submit"
+                  }
+                }
+              }
+            }
+          },
           "cardSet": {
-            "title": "1. Select a card set and its values",
+            "title": "2. Select a card set and its values",
             "sets": {
               "fibonacci": {
                 "label": "Fibonacci",
@@ -119,60 +178,11 @@
             }
           },
           "time": {
-            "title": "2. Adjust the time per estimation"
+            "title": "3. Adjust the time per estimation"
           },
           "password": {
-            "title": "3. Choose a password if needed",
+            "title": "4. Choose a password if needed",
             "placeholder": "Password (leave empty for unprotected session)"
-          },
-          "mode": {
-            "title": "4. Select the mode for your User Stories",
-            "description": {
-              "withoutUS": {
-                "tab": {
-                  "label": "Planning without User Stories"
-                },
-                "subtitle": "Planning without User Stories",
-                "descriptionLine1": "You will vote with your selected cards",
-                "descriptionLine2": "You will not be able to add User Stories once you've started the session"
-              },
-              "withUS": {
-                "tab": {
-                  "label": "Planning with User Stories"
-                },
-                "subtitle": "Integrate User Stories in your Poker-Planning",
-                "descriptionLine1": "Create your User Stories below",
-                "descriptionLine2": "Add title and description to each User Story",
-                "descriptionLine3": "Use the CSV-Import to integrate User Stories in your session",
-                "descriptionLine4": "You will be able to add and edit User Stories once you've started the session"
-              },
-              "withJira": {
-                "tab": {
-                  "label": "Planning with Jira"
-                },
-                "subtitle": "Select Jira for your Poker-Planning",
-                "descriptionLine1": "Please sign in with Jira",
-                "descriptionLine2": "Select your project",
-                "descriptionLine3": "After you have selected your project, you will be redirected to the next page to edit your user stories",
-                "descriptionLine4": "You will be able to add and edit User Stories once you've started the session",
-                "dialog": {
-                  "description": "A new tab will open immediately, please grant access to this application in this tab and enter the verification code here."
-                },
-                "inputs": {
-                  "verificationCode": {
-                    "placeholder": "Verification code"
-                  }
-                },
-                "buttons": {
-                  "signInWithJira": {
-                    "label": "Sign in with Jira"
-                  },
-                  "submit": {
-                    "label": "Submit"
-                  }
-                }
-              }
-            }
           }
         }
       },
@@ -191,6 +201,17 @@
           "title": "Story title",
           "description": "Description and acceptance criteria..."
         }
+      }
+    },
+    "notification": {
+      "messages": {
+        "hostLeft": "Host left the session",
+        "memberLeft": "Member left the session",
+        "memberJoined": "Member joined the session",
+        "jiraCredentials": "Wrong credentials",
+        "jiraLoginFailed": "Login failed",
+        "wrongID": "Wrong invitation code",
+        "password": "Wrong password"
       }
     }
   }

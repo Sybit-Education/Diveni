@@ -1,6 +1,7 @@
 <template>
   <b-container>
     <user-stories-sidebar
+      v-if="userStoryMode !== 'NO_US'"
       :card-set="voteSet"
       :show-estimations="planningStart"
       :initial-stories="userStories"
@@ -78,17 +79,18 @@
             @ok="closeSession"
           >
             <p class="my-4">
-              {{ $t("page.session.close.description") }}
+              {{ $t("page.session.close.description1") }}
+            </p>
+            <p v-if="userStoryMode !== 'NO_US'">
+              {{ $t("page.session.close.description2") }}
             </p>
           </b-modal>
         </b-col>
         <b-col>
           <estimate-timer
+            :start-timestamp="timerTimestamp"
             :pause-timer="estimateFinished"
-            :timer-triggered="triggerTimer"
-            :timer="timerCountdownNumber"
-            :start-timer-on-component-creation="startTimerOnComponentCreation"
-            :initial-timer="timerCountdownNumber"
+            :duration="timerCountdownNumber"
             @timerFinished="sendVotingFinishedMessage"
           />
         </b-col>
@@ -134,6 +136,7 @@
         />
       </b-row>
     </div>
+    <notify-host-component />
   </b-container>
 </template>
 
@@ -148,6 +151,7 @@ import EstimateTimer from "../components/EstimateTimer.vue";
 import CopySessionIdPopup from "../components/CopySessionIdPopup.vue";
 import RoundedAvatar from "../components/RoundedAvatar.vue";
 import confetti from "canvas-confetti";
+import NotifyHostComponent from "../components/NotifyHostComponent.vue";
 
 export default Vue.extend({
   name: "SessionPage",
@@ -158,6 +162,7 @@ export default Vue.extend({
     EstimateTimer,
     CopySessionIdPopup,
     RoundedAvatar,
+    NotifyHostComponent,
   },
   props: {
     adminID: { type: String, required: true },
@@ -166,6 +171,7 @@ export default Vue.extend({
     sessionState: { type: String, required: true },
     timerSecondsString: { type: String, required: true },
     startNewSessionOnMountedString: { type: String, required: false, default: "false" },
+    userStoryMode: { type: String, required: true },
   },
   data() {
     return {
@@ -198,6 +204,9 @@ export default Vue.extend({
     membersEstimated(): Member[] {
       return this.members.filter((member: Member) => member.currentEstimation !== null);
     },
+    timerTimestamp() {
+      return this.$store.state.timerTimestamp ? this.$store.state.timerTimestamp : "";
+    },
   },
   watch: {
     webSocketIsConnected(isConnected) {
@@ -206,6 +215,8 @@ export default Vue.extend({
         this.registerAdminPrincipalOnBackend();
         this.subscribeWSMemberUpdated();
         this.requestMemberUpdate();
+        this.subscribeOnTimerStart();
+        this.subscribeWSNotification();
         if (this.startNewSessionOnMountedString === "true") {
           this.sendRestartMessage();
         }
@@ -260,9 +271,15 @@ export default Vue.extend({
     subscribeWSMemberUpdated() {
       this.$store.commit("subscribeOnBackendWSAdminUpdate");
     },
+    subscribeOnTimerStart() {
+      this.$store.commit("subscribeOnBackendWSTimerStart");
+    },
     requestMemberUpdate() {
       const endPoint = Constants.webSocketGetMemberUpdateRoute;
       this.$store.commit("sendViaBackendWS", { endPoint });
+    },
+    subscribeWSNotification() {
+      this.$store.commit("subscribeOnBackendWSNotify");
     },
     sendUnregisterCommand() {
       const endPoint = `${Constants.webSocketUnregisterRoute}`;
@@ -291,19 +308,19 @@ export default Vue.extend({
     closeSession() {
       this.sendCloseSessionCommand();
       window.localStorage.removeItem("adminCookie");
-      this.$router.push({ name: "ResultPage" });
+      if (this.userStoryMode !== "NO_US") {
+        this.$router.push({ name: "ResultPage" });
+      } else {
+        this.$router.push({ name: "LandingPage" });
+      }
     },
     sendRestartMessage() {
       this.estimateFinished = false;
       const endPoint = Constants.webSocketRestartPlanningRoute;
       this.$store.commit("sendViaBackendWS", { endPoint });
-      this.reTriggerTime();
     },
     goToLandingPage() {
       this.$router.push({ name: "LandingPage" });
-    },
-    reTriggerTime() {
-      this.triggerTimer = (this.triggerTimer + 1) % 5;
     },
   },
 });
