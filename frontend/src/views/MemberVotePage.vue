@@ -56,7 +56,10 @@
           @sentVote="onSendVote"
         />
       </flicking>
-      <b-row v-else class="d-flex justify-content-between flex-wrap">
+      <b-row
+        v-else
+        class="d-flex justify-content-between flex-wrap text-center"
+      >
         <b-col>
           <div class="overflow-auto" style="max-height: 500px">
             <member-vote-card
@@ -82,7 +85,8 @@
     </b-row>
     <b-row
       v-if="votingFinished"
-      class="my-1 d-flex justify-content-center flex-wrap"
+      class="my-1 d-flex justify-content-center flex-wrap overflow-auto"
+      style="max-height: 500px"
     >
       <SessionMemberCard
         v-for="member of members"
