@@ -33,7 +33,6 @@ import de.htwg.aume.service.DatabaseService;
 import lombok.val;
 import de.htwg.aume.service.jira.JiraServerService;
 
-
 @CrossOrigin(origins = { "http://localhost:8080", "https://pp.vnmz.de" })
 @RestController
 public class RoutesController {
@@ -45,7 +44,9 @@ public class RoutesController {
 	DatabaseService databaseService;
 
 	@PostMapping(value = "/sessions")
-	public ResponseEntity<Map<String, Object>> createSession(@RequestParam("tokenIdentifier") Optional<String> tokenIdentifier, @RequestBody SessionConfig sessionConfig) {
+	public ResponseEntity<Map<String, Object>> createSession(
+			@RequestParam("tokenIdentifier") Optional<String> tokenIdentifier,
+			@RequestBody SessionConfig sessionConfig) {
 		val usedSessionIDs = databaseService.getSessions().stream().map(Session::getSessionID)
 				.collect(Collectors.toSet());
 		val usedDatabaseIDs = databaseService.getSessions().stream().map(Session::getDatabaseID)
@@ -56,7 +57,8 @@ public class RoutesController {
 				.limit(2).collect(Collectors.toList());
 		val accessToken = tokenIdentifier.map(token -> jiraServerService.getAccessTokens().remove(token)).orElse(null);
 		val session = new Session(databaseID, sessionIds.get(0), sessionIds.get(1), sessionConfig, UUID.randomUUID(),
-				new ArrayList<>(), new HashMap<>(), new ArrayList<>(), SessionState.WAITING_FOR_MEMBERS).setAccessToken(accessToken);
+				new ArrayList<>(), new HashMap<>(), new ArrayList<>(), SessionState.WAITING_FOR_MEMBERS, null, null)
+						.setAccessToken(accessToken);
 		databaseService.saveSession(session);
 		val responseMap = Map.of("session", session, "adminCookie", session.getAdminCookie());
 		return new ResponseEntity<>(responseMap, HttpStatus.CREATED);
