@@ -1,6 +1,7 @@
 <template>
   <b-container>
     <user-stories-sidebar
+      v-if="userStoryMode !== 'NO_US'"
       :card-set="voteSet"
       :show-estimations="true"
       :initial-stories="userStories"
@@ -119,6 +120,7 @@ export default Vue.extend({
     avatarAnimalAssetName: { type: String, default: undefined },
     voteSetJson: { type: String, default: undefined },
     timerSecondsString: { type: String, default: undefined },
+    userStoryMode: { type: String, default: undefined },
   },
   data() {
     return {

@@ -131,7 +131,7 @@ public class SessionTest {
 		val member1 = new Member(Utils.generateRandomID(), null, null, null, "S");
 		val member2 = new Member(Utils.generateRandomID(), null, null, null, "L");
 		val member3 = new Member(Utils.generateRandomID(), null, null, null, "XS");
-		val session = new Session(null, null, null, new SessionConfig(set, List.of(), 30, null), null,
+		val session = new Session(null, null, null, new SessionConfig(set, List.of(), 30, "US_MANUALLY", null), null,
 				List.of(member1, member2, member3), new HashMap<>(), new ArrayList<>(), null, null, null, null);
 
 		val result = session.selectHighlightedMembers();
@@ -153,8 +153,8 @@ public class SessionTest {
 		map.put(member1.getMemberID(), 1);
 		map.put(member2.getMemberID(), 0);
 		map.put(member3.getMemberID(), 0);
-		val session = new Session(null, null, null, new SessionConfig(set, List.of(), 30, null), null,
-				List.of(member1, member2, member3), map, new ArrayList<>(), null, null, null, null);
+		val session = new Session(null, null, null, new SessionConfig(set, List.of(), 30, "US_MANUALLY",
+				null), null, List.of(member1, member2, member3), map, new ArrayList<>(), null, null, null, null);
 
 		val result = session.selectHighlightedMembers();
 

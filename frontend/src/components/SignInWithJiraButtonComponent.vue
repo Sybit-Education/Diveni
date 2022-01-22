@@ -59,9 +59,7 @@ export default Vue.extend({
   },
   methods: {
     checkFormValidity() {
-      const valid = (
-        this.$refs.form as Vue & { checkValidity: () => boolean }
-      ).checkValidity();
+      const valid = (this.$refs.form as Vue & { checkValidity: () => boolean }).checkValidity();
       this.verificationCodeState = valid;
       return valid;
     },
@@ -89,10 +87,7 @@ export default Vue.extend({
       if (!valid) {
         return;
       }
-      await apiService.sendJiraOauth1VerificationCode(
-        this.verificationCode,
-        this.token
-      );
+      await apiService.sendJiraOauth1VerificationCode(this.verificationCode, this.token);
       this.$nextTick(() => {
         this.$bvModal.hide("modal-verification-code");
       });

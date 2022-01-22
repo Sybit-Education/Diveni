@@ -1,6 +1,8 @@
 <template>
   <div>
-    <h5>{{ $t("session.prepare.step.selection.mode.description.withJira.subtitle") }}</h5>
+    <h5>
+      <i>{{ $t("session.prepare.step.selection.mode.description.withJira.subtitle") }}</i>
+    </h5>
     <ul>
       <li>
         {{ $t("session.prepare.step.selection.mode.description.withJira.descriptionLine1") }}
