@@ -7,9 +7,7 @@
     <h1 class="fs-3-rem">
       <strong v-if="!estimateFinished">?</strong>
       <strong v-if="estimation === null && estimateFinished">-</strong>
-      <strong v-if="estimation !== null && estimateFinished">{{
-        estimation
-      }}</strong>
+      <strong v-if="estimation !== null && estimateFinished">{{ estimation }}</strong>
     </h1>
     <img :src="require(`@/assets/${assetName}`)" width="40" alt="image" />
     <h4 class="mt-2">
