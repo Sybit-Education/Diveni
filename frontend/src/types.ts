@@ -8,6 +8,7 @@ export interface StoreState {
   members: Record<string, unknown>[];
   notifications: Record<string, unknown>[];
   highlightedMembers: Record<string, unknown>[];
+  timerTimestamp: string | undefined;
   tokenId: string | undefined;
 }
 
