@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-dropdown :text="locales[$i18n.locale]" class="mt-4">
+    <b-dropdown :text="locales[$i18n.locale]" class="mt-4 mb-2">
       <b-dropdown-item
         v-for="(locale, key) in locales"
         :key="key"
