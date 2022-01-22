@@ -135,7 +135,7 @@
       </b-row>
     </div>
     <b-row v-if="userStoryMode !== 'NO_US'">
-      <b-col class="mt-2">
+      <b-col class="mt-3">
         <div class="overflow-auto" style="max-height: 700px">
           <user-stories-sidebar
             :card-set="voteSet"
@@ -148,7 +148,7 @@
           />
         </div>
       </b-col>
-      <b-col class="mt-2">
+      <b-col class="mt-3">
         <user-story-descriptions
           :card-set="voteSet"
           :initial-stories="userStories"
