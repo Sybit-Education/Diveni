@@ -48,38 +48,22 @@
         <div v-else>
           <b-row class="d-flex justify-content-start pb-3">
             <b-col>
-              <b-button
-                variant="outline-dark"
-                @click="sendRestartMessage"
-                class="m-1"
-              >
+              <b-button variant="outline-dark" class="m-1" @click="sendRestartMessage">
                 <b-icon-arrow-clockwise />
                 New
               </b-button>
-              <b-button
-                variant="outline-dark"
-                class="m-1"
-                @click="sendVotingFinishedMessage"
-              >
+              <b-button variant="outline-dark" class="m-1" @click="sendVotingFinishedMessage">
                 <b-icon-bar-chart />
                 Show result
               </b-button>
-              <b-button
-                v-b-modal.close-session-modal
-                variant="danger"
-                class="m-1"
-              >
+              <b-button v-b-modal.close-session-modal variant="danger" class="m-1">
                 <b-icon-x />
                 End meeting
               </b-button>
-              <b-modal
-                id="close-session-modal"
-                title="Are you sure"
-                @ok="closeSession"
-              >
+              <b-modal id="close-session-modal" title="Are you sure" @ok="closeSession">
                 <p class="my-4">
-                  Closing this session removes you and all members. You can
-                  download the user stories thereafter.
+                  Closing this session removes you and all members. You can download the user
+                  stories thereafter.
                 </p>
               </b-modal>
             </b-col>
@@ -90,17 +74,12 @@
                   :pause-timer="estimateFinished"
                   :timer-triggered="triggerTimer"
                   :timer="timerCountdownNumber"
-                  :start-timer-on-component-creation="
-                    startTimerOnComponentCreation
-                  "
+                  :start-timer-on-component-creation="startTimerOnComponentCreation"
                   :initial-timer="timerCountdownNumber"
                   @timerFinished="sendVotingFinishedMessage"
                 />
               </b-row>
-              <b-row
-                v-if="!estimateFinished"
-                class="my-1 d-flex justify-content-center flex-wrap"
-              >
+              <b-row v-if="!estimateFinished" class="my-1 d-flex justify-content-center flex-wrap">
                 <rounded-avatar
                   v-for="member of membersPending"
                   :key="member.memberID"
@@ -138,16 +117,8 @@
               :name="member.name"
               :estimation="member.currentEstimation"
               :estimate-finished="estimateFinished"
-              :highest="
-                estimateHighest
-                  ? estimateHighest.memberID === member.memberID
-                  : false
-              "
-              :lowest="
-                estimateHighest
-                  ? estimateLowest.memberID === member.memberID
-                  : false
-              "
+              :highest="estimateHighest ? estimateHighest.memberID === member.memberID : false"
+              :lowest="estimateHighest ? estimateLowest.memberID === member.memberID : false"
             />
           </b-row>
         </div>
@@ -159,8 +130,8 @@
               :card-set="voteSet"
               :show-estimations="planningStart"
               :initial-stories="userStories"
-              :showEditButtons="true"
-              :selectStory="true"
+              :show-edit-buttons="true"
+              :select-story="true"
               @userStoriesChanged="onUserStoriesChanged($event)"
               @selectedStory="onSelectedStory($event)"
             />
@@ -171,7 +142,7 @@
           <user-story-descriptions
             :card-set="voteSet"
             :initial-stories="userStories"
-            :editDescription="true"
+            :edit-description="true"
             :index="index"
             @userStoriesChanged="onUserStoriesChanged($event)"
           />
@@ -242,14 +213,10 @@ export default Vue.extend({
       return this.$store.state.webSocketConnected;
     },
     membersPending(): Member[] {
-      return this.members.filter(
-        (member: Member) => member.currentEstimation === null
-      );
+      return this.members.filter((member: Member) => member.currentEstimation === null);
     },
     membersEstimated(): Member[] {
-      return this.members.filter(
-        (member: Member) => member.currentEstimation !== null
-      );
+      return this.members.filter((member: Member) => member.currentEstimation !== null);
     },
     estimateHighest(): Member | null {
       if (this.membersEstimated.length < 1) {

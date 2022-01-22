@@ -5,16 +5,11 @@
         {{ title }}
       </h1>
       <h4>1. Select a card set and its values</h4>
-      <card-set-component
-        class="mt-3"
-        @selectedCardSetOptions="setCardSetOptions"
-      />
+      <card-set-component class="mt-3" @selectedCardSetOptions="setCardSetOptions" />
       <h4 class="mt-3">2. Specify estimation duration</h4>
       <b-row class="mt-3 text-center">
         <b-col>
-          <b-button variant="outline-secondary" @click="setTimerDown()">
-            -
-          </b-button>
+          <b-button variant="outline-secondary" @click="setTimerDown()"> - </b-button>
         </b-col>
         <b-col class="text-center">
           <h4>
@@ -22,9 +17,7 @@
           </h4>
         </b-col>
         <b-col>
-          <b-button variant="outline-secondary" @click="setTimerUp()">
-            +
-          </b-button>
+          <b-button variant="outline-secondary" @click="setTimerUp()"> + </b-button>
         </b-col>
       </b-row>
       <h4 class="mt-3">3. Secure with password</h4>
@@ -59,10 +52,7 @@
         >
           <stroy-points-component />
         </b-tab>
-        <b-tab
-          title="Planning with User Stories"
-          :title-link-class="linkClass(1)"
-        >
+        <b-tab title="Planning with User Stories" :title-link-class="linkClass(1)">
           <user-story-component class="mg_top_2_per" />
           <!--TODO: Implement session config with US-->
         </b-tab>

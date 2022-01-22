@@ -3,42 +3,38 @@
     <div class="list">
       <b-list-group-item
         v-for="(story, idx) of userStories"
+        v-show="idx === index"
         :key="story.name"
         class="border-0"
         variant="outline-secondary"
-        v-show="idx === index"
       >
         <div class="list-group list-group-horizontal">
           <b-form-input
+            v-model="userStories[idx].title"
             :disabled="!editDescription"
             class="border"
-            v-model="userStories[idx].title"
             size="lg"
             placeholder="Story title"
             @blur="publishChanges"
           />
           <b-dropdown
-            class="m-1"
             v-show="editDescription"
-            :text="
-              (userStories[idx].estimation
-                ? userStories[idx].estimation
-                : '?') + '    '
-            "
+            class="m-1"
+            :text="(userStories[idx].estimation ? userStories[idx].estimation : '?') + '    '"
             variant="info"
           >
             <b-dropdown-item
-              :disabled="!editDescription"
               v-for="num in cardSet"
               :key="num"
+              :disabled="!editDescription"
               :value="num == null ? '?' : num"
               @click="userStories[idx].estimation = num"
             >
               {{ num }}
             </b-dropdown-item>
             <b-dropdown-item
-              @click="userStories[idx].estimation = null"
               :disabled="!editDescription"
+              @click="userStories[idx].estimation = null"
             >
               ?
             </b-dropdown-item>
@@ -48,9 +44,7 @@
             class="card-body rounded"
             :style="{
               'background-color':
-                userStories[idx].estimation == null
-                  ? 'white'
-                  : 'RGB(13, 202, 240)',
+                userStories[idx].estimation == null ? 'white' : 'RGB(13, 202, 240)',
             }"
           >
             {{ story.estimation }}
@@ -58,14 +52,14 @@
         </div>
         <div>
           <b-form-textarea
-            class="mt-1"
-            @blur="publishChanges"
             id="textarea-auto-height"
+            v-model="userStories[idx].description"
+            class="mt-1"
             rows="27"
             max-rows="40"
-            v-model="userStories[idx].description"
             :disabled="!editDescription"
             placeholder="Description and acceptance criteria..."
+            @blur="publishChanges"
           />
         </div>
       </b-list-group-item>

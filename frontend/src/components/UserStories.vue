@@ -1,105 +1,84 @@
 <template>
   <div>
-    <draggable
-      v-model="userStories"
-      class="list"
-      group="people"
-      :options="{ disabled: !showEditButtons }"
-      @start="drag = true"
-      @end="drag = false"
+    <b-list-group-item
+      v-for="(story, index) of userStories"
+      :key="story.name"
+      class="rounded"
+      variant="outline-secondary"
+      :style="{
+        'border-color': story.isActive ? 'RGB(202, 202, 202)' : 'white',
+      }"
+      :active="story.isActive"
+      @mouseover="hover = index"
+      @mouseleave="hover = null"
+      @click="setUserStoryAsActive(index)"
     >
-      <b-list-group-item
-        class="rounded"
-        v-for="(story, index) of userStories"
-        :key="story.name"
-        @mouseover="hover = index"
-        @mouseleave="hover = null"
-        variant="outline-secondary"
-        :style="{
-          'border-color': story.isActive ? 'RGB(202, 202, 202)' : 'white',
-        }"
-        :active="story.isActive"
-        @click="setUserStoryAsActive(index)"
-      >
-        <div class="list-group list-group-horizontal">
-          <b-button
-            class="m-1"
-            v-if="showEditButtons"
-            :variant="story.isActive ? 'success' : 'outline-success'"
-            @click="markUserStory(index)"
-          >
-            <b-icon-check2 />
-          </b-button>
-          <b-form-input
-            :active="index === 0"
-            :disabled="true"
-            class="border-1"
-            v-model="userStories[index].title"
-            size="lg"
+      <div class="list-group list-group-horizontal">
+        <b-button
+          v-if="showEditButtons"
+          class="m-1"
+          :variant="story.isActive ? 'success' : 'outline-success'"
+          @click="markUserStory(index)"
+        >
+          <b-icon-check2 />
+        </b-button>
+        <b-form-input
+          v-model="userStories[index].title"
+          :active="index === 0"
+          :disabled="true"
+          class="border-1"
+          size="lg"
+          :style="{
+            'background-color': index === number ? 'RGB(202, 202, 202)' : 'white',
+          }"
+          placeholder="Story title"
+          @blur="publishChanges"
+        />
+        <b-button
+          v-show="showEditButtons && hover === index"
+          variant="danger"
+          @click="deleteStory(index)"
+        >
+          <b-icon-trash />
+        </b-button>
+        <div>
+          <div
+            v-show="userStories[index].estimation"
+            class="card-body rounded"
             :style="{
               'background-color':
-                index === number ? 'RGB(202, 202, 202)' : 'white',
+                userStories[index].estimation == null ? 'white' : 'RGB(13, 202, 240)',
+              width: '48px',
+              'font-size': 'larger',
             }"
-            placeholder="Story title"
-            @blur="publishChanges"
-          />
-          <b-button
-            v-show="showEditButtons && hover === index"
-            variant="danger"
-            @click="deleteStory(index)"
           >
-            <b-icon-trash />
-          </b-button>
-          <div>
-            <div
-              v-show="userStories[index].estimation"
-              class="card-body rounded"
-              :style="{
-                'background-color':
-                  userStories[index].estimation == null
-                    ? 'white'
-                    : 'RGB(13, 202, 240)',
-                width: '48px',
-                'font-size': 'larger',
-              }"
-            >
-              {{ story.estimation }}
-            </div>
+            {{ story.estimation }}
           </div>
         </div>
-      </b-list-group-item>
-      <b-button
-        v-if="userStories.length < 1 && showEditButtons"
-        size="lg"
-        variant="success"
-        @click="addUserStory()"
-      >
-        No stories yet... Add a story to start estimating.
-      </b-button>
-      <div v-if="userStories.length > 0 && showEditButtons">
-        <b-button
-          class="w-100 h-100"
-          size="lg"
-          variant="success"
-          @click="addUserStory()"
-        >
-          Add Story
-          <b-icon-plus />
-        </b-button>
       </div>
-    </draggable>
+    </b-list-group-item>
+    <b-button
+      v-if="userStories.length < 1 && showEditButtons"
+      size="lg"
+      variant="success"
+      @click="addUserStory()"
+    >
+      No stories yet... Add a story to start estimating.
+    </b-button>
+    <div v-if="userStories.length > 0 && showEditButtons">
+      <b-button class="w-100 h-100" size="lg" variant="success" @click="addUserStory()">
+        Add Story
+        <b-icon-plus />
+      </b-button>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
-import draggable from "vuedraggable";
 
 export default Vue.extend({
   name: "UserStoryTitles",
-  components: {
-    draggable,
-  },
   props: {
     cardSet: { type: Array, required: true },
     initialStories: { type: Array, required: true },
