@@ -28,10 +28,7 @@
         </h4>
         <b-icon-three-dots animation="fade" class="" font-scale="3" />
       </b-row>
-      <b-row
-        class="d-flex justify-content-center overflow-auto"
-        style="max-height: 500px"
-      >
+      <b-row class="d-flex justify-content-center overflow-auto" style="max-height: 500px">
         <SessionMemberCircle
           v-for="member of members"
           :key="member.memberID"
@@ -61,11 +58,7 @@
             <b-icon-arrow-clockwise />
             {{ $t("page.session.during.estimation.buttons.new") }}
           </b-button>
-          <b-button
-            variant="outline-dark"
-            class="mx-1"
-            @click="sendVotingFinishedMessage"
-          >
+          <b-button variant="outline-dark" class="mx-1" @click="sendVotingFinishedMessage">
             <b-icon-bar-chart />
             {{ $t("page.session.during.estimation.buttons.result") }}
           </b-button>
@@ -101,10 +94,7 @@
           {{ membersPending.length + membersEstimated.length }}
         </h4>
       </b-row>
-      <b-row
-        v-if="!estimateFinished"
-        class="my-1 d-flex justify-content-center flex-wrap"
-      >
+      <b-row v-if="!estimateFinished" class="my-1 d-flex justify-content-center flex-wrap">
         <rounded-avatar
           v-for="member of membersPending"
           :key="member.memberID"
@@ -136,8 +126,7 @@
           :estimation="member.currentEstimation"
           :estimate-finished="estimateFinished"
           :highlight="
-            highlightedMembers.includes(member.memberID) ||
-            highlightedMembers.length === 0
+            highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0
           "
         />
       </b-row>
@@ -236,19 +225,13 @@ export default Vue.extend({
       return this.$store.state.highlightedMembers;
     },
     membersPending(): Member[] {
-      return this.members.filter(
-        (member: Member) => member.currentEstimation === null
-      );
+      return this.members.filter((member: Member) => member.currentEstimation === null);
     },
     membersEstimated(): Member[] {
-      return this.members.filter(
-        (member: Member) => member.currentEstimation !== null
-      );
+      return this.members.filter((member: Member) => member.currentEstimation !== null);
     },
     timerTimestamp() {
-      return this.$store.state.timerTimestamp
-        ? this.$store.state.timerTimestamp
-        : "";
+      return this.$store.state.timerTimestamp ? this.$store.state.timerTimestamp : "";
     },
   },
   watch: {
