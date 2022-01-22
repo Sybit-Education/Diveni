@@ -4,17 +4,27 @@
       <h1 class="my-5">
         {{ $t("session.prepare.title") }}
       </h1>
-      <h4 class="mt-3">{{ $t("session.prepare.step.selection.mode.title") }}</h4>
+      <h4 class="mt-3">
+        {{ $t("session.prepare.step.selection.mode.title") }}
+      </h4>
       <b-tabs v-model="tabIndex" content-class="mt-3" fill>
         <b-tab
           class="mg_top_2_per"
-          :title="$t('session.prepare.step.selection.mode.description.withoutUS.tab.label')"
+          :title="
+            $t(
+              'session.prepare.step.selection.mode.description.withoutUS.tab.label'
+            )
+          "
           :title-link-class="linkClass(0)"
         >
           <stroy-points-component />
         </b-tab>
         <b-tab
-          :title="$t('session.prepare.step.selection.mode.description.withUS.tab.label')"
+          :title="
+            $t(
+              'session.prepare.step.selection.mode.description.withUS.tab.label'
+            )
+          "
           :title-link-class="linkClass(1)"
         >
           <user-story-component class="mg_top_2_per" />
@@ -25,24 +35,46 @@
             accept="text/csv"
             @change="importStory($event.target.files)"
           />
-          <b-button block color="primary" elevation="2" @click="openFileUploader()">
-            {{ $t("session.prepare.step.selection.mode.description.withUS.importButton") }}
+          <b-button
+            block
+            color="primary"
+            elevation="2"
+            @click="openFileUploader()"
+          >
+            {{
+              $t(
+                "session.prepare.step.selection.mode.description.withUS.importButton"
+              )
+            }}
           </b-button>
         </b-tab>
         <b-tab
           v-if="isJiraEnabled"
-          :title="$t('session.prepare.step.selection.mode.description.withJira.tab.label')"
+          :title="
+            $t(
+              'session.prepare.step.selection.mode.description.withJira.tab.label'
+            )
+          "
           :title-link-class="linkClass(2)"
         >
           <jira-component class="mg_top_2_per" />
         </b-tab>
       </b-tabs>
-      <h4 class="mt-4">{{ $t("session.prepare.step.selection.cardSet.title") }}</h4>
-      <card-set-component class="mt-3" @selectedCardSetOptions="setCardSetOptions" />
-      <h4 class="mt-3">{{ $t("session.prepare.step.selection.time.title") }}</h4>
+      <h4 class="mt-4">
+        {{ $t("session.prepare.step.selection.cardSet.title") }}
+      </h4>
+      <card-set-component
+        class="mt-3"
+        @selectedCardSetOptions="setCardSetOptions"
+      />
+      <h4 class="mt-3">
+        {{ $t("session.prepare.step.selection.time.title") }}
+      </h4>
       <b-row class="mt-3 text-center">
         <b-col>
-          <b-button variant="outline-secondary" @click="setTimerDown()"> -</b-button>
+          <b-button variant="outline-secondary" @click="setTimerDown()">
+            -</b-button
+          >
         </b-col>
         <b-col class="text-center">
           <h4>
@@ -50,10 +82,14 @@
           </h4>
         </b-col>
         <b-col>
-          <b-button variant="outline-secondary" @click="setTimerUp()"> +</b-button>
+          <b-button variant="outline-secondary" @click="setTimerUp()">
+            +</b-button
+          >
         </b-col>
       </b-row>
-      <h4 class="mt-3">{{ $t("session.prepare.step.selection.password.title") }}</h4>
+      <h4 class="mt-3">
+        {{ $t("session.prepare.step.selection.password.title") }}
+      </h4>
       <b-row class="mt-3">
         <b-col>
           <b-form>
@@ -61,19 +97,14 @@
               <b-form-input
                 id="input-password"
                 v-model="password"
-                :placeholder="$t('session.prepare.step.selection.password.placeholder')"
+                :placeholder="
+                  $t('session.prepare.step.selection.password.placeholder')
+                "
               />
             </b-form-group>
           </b-form>
         </b-col>
       </b-row>
-      <user-stories-sidebar
-        v-if="tabIndex !== 0"
-        :card-set="selectedCardSetOptions"
-        :show-estimations="false"
-        :initial-stories="userStories"
-        @userStoriesChanged="onUserStoriesChanged($event)"
-      />
       <b-button
         class="my-5"
         variant="success"
@@ -91,7 +122,6 @@ import Vue from "vue";
 import Session from "../model/Session";
 import Constants from "../constants";
 import CardSetComponent from "../components/CardSetComponent.vue";
-import UserStoriesSidebar from "../components/UserStoriesSidebar.vue";
 import UserStoryComponent from "../components/UserStoryComponent.vue";
 import JiraComponent from "../components/JiraComponent.vue";
 import StroyPointsComponent from "@/components/StroyPointsComponent.vue";
@@ -103,7 +133,6 @@ export default Vue.extend({
   name: "PrepareSessionPage",
   components: {
     CardSetComponent,
-    UserStoriesSidebar,
     UserStoryComponent,
     JiraComponent,
     StroyPointsComponent,
@@ -244,8 +273,12 @@ export default Vue.extend({
 
           file.data.forEach((story) => {
             let title = story.title ? story.title : story.Title;
-            let description = story.description ? story.description : story.Description;
-            let estimation = story.estimation ? story.estimation : story.Estimation;
+            let description = story.description
+              ? story.description
+              : story.Description;
+            let estimation = story.estimation
+              ? story.estimation
+              : story.Estimation;
 
             stories.push({
               title: title,
@@ -265,7 +298,9 @@ export default Vue.extend({
         },
         error: function (err, file, inputElem, reason) {
           this.$toast.error(
-            this.$t("session.prepare.step.selection.mode.description.withUS.toastErrorNotification")
+            this.$t(
+              "session.prepare.step.selection.mode.description.withUS.toastErrorNotification"
+            )
           );
         },
       });
