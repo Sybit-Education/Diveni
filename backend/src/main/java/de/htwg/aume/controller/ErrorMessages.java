@@ -18,6 +18,8 @@ public class ErrorMessages {
 
 	public static String failedToRetrieveProjectsErrorMessage = "failed to retrieve projects";
 
+	public static String failedToEditIssueErrorMessage = "failed to edit issue";
+
 	private ErrorMessages() {
 	}
 
