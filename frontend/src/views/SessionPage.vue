@@ -1,12 +1,5 @@
 <template>
   <b-container>
-    <user-stories-sidebar
-      v-if="session_userStoryMode !== 'NO_US'"
-      :card-set="voteSet"
-      :show-estimations="planningStart"
-      :initial-stories="userStories"
-      @userStoriesChanged="onUserStoriesChanged($event)"
-    />
     <b-row class="mt-5 mb-3">
       <b-col
         ><h1>
@@ -30,10 +23,12 @@
         />
       </b-row>
       <b-row class="mt-5">
-        <h4 class="text-center">{{ $t("page.session.before.text.waiting") }}</h4>
+        <h4 class="text-center">
+          {{ $t("page.session.before.text.waiting") }}
+        </h4>
         <b-icon-three-dots animation="fade" class="" font-scale="3" />
       </b-row>
-      <b-row class="d-flex justify-content-center">
+      <b-row class="d-flex justify-content-center overflow-auto" style="max-height: 500px">
         <SessionMemberCircle
           v-for="member of members"
           :key="member.memberID"
@@ -121,7 +116,10 @@
           {{ membersPending.length + membersEstimated.length }}
         </h4>
       </b-row>
-      <b-row class="my-1 d-flex justify-content-center flex-wrap">
+      <b-row
+        class="my-1 d-flex justify-content-center flex-wrap overflow-auto"
+        style="max-height: 500px"
+      >
         <SessionMemberCard
           v-for="member of estimateFinished ? members : membersEstimated"
           :key="member.memberID"
@@ -136,6 +134,30 @@
         />
       </b-row>
     </div>
+    <b-row v-if="userStoryMode !== 'NO_US'">
+      <b-col class="mt-3">
+        <div class="overflow-auto" style="max-height: 700px">
+          <user-stories-sidebar
+            :card-set="voteSet"
+            :show-estimations="planningStart"
+            :initial-stories="userStories"
+            :show-edit-buttons="true"
+            :select-story="true"
+            @userStoriesChanged="onUserStoriesChanged($event)"
+            @selectedStory="onSelectedStory($event)"
+          />
+        </div>
+      </b-col>
+      <b-col class="mt-3">
+        <user-story-descriptions
+          :card-set="voteSet"
+          :initial-stories="userStories"
+          :edit-description="true"
+          :index="index"
+          @userStoriesChanged="onUserStoriesChanged($event)"
+        />
+      </b-col>
+    </b-row>
     <notify-host-component />
   </b-container>
 </template>
@@ -146,10 +168,11 @@ import Constants from "../constants";
 import SessionMemberCircle from "../components/SessionMemberCircle.vue";
 import Member from "../model/Member";
 import SessionMemberCard from "../components/SessionMemberCard.vue";
-import UserStoriesSidebar from "../components/UserStoriesSidebar.vue";
+import UserStoriesSidebar from "../components/UserStories.vue";
 import EstimateTimer from "../components/EstimateTimer.vue";
 import CopySessionIdPopup from "../components/CopySessionIdPopup.vue";
 import RoundedAvatar from "../components/RoundedAvatar.vue";
+import UserStoryDescriptions from "../components/UserStoryDescriptions.vue";
 import confetti from "canvas-confetti";
 import NotifyHostComponent from "../components/NotifyHostComponent.vue";
 
@@ -162,6 +185,7 @@ export default Vue.extend({
     EstimateTimer,
     CopySessionIdPopup,
     RoundedAvatar,
+    UserStoryDescriptions,
     NotifyHostComponent,
   },
   props: {
@@ -170,7 +194,11 @@ export default Vue.extend({
     voteSetJson: { type: String, required: true },
     sessionState: { type: String, required: true },
     timerSecondsString: { type: String, required: true },
-    startNewSessionOnMountedString: { type: String, required: false, default: "false" },
+    startNewSessionOnMountedString: {
+      type: String,
+      required: false,
+      default: "false",
+    },
     userStoryMode: { type: String, required: true },
   },
   data() {
@@ -183,6 +211,9 @@ export default Vue.extend({
       session_timerSecondsString: "",
       session_userStoryMode: "",
       //data
+      index: 0,
+      stageLabelReady: "Ready",
+      stageLabelWaiting: "Waiting room",
       planningStart: false,
       voteSet: [] as string[],
       timerCountdownNumber: 0,
@@ -342,8 +373,14 @@ export default Vue.extend({
       this.$store.commit("setUserStories", { stories: $event });
       if (this.webSocketIsConnected) {
         const endPoint = `${Constants.webSocketAdminUpdatedUserStoriesRoute}`;
-        this.$store.commit("sendViaBackendWS", { endPoint, data: JSON.stringify($event) });
+        this.$store.commit("sendViaBackendWS", {
+          endPoint,
+          data: JSON.stringify($event),
+        });
       }
+    },
+    onSelectedStory($event) {
+      this.index = $event;
     },
     connectToWebSocket() {
       const url = `${Constants.backendURL}/connect?sessionID=${this.session_sessionID}&adminID=${this.session_adminID}`;

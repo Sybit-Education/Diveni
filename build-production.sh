@@ -2,7 +2,7 @@
 cd frontend
 npm run build
 cd ../backend
-mvn package -DskipTests -Dspring.profiles.active=prod
+./../mvnw package -DskipTests -D"spring.profiles.active=prod"
 cd ..
 docker compose build
 docker compose up -d
