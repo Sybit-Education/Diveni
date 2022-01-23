@@ -134,7 +134,7 @@
         />
       </b-row>
     </div>
-    <b-row v-if="userStoryMode !== 'NO_US'">
+    <b-row v-if="session_userStoryMode !== 'NO_US'">
       <b-col class="mt-3">
         <div class="overflow-auto" style="max-height: 700px">
           <user-stories-sidebar
