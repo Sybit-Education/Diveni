@@ -11,14 +11,14 @@
         </h1></b-col
       >
       <b-col v-if="planningStart" align-self="center">
-        <copy-session-id-popup class="float-end" :session-id="sessionID" />
+        <copy-session-id-popup class="float-end" :session-id="session_sessionID" />
       </b-col>
     </b-row>
     <div v-if="!planningStart">
       <b-row class="align-items-center">
         <copy-session-id-popup
           :text-before-session-i-d="$t('page.session.before.text.beforeID')"
-          :session-id="sessionID"
+          :session-id="session_sessionID"
           :text-after-session-i-d="$t('page.session.before.text.afterID')"
         />
       </b-row>
@@ -76,7 +76,7 @@
             <p class="my-4">
               {{ $t("page.session.close.description1") }}
             </p>
-            <p v-if="userStoryMode !== 'NO_US'">
+            <p v-if="session_userStoryMode !== 'NO_US'">
               {{ $t("page.session.close.description2") }}
             </p>
           </b-modal>
@@ -134,7 +134,7 @@
         />
       </b-row>
     </div>
-    <b-row v-if="userStoryMode !== 'NO_US'">
+    <b-row v-if="session_userStoryMode !== 'NO_US'">
       <b-col class="mt-3">
         <div class="overflow-auto" style="max-height: 700px">
           <user-stories-sidebar
@@ -203,15 +203,23 @@ export default Vue.extend({
   },
   data() {
     return {
+      //props copy
+      session_adminID: "",
+      session_sessionID: "",
+      session_voteSetJson: "",
+      session_sessionState: "",
+      session_timerSecondsString: "",
+      session_userStoryMode: "",
+      //data
       index: 0,
       stageLabelReady: "Ready",
       stageLabelWaiting: "Waiting room",
       planningStart: false,
       voteSet: [] as string[],
       timerCountdownNumber: 0,
-      triggerTimer: 0,
       startTimerOnComponentCreation: true,
       estimateFinished: false,
+      session: {},
     };
   },
   computed: {
@@ -249,6 +257,11 @@ export default Vue.extend({
         if (this.startNewSessionOnMountedString === "true") {
           this.sendRestartMessage();
         }
+        setTimeout(() => {
+          if (this.members.length === 0) {
+            this.requestMemberUpdate();
+          }
+        }, 300);
       }
     },
     highlightedMembers(highlights) {
@@ -261,27 +274,106 @@ export default Vue.extend({
       }
     },
   },
-  created() {
-    if (!this.sessionID || !this.adminID) {
-      this.goToLandingPage();
+  async created() {
+    this.copyPropsToData();
+    if (!this.session_sessionID || !this.session_adminID) {
+      //check for cookie
+      await this.checkAdminCookie();
+      this.assignSessionToData(this.session);
+      if (this.session_sessionID.length === 0) {
+        this.goToLandingPage();
+      } else {
+        this.handleReload();
+      }
     }
-    this.timerCountdownNumber = parseInt(this.timerSecondsString, 10);
+    this.timerCountdownNumber = parseInt(this.session_timerSecondsString, 10);
     window.addEventListener("beforeunload", this.sendUnregisterCommand);
   },
   mounted() {
-    this.voteSet = JSON.parse(this.voteSetJson);
+    this.voteSet = JSON.parse(this.session_voteSetJson);
     this.connectToWebSocket();
-    if (this.sessionState === Constants.memberUpdateCommandStartVoting) {
+    if (this.session_sessionState === Constants.memberUpdateCommandStartVoting) {
       this.planningStart = true;
-      if (this.planningStart) {
-        this.sendRestartMessage();
-      }
+      this.sendRestartMessage();
     }
   },
   destroyed() {
     window.removeEventListener("beforeunload", this.sendUnregisterCommand);
   },
   methods: {
+    async checkAdminCookie() {
+      console.log("checking admin cookie");
+      const cookie = window.localStorage.getItem("adminCookie");
+      if (cookie !== null) {
+        console.log(`Found admin cookie: '${cookie}'`);
+        const url = Constants.backendURL + Constants.createSessionRoute;
+        try {
+          const session = (
+            await this.axios.get(url, {
+              params: {
+                adminCookie: cookie,
+              },
+            })
+          ).data as {
+            sessionID: string;
+            adminID: string;
+            sessionConfig: {
+              set: Array<string>;
+              timerSeconds: number;
+              userStories: Array<{
+                title: string;
+                description: string;
+                estimation: string | null;
+                isActive: false;
+              }>;
+              userStoryMode: string;
+            };
+            sessionState: string;
+          };
+          this.session = session;
+        } catch (e) {
+          console.clear();
+          console.log(`got error: ${e}`);
+          window.localStorage.removeItem("adminCookie");
+        }
+      }
+    },
+    copyPropsToData() {
+      this.session_adminID = this.adminID;
+      this.session_sessionID = this.sessionID;
+      this.session_sessionState = this.sessionState;
+      this.session_timerSecondsString = this.timerSecondsString;
+      this.session_voteSetJson = this.voteSetJson;
+      this.session_userStoryMode = this.userStoryMode;
+    },
+    assignSessionToData(session) {
+      if (Object.keys(session).length !== 0) {
+        this.session_adminID = session.adminID;
+        this.session_sessionID = session.sessionID;
+        this.session_sessionState = session.sessionState;
+        this.session_timerSecondsString = session.sessionConfig.timerSeconds.toString();
+        this.session_voteSetJson = JSON.stringify(session.sessionConfig.set);
+        this.session_userStoryMode = session.sessionConfig.userStoryMode;
+        this.$store.commit("setUserStories", {
+          stories: session.sessionConfig.userStories,
+        });
+      }
+    },
+    handleReload() {
+      if (
+        this.session_sessionState === Constants.memberUpdateCommandStartVoting ||
+        this.session_sessionState === Constants.memberUpdateCommandVotingFinished
+      ) {
+        this.planningStart = true;
+      }
+      if (this.session_sessionState === Constants.memberUpdateCommandVotingFinished) {
+        this.estimateFinished = true;
+      }
+      this.timerCountdownNumber = parseInt(this.session_timerSecondsString, 10);
+      //reconnect and reload member
+      this.connectToWebSocket();
+      this.requestMemberUpdate();
+    },
     onUserStoriesChanged($event) {
       this.$store.commit("setUserStories", { stories: $event });
       if (this.webSocketIsConnected) {
@@ -296,7 +388,7 @@ export default Vue.extend({
       this.index = $event;
     },
     connectToWebSocket() {
-      const url = `${Constants.backendURL}/connect?sessionID=${this.sessionID}&adminID=${this.adminID}`;
+      const url = `${Constants.backendURL}/connect?sessionID=${this.session_sessionID}&adminID=${this.session_adminID}`;
       this.$store.commit("connectToBackendWS", url);
     },
     registerAdminPrincipalOnBackend() {
@@ -343,7 +435,7 @@ export default Vue.extend({
     closeSession() {
       this.sendCloseSessionCommand();
       window.localStorage.removeItem("adminCookie");
-      if (this.userStoryMode !== "NO_US") {
+      if (this.session_userStoryMode !== "NO_US") {
         this.$router.push({ name: "ResultPage" });
       } else {
         this.$router.push({ name: "LandingPage" });
