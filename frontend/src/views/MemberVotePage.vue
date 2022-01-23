@@ -30,32 +30,43 @@
         :name="name"
       />
     </b-col>
+    <b-row v-if="isMobile">
+      <mobile-story-title
+        v-if="userStoryMode !== 'NO_US'"
+        :card-set="voteSet"
+        :index="index"
+        :initial-stories="userStories"
+        :edit-description="false"
+        @userStoriesChanged="onUserStoriesChanged($event)"
+      />
+    </b-row>
     <b-row v-if="isStartVoting" class="my-5">
-      <flicking
-        v-if="isMobile"
-        id="flicking"
-        :options="{
-          renderOnlyVisible: false,
-          horizontal: true,
-          align: 'center',
-          bound: false,
-          defaultIndex: 0,
-          deceleration: 0.0005,
-        }"
-      >
-        <member-vote-card
-          v-for="(voteOption, index) in voteSet"
-          :key="voteOption"
-          :ref="`memberCard${voteOption}`"
-          class="flicking-panel mx-2"
-          :vote-option="voteOption"
-          :index="index"
-          :hex-color="hexColor"
-          :dragged="voteOption == draggedVote"
-          :is-mobile="true"
-          @sentVote="onSendVote"
-        />
-      </flicking>
+      <div v-if="isMobile">
+        <flicking
+          id="flicking"
+          :options="{
+            renderOnlyVisible: false,
+            horizontal: true,
+            align: 'center',
+            bound: false,
+            defaultIndex: 0,
+            deceleration: 0.0005,
+          }"
+        >
+          <member-vote-card
+            v-for="(voteOption, index) in voteSet"
+            :key="voteOption"
+            :ref="`memberCard${voteOption}`"
+            class="flicking-panel mx-2"
+            :vote-option="voteOption"
+            :index="index"
+            :hex-color="hexColor"
+            :dragged="voteOption == draggedVote"
+            :is-mobile="true"
+            @sentVote="onSendVote"
+          />
+        </flicking>
+      </div>
       <b-row v-else class="d-flex justify-content-between flex-wrap text-center">
         <b-col>
           <div class="overflow-auto" style="max-height: 500px">
@@ -96,7 +107,7 @@
         :highlight="highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0"
       />
     </b-row>
-    <b-row v-if="userStoryMode !== 'NO_US'">
+    <b-row v-if="userStoryMode !== 'NO_US' && !isMobile">
       <b-col class="mt-2">
         <div class="overflow-auto" style="height: 700px">
           <user-stories
@@ -119,6 +130,17 @@
         />
       </b-col>
     </b-row>
+    <b-col v-if="userStoryMode !== 'NO_US' && isMobile" class="mt-2">
+      <div class="overflow-auto" style="height: 700px">
+        <mobile-story-list
+          :card-set="voteSet"
+          :show-estimations="true"
+          :initial-stories="userStories"
+          :show-edit-buttons="false"
+          @selectedStory="onSelectedStory($event)"
+        />
+      </div>
+    </b-col>
     <notify-member-component />
   </b-container>
 </template>
@@ -135,6 +157,8 @@ import Member from "../model/Member";
 import confetti from "canvas-confetti";
 import UserStories from "../components/UserStories.vue";
 import UserStoryDescriptions from "../components/UserStoryDescriptions.vue";
+import MobileStoryList from "../components/MobileStoryList.vue";
+import MobileStoryTitle from "../components/MobileStoryTitle.vue";
 
 export default Vue.extend({
   name: "MemberVotePage",
@@ -146,6 +170,8 @@ export default Vue.extend({
     NotifyMemberComponent,
     UserStories,
     UserStoryDescriptions,
+    MobileStoryList,
+    MobileStoryTitle,
   },
   props: {
     memberID: { type: String, default: undefined },

@@ -1,74 +1,34 @@
 <template>
   <div>
-    <b-list-group-item
-      v-for="(story, index) of userStories"
-      :key="story.name"
-      class="rounded"
-      variant="outline-secondary"
-      :style="{
-        'border-color': story.isActive ? 'RGB(202, 202, 202)' : 'white',
-      }"
-      :active="story.isActive"
-      @mouseover="hover = index"
-      @mouseleave="hover = null"
-      @click="setUserStoryAsActive(index)"
-    >
-      <div class="list-group list-group-horizontal">
-        <b-button
-          v-if="showEditButtons"
-          class="m-1"
-          :variant="story.isActive ? 'success' : 'outline-success'"
-          @click="markUserStory(index)"
-        >
-          <b-icon-check2 />
-        </b-button>
-        <b-form-input
-          v-model="userStories[index].title"
-          :disabled="true"
-          class="border-1"
-          size="lg"
-          :style="{
-            'background-color': index === number ? 'RGB(202, 202, 202)' : 'white',
-          }"
-          :placeholder="$t('page.session.before.userStories.placeholder.userStoryTitle')"
-          @blur="publishChanges"
-        />
-        <b-button
-          v-show="showEditButtons && hover === index"
-          variant="danger"
-          @click="deleteStory(index)"
-        >
-          <b-icon-trash />
-        </b-button>
-        <div>
+    <div class="list">
+      <b-list-group-item
+        v-for="(story, idx) of userStories"
+        v-show="story.isActive"
+        :key="story.name"
+        class="border-0"
+        variant="outline-secondary"
+      >
+        <div class="list-group list-group-horizontal">
+          <b-form-input
+            v-model="userStories[idx].title"
+            :disabled="true"
+            class="border"
+            size="lg"
+            :placeholder="$t('page.session.before.userStories.placeholder.userStoryTitle')"
+            @blur="publishChanges"
+          />
           <div
-            v-show="userStories[index].estimation"
+            v-show="!editDescription"
             class="card-body rounded"
             :style="{
               'background-color':
-                userStories[index].estimation == null ? 'white' : 'RGB(13, 202, 240)',
-              width: '48px',
-              'font-size': 'larger',
+                userStories[idx].estimation == null ? 'white' : 'RGB(13, 202, 240)',
             }"
           >
             {{ story.estimation }}
           </div>
         </div>
-      </div>
-    </b-list-group-item>
-    <b-button
-      v-if="userStories.length < 1 && showEditButtons"
-      size="lg"
-      variant="success"
-      @click="addUserStory()"
-    >
-      {{ $t("page.session.before.userStories.button.addFirstUserStory") }}
-    </b-button>
-    <div v-if="userStories.length > 0 && showEditButtons">
-      <b-button class="w-100 h-100" size="lg" variant="success" @click="addUserStory()">
-        {{ $t("page.session.before.userStories.button.addUserStory") }}
-        <b-icon-plus />
-      </b-button>
+      </b-list-group-item>
     </div>
   </div>
 </template>
@@ -77,17 +37,17 @@
 import Vue from "vue";
 
 export default Vue.extend({
-  name: "UserStoryTitles",
+  name: "MobileStoryTitle",
   props: {
+    index: { type: Number, required: true },
     cardSet: { type: Array, required: true },
     initialStories: { type: Array, required: true },
-    showEstimations: { type: Boolean, required: true },
+    editDescription: { type: Boolean, required: true, default: false },
+    showEstimations: { type: Boolean, required: false },
     showEditButtons: { type: Boolean, required: false, default: true },
-    selectStory: { type: Boolean, required: false, default: false },
   },
   data() {
     return {
-      number: null,
       sideBarOpen: false,
       editEnabled: false,
       userStories: [] as Array<{
@@ -96,7 +56,6 @@ export default Vue.extend({
         estimation: string | null;
         isActive: boolean;
       }>,
-      hover: null,
     };
   },
   watch: {
@@ -125,8 +84,14 @@ export default Vue.extend({
   },
   methods: {
     setUserStoryAsActive(index) {
-      this.number = index;
-      this.$emit("selectedStory", index);
+      const stories = this.userStories.map((s) => ({
+        title: s.title,
+        description: s.description,
+        estimation: s.estimation,
+        isActive: false,
+      }));
+      stories[index].isActive = true;
+      this.userStories = stories;
     },
     addUserStory() {
       this.userStories.push({
@@ -148,26 +113,16 @@ export default Vue.extend({
     publishChanges() {
       this.$emit("userStoriesChanged", this.userStories);
     },
-    markUserStory(index) {
-      const stories = this.userStories.map((s) => ({
-        title: s.title,
-        description: s.description,
-        estimation: s.estimation,
-        isActive: false,
-      }));
-      stories[index].isActive = true;
-      this.userStories = stories;
+    toggleSideBar() {
+      this.sideBarOpen = !this.sideBarOpen;
+      this.editEnabled = false;
+      this.publishChanges();
     },
   },
 });
 </script>
 
 <style scoped>
-.list-group-item.active {
-  background-color: white !important;
-  border-width: 3px;
-}
-
 /* The side navigation menu */
 .sidenav {
   float: right;
