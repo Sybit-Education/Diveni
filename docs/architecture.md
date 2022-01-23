@@ -68,21 +68,36 @@ the internal structure and the components to be developed are now considered.
 
 | Component | Description   |
 | --------- | -----------   |
-| ControllerUtils |  |
+| SpringFoxConfig | Configuration for automatic Swagger API generation |
+| WebSocketConfig | Configurations (e.g. prefixes, CORS) for Websockets |
+| ----------- | |
+| ControllerUtils | Helper functions for all controllers |
 | ErrrorMessages | All error messages which can be thrown in exceptions |
+| ProjectManagementController | REST Controller for project management software (e.g. Jira) |
 | RoutesController | REST Controller |
 | WebsocketController | WebSocket Controller |
 | ----------- | |
 | PrincipalWebSocketHandler | Set anonymous user (Principal) in WebSocket messages by using uri query UUIDs. This is necessary to avoid broadcasting messages but sending them to specific user sessions |
 | SessionDisconnectedListener | Listener when a user disconnects from a session |
 | ----------- | |
+| AuthorizationCode | Authorization code for OAuth1 |
 | AvatarAnimal | Enum for the avatar animals |
+| JiraRequestToken | Request token for Jira Server |
 | JoinInfo | DTO to join a session |
 | Member | Member model |
+| MemberUpdate | ? |
+| Project | Project for project management providers |
 | Session | Session model |
 | SessionConfig | Configuration for session (e.g. set, timer) |
 | SessionState | Enum for the current state of the session |
+| TokenIdentifier | Identifier for project management providers access token before a session was created |
 | UserStory | User Story model |
+| VerificationCode | Verification code for OAuth |
+| ------ | |
+| MemberPayload | Notification about a member |
+| Notification | Generic notification |
+| NotificationPayload | Abstract class for notification payloads |
+| NotificationType | Notification types (e.g. Admin left, member left, member joined) |
 | ----------- | |
 | AdminPrincipal | Principal for admin |
 | MemberPrincipal | Principal for member |
@@ -90,8 +105,23 @@ the internal structure and the components to be developed are now considered.
 | ----------- | |
 | SessionRepository | Repository to save session data in the database |
 | ----------- | |
+| SessionScheduledTasks | Scheduled tasks which will be called in regular intervals (e.g. delete old sessions) |
+| ----------- | |
 | DatabaseService | Service to call the session repository |
 | WebSockerService | Business logic for the WebSocket controller |
+| ------ | |
+| ProjectManagementProvider | Interface for all project management providers with functions which are necessary (e.g. getIssues) |
+| ProjectManagementProviderOAuth1 | Interface for all project management providers with OAuth1 |
+| ProjectManagementProviderOAuth2 | Interface for all project management providers with OAuth2 |
+| ------ | |
+| JiraCloudService | Implementation for Jira Cloud |
+| ------ | |
+| JiraServerService | Implementation for Jira Server |
+| JiraOAuthClient | Helper class for Jira Server OAuth1 |
+| JiraOAuthGetAccessToken | Helper class for Jira Server OAuth1 |
+| JiraOAuthGetTemporaryToken | Helper class for Jira Server OAuth1 |
+| JiraOAuthTokenFactory | Helper class for Jira Server OAuth1 |
+| ----------- | |
 
 
 3 Database
