@@ -30,8 +30,8 @@ import de.htwg.aume.model.Session;
 import de.htwg.aume.model.SessionConfig;
 import de.htwg.aume.model.SessionState;
 import de.htwg.aume.service.DatabaseService;
+import de.htwg.aume.service.projectmanagementproviders.jiraserver.JiraServerService;
 import lombok.val;
-import de.htwg.aume.service.jira.JiraServerService;
 
 @CrossOrigin(origins = { "http://localhost:8080", "https://pp.vnmz.de" })
 @RestController
@@ -57,8 +57,8 @@ public class RoutesController {
 				.limit(2).collect(Collectors.toList());
 		val accessToken = tokenIdentifier.map(token -> jiraServerService.getAccessTokens().remove(token)).orElse(null);
 		val session = new Session(databaseID, sessionIds.get(0), sessionIds.get(1), sessionConfig, UUID.randomUUID(),
-				new ArrayList<>(), new HashMap<>(), new ArrayList<>(), SessionState.WAITING_FOR_MEMBERS, null, null)
-						.setAccessToken(accessToken);
+				new ArrayList<>(), new HashMap<>(), new ArrayList<>(), SessionState.WAITING_FOR_MEMBERS, null,
+				accessToken, null);
 		databaseService.saveSession(session);
 		val responseMap = Map.of("session", session, "adminCookie", session.getAdminCookie());
 		return new ResponseEntity<>(responseMap, HttpStatus.CREATED);
