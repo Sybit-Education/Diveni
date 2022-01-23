@@ -32,6 +32,14 @@
     </b-col>
     <b-row v-if="isStartVoting" class="my-5">
       <div v-if="isMobile">
+        <mobile-story-title
+          v-if="userStoryMode !== 'NO_US'"
+          :card-set="voteSet"
+          :index="index"
+          :initial-stories="userStories"
+          :edit-description="false"
+          @userStoriesChanged="onUserStoriesChanged($event)"
+        />
         <flicking
           id="flicking"
           :options="{
@@ -57,7 +65,11 @@
           />
         </flicking>
         <b-col class="mt-2">
-          <div class="overflow-auto" style="height: 700px">
+          <div
+            v-if="userStoryMode !== 'NO_US'"
+            class="overflow-auto"
+            style="height: 700px"
+          >
             <mobile-story-list
               :card-set="voteSet"
               :show-estimations="true"
@@ -154,6 +166,7 @@ import confetti from "canvas-confetti";
 import UserStories from "../components/UserStories.vue";
 import UserStoryDescriptions from "../components/UserStoryDescriptions.vue";
 import MobileStoryList from "../components/MobileStoryList.vue";
+import MobileStoryTitle from "../components/MobileStoryTitle.vue";
 
 export default Vue.extend({
   name: "MemberVotePage",
@@ -166,6 +179,7 @@ export default Vue.extend({
     UserStories,
     UserStoryDescriptions,
     MobileStoryList,
+    MobileStoryTitle,
   },
   props: {
     memberID: { type: String, default: undefined },
