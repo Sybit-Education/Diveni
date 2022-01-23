@@ -20,7 +20,7 @@ export default Vue.extend({
     //
   }),
   mounted() {
-    document.title = "Planning-Poker";
+    document.title = "DIVENI";
   },
 });
 </script>
