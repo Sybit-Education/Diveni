@@ -31,32 +31,47 @@
       />
     </b-col>
     <b-row v-if="isStartVoting" class="my-5">
-      <flicking
-        v-if="isMobile"
-        id="flicking"
-        :options="{
-          renderOnlyVisible: false,
-          horizontal: true,
-          align: 'center',
-          bound: false,
-          defaultIndex: 0,
-          deceleration: 0.0005,
-        }"
+      <div v-if="isMobile">
+        <flicking
+          id="flicking"
+          :options="{
+            renderOnlyVisible: false,
+            horizontal: true,
+            align: 'center',
+            bound: false,
+            defaultIndex: 0,
+            deceleration: 0.0005,
+          }"
+        >
+          <member-vote-card
+            v-for="(voteOption, index) in voteSet"
+            :key="voteOption"
+            :ref="`memberCard${voteOption}`"
+            class="flicking-panel mx-2"
+            :vote-option="voteOption"
+            :index="index"
+            :hex-color="hexColor"
+            :dragged="voteOption == draggedVote"
+            :is-mobile="true"
+            @sentVote="onSendVote"
+          />
+        </flicking>
+        <b-col class="mt-2">
+          <div class="overflow-auto" style="height: 700px">
+            <mobile-story-list
+              :card-set="voteSet"
+              :show-estimations="true"
+              :initial-stories="userStories"
+              :show-edit-buttons="false"
+              @selectedStory="onSelectedStory($event)"
+            />
+          </div>
+        </b-col>
+      </div>
+      <b-row
+        v-else
+        class="d-flex justify-content-between flex-wrap text-center"
       >
-        <member-vote-card
-          v-for="(voteOption, index) in voteSet"
-          :key="voteOption"
-          :ref="`memberCard${voteOption}`"
-          class="flicking-panel mx-2"
-          :vote-option="voteOption"
-          :index="index"
-          :hex-color="hexColor"
-          :dragged="voteOption == draggedVote"
-          :is-mobile="true"
-          @sentVote="onSendVote"
-        />
-      </flicking>
-      <b-row v-else class="d-flex justify-content-between flex-wrap text-center">
         <b-col>
           <div class="overflow-auto" style="max-height: 500px">
             <member-vote-card
@@ -93,10 +108,13 @@
         :name="member.name"
         :estimation="member.currentEstimation"
         :estimate-finished="votingFinished"
-        :highlight="highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0"
+        :highlight="
+          highlightedMembers.includes(member.memberID) ||
+          highlightedMembers.length === 0
+        "
       />
     </b-row>
-    <b-row v-if="userStoryMode !== 'NO_US'">
+    <b-row v-if="userStoryMode !== 'NO_US' && !isMobile">
       <b-col class="mt-2">
         <div class="overflow-auto" style="height: 700px">
           <user-stories
@@ -135,6 +153,7 @@ import Member from "../model/Member";
 import confetti from "canvas-confetti";
 import UserStories from "../components/UserStories.vue";
 import UserStoryDescriptions from "../components/UserStoryDescriptions.vue";
+import MobileStoryList from "../components/MobileStoryList.vue";
 
 export default Vue.extend({
   name: "MemberVotePage",
@@ -146,6 +165,7 @@ export default Vue.extend({
     NotifyMemberComponent,
     UserStories,
     UserStoryDescriptions,
+    MobileStoryList,
   },
   props: {
     memberID: { type: String, default: undefined },
@@ -179,22 +199,31 @@ export default Vue.extend({
       return this.$store.state.memberUpdates;
     },
     isStartVoting(): boolean {
-      return this.memberUpdates.at(-1) === Constants.memberUpdateCommandStartVoting;
+      return (
+        this.memberUpdates.at(-1) === Constants.memberUpdateCommandStartVoting
+      );
     },
     votingFinished(): boolean {
-      return this.memberUpdates.at(-1) === Constants.memberUpdateCommandVotingFinished;
+      return (
+        this.memberUpdates.at(-1) ===
+        Constants.memberUpdateCommandVotingFinished
+      );
     },
     members() {
       return this.$store.state.members;
     },
     membersEstimated(): Member[] {
-      return this.members.filter((member: Member) => member.currentEstimation !== null);
+      return this.members.filter(
+        (member: Member) => member.currentEstimation !== null
+      );
     },
     highlightedMembers() {
       return this.$store.state.highlightedMembers;
     },
     timerTimestamp() {
-      return this.$store.state.timerTimestamp ? this.$store.state.timerTimestamp : "";
+      return this.$store.state.timerTimestamp
+        ? this.$store.state.timerTimestamp
+        : "";
     },
   },
   watch: {
@@ -203,7 +232,9 @@ export default Vue.extend({
         this.draggedVote = null;
         this.estimateFinished = false;
         this.triggerTimer = (this.triggerTimer + 1) % 5;
-      } else if (updates.at(-1) === Constants.memberUpdateCommandVotingFinished) {
+      } else if (
+        updates.at(-1) === Constants.memberUpdateCommandVotingFinished
+      ) {
         this.estimateFinished = true;
       } else if (updates.at(-1) === Constants.memberUpdateCloseSession) {
         this.goToJoinPage();
