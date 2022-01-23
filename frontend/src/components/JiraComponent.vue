@@ -54,6 +54,7 @@ import Vue from "vue";
 import SignInWithJiraCloudButtonComponent from "./SignInWithJiraCloudButtonComponent.vue";
 import SignInWithJiraServerButtonComponent from "./SignInWithJiraServerButtonComponent.vue";
 import ProjectSelectionComponent from "./ProjectSelectionComponent.vue";
+import apiService from "@/services/api.service";
 
 export default Vue.extend({
   name: "JiraComponent",
@@ -64,6 +65,11 @@ export default Vue.extend({
   },
 
   data() {
+    if (this.$store.state.tokenId) {
+      apiService.getAllProjects().then((pr) => {
+        this.$store.commit("setProjects", pr);
+      });
+    }
     return {
       switch1: false,
       isJiraCloudEnabled: constants.isJiraCloudEnabled,

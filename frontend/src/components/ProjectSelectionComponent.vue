@@ -26,7 +26,6 @@ export default Vue.extend({
   data() {
     return {
       selected: null,
-      item: "",
       projects: [
         {
           value: null,
