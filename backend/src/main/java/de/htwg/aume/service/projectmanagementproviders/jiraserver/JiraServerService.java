@@ -29,11 +29,9 @@ import de.htwg.aume.controller.ErrorMessages;
 import de.htwg.aume.model.JiraRequestToken;
 import de.htwg.aume.model.TokenIdentifier;
 import de.htwg.aume.model.UserStory;
-import de.htwg.aume.service.projectmanagementproviders.ProjectManagementProvider;
 import de.htwg.aume.service.projectmanagementproviders.ProjectManagementProviderOAuth1;
 import lombok.Getter;
 import lombok.val;
-import lombok.var;
 
 @Service
 public class JiraServerService implements ProjectManagementProviderOAuth1 {
@@ -131,7 +129,7 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
             for (ObjectNode objectNode : node) {
                 for (JsonNode jsonNode : objectNode.get("issues")) {
                     val fields = jsonNode.get("fields");
-                    var estimation = fields.get(ESTIMATION_FIELD).asText();
+                    String estimation = fields.get(ESTIMATION_FIELD).asText();
                     if (estimation != null && estimation.endsWith(".0")) {
                         estimation = estimation.substring(0, estimation.length() - 2);
                     }
