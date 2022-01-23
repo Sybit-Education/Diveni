@@ -30,8 +30,8 @@ import de.htwg.aume.model.Session;
 import de.htwg.aume.model.SessionConfig;
 import de.htwg.aume.model.SessionState;
 import de.htwg.aume.service.DatabaseService;
+import de.htwg.aume.service.projectmanagementproviders.jiraserver.JiraServerService;
 import lombok.val;
-import de.htwg.aume.service.jira.JiraServerService;
 
 @CrossOrigin(origins = { "http://localhost:8080", "https://pp.vnmz.de" })
 @RestController
