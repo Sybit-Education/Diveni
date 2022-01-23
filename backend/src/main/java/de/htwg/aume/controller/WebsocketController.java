@@ -1,13 +1,18 @@
 package de.htwg.aume.controller;
 
 import java.security.Principal;
+import java.util.Date;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Controller;
+
+import de.htwg.aume.Utils;
 import de.htwg.aume.model.SessionState;
 import de.htwg.aume.model.UserStory;
+import de.htwg.aume.model.notification.MemberPayload;
 import de.htwg.aume.model.notification.Notification;
 import de.htwg.aume.model.notification.NotificationType;
 import de.htwg.aume.principals.AdminPrincipal;
@@ -27,8 +32,11 @@ public class WebsocketController {
 
 	@MessageMapping("/registerAdminUser")
 	public void registerAdminUser(AdminPrincipal principal) {
-		ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID());
+		val session = ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID());
 		webSocketService.setAdminUser(principal);
+		if (session.getTimerTimestamp() != null) {
+			webSocketService.sendTimerStartMessageToUser(session, session.getTimerTimestamp(), principal.getName());
+		}
 	}
 
 	@MessageMapping("/registerMember")
@@ -37,6 +45,11 @@ public class WebsocketController {
 		webSocketService.addMemberIfNew(principal);
 		webSocketService.sendMembersUpdate(session);
 		webSocketService.sendSessionStateToMember(session, principal.getName());
+		if (session.getTimerTimestamp() != null) {
+			webSocketService.sendTimerStartMessageToUser(session, session.getTimerTimestamp(), principal.getMemberID());
+		}
+		webSocketService.sendNotification(session, new Notification(NotificationType.MEMBER_JOINED, new MemberPayload(
+				((MemberPrincipal) principal).getMemberID())));
 	}
 
 	@MessageMapping("/unregister")
@@ -48,9 +61,13 @@ public class WebsocketController {
 					.setMemberInactive(((MemberPrincipal) principal).getMemberID());
 			databaseService.saveSession(session);
 			webSocketService.sendMembersUpdate(session);
+			webSocketService.sendNotification(session, new Notification(NotificationType.MEMBER_LEFT, new MemberPayload(
+					((MemberPrincipal) principal).getMemberID())));
 		} else {
+			val session = ControllerUtils
+					.getSessionOrThrowResponse(databaseService, ((AdminPrincipal) principal).getSessionID());
+			webSocketService.sendNotification(session, new Notification(NotificationType.ADMIN_LEFT, null));
 			webSocketService.removeAdmin((AdminPrincipal) principal);
-			webSocketService.sendNotification(new Notification(NotificationType.ADMIN_LEFT, null));
 		}
 	}
 
@@ -71,15 +88,19 @@ public class WebsocketController {
 	@MessageMapping("/startVoting")
 	public void startEstimation(AdminPrincipal principal) {
 		val session = ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID())
-				.updateSessionState(SessionState.START_VOTING).resetCurrentHighlights();
+				.updateSessionState(SessionState.START_VOTING).resetCurrentHighlights()
+				.setTimerTimestamp(Utils.getTimestampISO8601(new Date()));
 		databaseService.saveSession(session);
 		webSocketService.sendSessionStateToMembers(session);
+		webSocketService.sendTimerStartMessage(session, session.getTimerTimestamp());
 	}
 
 	@MessageMapping("/votingFinished")
 	public void votingFinished(AdminPrincipal principal) {
 		val session = ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID())
-				.updateSessionState(SessionState.VOTING_FINISHED).selectHighlightedMembers();
+				.updateSessionState(SessionState.VOTING_FINISHED)
+				.selectHighlightedMembers()
+				.resetTimerTimestamp();
 		databaseService.saveSession(session);
 		webSocketService.sendMembersUpdate(session);
 		webSocketService.sendSessionStateToMembers(session);
@@ -96,10 +117,12 @@ public class WebsocketController {
 	@MessageMapping("/restart")
 	public synchronized void restartVote(AdminPrincipal principal) {
 		val session = ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID())
-				.updateSessionState(SessionState.START_VOTING).resetEstimations();
+				.updateSessionState(SessionState.START_VOTING).resetEstimations()
+				.setTimerTimestamp(Utils.getTimestampISO8601(new Date()));
 		databaseService.saveSession(session);
 		webSocketService.sendMembersUpdate(session);
 		webSocketService.sendSessionStateToMembers(session);
+		webSocketService.sendTimerStartMessage(session, session.getTimerTimestamp());
 	}
 
 	@MessageMapping("/adminUpdatedUserStories")

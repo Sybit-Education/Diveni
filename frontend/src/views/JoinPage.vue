@@ -34,6 +34,7 @@ export default Vue.extend({
       sessionID: "",
       voteSet: "",
       timerSeconds: 0,
+      userStoryMode: "",
     };
   },
   created() {
@@ -68,12 +69,14 @@ export default Vue.extend({
               description: string;
               estimation: string | null;
             }>;
+            userStoryMode: string;
           };
           memberCookie: string;
         };
         window.localStorage.setItem("memberCookie", response.memberCookie);
         this.voteSet = JSON.stringify(response.sessionConfig.set);
         this.timerSeconds = parseInt(JSON.stringify(response.sessionConfig.timerSeconds), 10);
+        this.userStoryMode = response.sessionConfig.userStoryMode;
         console.log("session page");
         console.log(response);
         this.$store.commit("setUserStories", {
@@ -88,6 +91,10 @@ export default Vue.extend({
     convertAvatarAssetNameToBackendAnimal() {
       return Constants.avatarAnimalAssetNameToBackendEnum(this.avatarAnimalAssetName);
     },
+    connectToWebSocket(sessionID: string, memberID: string) {
+      const url = `${Constants.backendURL}/connect?sessionID=${sessionID}&memberID=${memberID}`;
+      this.$store.commit("connectToBackendWS", url);
+    },
     goToEstimationPage() {
       this.$router.push({
         name: "MemberVotePage",
@@ -99,15 +106,16 @@ export default Vue.extend({
           avatarAnimalAssetName: this.avatarAnimalAssetName,
           voteSetJson: this.voteSet,
           timerSecondsString: this.timerSeconds.toString(),
+          userStoryMode: this.userStoryMode,
         },
       });
     },
     showToast(e) {
       if (e.message == "Request failed with status code 404") {
-        this.$toast.error("Wrong ID");
+        this.$toast.error(this.$t("session.notification.messages.wrongID"));
       }
       if (e.message == "Request failed with status code 401") {
-        this.$toast.error("Wrong Password");
+        this.$toast.error(this.$t("session.notification.messages.password"));
       }
       console.log(e);
     },

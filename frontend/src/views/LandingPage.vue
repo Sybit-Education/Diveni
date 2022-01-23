@@ -78,6 +78,7 @@ export default Vue.extend({
                 estimation: string | null;
                 isActive: false;
               }>;
+              userStoryMode: string;
             };
             sessionState: string;
           };
@@ -131,6 +132,7 @@ export default Vue.extend({
           sessionState: this.sessionWrapper.session.sessionState,
           timerSecondsString: this.sessionWrapper.session.sessionConfig.timerSeconds.toString(),
           startNewSessionOnMountedString: this.startNewSessionOnMounted.toString(),
+          userStoryMode: this.sessionWrapper.session.sessionConfig.userStoryMode,
         },
       });
     },
@@ -138,6 +140,7 @@ export default Vue.extend({
       this.$router.push({
         name: "MemberVotePage",
         params: {
+          sessionID: rejoinInfo.sessionID,
           memberID: rejoinInfo.member.memberID,
           name: rejoinInfo.member.name,
           hexColor: rejoinInfo.member.hexColor,
