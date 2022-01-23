@@ -4,7 +4,9 @@
       <h1 class="my-5">
         {{ $t("session.prepare.title") }}
       </h1>
-      <h4 class="mt-3">{{ $t("session.prepare.step.selection.mode.title") }}</h4>
+      <h4 class="mt-3">
+        {{ $t("session.prepare.step.selection.mode.title") }}
+      </h4>
       <b-tabs v-model="tabIndex" content-class="mt-3" fill>
         <b-tab
           class="mg_top_2_per"
@@ -37,9 +39,13 @@
           <jira-component class="mg_top_2_per" />
         </b-tab>
       </b-tabs>
-      <h4 class="mt-4">{{ $t("session.prepare.step.selection.cardSet.title") }}</h4>
+      <h4 class="mt-4">
+        {{ $t("session.prepare.step.selection.cardSet.title") }}
+      </h4>
       <card-set-component class="mt-3" @selectedCardSetOptions="setCardSetOptions" />
-      <h4 class="mt-3">{{ $t("session.prepare.step.selection.time.title") }}</h4>
+      <h4 class="mt-3">
+        {{ $t("session.prepare.step.selection.time.title") }}
+      </h4>
       <b-row class="mt-3 text-center">
         <b-col>
           <b-button variant="outline-secondary" @click="setTimerDown()"> -</b-button>
@@ -53,7 +59,9 @@
           <b-button variant="outline-secondary" @click="setTimerUp()"> +</b-button>
         </b-col>
       </b-row>
-      <h4 class="mt-3">{{ $t("session.prepare.step.selection.password.title") }}</h4>
+      <h4 class="mt-3">
+        {{ $t("session.prepare.step.selection.password.title") }}
+      </h4>
       <b-row class="mt-3">
         <b-col>
           <b-form>
@@ -67,13 +75,6 @@
           </b-form>
         </b-col>
       </b-row>
-      <user-stories-sidebar
-        v-if="tabIndex !== 0"
-        :card-set="selectedCardSetOptions"
-        :show-estimations="false"
-        :initial-stories="userStories"
-        @userStoriesChanged="onUserStoriesChanged($event)"
-      />
       <b-button
         class="my-5"
         variant="success"
@@ -91,7 +92,6 @@ import Vue from "vue";
 import Session from "../model/Session";
 import Constants from "../constants";
 import CardSetComponent from "../components/CardSetComponent.vue";
-import UserStoriesSidebar from "../components/UserStoriesSidebar.vue";
 import UserStoryComponent from "../components/UserStoryComponent.vue";
 import JiraComponent from "../components/JiraComponent.vue";
 import StroyPointsComponent from "@/components/StroyPointsComponent.vue";
@@ -103,7 +103,6 @@ export default Vue.extend({
   name: "PrepareSessionPage",
   components: {
     CardSetComponent,
-    UserStoriesSidebar,
     UserStoryComponent,
     JiraComponent,
     StroyPointsComponent,
