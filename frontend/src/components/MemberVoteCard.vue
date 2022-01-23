@@ -80,8 +80,8 @@ export default Vue.extend({
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .swipe-card {
-  width: 280px;
-  height: 370px;
+  width: 148px;
+  height: 202px;
   justify-content: center; /* Centering y-axis */
   align-items: center; /* Centering x-axis */
   border-radius: 5%;
@@ -90,7 +90,7 @@ export default Vue.extend({
   cursor: pointer;
 }
 .text {
-  font-size: 7rem;
+  font-size: 5rem;
   font-weight: 500;
 }
 </style>
