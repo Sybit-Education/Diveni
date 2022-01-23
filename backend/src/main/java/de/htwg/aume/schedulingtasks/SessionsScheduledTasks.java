@@ -21,6 +21,8 @@ public class SessionsScheduledTasks {
 		c.setTime(new Date());
 		c.add(Calendar.DATE, -2);
 
-		databaseService.getSessions().stream().filter(s -> s.getLastModified() != null && s.getLastModified().getTime() < c.getTime().getTime()).forEach(session -> databaseService.deleteSession(session));
+		databaseService.getSessions().stream()
+				.filter(s -> s.getLastModified() != null && s.getLastModified().getTime() < c.getTime().getTime())
+				.forEach(session -> databaseService.deleteSession(session));
 	}
 }
