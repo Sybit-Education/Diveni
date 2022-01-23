@@ -1,13 +1,16 @@
-# AUME2021-Team-2
-AUME2021-Team-2
-![Coverage](.github/badges/jacoco.svg)
-![Branches](.github/badges/branches.svg)
+<br />
+<div align="center">
+  <img src="docs/assets/diveni_banner.png" width="560" />
+</div>
+<br />
+<p align="center">
+  <img src=".github/badges/jacoco.svg" />
+  <img src=".github/badges/branches.svg" />
+</p>
 
-icons from https://www.iconfinder.com/iconsets/animals-105
+---
 
-
-
-# Usage of Planning-Poker
+## Usage
 
 Create a meeting:
 
@@ -66,24 +69,26 @@ Depending on your device, you can see the results of the other members.
 6. The planning can be restarted at any given time by the host.
 
 
-#Application Instructions and Requirements:
+## Application Instructions and Requirements:
 
-##Technologies:
+### Technologies:
 Frontend communicates via REST and WebSockets with the backend.
 It uses Spring boot and communicates directly with the mongoDb in a docker container.
 Run the docker container first, then the backend.
-###Frontend
+#### Frontend
 - npm, vue2
 ```shell
 npm install
 npm run serve
 ```
  
-###Backend
+#### Backend
 - maven, springboot, java11
 ```shell
 mvn sping-boot:run
 ```
 
-###Database
+#### Database
 - Mongodb in docker on port 27017, no credentials (Run via docker desktop)
+
+Icons from https://www.iconfinder.com/iconsets/animals-105
