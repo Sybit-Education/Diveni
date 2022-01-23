@@ -7,8 +7,4 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuthorizationCode {
     private final String code;
-
-    public String getCode(){
-        return code;
-    }
 }

@@ -66,7 +66,7 @@
       }
     },
     "landing": {
-      "productTitle": "Planning-Poker",
+      "productTitle": "DIVENI",
       "meeting": {
         "new": {
           "title": "Neue Session",
@@ -153,7 +153,7 @@
                 "subtitle": "Wähle die Jira-Integration für das Planning",
                 "descriptionLine1": "Bitte melde dich mit Jira an",
                 "descriptionLine2": "Wähle dein Projekt",
-                "descriptionLine3": "Nach der Wahl des Projekts wirst du auf die nächste Seite gelangen um die user Stories ggf. zu bearbeiten",
+                "descriptionLine3": "Nach dem klicken auf start session, wirst du auf die nächste Seite gelangen um die user Stories ggf. zu bearbeiten",
                 "descriptionLine4": "Du kannst nach Start der Session User Stories bearbeiten oder neue hinzufügen",
                 "dialog": {
                   "description": "Es öffnet sich gleich ein neuer Tab. Bitte gewähre dieser Anwendung in diesem Tab den Zugriff und trage den Verifizierungscode hier ein."
@@ -169,6 +169,9 @@
                   },
                   "signInWithJiraServer": {
                     "label": "Mit Jira Server anmelden"
+                  },
+                  "selectProject":{
+                    "label": "Wählen Sie ihr Jira-Projekt aus"
                   },
                   "submit": {
                     "label": "Senden"
