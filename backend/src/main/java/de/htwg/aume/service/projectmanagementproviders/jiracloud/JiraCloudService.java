@@ -139,7 +139,6 @@ public class JiraCloudService implements ProjectManagementProviderOAuth2 {
         try {
             executeRequest(String.format(JIRA_HOME, cloudID) + "/issue/" + story.getJiraId(), HttpMethod.PUT,
                     accessTokens.get(tokenIdentifier), content);
-            ;
         } catch (Exception e) {
             e.printStackTrace();
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
@@ -154,7 +153,6 @@ public class JiraCloudService implements ProjectManagementProviderOAuth2 {
             String cloudID = getCloudID(accessTokens.get(tokenIdentifier));
             executeRequest(String.format(JIRA_HOME, cloudID) + "/issue/" + jiraID, HttpMethod.DELETE,
                     accessTokens.get(tokenIdentifier), null);
-            ;
         } catch (Exception e) {
             e.printStackTrace();
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
