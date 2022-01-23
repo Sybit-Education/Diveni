@@ -1,13 +1,6 @@
 <template>
   <div>
-    <b-button
-      variant="success"
-      :disabled="disabled"
-      @click="
-        getProjects();
-        openModal();
-      "
-    >
+    <b-button variant="success" :disabled="disabled" @click="getProjects()">
       {{
         $t("session.prepare.step.selection.mode.description.withJira.buttons.selectProject.label")
       }}
@@ -21,8 +14,8 @@
       </p>
       <section v-if="projects" class="drop-down">
         <b-dropdown text="Projects" class="m-md-2">
-          <b-dropdown-item v-for="(item, key) in projects" :key="key" @click="project = item.name">
-            {{ item.name }}
+          <b-dropdown-item v-for="(item, key) in projects" :key="key" @click="project = item">
+            {{ item }}
           </b-dropdown-item>
         </b-dropdown>
       </section>
@@ -51,15 +44,13 @@ export default Vue.extend({
     };
   },
   methods: {
-    async getProjects() {
-      this.projects = await apiService.getAllProjects();
-    },
-    openModal() {
-      this.$nextTick(() => {
+    getProjects() {
+      apiService.getAllProjects().then((pr) => {
+        this.projects = pr;
+        console.log(`got projects ${this.projects}`);
         this.$bvModal.show("modal-project-selection");
       });
     },
-
     handleOk(bvModalEvt) {
       bvModalEvt.preventDefault();
       this.handleSubmit(this.project);

@@ -8,7 +8,8 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint --no-fix && npm run prettier -- --check",
     "fmt": "vue-cli-service lint && npm run prettier -- --write",
-    "prettier": "prettier \"src/**/*.{vue,css,html,ts,js}\""
+    "prettier": "prettier \"src/**/*.{vue,css,html,ts,js}\"",
+    "licenses:update": "license-checker --json > ./public/frontend-dependencies.json"
   },
   "dependencies": {
     "@egjs/vue-flicking": "^4.3.1",
@@ -19,6 +20,7 @@
     "bootstrap-vue": "^2.21.2",
     "canvas-confetti": "^1.4.0",
     "core-js": "^3.6.5",
+    "papaparse": "^5.3.1",
     "register-service-worker": "^1.7.1",
     "sockjs-client": "^1.5.2",
     "uuid": "^8.3.2",
@@ -49,6 +51,7 @@
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-prettier": "^3.3.1",
     "eslint-plugin-vue": "^6.2.2",
+    "license-checker": "^25.0.1",
     "prettier": "^2.4.1",
     "sass": "~1.32.0",
     "sass-loader": "^10.0.0",

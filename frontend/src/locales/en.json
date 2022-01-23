@@ -1,6 +1,11 @@
 {
   "general": {
-    "pleaseWait": "Please wait..."
+    "pleaseWait": "Please wait...",
+    "about": "About",
+    "licenses": {
+      "frontend": "Licenses (Frontend)",
+      "backend": "Licenses (Backend)"
+    }
   },
   "page": {
     "session": {
@@ -15,7 +20,18 @@
           "afterID": "with your team mates",
           "waiting": "Waiting for members to join"
         },
-        "button": "Start Planning"
+        "button": "Start Planning",
+        "userStories": {
+          "button": {
+            "addFirstUserStory": "No stories yet... click to add stories",
+            "addUserStory": "Add User Story"
+          },
+          "placeholder": {
+            "userStoryTitle": "User Story Title",
+            "userStoryDescription": "Description and acceptance criteria..."
+          },
+          "text": "Click on a User Story Title to see the description"
+        }
       },
       "during": {
         "estimation": {
@@ -33,7 +49,8 @@
       },
       "close": {
         "popup": "Are you sure?",
-        "description": "Closing this session removes you and all members. You can download the user stories thereafter.",
+        "description1": "Closing this session removes you and all members.",
+        "description2": "You can download the user stories thereafter.",
         "button": {
           "cancel": "Cancel",
           "ok": "OK"
@@ -92,7 +109,12 @@
     },
     "vote": {
       "title": "Estimate!",
-      "waiting": "Waiting for your host to start ..."
+      "waiting": "Waiting for your host to start ...",
+      "button": {
+        "leave": {
+          "label": "Leave session"
+        }
+      }
     }
   },
   "session": {
@@ -116,10 +138,13 @@
                   "label": "Planning with User Stories"
                 },
                 "subtitle": "Integrate User Stories in your Poker-Planning",
-                "descriptionLine1": "Create your User Stories below",
+                "descriptionLine1": "Create your User Stories on the next page",
                 "descriptionLine2": "Add title and description to each User Story",
                 "descriptionLine3": "Use the CSV-Import to integrate User Stories in your session",
-                "descriptionLine4": "You will be able to add and edit User Stories once you've started the session"
+                "descriptionLine4": "You will be able to add and edit User Stories once you've started the session",
+                "importButton": "Import User Stories",
+                "toastSuccessNotification": "User Stories imported",
+                "toastErrorNotification": "Error when trying to import"
               },
               "withJira": {
                 "tab": {

@@ -34,6 +34,7 @@ export default Vue.extend({
       sessionID: "",
       voteSet: "",
       timerSeconds: 0,
+      userStoryMode: "",
     };
   },
   computed: {
@@ -49,6 +50,7 @@ export default Vue.extend({
         this.subscribeWSMemberUpdates();
         this.subscribeWSadminUpdatedUserStories();
         this.subscribeWSMemberUpdated();
+        this.subscribeOnTimerStart();
         this.subscribeWSNotification();
         this.goToEstimationPage();
       }
@@ -81,14 +83,12 @@ export default Vue.extend({
         const sessionConfig = result.data as {
           set: Array<string>;
           timerSeconds: number;
-          userStories: Array<{
-            title: string;
-            description: string;
-            estimation: string | null;
-          }>;
+          userStories: Array<{ title: string; description: string; estimation: string | null }>;
+          userStoryMode: string;
         };
         this.voteSet = JSON.stringify(sessionConfig.set);
         this.timerSeconds = parseInt(JSON.stringify(sessionConfig.timerSeconds), 10);
+        this.userStoryMode = sessionConfig.userStoryMode;
         console.log("session page");
         console.log(sessionConfig);
         this.$store.commit("setUserStories", {
@@ -123,6 +123,9 @@ export default Vue.extend({
     subscribeWSMemberUpdated() {
       this.$store.commit("subscribeOnBackendWSAdminUpdate");
     },
+    subscribeOnTimerStart() {
+      this.$store.commit("subscribeOnBackendWSTimerStart");
+    },
     goToEstimationPage() {
       this.$router.push({
         name: "MemberVotePage",
@@ -133,6 +136,7 @@ export default Vue.extend({
           avatarAnimalAssetName: this.avatarAnimalAssetName,
           voteSetJson: this.voteSet,
           timerSecondsString: this.timerSeconds.toString(),
+          userStoryMode: this.userStoryMode,
         },
       });
     },

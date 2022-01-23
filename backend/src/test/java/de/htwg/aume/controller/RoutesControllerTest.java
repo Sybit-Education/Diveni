@@ -47,7 +47,7 @@ public class RoutesControllerTest {
 	@Test
 	public void createSession_returnsSession() throws Exception {
 		val sessionConfigJson = sessionConfigToJson(
-				new SessionConfig(Arrays.asList("1", "2", "3"), List.of(), 10, null));
+				new SessionConfig(Arrays.asList("1", "2", "3"), List.of(), 10, "US_MANUALLY", null));
 		this.mockMvc.perform(post("/sessions").contentType(APPLICATION_JSON_UTF8).content(sessionConfigJson))
 				.andExpect(status().isCreated()).andExpect(jsonPath("$.session.databaseID").isNotEmpty())
 				.andExpect(jsonPath("$.session.sessionID").isNotEmpty())
@@ -59,7 +59,7 @@ public class RoutesControllerTest {
 	@Test
 	public void createProtectedSession_returnsSession() throws Exception {
 		val sessionConfigJson = sessionConfigToJson(
-				new SessionConfig(Arrays.asList("1", "2", "3"), List.of(), 10, "testPassword"));
+				new SessionConfig(Arrays.asList("1", "2", "3"), List.of(), 10, "US_MANUALLY", "testPassword"));
 		this.mockMvc.perform(post("/sessions").contentType(APPLICATION_JSON_UTF8).content(sessionConfigJson))
 				.andExpect(status().isCreated()).andExpect(jsonPath("$.session.databaseID").isNotEmpty())
 				.andExpect(jsonPath("$.session.sessionID").isNotEmpty())
@@ -77,8 +77,9 @@ public class RoutesControllerTest {
 	public void joinMember_addsMemberToSession() throws Exception {
 		val sessionUUID = Utils.generateRandomID();
 		sessionRepo.save(new Session(new ObjectId(), sessionUUID, Utils.generateRandomID(),
-				new SessionConfig(new ArrayList<>(), List.of(), 10, null), null, new ArrayList<>(), new HashMap<>(),
-				new ArrayList<>(), SessionState.WAITING_FOR_MEMBERS));
+				new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", null), null, new ArrayList<>(),
+				new HashMap<>(),
+				new ArrayList<>(), SessionState.WAITING_FOR_MEMBERS, null, null, null));
 
 		// @formatter:off
 		var memberAsJson = "{" + "'member': {" + "'memberID': '365eef59-931d-0000-0000-2ba016cb523b',"
@@ -95,9 +96,10 @@ public class RoutesControllerTest {
 	public void joinMember_addsMemberToProtectedSession() throws Exception {
 		val sessionUUID = Utils.generateRandomID();
 		val password = "testPassword";
-		SessionConfig sessionConfig = new SessionConfig(new ArrayList<>(), List.of(), 10, password);
+		SessionConfig sessionConfig = new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", password);
 		sessionRepo.save(new Session(new ObjectId(), sessionUUID, Utils.generateRandomID(), sessionConfig, null,
-				new ArrayList<>(), new HashMap<>(), new ArrayList<>(), SessionState.WAITING_FOR_MEMBERS));
+				new ArrayList<>(), new HashMap<>(), new ArrayList<>(), SessionState.WAITING_FOR_MEMBERS, null, null,
+				null));
 
 		// @formatter:off
 		var memberAsJson = "{" + "'password': '" + password + "'," + "'member': {"
@@ -114,9 +116,10 @@ public class RoutesControllerTest {
 	public void joinMember_failsToAddMemberToProtectedSessionWrongPassword() throws Exception {
 		val sessionUUID = Utils.generateRandomID();
 		val password = "testPassword";
-		SessionConfig sessionConfig = new SessionConfig(new ArrayList<>(), List.of(), 10, password);
+		SessionConfig sessionConfig = new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", password);
 		sessionRepo.save(new Session(new ObjectId(), sessionUUID, Utils.generateRandomID(), sessionConfig, null,
-				new ArrayList<Member>(), new HashMap<>(), new ArrayList<>(), SessionState.WAITING_FOR_MEMBERS));
+				new ArrayList<Member>(), new HashMap<>(), new ArrayList<>(), SessionState.WAITING_FOR_MEMBERS, null,
+				null, null));
 		// @formatter:off
 		var memberAsJson = "{" + "'password': '" + "wrongPassword" + "'," + "'member': {"
 				+ "'memberID': '365eef59-931d-0000-0000-2ba016cb523b'," + "'name': 'Julian',"
@@ -134,9 +137,10 @@ public class RoutesControllerTest {
 	public void joinMember_failsToAddMemberToProtectedSessionNullPassword() throws Exception {
 		val sessionUUID = Utils.generateRandomID();
 		val password = "testPassword";
-		SessionConfig sessionConfig = new SessionConfig(new ArrayList<>(), List.of(), 10, password);
+		SessionConfig sessionConfig = new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", password);
 		sessionRepo.save(new Session(new ObjectId(), sessionUUID, Utils.generateRandomID(), sessionConfig, null,
-				new ArrayList<>(), new HashMap<>(), new ArrayList<>(), SessionState.WAITING_FOR_MEMBERS));
+				new ArrayList<>(), new HashMap<>(), new ArrayList<>(), SessionState.WAITING_FOR_MEMBERS, null, null,
+				null));
 
 		// @formatter:off
 		var memberAsJson = "{" + "'password': " + "null" + "," + "'member': {"
@@ -155,8 +159,10 @@ public class RoutesControllerTest {
 	public void joinMember_failsToAddMemberDueToFalseAvatarAnimal() throws Exception {
 		val sessionUUID = UUID.randomUUID();
 		sessionRepo.save(new Session(new ObjectId(), Utils.generateRandomID(), Utils.generateRandomID(),
-				new SessionConfig(new ArrayList<>(), List.of(), 10, null), null, new ArrayList<Member>(),
-				new HashMap<>(), new ArrayList<>(), SessionState.WAITING_FOR_MEMBERS));
+				new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY",
+						null),
+				null, new ArrayList<Member>(),
+				new HashMap<>(), new ArrayList<>(), SessionState.WAITING_FOR_MEMBERS, null, null, null));
 
 		// @formatter:off
 		var memberAsJson = "{" + "'member': {" + "'memberID': '365eef59-931d-0000-0000-2ba016cb523b',"
@@ -173,8 +179,10 @@ public class RoutesControllerTest {
 	public void joinMember_failsToAddMemberDueToFalseAvatarAnimal2() throws Exception {
 		val sessionUUID = UUID.randomUUID();
 		sessionRepo.save(new Session(new ObjectId(), Utils.generateRandomID(), Utils.generateRandomID(),
-				new SessionConfig(new ArrayList<>(), List.of(), 10, null), null, new ArrayList<Member>(),
-				new HashMap<>(), new ArrayList<>(), SessionState.WAITING_FOR_MEMBERS));
+				new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY",
+						null),
+				null, new ArrayList<Member>(),
+				new HashMap<>(), new ArrayList<>(), SessionState.WAITING_FOR_MEMBERS, null, null, null));
 
 		// @formatter:off
 		var memberAsJson = "{" + "'member': {" + "'memberID': '365eef59-931d-0000-0000-2ba016cb523b',"
@@ -191,8 +199,8 @@ public class RoutesControllerTest {
 	public void joinMember_failsToAddMemberDueToFalseEstimation() throws Exception {
 		val sessionUUID = UUID.randomUUID();
 		sessionRepo.save(new Session(new ObjectId(), Utils.generateRandomID(), Utils.generateRandomID(),
-				new SessionConfig(new ArrayList<>(), List.of(), 10, null), null, new ArrayList<Member>(),
-				new HashMap<>(), new ArrayList<>(), SessionState.WAITING_FOR_MEMBERS));
+				new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", null), null, new ArrayList<Member>(),
+				new HashMap<>(), new ArrayList<>(), SessionState.WAITING_FOR_MEMBERS, null, null, null));
 
 		// @formatter:off
 		var memberAsJson = "{" + "'member': {" + "'memberID': '365eef59-931d-0000-0000-2ba016cb523b',"
@@ -226,8 +234,8 @@ public class RoutesControllerTest {
 	public void joinMember_addsMemberNotIfAlreadyExisting() throws Exception {
 		val sessionUUID = Utils.generateRandomID();
 		sessionRepo.save(new Session(new ObjectId(), sessionUUID, Utils.generateRandomID(),
-				new SessionConfig(new ArrayList<>(), List.of(), 10, null), null, new ArrayList<Member>(),
-				new HashMap<>(), new ArrayList<>(), SessionState.WAITING_FOR_MEMBERS));
+				new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", null), null, new ArrayList<Member>(),
+				new HashMap<>(), new ArrayList<>(), SessionState.WAITING_FOR_MEMBERS, null, null, null));
 
 		// @formatter:off
 		var memberAsJson = "{" + "'member': {" + "'memberID': '365eef59-931d-0000-0000-2ba016cb523b',"
@@ -250,8 +258,8 @@ public class RoutesControllerTest {
 	public void getSession_returnsSession() throws Exception {
 		val sessionUUID = Utils.generateRandomID();
 		sessionRepo.save(new Session(new ObjectId(), sessionUUID, Utils.generateRandomID(),
-				new SessionConfig(new ArrayList<>(), List.of(), 10, null), null, new ArrayList<Member>(),
-				new HashMap<>(), new ArrayList<>(), SessionState.WAITING_FOR_MEMBERS));
+				new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", null), null, new ArrayList<Member>(),
+				new HashMap<>(), new ArrayList<>(), SessionState.WAITING_FOR_MEMBERS, null, null, null));
 		this.mockMvc.perform(get("/sessions/{sessionID}", sessionUUID)).andExpect(status().isOk())
 				.andExpect(jsonPath("$.databaseID").isNotEmpty()).andExpect(jsonPath("$.sessionID").isNotEmpty())
 				.andExpect(jsonPath("$.adminID").isNotEmpty());
@@ -261,8 +269,8 @@ public class RoutesControllerTest {
 	@Test
 	public void getSession_failsWrongID() throws Exception {
 		sessionRepo.save(new Session(new ObjectId(), Utils.generateRandomID(), Utils.generateRandomID(),
-				new SessionConfig(new ArrayList<>(), List.of(), 10, null), null, new ArrayList<Member>(),
-				new HashMap<>(), new ArrayList<>(), SessionState.WAITING_FOR_MEMBERS));
+				new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", null), null, new ArrayList<Member>(),
+				new HashMap<>(), new ArrayList<>(), SessionState.WAITING_FOR_MEMBERS, null, null, null));
 
 		this.mockMvc.perform(get("/sessions/{sessionID}", UUID.randomUUID())).andExpect(status().isNotFound())
 				.andExpect(status().reason(ErrorMessages.sessionNotFoundErrorMessage));

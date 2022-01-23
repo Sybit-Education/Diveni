@@ -1,11 +1,5 @@
 <template>
   <b-container>
-    <user-stories-sidebar
-      :card-set="voteSet"
-      :show-estimations="planningStart"
-      :initial-stories="userStories"
-      @userStoriesChanged="onUserStoriesChanged($event)"
-    />
     <b-row class="mt-5 mb-3">
       <b-col
         ><h1>
@@ -29,10 +23,12 @@
         />
       </b-row>
       <b-row class="mt-5">
-        <h4 class="text-center">{{ $t("page.session.before.text.waiting") }}</h4>
+        <h4 class="text-center">
+          {{ $t("page.session.before.text.waiting") }}
+        </h4>
         <b-icon-three-dots animation="fade" class="" font-scale="3" />
       </b-row>
-      <b-row class="d-flex justify-content-center">
+      <b-row class="d-flex justify-content-center overflow-auto" style="max-height: 500px">
         <SessionMemberCircle
           v-for="member of members"
           :key="member.memberID"
@@ -78,17 +74,18 @@
             @ok="closeSession"
           >
             <p class="my-4">
-              {{ $t("page.session.close.description") }}
+              {{ $t("page.session.close.description1") }}
+            </p>
+            <p v-if="userStoryMode !== 'NO_US'">
+              {{ $t("page.session.close.description2") }}
             </p>
           </b-modal>
         </b-col>
         <b-col>
           <estimate-timer
+            :start-timestamp="timerTimestamp"
             :pause-timer="estimateFinished"
-            :timer-triggered="triggerTimer"
-            :timer="timerCountdownNumber"
-            :start-timer-on-component-creation="startTimerOnComponentCreation"
-            :initial-timer="timerCountdownNumber"
+            :duration="timerCountdownNumber"
             @timerFinished="sendVotingFinishedMessage"
           />
         </b-col>
@@ -119,7 +116,10 @@
           {{ membersPending.length + membersEstimated.length }}
         </h4>
       </b-row>
-      <b-row class="my-1 d-flex justify-content-center flex-wrap">
+      <b-row
+        class="my-1 d-flex justify-content-center flex-wrap overflow-auto"
+        style="max-height: 500px"
+      >
         <SessionMemberCard
           v-for="member of estimateFinished ? members : membersEstimated"
           :key="member.memberID"
@@ -134,6 +134,30 @@
         />
       </b-row>
     </div>
+    <b-row v-if="userStoryMode !== 'NO_US'">
+      <b-col class="mt-3">
+        <div class="overflow-auto" style="max-height: 700px">
+          <user-stories-sidebar
+            :card-set="voteSet"
+            :show-estimations="planningStart"
+            :initial-stories="userStories"
+            :show-edit-buttons="true"
+            :select-story="true"
+            @userStoriesChanged="onUserStoriesChanged($event)"
+            @selectedStory="onSelectedStory($event)"
+          />
+        </div>
+      </b-col>
+      <b-col class="mt-3">
+        <user-story-descriptions
+          :card-set="voteSet"
+          :initial-stories="userStories"
+          :edit-description="true"
+          :index="index"
+          @userStoriesChanged="onUserStoriesChanged($event)"
+        />
+      </b-col>
+    </b-row>
     <notify-host-component />
   </b-container>
 </template>
@@ -144,10 +168,11 @@ import Constants from "../constants";
 import SessionMemberCircle from "../components/SessionMemberCircle.vue";
 import Member from "../model/Member";
 import SessionMemberCard from "../components/SessionMemberCard.vue";
-import UserStoriesSidebar from "../components/UserStoriesSidebar.vue";
+import UserStoriesSidebar from "../components/UserStories.vue";
 import EstimateTimer from "../components/EstimateTimer.vue";
 import CopySessionIdPopup from "../components/CopySessionIdPopup.vue";
 import RoundedAvatar from "../components/RoundedAvatar.vue";
+import UserStoryDescriptions from "../components/UserStoryDescriptions.vue";
 import confetti from "canvas-confetti";
 import NotifyHostComponent from "../components/NotifyHostComponent.vue";
 
@@ -160,6 +185,7 @@ export default Vue.extend({
     EstimateTimer,
     CopySessionIdPopup,
     RoundedAvatar,
+    UserStoryDescriptions,
     NotifyHostComponent,
   },
   props: {
@@ -168,10 +194,16 @@ export default Vue.extend({
     voteSetJson: { type: String, required: true },
     sessionState: { type: String, required: true },
     timerSecondsString: { type: String, required: true },
-    startNewSessionOnMountedString: { type: String, required: false, default: "false" },
+    startNewSessionOnMountedString: {
+      type: String,
+      required: false,
+      default: "false",
+    },
+    userStoryMode: { type: String, required: true },
   },
   data() {
     return {
+      index: 0,
       stageLabelReady: "Ready",
       stageLabelWaiting: "Waiting room",
       planningStart: false,
@@ -201,6 +233,9 @@ export default Vue.extend({
     membersEstimated(): Member[] {
       return this.members.filter((member: Member) => member.currentEstimation !== null);
     },
+    timerTimestamp() {
+      return this.$store.state.timerTimestamp ? this.$store.state.timerTimestamp : "";
+    },
   },
   watch: {
     webSocketIsConnected(isConnected) {
@@ -209,6 +244,7 @@ export default Vue.extend({
         this.registerAdminPrincipalOnBackend();
         this.subscribeWSMemberUpdated();
         this.requestMemberUpdate();
+        this.subscribeOnTimerStart();
         this.subscribeWSNotification();
         if (this.startNewSessionOnMountedString === "true") {
           this.sendRestartMessage();
@@ -250,8 +286,14 @@ export default Vue.extend({
       this.$store.commit("setUserStories", { stories: $event });
       if (this.webSocketIsConnected) {
         const endPoint = `${Constants.webSocketAdminUpdatedUserStoriesRoute}`;
-        this.$store.commit("sendViaBackendWS", { endPoint, data: JSON.stringify($event) });
+        this.$store.commit("sendViaBackendWS", {
+          endPoint,
+          data: JSON.stringify($event),
+        });
       }
+    },
+    onSelectedStory($event) {
+      this.index = $event;
     },
     connectToWebSocket() {
       const url = `${Constants.backendURL}/connect?sessionID=${this.sessionID}&adminID=${this.adminID}`;
@@ -263,6 +305,9 @@ export default Vue.extend({
     },
     subscribeWSMemberUpdated() {
       this.$store.commit("subscribeOnBackendWSAdminUpdate");
+    },
+    subscribeOnTimerStart() {
+      this.$store.commit("subscribeOnBackendWSTimerStart");
     },
     requestMemberUpdate() {
       const endPoint = Constants.webSocketGetMemberUpdateRoute;
@@ -298,19 +343,19 @@ export default Vue.extend({
     closeSession() {
       this.sendCloseSessionCommand();
       window.localStorage.removeItem("adminCookie");
-      this.$router.push({ name: "ResultPage" });
+      if (this.userStoryMode !== "NO_US") {
+        this.$router.push({ name: "ResultPage" });
+      } else {
+        this.$router.push({ name: "LandingPage" });
+      }
     },
     sendRestartMessage() {
       this.estimateFinished = false;
       const endPoint = Constants.webSocketRestartPlanningRoute;
       this.$store.commit("sendViaBackendWS", { endPoint });
-      this.reTriggerTime();
     },
     goToLandingPage() {
       this.$router.push({ name: "LandingPage" });
-    },
-    reTriggerTime() {
-      this.triggerTimer = (this.triggerTimer + 1) % 5;
     },
   },
 });
