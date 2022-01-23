@@ -236,8 +236,10 @@ export default Vue.extend({
       if (!files || !files[0]) {
         return;
       }
+
       papaparse.parse(files[0], {
         header: true,
+        delimiter: ";",
         complete: (file: { data }) => {
           let stories: UserStory[] = [];
 
