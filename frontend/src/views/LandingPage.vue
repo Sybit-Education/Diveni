@@ -81,7 +81,6 @@ export default Vue.extend({
             sessionState: string;
           };
           this.sessionWrapper = { session };
-          this.startNewSessionOnMounted = true;
         } catch (e) {
           console.clear();
           console.log(`got error: ${e}`);
