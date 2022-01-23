@@ -17,7 +17,10 @@
           :disabled="isLoggedInWithJira"
         ></sign-in-with-jira-server-button-component>
       </li>
-      <li>{{ $t("session.prepare.step.selection.mode.description.withJira.descriptionLine2") }}</li>
+      <li>
+        {{ $t("session.prepare.step.selection.mode.description.withJira.descriptionLine2") }}
+        <project-selection-component />
+      </li>
       <li>
         {{ $t("session.prepare.step.selection.mode.description.withJira.descriptionLine3") }}
       </li>
@@ -31,12 +34,14 @@ import constants from "@/constants";
 import Vue from "vue";
 import SignInWithJiraCloudButtonComponent from "./SignInWithJiraCloudButtonComponent.vue";
 import SignInWithJiraServerButtonComponent from "./SignInWithJiraServerButtonComponent.vue";
+import ProjectSelectionComponent from "./ProjectSelectionComponent.vue";
 
 export default Vue.extend({
   name: "JiraComponent",
   components: {
     SignInWithJiraCloudButtonComponent,
     SignInWithJiraServerButtonComponent,
+    ProjectSelectionComponent,
   },
   data() {
     return {

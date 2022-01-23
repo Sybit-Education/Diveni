@@ -153,7 +153,7 @@
                 "subtitle": "Select Jira for your Poker-Planning",
                 "descriptionLine1": "Please sign in with Jira",
                 "descriptionLine2": "Select your project",
-                "descriptionLine3": "After you have selected your project, you will be redirected to the next page to edit your user stories",
+                "descriptionLine3": "After you click on start session, you will be redirected to the next page to edit your user stories",
                 "descriptionLine4": "You will be able to add and edit User Stories once you've started the session",
                 "dialog": {
                   "description": "A new tab will open immediately, please grant access to this application in this tab and enter the verification code here."
@@ -169,6 +169,9 @@
                   },
                   "signInWithJiraServer": {
                     "label": "Sign in with Jira Server"
+                  },
+                  "selectProject":{
+                    "label": "Select your jira project"
                   },
                   "submit": {
                     "label": "Submit"
