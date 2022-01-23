@@ -109,7 +109,7 @@
         </div>
       </b-col>
 
-      <b-col>
+      <b-col class="mt-2">
         <user-story-descriptions
           :card-set="voteSet"
           :index="index"
