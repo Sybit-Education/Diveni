@@ -102,6 +102,9 @@ export default Vue.extend({
           this.token
         );
         this.$store.commit("setTokenId", response.tokenId);
+        apiService.getAllProjects().then((pr) => {
+          this.$store.commit("setProjects", pr);
+        });
       } catch (e) {
         this.showToast(e);
       }

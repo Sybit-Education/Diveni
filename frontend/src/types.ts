@@ -10,6 +10,7 @@ export interface StoreState {
   highlightedMembers: Record<string, unknown>[];
   timerTimestamp: string | undefined;
   tokenId: string | undefined;
+  projects: Record<string, unknown>[];
 }
 
 export interface JiraRequestTokenDto {

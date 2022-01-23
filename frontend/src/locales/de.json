@@ -151,10 +151,13 @@
                   "label": "Planning mit Jira"
                 },
                 "subtitle": "Wähle die Jira-Integration für das Planning",
-                "descriptionLine1": "Bitte melde dich mit Jira an",
+                "descriptionLine1": "Melden Sie sich mit Jira Server an",
                 "descriptionLine2": "Wähle dein Projekt",
                 "descriptionLine3": "Nach dem klicken auf start session, wirst du auf die nächste Seite gelangen um die user Stories ggf. zu bearbeiten",
                 "descriptionLine4": "Du kannst nach Start der Session User Stories bearbeiten oder neue hinzufügen",
+                "formSelection": "Bitte wählen Sie ihr Projekt aus",
+                "selectedProject": "Ausgewähltes Projekt: ",
+                "allUserStories": "Alle User Stories",
                 "dialog": {
                   "description": "Es öffnet sich gleich ein neuer Tab. Bitte gewähre dieser Anwendung in diesem Tab den Zugriff und trage den Verifizierungscode hier ein."
                 },
@@ -175,6 +178,9 @@
                   },
                   "submit": {
                     "label": "Senden"
+                  },
+                  "formSelection": {
+                    "label": "Bitte wählen Sie ihr Projekt aus"
                   }
                 }
               }
