@@ -257,6 +257,11 @@ export default Vue.extend({
         if (this.startNewSessionOnMountedString === "true") {
           this.sendRestartMessage();
         }
+        setTimeout(() => {
+          if (this.members.length === 0) {
+            this.requestMemberUpdate();
+          }
+        }, 300);
       }
     },
     highlightedMembers(highlights) {
