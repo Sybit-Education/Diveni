@@ -14,9 +14,7 @@
             :disabled="true"
             class="border"
             size="lg"
-            :placeholder="
-              $t('page.session.before.userStories.placeholder.userStoryTitle')
-            "
+            :placeholder="$t('page.session.before.userStories.placeholder.userStoryTitle')"
             @blur="publishChanges"
           />
           <div
@@ -24,9 +22,7 @@
             class="card-body rounded"
             :style="{
               'background-color':
-                userStories[idx].estimation == null
-                  ? 'white'
-                  : 'RGB(13, 202, 240)',
+                userStories[idx].estimation == null ? 'white' : 'RGB(13, 202, 240)',
             }"
           >
             {{ story.estimation }}

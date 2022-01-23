@@ -18,12 +18,9 @@
           class="border-1"
           size="lg"
           :style="{
-            'background-color':
-              index === number ? 'RGB(202, 202, 202)' : 'white',
+            'background-color': index === number ? 'RGB(202, 202, 202)' : 'white',
           }"
-          :placeholder="
-            $t('page.session.before.userStories.placeholder.userStoryTitle')
-          "
+          :placeholder="$t('page.session.before.userStories.placeholder.userStoryTitle')"
           @blur="publishChanges"
         />
         <div>
@@ -32,9 +29,7 @@
             class="card-body rounded"
             :style="{
               'background-color':
-                userStories[index].estimation == null
-                  ? 'white'
-                  : 'RGB(13, 202, 240)',
+                userStories[index].estimation == null ? 'white' : 'RGB(13, 202, 240)',
               width: '48px',
               'font-size': 'larger',
             }"
