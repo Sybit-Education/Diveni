@@ -1,11 +1,5 @@
 <template>
   <b-container>
-    <user-stories-sidebar
-      :card-set="voteSet"
-      :show-estimations="planningStart"
-      :initial-stories="userStories"
-      @userStoriesChanged="onUserStoriesChanged($event)"
-    />
     <b-row class="mt-5 mb-3">
       <b-col
         ><h1>
@@ -17,22 +11,24 @@
         </h1></b-col
       >
       <b-col v-if="planningStart" align-self="center">
-        <copy-session-id-popup class="float-end" :session-id="sessionID" />
+        <copy-session-id-popup class="float-end" :session-id="session_sessionID" />
       </b-col>
     </b-row>
     <div v-if="!planningStart">
       <b-row class="align-items-center">
         <copy-session-id-popup
           :text-before-session-i-d="$t('page.session.before.text.beforeID')"
-          :session-id="sessionID"
+          :session-id="session_sessionID"
           :text-after-session-i-d="$t('page.session.before.text.afterID')"
         />
       </b-row>
       <b-row class="mt-5">
-        <h4 class="text-center">{{ $t("page.session.before.text.waiting") }}</h4>
+        <h4 class="text-center">
+          {{ $t("page.session.before.text.waiting") }}
+        </h4>
         <b-icon-three-dots animation="fade" class="" font-scale="3" />
       </b-row>
-      <b-row class="d-flex justify-content-center">
+      <b-row class="d-flex justify-content-center overflow-auto" style="max-height: 500px">
         <SessionMemberCircle
           v-for="member of members"
           :key="member.memberID"
@@ -78,17 +74,18 @@
             @ok="closeSession"
           >
             <p class="my-4">
-              {{ $t("page.session.close.description") }}
+              {{ $t("page.session.close.description1") }}
+            </p>
+            <p v-if="session_userStoryMode !== 'NO_US'">
+              {{ $t("page.session.close.description2") }}
             </p>
           </b-modal>
         </b-col>
         <b-col>
           <estimate-timer
+            :start-timestamp="timerTimestamp"
             :pause-timer="estimateFinished"
-            :timer-triggered="triggerTimer"
-            :timer="timerCountdownNumber"
-            :start-timer-on-component-creation="startTimerOnComponentCreation"
-            :initial-timer="timerCountdownNumber"
+            :duration="timerCountdownNumber"
             @timerFinished="sendVotingFinishedMessage"
           />
         </b-col>
@@ -119,7 +116,10 @@
           {{ membersPending.length + membersEstimated.length }}
         </h4>
       </b-row>
-      <b-row class="my-1 d-flex justify-content-center flex-wrap">
+      <b-row
+        class="my-1 d-flex justify-content-center flex-wrap overflow-auto"
+        style="max-height: 500px"
+      >
         <SessionMemberCard
           v-for="member of estimateFinished ? members : membersEstimated"
           :key="member.memberID"
@@ -128,11 +128,37 @@
           :name="member.name"
           :estimation="member.currentEstimation"
           :estimate-finished="estimateFinished"
-          :highest="estimateHighest ? estimateHighest.memberID === member.memberID : false"
-          :lowest="estimateHighest ? estimateLowest.memberID === member.memberID : false"
+          :highlight="
+            highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0
+          "
         />
       </b-row>
     </div>
+    <b-row v-if="session_userStoryMode !== 'NO_US'">
+      <b-col class="mt-3">
+        <div class="overflow-auto" style="max-height: 700px">
+          <user-stories-sidebar
+            :card-set="voteSet"
+            :show-estimations="planningStart"
+            :initial-stories="userStories"
+            :show-edit-buttons="true"
+            :select-story="true"
+            @userStoriesChanged="onUserStoriesChanged($event)"
+            @selectedStory="onSelectedStory($event)"
+          />
+        </div>
+      </b-col>
+      <b-col class="mt-3">
+        <user-story-descriptions
+          :card-set="voteSet"
+          :initial-stories="userStories"
+          :edit-description="true"
+          :index="index"
+          @userStoriesChanged="onUserStoriesChanged($event)"
+        />
+      </b-col>
+    </b-row>
+    <notify-host-component />
   </b-container>
 </template>
 
@@ -142,10 +168,13 @@ import Constants from "../constants";
 import SessionMemberCircle from "../components/SessionMemberCircle.vue";
 import Member from "../model/Member";
 import SessionMemberCard from "../components/SessionMemberCard.vue";
-import UserStoriesSidebar from "../components/UserStoriesSidebar.vue";
+import UserStoriesSidebar from "../components/UserStories.vue";
 import EstimateTimer from "../components/EstimateTimer.vue";
 import CopySessionIdPopup from "../components/CopySessionIdPopup.vue";
 import RoundedAvatar from "../components/RoundedAvatar.vue";
+import UserStoryDescriptions from "../components/UserStoryDescriptions.vue";
+import confetti from "canvas-confetti";
+import NotifyHostComponent from "../components/NotifyHostComponent.vue";
 
 export default Vue.extend({
   name: "SessionPage",
@@ -156,6 +185,8 @@ export default Vue.extend({
     EstimateTimer,
     CopySessionIdPopup,
     RoundedAvatar,
+    UserStoryDescriptions,
+    NotifyHostComponent,
   },
   props: {
     adminID: { type: String, required: true },
@@ -163,18 +194,32 @@ export default Vue.extend({
     voteSetJson: { type: String, required: true },
     sessionState: { type: String, required: true },
     timerSecondsString: { type: String, required: true },
-    startNewSessionOnMountedString: { type: String, required: false, default: "false" },
+    startNewSessionOnMountedString: {
+      type: String,
+      required: false,
+      default: "false",
+    },
+    userStoryMode: { type: String, required: true },
   },
   data() {
     return {
+      //props copy
+      session_adminID: "",
+      session_sessionID: "",
+      session_voteSetJson: "",
+      session_sessionState: "",
+      session_timerSecondsString: "",
+      session_userStoryMode: "",
+      //data
+      index: 0,
       stageLabelReady: "Ready",
       stageLabelWaiting: "Waiting room",
       planningStart: false,
       voteSet: [] as string[],
       timerCountdownNumber: 0,
-      triggerTimer: 0,
       startTimerOnComponentCreation: true,
       estimateFinished: false,
+      session: {},
     };
   },
   computed: {
@@ -187,33 +232,17 @@ export default Vue.extend({
     webSocketIsConnected() {
       return this.$store.state.webSocketConnected;
     },
+    highlightedMembers() {
+      return this.$store.state.highlightedMembers;
+    },
     membersPending(): Member[] {
       return this.members.filter((member: Member) => member.currentEstimation === null);
     },
     membersEstimated(): Member[] {
       return this.members.filter((member: Member) => member.currentEstimation !== null);
     },
-    estimateHighest(): Member | null {
-      if (this.membersEstimated.length < 1) {
-        return null;
-      }
-      return this.membersEstimated.reduce((prev, current) =>
-        this.voteSet.indexOf(prev.currentEstimation!) >
-        this.voteSet.indexOf(current.currentEstimation!)
-          ? prev
-          : current
-      );
-    },
-    estimateLowest(): Member | null {
-      if (this.membersEstimated.length < 1) {
-        return null;
-      }
-      return this.membersEstimated.reduce((prev, current) =>
-        this.voteSet.indexOf(prev.currentEstimation!) <
-        this.voteSet.indexOf(current.currentEstimation!)
-          ? prev
-          : current
-      );
+    timerTimestamp() {
+      return this.$store.state.timerTimestamp ? this.$store.state.timerTimestamp : "";
     },
   },
   watch: {
@@ -223,42 +252,143 @@ export default Vue.extend({
         this.registerAdminPrincipalOnBackend();
         this.subscribeWSMemberUpdated();
         this.requestMemberUpdate();
+        this.subscribeOnTimerStart();
+        this.subscribeWSNotification();
         if (this.startNewSessionOnMountedString === "true") {
           this.sendRestartMessage();
         }
+        setTimeout(() => {
+          if (this.members.length === 0) {
+            this.requestMemberUpdate();
+          }
+        }, 300);
+      }
+    },
+    highlightedMembers(highlights) {
+      if (this.estimateFinished && highlights.length === 0) {
+        confetti({
+          particleCount: 100,
+          startVelocity: 50,
+          spread: 100,
+        });
       }
     },
   },
-  created() {
-    if (!this.sessionID || !this.adminID) {
-      this.goToLandingPage();
+  async created() {
+    this.copyPropsToData();
+    if (!this.session_sessionID || !this.session_adminID) {
+      //check for cookie
+      await this.checkAdminCookie();
+      this.assignSessionToData(this.session);
+      if (this.session_sessionID.length === 0) {
+        this.goToLandingPage();
+      } else {
+        this.handleReload();
+      }
     }
-    this.timerCountdownNumber = parseInt(this.timerSecondsString, 10);
+    this.timerCountdownNumber = parseInt(this.session_timerSecondsString, 10);
     window.addEventListener("beforeunload", this.sendUnregisterCommand);
   },
   mounted() {
-    this.voteSet = JSON.parse(this.voteSetJson);
+    this.voteSet = JSON.parse(this.session_voteSetJson);
     this.connectToWebSocket();
-    if (this.sessionState === Constants.memberUpdateCommandStartVoting) {
+    if (this.session_sessionState === Constants.memberUpdateCommandStartVoting) {
       this.planningStart = true;
-      if (this.planningStart) {
-        this.sendRestartMessage();
-      }
+      this.sendRestartMessage();
     }
   },
   destroyed() {
     window.removeEventListener("beforeunload", this.sendUnregisterCommand);
   },
   methods: {
+    async checkAdminCookie() {
+      console.log("checking admin cookie");
+      const cookie = window.localStorage.getItem("adminCookie");
+      if (cookie !== null) {
+        console.log(`Found admin cookie: '${cookie}'`);
+        const url = Constants.backendURL + Constants.createSessionRoute;
+        try {
+          const session = (
+            await this.axios.get(url, {
+              params: {
+                adminCookie: cookie,
+              },
+            })
+          ).data as {
+            sessionID: string;
+            adminID: string;
+            sessionConfig: {
+              set: Array<string>;
+              timerSeconds: number;
+              userStories: Array<{
+                title: string;
+                description: string;
+                estimation: string | null;
+                isActive: false;
+              }>;
+              userStoryMode: string;
+            };
+            sessionState: string;
+          };
+          this.session = session;
+        } catch (e) {
+          console.clear();
+          console.log(`got error: ${e}`);
+          window.localStorage.removeItem("adminCookie");
+        }
+      }
+    },
+    copyPropsToData() {
+      this.session_adminID = this.adminID;
+      this.session_sessionID = this.sessionID;
+      this.session_sessionState = this.sessionState;
+      this.session_timerSecondsString = this.timerSecondsString;
+      this.session_voteSetJson = this.voteSetJson;
+      this.session_userStoryMode = this.userStoryMode;
+    },
+    assignSessionToData(session) {
+      if (Object.keys(session).length !== 0) {
+        this.session_adminID = session.adminID;
+        this.session_sessionID = session.sessionID;
+        this.session_sessionState = session.sessionState;
+        this.session_timerSecondsString = session.sessionConfig.timerSeconds.toString();
+        this.session_voteSetJson = JSON.stringify(session.sessionConfig.set);
+        this.session_userStoryMode = session.sessionConfig.userStoryMode;
+        this.$store.commit("setUserStories", {
+          stories: session.sessionConfig.userStories,
+        });
+      }
+    },
+    handleReload() {
+      if (
+        this.session_sessionState === Constants.memberUpdateCommandStartVoting ||
+        this.session_sessionState === Constants.memberUpdateCommandVotingFinished
+      ) {
+        this.planningStart = true;
+      }
+      if (this.session_sessionState === Constants.memberUpdateCommandVotingFinished) {
+        this.estimateFinished = true;
+      }
+      this.timerCountdownNumber = parseInt(this.session_timerSecondsString, 10);
+      //reconnect and reload member
+      this.connectToWebSocket();
+      this.requestMemberUpdate();
+    },
     onUserStoriesChanged($event) {
       this.$store.commit("setUserStories", { stories: $event });
       if (this.webSocketIsConnected) {
         const endPoint = `${Constants.webSocketAdminUpdatedUserStoriesRoute}`;
-        this.$store.commit("sendViaBackendWS", { endPoint, data: JSON.stringify($event) });
+        this.$store.commit("sendViaBackendWS", {
+          endPoint,
+          data: JSON.stringify($event),
+        });
       }
     },
+    onSelectedStory($event) {
+      this.index = $event;
+    },
     connectToWebSocket() {
-      const url = `${Constants.backendURL}/connect?sessionID=${this.sessionID}&adminID=${this.adminID}`;
+      const url = `${Constants.backendURL}/connect?sessionID=${this.session_sessionID}&adminID=${this.session_adminID}`;
       this.$store.commit("connectToBackendWS", url);
     },
     registerAdminPrincipalOnBackend() {
@@ -268,9 +398,15 @@ export default Vue.extend({
     subscribeWSMemberUpdated() {
       this.$store.commit("subscribeOnBackendWSAdminUpdate");
     },
+    subscribeOnTimerStart() {
+      this.$store.commit("subscribeOnBackendWSTimerStart");
+    },
     requestMemberUpdate() {
       const endPoint = Constants.webSocketGetMemberUpdateRoute;
       this.$store.commit("sendViaBackendWS", { endPoint });
+    },
+    subscribeWSNotification() {
+      this.$store.commit("subscribeOnBackendWSNotify");
     },
     sendUnregisterCommand() {
       const endPoint = `${Constants.webSocketUnregisterRoute}`;
@@ -299,19 +435,19 @@ export default Vue.extend({
     closeSession() {
       this.sendCloseSessionCommand();
       window.localStorage.removeItem("adminCookie");
-      this.$router.push({ name: "ResultPage" });
+      if (this.session_userStoryMode !== "NO_US") {
+        this.$router.push({ name: "ResultPage" });
+      } else {
+        this.$router.push({ name: "LandingPage" });
+      }
     },
     sendRestartMessage() {
       this.estimateFinished = false;
       const endPoint = Constants.webSocketRestartPlanningRoute;
       this.$store.commit("sendViaBackendWS", { endPoint });
-      this.reTriggerTime();
     },
     goToLandingPage() {
       this.$router.push({ name: "LandingPage" });
-    },
-    reTriggerTime() {
-      this.triggerTimer = (this.triggerTimer + 1) % 5;
     },
   },
 });

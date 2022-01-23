@@ -1,33 +1,35 @@
 <template>
   <b-container>
-    <user-stories-sidebar
-      :card-set="voteSet"
-      :show-estimations="true"
-      :initial-stories="userStories"
-      :show-edit-buttons="false"
-    />
     <b-row class="my-5 mx-2">
       <b-col>
         <h1>{{ $t("page.vote.title") }}</h1>
       </b-col>
       <b-col>
         <estimate-timer
+          :start-timestamp="timerTimestamp"
           :pause-timer="estimateFinished"
-          :timer-triggered="triggerTimer"
-          :timer="timerCountdownNumber"
-          :start-timer-on-component-creation="false"
-          :initial-timer="timerCountdownNumber"
+          :duration="timerCountdownNumber"
         />
       </b-col>
     </b-row>
-    <b-row class="justify-content-center">
+    <b-col class="d-flex justify-content-end horizontal">
+      <b-button
+        v-b-modal.close-session-modal
+        style="height: 40px"
+        variant="danger"
+        class="m-1 mt-4"
+        @click="leaveMeeting"
+      >
+        <b-icon-x />
+        {{ $t("page.vote.button.leave.label") }}
+      </b-button>
       <rounded-avatar
         :color="hexColor"
         :asset-name="avatarAnimalAssetName"
         :show-name="true"
         :name="name"
       />
-    </b-row>
+    </b-col>
     <b-row v-if="isStartVoting" class="my-5">
       <flicking
         v-if="isMobile"
@@ -54,21 +56,23 @@
           @sentVote="onSendVote"
         />
       </flicking>
-      <b-row v-else class="d-flex justify-content-between flex-wrap">
+      <b-row v-else class="d-flex justify-content-between flex-wrap text-center">
         <b-col>
-          <member-vote-card
-            v-for="(voteOption, index) in voteSet"
-            :key="voteOption"
-            :ref="`memberCard${voteOption}`"
-            style="display: inline-block"
-            class="flicking-panel m-2"
-            :vote-option="voteOption"
-            :index="index"
-            :hex-color="hexColor"
-            :dragged="voteOption == draggedVote"
-            :is-mobile="false"
-            @sentVote="onSendVote"
-          />
+          <div class="overflow-auto" style="max-height: 500px">
+            <member-vote-card
+              v-for="(voteOption, index) in voteSet"
+              :key="voteOption"
+              :ref="`memberCard${voteOption}`"
+              style="display: inline-block"
+              class="flicking-panel m-2"
+              :vote-option="voteOption"
+              :index="index"
+              :hex-color="hexColor"
+              :dragged="voteOption == draggedVote"
+              :is-mobile="false"
+              @sentVote="onSendVote"
+            />
+          </div>
         </b-col>
       </b-row>
     </b-row>
@@ -76,7 +80,11 @@
       <b-icon-three-dots animation="fade" class="my-5" font-scale="4" />
       <h1>{{ $t("page.vote.waiting") }}</h1>
     </b-row>
-    <b-row v-if="votingFinished" class="my-1 d-flex justify-content-center flex-wrap">
+    <b-row
+      v-if="votingFinished"
+      class="my-1 d-flex justify-content-center flex-wrap overflow-auto"
+      style="max-height: 500px"
+    >
       <SessionMemberCard
         v-for="member of members"
         :key="member.memberID"
@@ -85,10 +93,33 @@
         :name="member.name"
         :estimation="member.currentEstimation"
         :estimate-finished="votingFinished"
-        :highest="estimateHighest ? estimateHighest.memberID === member.memberID : false"
-        :lowest="estimateHighest ? estimateLowest.memberID === member.memberID : false"
+        :highlight="highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0"
       />
     </b-row>
+    <b-row v-if="userStoryMode !== 'NO_US'">
+      <b-col class="mt-2">
+        <div class="overflow-auto" style="height: 700px">
+          <user-stories
+            :card-set="voteSet"
+            :show-estimations="true"
+            :initial-stories="userStories"
+            :show-edit-buttons="false"
+            @selectedStory="onSelectedStory($event)"
+          />
+        </div>
+      </b-col>
+
+      <b-col class="mt-2">
+        <user-story-descriptions
+          :card-set="voteSet"
+          :index="index"
+          :initial-stories="userStories"
+          :edit-description="false"
+          @userStoriesChanged="onUserStoriesChanged($event)"
+        />
+      </b-col>
+    </b-row>
+    <notify-member-component />
   </b-container>
 </template>
 
@@ -97,10 +128,13 @@ import Vue from "vue";
 import RoundedAvatar from "../components/RoundedAvatar.vue";
 import MemberVoteCard from "../components/MemberVoteCard.vue";
 import Constants from "../constants";
-import UserStoriesSidebar from "../components/UserStoriesSidebar.vue";
 import EstimateTimer from "../components/EstimateTimer.vue";
 import SessionMemberCard from "../components/SessionMemberCard.vue";
+import NotifyMemberComponent from "../components/NotifyMemberComponent.vue";
 import Member from "../model/Member";
+import confetti from "canvas-confetti";
+import UserStories from "../components/UserStories.vue";
+import UserStoryDescriptions from "../components/UserStoryDescriptions.vue";
 
 export default Vue.extend({
   name: "MemberVotePage",
@@ -108,8 +142,10 @@ export default Vue.extend({
     RoundedAvatar,
     MemberVoteCard,
     EstimateTimer,
-    UserStoriesSidebar,
     SessionMemberCard,
+    NotifyMemberComponent,
+    UserStories,
+    UserStoryDescriptions,
   },
   props: {
     memberID: { type: String, default: undefined },
@@ -118,9 +154,11 @@ export default Vue.extend({
     avatarAnimalAssetName: { type: String, default: undefined },
     voteSetJson: { type: String, default: undefined },
     timerSecondsString: { type: String, default: undefined },
+    userStoryMode: { type: String, default: undefined },
   },
   data() {
     return {
+      index: 0,
       draggedVote: null,
       voteSet: [] as string[],
       timerCountdownNumber: 0,
@@ -152,27 +190,11 @@ export default Vue.extend({
     membersEstimated(): Member[] {
       return this.members.filter((member: Member) => member.currentEstimation !== null);
     },
-    estimateHighest(): Member | null {
-      if (this.membersEstimated.length < 1) {
-        return null;
-      }
-      return this.membersEstimated.reduce((prev, current) =>
-        this.voteSet.indexOf(prev.currentEstimation!) >
-        this.voteSet.indexOf(current.currentEstimation!)
-          ? prev
-          : current
-      );
+    highlightedMembers() {
+      return this.$store.state.highlightedMembers;
     },
-    estimateLowest(): Member | null {
-      if (this.membersEstimated.length < 1) {
-        return null;
-      }
-      return this.membersEstimated.reduce((prev, current) =>
-        this.voteSet.indexOf(prev.currentEstimation!) <
-        this.voteSet.indexOf(current.currentEstimation!)
-          ? prev
-          : current
-      );
+    timerTimestamp() {
+      return this.$store.state.timerTimestamp ? this.$store.state.timerTimestamp : "";
     },
   },
   watch: {
@@ -187,9 +209,18 @@ export default Vue.extend({
         this.goToJoinPage();
       }
     },
+    votingFinished(isFinished) {
+      if (isFinished && this.highlightedMembers.length === 0) {
+        confetti({
+          particleCount: 100,
+          startVelocity: 50,
+          spread: 100,
+        });
+      }
+    },
   },
   created() {
-    window.addEventListener("beforeunload", this.sendUnregisterCommand);
+    // window.addEventListener("beforeunload", this.sendUnregisterCommand);
     this.timerCountdownNumber = JSON.parse(this.timerSecondsString);
   },
   mounted() {
@@ -207,6 +238,9 @@ export default Vue.extend({
     this.sendUnregisterCommand();
   },
   methods: {
+    onSelectedStory($event) {
+      this.index = $event;
+    },
     onSendVote({ vote }) {
       this.draggedVote = vote;
       const endPoint = `${Constants.webSocketVoteRoute}`;
@@ -222,6 +256,13 @@ export default Vue.extend({
     },
     backendAnimalToAssetName(animal: string) {
       return Constants.avatarAnimalToAssetName(animal);
+    },
+    goToLandingPage() {
+      window.localStorage.removeItem("memberCookie");
+      this.$router.push({ name: "LandingPage" });
+    },
+    leaveMeeting() {
+      this.goToLandingPage();
     },
   },
 });

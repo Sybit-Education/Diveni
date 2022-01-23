@@ -1,4 +1,12 @@
 {
+  "general": {
+    "pleaseWait": "Bitte warten...",
+    "about": "Über",
+    "licenses": {
+      "frontend": "Lizenzen (Frontend)",
+      "backend": "Lizenzen (Backend)"
+    }
+  },
   "page": {
     "session": {
       "before": {
@@ -12,7 +20,18 @@
           "afterID": "mit deinen Teammitgliedern",
           "waiting": "Warte auf den Beitritt des Teams"
         },
-        "button": "Starte das Planning"
+        "button": "Starte das Planning",
+        "userStories": {
+          "button": {
+            "addFirstUserStory": "Noch keine Stories... Klicke um eine Story hinzuzufügen",
+            "addUserStory": "User Story hinzufügen"
+          },
+          "placeholder": {
+            "userStoryTitle": "User Story Titel",
+            "userStoryDescription": "Beschreibung und Akzeptanzkriterien..."
+          },
+          "text": "Klicke auf ein User Story Titel um die Beschreibung zu sehen"
+        }
       },
       "during": {
         "estimation": {
@@ -30,7 +49,8 @@
       },
       "close": {
         "popup": "Bist du dir sicher?",
-        "description": "Die Session wird für dich und alle Teammitglieder beendet. Im Anschluss kannst du die User Stories herunterladen.",
+        "description1": "Die Session wird für dich und alle Teammitglieder beendet.",
+        "description2": "Im Anschluss kannst du die User Stories herunterladen.",
         "button": {
           "cancel": "Zurück",
           "ok": "OK"
@@ -46,7 +66,7 @@
       }
     },
     "landing": {
-      "productTitle": "Planning-Poker",
+      "productTitle": "DIVENI",
       "meeting": {
         "new": {
           "title": "Neue Session",
@@ -89,7 +109,12 @@
     },
     "vote": {
       "title": "Schätze!",
-      "waiting": "Warte, bis der Organisator die Schätzrunde startet ..."
+      "waiting": "Warte, bis der Organisator die Schätzrunde startet ...",
+      "button": {
+        "leave": {
+          "label": "Session verlassen"
+        }
+      }
     }
   },
   "session": {
@@ -97,8 +122,66 @@
       "title": "Bereite deine Session vor:",
       "step": {
         "selection": {
+          "mode": {
+            "title": "1. Wähle den Modus für die User Stories",
+            "description": {
+              "withoutUS": {
+                "tab": {
+                  "label": "Planning ohne User Stories"
+                },
+                "subtitle": "Planning ohne User Stories",
+                "descriptionLine1": "Ihr werdet mit den gewählten Karten schätzen",
+                "descriptionLine2": "Du wirst keine User Stories hinzufügen können, wenn die Session gestartet wurde."
+              },
+              "withUS": {
+                "tab": {
+                  "label": "Planning mit User Stories"
+                },
+                "subtitle": "Integriere User Stories in das Planning",
+                "descriptionLine1": "Erstelle deine eigenen User Stories auf der nächsten Seite",
+                "descriptionLine2": "Füge jeder User Story Titel und Beschreibung hinzu",
+                "descriptionLine3": "Du kannst auch einen CSV-Import nutzen, um User Stories zu integrieren",
+                "descriptionLine4": "Du kannst nach Start der Session User Stories bearbeiten oder neue hinzufügen",
+                "importButton": "User Stories importieren",
+                "toastSuccessNotification": "User Stories importiert",
+                "toastErrorNotification": "Beim importieren ist leider ein Fehler aufgetreten"
+              },
+              "withJira": {
+                "tab": {
+                  "label": "Planning mit Jira"
+                },
+                "subtitle": "Wähle die Jira-Integration für das Planning",
+                "descriptionLine1": "Bitte melde dich mit Jira an",
+                "descriptionLine2": "Wähle dein Projekt",
+                "descriptionLine3": "Nach dem klicken auf start session, wirst du auf die nächste Seite gelangen um die user Stories ggf. zu bearbeiten",
+                "descriptionLine4": "Du kannst nach Start der Session User Stories bearbeiten oder neue hinzufügen",
+                "dialog": {
+                  "description": "Es öffnet sich gleich ein neuer Tab. Bitte gewähre dieser Anwendung in diesem Tab den Zugriff und trage den Verifizierungscode hier ein."
+                },
+                "inputs": {
+                  "verificationCode": {
+                    "placeholder": "Verifizierungscode"
+                  }
+                },
+                "buttons": {
+                  "signInWithJiraCloud": {
+                    "label": "Mit Jira Cloud anmelden"
+                  },
+                  "signInWithJiraServer": {
+                    "label": "Mit Jira Server anmelden"
+                  },
+                  "selectProject":{
+                    "label": "Wählen Sie ihr Jira-Projekt aus"
+                  },
+                  "submit": {
+                    "label": "Senden"
+                  }
+                }
+              }
+            }
+          },
           "cardSet": {
-            "title": "1. Wähle ein Kartenset mit den entsprechenden Werten",
+            "title": "2. Wähle ein Kartenset mit den entsprechenden Werten",
             "sets": {
               "fibonacci": {
                 "label": "Fibonacci-Folge",
@@ -119,44 +202,11 @@
             }
           },
           "time": {
-            "title": "2. Bestimme die Zeit pro Schätzrunde"
+            "title": "3. Bestimme die Zeit pro Schätzrunde"
           },
           "password": {
-            "title": "3. Wähle ein Passwort, falls gewünscht",
+            "title": "4. Wähle ein Passwort, falls gewünscht",
             "placeholder": "Passwort (leer lassen für eine offene Session)"
-          },
-          "mode": {
-            "title": "4. Wähle den Modus für die User Stories",
-            "description": {
-              "withoutUS": {
-                "tab": {
-                  "label": "Planning ohne User Stories"
-                },
-                "subtitle": "Planning ohne User Stories",
-                "descriptionLine1": "Ihr werdet mit den gewählten Karten schätzen",
-                "descriptionLine2": "Du wirst keine User Stories hinzufügen können, wenn die Session gestartet wurde."
-              },
-              "withUS": {
-                "tab": {
-                  "label": "Planning mit User Stories"
-                },
-                "subtitle": "Integriere User Stories in das Planning",
-                "descriptionLine1": "Erstelle deine eigenen User Stories",
-                "descriptionLine2": "Füge jeder User Story Titel und Beschreibung hinzu",
-                "descriptionLine3": "Du kannst auch einen CSV-Import nutzen, um User Stories zu integrieren",
-                "descriptionLine4": "Du kannst nach Start der Session User Stories bearbeiten oder neue hinzufügen"
-              },
-              "withJira": {
-                "tab": {
-                  "label": "Planning mit Jira"
-                },
-                "subtitle": "Wähle die Jira-Integration für das Planning",
-                "descriptionLine1": "Bitte authentifiziere dich mit Jira",
-                "descriptionLine2": "Wähle dein Projekt",
-                "descriptionLine3": "Nach der Wahl des Projekts wirst du auf die nächste Seite gelangen um die user Stories ggf. zu bearbeiten",
-                "descriptionLine4": "Du kannst nach Start der Session User Stories bearbeiten oder neue hinzufügen"
-              }
-            }
           }
         }
       },
@@ -175,6 +225,17 @@
           "title": "Story-Überschrift",
           "description": "Beschreibung und Akzeptanzkriterien..."
         }
+      }
+    },
+    "notification": {
+      "messages": {
+        "hostLeft": "Host hat die Sitzung verlassen",
+        "memberLeft": "Teilnehmer hat die Sitzung verlassen",
+        "memberJoined": "Teilnehmer ist der Sitzung beigetreten",
+        "jiraCredentials": "Falsche Login-Daten",
+        "jiraLoginFailed": "Login fehlgeschlagen",
+        "wrongID": "Falscher Einladungscode",
+        "password": "Falsches Passwort"
       }
     }
   }

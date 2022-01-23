@@ -34,6 +34,7 @@ export default Vue.extend({
       sessionID: "",
       voteSet: "",
       timerSeconds: 0,
+      userStoryMode: "",
     };
   },
   computed: {
@@ -49,6 +50,8 @@ export default Vue.extend({
         this.subscribeWSMemberUpdates();
         this.subscribeWSadminUpdatedUserStories();
         this.subscribeWSMemberUpdated();
+        this.subscribeOnTimerStart();
+        this.subscribeWSNotification();
         this.goToEstimationPage();
       }
     },
@@ -80,14 +83,12 @@ export default Vue.extend({
         const sessionConfig = result.data as {
           set: Array<string>;
           timerSeconds: number;
-          userStories: Array<{
-            title: string;
-            description: string;
-            estimation: string | null;
-          }>;
+          userStories: Array<{ title: string; description: string; estimation: string | null }>;
+          userStoryMode: string;
         };
         this.voteSet = JSON.stringify(sessionConfig.set);
         this.timerSeconds = parseInt(JSON.stringify(sessionConfig.timerSeconds), 10);
+        this.userStoryMode = sessionConfig.userStoryMode;
         console.log("session page");
         console.log(sessionConfig);
         this.$store.commit("setUserStories", {
@@ -113,11 +114,17 @@ export default Vue.extend({
     subscribeWSMemberUpdates() {
       this.$store.commit("subscribeOnBackendWSMemberUpdates");
     },
+    subscribeWSNotification() {
+      this.$store.commit("subscribeOnBackendWSNotify");
+    },
     subscribeWSadminUpdatedUserStories() {
       this.$store.commit("subscribeOnBackendWSStoriesUpdated");
     },
     subscribeWSMemberUpdated() {
       this.$store.commit("subscribeOnBackendWSAdminUpdate");
+    },
+    subscribeOnTimerStart() {
+      this.$store.commit("subscribeOnBackendWSTimerStart");
     },
     goToEstimationPage() {
       this.$router.push({
@@ -129,15 +136,16 @@ export default Vue.extend({
           avatarAnimalAssetName: this.avatarAnimalAssetName,
           voteSetJson: this.voteSet,
           timerSecondsString: this.timerSeconds.toString(),
+          userStoryMode: this.userStoryMode,
         },
       });
     },
     showToast(e) {
       if (e.message == "Request failed with status code 404") {
-        this.$toast.error("Wrong ID");
+        this.$toast.error(this.$t("session.notification.messages.wrongID"));
       }
       if (e.message == "Request failed with status code 401") {
-        this.$toast.error("Wrong Password");
+        this.$toast.error(this.$t("session.notification.messages.password"));
       }
       console.log(e);
     },

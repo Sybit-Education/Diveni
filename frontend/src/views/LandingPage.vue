@@ -1,8 +1,11 @@
 <template>
   <b-container>
-    <h1 class="my-5 mx-2">
-      {{ $t("page.landing.productTitle") }}
-    </h1>
+    <div class="d-flex align-items-center">
+      <img src="/img/icons/logo-128x128.png" style="height: 64px; margin-right: 12px" />
+      <h1 class="my-5 mx-2">
+        {{ $t("page.landing.productTitle") }}
+      </h1>
+    </div>
     <b-row class="justify-content-center">
       <landing-page-card
         class="col-md-4 m-2 col-12"
@@ -76,11 +79,11 @@ export default Vue.extend({
                 estimation: string | null;
                 isActive: false;
               }>;
+              userStoryMode: string;
             };
             sessionState: string;
           };
           this.sessionWrapper = { session };
-          this.startNewSessionOnMounted = true;
         } catch (e) {
           console.clear();
           console.log(`got error: ${e}`);
@@ -107,6 +110,7 @@ export default Vue.extend({
           sessionState: this.sessionWrapper.session.sessionState,
           timerSecondsString: this.sessionWrapper.session.sessionConfig.timerSeconds.toString(),
           startNewSessionOnMountedString: this.startNewSessionOnMounted.toString(),
+          userStoryMode: this.sessionWrapper.session.sessionConfig.userStoryMode,
         },
       });
     },

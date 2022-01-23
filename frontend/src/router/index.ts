@@ -5,6 +5,7 @@ import JoinPage from "../views/JoinPage.vue";
 import SessionPage from "../views/SessionPage.vue";
 import MemberVotePage from "../views/MemberVotePage.vue";
 import PrepareSessionPage from "../views/PrepareSessionPage.vue";
+import JiraCallbackPage from "../views/JiraCallbackPage.vue";
 import ResultPage from "../views/ResultPage.vue";
 
 Vue.use(VueRouter);
@@ -42,6 +43,11 @@ const routes: Array<RouteConfig> = [
     path: "/prepare",
     name: "PrepareSessionPage",
     component: PrepareSessionPage,
+  },
+  {
+    path: "/jiraCallback",
+    name: "JiraCallbackPage",
+    component: JiraCallbackPage,
   },
   {
     path: "*",

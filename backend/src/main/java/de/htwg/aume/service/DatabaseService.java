@@ -1,5 +1,6 @@
 package de.htwg.aume.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -33,7 +34,7 @@ public class DatabaseService {
     }
 
     public Session saveSession(Session session) {
-        return sessionRepo.save(session);
+        return sessionRepo.save(session.setLastModified(new Date()));
     }
 
     public void deleteSession(Session session) {
