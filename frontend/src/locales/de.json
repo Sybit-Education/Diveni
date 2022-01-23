@@ -1,6 +1,11 @@
 {
   "general": {
-    "pleaseWait": "Bitte warten..."
+    "pleaseWait": "Bitte warten...",
+    "about": "Über",
+    "licenses": {
+      "frontend": "Lizenzen (Frontend)",
+      "backend": "Lizenzen (Backend)"
+    }
   },
   "page": {
     "session": {
@@ -15,7 +20,18 @@
           "afterID": "mit deinen Teammitgliedern",
           "waiting": "Warte auf den Beitritt des Teams"
         },
-        "button": "Starte das Planning"
+        "button": "Starte das Planning",
+        "userStories": {
+          "button": {
+            "addFirstUserStory": "Noch keine Stories... Klicke um eine Story hinzuzufügen",
+            "addUserStory": "User Story hinzufügen"
+          },
+          "placeholder": {
+            "userStoryTitle": "User Story Titel",
+            "userStoryDescription": "Beschreibung und Akzeptanzkriterien..."
+          },
+          "text": "Klicke auf ein User Story Titel um die Beschreibung zu sehen"
+        }
       },
       "during": {
         "estimation": {
@@ -50,7 +66,7 @@
       }
     },
     "landing": {
-      "productTitle": "Planning-Poker",
+      "productTitle": "DIVENI",
       "meeting": {
         "new": {
           "title": "Neue Session",
@@ -93,7 +109,12 @@
     },
     "vote": {
       "title": "Schätze!",
-      "waiting": "Warte, bis der Organisator die Schätzrunde startet ..."
+      "waiting": "Warte, bis der Organisator die Schätzrunde startet ...",
+      "button": {
+        "leave": {
+          "label": "Session verlassen"
+        }
+      }
     }
   },
   "session": {
@@ -117,7 +138,7 @@
                   "label": "Planning mit User Stories"
                 },
                 "subtitle": "Integriere User Stories in das Planning",
-                "descriptionLine1": "Erstelle deine eigenen User Stories",
+                "descriptionLine1": "Erstelle deine eigenen User Stories auf der nächsten Seite",
                 "descriptionLine2": "Füge jeder User Story Titel und Beschreibung hinzu",
                 "descriptionLine3": "Du kannst auch einen CSV-Import nutzen, um User Stories zu integrieren",
                 "descriptionLine4": "Du kannst nach Start der Session User Stories bearbeiten oder neue hinzufügen",

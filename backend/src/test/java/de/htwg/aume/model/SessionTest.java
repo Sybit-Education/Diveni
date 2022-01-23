@@ -144,6 +144,25 @@ public class SessionTest {
 	}
 
 	@Test
+	public void selectHighlightedMembers_correctOrder() {
+		List<String> set = List.of("1", "2", "3", "4", "5");
+		val member1 = new Member(Utils.generateRandomID(), null, null, null, "4");
+		val member2 = new Member(Utils.generateRandomID(), null, null, null, "1");
+		val member3 = new Member(Utils.generateRandomID(), null, null, null, "3");
+		val member4 = new Member(Utils.generateRandomID(), null, null, null, "5");
+		val session = new Session(null, null, null, new SessionConfig(set, List.of(), 30, null, null),
+				null, List.of(member1, member2, member3, member4), new HashMap<>(), new ArrayList<>(), null, null, null,
+				null);
+
+		val result = session.selectHighlightedMembers();
+
+		val expectedHighlights = List.of(member2.getMemberID(), member4.getMemberID());
+		assertEquals(expectedHighlights, result.getCurrentHighlights());
+		assertEquals(0, result.getCurrentHighlights().indexOf(member2.getMemberID()));
+		assertEquals(1, result.getCurrentHighlights().indexOf(member4.getMemberID()));
+	}
+
+	@Test
 	public void selectHighlightedMembersPrioritized_works() {
 		List<String> set = List.of("XS", "S", "M", "L", "XL");
 		val member1 = new Member(Utils.generateRandomID(), null, null, null, "L");

@@ -113,8 +113,17 @@ public class Session {
 			}
 		}).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 		val newHighlighted = List.of(minMemberID, maxMemberID);
-		return new Session(databaseID, sessionID, adminID, sessionConfig, adminCookie, members, newVoted,
-				newHighlighted, sessionState, lastModified, accessToken, timerTimestamp);
+
+		val sortedMembers = members.stream().sorted((Member m1, Member m2) -> {
+			boolean b1 = newHighlighted.contains(m1.getMemberID());
+			boolean b2 = newHighlighted.contains(m2.getMemberID());
+			if (b1 == b2) {
+				return 0;
+			}
+			return b1 ? -1 : 1;
+		}).collect(Collectors.toList());
+		return new Session(databaseID, sessionID, adminID, sessionConfig, adminCookie,
+				sortedMembers, newVoted, newHighlighted, sessionState, lastModified, accessToken, timerTimestamp);
 	}
 
 	public Session resetCurrentHighlights() {
