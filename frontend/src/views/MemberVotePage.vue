@@ -30,16 +30,18 @@
         :name="name"
       />
     </b-col>
+    <b-row v-if="isMobile">
+      <mobile-story-title
+        v-if="userStoryMode !== 'NO_US'"
+        :card-set="voteSet"
+        :index="index"
+        :initial-stories="userStories"
+        :edit-description="false"
+        @userStoriesChanged="onUserStoriesChanged($event)"
+      />
+    </b-row>
     <b-row v-if="isStartVoting" class="my-5">
       <div v-if="isMobile">
-        <mobile-story-title
-          v-if="userStoryMode !== 'NO_US'"
-          :card-set="voteSet"
-          :index="index"
-          :initial-stories="userStories"
-          :edit-description="false"
-          @userStoriesChanged="onUserStoriesChanged($event)"
-        />
         <flicking
           id="flicking"
           :options="{
@@ -64,21 +66,6 @@
             @sentVote="onSendVote"
           />
         </flicking>
-        <b-col class="mt-2">
-          <div
-            v-if="userStoryMode !== 'NO_US'"
-            class="overflow-auto"
-            style="height: 700px"
-          >
-            <mobile-story-list
-              :card-set="voteSet"
-              :show-estimations="true"
-              :initial-stories="userStories"
-              :show-edit-buttons="false"
-              @selectedStory="onSelectedStory($event)"
-            />
-          </div>
-        </b-col>
       </div>
       <b-row
         v-else
@@ -149,6 +136,17 @@
         />
       </b-col>
     </b-row>
+    <b-col class="mt-2" v-if="userStoryMode !== 'NO_US' && isMobile">
+      <div class="overflow-auto" style="height: 700px">
+        <mobile-story-list
+          :card-set="voteSet"
+          :show-estimations="true"
+          :initial-stories="userStories"
+          :show-edit-buttons="false"
+          @selectedStory="onSelectedStory($event)"
+        />
+      </div>
+    </b-col>
     <notify-member-component />
   </b-container>
 </template>
