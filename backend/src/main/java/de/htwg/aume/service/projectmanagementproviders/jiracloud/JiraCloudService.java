@@ -105,19 +105,24 @@ public class JiraCloudService implements ProjectManagementProviderOAuth2 {
     @Override
     public List<UserStory> getIssues(String tokenIdentifier, String projectName) {
         String cloudID = getCloudID(accessTokens.get(tokenIdentifier));
-        ResponseEntity<String> response = executeRequest(String.format(JIRA_HOME, cloudID) + "/search", HttpMethod.GET,
-                accessTokens.get(tokenIdentifier));
+        ResponseEntity<String> response = executeRequest(
+                String.format(JIRA_HOME, cloudID) + "/search?jql=project=" + projectName
+                        + " order by rank&fields=summary,description," + ESTIMATION_FIELD,
+                HttpMethod.GET, accessTokens.get(tokenIdentifier));
         try {
-            Object node = new ObjectMapper().readValue(response.getBody(), Object.class);
-            // String json = new
-            // ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(response.getBody());
-            System.out.println(
-                    new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(node));
+            List<UserStory> userStories = new ArrayList<>();
+            JsonNode node = new ObjectMapper().readTree(response.getBody());
+            for (JsonNode issue : node.path("issues")) {
+                val fields = issue.get("fields");
+                userStories.add(new UserStory(issue.get("id").asText(), fields.get("summary").asText(),
+                        fields.get("description").asText(), fields.get(ESTIMATION_FIELD).asText(), false));
+            }
+            return userStories;
         } catch (Exception e) {
             e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                    ErrorMessages.failedToRetrieveProjectsErrorMessage);
         }
-        // System.out.println(response.getBody());
-        return null;
     }
 
     @Override
