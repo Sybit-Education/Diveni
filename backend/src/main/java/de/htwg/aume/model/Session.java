@@ -51,13 +51,12 @@ public class Session {
 	private final SessionState sessionState;
 
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-	private final String timerTimestamp;
-
-	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private final Date lastModified;
 
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-	private String accessToken;
+	private final String accessToken;
+
+	private final String timerTimestamp;
 
 	static Comparator<String> estimationByIndex(List<String> set) {
 		return Comparator.comparingInt((str) -> set.indexOf(str));
@@ -67,7 +66,7 @@ public class Session {
 		val updatedMembers = members.stream().map(m -> m.getMemberID().equals(memberID) ? m.updateEstimation(vote) : m)
 				.collect(Collectors.toList());
 		return new Session(databaseID, sessionID, adminID, sessionConfig, adminCookie, updatedMembers, memberVoted,
-				currentHighlights, sessionState, timerTimestamp, lastModified);
+				currentHighlights, sessionState, lastModified, accessToken, timerTimestamp);
 	}
 
 	static Stream<String> getFilteredEstimationStream(List<Member> members) {
@@ -88,7 +87,7 @@ public class Session {
 
 		if (maxEstimation.equals(minEstimation)) {
 			return new Session(databaseID, sessionID, adminID, sessionConfig, adminCookie, members, memberVoted,
-					new ArrayList<>(), sessionState, timerTimestamp, lastModified);
+					new ArrayList<>(), sessionState, lastModified, accessToken, timerTimestamp);
 		}
 		val maxEstimationMembers = this.members.stream().filter((member) -> member.getCurrentEstimation() != null
 				&& member.getCurrentEstimation().equals(maxEstimation.get())).collect(Collectors.toList());
@@ -115,12 +114,12 @@ public class Session {
 		}).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 		val newHighlighted = List.of(minMemberID, maxMemberID);
 		return new Session(databaseID, sessionID, adminID, sessionConfig, adminCookie, members, newVoted,
-				newHighlighted, sessionState, timerTimestamp, lastModified);
+				newHighlighted, sessionState, lastModified, accessToken, timerTimestamp);
 	}
 
 	public Session resetCurrentHighlights() {
 		return new Session(databaseID, sessionID, adminID, sessionConfig, adminCookie, members, memberVoted,
-				new ArrayList<>(), sessionState, timerTimestamp, lastModified);
+				new ArrayList<>(), sessionState, lastModified, accessToken, timerTimestamp);
 	}
 
 	public Session updateUserStories(List<UserStory> userStories) {
@@ -128,58 +127,56 @@ public class Session {
 				sessionConfig.getTimerSeconds().orElse(null), sessionConfig.getUserStoryMode(),
 				sessionConfig.getPassword());
 		return new Session(databaseID, sessionID, adminID, updatedSessionConfig, adminCookie, members, memberVoted,
-				currentHighlights, sessionState, timerTimestamp, lastModified);
+				currentHighlights, sessionState, lastModified, accessToken, timerTimestamp);
 	}
 
 	public Session resetEstimations() {
 		val updatedMembers = members.stream().map(m -> m.resetEstimation()).collect(Collectors.toList());
 		return new Session(databaseID, sessionID, adminID, sessionConfig, adminCookie, updatedMembers, memberVoted,
-				currentHighlights, sessionState, timerTimestamp, lastModified);
+				currentHighlights, sessionState, lastModified, accessToken, timerTimestamp);
 	}
 
 	public Session updateMembers(List<Member> updatedMembers) {
 		return new Session(databaseID, sessionID, adminID, sessionConfig, adminCookie, updatedMembers, memberVoted,
-				currentHighlights, sessionState, timerTimestamp, lastModified);
+				currentHighlights, sessionState, lastModified, accessToken, timerTimestamp);
 	}
 
 	public Session updateSessionState(SessionState updatedSessionState) {
 		return new Session(databaseID, sessionID, adminID, sessionConfig, adminCookie, members, memberVoted,
-				currentHighlights, updatedSessionState, timerTimestamp, lastModified);
+				currentHighlights, updatedSessionState, lastModified, accessToken, timerTimestamp);
 	}
 
 	public Session addMember(Member member) {
 		var updatedMembers = new ArrayList<>(members);
 		updatedMembers.add(member);
 		return new Session(databaseID, sessionID, adminID, sessionConfig, adminCookie, updatedMembers, memberVoted,
-				currentHighlights, sessionState, timerTimestamp, lastModified);
+				currentHighlights, sessionState, lastModified, accessToken, timerTimestamp);
 	}
 
 	public Session removeMember(String memberID) {
 		val updatedMembers = members.stream().filter(m -> !m.getMemberID().equals(memberID))
 				.collect(Collectors.toList());
 		return new Session(databaseID, sessionID, adminID, sessionConfig, adminCookie, updatedMembers, memberVoted,
-				currentHighlights, sessionState, timerTimestamp, lastModified);
-	}
-
-	public Session setLastModified(Date modified) {
-		return new Session(databaseID, sessionID, adminID, sessionConfig, adminCookie, members, memberVoted,
-				currentHighlights, sessionState, timerTimestamp, modified);
+				currentHighlights, sessionState, lastModified, accessToken, timerTimestamp);
 	}
 
 	public Session setTimerTimestamp(String timestamp) {
 		return new Session(databaseID, sessionID, adminID, sessionConfig, adminCookie, members, memberVoted,
-				currentHighlights, sessionState, timestamp, lastModified);
+				currentHighlights, sessionState, lastModified, accessToken, timestamp);
 	}
 
 	public Session resetTimerTimestamp() {
 		return new Session(databaseID, sessionID, adminID, sessionConfig, adminCookie, members, memberVoted,
-				currentHighlights, sessionState, null, lastModified);
+				currentHighlights, sessionState, lastModified, accessToken, null);
+	}
+
+	public Session setLastModified(Date lastModified) {
+		return new Session(databaseID, sessionID, adminID, sessionConfig, adminCookie, members, memberVoted,
+				currentHighlights, sessionState, lastModified, accessToken, timerTimestamp);
 	}
 
 	public Session setAccessToken(String token) {
-		val session = new Session(databaseID, sessionID, adminID, sessionConfig, adminCookie, members, memberVoted,
-				currentHighlights, sessionState, timerTimestamp, lastModified);
-		session.accessToken = token;
-		return session;
+		return new Session(databaseID, sessionID, adminID, sessionConfig, adminCookie, members, memberVoted,
+				currentHighlights, sessionState, lastModified, token, timerTimestamp);
 	}
 }

@@ -1,6 +1,11 @@
 {
   "general": {
-    "pleaseWait": "Bitte warten..."
+    "pleaseWait": "Bitte warten...",
+    "about": "Über",
+    "licenses": {
+      "frontend": "Lizenzen (Frontend)",
+      "backend": "Lizenzen (Backend)"
+    }
   },
   "page": {
     "session": {

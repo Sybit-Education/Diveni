@@ -34,7 +34,10 @@ import SignInWithJiraServerButtonComponent from "./SignInWithJiraServerButtonCom
 
 export default Vue.extend({
   name: "JiraComponent",
-  components: { SignInWithJiraCloudButtonComponent, SignInWithJiraServerButtonComponent },
+  components: {
+    SignInWithJiraCloudButtonComponent,
+    SignInWithJiraServerButtonComponent,
+  },
   data() {
     return {
       isJiraCloudEnabled: constants.isJiraCloudEnabled,
