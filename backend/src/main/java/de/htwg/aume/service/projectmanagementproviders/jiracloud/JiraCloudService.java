@@ -1,5 +1,6 @@
 package de.htwg.aume.service.projectmanagementproviders.jiracloud;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -9,9 +10,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.api.client.http.HttpResponse;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.api.client.util.Base64;
 
+import org.apache.catalina.connector.Response;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -33,8 +35,13 @@ import lombok.val;
 @Service
 public class JiraCloudService implements ProjectManagementProviderOAuth2 {
 
-    private final String clientId = "0XeKG8gq0JWWAShLLUv6Y27Zh8B9pPt8";
-    private final String clientSecret = "EJmAzc3yi1mXhlHEUx7kNDxa8VrbrH6NE79_839izauaWHGoBGnT9iRs90h9N1t9";
+    private static final String clientId = "0XeKG8gq0JWWAShLLUv6Y27Zh8B9pPt8";
+    private static final String clientSecret = "EJmAzc3yi1mXhlHEUx7kNDxa8VrbrH6NE79_839izauaWHGoBGnT9iRs90h9N1t9";
+
+    private static final String JIRA_OAUTH_URL = "https://auth.atlassian.com/oauth";
+    private static final int JIRA_CLOUD_API_VERSION = 2;
+    private static final String JIRA_HOME = "https://api.atlassian.com/ex/jira/%s/rest/api/" + JIRA_CLOUD_API_VERSION;
+    private static final String ESTIMATION_FIELD = "customfield_10016";
 
     @Getter
     private final Map<String, String> accessTokens = new HashMap<>();
@@ -51,13 +58,12 @@ public class JiraCloudService implements ProjectManagementProviderOAuth2 {
 
         HttpEntity<String> request = new HttpEntity<String>(headers);
 
-        String access_token_url = "https://auth.atlassian.com/oauth/token";
-        access_token_url += "?code=" + authorizationCode;
-        access_token_url += "&grant_type=authorization_code";
-        access_token_url += "&redirect_uri=" + origin + "/#/jiraCallback";
+        String accessTokenURL = JIRA_OAUTH_URL + "/token";
+        accessTokenURL += "?code=" + authorizationCode;
+        accessTokenURL += "&grant_type=authorization_code";
+        accessTokenURL += "&redirect_uri=" + origin + "/#/jiraCallback";
 
-        ResponseEntity<String> response = restTemplate.exchange(access_token_url, HttpMethod.POST, request,
-                String.class);
+        ResponseEntity<String> response = restTemplate.exchange(accessTokenURL, HttpMethod.POST, request, String.class);
 
         ObjectMapper mapper = new ObjectMapper();
         JsonNode node;
@@ -77,13 +83,40 @@ public class JiraCloudService implements ProjectManagementProviderOAuth2 {
 
     @Override
     public List<String> getProjects(String tokenIdentifier) {
-        // TODO Auto-generated method stub
-        return null;
+        val accessToken = accessTokens.get(tokenIdentifier);
+        String cloudID = getCloudID(accessToken);
+        try {
+            List<String> projects = new ArrayList<>();
+            ResponseEntity<String> response = executeRequest(String.format(JIRA_HOME, cloudID) + "/project/search",
+                    HttpMethod.GET, accessToken);
+            JsonNode node = new ObjectMapper().readTree(response.getBody());
+
+            for (JsonNode projectNode : node.path("values")) {
+                projects.add(projectNode.get("name").asText());
+            }
+            return projects;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                    ErrorMessages.failedToRetrieveProjectsErrorMessage);
+        }
     }
 
     @Override
     public List<UserStory> getIssues(String tokenIdentifier, String projectName) {
-        // TODO Auto-generated method stub
+        String cloudID = getCloudID(accessTokens.get(tokenIdentifier));
+        ResponseEntity<String> response = executeRequest(String.format(JIRA_HOME, cloudID) + "/search", HttpMethod.GET,
+                accessTokens.get(tokenIdentifier));
+        try {
+            Object node = new ObjectMapper().readValue(response.getBody(), Object.class);
+            // String json = new
+            // ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(response.getBody());
+            System.out.println(
+                    new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(node));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        // System.out.println(response.getBody());
         return null;
     }
 
@@ -102,6 +135,33 @@ public class JiraCloudService implements ProjectManagementProviderOAuth2 {
     @Override
     public boolean containsToken(String token) {
         return accessTokens.containsKey(token);
+    }
+
+    static String getCloudID(String accessToken) {
+        String accessibleResourcesURL = "https://api.atlassian.com/oauth/token/accessible-resources";
+        ResponseEntity<String> response = executeRequest(accessibleResourcesURL, HttpMethod.GET, accessToken);
+        try {
+            ObjectNode[] node = new ObjectMapper().readValue(response.getBody(), ObjectNode[].class);
+            for (ObjectNode objectNode : node) {
+                if (objectNode.has("id")) {
+                    return objectNode.get("id").asText();
+                }
+            }
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                    ErrorMessages.failedToRetrieveAccessTokenErrorMessage);
+        }
+    }
+
+    static ResponseEntity<String> executeRequest(String url, HttpMethod method, String accessToken) {
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        headers.add("Authorization", "Bearer " + accessToken);
+        HttpEntity<String> request = new HttpEntity<String>(headers);
+        return restTemplate.exchange(url, method, request, String.class);
     }
 
 }
