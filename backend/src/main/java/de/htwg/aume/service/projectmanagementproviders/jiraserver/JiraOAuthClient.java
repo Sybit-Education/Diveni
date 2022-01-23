@@ -1,4 +1,4 @@
-package de.htwg.aume.service.jira;
+package de.htwg.aume.service.projectmanagementproviders.jiraserver;
 
 import com.google.api.client.auth.oauth.OAuthAuthorizeTemporaryTokenUrl;
 import com.google.api.client.auth.oauth.OAuthCredentialsResponse;
