@@ -55,9 +55,10 @@ public class JiraServerController {
 	}
 
 	@PostMapping(value = "/oauth2/authorizationCode")
-	public ResponseEntity<TokenIdentifier> getOAuth2AccessToken(@RequestBody VerificationCode authorizationCode) {
+	public ResponseEntity<TokenIdentifier> getOAuth2AccessToken(@RequestHeader("Origin") String origin,
+			@RequestBody VerificationCode authorizationCode) {
 		return new ResponseEntity<>(
-				jiraCloudService.getAccessToken(authorizationCode.getCode()),
+				jiraCloudService.getAccessToken(authorizationCode.getCode(), origin),
 				HttpStatus.OK);
 	}
 
@@ -113,7 +114,8 @@ public class JiraServerController {
 		} else if (jiraCloudService.containsToken(tokenIdentifier)) {
 			return jiraCloudService;
 		}
-		// If a new project management provider should be implemented, it can just be added here
+		// If a new project management provider should be implemented, it can just be
+		// added here
 
 		return null;
 	}

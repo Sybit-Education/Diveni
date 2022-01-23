@@ -40,26 +40,27 @@ public class JiraCloudService implements ProjectManagementProviderOAuth2 {
     private final Map<String, String> accessTokens = new HashMap<>();
 
     @Override
-    public TokenIdentifier getAccessToken(String authorizationCode) {
+    public TokenIdentifier getAccessToken(String authorizationCode, String origin) {
         RestTemplate restTemplate = new RestTemplate();
         String credentials = clientId + ":" + clientSecret;
-		String encodedCredentials = new String(Base64.encodeBase64(credentials.getBytes()));
+        String encodedCredentials = new String(Base64.encodeBase64(credentials.getBytes()));
 
         HttpHeaders headers = new HttpHeaders();
-		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-		headers.add("Authorization", "Basic " + encodedCredentials);
+        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        headers.add("Authorization", "Basic " + encodedCredentials);
 
-		HttpEntity<String> request = new HttpEntity<String>(headers);
+        HttpEntity<String> request = new HttpEntity<String>(headers);
 
-		String access_token_url = "https://auth.atlassian.com/oauth/token";
-		access_token_url += "?code=" + authorizationCode;
-		access_token_url += "&grant_type=authorization_code";
-		access_token_url += "&redirect_uri=http://localhost:8080/#/jiraCallback";
+        String access_token_url = "https://auth.atlassian.com/oauth/token";
+        access_token_url += "?code=" + authorizationCode;
+        access_token_url += "&grant_type=authorization_code";
+        access_token_url += "&redirect_uri=" + origin + "/#/jiraCallback";
 
-		ResponseEntity<String> response = restTemplate.exchange(access_token_url, HttpMethod.POST, request, String.class);
+        ResponseEntity<String> response = restTemplate.exchange(access_token_url, HttpMethod.POST, request,
+                String.class);
 
-		ObjectMapper mapper = new ObjectMapper();
-		JsonNode node;
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode node;
         try {
             node = mapper.readTree(response.getBody());
             String accessToken = node.path("access_token").asText();
@@ -71,7 +72,7 @@ public class JiraCloudService implements ProjectManagementProviderOAuth2 {
             e.printStackTrace();
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
                     ErrorMessages.failedToRetrieveAccessTokenErrorMessage);
-        } 		
+        }
     }
 
     @Override
