@@ -6,31 +6,15 @@
 
     <ul>
       <li>
-        <!-- <div class="form-check form-switch">
-          <input
-            id="flexSwitchCheckDefault"
-            v-model="switch1"
-            class="form-check-input"
-            type="checkbox"
-          />
-          <label class="form-check-label" for="flexSwitchCheckDefault">{{
-            $t("session.prepare.step.selection.mode.description.withJira.descriptionLine1")
-          }}</label>
-        </div> -->
         {{ $t("session.prepare.step.selection.mode.description.withJira.descriptionLine1") }}
-        <!-- <div v-if="!switch1"> -->
-
         <sign-in-with-jira-cloud-button-component
           v-if="isJiraCloudEnabled"
           class="my-1"
         ></sign-in-with-jira-cloud-button-component>
-        <!-- </div> -->
-        <!-- <div v-if="switch1"> -->
         <sign-in-with-jira-server-button-component
           v-if="isJiraServerEnabled"
           class="my-1"
         ></sign-in-with-jira-server-button-component>
-        <!-- </div> -->
       </li>
       <li>
         {{ $t("session.prepare.step.selection.mode.description.withJira.descriptionLine2") }}
