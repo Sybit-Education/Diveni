@@ -9,19 +9,9 @@
         'border-color': story.isActive ? 'RGB(202, 202, 202)' : 'white',
       }"
       :active="story.isActive"
-      @mouseover="hover = index"
-      @mouseleave="hover = null"
       @click="setUserStoryAsActive(index)"
     >
       <div class="list-group list-group-horizontal">
-        <b-button
-          v-if="showEditButtons"
-          class="m-1"
-          :variant="story.isActive ? 'success' : 'outline-success'"
-          @click="markUserStory(index)"
-        >
-          <b-icon-check2 />
-        </b-button>
         <b-form-input
           v-model="userStories[index].title"
           :disabled="true"
@@ -33,13 +23,6 @@
           :placeholder="$t('page.session.before.userStories.placeholder.userStoryTitle')"
           @blur="publishChanges"
         />
-        <b-button
-          v-show="showEditButtons && hover === index"
-          variant="danger"
-          @click="deleteStory(index)"
-        >
-          <b-icon-trash />
-        </b-button>
         <div>
           <div
             v-show="userStories[index].estimation"
@@ -55,21 +38,17 @@
           </div>
         </div>
       </div>
+      <div v-if="index === number" :style="{ 'background-color': 'black' }">
+        <b-form-textarea
+          id="textarea-auto-height"
+          v-model="userStories[index].description"
+          class="mt-1"
+          rows="27"
+          max-rows="40"
+          :disabled="true"
+        />
+      </div>
     </b-list-group-item>
-    <b-button
-      v-if="userStories.length < 1 && showEditButtons"
-      size="lg"
-      variant="success"
-      @click="addUserStory()"
-    >
-      {{ $t("page.session.before.userStories.button.addFirstUserStory") }}
-    </b-button>
-    <div v-if="userStories.length > 0 && showEditButtons">
-      <b-button class="w-100 h-100" size="lg" variant="success" @click="addUserStory()">
-        {{ $t("page.session.before.userStories.button.addUserStory") }}
-        <b-icon-plus />
-      </b-button>
-    </div>
   </div>
 </template>
 
@@ -77,7 +56,7 @@
 import Vue from "vue";
 
 export default Vue.extend({
-  name: "UserStoryTitles",
+  name: "MobileStoryList",
   props: {
     cardSet: { type: Array, required: true },
     initialStories: { type: Array, required: true },
