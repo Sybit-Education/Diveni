@@ -18,14 +18,14 @@ Prepare a new session:
 
 1.	Click on the left "GO" button to create a new session.
 2.	You will be sent to the Prepare session page where you can customize the upcoming voting session for your team.
-    a.	As first step you choose the mode for your User Stories. You can choose to estimate
-        1.	Without User Stories
-        2.	With User Stories created in Diveni. You are then able to create User Stories on the right side.
-        3.	With User Stories imported from Jira. Choosing the last option you’ll have to connect to your Jira account. It will be explained how to connect and how to choose the correct project.
+    - a.	As first step you choose the mode for your User Stories. You can choose to estimate
+        - 1.	Without User Stories
+        - 2.	With User Stories created in Diveni. You are then able to create User Stories on the right side.
+        - 3.	With User Stories imported from Jira. Choosing the last option you’ll have to connect to your Jira account. It will be explained           how to connect and how to choose the correct project.
     Any mode specific information is given below the chosen mode.
-    b.	Second, you can decide which poker card set will be used for the upcoming voting session. You can choose between different sets: Fibonacci, T-shirt sizes (not for Jira US), hours or integer values. You can also select individually the range of each card set, including an additional „?“.
-    c.	In the third row, you can specify a timer for the voting session. The timer will automatically be initialized when starting the voting session. The value of the timer can be changed by clicking on the buttons on the left and right. The voting will automatically be stoped and the results will be shown when the timer hits zero.
-    d.	To finish the setting, you can secure your session by an optional password.
+    - b.	Second, you can decide which poker card set will be used for the upcoming voting session. You can choose between different sets: Fibonacci, T-shirt sizes (not for Jira US), hours or integer values. You can also select individually the range of each card set, including an additional „?“.
+    - c.	In the third row, you can specify a timer for the voting session. The timer will automatically be initialized when starting the voting session. The value of the timer can be changed by clicking on the buttons on the left and right. The voting will automatically be stoped and the results will be shown when the timer hits zero.
+    - d.	To finish the setting, you can secure your session by an optional password.
 Finalize by clicking „Start Session“ on the bottom of the page.
 3.	You will be sent to a waiting room where you can see which members already joined the meeting. Invite members by hovering over the blue code and copy the Session-ID or a direct link which you can send to your team members. 	After your members have joined, start the planning.
 4.	After the voting has started, you can see at "Waiting for x/y" which members have already voted. You can restart the voting at any given time, by clicking on the "New" button. Don't forget to mark a story (flag it with the button on the left side), so the members know which story they are estimating. Click on the "Show result" button or wait for the timer to see which values your members have voted for. You are always able to edit, delete or add User Stories, including setting the vote the members have agreed on.
