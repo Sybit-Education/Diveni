@@ -1,4 +1,5 @@
 import { StoreState } from "@/types";
+import { State } from "@egjs/vue-flicking";
 import SockJS from "sockjs-client";
 import Vue from "vue";
 import Vuex from "vuex";
@@ -17,6 +18,7 @@ export default new Vuex.Store<StoreState>({
     highlightedMembers: [],
     timerTimestamp: undefined,
     tokenId: undefined,
+    projects: [],
   },
   mutations: {
     setMembers(state, members) {
@@ -73,6 +75,9 @@ export default new Vuex.Store<StoreState>({
       state.notifications = [];
       state.webSocketConnected = false;
       state.stompClient = undefined;
+    },
+    setProjects(state, projects) {
+      state.projects = projects;
     },
     setUserStories(state, { stories }) {
       state.userStories = stories;
