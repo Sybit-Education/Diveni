@@ -29,7 +29,7 @@ import lombok.val;
 @CrossOrigin(origins = { "http://localhost:8080", "https://pp.vnmz.de" })
 @RestController
 @RequestMapping("/jira")
-public class JiraServerController {
+public class ProjectManagementController {
 
 	@Autowired
 	DatabaseService databaseService;
