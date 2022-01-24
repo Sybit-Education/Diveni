@@ -51,7 +51,6 @@ export default Vue.extend({
 
   data() {
     return {
-      switch1: false,
       isJiraCloudEnabled: constants.isJiraCloudEnabled,
       isJiraServerEnabled: constants.isJiraServerEnabled,
     };
