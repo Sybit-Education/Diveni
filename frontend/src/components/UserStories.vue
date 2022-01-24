@@ -28,12 +28,9 @@
           class="border-1"
           size="lg"
           :style="{
-            'background-color':
-              index === number ? 'RGB(202, 202, 202)' : 'white',
+            'background-color': index === number ? 'RGB(202, 202, 202)' : 'white',
           }"
-          :placeholder="
-            $t('page.session.before.userStories.placeholder.userStoryTitle')
-          "
+          :placeholder="$t('page.session.before.userStories.placeholder.userStoryTitle')"
           @blur="publishChanges"
         />
         <b-button
@@ -50,9 +47,7 @@
             class="card-body rounded"
             :style="{
               'background-color':
-                userStories[index].estimation == null
-                  ? 'white'
-                  : 'RGB(13, 202, 240)',
+                userStories[index].estimation == null ? 'white' : 'RGB(13, 202, 240)',
               width: '48px',
               'font-size': 'larger',
             }"
@@ -71,12 +66,7 @@
       {{ $t("page.session.before.userStories.button.addFirstUserStory") }}
     </b-button>
     <div v-if="userStories.length > 0 && showEditButtons">
-      <b-button
-        class="w-100 h-100"
-        size="lg"
-        variant="success"
-        @click="addUserStory()"
-      >
+      <b-button class="w-100 h-100" size="lg" variant="success" @click="addUserStory()">
         {{ $t("page.session.before.userStories.button.addUserStory") }}
         <b-icon-plus />
       </b-button>
