@@ -131,7 +131,7 @@
       </b-col>
     </b-row>
     <b-col v-if="userStoryMode !== 'NO_US' && isMobile" class="mt-2">
-      <div class="overflow-auto" style="height: 700px">
+      <div class="overflow-auto">
         <mobile-story-list
           :card-set="voteSet"
           :show-estimations="true"
