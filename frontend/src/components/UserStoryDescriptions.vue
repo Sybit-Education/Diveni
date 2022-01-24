@@ -57,12 +57,9 @@
       </b-list-group-item>
       <div
         v-if="userStories.length <= index && userStories.length"
-        class="border text-center rounded p-3 bg-secondary m-2"
+        class="text-center rounded p-3 m-2"
       >
-        <b-card
-          class="bg-secondary border-0 text-white"
-          :title="$t('page.session.before.userStories.text')"
-        />
+        <b-card class="border-0" :title="$t('page.session.before.userStories.text')" />
       </div>
     </div>
   </div>
