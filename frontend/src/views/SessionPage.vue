@@ -11,10 +11,7 @@
         </h1></b-col
       >
       <b-col v-if="planningStart" align-self="center">
-        <copy-session-id-popup
-          class="float-end"
-          :session-id="session_sessionID"
-        />
+        <copy-session-id-popup class="float-end" :session-id="session_sessionID" />
       </b-col>
     </b-row>
     <div v-if="!planningStart">
@@ -31,10 +28,7 @@
         </h4>
         <b-icon-three-dots animation="fade" class="" font-scale="3" />
       </b-row>
-      <b-row
-        class="d-flex justify-content-center overflow-auto"
-        style="max-height: 500px"
-      >
+      <b-row class="d-flex justify-content-center overflow-auto" style="max-height: 500px">
         <SessionMemberCircle
           v-for="member of members"
           :key="member.memberID"
@@ -64,11 +58,7 @@
             <b-icon-arrow-clockwise />
             {{ $t("page.session.during.estimation.buttons.new") }}
           </b-button>
-          <b-button
-            variant="outline-dark"
-            class="mx-1"
-            @click="sendVotingFinishedMessage"
-          >
+          <b-button variant="outline-dark" class="mx-1" @click="sendVotingFinishedMessage">
             <b-icon-bar-chart />
             {{ $t("page.session.during.estimation.buttons.result") }}
           </b-button>
@@ -107,10 +97,7 @@
           {{ membersPending.length + membersEstimated.length }}
         </h4>
       </b-row>
-      <b-row
-        v-if="!estimateFinished"
-        class="my-1 d-flex justify-content-center flex-wrap"
-      >
+      <b-row v-if="!estimateFinished" class="my-1 d-flex justify-content-center flex-wrap">
         <rounded-avatar
           v-for="member of membersPending"
           :key="member.memberID"
@@ -142,8 +129,7 @@
           :estimation="member.currentEstimation"
           :estimate-finished="estimateFinished"
           :highlight="
-            highlightedMembers.includes(member.memberID) ||
-            highlightedMembers.length === 0
+            highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0
           "
         />
       </b-row>
@@ -250,19 +236,13 @@ export default Vue.extend({
       return this.$store.state.highlightedMembers;
     },
     membersPending(): Member[] {
-      return this.members.filter(
-        (member: Member) => member.currentEstimation === null
-      );
+      return this.members.filter((member: Member) => member.currentEstimation === null);
     },
     membersEstimated(): Member[] {
-      return this.members.filter(
-        (member: Member) => member.currentEstimation !== null
-      );
+      return this.members.filter((member: Member) => member.currentEstimation !== null);
     },
     timerTimestamp() {
-      return this.$store.state.timerTimestamp
-        ? this.$store.state.timerTimestamp
-        : "";
+      return this.$store.state.timerTimestamp ? this.$store.state.timerTimestamp : "";
     },
   },
   watch: {
@@ -312,9 +292,7 @@ export default Vue.extend({
   mounted() {
     this.voteSet = JSON.parse(this.session_voteSetJson);
     this.connectToWebSocket();
-    if (
-      this.session_sessionState === Constants.memberUpdateCommandStartVoting
-    ) {
+    if (this.session_sessionState === Constants.memberUpdateCommandStartVoting) {
       this.planningStart = true;
       this.sendRestartMessage();
     }
@@ -373,8 +351,7 @@ export default Vue.extend({
         this.session_adminID = session.adminID;
         this.session_sessionID = session.sessionID;
         this.session_sessionState = session.sessionState;
-        this.session_timerSecondsString =
-          session.sessionConfig.timerSeconds.toString();
+        this.session_timerSecondsString = session.sessionConfig.timerSeconds.toString();
         this.session_voteSetJson = JSON.stringify(session.sessionConfig.set);
         this.session_userStoryMode = session.sessionConfig.userStoryMode;
         this.$store.commit("setUserStories", {
@@ -384,17 +361,12 @@ export default Vue.extend({
     },
     handleReload() {
       if (
-        this.session_sessionState ===
-          Constants.memberUpdateCommandStartVoting ||
-        this.session_sessionState ===
-          Constants.memberUpdateCommandVotingFinished
+        this.session_sessionState === Constants.memberUpdateCommandStartVoting ||
+        this.session_sessionState === Constants.memberUpdateCommandVotingFinished
       ) {
         this.planningStart = true;
       }
-      if (
-        this.session_sessionState ===
-        Constants.memberUpdateCommandVotingFinished
-      ) {
+      if (this.session_sessionState === Constants.memberUpdateCommandVotingFinished) {
         this.estimateFinished = true;
       }
       this.timerCountdownNumber = parseInt(this.session_timerSecondsString, 10);

@@ -5,12 +5,7 @@
       {{ sessionId }}
     </b-link>
     {{ textAfterSessionID }}
-    <b-popover
-      id="popover"
-      target="popover-link"
-      triggers="hover"
-      placement="top"
-    >
+    <b-popover id="popover" target="popover-link" triggers="hover" placement="top">
       <b-button class="mx-1" variant="success" @click="copyIdToClipboard()">
         {{ $t("page.session.before.copy.id") }}
       </b-button>
@@ -45,9 +40,7 @@ export default Vue.extend({
     copyLinkToClipboard() {
       navigator.clipboard
         .writeText(
-          `${document.URL.toString().replace("session", "join?sessionID=")}${
-            this.sessionId
-          }`
+          `${document.URL.toString().replace("session", "join?sessionID=")}${this.sessionId}`
         )
         .then(
           () => {
