@@ -16,13 +16,12 @@
       <b-col>
         <b-button
           v-b-modal.close-session-modal
-          style="height: 40px"
+          style="max-height: 40px"
           variant="danger"
           class="mt-4"
           @click="leaveMeeting"
         >
           {{ $t("page.vote.button.leave.label") }}
-          <b-icon-x />
         </b-button>
       </b-col>
       <b-col class="d-flex justify-content-end">
