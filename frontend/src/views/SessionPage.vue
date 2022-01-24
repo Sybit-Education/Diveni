@@ -155,6 +155,7 @@
           :edit-description="true"
           :index="index"
           @userStoriesChanged="onUserStoriesChanged($event)"
+          @synchronizeJira="onSynchronizeJira($event)"
         />
       </b-col>
     </b-row>
@@ -175,6 +176,7 @@ import RoundedAvatar from "../components/RoundedAvatar.vue";
 import UserStoryDescriptions from "../components/UserStoryDescriptions.vue";
 import confetti from "canvas-confetti";
 import NotifyHostComponent from "../components/NotifyHostComponent.vue";
+import apiService from "@/services/api.service";
 
 export default Vue.extend({
   name: "SessionPage",
@@ -382,6 +384,16 @@ export default Vue.extend({
           endPoint,
           data: JSON.stringify($event),
         });
+      }
+    },
+    async onSynchronizeJira($event) {
+      if (this.session_userStoryMode === "US_JIRA") {
+        const response = await apiService.updateUserStory(JSON.stringify($event));
+        if (response.status === 200) {
+          this.$toast.success(this.$t("session.notification.messages.jiraSynchronizeSuccess"));
+        } else {
+          this.$toast.error(this.$t("session.notification.messages.jiraSynchronizeFailed"));
+        }
       }
     },
     onSelectedStory($event) {

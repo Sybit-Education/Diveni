@@ -15,7 +15,10 @@
             class="border"
             size="lg"
             :placeholder="$t('page.session.before.userStories.placeholder.userStoryTitle')"
-            @blur="publishChanges"
+            @blur="
+              publishChanges();
+              synchronizeJira(idx);
+            "
           />
           <b-dropdown
             v-show="editDescription"
@@ -28,7 +31,11 @@
               :key="num"
               :disabled="!editDescription"
               :value="num == null ? '?' : num"
-              @click="userStories[idx].estimation = num"
+              @click="
+                userStories[idx].estimation = num;
+                publishChanges();
+                synchronizeJira(idx);  
+              "
             >
               {{ num }}
             </b-dropdown-item>
@@ -59,7 +66,10 @@
             max-rows="40"
             :disabled="!editDescription"
             :placeholder="$t('page.session.before.userStories.placeholder.userStoryDescription')"
-            @blur="publishChanges"
+            @blur="
+              publishChanges();
+              synchronizeJira(idx);
+            "
           />
         </div>
       </b-list-group-item>
@@ -155,6 +165,9 @@ export default Vue.extend({
     },
     publishChanges() {
       this.$emit("userStoriesChanged", this.userStories);
+    },
+    synchronizeJira(idx) {
+      this.$emit("synchronizeJira", this.userStories[idx]);
     },
     toggleSideBar() {
       this.sideBarOpen = !this.sideBarOpen;

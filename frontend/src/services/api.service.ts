@@ -42,6 +42,14 @@ class ApiService {
     const response = await axios.get(`${constants.backendURL}/jira/projects/${project}/issues`);
     return response.data;
   }
+  public async updateUserStory(story): Promise<any> {
+    const response = await axios.put(`${constants.backendURL}/jira/issue`, story, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    return response;
+  }
 }
 
 export default new ApiService();

@@ -37,7 +37,6 @@
         :index="index"
         :initial-stories="userStories"
         :edit-description="false"
-        @userStoriesChanged="onUserStoriesChanged($event)"
       />
     </b-row>
     <b-row v-if="isStartVoting" class="my-5">
@@ -126,7 +125,6 @@
           :index="index"
           :initial-stories="userStories"
           :edit-description="false"
-          @userStoriesChanged="onUserStoriesChanged($event)"
         />
       </b-col>
     </b-row>

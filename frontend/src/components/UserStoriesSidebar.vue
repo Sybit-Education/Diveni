@@ -52,11 +52,14 @@
                 v-for="num in cardSet"
                 :key="num"
                 :value="num == null ? '?' : num"
-                @click="userStories[index].estimation = num"
+                @click="
+                  userStories[index].estimation = num;
+                  publishChanges();
+                  synchronizeJira();
+                "
               >
                 {{ num }}
               </b-dropdown-item>
-              <b-dropdown-item @click="userStories[index].estimation = null"> ? </b-dropdown-item>
             </b-dropdown>
 
             <b-button v-if="!editEnabled && showEstimations" class="mx-2" pill variant="info">
@@ -165,6 +168,9 @@ export default Vue.extend({
     },
     publishChanges() {
       this.$emit("userStoriesChanged", this.userStories);
+    },
+    synchronizeJira(idx) {
+      this.$emit("synchronizeJira", this.userStories[idx]);
     },
     toggleSideBar() {
       this.sideBarOpen = !this.sideBarOpen;

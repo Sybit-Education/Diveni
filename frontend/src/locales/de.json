@@ -170,7 +170,7 @@
                   "signInWithJiraServer": {
                     "label": "Mit Jira Server anmelden"
                   },
-                  "selectProject":{
+                  "selectProject": {
                     "label": "Wählen Sie ihr Jira-Projekt aus"
                   },
                   "submit": {
@@ -234,6 +234,8 @@
         "memberJoined": "Teilnehmer ist der Sitzung beigetreten",
         "jiraCredentials": "Falsche Login-Daten",
         "jiraLoginFailed": "Login fehlgeschlagen",
+        "jiraSynchronizeSuccess": "Änderungen mit Jira synchronisiert",
+        "jiraSynchronizeFailed": "Fehler beim Synchronisieren mit Jira",
         "wrongID": "Falscher Einladungscode",
         "password": "Falsches Passwort"
       }

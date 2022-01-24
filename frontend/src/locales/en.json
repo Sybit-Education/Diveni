@@ -170,7 +170,7 @@
                   "signInWithJiraServer": {
                     "label": "Sign in with Jira Server"
                   },
-                  "selectProject":{
+                  "selectProject": {
                     "label": "Select your jira project"
                   },
                   "submit": {
@@ -234,6 +234,8 @@
         "memberJoined": "Member joined the session",
         "jiraCredentials": "Wrong credentials",
         "jiraLoginFailed": "Login failed",
+        "jiraSynchronizeSuccess": "Synchronized changes with Jira",
+        "jiraSynchronizeFailed": "Failed to synchronize changes with Jira",
         "wrongID": "Wrong invitation code",
         "password": "Wrong password"
       }
