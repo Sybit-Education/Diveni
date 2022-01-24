@@ -16,9 +16,7 @@
             :disabled="true"
             class="border"
             size="lg"
-            :placeholder="
-              $t('page.session.before.userStories.placeholder.userStoryTitle')
-            "
+            :placeholder="$t('page.session.before.userStories.placeholder.userStoryTitle')"
             @blur="publishChanges"
           />
         </div>
