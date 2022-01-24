@@ -30,7 +30,8 @@
             "userStoryTitle": "User Story Title",
             "userStoryDescription": "Description and acceptance criteria..."
           },
-          "text": "Click on a User Story Title to see the description"
+          "text": "Click on a User Story Title to see the description",
+          "sum": "Sum:"
         }
       },
       "during": {

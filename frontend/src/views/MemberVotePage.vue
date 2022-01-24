@@ -110,6 +110,11 @@
         :highlight="highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0"
       />
     </b-row>
+    <b-row v-if="userStoryMode !== 'NO_US'" class="mt-5">
+      <b-col md="6">
+        <UserStorySumComponent class="ms-4" />
+      </b-col>
+    </b-row>
     <b-row v-if="userStoryMode !== 'NO_US' && !isMobile">
       <b-col class="mt-2">
         <div class="overflow-auto" style="height: 700px">
@@ -162,6 +167,7 @@ import UserStories from "../components/UserStories.vue";
 import UserStoryDescriptions from "../components/UserStoryDescriptions.vue";
 import MobileStoryList from "../components/MobileStoryList.vue";
 import MobileStoryTitle from "../components/MobileStoryTitle.vue";
+import UserStorySumComponent from "@/components/UserStorySum.vue";
 
 export default Vue.extend({
   name: "MemberVotePage",
@@ -175,6 +181,7 @@ export default Vue.extend({
     UserStoryDescriptions,
     MobileStoryList,
     MobileStoryTitle,
+    UserStorySumComponent,
   },
   props: {
     memberID: { type: String, default: undefined },
