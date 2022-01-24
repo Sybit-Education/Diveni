@@ -9,24 +9,16 @@
         variant="outline-secondary"
       >
         <div class="list-group list-group-horizontal">
-          <b-form-input
+          <b-form-textarea
             v-model="userStories[idx].title"
+            rows="1"
+            max-rows="3"
             :disabled="true"
             class="border"
             size="lg"
             :placeholder="$t('page.session.before.userStories.placeholder.userStoryTitle')"
             @blur="publishChanges"
           />
-          <div
-            v-show="!editDescription"
-            class="card-body rounded"
-            :style="{
-              'background-color':
-                userStories[idx].estimation == null ? 'white' : 'RGB(13, 202, 240)',
-            }"
-          >
-            {{ story.estimation }}
-          </div>
         </div>
       </b-list-group-item>
     </div>

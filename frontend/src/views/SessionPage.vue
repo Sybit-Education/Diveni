@@ -135,9 +135,9 @@
       </b-row>
     </div>
     <b-row v-if="session_userStoryMode !== 'NO_US'">
-      <b-col class="mt-3">
+      <b-col class="mt-5">
         <div class="overflow-auto" style="max-height: 700px">
-          <user-stories-sidebar
+          <user-stories
             :card-set="voteSet"
             :show-estimations="planningStart"
             :initial-stories="userStories"
@@ -148,7 +148,7 @@
           />
         </div>
       </b-col>
-      <b-col class="mt-3">
+      <b-col class="mt-5">
         <user-story-descriptions
           :card-set="voteSet"
           :initial-stories="userStories"
@@ -168,7 +168,7 @@ import Constants from "../constants";
 import SessionMemberCircle from "../components/SessionMemberCircle.vue";
 import Member from "../model/Member";
 import SessionMemberCard from "../components/SessionMemberCard.vue";
-import UserStoriesSidebar from "../components/UserStories.vue";
+import UserStories from "../components/UserStories.vue";
 import EstimateTimer from "../components/EstimateTimer.vue";
 import CopySessionIdPopup from "../components/CopySessionIdPopup.vue";
 import RoundedAvatar from "../components/RoundedAvatar.vue";
@@ -181,7 +181,7 @@ export default Vue.extend({
   components: {
     SessionMemberCircle,
     SessionMemberCard,
-    UserStoriesSidebar,
+    UserStories,
     EstimateTimer,
     CopySessionIdPopup,
     RoundedAvatar,

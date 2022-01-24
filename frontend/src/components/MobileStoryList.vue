@@ -25,7 +25,7 @@
         />
         <div>
           <div
-            v-show="userStories[index].estimation"
+            v-if="userStories[index].estimation"
             class="card-body rounded"
             :style="{
               'background-color':
@@ -38,7 +38,7 @@
           </div>
         </div>
       </div>
-      <div v-if="index === number" :style="{ 'background-color': 'black' }">
+      <div v-if="index === number && exist" :style="{ 'background-color': 'black' }">
         <b-form-textarea
           id="textarea-auto-height"
           v-model="userStories[index].description"
@@ -66,9 +66,9 @@ export default Vue.extend({
   },
   data() {
     return {
+      exist: false,
       number: null,
       sideBarOpen: false,
-      editEnabled: false,
       userStories: [] as Array<{
         title: string;
         description: string;
@@ -79,9 +79,6 @@ export default Vue.extend({
     };
   },
   watch: {
-    userStories() {
-      this.publishChanges();
-    },
     initialStories() {
       this.userStories = this.initialStories as Array<{
         title: string;
@@ -89,9 +86,6 @@ export default Vue.extend({
         estimation: string | null;
         isActive: boolean;
       }>;
-    },
-    editEnabled() {
-      this.publishChanges();
     },
   },
   created() {
@@ -105,37 +99,7 @@ export default Vue.extend({
   methods: {
     setUserStoryAsActive(index) {
       this.number = index;
-      this.$emit("selectedStory", index);
-    },
-    addUserStory() {
-      this.userStories.push({
-        title: "",
-        description: "",
-        estimation: null,
-        isActive: false,
-      });
-    },
-    deleteStory(index) {
-      this.userStories.splice(index, 1);
-    },
-    editOrSave() {
-      if (!this.editEnabled) {
-        this.publishChanges();
-      }
-      this.editEnabled = !this.editEnabled;
-    },
-    publishChanges() {
-      this.$emit("userStoriesChanged", this.userStories);
-    },
-    markUserStory(index) {
-      const stories = this.userStories.map((s) => ({
-        title: s.title,
-        description: s.description,
-        estimation: s.estimation,
-        isActive: false,
-      }));
-      stories[index].isActive = true;
-      this.userStories = stories;
+      this.exist = !this.exist;
     },
   },
 });
