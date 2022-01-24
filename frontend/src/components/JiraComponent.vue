@@ -6,7 +6,7 @@
 
     <ul>
       <li>
-        <div class="form-check form-switch">
+        <!-- <div class="form-check form-switch">
           <input
             id="flexSwitchCheckDefault"
             v-model="switch1"
@@ -16,23 +16,21 @@
           <label class="form-check-label" for="flexSwitchCheckDefault">{{
             $t("session.prepare.step.selection.mode.description.withJira.descriptionLine1")
           }}</label>
-        </div>
+        </div> -->
+        {{ $t("session.prepare.step.selection.mode.description.withJira.descriptionLine1") }}
+        <!-- <div v-if="!switch1"> -->
 
-        <div v-if="!switch1">
-          <sign-in-with-jira-cloud-button-component
-            v-if="isJiraCloudEnabled"
-            class="my-1"
-            :disabled="isLoggedInWithJira"
-          ></sign-in-with-jira-cloud-button-component>
-        </div>
-
-        <div v-if="switch1">
-          <sign-in-with-jira-server-button-component
-            v-if="isJiraServerEnabled"
-            class="my-1"
-            :disabled="isLoggedInWithJira"
-          ></sign-in-with-jira-server-button-component>
-        </div>
+        <sign-in-with-jira-cloud-button-component
+          v-if="isJiraCloudEnabled"
+          class="my-1"
+        ></sign-in-with-jira-cloud-button-component>
+        <!-- </div> -->
+        <!-- <div v-if="switch1"> -->
+        <sign-in-with-jira-server-button-component
+          v-if="isJiraServerEnabled"
+          class="my-1"
+        ></sign-in-with-jira-server-button-component>
+        <!-- </div> -->
       </li>
       <li>
         {{ $t("session.prepare.step.selection.mode.description.withJira.descriptionLine2") }}
@@ -90,6 +88,7 @@ export default Vue.extend({
           apiService.getAllProjects().then((pr) => {
             this.$store.commit("setProjects", pr);
           });
+          this.$toast.success("Logged in");
         }
       },
       immediate: true,

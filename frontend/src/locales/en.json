@@ -151,7 +151,7 @@
                   "label": "Planning with Jira"
                 },
                 "subtitle": "Select Jira for your Poker-Planning",
-                "descriptionLine1": "Sign in with Jira server",
+                "descriptionLine1": "Sign in with your credentials",
                 "descriptionLine2": "Select your project",
                 "descriptionLine3": "After you click on start session, you will be redirected to the next page to edit your user stories",
                 "descriptionLine4": "You will be able to add and edit User Stories once you've started the session",
@@ -179,7 +179,6 @@
                   "submit": {
                     "label": "Submit"
                   }
-            
                 }
               }
             }
