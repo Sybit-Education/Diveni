@@ -438,6 +438,7 @@ export default Vue.extend({
       if (this.session_userStoryMode !== "NO_US") {
         this.$router.push({ name: "ResultPage" });
       } else {
+        this.$store.commit("clearStore");
         this.$router.push({ name: "LandingPage" });
       }
     },

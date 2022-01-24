@@ -13,7 +13,7 @@
       @draggedUp="draggedUp"
     >
       <div class="flicking-panel swipe-card" :style="swipeableCardBackgroundColor">
-        <div class="text">
+        <div class="text" @click="onCardClicked()">
           {{ dragged ? "💪" : voteOption }}
         </div>
       </div>
