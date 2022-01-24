@@ -4,7 +4,7 @@
       <b-col>
         <div class="d-flex justify-content-around">
           <div
-            v-for="item of allCardSets"
+            v-for="item of (userStoryMode === 'US_JIRA' ? allCardSetsWithJiraMode : allCardSets)"
             :key="item.name"
             class="swipe-card"
             :style="`background-color: ${
@@ -45,6 +45,9 @@ import Vue from "vue";
 
 export default Vue.extend({
   name: "CardSetComponent",
+  props: {
+    userStoryMode: { type: String, required: true },
+  },
   data() {
     return {
       selectedCardSet: {
@@ -52,11 +55,7 @@ export default Vue.extend({
         values: [],
         activeValues: [] as string[],
       },
-    };
-  },
-  computed: {
-    allCardSets() {
-      return [
+      allCardSets: [
         {
           name: this.$t("session.prepare.step.selection.cardSet.sets.fibonacci.label"),
           description: this.$t("session.prepare.step.selection.cardSet.sets.fibonacci.description"),
@@ -83,8 +82,28 @@ export default Vue.extend({
           values: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "?"],
           activeValues: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
         },
-      ];
-    },
+      ],
+      allCardSetsWithJiraMode: [
+        {
+          name: this.$t("session.prepare.step.selection.cardSet.sets.fibonacci.label"),
+          description: this.$t("session.prepare.step.selection.cardSet.sets.fibonacci.description"),
+          values: ["1", "2", "3", "5", "8", "13", "21", "34", "55", "?"],
+          activeValues: ["1", "2", "3", "5", "8", "13", "21"],
+        },
+        {
+          name: this.$t("session.prepare.step.selection.cardSet.sets.hours.label"),
+          description: this.$t("session.prepare.step.selection.cardSet.sets.hours.description"),
+          values: ["1", "2", "3", "4", "5", "6", "8", "10", "12", "16", "?"],
+          activeValues: ["1", "2", "3", "4", "5", "6", "8", "10", "12", "16"],
+        },
+        {
+          name: this.$t("session.prepare.step.selection.cardSet.sets.numbers.label"),
+          description: this.$t("session.prepare.step.selection.cardSet.sets.numbers.description"),
+          values: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "?"],
+          activeValues: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
+        },
+      ],
+    };
   },
   methods: {
     isActiveCardSetNumber(num) {
