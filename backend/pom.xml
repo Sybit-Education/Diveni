@@ -121,6 +121,14 @@
 						</goals>
 					</execution>
 				</executions>
+				<configuration>
+					<excludes>
+						<exclude>de/htwg/aume/service/projectmanagementproviders/jiraserver/*</exclude>
+						<exclude>de/htwg/aume/service/projectmanagementproviders/jiracloud/*</exclude>
+						<exclude>de/htwg/aume/service/jira/*</exclude>
+						<exclude>de/htwg/aume/controller/JiraServerController.class</exclude>
+					</excludes>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
