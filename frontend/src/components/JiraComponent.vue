@@ -72,12 +72,14 @@ export default Vue.extend({
       switch1: false,
       isJiraCloudEnabled: constants.isJiraCloudEnabled,
       isJiraServerEnabled: constants.isJiraServerEnabled,
-      isLoggedInWithJira: !!this.$store.state.tokenId,
     };
   },
   computed: {
     getTokenId() {
       return this.$store.state.tokenId;
+    },
+    isLoggedInWithJira() {
+      return !!this.$store.state.tokenId;
     },
   },
   watch: {
