@@ -109,12 +109,13 @@ public class JiraCloudService implements ProjectManagementProviderOAuth2 {
             JsonNode node = new ObjectMapper().readTree(response.getBody());
             for (JsonNode issue : node.path("issues")) {
                 val fields = issue.get("fields");
-                String estimation = fields.get(ESTIMATION_FIELD).asText();
+                String estimation = fields.get(ESTIMATION_FIELD).isNull() ? null
+                        : String.valueOf(fields.get(ESTIMATION_FIELD).asDouble());
                 if (estimation != null && estimation.endsWith(".0")) {
                     estimation = estimation.substring(0, estimation.length() - 2);
                 }
-                userStories.add(new UserStory(issue.get("id").asText(), fields.get("summary").asText(),
-                        fields.get("description").asText(), estimation, false));
+                userStories.add(new UserStory(issue.get("id").textValue(), fields.get("summary").textValue(),
+                        fields.get("description").textValue(), estimation, false));
             }
             return userStories;
         } catch (Exception e) {
