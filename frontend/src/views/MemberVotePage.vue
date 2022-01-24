@@ -107,14 +107,9 @@
         :highlight="highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0"
       />
     </b-row>
-    <b-row
-      v-if="userStoryMode !== 'NO_US'"
-      class="mt-5"
-    >
+    <b-row v-if="userStoryMode !== 'NO_US'" class="mt-5">
       <b-col md="6">
-        <UserStorySumComponent
-          class="ms-4"
-        />
+        <UserStorySumComponent class="ms-4" />
       </b-col>
     </b-row>
     <b-row v-if="userStoryMode !== 'NO_US' && !isMobile">

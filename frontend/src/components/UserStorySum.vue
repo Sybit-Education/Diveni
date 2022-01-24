@@ -1,9 +1,6 @@
 <template>
   <div>
-    <b-row
-      v-if="userStorySum > 0"
-      align-h="between"
-    >
+    <b-row v-if="userStorySum > 0" align-h="between">
       <b-col>
         <h4 class="float-start">{{ $t("page.session.before.userStories.sum") }}</h4>
         <h4 class="float-end me-4">{{ userStorySum }}</h4>
@@ -21,7 +18,7 @@ export default Vue.extend({
     userStorySum() {
       var sum = 0;
       this.$store.state.userStories.forEach((userStory) => {
-        if(userStory.estimation !== null) {
+        if (userStory.estimation !== null) {
           sum += parseInt(userStory.estimation);
         }
       });
@@ -31,6 +28,4 @@ export default Vue.extend({
 });
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

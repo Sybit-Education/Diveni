@@ -134,14 +134,9 @@
         />
       </b-row>
     </div>
-    <b-row
-      v-if="session_userStoryMode !== 'NO_US'"
-      class="mt-5"
-    >
+    <b-row v-if="session_userStoryMode !== 'NO_US'" class="mt-5">
       <b-col md="6">
-        <UserStorySumComponent
-          class="ms-4"
-        />
+        <UserStorySumComponent class="ms-4" />
       </b-col>
     </b-row>
     <b-row v-if="session_userStoryMode !== 'NO_US'">
