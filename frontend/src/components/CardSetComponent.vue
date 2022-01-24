@@ -4,7 +4,7 @@
       <b-col>
         <div class="d-flex justify-content-around">
           <div
-            v-for="item of (userStoryMode === 'US_JIRA' ? allCardSetsWithJiraMode : allCardSets)"
+            v-for="item of userStoryMode === jiraTag ? allCardSetsWithJiraMode : allCardSets"
             :key="item.name"
             class="swipe-card"
             :style="`background-color: ${
@@ -50,6 +50,7 @@ export default Vue.extend({
   },
   data() {
     return {
+      jiraTag: "US_JIRA",
       selectedCardSet: {
         name: "",
         values: [],
