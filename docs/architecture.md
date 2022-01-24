@@ -85,7 +85,7 @@ the internal structure and the components to be developed are now considered.
 | JiraRequestToken | Request token for Jira Server |
 | JoinInfo | DTO to join a session |
 | Member | Member model |
-| MemberUpdate | ? |
+| MemberUpdate | Model for the current members and highlighted members |
 | Project | Project for project management providers |
 | Session | Session model |
 | SessionConfig | Configuration for session (e.g. set, timer) |
@@ -124,27 +124,20 @@ the internal structure and the components to be developed are now considered.
 | ----------- | |
 
 
-3 Database
-----------
-
-
-
-
-4 Distribution diagram
+3 API
 -------------------
 
-The distribution of the product during development is shown in the following diagram:
+The current documentation for the REST API can be seen on https://pp.vnmz.de/api/swagger-ui.html.
 
-![distribution-diagram](./assets/diagram/distribution-diagram.png)
+This sequence diagram shows all Websocket commands and when they are used. 
 
-5 Testing
+![sequence-diagram](./assets/diagram/websocket-sequence-diagram.png)
+
+4 Testing
 ---------
 
 Functionalities of the application must be tested sufficiently to ensure quality. 
 Backend methods are tested by Java unit tests. The test coverage is at least 75%.
 Front-end components are tested using smoke tests on a test server.
 Github runners are also used to automatically trigger and verify the tests.
-
-6 Deployment
--------------
 
