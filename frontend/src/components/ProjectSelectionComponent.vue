@@ -5,14 +5,14 @@
       {{ $t("session.prepare.step.selection.mode.description.withJira.selectedProject") }}
       <strong>{{ selected }}</strong>
     </div>
-    <div v-if="userStories.length > 0" class="mt-3">
+    <!-- <div v-if="userStories.length > 0" class="mt-3">
       <strong>
         {{ $t("session.prepare.step.selection.mode.description.withJira.allUserStories") }}</strong
       >
-    </div>
+    </div> 
     <b-list-group>
       <b-list-group-item v-for="item of userStories" :key="item">{{ item }}</b-list-group-item>
-    </b-list-group>
+    </b-list-group>-->
   </div>
 </template>
 
@@ -51,10 +51,7 @@ export default Vue.extend({
   methods: {
     async getUserStories(project) {
       const response = await apiService.getUserStoriesFromProject(project);
-      console.log(response);
-
       this.$store.commit("setUserStories", { stories: response });
-      this.$toast.success("Project " + project + " selected");
       for (const userstory of response) {
         this.userStories.push(userstory.title);
       }

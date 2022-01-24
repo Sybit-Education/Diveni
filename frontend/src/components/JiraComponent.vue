@@ -36,7 +36,10 @@
       </li>
       <li>
         {{ $t("session.prepare.step.selection.mode.description.withJira.descriptionLine2") }}
-        <project-selection-component class="my-1"></project-selection-component>
+        <project-selection-component
+          v-if="isLoggedInWithJira"
+          class="my-1"
+        ></project-selection-component>
       </li>
       <li>
         {{ $t("session.prepare.step.selection.mode.description.withJira.descriptionLine3") }}
@@ -65,17 +68,30 @@ export default Vue.extend({
   },
 
   data() {
-    if (this.$store.state.tokenId) {
-      apiService.getAllProjects().then((pr) => {
-        this.$store.commit("setProjects", pr);
-      });
-    }
     return {
       switch1: false,
       isJiraCloudEnabled: constants.isJiraCloudEnabled,
       isJiraServerEnabled: constants.isJiraServerEnabled,
       isLoggedInWithJira: !!this.$store.state.tokenId,
     };
+  },
+  computed: {
+    getTokenId() {
+      return this.$store.state.tokenId;
+    },
+  },
+  watch: {
+    getTokenId: {
+      handler(newVal) {
+        console.log(newVal);
+        if (newVal) {
+          apiService.getAllProjects().then((pr) => {
+            this.$store.commit("setProjects", pr);
+          });
+        }
+      },
+      immediate: true,
+    },
   },
 });
 </script>
