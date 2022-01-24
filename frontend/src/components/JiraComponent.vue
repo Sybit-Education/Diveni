@@ -66,7 +66,6 @@ export default Vue.extend({
   watch: {
     getTokenId: {
       handler(newVal) {
-        console.log(newVal);
         if (newVal) {
           apiService.getAllProjects().then((pr) => {
             this.$store.commit("setProjects", pr);
