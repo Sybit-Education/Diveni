@@ -16,13 +16,19 @@
             :disabled="!editDescription"
             class="border"
             size="lg"
-            :placeholder="$t('page.session.before.userStories.placeholder.userStoryTitle')"
+            :placeholder="
+              $t('page.session.before.userStories.placeholder.userStoryTitle')
+            "
             @blur="publishChanges"
           />
           <b-dropdown
             v-show="editDescription"
-            class="m-1"
-            :text="(userStories[idx].estimation ? userStories[idx].estimation : '?') + '    '"
+            class="mx-1"
+            :text="
+              (userStories[idx].estimation
+                ? userStories[idx].estimation
+                : '?') + '    '
+            "
             variant="info"
           >
             <b-dropdown-item
@@ -50,7 +56,11 @@
             rows="27"
             max-rows="40"
             :disabled="!editDescription"
-            :placeholder="$t('page.session.before.userStories.placeholder.userStoryDescription')"
+            :placeholder="
+              $t(
+                'page.session.before.userStories.placeholder.userStoryDescription'
+              )
+            "
             @blur="publishChanges"
           />
         </div>
