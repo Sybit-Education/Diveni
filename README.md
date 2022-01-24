@@ -1,6 +1,8 @@
 <br />
 <div align="center">
   <img src="docs/assets/diveni_banner.png" width="560" />
+  <img src="docs/assets/voting.png" />
+  <img src="docs/assets/estimation_result.png" />
 </div>
 <br />
 <p align="center">
