@@ -134,8 +134,13 @@
         />
       </b-row>
     </div>
+    <b-row v-if="session_userStoryMode !== 'NO_US'" class="mt-5">
+      <b-col md="6">
+        <UserStorySumComponent class="ms-4" />
+      </b-col>
+    </b-row>
     <b-row v-if="session_userStoryMode !== 'NO_US'">
-      <b-col class="mt-5">
+      <b-col>
         <div class="overflow-auto" style="max-height: 700px">
           <user-stories
             :card-set="voteSet"
@@ -148,7 +153,7 @@
           />
         </div>
       </b-col>
-      <b-col class="mt-5">
+      <b-col>
         <user-story-descriptions
           :card-set="voteSet"
           :initial-stories="userStories"
@@ -175,10 +180,12 @@ import RoundedAvatar from "../components/RoundedAvatar.vue";
 import UserStoryDescriptions from "../components/UserStoryDescriptions.vue";
 import confetti from "canvas-confetti";
 import NotifyHostComponent from "../components/NotifyHostComponent.vue";
+import UserStorySumComponent from "@/components/UserStorySum.vue";
 
 export default Vue.extend({
   name: "SessionPage",
   components: {
+    UserStorySumComponent,
     SessionMemberCircle,
     SessionMemberCard,
     UserStories,
@@ -357,6 +364,7 @@ export default Vue.extend({
         this.$store.commit("setUserStories", {
           stories: session.sessionConfig.userStories,
         });
+        this.voteSet = JSON.parse(this.session_voteSetJson);
       }
     },
     handleReload() {
