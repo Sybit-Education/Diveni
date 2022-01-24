@@ -52,11 +52,7 @@
                 v-for="num in cardSet"
                 :key="num"
                 :value="num == null ? '?' : num"
-                @click="
-                  userStories[index].estimation = num;
-                  publishChanges();
-                  synchronizeJira();
-                "
+                @click="userStories[index].estimation = num"
               >
                 {{ num }}
               </b-dropdown-item>
@@ -66,7 +62,14 @@
               {{ story.estimation ? story.estimation : "?" }}
             </b-button>
 
-            <b-button v-if="editEnabled" variant="danger" @click="deleteStory(index)">
+            <b-button
+              v-if="editEnabled"
+              variant="danger"
+              @click="
+                deleteStory(index);
+                synchronizeJira(index, true);
+              "
+            >
               <b-icon-trash />
             </b-button>
             <b-button v-b-toggle="`collapse-${index}`" variant="light">
@@ -169,8 +172,8 @@ export default Vue.extend({
     publishChanges() {
       this.$emit("userStoriesChanged", this.userStories);
     },
-    synchronizeJira(idx) {
-      this.$emit("synchronizeJira", this.userStories[idx]);
+    synchronizeJira(idx, remove) {
+      this.$emit("synchronizeJira", { story: this.userStories[idx], doRemove: remove });
     },
     toggleSideBar() {
       this.sideBarOpen = !this.sideBarOpen;

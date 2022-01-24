@@ -144,6 +144,7 @@
             :show-edit-buttons="true"
             :select-story="true"
             @userStoriesChanged="onUserStoriesChanged($event)"
+            @synchronizeJira="onSynchronizeJira"
             @selectedStory="onSelectedStory($event)"
           />
         </div>
@@ -155,7 +156,7 @@
           :edit-description="true"
           :index="index"
           @userStoriesChanged="onUserStoriesChanged($event)"
-          @synchronizeJira="onSynchronizeJira($event)"
+          @synchronizeJira="onSynchronizeJira"
         />
       </b-col>
     </b-row>
@@ -386,9 +387,14 @@ export default Vue.extend({
         });
       }
     },
-    async onSynchronizeJira($event) {
+    async onSynchronizeJira({ story, doRemove }) {
       if (this.session_userStoryMode === "US_JIRA") {
-        const response = await apiService.updateUserStory(JSON.stringify($event));
+        let response;
+        if (doRemove) {
+          response = await apiService.deleteUserStory(story.jiraId);
+        } else {
+          response = await apiService.updateUserStory(JSON.stringify(story));
+        }
         if (response.status === 200) {
           this.$toast.success(this.$t("session.notification.messages.jiraSynchronizeSuccess"));
         } else {

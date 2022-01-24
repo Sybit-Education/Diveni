@@ -36,7 +36,10 @@
         <b-button
           v-show="showEditButtons && hover === index"
           variant="danger"
-          @click="deleteStory(index)"
+          @click="
+            synchronizeJira(index, true);
+            deleteStory(index);
+          "
         >
           <b-icon-trash />
         </b-button>
@@ -51,7 +54,7 @@
               'font-size': 'larger',
             }"
           >
-            {{ story.estimation }}
+            {{ story.estimation == null ? "?" : story.estimation }}
           </div>
         </div>
       </div>
@@ -147,6 +150,9 @@ export default Vue.extend({
     },
     publishChanges() {
       this.$emit("userStoriesChanged", this.userStories);
+    },
+    synchronizeJira(idx, remove) {
+      this.$emit("synchronizeJira", { story: this.userStories[idx], doRemove: remove });
     },
     markUserStory(index) {
       const stories = this.userStories.map((s) => ({

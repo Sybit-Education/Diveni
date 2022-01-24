@@ -27,23 +27,17 @@
             variant="info"
           >
             <b-dropdown-item
-              v-for="num in cardSet"
+              v-for="num in filteredCardSet"
               :key="num"
               :disabled="!editDescription"
-              :value="num == null ? '?' : num"
+              :value="num"
               @click="
                 userStories[idx].estimation = num;
                 publishChanges();
-                synchronizeJira(idx);  
+                synchronizeJira(idx);
               "
             >
               {{ num }}
-            </b-dropdown-item>
-            <b-dropdown-item
-              :disabled="!editDescription"
-              @click="userStories[idx].estimation = null"
-            >
-              ?
             </b-dropdown-item>
           </b-dropdown>
           <div
@@ -104,6 +98,7 @@ export default Vue.extend({
       sideBarOpen: false,
       editEnabled: false,
       userStories: [] as Array<{
+        jiraId: string | null;
         title: string;
         description: string;
         estimation: string | null;
@@ -111,12 +106,18 @@ export default Vue.extend({
       }>,
     };
   },
+  computed: {
+    filteredCardSet(): any {
+      return this.cardSet.filter((card) => card !== "?");
+    },
+  },
   watch: {
     userStories() {
       this.publishChanges();
     },
     initialStories() {
       this.userStories = this.initialStories as Array<{
+        jiraId: string | null;
         title: string;
         description: string;
         estimation: string | null;
@@ -129,6 +130,7 @@ export default Vue.extend({
   },
   created() {
     this.userStories = this.initialStories as Array<{
+      jiraId: string | null;
       title: string;
       description: string;
       estimation: string | null;
@@ -138,6 +140,7 @@ export default Vue.extend({
   methods: {
     setUserStoryAsActive(index) {
       const stories = this.userStories.map((s) => ({
+        jiraId: s.jiraId,
         title: s.title,
         description: s.description,
         estimation: s.estimation,
@@ -148,14 +151,12 @@ export default Vue.extend({
     },
     addUserStory() {
       this.userStories.push({
+        jiraId: null,
         title: "",
         description: "",
         estimation: null,
         isActive: false,
       });
-    },
-    deleteStory(index) {
-      this.userStories.splice(index, 1);
     },
     editOrSave() {
       if (!this.editEnabled) {
@@ -167,7 +168,7 @@ export default Vue.extend({
       this.$emit("userStoriesChanged", this.userStories);
     },
     synchronizeJira(idx) {
-      this.$emit("synchronizeJira", this.userStories[idx]);
+      this.$emit("synchronizeJira", { story: this.userStories[idx], doRemove: false });
     },
     toggleSideBar() {
       this.sideBarOpen = !this.sideBarOpen;
