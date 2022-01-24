@@ -47,8 +47,12 @@ export default Vue.extend({
     return {
       isJiraCloudEnabled: constants.isJiraCloudEnabled,
       isJiraServerEnabled: constants.isJiraServerEnabled,
-      isLoggedInWithJira: !!this.$store.state.tokenId,
     };
+  },
+  computed: {
+    isLoggedInWithJira() {
+      return !!this.$store.state.tokenId;
+    },
   },
 });
 </script>
