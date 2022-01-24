@@ -1,6 +1,6 @@
 <template>
   <b-container>
-    <b-row class="my-5 mx-2">
+    <b-row class="mt-5">
       <b-col>
         <h1>{{ $t("page.vote.title") }}</h1>
       </b-col>
@@ -12,24 +12,28 @@
         />
       </b-col>
     </b-row>
-    <b-col class="d-flex justify-content-end horizontal">
-      <b-button
-        v-b-modal.close-session-modal
-        style="height: 40px"
-        variant="danger"
-        class="m-1 mt-4"
-        @click="leaveMeeting"
-      >
-        <b-icon-x />
-        {{ $t("page.vote.button.leave.label") }}
-      </b-button>
-      <rounded-avatar
-        :color="hexColor"
-        :asset-name="avatarAnimalAssetName"
-        :show-name="true"
-        :name="name"
-      />
-    </b-col>
+    <b-row class="d-flex justify-content-end horizontal">
+      <b-col>
+        <b-button
+          v-b-modal.close-session-modal
+          style="height: 40px"
+          variant="danger"
+          class="mt-4"
+          @click="leaveMeeting"
+        >
+          {{ $t("page.vote.button.leave.label") }}
+          <b-icon-x />
+        </b-button>
+      </b-col>
+      <b-col class="d-flex justify-content-end">
+        <rounded-avatar
+          :color="hexColor"
+          :asset-name="avatarAnimalAssetName"
+          :show-name="true"
+          :name="name"
+        />
+      </b-col>
+    </b-row>
     <b-row v-if="isMobile">
       <mobile-story-title
         v-if="userStoryMode !== 'NO_US'"
@@ -67,7 +71,10 @@
           />
         </flicking>
       </div>
-      <b-row v-else class="d-flex justify-content-between flex-wrap text-center">
+      <b-row
+        v-else
+        class="d-flex justify-content-between flex-wrap text-center"
+      >
         <b-col>
           <div class="overflow-auto" style="max-height: 500px">
             <member-vote-card
@@ -88,8 +95,8 @@
       </b-row>
     </b-row>
     <b-row v-if="!isStartVoting && !votingFinished" class="my-5 text-center">
-      <b-icon-three-dots animation="fade" class="my-5" font-scale="4" />
       <h1>{{ $t("page.vote.waiting") }}</h1>
+      <b-icon-three-dots animation="fade" class="my-5" font-scale="4" />
     </b-row>
     <b-row
       v-if="votingFinished"
@@ -104,7 +111,10 @@
         :name="member.name"
         :estimation="member.currentEstimation"
         :estimate-finished="votingFinished"
-        :highlight="highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0"
+        :highlight="
+          highlightedMembers.includes(member.memberID) ||
+          highlightedMembers.length === 0
+        "
       />
     </b-row>
     <b-row v-if="userStoryMode !== 'NO_US' && !isMobile">
@@ -205,22 +215,31 @@ export default Vue.extend({
       return this.$store.state.memberUpdates;
     },
     isStartVoting(): boolean {
-      return this.memberUpdates.at(-1) === Constants.memberUpdateCommandStartVoting;
+      return (
+        this.memberUpdates.at(-1) === Constants.memberUpdateCommandStartVoting
+      );
     },
     votingFinished(): boolean {
-      return this.memberUpdates.at(-1) === Constants.memberUpdateCommandVotingFinished;
+      return (
+        this.memberUpdates.at(-1) ===
+        Constants.memberUpdateCommandVotingFinished
+      );
     },
     members() {
       return this.$store.state.members;
     },
     membersEstimated(): Member[] {
-      return this.members.filter((member: Member) => member.currentEstimation !== null);
+      return this.members.filter(
+        (member: Member) => member.currentEstimation !== null
+      );
     },
     highlightedMembers() {
       return this.$store.state.highlightedMembers;
     },
     timerTimestamp() {
-      return this.$store.state.timerTimestamp ? this.$store.state.timerTimestamp : "";
+      return this.$store.state.timerTimestamp
+        ? this.$store.state.timerTimestamp
+        : "";
     },
   },
   watch: {
@@ -229,7 +248,9 @@ export default Vue.extend({
         this.draggedVote = null;
         this.estimateFinished = false;
         this.triggerTimer = (this.triggerTimer + 1) % 5;
-      } else if (updates.at(-1) === Constants.memberUpdateCommandVotingFinished) {
+      } else if (
+        updates.at(-1) === Constants.memberUpdateCommandVotingFinished
+      ) {
         this.estimateFinished = true;
       } else if (updates.at(-1) === Constants.memberUpdateCloseSession) {
         this.goToJoinPage();

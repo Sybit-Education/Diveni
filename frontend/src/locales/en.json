@@ -109,7 +109,7 @@
     },
     "vote": {
       "title": "Estimate!",
-      "waiting": "Waiting for your host to start ...",
+      "waiting": "Waiting for your host to start",
       "button": {
         "leave": {
           "label": "Leave session"
@@ -173,7 +173,7 @@
                   "signInWithJiraServer": {
                     "label": "Sign in with Jira Server"
                   },
-                  "selectProject":{
+                  "selectProject": {
                     "label": "Select your jira project"
                   },
                   "submit": {

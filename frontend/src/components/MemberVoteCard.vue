@@ -12,8 +12,11 @@
       :interact-lock-swipe-down="true"
       @draggedUp="draggedUp"
     >
-      <div class="flicking-panel swipe-card" :style="swipeableCardBackgroundColor">
-        <div class="text">
+      <div
+        class="flicking-panel swipe-card"
+        :style="swipeableCardBackgroundColor"
+      >
+        <div class="text" @click="onCardClicked()">
           {{ dragged ? "💪" : voteOption }}
         </div>
       </div>
