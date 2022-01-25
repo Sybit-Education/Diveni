@@ -22,6 +22,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import de.htwg.aume.Utils;
 import de.htwg.aume.controller.ErrorMessages;
+import de.htwg.aume.model.Project;
 import de.htwg.aume.model.TokenIdentifier;
 import de.htwg.aume.model.UserStory;
 import de.htwg.aume.service.projectmanagementproviders.ProjectManagementProviderOAuth2;
@@ -77,17 +78,17 @@ public class JiraCloudService implements ProjectManagementProviderOAuth2 {
     }
 
     @Override
-    public List<String> getProjects(String tokenIdentifier) {
+    public List<Project> getProjects(String tokenIdentifier) {
         val accessToken = accessTokens.get(tokenIdentifier);
         String cloudID = getCloudID(accessToken);
         try {
-            List<String> projects = new ArrayList<>();
+            List<Project> projects = new ArrayList<>();
             ResponseEntity<String> response = executeRequest(String.format(JIRA_HOME, cloudID) + "/project/search",
                     HttpMethod.GET, accessToken, null);
             JsonNode node = new ObjectMapper().readTree(response.getBody());
 
             for (JsonNode projectNode : node.path("values")) {
-                projects.add(projectNode.get("name").asText());
+                projects.add(new Project(projectNode.get("name").asText(), projectNode.get("id").asText()));
             }
             return projects;
         } catch (Exception e) {
@@ -166,6 +167,12 @@ public class JiraCloudService implements ProjectManagementProviderOAuth2 {
     }
 
     @Override
+    public String getCurrentUsername(String tokenIdentifier) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
     public boolean containsToken(String token) {
         return accessTokens.containsKey(token);
     }
@@ -197,4 +204,9 @@ public class JiraCloudService implements ProjectManagementProviderOAuth2 {
         return restTemplate.exchange(url, method, request, String.class);
     }
 
+    @Override
+    public String createIssue(String tokenIdentifier, String projectID, UserStory story) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

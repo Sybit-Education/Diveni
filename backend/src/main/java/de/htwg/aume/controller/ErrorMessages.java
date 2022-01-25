@@ -20,6 +20,10 @@ public class ErrorMessages {
 
 	public static String failedToEditIssueErrorMessage = "failed to edit issue";
 
+	public static String failedToDeleteIssueErrorMessage = "failed to edit issue";
+
+	public static String failedToRetrieveUsernameErrorMessage = "failed to retrieve current user";
+
 	private ErrorMessages() {
 	}
 

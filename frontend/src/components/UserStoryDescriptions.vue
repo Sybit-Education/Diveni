@@ -18,8 +18,7 @@
             size="lg"
             :placeholder="$t('page.session.before.userStories.placeholder.userStoryTitle')"
             @blur="
-              publishChanges();
-              synchronizeJira(idx);
+              publishChanges(idx);
             "
           />
           <b-dropdown
@@ -35,8 +34,7 @@
               :value="num"
               @click="
                 userStories[idx].estimation = num;
-                publishChanges();
-                synchronizeJira(idx);
+                publishChanges(idx);
               "
             >
               {{ num }}
@@ -53,8 +51,7 @@
             :disabled="!editDescription"
             :placeholder="$t('page.session.before.userStories.placeholder.userStoryDescription')"
             @blur="
-              publishChanges();
-              synchronizeJira(idx);
+              publishChanges(idx);
             "
           />
         </div>
@@ -85,7 +82,6 @@ export default Vue.extend({
   data() {
     return {
       sideBarOpen: false,
-      editEnabled: false,
       userStories: [] as Array<{
         jiraId: string | null;
         title: string;
@@ -101,9 +97,6 @@ export default Vue.extend({
     },
   },
   watch: {
-    userStories() {
-      this.publishChanges();
-    },
     initialStories() {
       this.userStories = this.initialStories as Array<{
         jiraId: string | null;
@@ -112,9 +105,6 @@ export default Vue.extend({
         estimation: string | null;
         isActive: boolean;
       }>;
-    },
-    editEnabled() {
-      this.publishChanges();
     },
   },
   created() {
@@ -137,6 +127,7 @@ export default Vue.extend({
       }));
       stories[index].isActive = true;
       this.userStories = stories;
+      this.publishChanges(index);
     },
     addUserStory() {
       this.userStories.push({
@@ -147,23 +138,12 @@ export default Vue.extend({
         isActive: false,
       });
     },
-    editOrSave() {
-      if (!this.editEnabled) {
-        this.publishChanges();
-      }
-      this.editEnabled = !this.editEnabled;
+    publishChanges(idx) {
+      this.$emit("userStoriesChanged", { us: this.userStories, idx: idx, doRemove: false });
     },
-    publishChanges() {
-      this.$emit("userStoriesChanged", this.userStories);
-    },
-    synchronizeJira(idx) {
-      this.$emit("synchronizeJira", { story: this.userStories[idx], doRemove: false });
-    },
-    toggleSideBar() {
-      this.sideBarOpen = !this.sideBarOpen;
-      this.editEnabled = false;
-      this.publishChanges();
-    },
+    // synchronizeJira(idx) {
+    //   this.$emit("synchronizeJira", { story: this.userStories[idx], doRemove: false });
+    // },
   },
 });
 </script>

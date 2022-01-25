@@ -16,6 +16,7 @@
 <script lang="ts">
 import Vue from "vue";
 import apiService from "@/services/api.service";
+import Project from "../model/Project";
 
 export default Vue.extend({
   name: "ProjectSelectionComponent",
@@ -27,9 +28,12 @@ export default Vue.extend({
     };
   },
   computed: {
-    getAllProjects() {
-      const projects = this.$store.state.projects;
-      if (projects.length < 1) {
+    projects(): Array<Project> {
+      return this.$store.state.projects;
+    },
+    getAllProjects(): any {
+      const projectNames = this.projects.map(p => p.name);
+      if (projectNames.length < 1) {
         return [
           {
             value: null,
@@ -42,7 +46,7 @@ export default Vue.extend({
             value: null,
             text: this.$t("session.prepare.step.selection.mode.description.withJira.formSelection"),
           },
-          ...projects,
+          ...projectNames,
         ];
       }
     },
@@ -50,6 +54,10 @@ export default Vue.extend({
 
   methods: {
     async getUserStories(project) {
+      console.log(`Trying to select ${project}`);
+      const selectedProject = this.projects.find(p => p.name === project);
+      console.log(`Selected: ${selectedProject}`);
+      this.$store.commit("setSelectedProject", selectedProject);
       const response = await apiService.getUserStoriesFromProject(project);
       this.$store.commit("setUserStories", { stories: response });
     },

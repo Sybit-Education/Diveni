@@ -1,4 +1,5 @@
 import { Client } from "webstomp-client";
+import Project from "./model/Project";
 
 export interface StoreState {
   stompClient: Client | undefined;
@@ -11,6 +12,7 @@ export interface StoreState {
   timerTimestamp: string | undefined;
   tokenId: string | undefined;
   projects: Record<string, unknown>[];
+  selectedProject: Project | undefined;
 }
 
 export interface JiraRequestTokenDto {
