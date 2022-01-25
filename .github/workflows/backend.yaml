@@ -107,6 +107,16 @@ jobs:
           target: ${{ secrets.DEPLOY_DIR_BACKEND }}
           strip_components: 2
           rm: true
+      - name: Create `.env` file
+        uses: appleboy/ssh-action@v0.1.1
+        with:
+          host: ${{ secrets.DEPLOY_SSH_HOST }}
+          username: ${{ secrets.DEPLOY_SSH_USERNAME }}
+          password: ${{ secrets.DEPLOY_SSH_PASSWORD }}
+          port: ${{ secrets.DEPLOY_SSH_PORT }}
+          script_stop: true
+          script: |
+            echo "${{ secrets.DEPLOY_BACKEND_ENV_FILE_CONTENT_BASE64 }}" | base64 --decode > .env
       - name: Start application
         uses: appleboy/ssh-action@v0.1.1
         with:
