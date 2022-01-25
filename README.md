@@ -42,8 +42,8 @@ Depending on your device, you can see the results of the other members.
 ## Screenshots
 
 <div align="center">
-  <img src="docs/assets/voting.png" />
-  <img src="docs/assets/estimation_result.png" />
+  <img src="docs/assets/userEstimationVoted.JPG" />
+  <img src="docs/assets/hostEstimationFinished.JPG" />
 </div>
 
 ## Application Instructions and Requirements:
