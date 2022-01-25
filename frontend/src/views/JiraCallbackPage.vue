@@ -30,6 +30,7 @@ export default Vue.extend({
     async verifyCode(code: string) {
       try {
         const response = await apiService.sendJiraOauth2AuthorizationCode(code);
+        localStorage.setItem("tokenId", response.tokenId);
         this.$store.commit("setTokenId", response.tokenId);
       } catch (e) {
         this.showToast(e);
