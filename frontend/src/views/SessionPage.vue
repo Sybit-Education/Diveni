@@ -134,10 +134,15 @@
         />
       </b-row>
     </div>
+    <b-row v-if="session_userStoryMode !== 'NO_US'" class="mt-5">
+      <b-col md="6">
+        <UserStorySumComponent class="ms-4" />
+      </b-col>
+    </b-row>
     <b-row v-if="session_userStoryMode !== 'NO_US'">
-      <b-col class="mt-3">
+      <b-col>
         <div class="overflow-auto" style="max-height: 700px">
-          <user-stories-sidebar
+          <user-stories
             :card-set="voteSet"
             :show-estimations="planningStart"
             :initial-stories="userStories"
@@ -148,7 +153,7 @@
           />
         </div>
       </b-col>
-      <b-col class="mt-3">
+      <b-col>
         <user-story-descriptions
           :card-set="voteSet"
           :initial-stories="userStories"
@@ -168,20 +173,22 @@ import Constants from "../constants";
 import SessionMemberCircle from "../components/SessionMemberCircle.vue";
 import Member from "../model/Member";
 import SessionMemberCard from "../components/SessionMemberCard.vue";
-import UserStoriesSidebar from "../components/UserStories.vue";
+import UserStories from "../components/UserStories.vue";
 import EstimateTimer from "../components/EstimateTimer.vue";
 import CopySessionIdPopup from "../components/CopySessionIdPopup.vue";
 import RoundedAvatar from "../components/RoundedAvatar.vue";
 import UserStoryDescriptions from "../components/UserStoryDescriptions.vue";
 import confetti from "canvas-confetti";
 import NotifyHostComponent from "../components/NotifyHostComponent.vue";
+import UserStorySumComponent from "@/components/UserStorySum.vue";
 
 export default Vue.extend({
   name: "SessionPage",
   components: {
+    UserStorySumComponent,
     SessionMemberCircle,
     SessionMemberCard,
-    UserStoriesSidebar,
+    UserStories,
     EstimateTimer,
     CopySessionIdPopup,
     RoundedAvatar,
@@ -357,6 +364,7 @@ export default Vue.extend({
         this.$store.commit("setUserStories", {
           stories: session.sessionConfig.userStories,
         });
+        this.voteSet = JSON.parse(this.session_voteSetJson);
       }
     },
     handleReload() {
@@ -438,6 +446,7 @@ export default Vue.extend({
       if (this.session_userStoryMode !== "NO_US") {
         this.$router.push({ name: "ResultPage" });
       } else {
+        this.$store.commit("clearStore");
         this.$router.push({ name: "LandingPage" });
       }
     },

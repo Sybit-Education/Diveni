@@ -30,7 +30,8 @@
             "userStoryTitle": "User Story Title",
             "userStoryDescription": "Description and acceptance criteria..."
           },
-          "text": "Click on a User Story Title to see the description"
+          "text": "Click on a User Story Title to see the description",
+          "sum": "Total:"
         }
       },
       "during": {
@@ -109,7 +110,7 @@
     },
     "vote": {
       "title": "Estimate!",
-      "waiting": "Waiting for your host to start ...",
+      "waiting": "Waiting for your host to start",
       "button": {
         "leave": {
           "label": "Leave session"
@@ -173,7 +174,7 @@
                   "signInWithJiraServer": {
                     "label": "Sign in with Jira Server"
                   },
-                  "selectProject":{
+                  "selectProject": {
                     "label": "Select your jira project"
                   },
                   "submit": {

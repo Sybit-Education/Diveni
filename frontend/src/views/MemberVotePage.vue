@@ -1,6 +1,6 @@
 <template>
   <b-container>
-    <b-row class="my-5 mx-2">
+    <b-row class="mt-5">
       <b-col>
         <h1>{{ $t("page.vote.title") }}</h1>
       </b-col>
@@ -12,24 +12,27 @@
         />
       </b-col>
     </b-row>
-    <b-col class="d-flex justify-content-end horizontal">
-      <b-button
-        v-b-modal.close-session-modal
-        style="height: 40px"
-        variant="danger"
-        class="m-1 mt-4"
-        @click="leaveMeeting"
-      >
-        <b-icon-x />
-        {{ $t("page.vote.button.leave.label") }}
-      </b-button>
-      <rounded-avatar
-        :color="hexColor"
-        :asset-name="avatarAnimalAssetName"
-        :show-name="true"
-        :name="name"
-      />
-    </b-col>
+    <b-row class="d-flex justify-content-end horizontal">
+      <b-col>
+        <b-button
+          v-b-modal.close-session-modal
+          style="max-height: 40px"
+          variant="danger"
+          class="mt-4"
+          @click="leaveMeeting"
+        >
+          {{ $t("page.vote.button.leave.label") }}
+        </b-button>
+      </b-col>
+      <b-col class="d-flex justify-content-end">
+        <rounded-avatar
+          :color="hexColor"
+          :asset-name="avatarAnimalAssetName"
+          :show-name="true"
+          :name="name"
+        />
+      </b-col>
+    </b-row>
     <b-row v-if="isMobile">
       <mobile-story-title
         v-if="userStoryMode !== 'NO_US'"
@@ -88,8 +91,8 @@
       </b-row>
     </b-row>
     <b-row v-if="!isStartVoting && !votingFinished" class="my-5 text-center">
-      <b-icon-three-dots animation="fade" class="my-5" font-scale="4" />
       <h1>{{ $t("page.vote.waiting") }}</h1>
+      <b-icon-three-dots animation="fade" class="my-5" font-scale="4" />
     </b-row>
     <b-row
       v-if="votingFinished"
@@ -106,6 +109,11 @@
         :estimate-finished="votingFinished"
         :highlight="highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0"
       />
+    </b-row>
+    <b-row v-if="userStoryMode !== 'NO_US'" class="mt-5">
+      <b-col md="6">
+        <UserStorySumComponent class="ms-4" />
+      </b-col>
     </b-row>
     <b-row v-if="userStoryMode !== 'NO_US' && !isMobile">
       <b-col class="mt-2">
@@ -131,7 +139,7 @@
       </b-col>
     </b-row>
     <b-col v-if="userStoryMode !== 'NO_US' && isMobile" class="mt-2">
-      <div class="overflow-auto" style="height: 700px">
+      <div class="overflow-auto">
         <mobile-story-list
           :card-set="voteSet"
           :show-estimations="true"
@@ -159,6 +167,7 @@ import UserStories from "../components/UserStories.vue";
 import UserStoryDescriptions from "../components/UserStoryDescriptions.vue";
 import MobileStoryList from "../components/MobileStoryList.vue";
 import MobileStoryTitle from "../components/MobileStoryTitle.vue";
+import UserStorySumComponent from "@/components/UserStorySum.vue";
 
 export default Vue.extend({
   name: "MemberVotePage",
@@ -172,6 +181,7 @@ export default Vue.extend({
     UserStoryDescriptions,
     MobileStoryList,
     MobileStoryTitle,
+    UserStorySumComponent,
   },
   props: {
     memberID: { type: String, default: undefined },

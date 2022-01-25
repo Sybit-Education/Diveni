@@ -3,68 +3,74 @@ Software architecture
 
 ##Content Overview
 
-    1 Context diagram
-    2 Component diagram
-    3 Database
-    4 Distribution diagram
-    5 Testing
-    6 Deployment
+    1 Component diagram
+    2 Component description
+        2.1 Frontend
+        2.2 Backend
+    3 API
+        3.1 REST API
+        3.2 Websocket
+    4 Testing
 
-1 Context diagram
-----------------------
-
-The diagram below is a context diagram. It serves to illustrate the system from a black box perspective. Furthermore, interfaces to other systems are also depicted here. 
-A connection to a Jira instance is required.
-
-![context-diagram](./assets/diagram/context-diagram.png)
-
-2 Component diagram
+1 Component diagram
 --------------------------------------
 
 Context delineation provided insight of the system from a black box perspective. In the building block view
 the internal structure and the components to be developed are now considered.
 
-![components-diagram](./assets/diagram/components-diagram.png)
+![components-diagram](./assets/diagram/components-diagram-03.png)
 
-## Component Overview
+2 Component description
+--------------------------------------
 
-### Frontend
+##2.1 Frontend
 
 | Component | Description   |
 | --------- | -----------   |
-| CardSetComponent |  |
-| CopySessionIdPopup |  |
-| Estimatetimer |  |
-| JiraComponent |  |
-| JoinPageCard |  |
-| LandingPageCard |  |
-| LocaleDropdown |  |
-| MemberVoteCard |  |
-| RoundedAvatar |  |
-| SessionMemberCard |  |
-| SessionMemberCircle |  |
-| StoryPointsComponent |  |
-| UserStoriesSidebar |  |
-| UserStoryComponent |  |
+| AboutDropdown | Dropdown with links to front-/backend licenses |
+| CardSetComponent | Card set selection in page "PrepareSession" |
+| CopySessionIdPopup | Link including a popup with the functionalities: copy code or link to clipboard |
+| EstimateTimer | Displays the timer and has the logic for the countdown |
+| JiraComponent | Component for the "Planning with Jira" tab. |
+| JoinPageCard | Card for joining a Session in page "JoinPage" |
+| LandingPageCard | Cards for "New Session"/"Join Session"/"Reconnect to Session" in page "LandingPage" |
+| LocaleDropdown | Dropdown for language selection |
+| MemberVoteCard | The cards which the member can choose from. Used in page "MemberVotePage" |
+| MobileStoryList | List of all user stories before and during the plannings. Especially for mobile devices. Used in page "MemberVotePage" |
+| MobileStoryTitle | Title with optional collapsable description for the user stories. Especially for mobile devices. Used in page "MemberVotePage" |
+| NotifyHostComponent | Triggers toast notifications for host. Does not have ui |
+| NotifyMemberComponent | Triggers toast notifications for members. Does not have ui |
+| ProjectSelectionComponent | Dropdown to select project after jira authentication in page "PrepareSession" |
+| RoundedAvatar | Circle with animal emoji and name. Used in pages: "JoinPage"/"MemberVotePage"/"SessionPage" |
+| SessionMemberCard | The cards representing the members with name, emoji and current estimation. Used in page "SessionPage" |
+| SessionMemberCircle | The circle representing the members with name and emoji. Used in pages: "SessionPage"/"MemberVotePage" |
+| SignInWithJiraCloudButtonComponent | Button which redirects to jira (cloud) authentication |
+| SignInWithJiraServerButtonComponent | Button including the login logic for jira server |
+| StoryPointsComponent | Includes text for "Planning without user stories"-Tab in page "PrepareSession" |
+| UserStories | List of all user stories including the logic to select the current user story and the logic for submitting a value |
+| UserStoryComponent | Includes text for "Planning with user stories"-Tab in page "PrepareSession" |
+| UserStoryDescriptions | Displays the description for the selected user story |
+| UserStorySum | Calculates and displays dynamically the sum of all estimated user stories |
 | ----------- | |
-| JoinCommand |  |
-| Member |  |
-| Session |  |
-| SessionConfig |  |
-| UserStory |  |
+| JoinCommand | Model for the command to join a session |
+| Member | Model representing a member |
+| Session | Model for a session including all relevant information |
+| SessionConfig | Model which is used in the session model. Clusters all important information about the configs of the session|
+| UserStory | Model representing a user story |
 | ----------- | |
-| JoinPage |  |
-| LandingPage |  |
-| MemberVotePage |  |
-| PrepareSessionPage |  |
-| ResultPage |  |
-| SessionPage |  |
+| JiraCallbackPage | Page for he jira callback when authenticating. Redirects immediately to the "PrepareSession" Page |
+| JoinPage | Page for members to join a session |
+| LandingPage | First page where a first time user normally lands. Includes the option a user has and redirects either to page "PrepareSession"/"JoinPage" or directly to "SessionPage" |
+| MemberVotePage | The page for members when they join a session. It also includes the voting and selection which the Cards |
+| PrepareSessionPage | The prepare Session Page displays a site where a admin can choose all important configs for the new session: user story mode, card set, timer or password |
+| ResultPage | The ResultPage is displayed after a planning session is finished. It shows the results and the estimation overview over all user stories. Also includes a CSV-Export and a Link back to "LandingPage" |
+| SessionPage | The SessionPage is displayed the admin before and during the planning sessions. It provides some functionality to control the planning like restart session, show estimations or end sessions. Also includes the possibility to add or change the user stories |
 | ----------- | |
-| Router |  |
+| Router | The Router includes all routes to the Pages with their specific links |
 | ----------- | |
-| Store |  |
+| Store | The store includes data which can be accessed from all views and components |
 
-### Backend
+##2.2 Backend
 
 | Component | Description   |
 | --------- | -----------   |
@@ -85,7 +91,7 @@ the internal structure and the components to be developed are now considered.
 | JiraRequestToken | Request token for Jira Server |
 | JoinInfo | DTO to join a session |
 | Member | Member model |
-| MemberUpdate | ? |
+| MemberUpdate | Model for the current members and highlighted members |
 | Project | Project for project management providers |
 | Session | Session model |
 | SessionConfig | Configuration for session (e.g. set, timer) |
@@ -123,28 +129,24 @@ the internal structure and the components to be developed are now considered.
 | JiraOAuthTokenFactory | Helper class for Jira Server OAuth1 |
 | ----------- | |
 
-
-3 Database
-----------
-
-
-
-
-4 Distribution diagram
+3 API
 -------------------
 
-The distribution of the product during development is shown in the following diagram:
+##3.1 REST API
 
-![distribution-diagram](./assets/diagram/distribution-diagram.png)
+The current documentation for the REST API can be seen on https://pp.vnmz.de/api/swagger-ui.html.
 
-5 Testing
+##3.2 Websocket
+
+This sequence diagram shows all Websocket commands and when they are used. 
+
+![sequence-diagram](./assets/diagram/websocket-sequence-diagram.png)
+
+4 Testing
 ---------
 
 Functionalities of the application must be tested sufficiently to ensure quality. 
 Backend methods are tested by Java unit tests. The test coverage is at least 75%.
 Front-end components are tested using smoke tests on a test server.
 Github runners are also used to automatically trigger and verify the tests.
-
-6 Deployment
--------------
 

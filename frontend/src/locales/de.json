@@ -30,14 +30,15 @@
             "userStoryTitle": "User Story Titel",
             "userStoryDescription": "Beschreibung und Akzeptanzkriterien..."
           },
-          "text": "Klicke auf ein User Story Titel um die Beschreibung zu sehen"
+          "text": "Klicke auf ein User Story Titel um die Beschreibung zu sehen",
+          "sum": "Summe:"
         }
       },
       "during": {
         "estimation": {
           "title": "Schätzrunde",
           "message": {
-            "waitingFor": "Warte auf die Schätzungen",
+            "waitingFor": "Warte auf",
             "finished": "Schätzrunde beendet"
           },
           "buttons": {
@@ -109,7 +110,7 @@
     },
     "vote": {
       "title": "Schätze!",
-      "waiting": "Warte, bis der Organisator die Schätzrunde startet ...",
+      "waiting": "Warte, bis der Organisator die Schätzrunde startet",
       "button": {
         "leave": {
           "label": "Session verlassen"
@@ -173,7 +174,7 @@
                   "signInWithJiraServer": {
                     "label": "Mit Jira Server anmelden"
                   },
-                  "selectProject":{
+                  "selectProject": {
                     "label": "Wählen Sie ihr Jira-Projekt aus"
                   },
                   "submit": {

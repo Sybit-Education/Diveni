@@ -9,8 +9,10 @@
         variant="outline-secondary"
       >
         <div class="list-group list-group-horizontal">
-          <b-form-input
+          <b-form-textarea
             v-model="userStories[idx].title"
+            rows="1"
+            max-rows="3"
             :disabled="!editDescription"
             class="border"
             size="lg"
@@ -19,7 +21,7 @@
           />
           <b-dropdown
             v-show="editDescription"
-            class="m-1"
+            class="mx-1"
             :text="(userStories[idx].estimation ? userStories[idx].estimation : '?') + '    '"
             variant="info"
           >
@@ -39,16 +41,6 @@
               ?
             </b-dropdown-item>
           </b-dropdown>
-          <div
-            v-show="!editDescription"
-            class="card-body rounded"
-            :style="{
-              'background-color':
-                userStories[idx].estimation == null ? 'white' : 'RGB(13, 202, 240)',
-            }"
-          >
-            {{ story.estimation }}
-          </div>
         </div>
         <div>
           <b-form-textarea
@@ -65,12 +57,9 @@
       </b-list-group-item>
       <div
         v-if="userStories.length <= index && userStories.length"
-        class="border text-center rounded p-3 bg-secondary m-2"
+        class="text-center rounded p-3 m-2"
       >
-        <b-card
-          class="bg-secondary border-0 text-white"
-          :title="$t('page.session.before.userStories.text')"
-        />
+        <b-card class="border-0" :title="$t('page.session.before.userStories.text')" />
       </div>
     </div>
   </div>
