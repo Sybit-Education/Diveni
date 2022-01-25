@@ -54,11 +54,15 @@ class ApiService {
   }
 
   public async createUserStory(story, projectID): Promise<any> {
-    const response = await axios.post(`${constants.backendURL}/jira/issue?projectID=${projectID}`, story, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await axios.post(
+      `${constants.backendURL}/jira/issue?projectID=${projectID}`,
+      story,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
     return response;
   }
 

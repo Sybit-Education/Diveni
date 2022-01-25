@@ -234,7 +234,7 @@ export default Vue.extend({
   computed: {
     selectedProject(): Project {
       return this.$store.state.selectedProject;
-    }, 
+    },
     userStories() {
       return this.$store.state.userStories;
     },
@@ -400,10 +400,17 @@ export default Vue.extend({
           us.splice(idx, 1);
         } else {
           console.log(`JIRA ID: ${us[idx].jiraID}`);
-          if(us[idx].jiraId === null) {
-            response = await apiService.createUserStory(JSON.stringify(us[idx]), this.selectedProject.id);
-            if(response.status === 200) {
-              us = this.userStories.map(s => s.title === us[idx].title && s.description === us[idx].description ? {...s, jiraId: response.data} : s);
+          if (us[idx].jiraId === null) {
+            response = await apiService.createUserStory(
+              JSON.stringify(us[idx]),
+              this.selectedProject.id
+            );
+            if (response.status === 200) {
+              us = this.userStories.map((s) =>
+                s.title === us[idx].title && s.description === us[idx].description
+                  ? { ...s, jiraId: response.data }
+                  : s
+              );
               console.log(`assigned id: ${us[idx].jiraId}`);
             }
           } else {
@@ -433,10 +440,15 @@ export default Vue.extend({
           response = await apiService.deleteUserStory(story.jiraId);
         } else {
           console.log(`JIRA ID: ${story.jiraID}`);
-          if(story.jiraId === null) {
-            response = await apiService.createUserStory(JSON.stringify(story), this.selectedProject.id);
-            if(response.status === 200) {
-              const updatedStories = this.userStories.map(s => s.title === story.title && s.description === story.description);
+          if (story.jiraId === null) {
+            response = await apiService.createUserStory(
+              JSON.stringify(story),
+              this.selectedProject.id
+            );
+            if (response.status === 200) {
+              const updatedStories = this.userStories.map(
+                (s) => s.title === story.title && s.description === story.description
+              );
               this.$store.commit("setUserStories", updatedStories);
             }
           } else {

@@ -17,9 +17,7 @@
             class="border"
             size="lg"
             :placeholder="$t('page.session.before.userStories.placeholder.userStoryTitle')"
-            @blur="
-              publishChanges(idx);
-            "
+            @blur="publishChanges(idx)"
           />
           <b-dropdown
             v-show="editDescription"
@@ -50,9 +48,7 @@
             max-rows="40"
             :disabled="!editDescription"
             :placeholder="$t('page.session.before.userStories.placeholder.userStoryDescription')"
-            @blur="
-              publishChanges(idx);
-            "
+            @blur="publishChanges(idx)"
           />
         </div>
       </b-list-group-item>

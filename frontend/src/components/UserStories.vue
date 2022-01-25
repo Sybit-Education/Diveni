@@ -36,9 +36,7 @@
           v-show="showEditButtons && hover === index"
           variant="outline-danger"
           class="border-0"
-          @click="
-            deleteStory(index);
-          "
+          @click="deleteStory(index)"
         >
           <b-icon-trash />
         </b-button>

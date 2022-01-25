@@ -32,7 +32,7 @@ export default Vue.extend({
       return this.$store.state.projects;
     },
     getAllProjects(): any {
-      const projectNames = this.projects.map(p => p.name);
+      const projectNames = this.projects.map((p) => p.name);
       if (projectNames.length < 1) {
         return [
           {
@@ -55,7 +55,7 @@ export default Vue.extend({
   methods: {
     async getUserStories(project) {
       console.log(`Trying to select ${project}`);
-      const selectedProject = this.projects.find(p => p.name === project);
+      const selectedProject = this.projects.find((p) => p.name === project);
       console.log(`Selected: ${selectedProject}`);
       this.$store.commit("setSelectedProject", selectedProject);
       const response = await apiService.getUserStoriesFromProject(project);
