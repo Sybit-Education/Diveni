@@ -34,15 +34,14 @@ import lombok.val;
 
 @Service
 public class JiraCloudService implements ProjectManagementProviderOAuth2 {
-    @Value("${jira.cloud.clientId}")
+    @Value("${JIRA_CLOUD_CLIENTID}")
     private String CLIENT_ID;
-    @Value("${jira.cloud.clientSecret}")
+    @Value("${JIRA_CLOUD_CLIENTSECRET}")
     private String CLIENT_SECRET;
-    @Value("${jira.cloud.apiVersion:2}")
-    private int JIRA_CLOUD_API_VERSION;
-    @Value("${jira.cloud.estimationField:customfield_10016}")
+    @Value("${JIRA_CLOUD_ESTIMATIONFIELD:customfield_10016}")
     private String ESTIMATION_FIELD;
 
+    private final int JIRA_CLOUD_API_VERSION = 2;
     private final String JIRA_OAUTH_URL = "https://auth.atlassian.com/oauth";
     private final String JIRA_HOME = "https://api.atlassian.com/ex/jira/%s/rest/api/";
 
@@ -51,7 +50,6 @@ public class JiraCloudService implements ProjectManagementProviderOAuth2 {
 
     @Override
     public TokenIdentifier getAccessToken(String authorizationCode, String origin) {
-        System.out.println(JIRA_HOME);
         RestTemplate restTemplate = new RestTemplate();
         String credentials = CLIENT_ID + ":" + CLIENT_SECRET;
         String encodedCredentials = new String(Base64.encodeBase64(credentials.getBytes()));

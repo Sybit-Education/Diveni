@@ -36,18 +36,18 @@ import lombok.val;
 
 @Service
 public class JiraServerService implements ProjectManagementProviderOAuth1 {
-    @Value("${jira.server.jiraHome}")
+    @Value("${JIRA_SERVER_JIRAHOME}")
     private String JIRA_HOME;
-    @Value("${jira.server.consumerKey:OauthKey}")
+    @Value("${JIRA_SERVER_CONSUMERKEY:OauthKey}")
     private String CONSUMER_KEY;
-    @Value("${jira.server.privateKey}")
+    @Value("${JIRA_SERVER_PRIVATEKEY}")
     private String PRIVATE_KEY;
-    @Value("${jira.server.estimationField:customfield_10111}")
+    @Value("${JIRA_SERVER_ESTIMATIONFIELD:customfield_10111}")
     private String ESTIMATION_FIELD;
-    @Value("${jira.server.apiVersion:2}")
-    private int JIRA_SERVER_API_VERSION;
-    @Value("${jira.server.rankName:RANK}")
+    @Value("${JIRA_SERVER_RANKNAME:RANK}")
     private String RANK_NAME;
+
+    private final int JIRA_SERVER_API_VERSION = 2;
 
     @Getter
     private final Map<String, String> accessTokens = new HashMap<>();
