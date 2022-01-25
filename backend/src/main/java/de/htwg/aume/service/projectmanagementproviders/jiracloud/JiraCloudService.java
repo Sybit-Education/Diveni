@@ -10,6 +10,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.api.client.util.Base64;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -30,14 +34,16 @@ import lombok.val;
 
 @Service
 public class JiraCloudService implements ProjectManagementProviderOAuth2 {
+    @Value("${JIRA_CLOUD_CLIENTID}")
+    private String CLIENT_ID;
+    @Value("${JIRA_CLOUD_CLIENTSECRET}")
+    private String CLIENT_SECRET;
+    @Value("${JIRA_CLOUD_ESTIMATIONFIELD:customfield_10016}")
+    private String ESTIMATION_FIELD;
 
-    private static final String clientId = "0XeKG8gq0JWWAShLLUv6Y27Zh8B9pPt8";
-    private static final String clientSecret = "EJmAzc3yi1mXhlHEUx7kNDxa8VrbrH6NE79_839izauaWHGoBGnT9iRs90h9N1t9";
-
-    private static final String JIRA_OAUTH_URL = "https://auth.atlassian.com/oauth";
-    private static final int JIRA_CLOUD_API_VERSION = 2;
-    private static final String JIRA_HOME = "https://api.atlassian.com/ex/jira/%s/rest/api/" + JIRA_CLOUD_API_VERSION;
-    private static final String ESTIMATION_FIELD = "customfield_10016";
+    private final int JIRA_CLOUD_API_VERSION = 2;
+    private final String JIRA_OAUTH_URL = "https://auth.atlassian.com/oauth";
+    private final String JIRA_HOME = "https://api.atlassian.com/ex/jira/%s/rest/api/";
 
     @Getter
     private final Map<String, String> accessTokens = new HashMap<>();
@@ -45,7 +51,7 @@ public class JiraCloudService implements ProjectManagementProviderOAuth2 {
     @Override
     public TokenIdentifier getAccessToken(String authorizationCode, String origin) {
         RestTemplate restTemplate = new RestTemplate();
-        String credentials = clientId + ":" + clientSecret;
+        String credentials = CLIENT_ID + ":" + CLIENT_SECRET;
         String encodedCredentials = new String(Base64.encodeBase64(credentials.getBytes()));
 
         HttpHeaders headers = new HttpHeaders();
@@ -82,7 +88,7 @@ public class JiraCloudService implements ProjectManagementProviderOAuth2 {
         String cloudID = getCloudID(accessToken);
         try {
             List<String> projects = new ArrayList<>();
-            ResponseEntity<String> response = executeRequest(String.format(JIRA_HOME, cloudID) + "/project/search",
+            ResponseEntity<String> response = executeRequest(String.format(getJiraUrl(), cloudID) + "/project/search",
                     HttpMethod.GET, accessToken, null);
             JsonNode node = new ObjectMapper().readTree(response.getBody());
 
@@ -101,8 +107,8 @@ public class JiraCloudService implements ProjectManagementProviderOAuth2 {
     public List<UserStory> getIssues(String tokenIdentifier, String projectName) {
         String cloudID = getCloudID(accessTokens.get(tokenIdentifier));
         ResponseEntity<String> response = executeRequest(
-                String.format(JIRA_HOME, cloudID) + "/search?jql=project=" + projectName
-                        + " order by rank&fields=summary,description," + ESTIMATION_FIELD,
+                String.format(getJiraUrl(), cloudID) + "/search?jql=project='" + projectName
+                        + "' order by rank&fields=summary,description," + ESTIMATION_FIELD,
                 HttpMethod.GET, accessTokens.get(tokenIdentifier), null);
         try {
             List<UserStory> userStories = new ArrayList<>();
@@ -141,7 +147,7 @@ public class JiraCloudService implements ProjectManagementProviderOAuth2 {
         }
         content.put("fields", fields);
         try {
-            executeRequest(String.format(JIRA_HOME, cloudID) + "/issue/" + story.getJiraId(), HttpMethod.PUT,
+            executeRequest(String.format(getJiraUrl(), cloudID) + "/issue/" + story.getJiraId(), HttpMethod.PUT,
                     accessTokens.get(tokenIdentifier), content);
         } catch (Exception e) {
             e.printStackTrace();
@@ -155,7 +161,7 @@ public class JiraCloudService implements ProjectManagementProviderOAuth2 {
     public void deleteIssue(String tokenIdentifier, String jiraID) {
         try {
             String cloudID = getCloudID(accessTokens.get(tokenIdentifier));
-            executeRequest(String.format(JIRA_HOME, cloudID) + "/issue/" + jiraID, HttpMethod.DELETE,
+            executeRequest(String.format(getJiraUrl(), cloudID) + "/issue/" + jiraID, HttpMethod.DELETE,
                     accessTokens.get(tokenIdentifier), null);
         } catch (Exception e) {
             e.printStackTrace();
@@ -194,6 +200,10 @@ public class JiraCloudService implements ProjectManagementProviderOAuth2 {
         headers.add("Authorization", "Bearer " + accessToken);
         HttpEntity<Object> request = new HttpEntity<Object>(body, headers);
         return restTemplate.exchange(url, method, request, String.class);
+    }
+
+    private String getJiraUrl(){
+        return JIRA_HOME + JIRA_CLOUD_API_VERSION;
     }
 
 }
