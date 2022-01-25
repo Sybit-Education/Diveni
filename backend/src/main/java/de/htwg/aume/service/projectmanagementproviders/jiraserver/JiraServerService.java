@@ -54,6 +54,7 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
 
     @Override
     public JiraRequestToken getRequestToken() {
+        System.out.println("JIRA HOME: " + JIRA_HOME);
         JiraRequestToken jiraRequestToken = new JiraRequestToken();
 
         try {
