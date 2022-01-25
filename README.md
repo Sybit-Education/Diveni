@@ -1,6 +1,12 @@
-![diveni-banner](./docs/assets/diveni_banner.png)
-![jacoco-badge](./.github/badges/jacoco.svg)
-![branch-bagde](./.github/badges/branches.svg)
+<br />
+<div align="center">
+  <img src="docs/assets/diveni_banner.png" width="560" />
+</div>
+<br />
+<p align="center">
+  <img src=".github/badges/jacoco.svg" />
+  <img src=".github/badges/branches.svg" />
+</p>
 
 ---
 
@@ -35,8 +41,10 @@ Depending on your device, you can see the results of the other members.
 
 ## Screenshots
 
-![user-estimation-voted](./docs/assets/userEstimationVoted.JPG)
-![host-estimation-finished](./docs/assets/hostEstimationFinished.JPG)
+<div align="center">
+  <img src="docs/assets/userEstimationVoted.JPG" />
+  <img src="docs/assets/hostEstimationFinished.JPG" />
+</div>
 
 ## Application Instructions and Requirements:
 
