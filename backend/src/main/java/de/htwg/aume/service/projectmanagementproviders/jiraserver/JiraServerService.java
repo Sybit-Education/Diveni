@@ -119,8 +119,8 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
             JiraOAuthClient jiraOAuthClient = new JiraOAuthClient(JIRA_HOME);
             OAuthParameters parameters = jiraOAuthClient.getParameters(accessToken, CONSUMER_KEY, PRIVATE_KEY);
             HttpResponse response = getResponseFromUrl(parameters, new GenericUrl(
-                    JIRA_SERVER_API_URL + "/search?jql=project=" + projectName
-                            + " and status != done ORDER BY RANK&fields=summary,description," + ESTIMATION_FIELD
+                    JIRA_SERVER_API_URL + "/search?jql=project='" + projectName
+                            + "' and status != done ORDER BY RANK&fields=summary,description," + ESTIMATION_FIELD
                             + "&maxResults=1000"),
                     "GET", null);
             // The reply from the Jira API is no correct JSON, therefore [ and ] have to be

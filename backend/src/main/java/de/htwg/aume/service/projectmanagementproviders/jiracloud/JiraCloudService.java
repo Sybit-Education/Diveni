@@ -101,8 +101,8 @@ public class JiraCloudService implements ProjectManagementProviderOAuth2 {
     public List<UserStory> getIssues(String tokenIdentifier, String projectName) {
         String cloudID = getCloudID(accessTokens.get(tokenIdentifier));
         ResponseEntity<String> response = executeRequest(
-                String.format(JIRA_HOME, cloudID) + "/search?jql=project=" + projectName
-                        + " order by rank&fields=summary,description," + ESTIMATION_FIELD,
+                String.format(JIRA_HOME, cloudID) + "/search?jql=project='" + projectName
+                        + "' order by rank&fields=summary,description," + ESTIMATION_FIELD,
                 HttpMethod.GET, accessTokens.get(tokenIdentifier), null);
         try {
             List<UserStory> userStories = new ArrayList<>();
