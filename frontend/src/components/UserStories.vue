@@ -51,7 +51,7 @@
               'font-size': 'larger',
             }"
           >
-            {{ story.estimation }}
+            {{ story.estimation == null ? "?" : story.estimation }}
           </div>
         </div>
       </div>
@@ -75,6 +75,7 @@
 
 <script lang="ts">
 import Vue from "vue";
+import UserStory from "../model/UserStory";
 
 export default Vue.extend({
   name: "UserStoryTitles",
@@ -89,39 +90,20 @@ export default Vue.extend({
     return {
       number: null,
       sideBarOpen: false,
-      editEnabled: false,
-      userStories: [] as Array<{
-        title: string;
-        description: string;
-        estimation: string | null;
-        isActive: boolean;
-      }>,
+      userStories: [] as Array<UserStory>,
       hover: null,
     };
   },
   watch: {
-    userStories() {
-      this.publishChanges();
-    },
+    // userStories() {
+    //   this.publishChanges();
+    // },
     initialStories() {
-      this.userStories = this.initialStories as Array<{
-        title: string;
-        description: string;
-        estimation: string | null;
-        isActive: boolean;
-      }>;
-    },
-    editEnabled() {
-      this.publishChanges();
+      this.userStories = this.initialStories as Array<UserStory>;
     },
   },
-  created() {
-    this.userStories = this.initialStories as Array<{
-      title: string;
-      description: string;
-      estimation: string | null;
-      isActive: boolean;
-    }>;
+  mounted() {
+    this.userStories = this.initialStories as Array<UserStory>;
   },
   methods: {
     setUserStoryAsActive(index) {
@@ -129,27 +111,24 @@ export default Vue.extend({
       this.$emit("selectedStory", index);
     },
     addUserStory() {
-      this.userStories.push({
+      const story: UserStory = {
+        jiraId: null,
         title: "",
         description: "",
         estimation: null,
         isActive: false,
-      });
+      };
+      this.userStories.push(story);
     },
     deleteStory(index) {
-      this.userStories.splice(index, 1);
+      this.publishChanges(index, true);
     },
-    editOrSave() {
-      if (!this.editEnabled) {
-        this.publishChanges();
-      }
-      this.editEnabled = !this.editEnabled;
-    },
-    publishChanges() {
-      this.$emit("userStoriesChanged", this.userStories);
+    publishChanges(index, remove) {
+      this.$emit("userStoriesChanged", { us: this.userStories, idx: index, doRemove: remove });
     },
     markUserStory(index) {
       const stories = this.userStories.map((s) => ({
+        jiraId: s.jiraId,
         title: s.title,
         description: s.description,
         estimation: s.estimation,
@@ -157,6 +136,7 @@ export default Vue.extend({
       }));
       stories[index].isActive = true;
       this.userStories = stories;
+      this.publishChanges(index, false);
     },
   },
 });

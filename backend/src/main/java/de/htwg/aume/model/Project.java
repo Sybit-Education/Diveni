@@ -7,4 +7,5 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class Project {
     private final String name;
+    private final String id;
 }

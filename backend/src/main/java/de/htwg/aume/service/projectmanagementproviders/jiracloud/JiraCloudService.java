@@ -11,9 +11,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.api.client.util.Base64;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -26,6 +23,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import de.htwg.aume.Utils;
 import de.htwg.aume.controller.ErrorMessages;
+import de.htwg.aume.model.Project;
 import de.htwg.aume.model.TokenIdentifier;
 import de.htwg.aume.model.UserStory;
 import de.htwg.aume.service.projectmanagementproviders.ProjectManagementProviderOAuth2;
@@ -83,17 +81,17 @@ public class JiraCloudService implements ProjectManagementProviderOAuth2 {
     }
 
     @Override
-    public List<String> getProjects(String tokenIdentifier) {
+    public List<Project> getProjects(String tokenIdentifier) {
         val accessToken = accessTokens.get(tokenIdentifier);
         String cloudID = getCloudID(accessToken);
         try {
-            List<String> projects = new ArrayList<>();
+            List<Project> projects = new ArrayList<>();
             ResponseEntity<String> response = executeRequest(String.format(getJiraUrl(), cloudID) + "/project/search",
                     HttpMethod.GET, accessToken, null);
             JsonNode node = new ObjectMapper().readTree(response.getBody());
 
             for (JsonNode projectNode : node.path("values")) {
-                projects.add(projectNode.get("name").asText());
+                projects.add(new Project(projectNode.get("name").asText(), projectNode.get("id").asText()));
             }
             return projects;
         } catch (Exception e) {
@@ -107,7 +105,8 @@ public class JiraCloudService implements ProjectManagementProviderOAuth2 {
     public List<UserStory> getIssues(String tokenIdentifier, String projectName) {
         String cloudID = getCloudID(accessTokens.get(tokenIdentifier));
         ResponseEntity<String> response = executeRequest(
-                String.format(getJiraUrl(), cloudID) + "/search?jql=project='" + projectName
+                String.format(
+                        getJiraUrl(), cloudID) + "/search?jql=project='" + projectName
                         + "' order by rank&fields=summary,description," + ESTIMATION_FIELD,
                 HttpMethod.GET, accessTokens.get(tokenIdentifier), null);
         try {
@@ -115,12 +114,13 @@ public class JiraCloudService implements ProjectManagementProviderOAuth2 {
             JsonNode node = new ObjectMapper().readTree(response.getBody());
             for (JsonNode issue : node.path("issues")) {
                 val fields = issue.get("fields");
-                String estimation = fields.get(ESTIMATION_FIELD).asText();
+                String estimation = fields.get(ESTIMATION_FIELD).isNull() ? null
+                        : String.valueOf(fields.get(ESTIMATION_FIELD).asDouble());
                 if (estimation != null && estimation.endsWith(".0")) {
                     estimation = estimation.substring(0, estimation.length() - 2);
                 }
-                userStories.add(new UserStory(issue.get("id").asText(), fields.get("summary").asText(),
-                        fields.get("description").asText(), estimation, false));
+                userStories.add(new UserStory(issue.get("id").textValue(), fields.get("summary").textValue(),
+                        fields.get("description").textValue(), estimation, false));
             }
             return userStories;
         } catch (Exception e) {
@@ -171,6 +171,12 @@ public class JiraCloudService implements ProjectManagementProviderOAuth2 {
     }
 
     @Override
+    public String getCurrentUsername(String tokenIdentifier) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
     public boolean containsToken(String token) {
         return accessTokens.containsKey(token);
     }
@@ -202,7 +208,13 @@ public class JiraCloudService implements ProjectManagementProviderOAuth2 {
         return restTemplate.exchange(url, method, request, String.class);
     }
 
-    private String getJiraUrl(){
+    @Override
+    public String createIssue(String tokenIdentifier, String projectID, UserStory story) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    private String getJiraUrl() {
         return JIRA_HOME + JIRA_CLOUD_API_VERSION;
     }
 

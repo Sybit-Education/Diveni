@@ -17,7 +17,7 @@
             class="border"
             size="lg"
             :placeholder="$t('page.session.before.userStories.placeholder.userStoryTitle')"
-            @blur="publishChanges"
+            @blur="publishChanges(idx)"
           />
           <b-dropdown
             v-show="editDescription"
@@ -26,19 +26,16 @@
             variant="info"
           >
             <b-dropdown-item
-              v-for="num in cardSet"
+              v-for="num in filteredCardSet"
               :key="num"
               :disabled="!editDescription"
-              :value="num == null ? '?' : num"
-              @click="userStories[idx].estimation = num"
+              :value="num"
+              @click="
+                userStories[idx].estimation = num;
+                publishChanges(idx);
+              "
             >
               {{ num }}
-            </b-dropdown-item>
-            <b-dropdown-item
-              :disabled="!editDescription"
-              @click="userStories[idx].estimation = null"
-            >
-              ?
             </b-dropdown-item>
           </b-dropdown>
         </div>
@@ -51,7 +48,7 @@
             max-rows="40"
             :disabled="!editDescription"
             :placeholder="$t('page.session.before.userStories.placeholder.userStoryDescription')"
-            @blur="publishChanges"
+            @blur="publishChanges(idx)"
           />
         </div>
       </b-list-group-item>
@@ -81,8 +78,8 @@ export default Vue.extend({
   data() {
     return {
       sideBarOpen: false,
-      editEnabled: false,
       userStories: [] as Array<{
+        jiraId: string | null;
         title: string;
         description: string;
         estimation: string | null;
@@ -90,24 +87,25 @@ export default Vue.extend({
       }>,
     };
   },
-  watch: {
-    userStories() {
-      this.publishChanges();
+  computed: {
+    filteredCardSet(): any {
+      return this.cardSet.filter((card) => card !== "?");
     },
+  },
+  watch: {
     initialStories() {
       this.userStories = this.initialStories as Array<{
+        jiraId: string | null;
         title: string;
         description: string;
         estimation: string | null;
         isActive: boolean;
       }>;
     },
-    editEnabled() {
-      this.publishChanges();
-    },
   },
   created() {
     this.userStories = this.initialStories as Array<{
+      jiraId: string | null;
       title: string;
       description: string;
       estimation: string | null;
@@ -117,6 +115,7 @@ export default Vue.extend({
   methods: {
     setUserStoryAsActive(index) {
       const stories = this.userStories.map((s) => ({
+        jiraId: s.jiraId,
         title: s.title,
         description: s.description,
         estimation: s.estimation,
@@ -124,32 +123,23 @@ export default Vue.extend({
       }));
       stories[index].isActive = true;
       this.userStories = stories;
+      this.publishChanges(index);
     },
     addUserStory() {
       this.userStories.push({
+        jiraId: null,
         title: "",
         description: "",
         estimation: null,
         isActive: false,
       });
     },
-    deleteStory(index) {
-      this.userStories.splice(index, 1);
+    publishChanges(idx) {
+      this.$emit("userStoriesChanged", { us: this.userStories, idx: idx, doRemove: false });
     },
-    editOrSave() {
-      if (!this.editEnabled) {
-        this.publishChanges();
-      }
-      this.editEnabled = !this.editEnabled;
-    },
-    publishChanges() {
-      this.$emit("userStoriesChanged", this.userStories);
-    },
-    toggleSideBar() {
-      this.sideBarOpen = !this.sideBarOpen;
-      this.editEnabled = false;
-      this.publishChanges();
-    },
+    // synchronizeJira(idx) {
+    //   this.$emit("synchronizeJira", { story: this.userStories[idx], doRemove: false });
+    // },
   },
 });
 </script>
