@@ -123,15 +123,11 @@ export default Vue.extend({
       this.userStories.push(story);
     },
     deleteStory(index) {
-      // this.userStories.splice(index, 1);
       this.publishChanges(index, true);
     },
     publishChanges(index, remove) {
       this.$emit("userStoriesChanged", { us: this.userStories, idx: index, doRemove: remove });
     },
-    // synchronizeJira(idx, remove) {
-    //   this.$emit("synchronizeJira", { story: this.userStories[idx], doRemove: remove });
-    // },
     markUserStory(index) {
       const stories = this.userStories.map((s) => ({
         jiraId: s.jiraId,
