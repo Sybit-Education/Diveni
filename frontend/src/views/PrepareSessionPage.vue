@@ -42,7 +42,11 @@
       <h4 class="mt-4">
         {{ $t("session.prepare.step.selection.cardSet.title") }}
       </h4>
-      <card-set-component class="mt-3" @selectedCardSetOptions="setCardSetOptions" />
+      <card-set-component
+        class="mt-3"
+        :user-story-mode="userStoryMode"
+        @selectedCardSetOptions="setCardSetOptions"
+      />
       <h4 class="mt-3">
         {{ $t("session.prepare.step.selection.time.title") }}
       </h4>
@@ -121,6 +125,9 @@ export default Vue.extend({
     userStories() {
       return this.$store.state.userStories;
     },
+    userStoryMode(): string {
+      return ["NO_US", "US_MANUALLY", "US_JIRA"][this.tabIndex];
+    },
     formatTimer(): string {
       const minutes = Math.floor(this.timer / 60);
       const seconds = (this.timer % 60).toString().padStart(2, "0");
@@ -159,7 +166,7 @@ export default Vue.extend({
         timerSeconds: this.timer,
         password: this.password === "" ? null : this.password,
         userStories: this.userStories,
-        userStoryMode: ["NO_US", "US_MANUALLY", "US_JIRA"][this.tabIndex],
+        userStoryMode: this.userStoryMode,
       };
       try {
         const response = (await this.axios.post(url, sessionConfig)).data as {

@@ -16,7 +16,6 @@
       <div class="list-group list-group-horizontal">
         <b-button
           v-if="showEditButtons"
-          class="m-1"
           :variant="story.isActive ? 'success' : 'outline-success'"
           @click="markUserStory(index)"
         >
@@ -25,7 +24,7 @@
         <b-form-input
           v-model="userStories[index].title"
           :disabled="true"
-          class="border-1"
+          class="border-1 mx-1"
           size="lg"
           :style="{
             'background-color': index === number ? 'RGB(202, 202, 202)' : 'white',
@@ -35,7 +34,8 @@
         />
         <b-button
           v-show="showEditButtons && hover === index"
-          variant="danger"
+          variant="outline-danger"
+          class="border-0"
           @click="
             synchronizeJira(index, true);
             deleteStory(index);

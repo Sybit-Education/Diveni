@@ -30,14 +30,15 @@
             "userStoryTitle": "User Story Titel",
             "userStoryDescription": "Beschreibung und Akzeptanzkriterien..."
           },
-          "text": "Klicke auf ein User Story Titel um die Beschreibung zu sehen"
+          "text": "Klicke auf ein User Story Titel um die Beschreibung zu sehen",
+          "sum": "Summe:"
         }
       },
       "during": {
         "estimation": {
           "title": "Schätzrunde",
           "message": {
-            "waitingFor": "Warte auf die Schätzungen",
+            "waitingFor": "Warte auf",
             "finished": "Schätzrunde beendet"
           },
           "buttons": {
@@ -109,7 +110,7 @@
     },
     "vote": {
       "title": "Schätze!",
-      "waiting": "Warte, bis der Organisator die Schätzrunde startet ...",
+      "waiting": "Warte, bis der Organisator die Schätzrunde startet",
       "button": {
         "leave": {
           "label": "Session verlassen"
@@ -151,10 +152,13 @@
                   "label": "Planning mit Jira"
                 },
                 "subtitle": "Wähle die Jira-Integration für das Planning",
-                "descriptionLine1": "Bitte melde dich mit Jira an",
+                "descriptionLine1": "Logge dich mit deinen Anmeldedaten ein",
                 "descriptionLine2": "Wähle dein Projekt",
                 "descriptionLine3": "Nach dem klicken auf start session, wirst du auf die nächste Seite gelangen um die user Stories ggf. zu bearbeiten",
                 "descriptionLine4": "Du kannst nach Start der Session User Stories bearbeiten oder neue hinzufügen",
+                "formSelection": "Bitte wähle dein Projekt aus",
+                "selectedProject": "Ausgewähltes Projekt: ",
+                "allUserStories": "Alle User Stories",
                 "dialog": {
                   "description": "Es öffnet sich gleich ein neuer Tab. Bitte gewähre dieser Anwendung in diesem Tab den Zugriff und trage den Verifizierungscode hier ein."
                 },
