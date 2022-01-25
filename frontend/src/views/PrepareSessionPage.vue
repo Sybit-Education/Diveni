@@ -256,6 +256,7 @@ export default Vue.extend({
             let estimation = story.estimation ? story.estimation : story.Estimation;
 
             stories.push({
+              jiraId: null,
               title: title,
               description: description,
               estimation: estimation,

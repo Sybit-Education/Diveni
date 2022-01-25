@@ -38,9 +38,41 @@ class ApiService {
     const response = await axios.get(`${constants.backendURL}/jira/projects`);
     return response.data;
   }
+
   public async getUserStoriesFromProject(project): Promise<any> {
     const response = await axios.get(`${constants.backendURL}/jira/projects/${project}/issues`);
     return response.data;
+  }
+
+  public async updateUserStory(story): Promise<any> {
+    const response = await axios.put(`${constants.backendURL}/jira/issue`, story, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return response;
+  }
+
+  public async createUserStory(story, projectID): Promise<any> {
+    const response = await axios.post(
+      `${constants.backendURL}/jira/issue?projectID=${projectID}`,
+      story,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response;
+  }
+
+  public async deleteUserStory(jiraId): Promise<any> {
+    const response = await axios.delete(`${constants.backendURL}/jira/issue/${jiraId}`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return response;
   }
 }
 

@@ -238,6 +238,8 @@
         "memberJoined": "Teilnehmer ist der Sitzung beigetreten",
         "jiraCredentials": "Falsche Login-Daten",
         "jiraLoginFailed": "Login fehlgeschlagen",
+        "jiraSynchronizeSuccess": "Änderungen mit Jira synchronisiert",
+        "jiraSynchronizeFailed": "Fehler beim Synchronisieren mit Jira",
         "wrongID": "Falscher Einladungscode",
         "password": "Falsches Passwort"
       }

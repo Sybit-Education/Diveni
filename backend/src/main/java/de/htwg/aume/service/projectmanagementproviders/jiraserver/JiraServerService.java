@@ -28,6 +28,7 @@ import org.springframework.web.server.ResponseStatusException;
 import de.htwg.aume.Utils;
 import de.htwg.aume.controller.ErrorMessages;
 import de.htwg.aume.model.JiraRequestToken;
+import de.htwg.aume.model.Project;
 import de.htwg.aume.model.TokenIdentifier;
 import de.htwg.aume.model.UserStory;
 import de.htwg.aume.service.projectmanagementproviders.ProjectManagementProviderOAuth1;
@@ -48,6 +49,7 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
     private String RANK_NAME;
 
     private final int JIRA_SERVER_API_VERSION = 2;
+    private static final String USER_STORY_ID = "10002";
 
     @Getter
     private final Map<String, String> accessTokens = new HashMap<>();
@@ -93,9 +95,9 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
     }
 
     @Override
-    public List<String> getProjects(String tokenIdentifier) {
+    public List<Project> getProjects(String tokenIdentifier) {
         try {
-            List<String> projects = new ArrayList<>();
+            List<Project> projects = new ArrayList<>();
             val accessToken = accessTokens.get(tokenIdentifier);
             JiraOAuthClient jiraOAuthClient = new JiraOAuthClient(JIRA_HOME);
             OAuthParameters parameters = jiraOAuthClient.getParameters(accessToken, CONSUMER_KEY, PRIVATE_KEY);
@@ -104,9 +106,7 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
             ObjectNode[] node = new ObjectMapper().readValue(response.parseAsString(), ObjectNode[].class);
 
             for (ObjectNode objectNode : node) {
-                if (objectNode.has("name")) {
-                    projects.add(objectNode.get("name").asText());
-                }
+                projects.add(new Project(objectNode.get("name").asText(), objectNode.get("id").asText()));
             }
             return projects;
         } catch (Exception e) {
@@ -125,7 +125,8 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
             OAuthParameters parameters = jiraOAuthClient.getParameters(accessToken, CONSUMER_KEY, PRIVATE_KEY);
             HttpResponse response = getResponseFromUrl(parameters, new GenericUrl(
                     getJiraUrl() + "/search?jql=project='" + projectName
-                            + "' and status != done ORDER BY " + RANK_NAME + "&fields=summary,description," + ESTIMATION_FIELD
+                            + "' and status != done ORDER BY " + RANK_NAME + "&fields=summary,description,"
+                            + ESTIMATION_FIELD
                             + "&maxResults=1000"),
                     "GET", null);
             // The reply from the Jira API is no correct JSON, therefore [ and ] have to be
@@ -137,16 +138,13 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
             for (ObjectNode objectNode : node) {
                 for (JsonNode jsonNode : objectNode.get("issues")) {
                     val fields = jsonNode.get("fields");
-                    String estimation = null;
-                    if (fields.get(ESTIMATION_FIELD)!= null){
-                        estimation = fields.get(ESTIMATION_FIELD).asText();
-                    }
-
+                    String estimation = fields.get(ESTIMATION_FIELD).isNull() ? null
+                            : String.valueOf(fields.get(ESTIMATION_FIELD).asDouble());
                     if (estimation != null && estimation.endsWith(".0")) {
                         estimation = estimation.substring(0, estimation.length() - 2);
                     }
-                    userStories.add(new UserStory(jsonNode.get("id").asText(), fields.get("summary").asText(),
-                            fields.get("description").asText(), estimation, false));
+                    userStories.add(new UserStory(jsonNode.get("id").textValue(), fields.get("summary").textValue(),
+                            fields.get("description").textValue(), estimation, false));
                 }
             }
 
@@ -188,6 +186,31 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
         }
     }
 
+    public String createIssue(String tokenIdentifier, String projectID, UserStory story) {
+        Map<String, Map<String, Object>> content = new HashMap<>();
+        Map<String, Object> fields = new HashMap<>();
+        fields.put("reporter", Map.of("name", getCurrentUsername(tokenIdentifier)));
+        fields.put("issuetype", Map.of("id", USER_STORY_ID));
+        fields.put("project", Map.of("id", projectID));
+        fields.put("summary", story.getTitle());
+        content.put("fields", fields);
+        try {
+            JiraOAuthClient jiraOAuthClient = new JiraOAuthClient(JIRA_HOME);
+            OAuthParameters parameters = jiraOAuthClient.getParameters(accessTokens.get(tokenIdentifier),
+                    CONSUMER_KEY, PRIVATE_KEY);
+            HttpResponse response = getResponseFromUrl(parameters, new GenericUrl(
+                    getJiraUrl() + "/issue"), "POST",
+                    new JsonHttpContent(GsonFactory.getDefaultInstance(), content));
+
+            JsonNode node = new ObjectMapper().readTree(response.parseAsString());
+            return node.path("id").asText();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                    ErrorMessages.failedToDeleteIssueErrorMessage);
+        }
+    }
+
     @Override
     public void deleteIssue(String tokenIdentifier, String jiraID) {
         try {
@@ -201,7 +224,25 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
         } catch (Exception e) {
             e.printStackTrace();
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
-                    ErrorMessages.failedToEditIssueErrorMessage);
+                    ErrorMessages.failedToDeleteIssueErrorMessage);
+        }
+    }
+
+    @Override
+    public String getCurrentUsername(String tokenIdentifier) {
+        try {
+            JiraOAuthClient jiraOAuthClient = new JiraOAuthClient(JIRA_HOME);
+            OAuthParameters parameters = jiraOAuthClient.getParameters(accessTokens.get(tokenIdentifier),
+                    CONSUMER_KEY, PRIVATE_KEY);
+            HttpResponse response = getResponseFromUrl(parameters, new GenericUrl(
+                    JIRA_HOME + "/rest/auth/latest/session"), "GET", null);
+            String res = response.parseAsString();
+            JsonNode node = new ObjectMapper().readTree(res);
+            return node.path("name").asText();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                    ErrorMessages.failedToRetrieveUsernameErrorMessage);
         }
     }
 

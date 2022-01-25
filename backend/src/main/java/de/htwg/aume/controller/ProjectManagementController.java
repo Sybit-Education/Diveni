@@ -14,9 +14,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import de.htwg.aume.model.JiraRequestToken;
+import de.htwg.aume.model.Project;
 import de.htwg.aume.model.TokenIdentifier;
 import de.htwg.aume.model.UserStory;
 import de.htwg.aume.model.VerificationCode;
@@ -61,7 +64,7 @@ public class ProjectManagementController {
 	}
 
 	@GetMapping(value = "/projects")
-	public ResponseEntity<List<String>> getProjects(@RequestHeader("X-Token-ID") String tokenIdentifier) {
+	public ResponseEntity<List<Project>> getProjects(@RequestHeader("X-Token-ID") String tokenIdentifier) {
 		val projectManagementProvider = getProjectManagementProvider(tokenIdentifier);
 
 		if (projectManagementProvider == null) {
@@ -83,18 +86,25 @@ public class ProjectManagementController {
 		return new ResponseEntity<>(projectManagementProvider.getIssues(tokenIdentifier, projectName), HttpStatus.OK);
 	}
 
-	// TODO: For testing with postman at the moment, will be changed when
-	// implementing frontend for it
-	/* @RequestParam("sessionID") sessionID, */
 	@PutMapping(value = "/issue")
 	public void updateIssue(@RequestHeader("X-Token-ID") String tokenIdentifier, @RequestBody UserStory userStory) {
-		// val session = ControllerUtils.getSessionOrThrowResponse(databaseService,
-		// sessionID);
 		val projectManagementProvider = getProjectManagementProvider(tokenIdentifier);
 
 		if (projectManagementProvider != null) {
 			projectManagementProvider.updateIssue(tokenIdentifier, userStory);
 		}
+	}
+
+	@PostMapping(value = "issue")
+	public ResponseEntity<String> createIssue(@RequestHeader("X-Token-ID") String tokenIdentifier,
+			@RequestParam("projectID") String projectID, @RequestBody UserStory userStory) {
+		val projectManagementProvider = getProjectManagementProvider(tokenIdentifier);
+
+		if (projectManagementProvider != null) {
+			return new ResponseEntity<>(projectManagementProvider.createIssue(tokenIdentifier, projectID, userStory),
+					HttpStatus.OK);
+		}
+		throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to create issue");
 	}
 
 	@DeleteMapping(value = "/issue/{jiraID}")

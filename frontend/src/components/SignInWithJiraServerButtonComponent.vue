@@ -101,6 +101,7 @@ export default Vue.extend({
           this.verificationCode,
           this.token
         );
+        localStorage.setItem("tokenId", response.tokenId);
         this.$store.commit("setTokenId", response.tokenId);
       } catch (e) {
         this.showToast(e);

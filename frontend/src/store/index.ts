@@ -19,6 +19,7 @@ export default new Vuex.Store<StoreState>({
     timerTimestamp: undefined,
     tokenId: undefined,
     projects: [],
+    selectedProject: undefined,
   },
   mutations: {
     setMembers(state, members) {
@@ -75,6 +76,9 @@ export default new Vuex.Store<StoreState>({
       state.notifications = [];
       state.webSocketConnected = false;
       state.stompClient = undefined;
+    },
+    setSelectedProject(state, project) {
+      state.selectedProject = project;
     },
     setProjects(state, projects) {
       state.projects = projects;
