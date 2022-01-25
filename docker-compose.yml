@@ -14,6 +14,8 @@ services:
     build: ./backend
     image: aume2021-team-2_backend
     container_name: aume2021-team-2_backend
+    env_file:
+      - ./backend/.env
     ports:
       - 9090:9090
     restart: always

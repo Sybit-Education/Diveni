@@ -20,6 +20,7 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.http.json.JsonHttpContent;
 import com.google.api.client.json.gson.GsonFactory;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -35,14 +36,18 @@ import lombok.val;
 
 @Service
 public class JiraServerService implements ProjectManagementProviderOAuth1 {
-    private static final String JIRA_HOME = "http://5.189.185.210:8080";
-    private static final String CONSUMER_KEY = "OauthKey";
-    private static final String PRIVATE_KEY = "MIICeAIBADANBgkqhkiG9w0BAQEFAASCAmIwggJeAgEAAoGBAOMj4i7WeH+0OYkgr7+fhc2qJbdaOUh4JmnHBnVqQMwpZDotsyr7HCWZXlvTjbQCr2NQxq424yEbFitcK1ZuNfS8zTp8vm4Ch4u/FTQBm5nPP3fM4FkLYzZQmQqnStirzUFrGSK4jtqS5wh+lfgXCPOp3mSoDp7KVizHSBQTBtXbAgMBAAECgYEAqx83og3WTm+bASJtBbLK/Xz4WUBR87UBS6Ozy/W2x5lPdz1CxFjWhcUb/5ZMJZf4RpxucoXLa/+aHiScSctSPZo7GgOUL1rEVi/POdht8w67N/KWA57VQy9n087MaMCOWf3ezfxcUMv4fzolgF3TxIMM+cYnFULydl8yzMGnBRECQQDzw1m1al/qYCfBtUeuQVd98i+QPLRvFcTCvo0848NT/Cl81iUCymr2LY/dvJEx2xJ3eC4xPw1UlIwt9RN7JQpFAkEA7oromA0e3igxyeQ7zUBBEdZLk7RbrNZ7FJ1ShdRqMcD3Ln+nwkLr0g9o/2XGkh2+EexyKEk4P4iwrIXoddlxnwJAYQ5Q86itE/bBHaF+LuWZXm5FfdqNxQUX2KpiNfJB3XizVB83kUrjF63AcHsaHI2rZqIVUkpWlmym+81uukNfOQJBALZejKRyo37EzAvF6dJppVW1t+IcqVniQAbqoASg+O9Az7lE70SdVR0rmuJnNQDQrFeXpU8Xa2FnZ2r+lVJEA5ECQQC6fPxR9WBpaJM2hfEBDFxaggbTNwoPA3uOLOGSTYkHXBZ98idjesfu3ZOq06IsVaLZEuIz/hIvvrdzjYRnugFA";
+    @Value("${JIRA_SERVER_JIRAHOME}")
+    private String JIRA_HOME;
+    @Value("${JIRA_SERVER_CONSUMERKEY:OauthKey}")
+    private String CONSUMER_KEY;
+    @Value("${JIRA_SERVER_PRIVATEKEY}")
+    private String PRIVATE_KEY;
+    @Value("${JIRA_SERVER_ESTIMATIONFIELD:customfield_10111}")
+    private String ESTIMATION_FIELD;
+    @Value("${JIRA_SERVER_RANKNAME:RANK}")
+    private String RANK_NAME;
 
-    private static final String ESTIMATION_FIELD = "customfield_10111";
-    private static final int JIRA_SERVER_API_VERSION = 2;
-    private static final String JIRA_SERVER_API_URL = String.format("%s/rest/api/%d", JIRA_HOME,
-            JIRA_SERVER_API_VERSION);
+    private final int JIRA_SERVER_API_VERSION = 2;
 
     @Getter
     private final Map<String, String> accessTokens = new HashMap<>();
@@ -95,7 +100,7 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
             JiraOAuthClient jiraOAuthClient = new JiraOAuthClient(JIRA_HOME);
             OAuthParameters parameters = jiraOAuthClient.getParameters(accessToken, CONSUMER_KEY, PRIVATE_KEY);
             HttpResponse response = getResponseFromUrl(parameters,
-                    new GenericUrl(JIRA_SERVER_API_URL + "/project"), "GET", null);
+                    new GenericUrl(getJiraUrl() + "/project"), "GET", null);
             ObjectNode[] node = new ObjectMapper().readValue(response.parseAsString(), ObjectNode[].class);
 
             for (ObjectNode objectNode : node) {
@@ -119,8 +124,8 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
             JiraOAuthClient jiraOAuthClient = new JiraOAuthClient(JIRA_HOME);
             OAuthParameters parameters = jiraOAuthClient.getParameters(accessToken, CONSUMER_KEY, PRIVATE_KEY);
             HttpResponse response = getResponseFromUrl(parameters, new GenericUrl(
-                    JIRA_SERVER_API_URL + "/search?jql=project=" + projectName
-                            + " and status != done ORDER BY RANK&fields=summary,description," + ESTIMATION_FIELD
+                    getJiraUrl() + "/search?jql=project='" + projectName
+                            + "' and status != done ORDER BY " + RANK_NAME + "&fields=summary,description," + ESTIMATION_FIELD
                             + "&maxResults=1000"),
                     "GET", null);
             // The reply from the Jira API is no correct JSON, therefore [ and ] have to be
@@ -132,7 +137,11 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
             for (ObjectNode objectNode : node) {
                 for (JsonNode jsonNode : objectNode.get("issues")) {
                     val fields = jsonNode.get("fields");
-                    String estimation = fields.get(ESTIMATION_FIELD).asText();
+                    String estimation = null;
+                    if (fields.get(ESTIMATION_FIELD)!= null){
+                        estimation = fields.get(ESTIMATION_FIELD).asText();
+                    }
+
                     if (estimation != null && estimation.endsWith(".0")) {
                         estimation = estimation.substring(0, estimation.length() - 2);
                     }
@@ -169,7 +178,7 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
             OAuthParameters parameters = jiraOAuthClient.getParameters(accessTokens.get(tokenIdentifier),
                     CONSUMER_KEY, PRIVATE_KEY);
             HttpResponse response = getResponseFromUrl(parameters, new GenericUrl(
-                    JIRA_SERVER_API_URL + "/issue/" + story.getJiraId()), "PUT",
+                    getJiraUrl() + "/issue/" + story.getJiraId()), "PUT",
                     new JsonHttpContent(GsonFactory.getDefaultInstance(), content));
             System.out.print(response.parseAsString());
         } catch (Exception e) {
@@ -186,7 +195,7 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
             OAuthParameters parameters = jiraOAuthClient.getParameters(accessTokens.get(tokenIdentifier),
                     CONSUMER_KEY, PRIVATE_KEY);
             HttpResponse response = getResponseFromUrl(parameters, new GenericUrl(
-                    JIRA_SERVER_API_URL + "/issue/" + jiraID), "DELETE", null);
+                    getJiraUrl() + "/issue/" + jiraID), "DELETE", null);
 
             System.out.print(response.parseAsString());
         } catch (Exception e) {
@@ -214,6 +223,11 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
     @Override
     public boolean containsToken(String token) {
         return accessTokens.containsKey(token);
+    }
+
+    private String getJiraUrl() {
+        return String.format("%s/rest/api/%d", JIRA_HOME,
+                JIRA_SERVER_API_VERSION);
     }
 
 }
