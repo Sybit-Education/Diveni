@@ -3,22 +3,16 @@ Software architecture
 
 ##Content Overview
 
-    1 Context diagram
-    2 Component diagram
-    3 Database
-    4 Distribution diagram
-    5 Testing
-    6 Deployment
+    1 Component diagram
+    2 Component description
+        2.1 Frontend
+        2.2 Backend
+    3 API
+        3.1 REST API
+        3.2 Websocket
+    4 Testing
 
-1 Context diagram
-----------------------
-
-The diagram below is a context diagram. It serves to illustrate the system from a black box perspective. Furthermore, interfaces to other systems are also depicted here. 
-A connection to a Jira instance is required.
-
-![context-diagram](./assets/diagram/context-diagram.png)
-
-2 Component diagram
+1 Component diagram
 --------------------------------------
 
 Context delineation provided insight of the system from a black box perspective. In the building block view
@@ -26,9 +20,10 @@ the internal structure and the components to be developed are now considered.
 
 ![components-diagram](./assets/diagram/components-diagram-03.png)
 
-## Component Overview
+2 Component description
+--------------------------------------
 
-### Frontend
+##2.1 Frontend
 
 | Component | Description   |
 | --------- | -----------   |
@@ -75,7 +70,7 @@ the internal structure and the components to be developed are now considered.
 | ----------- | |
 | Store | The store includes data which can be accessed from all views and components |
 
-### Backend
+##2.2 Backend
 
 | Component | Description   |
 | --------- | -----------   |
@@ -134,11 +129,14 @@ the internal structure and the components to be developed are now considered.
 | JiraOAuthTokenFactory | Helper class for Jira Server OAuth1 |
 | ----------- | |
 
-
 3 API
 -------------------
 
+##3.1 REST API
+
 The current documentation for the REST API can be seen on https://pp.vnmz.de/api/swagger-ui.html.
+
+##3.2 Websocket
 
 This sequence diagram shows all Websocket commands and when they are used. 
 
