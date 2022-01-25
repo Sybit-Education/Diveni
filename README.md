@@ -1,8 +1,6 @@
 <br />
 <div align="center">
   <img src="docs/assets/diveni_banner.png" width="560" />
-  <img src="docs/assets/voting.png" />
-  <img src="docs/assets/estimation_result.png" />
 </div>
 <br />
 <p align="center">
@@ -41,6 +39,12 @@ Join a meeting:
 Depending on your device, you can see the results of the other members.
 6.	The planning can be restarted at any given time by the host.
 
+## Screenshots
+
+<div align="center">
+  <img src="docs/assets/voting.png" />
+  <img src="docs/assets/estimation_result.png" />
+</div>
 
 ## Application Instructions and Requirements:
 
