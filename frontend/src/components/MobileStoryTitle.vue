@@ -3,7 +3,7 @@
     <div class="list">
       <b-list-group-item
         v-for="(story, idx) of userStories"
-        v-show="idx === index"
+        v-show="story.isActive"
         :key="story.name"
         class="border-0"
         variant="outline-secondary"
@@ -13,54 +13,14 @@
             v-model="userStories[idx].title"
             rows="1"
             max-rows="3"
-            :disabled="!editDescription"
+            :disabled="true"
             class="border"
             size="lg"
             :placeholder="$t('page.session.before.userStories.placeholder.userStoryTitle')"
             @blur="publishChanges"
           />
-          <b-dropdown
-            v-show="editDescription"
-            class="mx-1"
-            :text="(userStories[idx].estimation ? userStories[idx].estimation : '?') + '    '"
-            variant="info"
-          >
-            <b-dropdown-item
-              v-for="num in cardSet"
-              :key="num"
-              :disabled="!editDescription"
-              :value="num == null ? '?' : num"
-              @click="userStories[idx].estimation = num"
-            >
-              {{ num }}
-            </b-dropdown-item>
-            <b-dropdown-item
-              :disabled="!editDescription"
-              @click="userStories[idx].estimation = null"
-            >
-              ?
-            </b-dropdown-item>
-          </b-dropdown>
-        </div>
-        <div>
-          <b-form-textarea
-            id="textarea-auto-height"
-            v-model="userStories[idx].description"
-            class="mt-1"
-            rows="27"
-            max-rows="40"
-            :disabled="!editDescription"
-            :placeholder="$t('page.session.before.userStories.placeholder.userStoryDescription')"
-            @blur="publishChanges"
-          />
         </div>
       </b-list-group-item>
-      <div
-        v-if="userStories.length <= index && userStories.length"
-        class="text-center rounded p-3 m-2"
-      >
-        <b-card class="border-0" :title="$t('page.session.before.userStories.text')" />
-      </div>
     </div>
   </div>
 </template>
@@ -69,7 +29,7 @@
 import Vue from "vue";
 
 export default Vue.extend({
-  name: "UserStoryDescriptions",
+  name: "MobileStoryTitle",
   props: {
     index: { type: Number, required: true },
     cardSet: { type: Array, required: true },

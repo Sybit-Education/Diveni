@@ -5,7 +5,7 @@
       {{ sessionId }}
     </b-link>
     {{ textAfterSessionID }}
-    <b-popover target="popover-link" triggers="hover" placement="top">
+    <b-popover id="popover" target="popover-link" triggers="hover" placement="top">
       <b-button class="mx-1" variant="success" @click="copyIdToClipboard()">
         {{ $t("page.session.before.copy.id") }}
       </b-button>
@@ -56,4 +56,8 @@ export default Vue.extend({
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped></style>
+<style scoped>
+#popover {
+  max-width: 400px;
+}
+</style>

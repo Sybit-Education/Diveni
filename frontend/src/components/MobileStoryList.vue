@@ -9,22 +9,13 @@
         'border-color': story.isActive ? 'RGB(202, 202, 202)' : 'white',
       }"
       :active="story.isActive"
-      @mouseover="hover = index"
-      @mouseleave="hover = null"
       @click="setUserStoryAsActive(index)"
     >
       <div class="list-group list-group-horizontal">
-        <b-button
-          v-if="showEditButtons"
-          :variant="story.isActive ? 'success' : 'outline-success'"
-          @click="markUserStory(index)"
-        >
-          <b-icon-check2 />
-        </b-button>
         <b-form-input
           v-model="userStories[index].title"
           :disabled="true"
-          class="border-1 mx-1"
+          class="border-1"
           size="lg"
           :style="{
             'background-color': index === number ? 'RGB(202, 202, 202)' : 'white',
@@ -32,17 +23,9 @@
           :placeholder="$t('page.session.before.userStories.placeholder.userStoryTitle')"
           @blur="publishChanges"
         />
-        <b-button
-          v-show="showEditButtons && hover === index"
-          variant="outline-danger"
-          class="border-0"
-          @click="deleteStory(index)"
-        >
-          <b-icon-trash />
-        </b-button>
         <div>
           <div
-            v-show="userStories[index].estimation"
+            v-if="userStories[index].estimation"
             class="card-body rounded"
             :style="{
               'background-color':
@@ -55,21 +38,17 @@
           </div>
         </div>
       </div>
+      <div v-if="index === number && exist" :style="{ 'background-color': 'black' }">
+        <b-form-textarea
+          id="textarea-auto-height"
+          v-model="userStories[index].description"
+          class="mt-1"
+          rows="27"
+          max-rows="40"
+          :disabled="true"
+        />
+      </div>
     </b-list-group-item>
-    <b-button
-      v-if="userStories.length < 1 && showEditButtons"
-      size="lg"
-      variant="success"
-      @click="addUserStory()"
-    >
-      {{ $t("page.session.before.userStories.button.addFirstUserStory") }}
-    </b-button>
-    <div v-if="userStories.length > 0 && showEditButtons">
-      <b-button class="w-100 h-100" size="lg" variant="success" @click="addUserStory()">
-        {{ $t("page.session.before.userStories.button.addUserStory") }}
-        <b-icon-plus />
-      </b-button>
-    </div>
   </div>
 </template>
 
@@ -77,7 +56,7 @@
 import Vue from "vue";
 
 export default Vue.extend({
-  name: "UserStoryTitles",
+  name: "MobileStoryList",
   props: {
     cardSet: { type: Array, required: true },
     initialStories: { type: Array, required: true },
@@ -87,9 +66,9 @@ export default Vue.extend({
   },
   data() {
     return {
+      exist: false,
       number: null,
       sideBarOpen: false,
-      editEnabled: false,
       userStories: [] as Array<{
         title: string;
         description: string;
@@ -100,9 +79,6 @@ export default Vue.extend({
     };
   },
   watch: {
-    userStories() {
-      this.publishChanges();
-    },
     initialStories() {
       this.userStories = this.initialStories as Array<{
         title: string;
@@ -110,9 +86,6 @@ export default Vue.extend({
         estimation: string | null;
         isActive: boolean;
       }>;
-    },
-    editEnabled() {
-      this.publishChanges();
     },
   },
   created() {
@@ -126,37 +99,7 @@ export default Vue.extend({
   methods: {
     setUserStoryAsActive(index) {
       this.number = index;
-      this.$emit("selectedStory", index);
-    },
-    addUserStory() {
-      this.userStories.push({
-        title: "",
-        description: "",
-        estimation: null,
-        isActive: false,
-      });
-    },
-    deleteStory(index) {
-      this.userStories.splice(index, 1);
-    },
-    editOrSave() {
-      if (!this.editEnabled) {
-        this.publishChanges();
-      }
-      this.editEnabled = !this.editEnabled;
-    },
-    publishChanges() {
-      this.$emit("userStoriesChanged", this.userStories);
-    },
-    markUserStory(index) {
-      const stories = this.userStories.map((s) => ({
-        title: s.title,
-        description: s.description,
-        estimation: s.estimation,
-        isActive: false,
-      }));
-      stories[index].isActive = true;
-      this.userStories = stories;
+      this.exist = !this.exist;
     },
   },
 });

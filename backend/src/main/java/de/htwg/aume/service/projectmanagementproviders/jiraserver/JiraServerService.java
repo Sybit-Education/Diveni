@@ -120,7 +120,8 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
             OAuthParameters parameters = jiraOAuthClient.getParameters(accessToken, CONSUMER_KEY, PRIVATE_KEY);
             HttpResponse response = getResponseFromUrl(parameters, new GenericUrl(
                     JIRA_SERVER_API_URL + "/search?jql=project=" + projectName
-                            + " and status != done ORDER BY RANK&fields=summary,description,customfield_10111&maxResults=1000"),
+                            + " and status != done ORDER BY RANK&fields=summary,description," + ESTIMATION_FIELD
+                            + "&maxResults=1000"),
                     "GET", null);
             // The reply from the Jira API is no correct JSON, therefore [ and ] have to be
             // added
@@ -131,8 +132,12 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
             for (ObjectNode objectNode : node) {
                 for (JsonNode jsonNode : objectNode.get("issues")) {
                     val fields = jsonNode.get("fields");
+                    String estimation = fields.get(ESTIMATION_FIELD).asText();
+                    if (estimation != null && estimation.endsWith(".0")) {
+                        estimation = estimation.substring(0, estimation.length() - 2);
+                    }
                     userStories.add(new UserStory(jsonNode.get("id").asText(), fields.get("summary").asText(),
-                            fields.get("description").asText(), fields.get("customfield_10111").asText(), false));
+                            fields.get("description").asText(), estimation, false));
                 }
             }
 
