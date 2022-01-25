@@ -116,6 +116,7 @@ jobs:
           port: ${{ secrets.DEPLOY_SSH_PORT }}
           script_stop: true
           script: |
+            cd ${{ secrets.DEPLOY_DIR_BACKEND }}
             echo "${{ secrets.DEPLOY_BACKEND_ENV_FILE_CONTENT_BASE64 }}" | base64 --decode > .env
       - name: Start application
         uses: appleboy/ssh-action@v0.1.1
