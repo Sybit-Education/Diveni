@@ -24,7 +24,7 @@ A connection to a Jira instance is required.
 Context delineation provided insight of the system from a black box perspective. In the building block view
 the internal structure and the components to be developed are now considered.
 
-![components-diagram](./assets/diagram/components-diagram.png)
+![components-diagram](./assets/diagram/components-diagram-03.png)
 
 ## Component Overview
 
@@ -32,20 +32,30 @@ the internal structure and the components to be developed are now considered.
 
 | Component | Description   |
 | --------- | -----------   |
+| AboutDropdown |  |
 | CardSetComponent |  |
 | CopySessionIdPopup |  |
-| Estimatetimer |  |
+| EstimateTimer |  |
 | JiraComponent |  |
 | JoinPageCard |  |
 | LandingPageCard |  |
 | LocaleDropdown |  |
 | MemberVoteCard |  |
+| MobileStoryList |  |
+| MobileStoryTitle |  |
+| NotifyHostComponent |  |
+| NotifyMemberComponent |  |
+| ProjectSelectionComponent |  |
 | RoundedAvatar |  |
 | SessionMemberCard |  |
 | SessionMemberCircle |  |
+| SignInWithJiraCloudButtonComponent |  |
+| SignInWithJiraServerButtonComponent |  |
 | StoryPointsComponent |  |
-| UserStoriesSidebar |  |
+| UserStories |  |
 | UserStoryComponent |  |
+| UserStoryDescriptions |  |
+| UserStorySum |  |
 | ----------- | |
 | JoinCommand |  |
 | Member |  |
@@ -53,6 +63,7 @@ the internal structure and the components to be developed are now considered.
 | SessionConfig |  |
 | UserStory |  |
 | ----------- | |
+| JiraCallbackPage |  |
 | JoinPage |  |
 | LandingPage |  |
 | MemberVotePage |  |
