@@ -1,3 +1,9 @@
+<!--
+SPDX-License-Identifier: AGPL-3.0-or-later
+Diveni - The Planing-Poker App
+Copyright (C) 2022 AUME-Team 21/22, HTWG Konstanz
+-->
+
 <template>
   <b-container>
     <router-view />
