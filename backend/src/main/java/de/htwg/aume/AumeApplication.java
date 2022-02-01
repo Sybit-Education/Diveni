@@ -1,3 +1,8 @@
+/*
+  SPDX-License-Identifier: AGPL-3.0-or-later
+  Diveni - The Planing-Poker App
+  Copyright (C) 2022 AUME-Team 21/22, HTWG Konstanz
+*/
 package de.htwg.aume;
 
 import org.springframework.boot.SpringApplication;
