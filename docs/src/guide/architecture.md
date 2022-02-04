@@ -1,29 +1,15 @@
-Software architecture
----------------------
+# Software Architecture
 
-##Content Overview
-
-    1 Component diagram
-    2 Component description
-        2.1 Frontend
-        2.2 Backend
-    3 API
-        3.1 REST API
-        3.2 Websocket
-    4 Testing
-
-1 Component diagram
---------------------------------------
+## Component Diagram
 
 Context delineation provided insight of the system from a black box perspective. In the building block view
 the internal structure and the components to be developed are now considered.
 
-![components-diagram](./assets/diagram/components-diagram-03.png)
+![components diagram](/diagram/components-diagram-03.png)
 
-2 Component description
---------------------------------------
+## Component Description
 
-##2.1 Frontend
+### Frontend
 
 | Component | Description   |
 | --------- | -----------   |
@@ -70,7 +56,7 @@ the internal structure and the components to be developed are now considered.
 | ----------- | |
 | Store | The store includes data which can be accessed from all views and components |
 
-##2.2 Backend
+### Backend
 
 | Component | Description   |
 | --------- | -----------   |
@@ -129,24 +115,21 @@ the internal structure and the components to be developed are now considered.
 | JiraOAuthTokenFactory | Helper class for Jira Server OAuth1 |
 | ----------- | |
 
-3 API
--------------------
+## API
 
-##3.1 REST API
+### REST API
 
 The current documentation for the REST API can be seen on https://pp.vnmz.de/api/swagger-ui.html.
 
-##3.2 Websocket
+### Websocket
 
 This sequence diagram shows all Websocket commands and when they are used. 
 
-![sequence-diagram](./assets/diagram/websocket-sequence-diagram.png)
+![sequence diagram](/diagram/websocket-sequence-diagram.png)
 
-4 Testing
----------
+## Testing
 
 Functionalities of the application must be tested sufficiently to ensure quality. 
 Backend methods are tested by Java unit tests. The test coverage is at least 75%.
 Front-end components are tested using smoke tests on a test server.
-Github runners are also used to automatically trigger and verify the tests.
-
+GitHub runners are also used to automatically trigger and verify the tests.
