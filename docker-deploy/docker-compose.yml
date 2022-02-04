@@ -10,6 +10,8 @@ services:
       - database
     image: aume2021-team-2_backend
     container_name: aume2021-team-2_backend
+    env_file:
+      - ./.env
     restart: always
   frontend:
     depends_on:
