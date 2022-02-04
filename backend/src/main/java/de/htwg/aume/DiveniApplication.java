@@ -13,10 +13,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication
 @EnableMongoRepositories
 @EnableScheduling
-public class AumeApplication {
+public class DiveniApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(AumeApplication.class, args);
+		SpringApplication.run(DiveniApplication.class, args);
 	}
 
 }

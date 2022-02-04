@@ -1,12 +1,19 @@
-<br />
-<div align="center">
-  <img src="docs/assets/diveni_banner.png" width="560" />
-</div>
-<br />
-<p align="center">
-  <img src=".github/badges/jacoco.svg" />
-  <img src=".github/badges/branches.svg" />
-</p>
+# Diveni - The Planning-Poker App
+
+![Code Coverage Lnies](.github/badges/jacoco.svg)
+![Code Coverage Branches](.github/badges/branches.svg)
+[![License](https://img.shields.io/badge/license-GNU%20AGPL%20v3-blue.svg)](LICENSE)
+
+![DIVENI Logo](docs/assets/diveni_banner.png)
+
+WebApp to do Planning Poker with remote teams using external issue tracker as source of stories.
+
+Supported issue trackers:
+
+- Atlassian JIRA onPremise
+- Atlassian JIRA Cloud
+
+More connectors are planned.
 
 ---
 
@@ -69,3 +76,9 @@ mvn spring-boot:run
 - Mongodb in docker on port 27017, no credentials (Run via docker desktop)
 
 Icons from https://www.iconfinder.com/iconsets/animals-105
+
+---
+
+## License
+
+[LICENSE](LICENSE)
