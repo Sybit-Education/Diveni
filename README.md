@@ -41,31 +41,65 @@ Depending on your device, you can see the results of the other members.
 
 ## Screenshots
 
-<div align="center">
-  <img src="docs/assets/userEstimationVoted.JPG" />
-  <img src="docs/assets/hostEstimationFinished.JPG" />
-</div>
+![Voters view of voted story](docs/src/.vuepress/public/img/userEstimationVoted.JPG)
 
-## Application Instructions and Requirements:
+![Host view voted story](docs/src/.vuepress/public/img/hostEstimationFinished.JPG)
 
-### Technologies:
+
+## Application Instructions and Requirements
+
+### Technologies
+
 Frontend communicates via REST and WebSockets with the backend.
 It uses Spring boot and communicates directly with the mongoDb in a docker container.
 Run the docker container first, then the backend.
+
 #### Frontend
 - npm, vue2
+
 ```shell
 npm install
 npm run serve
 ```
  
 #### Backend
+
 - maven, springboot, java11
+
 ```shell
 mvn spring-boot:run
 ```
 
 #### Database
+
 - Mongodb in docker on port 27017, no credentials (Run via docker desktop)
 
-Icons from https://www.iconfinder.com/iconsets/animals-105
+
+---
+
+## Contributors
+
+
+[![Diveni Contributors](https://contrib.rocks/image?repo=Sybit-Education/Diveni)](https://github.com/Sybit-Education/Diveni/graphs/contributors)
+
+
+Made with [contrib.rocks](https://contrib.rocks).
+
+## Credits
+
+- Icons: [Animal by Thiago Silva](https://www.iconfinder.com/iconsets/animals-105), License: [CC0 1.0 Universal](https://creativecommons.org/publicdomain/zero/1.0/)
+
+### HTWG Konstanz
+
+TBD
+
+### Sybit GmbH
+
+TBD
+
+
+---
+
+## License
+
+[LICENSE](LICENSE)
