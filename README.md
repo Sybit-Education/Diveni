@@ -41,9 +41,9 @@ Depending on your device, you can see the results of the other members.
 
 ## Screenshots
 
-![Voters view of voted story](docs/src/.vuepress/public/img/userEstimationVoted.JPG)
+![Voters view of voted story](docs/.vuepress/public/img/userEstimationVoted.JPG)
 
-![Host view voted story](docs/src/.vuepress/public/img/hostEstimationFinished.JPG)
+![Host view voted story](docs/.vuepress/public/img/hostEstimationFinished.JPG)
 
 
 ## Application Instructions and Requirements

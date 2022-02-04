@@ -1,4 +1,4 @@
-const { description } = require('../../package')
+const { description } = require('../../package.json')
 
 module.exports = {
   /**
