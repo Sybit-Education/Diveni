@@ -29,7 +29,7 @@ import de.htwg.aume.service.projectmanagementproviders.jiracloud.JiraCloudServic
 import de.htwg.aume.service.projectmanagementproviders.jiraserver.JiraServerService;
 import lombok.val;
 
-@CrossOrigin(origins = { "http://localhost:8080", "https://pp.vnmz.de" })
+@CrossOrigin
 @RestController
 @RequestMapping("/jira")
 public class ProjectManagementController {
