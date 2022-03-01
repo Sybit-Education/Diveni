@@ -5,11 +5,11 @@ tagline: The Planning-Poker App
 actionText: Quick Start →
 actionLink: /guide/
 features:
-- title: Feature 1 Title
-  details: Feature 1 Description
-- title: Feature 2 Title
-  details: Feature 2 Description
-- title: Feature 3 Title
-  details: Feature 3 Description
-footer: Made by Diveni Development Team with ❤️
+- title: Vote Remote
+  details: Do an interactive planning poker with your distributed teams.
+- title: Connect to JIRA
+  details: Import User Stories from Jira Server or JIRA Cloud to update their Story Points.
+- title: Open Source
+  details: Install Diveni in your own Docker based environment.
+footer: Made by Diveni Development Team with ❤️at Lake Constance
 ---
