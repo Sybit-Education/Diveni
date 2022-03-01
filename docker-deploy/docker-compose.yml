@@ -4,19 +4,19 @@ services:
   database:
     image: aume2021-team-2_database
     container_name: aume2021-team-2_database
-    restart: always
+    restart: unless-stopped
   backend:
     depends_on:
       - database
     image: aume2021-team-2_backend
     container_name: aume2021-team-2_backend
-    restart: always
+    restart: unless-stopped
   frontend:
     depends_on:
       - backend
     container_name: aume2021-team-2_frontend
     image: aume2021-team-2_frontend
-    restart: always
+    restart: unless-stopped
   proxy:
     depends_on:
         - frontend
@@ -24,6 +24,6 @@ services:
         - database
     container_name: aume2021-team-2_proxy
     image: aume2021-team-2_proxy
-    restart: always
+    restart: unless-stopped
     ports:
         - 8182:80
