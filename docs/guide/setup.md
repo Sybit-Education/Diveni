@@ -1,8 +1,12 @@
 # Setup
 
-## JIRA Cloud
+## Connectors
 
-## JIRA Enterprise
+### JIRA Cloud
+
+TODO
+
+### JIRA Enterprise
 
 For setting up the JIRA application, the steps described here should be sufficient: 
 <https://developer.atlassian.com/server/jira/platform/oauth/>

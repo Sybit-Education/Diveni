@@ -7,6 +7,7 @@ the internal structure and the components to be developed are now considered.
 
 ![components diagram](/diagram/components-diagram-03.png)
 
+
 ## Component Description
 
 ### Frontend
@@ -125,11 +126,88 @@ The current documentation for the REST API can be seen on https://pp.vnmz.de/api
 
 This sequence diagram shows all Websocket commands and when they are used. 
 
-![sequence diagram](/diagram/websocket-sequence-diagram.png)
+#### Websocket Sequence Diagrams
 
-## Testing
+Diagrams created using [Mermaid](https://mermaid-js.github.io/mermaid/#/).
 
-Functionalities of the application must be tested sufficiently to ensure quality. 
-Backend methods are tested by Java unit tests. The test coverage is at least 75%.
-Front-end components are tested using smoke tests on a test server.
-GitHub runners are also used to automatically trigger and verify the tests.
+##### Create Session and Vote
+
+```mermaid
+sequenceDiagram
+actor User
+participant Server
+actor Admin
+
+Note over User, Admin: Create session
+Admin->>+Server: /registerAdminUser
+Server->>-Admin: admin joined
+User->>+Server: /registerMember
+Server->>-User: user joined
+
+Note over User, Admin: Add user stories to session
+Admin->>+Server: /adminUpdatedUserStories
+Server->>-Admin: User Stories added to session
+
+Note over User, Admin: Voting in progress
+loop
+    User->>+Server: /vote
+    Admin->>+Server: /votingFinished
+    Server->>-Server: close voting
+    par
+        Server->>User: show voting results
+    and
+        Server->>Admin: show voting results
+    end
+end
+
+```
+
+###### Admin disconnected
+
+```mermaid
+sequenceDiagram
+actor Admin
+participant Server
+
+Note left of Admin: Admin disconnected
+Admin-->Admin: reload browser
+Admin->>Server: /registerAdminUser
+Admin->>Server: /memberUpdate
+Server->>Admin: Admin reconnected
+
+```
+
+##### Unregister User from Session
+
+```mermaid
+sequenceDiagram
+actor User
+participant Server
+actor Admin
+
+User->>Server: /unregister
+Server->>Server: remove User from session
+par
+    Server->>Admin: update user list
+and
+    Server->>User: update user list
+end
+```
+
+##### Close Session
+
+```mermaid
+sequenceDiagram
+actor User
+participant Server
+actor Admin
+
+Admin->>Server: /closeSession
+Server->>Server: remove all users from session
+Server->>Server: remove all  session data
+par
+    Server->>Admin: session closed
+and
+    Server->>User: session closed
+end
+```
