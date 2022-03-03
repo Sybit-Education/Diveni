@@ -33,7 +33,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import lombok.val;
 
-@CrossOrigin(origins = { "http://localhost:8080", "https://pp.vnmz.de" })
+@CrossOrigin
 @RestController
 public class RoutesController {
 

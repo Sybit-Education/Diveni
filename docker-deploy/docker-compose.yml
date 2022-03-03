@@ -11,6 +11,9 @@ services:
     image: diveni_backend
     container_name: diveni_backend
     restart: unless-stopped
+    env_file:
+      - ./.env
+
   frontend:
     depends_on:
       - backend
