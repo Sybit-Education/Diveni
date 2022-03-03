@@ -79,6 +79,22 @@ Icons from https://www.iconfinder.com/iconsets/animals-105
 
 ---
 
+## Credits
+
+### HTWG Konstanz
+
+TBD
+
+### Sybit GmbH
+
+Sybit supports teaching at the university in Constance and has appeared as an industry partner 
+in this project. partner in this project. A product owner represented Sybit's requirements to the 
+students and approved the releases in the agile project development.
+
+Sybit will continue to support and maintain the project.
+
+---
+
 ## License
 
 [LICENSE](LICENSE)
