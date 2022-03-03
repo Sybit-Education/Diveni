@@ -2,28 +2,28 @@ version: "3.8"
 
 services:
   database:
-    image: aume2021-team-2_database
-    container_name: aume2021-team-2_database
+    image: diveni_database
+    container_name: diveni_database
     restart: unless-stopped
   backend:
     depends_on:
       - database
-    image: aume2021-team-2_backend
-    container_name: aume2021-team-2_backend
+    image: diveni_backend
+    container_name: diveni_backend
     restart: unless-stopped
   frontend:
     depends_on:
       - backend
-    container_name: aume2021-team-2_frontend
-    image: aume2021-team-2_frontend
+    container_name: diveni_frontend
+    image: diveni_frontend
     restart: unless-stopped
   proxy:
     depends_on:
         - frontend
         - backend
         - database
-    container_name: aume2021-team-2_proxy
-    image: aume2021-team-2_proxy
+    container_name: diveni_proxy
+    image: diveni_proxy
     restart: unless-stopped
     ports:
         - 8182:80
