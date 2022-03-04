@@ -3,6 +3,8 @@
 ![Code Coverage Lnies](.github/badges/jacoco.svg)
 ![Code Coverage Branches](.github/badges/branches.svg)
 [![License](https://img.shields.io/badge/license-GNU%20AGPL%20v3-blue.svg)](LICENSE)
+[![Discord](https://img.shields.io/discord/935641426216222730?color=%237289DA&label=Discord&logo=Discord&logoColor=%237289DA)](https://discord.com/channels/935641426216222730/)
+
 
 ![DIVENI Logo](docs/assets/diveni_banner.png)
 
