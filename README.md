@@ -1,12 +1,21 @@
-<br />
-<div align="center">
-  <img src="docs/assets/diveni_banner.png" width="560" />
-</div>
-<br />
-<p align="center">
-  <img src=".github/badges/jacoco.svg" />
-  <img src=".github/badges/branches.svg" />
-</p>
+# Diveni - The Planning-Poker App
+
+[![License](https://img.shields.io/badge/license-GNU%20AGPL%20v3-blue.svg)](LICENSE)
+[![Discord](https://img.shields.io/discord/935641426216222730?color=%237289DA&label=Discord&logo=Discord&logoColor=%237289DA)](https://discord.com/channels/935641426216222730/)
+
+![Code Coverage Lnies](.github/badges/jacoco.svg)
+![Code Coverage Branches](.github/badges/branches.svg)
+
+![DIVENI Logo](docs/assets/diveni_banner.png)
+
+WebApp to do Planning Poker with remote teams using external issue tracker as source of stories.
+
+Supported issue trackers:
+
+- Atlassian JIRA onPremise
+- Atlassian JIRA Cloud
+
+More connectors are planned.
 
 ---
 
@@ -69,3 +78,25 @@ mvn spring-boot:run
 - Mongodb in docker on port 27017, no credentials (Run via docker desktop)
 
 Icons from https://www.iconfinder.com/iconsets/animals-105
+
+---
+
+## Credits
+
+### HTWG Konstanz
+
+TBD
+
+### Sybit GmbH
+
+Sybit supports teaching at the university in Constance and has appeared as an industry partner 
+in this project. partner in this project. A product owner represented Sybit's requirements to the 
+students and approved the releases in the agile project development.
+
+Sybit will continue to support and maintain the project.
+
+---
+
+## License
+
+[LICENSE](LICENSE)

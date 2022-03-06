@@ -2,6 +2,6 @@ FROM sapmachine:lts
 
 WORKDIR /app
 
-COPY ./target/app.jar ./aume.jar
+COPY ./target/app.jar ./diveni.jar
 
-CMD java -jar -Dspring.profiles.active=prod ./aume.jar
+CMD java -jar -Dspring.profiles.active=prod ./diveni.jar

@@ -7,11 +7,11 @@
 		<version>2.5.5</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>de.htwg</groupId>
-	<artifactId>aume</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>aume</name>
-	<description>Demo project for Spring Boot</description>
+	<groupId>io.diveni</groupId>
+	<artifactId>backend</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+	<name>Diveni-backend</name>
+	<description>Backend of Diveni Planning Poker App</description>
 	<properties>
 		<java.version>11</java.version>
 		<log4j2.version>2.17.1</log4j2.version>
@@ -141,10 +141,10 @@
 				</executions>
 				<configuration>
 					<excludes>
-						<exclude>de/htwg/aume/service/projectmanagementproviders/jiraserver/*</exclude>
-						<exclude>de/htwg/aume/service/projectmanagementproviders/jiracloud/*</exclude>
-						<exclude>de/htwg/aume/service/jira/*</exclude>
-						<exclude>de/htwg/aume/controller/JiraServerController.class</exclude>
+						<exclude>io/diveni/backend/service/projectmanagementproviders/jiraserver/*</exclude>
+						<exclude>io/diveni/backend/service/projectmanagementproviders/jiracloud/*</exclude>
+						<exclude>io/diveni/backend/service/jira/*</exclude>
+						<exclude>io/diveni/backend/controller/JiraServerController.class</exclude>
 					</excludes>
 				</configuration>
 			</plugin>

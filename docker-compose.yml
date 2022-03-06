@@ -3,39 +3,39 @@ version: "3.8"
 services:
   database:
     build: ./database
-    image: aume2021-team-2_database
-    container_name: aume2021-team-2_database
+    image: diveni_database
+    container_name: diveni_database
     ports:
       - 27017:27017
-    restart: always
+    restart: unless-stopped
   backend:
     depends_on:
       - database
     build: ./backend
-    image: aume2021-team-2_backend
-    container_name: aume2021-team-2_backend
+    image: diveni_backend
+    container_name: diveni_backend
     env_file:
       - ./backend/.env
     ports:
       - 9090:9090
-    restart: always
+    restart: unless-stopped
   frontend:
     depends_on:
       - backend
-    image:  aume2021-team-2_frontend
+    image:  diveni_frontend
     build: ./frontend
-    container_name: aume2021-team-2_frontend
+    container_name: diveni_frontend
     ports:
       - 8080:8080
-    restart: always
+    restart: unless-stopped
   proxy:
     depends_on:
         - frontend
         - backend
         - database
-    image:  aume2021-team-2_proxy
+    image:  diveni_proxy
     build: ./proxy
-    container_name: aume2021-team-2_proxy
-    restart: always
+    container_name: diveni_proxy
+    restart: unless-stopped
     ports:
         - 80:80
