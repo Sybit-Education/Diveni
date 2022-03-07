@@ -37,11 +37,11 @@ import lombok.val;
 
 @Service
 public class JiraServerService implements ProjectManagementProviderOAuth1 {
-    @Value("${JIRA_SERVER_JIRAHOME}")
+    @Value("${JIRA_SERVER_JIRAHOME:#{null}}")
     private String JIRA_HOME;
     @Value("${JIRA_SERVER_CONSUMERKEY:OauthKey}")
     private String CONSUMER_KEY;
-    @Value("${JIRA_SERVER_PRIVATEKEY}")
+    @Value("${JIRA_SERVER_PRIVATEKEY:#{null}}")
     private String PRIVATE_KEY;
     @Value("${JIRA_SERVER_ESTIMATIONFIELD:customfield_10111}")
     private String ESTIMATION_FIELD;
