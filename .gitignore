@@ -30,6 +30,7 @@ frontend/node_modules
 # local env files
 .env.local
 .env.*.local
+backend/.env
 
 # Log files
 npm-debug.log*
