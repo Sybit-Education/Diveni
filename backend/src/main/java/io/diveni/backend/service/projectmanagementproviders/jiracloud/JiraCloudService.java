@@ -32,9 +32,9 @@ import lombok.val;
 
 @Service
 public class JiraCloudService implements ProjectManagementProviderOAuth2 {
-    @Value("${JIRA_CLOUD_CLIENTID}")
+    @Value("${JIRA_CLOUD_CLIENTID:#{null}}")
     private String CLIENT_ID;
-    @Value("${JIRA_CLOUD_CLIENTSECRET}")
+    @Value("${JIRA_CLOUD_CLIENTSECRET:#{null}}")
     private String CLIENT_SECRET;
     @Value("${JIRA_CLOUD_ESTIMATIONFIELD:customfield_10016}")
     private String ESTIMATION_FIELD;
