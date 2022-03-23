@@ -128,7 +128,7 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
                             + "' AND resolution = Unresolved "
                             + " AND type != Sub-Task AND type != Sub-Bug "
                             + "ORDER BY " + RANK_NAME +  " ASC, updated DESC"
-                            + "&fields=summary,description," + ESTIMATION_FIELD + ", " + RANK_NAME
+                            + "&fields=summary,description," + ESTIMATION_FIELD
                             + "&maxResults=1000"),
                     "GET", null);
             // The reply from the Jira API is no correct JSON, therefore [ and ] have to be
