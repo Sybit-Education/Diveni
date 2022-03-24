@@ -125,8 +125,10 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
             OAuthParameters parameters = jiraOAuthClient.getParameters(accessToken, CONSUMER_KEY, PRIVATE_KEY);
             HttpResponse response = getResponseFromUrl(parameters, new GenericUrl(
                     getJiraUrl() + "/search?jql=project='" + projectName
-                            + "' and status != done ORDER BY " + RANK_NAME + "&fields=summary,description,"
-                            + ESTIMATION_FIELD
+                            + "' AND resolution = Unresolved "
+                            + " AND type != Sub-Task AND type != Sub-Bug "
+                            + "ORDER BY " + RANK_NAME +  " ASC, updated DESC"
+                            + "&fields=summary,description," + ESTIMATION_FIELD
                             + "&maxResults=1000"),
                     "GET", null);
             // The reply from the Jira API is no correct JSON, therefore [ and ] have to be
@@ -138,8 +140,10 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
             for (ObjectNode objectNode : node) {
                 for (JsonNode jsonNode : objectNode.get("issues")) {
                     val fields = jsonNode.get("fields");
-                    String estimation = fields.get(ESTIMATION_FIELD).isNull() ? null
-                            : String.valueOf(fields.get(ESTIMATION_FIELD).asDouble());
+                    String estimation =
+                        (fields.get(ESTIMATION_FIELD) == null || fields.get(ESTIMATION_FIELD).isNull())
+                          ? null
+                          : String.valueOf(fields.get(ESTIMATION_FIELD).asDouble());
                     if (estimation != null && estimation.endsWith(".0")) {
                         estimation = estimation.substring(0, estimation.length() - 2);
                     }
