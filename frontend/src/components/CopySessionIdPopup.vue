@@ -48,7 +48,9 @@ export default Vue.extend({
       }
     },
     copyLinkToClipboard() {
-      const text = `${document.URL.toString().replace("session", "join?sessionID=")}${this.sessionId}`;
+      const text = `${document.URL.toString().replace("session", "join?sessionID=")}${
+        this.sessionId
+      }`;
       if (this.canCopy) {
         navigator.clipboard.writeText(text).then(
           () => {
