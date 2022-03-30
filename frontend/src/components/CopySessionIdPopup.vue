@@ -26,23 +26,16 @@ export default Vue.extend({
     sessionId: { type: String, required: true },
     textAfterSessionID: { type: String, required: false, default: "" },
   },
+  data: () => ({
+    canCopy: false,
+  }),
+  mounted() {
+    this.canCopy = !!navigator.clipboard;
+  },
   methods: {
     copyIdToClipboard() {
-      navigator.clipboard.writeText(this.sessionId).then(
-        () => {
-          console.log("Copying to clipboard was successful!");
-        },
-        (err) => {
-          console.error("Could not copy text: ", err);
-        }
-      );
-    },
-    copyLinkToClipboard() {
-      navigator.clipboard
-        .writeText(
-          `${document.URL.toString().replace("session", "join?sessionID=")}${this.sessionId}`
-        )
-        .then(
+      if (this.canCopy) {
+        navigator.clipboard.writeText(this.sessionId).then(
           () => {
             console.log("Copying to clipboard was successful!");
           },
@@ -50,6 +43,38 @@ export default Vue.extend({
             console.error("Could not copy text: ", err);
           }
         );
+      } else {
+        this.copyToClipboardAlternative(this.sessionId);
+      }
+    },
+    copyLinkToClipboard() {
+      const text = `${document.URL.toString().replace("session", "join?sessionID=")}${this.sessionId}`;
+      if (this.canCopy) {
+        navigator.clipboard.writeText(text).then(
+          () => {
+            console.log("Copying to clipboard was successful!");
+          },
+          (err) => {
+            console.error("Could not copy text: ", err);
+          }
+        );
+      } else {
+        this.copyToClipboardAlternative(text);
+      }
+    },
+    copyToClipboardAlternative(text) {
+      const textarea = document.createElement("textarea");
+      textarea.textContent = text;
+      textarea.style.position = "fixed";
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand("copy");
+      } catch (err) {
+        console.error("Could not copy text: ", err);
+      } finally {
+        document.body.removeChild(textarea);
+      }
     },
   },
 });
