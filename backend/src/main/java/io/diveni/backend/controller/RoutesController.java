@@ -51,7 +51,7 @@ public class RoutesController {
 	public ResponseEntity<Map<String, Object>> createSession(
 			@RequestParam("tokenIdentifier") Optional<String> tokenIdentifier,
 			@RequestBody SessionConfig sessionConfig) {
-	  LOGGER.debug("--> createSession(), tokenIdentifier=" + tokenIdentifier);
+	  LOGGER.debug("--> createSession(), tokenIdentifier={}", tokenIdentifier);
 
 		val usedSessionIDs = databaseService.getSessions().stream().map(Session::getSessionID)
 				.collect(Collectors.toSet());
@@ -74,7 +74,7 @@ public class RoutesController {
 
 	@GetMapping(value = "/sessions")
 	public ResponseEntity<Session> getExistingSession(@RequestParam("adminCookie") UUID adminCookie) {
-	  LOGGER.debug("--> getExistingSession(), adminCookie=" + adminCookie);
+	  LOGGER.debug("--> getExistingSession(), adminCookie={}", adminCookie);
 		val session = databaseService.getSessionByAdminCookie(adminCookie);
 		if (session.isPresent()) {
 		  LOGGER.debug("<-- getExistingSession()");
@@ -88,7 +88,7 @@ public class RoutesController {
 
 	@PostMapping(value = "/sessions/{sessionID}/join")
 	public ResponseEntity<SessionConfig> joinSession(@PathVariable String sessionID, @RequestBody JoinInfo joinInfo) {
-	  LOGGER.debug("--> joinSession(), sessionID=" + sessionID);
+	  LOGGER.debug("--> joinSession(), sessionID={}", sessionID);
 		val session = addMemberToSession(sessionID, joinInfo.getMember(), joinInfo.getPassword());
     LOGGER.debug("<-- joinSession()");
 		return new ResponseEntity<SessionConfig>(session.getSessionConfig(), HttpStatus.OK);
@@ -96,14 +96,14 @@ public class RoutesController {
 
 	@GetMapping(value = "/sessions/{sessionID}")
 	public @ResponseBody Session getSession(@PathVariable String sessionID) {
-    LOGGER.debug("--> getSession(), sessionID=" + sessionID);
+    LOGGER.debug("--> getSession(), sessionID={}", sessionID);
     Session session = ControllerUtils.getSessionOrThrowResponse(databaseService, sessionID);
     LOGGER.debug("<-- getSession()");
     return session;
 	}
 
 	private synchronized Session addMemberToSession(String sessionID, Member member, Optional<String> password) {
-	  LOGGER.debug("--> addMemberToSession(), sessionID=" + sessionID + ", member=" + member);
+	  LOGGER.debug("--> addMemberToSession(), sessionID={}, member={}", sessionID, member);
     val session = databaseService.getSessionByID(sessionID).orElseThrow(
 				() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessages.sessionNotFoundErrorMessage));
 		List<Member> members = session.getMembers().stream().map(m -> m).collect(Collectors.toList());

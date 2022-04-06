@@ -69,7 +69,7 @@ public class ProjectManagementController {
 	@PostMapping(value = "/oauth2/authorizationCode")
 	public ResponseEntity<TokenIdentifier> getOAuth2AccessToken(@RequestHeader("Origin") String origin,
 			@RequestBody VerificationCode authorizationCode) {
-    LOGGER.debug("--> getOAuth2AccessToken(), origin=" + origin);
+    LOGGER.debug("--> getOAuth2AccessToken(), origin={}", origin);
     ResponseEntity<TokenIdentifier> response = new ResponseEntity<>(
       jiraCloudService.getAccessToken(authorizationCode.getCode(), origin),
       HttpStatus.OK);
@@ -79,7 +79,7 @@ public class ProjectManagementController {
 
 	@GetMapping(value = "/projects")
 	public ResponseEntity<List<Project>> getProjects(@RequestHeader("X-Token-ID") String tokenIdentifier) {
-    LOGGER.debug("--> getProjects(), tokenIdentifier=" + tokenIdentifier);
+    LOGGER.debug("--> getProjects(), tokenIdentifier={}", tokenIdentifier);
 		val projectManagementProvider = getProjectManagementProvider(tokenIdentifier);
 
     ResponseEntity<List<Project>> response;
@@ -96,7 +96,7 @@ public class ProjectManagementController {
 	@GetMapping(value = "/projects/{projectName}/issues")
 	public ResponseEntity<List<UserStory>> getIssues(@RequestHeader("X-Token-ID") String tokenIdentifier,
                                                    @PathVariable String projectName) {
-	  LOGGER.debug("--> getIssues(), projectName=" + projectName);
+	  LOGGER.debug("--> getIssues(), projectName={}", projectName);
 		val projectManagementProvider = getProjectManagementProvider(tokenIdentifier);
 
     ResponseEntity<List<UserStory>> response;
@@ -112,7 +112,7 @@ public class ProjectManagementController {
 
 	@PutMapping(value = "/issue")
 	public void updateIssue(@RequestHeader("X-Token-ID") String tokenIdentifier, @RequestBody UserStory userStory) {
-	  LOGGER.debug("--> updateIssue(), userStoryId=" + userStory.getJiraId());
+	  LOGGER.debug("--> updateIssue(), userStoryId={}", userStory.getJiraId());
 	  val projectManagementProvider = getProjectManagementProvider(tokenIdentifier);
 
 		if (projectManagementProvider != null) {
@@ -126,7 +126,7 @@ public class ProjectManagementController {
 	@PostMapping(value = "issue")
 	public ResponseEntity<String> createIssue(@RequestHeader("X-Token-ID") String tokenIdentifier,
 			@RequestParam("projectID") String projectID, @RequestBody UserStory userStory) {
-	  LOGGER.debug("--> createIssue(), projectID=" + projectID + ", userStoryId=" + userStory.getJiraId());
+	  LOGGER.debug("--> createIssue(), projectID={}, userStoryId={}", projectID, userStory.getJiraId());
 
 		val projectManagementProvider = getProjectManagementProvider(tokenIdentifier);
 
@@ -143,7 +143,7 @@ public class ProjectManagementController {
 
 	@DeleteMapping(value = "/issue/{jiraID}")
 	public void deleteIssue(@RequestHeader("X-Token-ID") String tokenIdentifier, @PathVariable String jiraID) {
-	  LOGGER.debug("--> deleteIssue(), jiraID=" + jiraID);
+	  LOGGER.debug("--> deleteIssue(), jiraID={}", jiraID);
 		val projectManagementProvider = getProjectManagementProvider(tokenIdentifier);
 
 		if (projectManagementProvider == null) {

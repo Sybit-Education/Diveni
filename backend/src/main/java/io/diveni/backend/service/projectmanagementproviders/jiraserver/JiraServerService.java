@@ -132,7 +132,7 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
 
     @Override
     public List<UserStory> getIssues(String tokenIdentifier, String projectName) {
-        LOGGER.debug("--> getIssues(), projectName=" + projectName);
+        LOGGER.debug("--> getIssues(), projectName={}", projectName);
         try {
             List<UserStory> userStories = new ArrayList<>();
             val accessToken = accessTokens.get(tokenIdentifier);
@@ -175,7 +175,7 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
 
     @Override
     public void updateIssue(String tokenIdentifier, UserStory story) {
-        LOGGER.debug("--> updateIssue(), storyID=" + story.getJiraId());
+        LOGGER.debug("--> updateIssue(), storyID={}", story.getJiraId());
         Map<String, Map<String, Object>> content = new HashMap<>();
         Map<String, Object> fields = new HashMap<>();
         fields.put("summary", story.getTitle());
@@ -208,7 +208,7 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
     }
 
     public String createIssue(String tokenIdentifier, String projectID, UserStory story) {
-        LOGGER.debug("--> createIssue(), projectID=" + projectID);
+        LOGGER.debug("--> createIssue(), projectID={}", projectID);
         Map<String, Map<String, Object>> content = new HashMap<>();
         Map<String, Object> fields = new HashMap<>();
         fields.put("reporter", Map.of("name", getCurrentUsername(tokenIdentifier)));
@@ -237,7 +237,7 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
 
     @Override
     public void deleteIssue(String tokenIdentifier, String jiraID) {
-        LOGGER.debug("--> deleteIssue(), jiraID=" + jiraID);
+        LOGGER.debug("--> deleteIssue(), jiraID={}", jiraID);
         try {
             JiraOAuthClient jiraOAuthClient = new JiraOAuthClient(JIRA_HOME);
             OAuthParameters parameters = jiraOAuthClient.getParameters(accessTokens.get(tokenIdentifier),
@@ -256,7 +256,7 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
 
     @Override
     public String getCurrentUsername(String tokenIdentifier) {
-        LOGGER.debug("--> getCurrentUsername(), tokenIdentifier=" + tokenIdentifier);
+        LOGGER.debug("--> getCurrentUsername(), tokenIdentifier={}", tokenIdentifier);
         try {
             JiraOAuthClient jiraOAuthClient = new JiraOAuthClient(JIRA_HOME);
             OAuthParameters parameters = jiraOAuthClient.getParameters(accessTokens.get(tokenIdentifier),

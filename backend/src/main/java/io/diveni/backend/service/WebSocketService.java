@@ -45,7 +45,7 @@ public class WebSocketService {
 	private List<SessionPrincipals> sessionPrincipalList = List.of();
 
 	public SessionPrincipals getSessionPrincipals(String sessionID) {
-	  LOGGER.debug("--> getSessionPrincipals(), sessionID=" + sessionID);
+	  LOGGER.debug("--> getSessionPrincipals(), sessionID={}", sessionID);
 	  SessionPrincipals sessionPrincipals = sessionPrincipalList.stream().filter(s -> s.sessionID().equals(sessionID)).findFirst().orElseThrow(
       () -> new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessages.sessionNotFoundErrorMessage));
 		LOGGER.debug("<-- getSessionPrincipals()");
@@ -53,7 +53,7 @@ public class WebSocketService {
 	}
 
 	public synchronized void addMemberIfNew(MemberPrincipal member) {
-	  LOGGER.debug("--> addMemberIfNew(), member=" + member.getMemberID());
+	  LOGGER.debug("--> addMemberIfNew(), member={}", member.getMemberID());
 		val sessionPrincipals = getSessionPrincipals(member.getSessionID());
 		val updatedMembers = Stream
 				.concat(sessionPrincipals.memberPrincipals().stream()
@@ -69,7 +69,7 @@ public class WebSocketService {
 	}
 
 	public synchronized void removeMember(MemberPrincipal member) {
-    LOGGER.debug("--> removeMember(), member=" + member.getMemberID());
+    LOGGER.debug("--> removeMember(), member={}", member.getMemberID());
 		val sessionPrincipals = getSessionPrincipals(member.getSessionID());
 		val updatedMembers = sessionPrincipals.memberPrincipals().stream()
 				.filter(m -> !m.getMemberID().equals(member.getMemberID())).collect(Collectors.toSet());
@@ -83,7 +83,7 @@ public class WebSocketService {
 	}
 
 	public synchronized void removeAdmin(AdminPrincipal admin) {
-    LOGGER.debug("--> removeAdmin(), admin=" + admin.getAdminID());
+    LOGGER.debug("--> removeAdmin(), admin={}", admin.getAdminID());
 		sessionPrincipalList = sessionPrincipalList.stream().map(p -> {
 			if (p.adminPrincipal() == admin) {
 				return p.adminPrincipal(null);
@@ -95,7 +95,7 @@ public class WebSocketService {
 	}
 
 	public synchronized void setAdminUser(AdminPrincipal principal) {
-    LOGGER.debug("--> setAdminUser(), principal=" + principal.getAdminID());
+    LOGGER.debug("--> setAdminUser(), principal={}", principal.getAdminID());
 		if (sessionPrincipalList.stream().anyMatch(p -> p.sessionID().equals(principal.getSessionID()))) {
 			sessionPrincipalList = sessionPrincipalList.stream().map(p -> {
 				if (p.sessionID().equals(principal.getSessionID()))
@@ -113,7 +113,7 @@ public class WebSocketService {
 	}
 
 	public void sendMembersUpdate(Session session) {
-    LOGGER.debug("--> sendMembersUpdate(), sessionID=" + session.getSessionID());
+    LOGGER.debug("--> sendMembersUpdate(), sessionID={}", session.getSessionID());
 		val sessionPrincipals = getSessionPrincipals(session.getSessionID());
 		if (sessionPrincipals.adminPrincipal() != null) {
 			simpMessagingTemplate.convertAndSendToUser(sessionPrincipals.adminPrincipal().getName(),
@@ -125,7 +125,7 @@ public class WebSocketService {
 	}
 
 	public void sendMembersUpdateToMembers(Session session) {
-    LOGGER.debug("--> sendMembersUpdateToMembers(), sessionID=" + session.getSessionID());
+    LOGGER.debug("--> sendMembersUpdateToMembers(), sessionID={}", session.getSessionID());
 		getSessionPrincipals(session.getSessionID()).memberPrincipals()
 				.forEach(member -> simpMessagingTemplate.convertAndSendToUser(member.getMemberID().toString(),
 						MEMBERS_UPDATED_DESTINATION,
@@ -134,7 +134,7 @@ public class WebSocketService {
 	}
 
 	public void sendSessionStateToMembers(Session session) {
-    LOGGER.debug("--> sendSessionStateToMembers(), sessionID=" + session.getSessionID());
+    LOGGER.debug("--> sendSessionStateToMembers(), sessionID={}", session.getSessionID());
 		// TODO: Send highlighted with it
 		getSessionPrincipals(session.getSessionID()).memberPrincipals().stream()
 				.forEach(member -> sendSessionStateToMember(session, member.getMemberID().toString()));
@@ -142,28 +142,28 @@ public class WebSocketService {
 	}
 
 	public void sendUpdatedUserStoriesToMembers(Session session) {
-    LOGGER.debug("--> sendUpdatedUserStoriesToMembers(), sessionID=" + session.getSessionID());
+    LOGGER.debug("--> sendUpdatedUserStoriesToMembers(), sessionID={}", session.getSessionID());
 		getSessionPrincipals(session.getSessionID()).memberPrincipals()
 				.forEach(member -> sendUpdatedUserStoriesToMember(session, member.getMemberID().toString()));
     LOGGER.debug("<-- sendUpdatedUserStoriesToMembers()");
 	}
 
 	public void sendSessionStateToMember(Session session, String memberID) {
-    LOGGER.debug("--> sendSessionStateToMember(), sessionID=" + session.getSessionID() + ", memberID="+ memberID);
+    LOGGER.debug("--> sendSessionStateToMember(), sessionID={}, memberID={}", session.getSessionID(), memberID);
 		simpMessagingTemplate.convertAndSendToUser(memberID, MEMBER_UPDATES_DESTINATION,
 				session.getSessionState().toString());
     LOGGER.debug("<-- sendSessionStateToMember()");
 	}
 
 	public void sendUpdatedUserStoriesToMember(Session session, String memberID) {
-    LOGGER.debug("--> sendUpdatedUserStoriesToMember(), sessionID=" + session.getSessionID() + ", memberID="+ memberID);
+    LOGGER.debug("--> sendUpdatedUserStoriesToMember(), sessionID={}, memberID={}", session.getSessionID(), memberID);
 		simpMessagingTemplate.convertAndSendToUser(memberID, US_UPDATES_DESTINATION,
 				session.getSessionConfig().getUserStories());
     LOGGER.debug("<-- sendUpdatedUserStoriesToMember()");
 	}
 
 	public void sendTimerStartMessage(Session session, String timestamp) {
-    LOGGER.debug("--> sendTimerStartMessage(), sessionID=" + session.getSessionID());
+    LOGGER.debug("--> sendTimerStartMessage(), sessionID={}", session.getSessionID());
 		val sessionPrincipals = getSessionPrincipals(session.getSessionID());
 		if (sessionPrincipals.adminPrincipal() != null) {
 			sendTimerStartMessageToUser(session, timestamp, sessionPrincipals.adminPrincipal().getName());
@@ -174,13 +174,13 @@ public class WebSocketService {
 	}
 
 	public void sendTimerStartMessageToUser(Session session, String timestamp, String userID) {
-    LOGGER.debug("--> sendTimerStartMessageToUser(), sessionID=" + session.getSessionID() + ", userID="+ userID);
+    LOGGER.debug("--> sendTimerStartMessageToUser(), sessionID={}, userID={}", session.getSessionID(), userID);
 		simpMessagingTemplate.convertAndSendToUser(userID, START_TIMER_DESTINATION, timestamp);
     LOGGER.debug("<-- sendTimerStartMessageToUser()");
 	}
 
 	public void sendNotification(Session session, Notification notification) {
-    LOGGER.debug("--> sendNotification(), sessionID=" + session.getSessionID());
+    LOGGER.debug("--> sendNotification(), sessionID={}", session.getSessionID());
 		getSessionPrincipals(session.getSessionID()).memberPrincipals()
 				.forEach(member -> {
 					simpMessagingTemplate.convertAndSendToUser(member.getMemberID().toString(),
@@ -195,7 +195,7 @@ public class WebSocketService {
 	}
 
 	public void removeSession(Session session) {
-    LOGGER.debug("--> removeSession(), sessionID=" + session.getSessionID());
+    LOGGER.debug("--> removeSession(), sessionID={}", session.getSessionID());
 		sessionPrincipalList = sessionPrincipalList.stream().filter(p -> !p.sessionID().equals(session.getSessionID()))
 				.collect(Collectors.toList());
     LOGGER.debug("<-- removeSession()");
