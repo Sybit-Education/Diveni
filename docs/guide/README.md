@@ -10,6 +10,7 @@ In addition, the mobile application offers JIRA integration.
 ## Create new session
 
 To create a new session click on the "GO" button of the left window "New session".
+    
     ![Home]($withBase('/img/diveni_home.png'))
 
 After this you will be sent to the Prepare session page where you can customize the upcoming voting session for your team. 
