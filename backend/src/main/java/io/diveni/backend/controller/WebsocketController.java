@@ -12,6 +12,8 @@ import io.diveni.backend.model.notification.Notification;
 import io.diveni.backend.model.notification.NotificationType;
 import io.diveni.backend.service.DatabaseService;
 import io.diveni.backend.service.WebSocketService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -24,6 +26,8 @@ import lombok.val;
 @Controller
 public class WebsocketController {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(WebsocketController.class);
+
 	@Autowired
 	private WebSocketService webSocketService;
 
@@ -32,15 +36,18 @@ public class WebsocketController {
 
 	@MessageMapping("/registerAdminUser")
 	public void registerAdminUser(AdminPrincipal principal) {
+    LOGGER.debug("--> registerAdminUser()");
 		val session = ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID());
 		webSocketService.setAdminUser(principal);
 		if (session.getTimerTimestamp() != null) {
 			webSocketService.sendTimerStartMessageToUser(session, session.getTimerTimestamp(), principal.getName());
 		}
+    LOGGER.debug("<-- registerAdminUser()");
 	}
 
 	@MessageMapping("/registerMember")
 	public void joinMember(MemberPrincipal principal) {
+    LOGGER.debug("--> joinMember()");
 		val session = ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID());
 		webSocketService.addMemberIfNew(principal);
 		webSocketService.sendMembersUpdate(session);
@@ -50,10 +57,12 @@ public class WebsocketController {
 		}
 		webSocketService.sendNotification(session, new Notification(NotificationType.MEMBER_JOINED, new MemberPayload(
 				((MemberPrincipal) principal).getMemberID())));
+    LOGGER.debug("<-- joinMember()");
 	}
 
 	@MessageMapping("/unregister")
 	public void removeMember(Principal principal) {
+    LOGGER.debug("--> removeMember()");
 		if (principal instanceof MemberPrincipal) {
 			webSocketService.removeMember((MemberPrincipal) principal);
 			val session = ControllerUtils
@@ -68,35 +77,43 @@ public class WebsocketController {
 					.getSessionOrThrowResponse(databaseService, ((AdminPrincipal) principal).getSessionID());
 			webSocketService.sendNotification(session, new Notification(NotificationType.ADMIN_LEFT, null));
 			webSocketService.removeAdmin((AdminPrincipal) principal);
+      LOGGER.debug("<-- removeMember()");
 		}
 	}
 
 	@MessageMapping("/closeSession")
 	public void closeSession(AdminPrincipal principal) {
+    LOGGER.debug("--> closeSession()");
 		val session = ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID());
 		webSocketService.sendSessionStateToMembers(session.updateSessionState(SessionState.SESSION_CLOSED));
 		webSocketService.removeSession(session);
 		databaseService.deleteSession(session);
+    LOGGER.debug("<-- closeSession()");
 	}
 
 	@MessageMapping("/memberUpdate")
 	public void getMemberUpdate(AdminPrincipal principal) {
+    LOGGER.debug("--> getMemberUpdate()");
 		val session = ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID());
 		webSocketService.sendMembersUpdate(session);
+    LOGGER.debug("<-- getMemberUpdate()");
 	}
 
 	@MessageMapping("/startVoting")
 	public void startEstimation(AdminPrincipal principal) {
+    LOGGER.debug("--> startEstimation()");
 		val session = ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID())
 				.updateSessionState(SessionState.START_VOTING).resetCurrentHighlights()
 				.setTimerTimestamp(Utils.getTimestampISO8601(new Date()));
 		databaseService.saveSession(session);
 		webSocketService.sendSessionStateToMembers(session);
 		webSocketService.sendTimerStartMessage(session, session.getTimerTimestamp());
+    LOGGER.debug("<-- startEstimation()");
 	}
 
 	@MessageMapping("/votingFinished")
 	public void votingFinished(AdminPrincipal principal) {
+    LOGGER.debug("--> votingFinished()");
 		val session = ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID())
 				.updateSessionState(SessionState.VOTING_FINISHED)
 				.selectHighlightedMembers()
@@ -104,18 +121,22 @@ public class WebsocketController {
 		databaseService.saveSession(session);
 		webSocketService.sendMembersUpdate(session);
 		webSocketService.sendSessionStateToMembers(session);
+    LOGGER.debug("<-- votingFinished()");
 	}
 
 	@MessageMapping("/vote")
 	public synchronized void processVote(@Payload String vote, MemberPrincipal member) {
+    LOGGER.debug("--> processVote()");
 		val session = ControllerUtils.getSessionByMemberIDOrThrowResponse(databaseService, member.getMemberID())
 				.updateEstimation(member.getMemberID(), vote);
 		databaseService.saveSession(session);
 		webSocketService.sendMembersUpdate(session);
+    LOGGER.debug("<-- processVote()");
 	}
 
 	@MessageMapping("/restart")
 	public synchronized void restartVote(AdminPrincipal principal) {
+    LOGGER.debug("--> restartVote()");
 		val session = ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID())
 				.updateSessionState(SessionState.START_VOTING).resetEstimations()
 				.setTimerTimestamp(Utils.getTimestampISO8601(new Date()));
@@ -123,13 +144,16 @@ public class WebsocketController {
 		webSocketService.sendMembersUpdate(session);
 		webSocketService.sendSessionStateToMembers(session);
 		webSocketService.sendTimerStartMessage(session, session.getTimerTimestamp());
+    LOGGER.debug("<-- restartVote()");
 	}
 
 	@MessageMapping("/adminUpdatedUserStories")
 	public synchronized void adminUpdatedUserStories(AdminPrincipal principal, @Payload List<UserStory> userStories) {
+    LOGGER.debug("--> adminUpdatedUserStories()");
 		val session = ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID())
 				.updateUserStories(userStories);
 		databaseService.saveSession(session);
 		webSocketService.sendUpdatedUserStoriesToMembers(session);
+    LOGGER.debug("<-- adminUpdatedUserStories()");
 	}
 }

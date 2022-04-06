@@ -18,6 +18,8 @@ import io.diveni.backend.model.SessionState;
 import io.diveni.backend.service.DatabaseService;
 import io.diveni.backend.service.projectmanagementproviders.jiraserver.JiraServerService;
 import org.bson.types.ObjectId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +39,8 @@ import lombok.val;
 @RestController
 public class RoutesController {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(RoutesController.class);
+
 	@Autowired
   JiraServerService jiraServerService;
 
@@ -47,6 +51,8 @@ public class RoutesController {
 	public ResponseEntity<Map<String, Object>> createSession(
 			@RequestParam("tokenIdentifier") Optional<String> tokenIdentifier,
 			@RequestBody SessionConfig sessionConfig) {
+	  LOGGER.debug("--> createSession(), tokenIdentifier={}", tokenIdentifier);
+
 		val usedSessionIDs = databaseService.getSessions().stream().map(Session::getSessionID)
 				.collect(Collectors.toSet());
 		val usedDatabaseIDs = databaseService.getSessions().stream().map(Session::getDatabaseID)
@@ -61,32 +67,44 @@ public class RoutesController {
 				accessToken, null);
 		databaseService.saveSession(session);
 		val responseMap = Map.of("session", session, "adminCookie", session.getAdminCookie());
+
+		LOGGER.debug("<-- createSession()");
 		return new ResponseEntity<>(responseMap, HttpStatus.CREATED);
 	}
 
 	@GetMapping(value = "/sessions")
 	public ResponseEntity<Session> getExistingSession(@RequestParam("adminCookie") UUID adminCookie) {
+	  LOGGER.debug("--> getExistingSession(), adminCookie={}", adminCookie);
 		val session = databaseService.getSessionByAdminCookie(adminCookie);
 		if (session.isPresent()) {
+		  LOGGER.debug("<-- getExistingSession()");
 			return new ResponseEntity<>(session.get(), HttpStatus.OK);
 		} else {
+		  LOGGER.warn("Session with cookie was not found!");
+		  LOGGER.debug("<-- getExistingSession()");
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessages.sessionNotFoundErrorMessage);
 		}
 	}
 
 	@PostMapping(value = "/sessions/{sessionID}/join")
 	public ResponseEntity<SessionConfig> joinSession(@PathVariable String sessionID, @RequestBody JoinInfo joinInfo) {
+	  LOGGER.debug("--> joinSession(), sessionID={}", sessionID);
 		val session = addMemberToSession(sessionID, joinInfo.getMember(), joinInfo.getPassword());
+    LOGGER.debug("<-- joinSession()");
 		return new ResponseEntity<SessionConfig>(session.getSessionConfig(), HttpStatus.OK);
 	}
 
 	@GetMapping(value = "/sessions/{sessionID}")
 	public @ResponseBody Session getSession(@PathVariable String sessionID) {
-		return ControllerUtils.getSessionOrThrowResponse(databaseService, sessionID);
+    LOGGER.debug("--> getSession(), sessionID={}", sessionID);
+    Session session = ControllerUtils.getSessionOrThrowResponse(databaseService, sessionID);
+    LOGGER.debug("<-- getSession()");
+    return session;
 	}
 
 	private synchronized Session addMemberToSession(String sessionID, Member member, Optional<String> password) {
-		val session = databaseService.getSessionByID(sessionID).orElseThrow(
+	  LOGGER.debug("--> addMemberToSession(), sessionID={}, member={}", sessionID, member);
+    val session = databaseService.getSessionByID(sessionID).orElseThrow(
 				() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessages.sessionNotFoundErrorMessage));
 		List<Member> members = session.getMembers().stream().map(m -> m).collect(Collectors.toList());
 		if (members.stream().anyMatch(m -> m.getMemberID().equals(member.getMemberID()))) {
@@ -99,6 +117,7 @@ public class RoutesController {
 		}
 		members.add(member);
 		databaseService.saveSession(session.updateMembers(members));
+    LOGGER.debug("<-- addMemberToSession()");
 		return session;
 	}
 }
