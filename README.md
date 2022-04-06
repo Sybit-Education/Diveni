@@ -93,7 +93,7 @@ Sybit supports teaching at the university at HTWG Konstanz and acted as an indus
 partner in this project. A product owner represented Sybit's requirements to the 
 students and released the sprints in the agile project development.
 
-Sybit GmbH will continue to support and maintain the project as an open source project.
+[Sybit GmbH](https://www.sybit.de) will continue to support and maintain the project as an open source project.
 
 ---
 
