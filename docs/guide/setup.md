@@ -1,5 +1,27 @@
 # Setup
 
+## Installation
+
+Local Installation
+- Technical Requirements:
+  - Java 11
+    - Download from SAPMachine <https://sap.github.io/SapMachine/>
+    - ![Download_Selection_Java11](docs/.vuepress/public/img/Java11_Installer_Selection.png)
+    - Select the appropriate installer for your OS
+  - Maven
+    - Download from Apache <https://maven.apache.org/download.cgi>
+    - ![Download_Selection_Maven](docs/.vuepress/public/img/Maven_Selection.png)
+    - Click the link in the marked line
+  - Node.js
+    - Download from nodejs <https://nodejs.org/en/download/>
+    - ![Download_Selection_nodejs](docs/.vuepress/public/img/nodejs_Installer_Selection.png)
+    - Select the appropriate installer for your OS
+  - MongoDB
+    - MongoDB is running in the background at port 27017
+      - <https://www.mongodb.com/docs/manual/administration/install-community/>
+      - ![Download_Selection_MongoDB](docs/.vuepress/public/img/MongoDB_Installer_Selection.png)
+      - Select the appropriate installer for your OS and follow the instructions
+
 ## Connectors
 
 ### JIRA Cloud
