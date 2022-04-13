@@ -71,6 +71,17 @@ public class WebsocketController {
 		}
 	}
 
+	@MessageMapping("/kickMember")
+  public void kickMember(AdminPrincipal principal, @Payload String memberID) {
+    val session = ControllerUtils
+      .getSessionOrThrowResponse(databaseService, principal.getSessionID()).removeMember(memberID);
+    databaseService.saveSession(session);
+    webSocketService.sendMembersUpdate(session);
+    webSocketService.sendNotification(session, new Notification(NotificationType.MEMBER_LEFT, new MemberPayload(
+      memberID)));
+    webSocketService.removeMember(new MemberPrincipal(principal.getSessionID(), memberID));
+  }
+
 	@MessageMapping("/closeSession")
 	public void closeSession(AdminPrincipal principal) {
 		val session = ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID());

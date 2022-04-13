@@ -230,6 +230,9 @@ export default Vue.extend({
     timerTimestamp() {
       return this.$store.state.timerTimestamp ? this.$store.state.timerTimestamp : "";
     },
+    notifications() {
+      return this.$store.state.notifications;
+    },
   },
   watch: {
     memberUpdates(updates) {
@@ -250,6 +253,12 @@ export default Vue.extend({
           startVelocity: 50,
           spread: 100,
         });
+      }
+    },
+    notifications(notifications) {
+      if (notifications.at(-1).type === "MEMBER_LEFT" && notifications.at(-1).payload.memberID === this.memberID) {
+        this.$toast.error(this.$t("session.notification.messages.memberRemoved"))
+        this.leaveMeeting();
       }
     },
   },

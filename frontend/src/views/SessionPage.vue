@@ -101,6 +101,7 @@
         <rounded-avatar
           v-for="member of membersPending"
           :key="member.memberID"
+          :member-id="member.memberID"
           class="mx-2"
           :asset-name="backendAnimalToAssetName(member.avatarAnimal)"
           :color="member.hexColor"
