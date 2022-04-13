@@ -25,12 +25,7 @@
         </b-button>
       </b-col>
       <b-col class="d-flex justify-content-end">
-        <rounded-avatar
-          :color="hexColor"
-          :asset-name="avatarAnimalAssetName"
-          :show-name="true"
-          :name="name"
-        />
+        <rounded-avatar :member="getMember" />
       </b-col>
     </b-row>
     <b-row v-if="isMobile">
@@ -232,6 +227,13 @@ export default Vue.extend({
     },
     notifications() {
       return this.$store.state.notifications;
+    },
+    getMember() {
+      return {
+        hexColor: this.hexColor,
+        avatarAnimal: this.avatarAnimalAssetName,
+        name: this.name,
+      };
     },
   },
   watch: {

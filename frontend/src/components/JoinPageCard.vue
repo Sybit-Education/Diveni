@@ -8,10 +8,8 @@
     >
       <b-row class="justify-content-center">
         <rounded-avatar
-          :color="'transparent'"
-          :asset-name="animalAssetName"
+          :member="getMember"
           :show-name="false"
-          :name="''"
         />
       </b-row>
       <b-row class="mt-2">
@@ -63,12 +61,19 @@ export default Vue.extend({
     buttonText: { type: String, required: true },
     sessionIdFromUrl: { type: String, required: true },
   },
-  data() {
-    return {
-      sessionID: "",
-      password: "",
-      name: "",
-    };
+  data: () => ({
+    sessionID: "",
+    password: "",
+    name: "",
+  }),
+  computed: {
+    getMember() {
+      return {
+        hexColor: "transparent",
+        avatarAnimal: this.animalAssetName,
+        name: "",
+      };
+    },
   },
   created() {
     if (this.sessionIdFromUrl) {

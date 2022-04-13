@@ -1,12 +1,12 @@
 <template>
-  <div :style="`background-color: ${color};`" class="text-center">
+  <div :style="`background-color: ${member.hexColor}; width: 150px`" class="text-center">
     <img
-      :src="require(`@/assets/${assetName}`)"
-      :alt="altAttribute.toLowerCase() + ' image'"
+      :src="require(`@/assets/${member.avatarAnimal}`)"
+      :alt="member.avatarAnimal.toLowerCase() + ' image'"
       width="70"
     />
     <h4 class="m-2">
-      <strong>{{ name }}</strong>
+      <strong>{{ member.name }}</strong>
     </h4>
   </div>
 </template>
@@ -15,12 +15,8 @@
 import Vue from "vue";
 
 export default Vue.extend({
-  name: "SessionMemberCircle",
   props: {
-    assetName: { type: String, required: true },
-    altAttribute: { type: String, required: false, default: "animal" },
-    name: { type: String, required: true },
-    color: { type: String, required: true },
+    member: { type: Object, required: true }
   },
 });
 </script>

@@ -29,14 +29,12 @@
         <b-icon-three-dots animation="fade" class="" font-scale="3" />
       </b-row>
       <b-row class="d-flex justify-content-center overflow-auto" style="max-height: 500px">
-        <SessionMemberCircle
+        <KickUserWrapper
           v-for="member of members"
           :key="member.memberID"
           class="m-4"
-          :color="member.hexColor"
-          :asset-name="backendAnimalToAssetName(member.avatarAnimal)"
-          :alt-attribute="member.avatarAnimal"
-          :name="member.name"
+          child="SessionMemberCircle"
+          :member="member"
         />
       </b-row>
       <b-row>
@@ -98,15 +96,12 @@
         </h4>
       </b-row>
       <b-row v-if="!estimateFinished" class="my-1 d-flex justify-content-center flex-wrap">
-        <rounded-avatar
+        <KickUserWrapper
           v-for="member of membersPending"
           :key="member.memberID"
-          :member-id="member.memberID"
           class="mx-2"
-          :asset-name="backendAnimalToAssetName(member.avatarAnimal)"
-          :color="member.hexColor"
-          :show-name="true"
-          :name="member.name"
+          child="RoundedAvatar"
+          :member="member"
         />
       </b-row>
       <hr />
@@ -171,30 +166,28 @@
 <script lang="ts">
 import Vue from "vue";
 import Constants from "../constants";
-import SessionMemberCircle from "../components/SessionMemberCircle.vue";
 import Member from "../model/Member";
 import SessionMemberCard from "../components/SessionMemberCard.vue";
 import UserStories from "../components/UserStories.vue";
 import EstimateTimer from "../components/EstimateTimer.vue";
 import CopySessionIdPopup from "../components/CopySessionIdPopup.vue";
-import RoundedAvatar from "../components/RoundedAvatar.vue";
 import UserStoryDescriptions from "../components/UserStoryDescriptions.vue";
 import confetti from "canvas-confetti";
 import NotifyHostComponent from "../components/NotifyHostComponent.vue";
 import apiService from "@/services/api.service";
 import UserStorySumComponent from "@/components/UserStorySum.vue";
 import Project from "../model/Project";
+import KickUserWrapper from "@/components/KickUserWrapper.vue";
 
 export default Vue.extend({
   name: "SessionPage",
   components: {
+    KickUserWrapper,
     UserStorySumComponent,
-    SessionMemberCircle,
     SessionMemberCard,
     UserStories,
     EstimateTimer,
     CopySessionIdPopup,
-    RoundedAvatar,
     UserStoryDescriptions,
     NotifyHostComponent,
   },
