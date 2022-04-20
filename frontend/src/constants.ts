@@ -106,17 +106,12 @@ class Constants {
       "zebra",
     ];
     const num = Math.random() * (animals.length - 0);
-    return `${animals[parseInt(num.toString(), 10)]}.png`;
+    return animals[parseInt(num.toString(), 10)];
   }
 
   // eslint-disable-next-line class-methods-use-this
   public avatarAnimalAssetNameToBackendEnum(assetName: string) {
     return assetName.split(".")[0].toUpperCase();
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  public avatarAnimalToAssetName(animal: string) {
-    return `${animal.toLowerCase()}.png`;
   }
 }
 

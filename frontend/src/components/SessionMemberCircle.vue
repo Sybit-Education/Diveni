@@ -1,7 +1,7 @@
 <template>
   <div :style="`background-color: ${member.hexColor}; width: 150px`" class="text-center">
     <img
-      :src="require(`@/assets/${member.avatarAnimal}`)"
+      :src="require(`@/assets/${member.avatarAnimal.toLowerCase()}.png`)"
       :alt="member.avatarAnimal.toLowerCase() + ' image'"
       width="70"
     />
@@ -16,7 +16,7 @@ import Vue from "vue";
 
 export default Vue.extend({
   props: {
-    member: { type: Object, required: true }
+    member: { type: Object, required: true },
   },
 });
 </script>

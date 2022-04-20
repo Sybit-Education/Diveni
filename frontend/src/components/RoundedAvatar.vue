@@ -1,7 +1,7 @@
 <template>
   <div id="parent" class="rounded-circle" :style="`background-color: ${member.hexColor}`">
     <div id="column" class="text-center">
-      <img :src="require(`@/assets/${member.avatarAnimal}`)" width="44" />
+      <img :src="require(`@/assets/${member.avatarAnimal.toLowerCase()}.png`)" width="44" />
       <div v-if="showName" id="name">
         {{ member.name }}
       </div>
@@ -11,7 +11,6 @@
 
 <script lang="ts">
 import Vue from "vue";
-// import Constants from "@/constants";
 
 export default Vue.extend({
   name: "RoundedAvatar",
