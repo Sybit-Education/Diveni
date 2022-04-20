@@ -1,6 +1,6 @@
 <template>
   <div :id="`user${member.memberID}`" class="component">
-    <Component :is="child" :member="member" data-container="body" />
+    <Component :is="child" :member="member" :props="props" />
     <b-popover
       :target="`user${member.memberID}`"
       triggers="hover"
@@ -38,18 +38,14 @@ export default Vue.extend({
   components: {
     SessionMemberCircle: () => import("@/components/SessionMemberCircle.vue"),
     RoundedAvatar: () => import("@/components/RoundedAvatar.vue"),
+    SessionMemberCard: () => import("@/components/SessionMemberCard.vue"),
   },
   props: {
     child: { type: String, required: true },
     member: { type: Object, required: true },
-  },
-  mounted() {
-    this.member.avatarAnimal = this.backendAnimalToAssetName(this.member.avatarAnimal);
+    props: { type: Object, required: false, default: () => ({}) },
   },
   methods: {
-    backendAnimalToAssetName(animal: string) {
-      return Constants.avatarAnimalToAssetName(animal);
-    },
     openModal() {
       this.$root.$emit("bv::hide::popover");
       this.$root.$emit("bv::show::modal", `modal${this.member.memberID}`, "#btnShow");

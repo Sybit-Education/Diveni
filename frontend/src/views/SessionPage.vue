@@ -116,17 +116,16 @@
         class="my-1 d-flex justify-content-center flex-wrap overflow-auto"
         style="max-height: 500px"
       >
-        <SessionMemberCard
+        <KickUserWrapper
           v-for="member of estimateFinished ? members : membersEstimated"
           :key="member.memberID"
-          :color="member.hexColor"
-          :asset-name="backendAnimalToAssetName(member.avatarAnimal)"
-          :name="member.name"
-          :estimation="member.currentEstimation"
-          :estimate-finished="estimateFinished"
-          :highlight="
-            highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0
-          "
+          child="SessionMemberCard"
+          :member="member"
+          :props="{
+            estimateFinished: estimateFinished,
+            highlight:
+              highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0,
+          }"
         />
       </b-row>
     </div>
@@ -167,7 +166,6 @@
 import Vue from "vue";
 import Constants from "../constants";
 import Member from "../model/Member";
-import SessionMemberCard from "../components/SessionMemberCard.vue";
 import UserStories from "../components/UserStories.vue";
 import EstimateTimer from "../components/EstimateTimer.vue";
 import CopySessionIdPopup from "../components/CopySessionIdPopup.vue";
@@ -184,7 +182,6 @@ export default Vue.extend({
   components: {
     KickUserWrapper,
     UserStorySumComponent,
-    SessionMemberCard,
     UserStories,
     EstimateTimer,
     CopySessionIdPopup,
@@ -500,9 +497,6 @@ export default Vue.extend({
         this.$store.commit("sendViaBackendWS", { endPoint });
         this.estimateFinished = true;
       }
-    },
-    backendAnimalToAssetName(animal: string) {
-      return Constants.avatarAnimalToAssetName(animal);
     },
     closeSession() {
       this.sendCloseSessionCommand();

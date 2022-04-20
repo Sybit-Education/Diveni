@@ -96,12 +96,12 @@
       <SessionMemberCard
         v-for="member of members"
         :key="member.memberID"
-        :color="member.hexColor"
-        :asset-name="backendAnimalToAssetName(member.avatarAnimal)"
-        :name="member.name"
-        :estimation="member.currentEstimation"
-        :estimate-finished="votingFinished"
-        :highlight="highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0"
+        :member="member"
+        :props="{
+          estimateFinished: votingFinished,
+          highlight:
+            highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0,
+        }"
       />
     </b-row>
     <b-row v-if="userStoryMode !== 'NO_US'" class="mt-5">
@@ -298,9 +298,6 @@ export default Vue.extend({
     },
     goToJoinPage() {
       this.$router.push({ name: "JoinPage" });
-    },
-    backendAnimalToAssetName(animal: string) {
-      return Constants.avatarAnimalToAssetName(animal);
     },
     goToLandingPage() {
       window.localStorage.removeItem("memberCookie");
