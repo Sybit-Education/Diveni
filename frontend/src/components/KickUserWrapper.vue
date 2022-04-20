@@ -1,5 +1,5 @@
 <template>
-  <div :id="`user${member.memberID}`" class="component">
+  <div :id="`user${member.memberID}`" class="component" :style="{ width: width }">
     <Component :is="child" :member="member" :props="props" />
     <b-popover
       :target="`user${member.memberID}`"
@@ -45,6 +45,20 @@ export default Vue.extend({
     member: { type: Object, required: true },
     props: { type: Object, required: false, default: () => ({}) },
   },
+  computed: {
+    width() {
+      switch (this.child) {
+        case "SessionMemberCircle":
+          return "150px";
+        case "RoundedAvatar":
+          return "100px";
+        case "SessionMemberCard":
+          return "190px";
+        default:
+          return "100px";
+      }
+    }
+  },
   methods: {
     openModal() {
       this.$root.$emit("bv::hide::popover");
@@ -68,7 +82,6 @@ export default Vue.extend({
   border: transparent;
 }
 .component {
-  width: 150px;
   display: grid;
   justify-content: center;
   align-items: center;
