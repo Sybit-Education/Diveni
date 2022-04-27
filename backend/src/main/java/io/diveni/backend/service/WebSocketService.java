@@ -60,10 +60,11 @@ public class WebSocketService {
 						.filter(m -> !m.getName().equals(member.getName())), Stream.of(member))
 				.collect(Collectors.toSet());
 		sessionPrincipalList = sessionPrincipalList.stream().map(p -> {
-			if (p == sessionPrincipals)
-				return p.memberPrincipals(updatedMembers);
-			else
-				return p;
+			if (p == sessionPrincipals) {
+        return p.memberPrincipals(updatedMembers);
+      } else {
+        return p;
+      }
 		}).collect(Collectors.toList());
     LOGGER.debug("<-- addMemberIfNew()");
 	}
