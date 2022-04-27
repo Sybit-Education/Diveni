@@ -7,7 +7,14 @@
       class="card col-lg-6 col-md-8 col-sm-10 p-5"
     >
       <b-row class="justify-content-center">
-        <rounded-avatar :member="getMember" :show-name="false" />
+        <rounded-avatar
+          :member="{
+            hexColor: 'transparent',
+            avatarAnimal: animalAssetName,
+            name: '',
+          }"
+          :show-name="false"
+        />
       </b-row>
       <b-row class="mt-2">
         <b-col>
@@ -58,19 +65,12 @@ export default Vue.extend({
     buttonText: { type: String, required: true },
     sessionIdFromUrl: { type: String, required: true },
   },
-  data: () => ({
-    sessionID: "",
-    password: "",
-    name: "",
-  }),
-  computed: {
-    getMember() {
-      return {
-        hexColor: "transparent",
-        avatarAnimal: this.animalAssetName,
-        name: "",
-      };
-    },
+  data() {
+    return {
+      sessionID: "",
+      password: "",
+      name: "",
+    };
   },
   created() {
     if (this.sessionIdFromUrl) {
