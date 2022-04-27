@@ -71,7 +71,7 @@ public class WebsocketController {
 		}
 	}
 
-	@MessageMapping("/kickMember")
+	@MessageMapping("/kick-member")
   public void kickMember(AdminPrincipal principal, @Payload String memberID) {
     val session = ControllerUtils
       .getSessionOrThrowResponse(databaseService, principal.getSessionID()).removeMember(memberID);

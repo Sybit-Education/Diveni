@@ -29,7 +29,7 @@
         <b-icon-three-dots animation="fade" class="" font-scale="3" />
       </b-row>
       <b-row class="d-flex justify-content-center overflow-auto" style="max-height: 500px">
-        <KickUserWrapper
+        <kick-user-wrapper
           v-for="member of members"
           :key="member.memberID"
           class="m-4"
@@ -96,7 +96,7 @@
         </h4>
       </b-row>
       <b-row v-if="!estimateFinished" class="my-1 d-flex justify-content-center flex-wrap">
-        <KickUserWrapper
+        <kick-user-wrapper
           v-for="member of membersPending"
           :key="member.memberID"
           class="mx-2"
@@ -116,7 +116,7 @@
         class="my-1 d-flex justify-content-center flex-wrap overflow-auto"
         style="max-height: 500px"
       >
-        <KickUserWrapper
+        <kick-user-wrapper
           v-for="member of estimateFinished ? members : membersEstimated"
           :key="member.memberID"
           child="SessionMemberCard"

@@ -17,7 +17,7 @@ class Constants {
 
   webSocketUnregisterRoute = "/ws/unregister";
 
-  webSocketKickMemberRoute = "/ws/kickMember";
+  webSocketKickMemberRoute = "/ws/kick-member";
 
   webSocketCloseSessionRoute = "/ws/closeSession";
 
