@@ -258,8 +258,11 @@ export default Vue.extend({
       }
     },
     notifications(notifications) {
-      if (notifications.at(-1).type === "MEMBER_LEFT" && notifications.at(-1).payload.memberID === this.memberID) {
-        this.$toast.error(this.$t("session.notification.messages.memberRemoved"))
+      if (
+        notifications.at(-1).type === "MEMBER_LEFT" &&
+        notifications.at(-1).payload.memberID === this.memberID
+      ) {
+        this.$toast.error(this.$t("session.notification.messages.memberRemoved"));
         this.leaveMeeting();
       }
     },

@@ -11,7 +11,11 @@
         member.currentEstimation
       }}</strong>
     </h1>
-    <img :src="require(`@/assets/${member.avatarAnimal.toLowerCase()}.png`)" width="40" alt="image" />
+    <img
+      :src="require(`@/assets/${member.avatarAnimal.toLowerCase()}.png`)"
+      width="40"
+      alt="image"
+    />
     <h4 class="mt-2">
       <strong>{{ member.name }}</strong>
     </h4>

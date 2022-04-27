@@ -57,7 +57,7 @@ export default Vue.extend({
         default:
           return "100px";
       }
-    }
+    },
   },
   methods: {
     openModal() {

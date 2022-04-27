@@ -7,10 +7,7 @@
       class="card col-lg-6 col-md-8 col-sm-10 p-5"
     >
       <b-row class="justify-content-center">
-        <rounded-avatar
-          :member="getMember"
-          :show-name="false"
-        />
+        <rounded-avatar :member="getMember" :show-name="false" />
       </b-row>
       <b-row class="mt-2">
         <b-col>
