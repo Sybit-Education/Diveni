@@ -1,9 +1,9 @@
 <template>
-  <h4>
+  <div class="copy-session">
     {{ textBeforeSessionID }}
-    <b-link id="popover-link" href="" @click="copyLinkToClipboard()">
-      {{ sessionId }}
-    </b-link>
+    <strong>
+      <b-link id="popover-link" href="#" @click="copyLinkToClipboard()" v-text="sessionId" />
+    </strong>
     {{ textAfterSessionID }}
     <b-popover id="popover" target="popover-link" triggers="hover" placement="top">
       <b-button class="mx-1" variant="success" @click="copyIdToClipboard()">
@@ -13,7 +13,7 @@
         {{ $t("page.session.before.copy.link") }}
       </b-button>
     </b-popover>
-  </h4>
+  </div>
 </template>
 
 <script lang="ts">
@@ -84,6 +84,9 @@ export default Vue.extend({
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.copy-session {
+  font-size: 1.75rem;
+}
 #popover {
   max-width: 400px;
 }
