@@ -1,34 +1,17 @@
 module.exports = {
-  /**
-   * Ref：https://v1.vuepress.vuejs.org/config/#title
-   */
+  lang: 'en-US',
   title: 'Diveni',
-  /**
-   * Ref：https://v1.vuepress.vuejs.org/config/#description
-   */
   description: 'The Planning-Poker App',
   base: '/Diveni/',
-  /**
-   * Extra tags to be injected to the page HTML `<head>`
-   *
-   * ref：https://v1.vuepress.vuejs.org/config/#head
-   */
   head: [
     ['meta', { name: 'theme-color', content: '#3eaf7c' }],
     ['meta', { name: 'apple-mobile-web-app-capable', content: 'yes' }],
     ['meta', { name: 'apple-mobile-web-app-status-bar-style', content: 'black' }]
   ],
-
-  /**
-   * Theme configuration, here is the default theme configuration for VuePress.
-   *
-   * ref：https://v1.vuepress.vuejs.org/theme/default-theme-config.html
-   */
   themeConfig: {
-    repo: 'https://github.com/Sybit-Education/Diveni/',
+    repo: 'Sybit-Education/Diveni',
+    docsDir: 'docs',
     editLinks: false,
-    docsDir: '',
-    editLinkText: '',
     lastUpdated: false,
     nav: [
       {
@@ -38,16 +21,21 @@ module.exports = {
       {
         text: 'Demo',
         link: '/demo/'
+      },
+      {
+        text: 'License',
+        link: '/license'
       }
     ],
     sidebar: {
       '/guide/': [
         {
-          title: 'Guide',
-          collapsable: false,
+          collapsible: true,
           children: [
             '',
-            'setup',
+            'user',
+            'install',
+            'develop',
             'architecture',
             'testing'
           ]
@@ -55,13 +43,9 @@ module.exports = {
       ],
     }
   },
-
-  /**
-   * Apply plugins，ref：https://v1.vuepress.vuejs.org/zh/plugin/
-   */
   plugins: [
     '@vuepress/plugin-back-to-top',
     '@vuepress/plugin-medium-zoom',
-    'vuepress-plugin-mermaidjs'
+    'vuepress-plugin-mermaidjs',
   ]
 }
