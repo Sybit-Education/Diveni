@@ -3,6 +3,7 @@
 ## Installation
 
 ### Local Installation
+
 - Technical Requirements:
   - Java 11
     - Download from SAPMachine <https://sap.github.io/SapMachine/>
@@ -23,6 +24,7 @@
       - Select the appropriate installer for your OS and follow the instructions
 
 ### Setup
+
 1. Clone repository with Git from Github:
       git clone https://github.com/Sybit-Education/Diveni.git
    Or download the repository and unzip it’s content:
@@ -48,9 +50,6 @@
 
 ## Connectors
 ### JIRA Connection
-
-
-
 
 
 ### JIRA Cloud
