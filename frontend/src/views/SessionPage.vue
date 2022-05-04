@@ -398,6 +398,7 @@ export default Vue.extend({
         if (doRemove) {
           response = await apiService.deleteUserStory(us[idx].jiraId);
           us.splice(idx, 1);
+          doRemove = false;
         } else {
           console.log(`JIRA ID: ${us[idx].jiraID}`);
           if (us[idx].jiraId === null) {
@@ -424,6 +425,9 @@ export default Vue.extend({
         }
       }
       // WS send
+      if (doRemove) {
+        us.splice(idx, 1);
+      }
       this.$store.commit("setUserStories", { stories: us });
       if (this.webSocketIsConnected) {
         const endPoint = `${Constants.webSocketAdminUpdatedUserStoriesRoute}`;
