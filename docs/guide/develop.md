@@ -62,3 +62,11 @@ one-way (incoming) link from the client to Jira.
 
 Afterwards, you will see the client secret and ID, which needs to be provided for Diveni on 
 JIRA-Server.
+
+## Troubleshooting
+
+- When working with IntelliJ and starting Diveni's Backend with IntelliJs editor it may throw an
+  exception when trying to connect with Jira.\
+  This is because it can not find the desired .env file in your working directory (/backend).
+  When this happens make sure to include ```/backend``` to your run working directory in the run
+  configuration settings.
