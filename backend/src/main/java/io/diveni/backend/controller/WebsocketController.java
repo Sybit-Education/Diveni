@@ -40,12 +40,13 @@ public class WebsocketController {
 		var session = ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID());
 		webSocketService.setAdminUser(principal);
 		if (session.getTimerTimestamp() != null) {
-      session = session.setTimerTimestamp(Utils.getTimestampISO8601(new Date()))
-        .updateSessionState(SessionState.START_VOTING);
+      session = session.setTimerTimestamp(Utils.getTimestampISO8601(new Date()));
       databaseService.saveSession(session);
-      webSocketService.sendNotification(session, new Notification(NotificationType.ADMIN_JOINED, null));
       webSocketService.sendTimerStartMessage(session, session.getTimerTimestamp());
 		}
+    if (session.getMembers().size() > 0) {
+      webSocketService.sendNotification(session, new Notification(NotificationType.ADMIN_JOINED, null));
+    }
     LOGGER.debug("<-- registerAdminUser()");
 	}
 
