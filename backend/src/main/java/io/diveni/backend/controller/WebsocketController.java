@@ -44,7 +44,7 @@ public class WebsocketController {
         .updateSessionState(SessionState.START_VOTING);
       databaseService.saveSession(session);
       webSocketService.sendNotification(session, new Notification(NotificationType.ADMIN_JOINED, null));
-			webSocketService.sendTimerStartMessageToUser(session, session.getTimerTimestamp(), principal.getName());
+      webSocketService.sendTimerStartMessage(session, session.getTimerTimestamp());
 		}
     LOGGER.debug("<-- registerAdminUser()");
 	}

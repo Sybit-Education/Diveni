@@ -317,7 +317,6 @@ export default Vue.extend({
     },
     reactOnHostJoin() {
       this.pauseSession = false;
-      this.timerTimestamp();
     },
   },
 });
