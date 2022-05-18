@@ -37,9 +37,13 @@ public class WebsocketController {
 	@MessageMapping("/registerAdminUser")
 	public void registerAdminUser(AdminPrincipal principal) {
     LOGGER.debug("--> registerAdminUser()");
-		val session = ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID());
+		var session = ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID());
 		webSocketService.setAdminUser(principal);
 		if (session.getTimerTimestamp() != null) {
+      session = session.setTimerTimestamp(Utils.getTimestampISO8601(new Date()))
+        .updateSessionState(SessionState.START_VOTING);
+      databaseService.saveSession(session);
+      webSocketService.sendNotification(session, new Notification(NotificationType.ADMIN_JOINED, null));
 			webSocketService.sendTimerStartMessageToUser(session, session.getTimerTimestamp(), principal.getName());
 		}
     LOGGER.debug("<-- registerAdminUser()");
@@ -74,7 +78,7 @@ public class WebsocketController {
 					((MemberPrincipal) principal).getMemberID())));
 		} else {
 			val session = ControllerUtils
-					.getSessionOrThrowResponse(databaseService, ((AdminPrincipal) principal).getSessionID());
+          .getSessionOrThrowResponse(databaseService, ((AdminPrincipal) principal).getSessionID());
 			webSocketService.sendNotification(session, new Notification(NotificationType.ADMIN_LEFT, null));
 			webSocketService.removeAdmin((AdminPrincipal) principal);
       LOGGER.debug("<-- removeMember()");

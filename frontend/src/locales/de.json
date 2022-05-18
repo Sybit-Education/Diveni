@@ -115,7 +115,8 @@
         "leave": {
           "label": "Session verlassen"
         }
-      }
+      },
+      "hostLeft": "Warte, bis der Organisator die Sitzung wieder betritt..."
     }
   },
   "session": {
@@ -233,7 +234,8 @@
     },
     "notification": {
       "messages": {
-        "hostLeft": "Host hat die Sitzung verlassen",
+        "hostLeft": "Organisator hat die Sitzung verlassen",
+        "hostJoined": "Organisator ist der Sitzung beigetreten",
         "memberLeft": "Teilnehmer hat die Sitzung verlassen",
         "memberJoined": "Teilnehmer ist der Sitzung beigetreten",
         "jiraCredentials": "Falsche Login-Daten",

@@ -49,6 +49,7 @@ export default Vue.extend({
     hexColor: { type: String, required: true },
     dragged: { type: Boolean, required: true },
     isMobile: { type: Boolean, required: true },
+    disabled: { type: Boolean, default: false },
   },
   computed: {
     swipeableCardBackgroundColor(): string {
@@ -64,14 +65,16 @@ export default Vue.extend({
       this.draggedUp();
     },
     draggedUp() {
-      confetti({
-        particleCount: 50,
-        startVelocity: 50,
-        spread: 100,
-      });
-      this.$emit("sentVote", {
-        vote: this.voteOption,
-      });
+      if (!this.disabled) {
+        confetti({
+          particleCount: 50,
+          startVelocity: 50,
+          spread: 100,
+        });
+        this.$emit("sentVote", {
+          vote: this.voteOption,
+        });
+      }
     },
   },
 });
