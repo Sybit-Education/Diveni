@@ -280,7 +280,6 @@ export default Vue.extend({
       this.goToJoinPage();
     }
     this.voteSet = JSON.parse(this.voteSetJson);
-    console.log(this.voteSet)
   },
   beforeDestroy() {
     this.sendUnregisterCommand();
