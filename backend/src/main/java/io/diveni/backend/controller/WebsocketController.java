@@ -42,7 +42,9 @@ public class WebsocketController {
 		if (session.getTimerTimestamp() != null) {
       session = session.setTimerTimestamp(Utils.getTimestampISO8601(new Date()));
       databaseService.saveSession(session);
-      webSocketService.sendTimerStartMessage(session, session.getTimerTimestamp());
+      if (!SessionState.VOTING_FINISHED.equals(session.getSessionState())) {
+        webSocketService.sendTimerStartMessage(session, session.getTimerTimestamp());
+      }
 		}
     if (session.getMembers().size() > 0) {
       webSocketService.sendNotification(session, new Notification(NotificationType.ADMIN_JOINED, null));
