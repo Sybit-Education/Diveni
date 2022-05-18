@@ -20,7 +20,7 @@ export default Vue.extend({
         this.$toast.warning(hostLeft);
         this.$emit("hostLeft");
       } else if (message.type === "ADMIN_JOINED") {
-        this.$toast.info(this.$t("session.notification.messages.hostLeft"));
+        this.$toast.info(this.$t("session.notification.messages.hostJoined"));
         this.$emit("hostJoined");
       }
     },
