@@ -1,5 +1,5 @@
 <template>
-  <b-overlay :show="!pauseSession">
+  <b-overlay :show="pauseSession">
     <template #overlay>
       <b-spinner class="me-2" />
       <span class="overlayText">
