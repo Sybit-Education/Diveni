@@ -48,23 +48,30 @@
 
 ## Connectors
 ### JIRA Connection
-
-
-
-
-
-### JIRA Cloud
-
-TODO
-
-### JIRA Enterprise
-
-For setting up the JIRA application, the steps described here should be sufficient: 
+For setting up the JIRA application, follow step 1 of the here described steps:
 <https://developer.atlassian.com/server/jira/platform/oauth/>
 
-It doesn't matter what you enter in remaining fields (URL, name, type, and so on). 
-This is because we only want to retrieve data from Jira, therefore we only need to set up a 
+It doesn't matter what you enter in remaining fields (URL, name, type, and so on).
+This is because we only want to retrieve data from Jira, therefore we only need to set up a
 one-way (incoming) link from the client to Jira.
 
-Afterwards, you will see the client secret and ID, which needs to be provided for Diveni on 
+Afterwards, you will see the client secret and ID, which needs to be provided for Diveni on
 JIRA-Server.
+
+
+# Remote Installation
+## Technical Requirements:
+- Docker
+
+## Setup (Gets improved)
+1. In your local environment execute script in root/build-production.sh
+2. Execute script root/docker-production.sh
+3. Connect via ssh to your server and move file root/diveni.tar.gz onto it
+4. Unzip content with tar –xf diveni.tar.gz
+5. Execute script start_script.sh
+
+
+# TODO
+
+
+
