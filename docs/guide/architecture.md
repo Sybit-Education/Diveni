@@ -5,9 +5,35 @@
 Context delineation provided insight of the system from a black box perspective. In the building block view
 the internal structure and the components to be developed are now considered.
 
-![components diagram](/diagram/components-diagram-03.png)
+Diveni is separated in four Docker containers:
 
+```mermaid
+flowchart TD
+  Browser(Browser)
+  subgraph Reverse-Proxy-Container
+    direction RL
+      Reverse-Proxy
+  end  
+  subgraph Frontend-Container
+    direction RL
+      Frontend
+  end
+  subgraph Backend-Container
+    direction RL
+      Backend
+  end
+  subgraph Database-Container
+    direction RL
+      Database[(Database)]
+  end  
 
+  Browser  <-- https/wss --> Reverse-Proxy
+  Reverse-Proxy <-- http/ws --> Frontend
+  Reverse-Proxy <-- http --> Backend  
+  Frontend <-- http/ws --> Backend
+  Backend <--> Database
+  
+```
 ## Component Description
 
 ### Frontend
