@@ -46,6 +46,15 @@
             "result": "Ergebnisse anzeigen",
             "finish": "Beende die Session"
           }
+        },
+        "modal": {
+          "title": "Mitglied entfernen",
+          "bodyPart1": "Bist du dir sicher, dass du ",
+          "bodyPart2": " aus deiner Sitzung entfernen möchtest?",
+          "buttons": {
+            "cancel": "Abbrechen",
+            "ok": "Entfernen"
+          }
         }
       },
       "close": {
@@ -236,6 +245,7 @@
         "hostLeft": "Host hat die Sitzung verlassen",
         "memberLeft": "Teilnehmer hat die Sitzung verlassen",
         "memberJoined": "Teilnehmer ist der Sitzung beigetreten",
+        "memberRemoved": "Du wurdest vom Host aus der Sitzung entfernt",
         "jiraCredentials": "Falsche Login-Daten",
         "jiraLoginFailed": "Login fehlgeschlagen",
         "jiraSynchronizeSuccess": "Änderungen mit Jira synchronisiert",
