@@ -7,8 +7,8 @@
       placement="top"
       boundary="viewport"
     >
-      <b-button class="rounded-circle px-2" variant="danger">
-        <b-icon icon="x" scale="2" @click="openModal" />
+      <b-button class="rounded-circle px-2" variant="danger" @click="openModal">
+        <b-icon icon="x" scale="2" />
       </b-button>
     </b-popover>
     <b-modal :id="`modal${member.memberID}`">
