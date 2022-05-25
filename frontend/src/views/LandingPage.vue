@@ -55,7 +55,6 @@ export default Vue.extend({
   },
   methods: {
     async checkAdminCookie() {
-      console.log("checking admin cookie");
       const cookie = window.localStorage.getItem("adminCookie");
       if (cookie !== null) {
         console.log(`Found admin cookie: '${cookie}'`);
@@ -87,7 +86,7 @@ export default Vue.extend({
           this.sessionWrapper = { session };
         } catch (e) {
           console.clear();
-          console.log(`got error: ${e}`);
+          console.error(`got error: ${e}`);
           window.localStorage.removeItem("adminCookie");
         }
       }

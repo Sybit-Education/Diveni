@@ -43,7 +43,7 @@ export default Vue.extend({
       } else {
         this.$toast.error(this.$t("session.notification.messages.jiraLoginFailed"));
       }
-      console.log(error);
+      console.error(error);
     },
   },
 });

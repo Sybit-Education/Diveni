@@ -27,6 +27,10 @@ export default new Vuex.Store<StoreState>({
     },
     connectToBackendWS(state, url) {
       state.stompClient = webstomp.over(new SockJS(url));
+      if (process.env.NODE_ENV === "production") {
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        state.stompClient.debug = () => {};
+      }
       state.stompClient.connect(
         {},
         () => {
