@@ -25,12 +25,7 @@
         </b-button>
       </b-col>
       <b-col class="d-flex justify-content-end">
-        <rounded-avatar
-          :color="hexColor"
-          :asset-name="avatarAnimalAssetName"
-          :show-name="true"
-          :name="name"
-        />
+        <rounded-avatar :member="getMember" />
       </b-col>
     </b-row>
     <b-row v-if="isMobile">
@@ -101,12 +96,12 @@
       <SessionMemberCard
         v-for="member of members"
         :key="member.memberID"
-        :color="member.hexColor"
-        :asset-name="backendAnimalToAssetName(member.avatarAnimal)"
-        :name="member.name"
-        :estimation="member.currentEstimation"
-        :estimate-finished="votingFinished"
-        :highlight="highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0"
+        :member="member"
+        :props="{
+          estimateFinished: votingFinished,
+          highlight:
+            highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0,
+        }"
       />
     </b-row>
     <b-row v-if="userStoryMode !== 'NO_US'" class="mt-5">
@@ -230,6 +225,16 @@ export default Vue.extend({
     timerTimestamp() {
       return this.$store.state.timerTimestamp ? this.$store.state.timerTimestamp : "";
     },
+    notifications() {
+      return this.$store.state.notifications;
+    },
+    getMember() {
+      return {
+        hexColor: this.hexColor,
+        avatarAnimal: this.avatarAnimalAssetName,
+        name: this.name,
+      };
+    },
   },
   watch: {
     memberUpdates(updates) {
@@ -250,6 +255,15 @@ export default Vue.extend({
           startVelocity: 50,
           spread: 100,
         });
+      }
+    },
+    notifications(notifications) {
+      if (
+        notifications.at(-1).type === "MEMBER_LEFT" &&
+        notifications.at(-1).payload.memberID === this.memberID
+      ) {
+        this.$toast.error(this.$t("session.notification.messages.memberRemoved"));
+        this.leaveMeeting();
       }
     },
   },
@@ -287,9 +301,6 @@ export default Vue.extend({
     },
     goToJoinPage() {
       this.$router.push({ name: "JoinPage" });
-    },
-    backendAnimalToAssetName(animal: string) {
-      return Constants.avatarAnimalToAssetName(animal);
     },
     goToLandingPage() {
       window.localStorage.removeItem("memberCookie");

@@ -1,17 +1,23 @@
 <template>
   <div
-    :style="`background-color: ${color};`"
+    :style="`background-color: ${member.hexColor};`"
     class="text-center card m-2"
-    :class="{ greyOut: !highlight && estimateFinished }"
+    :class="{ greyOut: !props.highlight && props.estimateFinished }"
   >
     <h1 class="fs-3-rem">
-      <strong v-if="!estimateFinished">?</strong>
-      <strong v-if="estimation === null && estimateFinished">-</strong>
-      <strong v-if="estimation !== null && estimateFinished">{{ estimation }}</strong>
+      <strong v-if="!props.estimateFinished">?</strong>
+      <strong v-if="member.currentEstimation === null && props.estimateFinished">-</strong>
+      <strong v-if="member.currentEstimation !== null && props.estimateFinished">{{
+        member.currentEstimation
+      }}</strong>
     </h1>
-    <img :src="require(`@/assets/${assetName}`)" width="40" alt="image" />
+    <img
+      :src="require(`@/assets/${member.avatarAnimal.toLowerCase()}.png`)"
+      width="40"
+      alt="image"
+    />
     <h4 class="mt-2">
-      <strong>{{ name }}</strong>
+      <strong>{{ member.name }}</strong>
     </h4>
   </div>
 </template>
@@ -22,12 +28,12 @@ import Vue from "vue";
 export default Vue.extend({
   name: "SessionMemberCard",
   props: {
-    assetName: { type: String, required: true },
-    color: { type: String, required: true },
-    estimation: { type: String, required: false, default: null },
-    name: { type: String, required: true },
-    estimateFinished: { type: Boolean, required: false, default: false },
-    highlight: { type: Boolean, required: false, default: false },
+    member: { type: Object, required: true },
+    props: {
+      type: Object,
+      required: false,
+      default: () => ({ estimateFinished: false, highlight: false }),
+    },
   },
 });
 </script>

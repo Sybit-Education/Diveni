@@ -1,9 +1,9 @@
 <template>
-  <div id="parent" class="rounded-circle" :style="`background-color: ${color}`">
+  <div id="parent" class="rounded-circle" :style="`background-color: ${member.hexColor}`">
     <div id="column" class="text-center">
-      <img :src="require(`@/assets/${assetName}`)" width="44" />
+      <img :src="require(`@/assets/${member.avatarAnimal.toLowerCase()}.png`)" width="44" />
       <div v-if="showName" id="name">
-        {{ name }}
+        {{ member.name }}
       </div>
     </div>
   </div>
@@ -15,10 +15,8 @@ import Vue from "vue";
 export default Vue.extend({
   name: "RoundedAvatar",
   props: {
-    color: { type: String, required: true },
-    assetName: { type: String, required: true },
-    showName: { type: Boolean, required: true },
-    name: { type: String, required: true },
+    member: { type: Object, required: true },
+    showName: { type: Boolean, default: true },
   },
 });
 </script>
@@ -35,7 +33,5 @@ export default Vue.extend({
   display: flex;
   justify-content: center; /* Centering y-axis */
   align-items: center; /* Centering x-axis */
-}
-#name {
 }
 </style>
