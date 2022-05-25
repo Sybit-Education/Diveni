@@ -12,7 +12,8 @@
       "before": {
         "copy": {
           "id": "Code kopieren",
-          "link": "Link kopieren"
+          "link": "Link kopieren",
+          "qr": "QR-Code anzeigen"
         },
         "title": "Warte auf die Teammitglieder...",
         "text": {
