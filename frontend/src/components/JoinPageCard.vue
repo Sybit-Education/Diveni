@@ -8,10 +8,12 @@
     >
       <b-row class="justify-content-center">
         <rounded-avatar
-          :color="'transparent'"
-          :asset-name="animalAssetName"
+          :member="{
+            hexColor: 'transparent',
+            avatarAnimal: animalAssetName,
+            name: '',
+          }"
           :show-name="false"
-          :name="''"
         />
       </b-row>
       <b-row class="mt-2">

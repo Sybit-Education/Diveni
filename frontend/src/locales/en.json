@@ -46,6 +46,15 @@
             "result": "Show result",
             "finish": "Finish session"
           }
+        },
+        "modal": {
+          "title": "Remove member",
+          "bodyPart1": "Are you sure you want to remove ",
+          "bodyPart2": " from your current session?",
+          "buttons": {
+            "cancel": "Cancel",
+            "ok": "Remove"
+          }
         }
       },
       "close": {
@@ -238,6 +247,7 @@
         "hostJoined": "Host joined the session",
         "memberLeft": "Member left the session",
         "memberJoined": "Member joined the session",
+        "memberRemoved": "You have been removed from the session by the host",
         "jiraCredentials": "Wrong credentials",
         "jiraLoginFailed": "Login failed",
         "jiraSynchronizeSuccess": "Synchronized changes with Jira",

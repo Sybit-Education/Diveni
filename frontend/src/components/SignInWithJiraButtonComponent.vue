@@ -82,7 +82,6 @@ export default Vue.extend({
       this.handleSubmit();
     },
     async handleSubmit() {
-      console.log(this.verificationCode);
       const valid = this.checkFormValidity();
       if (!valid) {
         return;
