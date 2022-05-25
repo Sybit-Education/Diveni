@@ -20,9 +20,6 @@ export default Vue.extend({
     showName: { type: Boolean, required: true },
     name: { type: String, required: true },
   },
-  mounted() {
-    console.log(this.assetName);
-  },
 });
 </script>
 
