@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import io.diveni.backend.Utils;
+import io.diveni.backend.model.Session;
 import io.diveni.backend.model.SessionState;
 import io.diveni.backend.model.UserStory;
 import io.diveni.backend.model.notification.MemberPayload;
@@ -37,7 +38,7 @@ public class WebsocketController {
 	@MessageMapping("/registerAdminUser")
 	public void registerAdminUser(AdminPrincipal principal) {
     LOGGER.debug("--> registerAdminUser()");
-		var session = ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID());
+		Session session = ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID());
 		webSocketService.setAdminUser(principal);
 		if (session.getTimerTimestamp() != null) {
       session = session.setTimerTimestamp(Utils.getTimestampISO8601(new Date()));
