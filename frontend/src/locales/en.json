@@ -124,7 +124,8 @@
         "leave": {
           "label": "Leave session"
         }
-      }
+      },
+      "hostLeft": "Waiting for the host to come back..."
     }
   },
   "session": {
@@ -243,6 +244,7 @@
     "notification": {
       "messages": {
         "hostLeft": "Host left the session",
+        "hostJoined": "Host joined the session",
         "memberLeft": "Member left the session",
         "memberJoined": "Member joined the session",
         "memberRemoved": "You have been removed from the session by the host",

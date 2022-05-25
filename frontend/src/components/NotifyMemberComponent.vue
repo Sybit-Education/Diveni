@@ -3,7 +3,6 @@ import Vue from "vue";
 
 export default Vue.extend({
   name: "NotifyMemberComponent",
-
   computed: {
     notifications() {
       return this.$store.state.notifications;
@@ -16,9 +15,13 @@ export default Vue.extend({
   },
   methods: {
     showToast(message) {
-      if (message.type == "ADMIN_LEFT") {
+      if (message.type === "ADMIN_LEFT") {
         const hostLeft = this.$t("session.notification.messages.hostLeft");
         this.$toast.warning(hostLeft);
+        this.$emit("hostLeft");
+      } else if (message.type === "ADMIN_JOINED") {
+        this.$toast.info(this.$t("session.notification.messages.hostJoined"));
+        this.$emit("hostJoined");
       }
     },
   },

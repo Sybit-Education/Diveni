@@ -298,6 +298,9 @@ export default Vue.extend({
     if (this.session_sessionState === Constants.memberUpdateCommandStartVoting) {
       this.planningStart = true;
       this.sendRestartMessage();
+    } else if (this.session_sessionState === Constants.memberUpdateCommandVotingFinished) {
+      this.planningStart = true;
+      this.estimateFinished = true;
     }
   },
   destroyed() {

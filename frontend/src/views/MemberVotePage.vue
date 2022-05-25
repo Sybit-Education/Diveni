@@ -1,118 +1,148 @@
 <template>
-  <b-container>
-    <b-row class="mt-5">
-      <b-col>
-        <h1>{{ $t("page.vote.title") }}</h1>
-      </b-col>
-      <b-col>
-        <estimate-timer
-          :start-timestamp="timerTimestamp"
-          :pause-timer="estimateFinished"
-          :duration="timerCountdownNumber"
-        />
-      </b-col>
-    </b-row>
-    <b-row class="d-flex justify-content-end horizontal">
-      <b-col>
-        <b-button
-          v-b-modal.close-session-modal
-          style="max-height: 40px"
-          variant="danger"
-          class="mt-4"
-          @click="leaveMeeting"
-        >
-          {{ $t("page.vote.button.leave.label") }}
-        </b-button>
-      </b-col>
-      <b-col class="d-flex justify-content-end">
-        <rounded-avatar :member="getMember" />
-      </b-col>
-    </b-row>
-    <b-row v-if="isMobile">
-      <mobile-story-title
-        v-if="userStoryMode !== 'NO_US'"
-        :card-set="voteSet"
-        :index="index"
-        :initial-stories="userStories"
-        :edit-description="false"
-      />
-    </b-row>
-    <b-row v-if="isStartVoting" class="my-5">
-      <div v-if="isMobile">
-        <flicking
-          id="flicking"
-          :options="{
-            renderOnlyVisible: false,
-            horizontal: true,
-            align: 'center',
-            bound: false,
-            defaultIndex: 0,
-            deceleration: 0.0005,
-          }"
-        >
-          <member-vote-card
-            v-for="(voteOption, index) in voteSet"
-            :key="voteOption"
-            :ref="`memberCard${voteOption}`"
-            class="flicking-panel mx-2"
-            :vote-option="voteOption"
-            :index="index"
-            :hex-color="hexColor"
-            :dragged="voteOption == draggedVote"
-            :is-mobile="true"
-            @sentVote="onSendVote"
-          />
-        </flicking>
-      </div>
-      <b-row v-else class="d-flex justify-content-between flex-wrap text-center">
+  <b-overlay :show="pauseSession">
+    <template #overlay>
+      <b-spinner class="me-2" />
+      <span class="overlayText">
+        {{ $t("page.vote.hostLeft") }}
+      </span>
+    </template>
+    <b-container>
+      <b-row class="mt-5">
         <b-col>
-          <div class="overflow-auto" style="max-height: 500px">
+          <h1>{{ $t("page.vote.title") }}</h1>
+        </b-col>
+        <b-col>
+          <estimate-timer
+            :key="timerTimestamp"
+            :start-timestamp="timerTimestamp"
+            :pause-timer="estimateFinished || pauseSession"
+            :duration="timerCountdownNumber"
+          />
+        </b-col>
+      </b-row>
+      <b-row class="d-flex justify-content-end horizontal">
+        <b-col>
+          <b-button
+            v-b-modal.close-session-modal
+            style="max-height: 40px"
+            variant="danger"
+            class="mt-4"
+            @click="leaveMeeting"
+          >
+            {{ $t("page.vote.button.leave.label") }}
+          </b-button>
+        </b-col>
+        <b-col class="d-flex justify-content-end">
+          <rounded-avatar :member="getMember" />
+        </b-col>
+      </b-row>
+      <b-row v-if="isMobile">
+        <mobile-story-title
+          v-if="userStoryMode !== 'NO_US'"
+          :card-set="voteSet"
+          :index="index"
+          :initial-stories="userStories"
+          :edit-description="false"
+        />
+      </b-row>
+      <b-row v-if="isStartVoting" class="my-5">
+        <div v-if="isMobile">
+          <flicking
+            id="flicking"
+            :options="{
+              renderOnlyVisible: false,
+              horizontal: true,
+              align: 'center',
+              bound: false,
+              defaultIndex: 0,
+              deceleration: 0.0005,
+            }"
+          >
             <member-vote-card
               v-for="(voteOption, index) in voteSet"
               :key="voteOption"
               :ref="`memberCard${voteOption}`"
-              style="display: inline-block"
-              class="flicking-panel m-2"
+              class="flicking-panel mx-2"
               :vote-option="voteOption"
               :index="index"
               :hex-color="hexColor"
-              :dragged="voteOption == draggedVote"
-              :is-mobile="false"
+              :dragged="voteOption === draggedVote"
+              :is-mobile="true"
+              :disabled="pauseSession"
               @sentVote="onSendVote"
             />
-          </div>
-        </b-col>
+          </flicking>
+        </div>
+        <b-row v-else class="d-flex justify-content-between flex-wrap text-center">
+          <b-col>
+            <div class="overflow-auto" style="max-height: 500px">
+              <member-vote-card
+                v-for="(voteOption, index) in voteSet"
+                :key="voteOption"
+                :ref="`memberCard${voteOption}`"
+                style="display: inline-block"
+                class="flicking-panel m-2"
+                :vote-option="voteOption"
+                :index="index"
+                :hex-color="hexColor"
+                :dragged="voteOption === draggedVote"
+                :is-mobile="false"
+                :disabled="pauseSession"
+                @sentVote="onSendVote"
+              />
+            </div>
+          </b-col>
+        </b-row>
       </b-row>
-    </b-row>
-    <b-row v-if="!isStartVoting && !votingFinished" class="my-5 text-center">
-      <h1>{{ $t("page.vote.waiting") }}</h1>
-      <b-icon-three-dots animation="fade" class="my-5" font-scale="4" />
-    </b-row>
-    <b-row
-      v-if="votingFinished"
-      class="my-1 d-flex justify-content-center flex-wrap overflow-auto"
-      style="max-height: 500px"
-    >
-      <SessionMemberCard
-        v-for="member of members"
-        :key="member.memberID"
-        :member="member"
-        :props="{
+      <b-row v-if="!isStartVoting && !votingFinished" class="my-5 text-center">
+        <h1>{{ $t("page.vote.waiting") }}</h1>
+        <b-icon-three-dots animation="fade" class="my-5" font-scale="4" />
+      </b-row>
+      <b-row
+        v-if="votingFinished"
+        class="my-1 d-flex justify-content-center flex-wrap overflow-auto"
+        style="max-height: 500px"
+      >
+        <SessionMemberCard
+          v-for="member of members"
+          :key="member.memberID"
+          :member="member"
+          :props="{
           estimateFinished: votingFinished,
           highlight:
             highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0,
         }"
-      />
-    </b-row>
-    <b-row v-if="userStoryMode !== 'NO_US'" class="mt-5">
-      <b-col md="6">
-        <UserStorySumComponent class="ms-4" />
-      </b-col>
-    </b-row>
-    <b-row v-if="userStoryMode !== 'NO_US' && !isMobile">
-      <b-col class="mt-2">
-        <div class="overflow-auto" style="height: 700px">
-          <user-stories
+        />
+      </b-row>
+      <b-row v-if="userStoryMode !== 'NO_US'" class="mt-5">
+        <b-col md="6">
+          <UserStorySumComponent class="ms-4" />
+        </b-col>
+      </b-row>
+      <b-row v-if="userStoryMode !== 'NO_US' && !isMobile">
+        <b-col class="mt-2">
+          <div class="overflow-auto" style="height: 700px">
+            <user-stories
+              :card-set="voteSet"
+              :show-estimations="true"
+              :initial-stories="userStories"
+              :show-edit-buttons="false"
+              @selectedStory="onSelectedStory($event)"
+            />
+          </div>
+        </b-col>
+        <b-col class="mt-2">
+          <user-story-descriptions
+            :card-set="voteSet"
+            :index="index"
+            :initial-stories="userStories"
+            :edit-description="false"
+          />
+        </b-col>
+      </b-row>
+      <b-col v-if="userStoryMode !== 'NO_US' && isMobile" class="mt-2">
+        <div class="overflow-auto">
+          <mobile-story-list
             :card-set="voteSet"
             :show-estimations="true"
             :initial-stories="userStories"
@@ -121,29 +151,9 @@
           />
         </div>
       </b-col>
-
-      <b-col class="mt-2">
-        <user-story-descriptions
-          :card-set="voteSet"
-          :index="index"
-          :initial-stories="userStories"
-          :edit-description="false"
-        />
-      </b-col>
-    </b-row>
-    <b-col v-if="userStoryMode !== 'NO_US' && isMobile" class="mt-2">
-      <div class="overflow-auto">
-        <mobile-story-list
-          :card-set="voteSet"
-          :show-estimations="true"
-          :initial-stories="userStories"
-          :show-edit-buttons="false"
-          @selectedStory="onSelectedStory($event)"
-        />
-      </div>
-    </b-col>
-    <notify-member-component />
-  </b-container>
+      <notify-member-component @hostLeft="reactOnHostLeave" @hostJoined="reactOnHostJoin" />
+    </b-container>
+  </b-overlay>
 </template>
 
 <script lang="ts">
@@ -193,6 +203,7 @@ export default Vue.extend({
       timerCountdownNumber: 0,
       triggerTimer: 0,
       estimateFinished: false,
+      pauseSession: false,
     };
   },
   computed: {
@@ -309,6 +320,12 @@ export default Vue.extend({
     leaveMeeting() {
       this.goToLandingPage();
     },
+    reactOnHostLeave() {
+      this.pauseSession = true;
+    },
+    reactOnHostJoin() {
+      this.pauseSession = false;
+    },
   },
 });
 </script>
@@ -318,5 +335,10 @@ export default Vue.extend({
 #flicking {
   /* overflow:visible;  Add when fix is clear how to stay responsiv*/
   width: 100%;
+}
+.overlayText {
+  font-size: 2em;
+  margin: 0.67em 0;
+  font-weight: bold;
 }
 </style>
