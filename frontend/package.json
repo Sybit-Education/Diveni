@@ -21,6 +21,7 @@
     "canvas-confetti": "^1.4.0",
     "core-js": "^3.6.5",
     "papaparse": "^5.3.1",
+    "qrcode.vue": "^1.7.0",
     "register-service-worker": "^1.7.1",
     "sockjs-client": "^1.5.2",
     "uuid": "^8.3.2",

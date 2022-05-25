@@ -12,7 +12,8 @@
       "before": {
         "copy": {
           "id": "Copy code",
-          "link": "Copy link"
+          "link": "Copy link",
+          "qr": "Show QR code"
         },
         "title": "Waiting for members ...",
         "text": {
