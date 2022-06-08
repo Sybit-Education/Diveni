@@ -108,10 +108,10 @@
           :key="member.memberID"
           :member="member"
           :props="{
-          estimateFinished: votingFinished,
-          highlight:
-            highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0,
-        }"
+            estimateFinished: votingFinished,
+            highlight:
+              highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0,
+          }"
         />
       </b-row>
       <b-row v-if="userStoryMode !== 'NO_US'" class="mt-5">

@@ -213,6 +213,15 @@
               "numbers": {
                 "label": "Numbers",
                 "description": "Integer numbers. What else do you want?"
+              },
+              "ownSet": {
+                "label": "Own card set",
+                "description": "Here you can set up your own card",
+                "hint": {
+                  "label": "Hint",
+                  "description": "In the text field below you can set up your own card set. Every entry is separated by a semicolon (;). Duplicated entries are skipped.",
+                  "example": "E.g: 1;2;3;4;5;6;7;"
+                }
               }
             }
           },

@@ -17,13 +17,31 @@
             </div>
             <div style="padding: 16px; text-align: center">
               {{ item.description }}
+              <div v-if="item.values.length === 0">
+                <span id="createSetHint">
+                  <b-icon-info-circle class="mt-3 me-1" />{{
+                    $t("session.prepare.step.selection.cardSet.sets.ownSet.hint.label")
+                  }}</span
+                >
+                <b-popover target="createSetHint" triggers="hover" placement="top">
+                  <template #title>
+                    {{ $t("session.prepare.step.selection.cardSet.sets.ownSet.hint.label") }}
+                  </template>
+                  <p>
+                    {{ $t("session.prepare.step.selection.cardSet.sets.ownSet.hint.description") }}
+                  </p>
+                  <p>
+                    {{ $t("session.prepare.step.selection.cardSet.sets.ownSet.hint.example") }}
+                  </p>
+                </b-popover>
+              </div>
             </div>
           </div>
         </div>
       </b-col>
     </b-row>
     <b-row v-if="selectedCardSet.name !== ''">
-      <div class="text-center mt-3">
+      <div v-if="selectedCardSet.values.length !== 0" class="text-center mt-3">
         <b-button
           v-for="item in selectedCardSet.values"
           :key="item"
@@ -36,6 +54,26 @@
           {{ item }}
         </b-button>
       </div>
+      <b-row v-else class="mt-3 d-flex px-5">
+        <b-col sm="6">
+          <b-form-input
+            v-model="createSetInput"
+            :placeholder="$t('session.prepare.step.selection.cardSet.sets.ownSet.hint.example')"
+          ></b-form-input>
+        </b-col>
+        <b-col sm="6">
+          <b-button
+            v-for="item in selectedCardSet.activeValues"
+            :key="item"
+            class="m-1"
+            pill
+            variant="success"
+            style="min-width: 60px"
+          >
+            {{ item }}
+          </b-button>
+        </b-col>
+      </b-row>
     </b-row>
   </div>
 </template>
@@ -56,6 +94,7 @@ export default Vue.extend({
         values: [],
         activeValues: [] as string[],
       },
+      createSetInput: "",
       allCardSets: [
         {
           name: this.$t("session.prepare.step.selection.cardSet.sets.fibonacci.label"),
@@ -83,6 +122,12 @@ export default Vue.extend({
           values: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "?"],
           activeValues: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
         },
+        {
+          name: this.$t("session.prepare.step.selection.cardSet.sets.ownSet.label"),
+          description: this.$t("session.prepare.step.selection.cardSet.sets.ownSet.description"),
+          values: [],
+          activeValues: [],
+        },
       ],
       allCardSetsWithJiraMode: [
         {
@@ -105,6 +150,19 @@ export default Vue.extend({
         },
       ],
     };
+  },
+  watch: {
+    createSetInput(newVal) {
+      if (newVal.length > 1 && newVal.slice(-1) === ";") {
+        const currentValues = [...new Set(newVal.split(";"))] as string[];
+        currentValues.pop();
+        this.selectedCardSet.activeValues = currentValues;
+        this.$emit("selectedCardSetOptions", this.selectedCardSet.activeValues);
+      } else if (newVal.length == 0) {
+        this.selectedCardSet.activeValues = [];
+        this.$emit("selectedCardSetOptions", this.selectedCardSet.activeValues);
+      }
+    },
   },
   methods: {
     isActiveCardSetNumber(num) {
