@@ -56,7 +56,10 @@
       </div>
       <b-row v-else class="mt-3 d-flex px-5">
         <b-col sm="6">
-          <b-form-input v-model="createSetInput" :placeholder="$t('session.prepare.step.selection.cardSet.sets.ownSet.hint.example')"></b-form-input>
+          <b-form-input
+            v-model="createSetInput"
+            :placeholder="$t('session.prepare.step.selection.cardSet.sets.ownSet.hint.example')"
+          ></b-form-input>
         </b-col>
         <b-col sm="6">
           <b-button
