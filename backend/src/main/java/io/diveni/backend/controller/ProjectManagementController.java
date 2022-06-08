@@ -31,7 +31,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import lombok.val;
 
-@CrossOrigin
 @RestController
 @RequestMapping("/jira")
 public class ProjectManagementController {

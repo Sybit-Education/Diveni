@@ -35,7 +35,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import lombok.val;
 
-@CrossOrigin
 @RestController
 public class RoutesController {
 

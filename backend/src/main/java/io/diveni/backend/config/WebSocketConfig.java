@@ -1,5 +1,6 @@
 package io.diveni.backend.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
@@ -12,6 +13,9 @@ import io.diveni.backend.handler.PrincipalWebSocketHandler;
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
+  @Value("${SERVER_URL:#{null}}")
+  private String SERVER_URL;
+
 	@Override
 	public void configureMessageBroker(MessageBrokerRegistry registry) {
 		registry.enableSimpleBroker("/updates");
@@ -23,6 +27,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 	@Override
 	public void registerStompEndpoints(StompEndpointRegistry registry) {
 		registry.addEndpoint("/connect").setHandshakeHandler(new PrincipalWebSocketHandler())
-				.setAllowedOriginPatterns("*").withSockJS();
+				.setAllowedOrigins(SERVER_URL).withSockJS();
 	}
 }
