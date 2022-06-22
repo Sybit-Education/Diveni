@@ -7,7 +7,7 @@
     "name": "Diveni Development Team",
     "email": "info@diveni.io"
   },
-  "repository": "https://github.com/Sybit-Education/Diveni/Diveni",
+  "repository": "https://github.com/Sybit-Education/Diveni",
   "scripts": {
     "dev": "vuepress dev docs",
     "build": "vuepress build docs"

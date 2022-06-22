@@ -1,9 +1,9 @@
 <template>
-  <h4>
+  <div class="copy-session">
     {{ textBeforeSessionID }}
-    <b-link id="popover-link" href="" @click="copyLinkToClipboard()">
-      {{ sessionId }}
-    </b-link>
+    <strong>
+      <b-link id="popover-link" href="#" @click="copyLinkToClipboard()" v-text="sessionId" />
+    </strong>
     {{ textAfterSessionID }}
     <b-popover id="popover" target="popover-link" triggers="hover" placement="top">
       <b-button class="mx-1" variant="success" @click="copyIdToClipboard()">
@@ -12,15 +12,28 @@
       <b-button class="mx-1" variant="success" @click="copyLinkToClipboard()">
         {{ $t("page.session.before.copy.link") }}
       </b-button>
+      <b-button class="mx-1" variant="success" @click="$bvModal.show('qr-modal')">
+        {{ $t("page.session.before.copy.qr") }}
+      </b-button>
     </b-popover>
-  </h4>
+    <b-modal id="qr-modal" ok-only>
+      <template #modal-header>
+        <h3>QR code</h3>
+      </template>
+      <qrcode-vue :value="sessionLink" size="400" class="qr-code" />
+    </b-modal>
+  </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
+import QrcodeVue from "qrcode.vue";
 
 export default Vue.extend({
   name: "CopySessionIdPopup",
+  components: {
+    QrcodeVue,
+  },
   props: {
     textBeforeSessionID: { type: String, required: false, default: "" },
     sessionId: { type: String, required: true },
@@ -29,6 +42,11 @@ export default Vue.extend({
   data: () => ({
     canCopy: false,
   }),
+  computed: {
+    sessionLink(): string {
+      return `${document.URL.toString().replace("session", "join?sessionID=")}${this.sessionId}`;
+    },
+  },
   mounted() {
     this.canCopy = !!navigator.clipboard;
   },
@@ -48,9 +66,7 @@ export default Vue.extend({
       }
     },
     copyLinkToClipboard() {
-      const text = `${document.URL.toString().replace("session", "join?sessionID=")}${
-        this.sessionId
-      }`;
+      const text = this.sessionLink;
       if (this.canCopy) {
         navigator.clipboard.writeText(text).then(
           () => {
@@ -84,7 +100,14 @@ export default Vue.extend({
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.copy-session {
+  font-size: 1.75rem;
+}
 #popover {
-  max-width: 400px;
+  max-width: 500px;
+}
+.qr-code {
+  display: table;
+  margin: 0 auto;
 }
 </style>

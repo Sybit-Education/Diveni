@@ -12,7 +12,8 @@
       "before": {
         "copy": {
           "id": "Copy code",
-          "link": "Copy link"
+          "link": "Copy link",
+          "qr": "Show QR code"
         },
         "title": "Waiting for members ...",
         "text": {
@@ -45,6 +46,15 @@
             "new": "New",
             "result": "Show result",
             "finish": "Finish session"
+          }
+        },
+        "modal": {
+          "title": "Remove member",
+          "bodyPart1": "Are you sure you want to remove ",
+          "bodyPart2": " from your current session?",
+          "buttons": {
+            "cancel": "Cancel",
+            "ok": "Remove"
           }
         }
       },
@@ -115,7 +125,8 @@
         "leave": {
           "label": "Leave session"
         }
-      }
+      },
+      "hostLeft": "Waiting for the host to come back..."
     }
   },
   "session": {
@@ -202,6 +213,15 @@
               "numbers": {
                 "label": "Numbers",
                 "description": "Integer numbers. What else do you want?"
+              },
+              "ownSet": {
+                "label": "Own card set",
+                "description": "Here you can set up your own card",
+                "hint": {
+                  "label": "Hint",
+                  "description": "In the text field below you can set up your own card set. Every entry is separated by a semicolon (;). Duplicated entries are skipped.",
+                  "example": "E.g: 1;2;3;4;5;6;7;"
+                }
               }
             }
           },
@@ -234,8 +254,10 @@
     "notification": {
       "messages": {
         "hostLeft": "Host left the session",
+        "hostJoined": "Host joined the session",
         "memberLeft": "Member left the session",
         "memberJoined": "Member joined the session",
+        "memberRemoved": "You have been removed from the session by the host",
         "jiraCredentials": "Wrong credentials",
         "jiraLoginFailed": "Login failed",
         "jiraSynchronizeSuccess": "Synchronized changes with Jira",
