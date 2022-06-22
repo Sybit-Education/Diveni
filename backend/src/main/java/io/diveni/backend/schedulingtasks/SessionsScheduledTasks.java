@@ -14,21 +14,21 @@ import org.springframework.stereotype.Component;
 @Component
 public class SessionsScheduledTasks {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(SessionsScheduledTasks.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SessionsScheduledTasks.class);
 
-	@Autowired
-  DatabaseService databaseService;
+    @Autowired
+    DatabaseService databaseService;
 
-	@Scheduled(fixedDelay = 60, timeUnit = TimeUnit.MINUTES)
-	public void deleteOldSessions() {
-	  LOGGER.info("--> deleteOldSessions()");
-		Calendar c = Calendar.getInstance();
-		c.setTime(new Date());
-		c.add(Calendar.DATE, -2);
+    @Scheduled(fixedDelay = 60, timeUnit = TimeUnit.MINUTES)
+    public void deleteOldSessions() {
+        LOGGER.info("--> deleteOldSessions()");
+        Calendar c = Calendar.getInstance();
+        c.setTime(new Date());
+        c.add(Calendar.DATE, -2);
 
-		databaseService.getSessions().stream()
-				.filter(s -> s.getLastModified() != null && s.getLastModified().getTime() < c.getTime().getTime())
-				.forEach(session -> databaseService.deleteSession(session));
-    LOGGER.info("<-- deleteOldSessions()");
-	}
+        databaseService.getSessions().stream()
+            .filter(s -> s.getLastModified() != null && s.getLastModified().getTime() < c.getTime().getTime())
+            .forEach(session -> databaseService.deleteSession(session));
+        LOGGER.info("<-- deleteOldSessions()");
+    }
 }

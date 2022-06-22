@@ -38,7 +38,7 @@ public class ControllerUtilsTest {
         doReturn(Optional.empty()).when(databaseServiceMock).getSessionByID(any());
 
         assertThrows(ResponseStatusException.class,
-                () -> ControllerUtils.getSessionOrThrowResponse(databaseServiceMock, Utils.generateRandomID()));
+            () -> ControllerUtils.getSessionOrThrowResponse(databaseServiceMock, Utils.generateRandomID()));
     }
 
     @Test
@@ -47,7 +47,7 @@ public class ControllerUtilsTest {
         doReturn(Optional.of(session)).when(databaseServiceMock).getSessionByMemberID(any());
 
         Assertions.assertEquals(session,
-                ControllerUtils.getSessionByMemberIDOrThrowResponse(databaseServiceMock, Utils.generateRandomID()));
+            ControllerUtils.getSessionByMemberIDOrThrowResponse(databaseServiceMock, Utils.generateRandomID()));
     }
 
     @Test
@@ -55,6 +55,6 @@ public class ControllerUtilsTest {
         doReturn(Optional.empty()).when(databaseServiceMock).getSessionByMemberID(any());
 
         assertThrows(ResponseStatusException.class, () -> ControllerUtils
-                .getSessionByMemberIDOrThrowResponse(databaseServiceMock, Utils.generateRandomID()));
+            .getSessionByMemberIDOrThrowResponse(databaseServiceMock, Utils.generateRandomID()));
     }
 }

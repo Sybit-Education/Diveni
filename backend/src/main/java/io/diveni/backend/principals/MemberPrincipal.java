@@ -9,17 +9,17 @@ import lombok.Getter;
 @Getter
 public class MemberPrincipal implements Principal {
 
-	private final String sessionID;
+    private final String sessionID;
 
-	private final String memberID;
+    private final String memberID;
 
-	public MemberPrincipal(String sessionID, String memberID) {
-		this.memberID = memberID;
-		this.sessionID = sessionID;
-	}
+    public MemberPrincipal(String sessionID, String memberID) {
+        this.memberID = memberID;
+        this.sessionID = sessionID;
+    }
 
-	@Override
-	public String getName() {
-		return memberID.toString();
-	}
+    @Override
+    public String getName() {
+        return memberID.toString();
+    }
 }

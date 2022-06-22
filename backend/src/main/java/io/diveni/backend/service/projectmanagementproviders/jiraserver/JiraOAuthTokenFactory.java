@@ -44,7 +44,7 @@ public class JiraOAuthTokenFactory {
         return accessToken;
     }
 
-        /**
+    /**
      * Initialize JiraOAuthGetAccessToken
      * by setting it to use POST method, secret, request token
      * and setting consumer and private keys.

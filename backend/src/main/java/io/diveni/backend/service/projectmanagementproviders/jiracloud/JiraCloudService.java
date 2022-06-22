@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -36,7 +37,11 @@ import lombok.val;
 public class JiraCloudService implements ProjectManagementProviderOAuth2 {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JiraCloudService.class);
-
+    private final int JIRA_CLOUD_API_VERSION = 2;
+    private final String JIRA_OAUTH_URL = "https://auth.atlassian.com/oauth";
+    private final String JIRA_HOME = "https://api.atlassian.com/ex/jira/%s/rest/api/";
+    @Getter
+    private final Map<String, String> accessTokens = new HashMap<>();
     @Value("${JIRA_CLOUD_CLIENTID:#{null}}")
     private String CLIENT_ID;
     @Value("${JIRA_CLOUD_CLIENTSECRET:#{null}}")
@@ -44,12 +49,38 @@ public class JiraCloudService implements ProjectManagementProviderOAuth2 {
     @Value("${JIRA_CLOUD_ESTIMATIONFIELD:customfield_10016}")
     private String ESTIMATION_FIELD;
 
-    private final int JIRA_CLOUD_API_VERSION = 2;
-    private final String JIRA_OAUTH_URL = "https://auth.atlassian.com/oauth";
-    private final String JIRA_HOME = "https://api.atlassian.com/ex/jira/%s/rest/api/";
+    static String getCloudID(String accessToken) {
+        LOGGER.debug("--> getCloudID()");
+        String accessibleResourcesURL = "https://api.atlassian.com/oauth/token/accessible-resources";
+        ResponseEntity<String> response = executeRequest(accessibleResourcesURL, HttpMethod.GET, accessToken, null);
+        try {
+            ObjectNode[] node = new ObjectMapper().readValue(response.getBody(), ObjectNode[].class);
+            for (ObjectNode objectNode : node) {
+                if (objectNode.has("id")) {
+                    LOGGER.debug("<-- getCloudID()");
+                    return objectNode.get("id").asText();
+                }
+            }
+            LOGGER.debug("<-- getCloudID(), CloudID not found");
+            return null;
+        } catch (Exception e) {
+            LOGGER.error("Failed to get cloud id!");
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                ErrorMessages.failedToRetrieveAccessTokenErrorMessage);
+        }
+    }
 
-    @Getter
-    private final Map<String, String> accessTokens = new HashMap<>();
+    static ResponseEntity<String> executeRequest(String url, HttpMethod method, String accessToken, Object body) {
+        LOGGER.debug("--> executeRequest()");
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        headers.add("Authorization", "Bearer " + accessToken);
+        HttpEntity<Object> request = new HttpEntity<Object>(body, headers);
+        LOGGER.debug("<-- executeRequest()");
+        return restTemplate.exchange(url, method, request, String.class);
+    }
 
     @Override
     public TokenIdentifier getAccessToken(String authorizationCode, String origin) {
@@ -84,7 +115,7 @@ public class JiraCloudService implements ProjectManagementProviderOAuth2 {
             LOGGER.error("Failed to get access token!");
             e.printStackTrace();
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
-                    ErrorMessages.failedToRetrieveAccessTokenErrorMessage);
+                ErrorMessages.failedToRetrieveAccessTokenErrorMessage);
         }
     }
 
@@ -96,7 +127,7 @@ public class JiraCloudService implements ProjectManagementProviderOAuth2 {
         try {
             List<Project> projects = new ArrayList<>();
             ResponseEntity<String> response = executeRequest(String.format(getJiraUrl(), cloudID) + "/project/search",
-                    HttpMethod.GET, accessToken, null);
+                HttpMethod.GET, accessToken, null);
             JsonNode node = new ObjectMapper().readTree(response.getBody());
 
             for (JsonNode projectNode : node.path("values")) {
@@ -108,7 +139,7 @@ public class JiraCloudService implements ProjectManagementProviderOAuth2 {
             LOGGER.error("Failed to get projects!");
             e.printStackTrace();
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
-                    ErrorMessages.failedToRetrieveProjectsErrorMessage);
+                ErrorMessages.failedToRetrieveProjectsErrorMessage);
         }
     }
 
@@ -117,22 +148,22 @@ public class JiraCloudService implements ProjectManagementProviderOAuth2 {
         LOGGER.debug("--> getIssues(), projectName={}", projectName);
         String cloudID = getCloudID(accessTokens.get(tokenIdentifier));
         ResponseEntity<String> response = executeRequest(
-                String.format(
-                        getJiraUrl(), cloudID) + "/search?jql=project='" + projectName
-                        + "' order by rank&fields=summary,description," + ESTIMATION_FIELD,
-                HttpMethod.GET, accessTokens.get(tokenIdentifier), null);
+            String.format(
+                getJiraUrl(), cloudID) + "/search?jql=project='" + projectName
+                + "' order by rank&fields=summary,description," + ESTIMATION_FIELD,
+            HttpMethod.GET, accessTokens.get(tokenIdentifier), null);
         try {
             List<UserStory> userStories = new ArrayList<>();
             JsonNode node = new ObjectMapper().readTree(response.getBody());
             for (JsonNode issue : node.path("issues")) {
                 val fields = issue.get("fields");
                 String estimation = fields.get(ESTIMATION_FIELD).isNull() ? null
-                        : String.valueOf(fields.get(ESTIMATION_FIELD).asDouble());
+                    : String.valueOf(fields.get(ESTIMATION_FIELD).asDouble());
                 if (estimation != null && estimation.endsWith(".0")) {
                     estimation = estimation.substring(0, estimation.length() - 2);
                 }
                 userStories.add(new UserStory(issue.get("id").textValue(), fields.get("summary").textValue(),
-                        fields.get("description").textValue(), estimation, false));
+                    fields.get("description").textValue(), estimation, false));
             }
             LOGGER.debug("<-- getIssues()");
             return userStories;
@@ -140,7 +171,7 @@ public class JiraCloudService implements ProjectManagementProviderOAuth2 {
             LOGGER.error("Failed to get issues!");
             e.printStackTrace();
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
-                    ErrorMessages.failedToRetrieveProjectsErrorMessage);
+                ErrorMessages.failedToRetrieveProjectsErrorMessage);
         }
     }
 
@@ -158,19 +189,19 @@ public class JiraCloudService implements ProjectManagementProviderOAuth2 {
             } catch (NumberFormatException e) {
                 LOGGER.error("Failed to parse estimation into double!");
                 throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
-                        ErrorMessages.failedToEditIssueErrorMessage);
+                    ErrorMessages.failedToEditIssueErrorMessage);
             }
         }
         content.put("fields", fields);
         try {
             executeRequest(String.format(getJiraUrl(), cloudID) + "/issue/" + story.getJiraId(), HttpMethod.PUT,
-                    accessTokens.get(tokenIdentifier), content);
+                accessTokens.get(tokenIdentifier), content);
             LOGGER.debug("<-- updateIssue()");
         } catch (Exception e) {
             LOGGER.error("Failed to update issue!");
             e.printStackTrace();
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
-                    ErrorMessages.failedToEditIssueErrorMessage);
+                ErrorMessages.failedToEditIssueErrorMessage);
         }
 
     }
@@ -181,13 +212,13 @@ public class JiraCloudService implements ProjectManagementProviderOAuth2 {
         try {
             String cloudID = getCloudID(accessTokens.get(tokenIdentifier));
             executeRequest(String.format(getJiraUrl(), cloudID) + "/issue/" + jiraID, HttpMethod.DELETE,
-                    accessTokens.get(tokenIdentifier), null);
+                accessTokens.get(tokenIdentifier), null);
             LOGGER.debug("<-- deleteIssue()");
         } catch (Exception e) {
             LOGGER.error("Failed to delete issue!");
             e.printStackTrace();
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
-                    ErrorMessages.failedToEditIssueErrorMessage);
+                ErrorMessages.failedToEditIssueErrorMessage);
         }
     }
 
@@ -200,39 +231,6 @@ public class JiraCloudService implements ProjectManagementProviderOAuth2 {
     @Override
     public boolean containsToken(String token) {
         return accessTokens.containsKey(token);
-    }
-
-    static String getCloudID(String accessToken) {
-        LOGGER.debug("--> getCloudID()");
-        String accessibleResourcesURL = "https://api.atlassian.com/oauth/token/accessible-resources";
-        ResponseEntity<String> response = executeRequest(accessibleResourcesURL, HttpMethod.GET, accessToken, null);
-        try {
-            ObjectNode[] node = new ObjectMapper().readValue(response.getBody(), ObjectNode[].class);
-            for (ObjectNode objectNode : node) {
-                if (objectNode.has("id")) {
-                    LOGGER.debug("<-- getCloudID()");
-                    return objectNode.get("id").asText();
-                }
-            }
-            LOGGER.debug("<-- getCloudID(), CloudID not found");
-            return null;
-        } catch (Exception e) {
-            LOGGER.error("Failed to get cloud id!");
-            e.printStackTrace();
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
-                    ErrorMessages.failedToRetrieveAccessTokenErrorMessage);
-        }
-    }
-
-    static ResponseEntity<String> executeRequest(String url, HttpMethod method, String accessToken, Object body) {
-        LOGGER.debug("--> executeRequest()");
-        RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
-        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-        headers.add("Authorization", "Bearer " + accessToken);
-        HttpEntity<Object> request = new HttpEntity<Object>(body, headers);
-        LOGGER.debug("<-- executeRequest()");
-        return restTemplate.exchange(url, method, request, String.class);
     }
 
     @Override

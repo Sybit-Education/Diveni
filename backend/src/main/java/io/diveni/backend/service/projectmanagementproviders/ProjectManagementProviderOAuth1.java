@@ -5,5 +5,6 @@ import io.diveni.backend.model.TokenIdentifier;
 
 public interface ProjectManagementProviderOAuth1 extends ProjectManagementProvider {
     public JiraRequestToken getRequestToken();
+
     public TokenIdentifier getAccessToken(String verificationCode, String requestToken);
 }

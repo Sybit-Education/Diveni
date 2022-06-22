@@ -12,10 +12,9 @@ import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 @Component
 public class SessionDisconnectedListener implements ApplicationListener<SessionDisconnectEvent> {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(SessionDisconnectedListener.class);
     @Autowired
     WebsocketController controller;
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(SessionDisconnectedListener.class);
 
     @Override
     public void onApplicationEvent(SessionDisconnectEvent event) {

@@ -9,11 +9,11 @@ public class JiraRequestToken {
     private String token;
     private String url;
 
-    public void setToken(String token){
+    public void setToken(String token) {
         this.token = token;
     }
 
-    public void setUrl(String url){
+    public void setUrl(String url) {
         this.url = url;
     }
 }

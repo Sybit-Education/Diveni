@@ -9,11 +9,11 @@ public class VerificationCode {
     private final String code;
     private final String token;
 
-    public String getCode(){
+    public String getCode() {
         return code;
     }
 
-    public String getToken(){
+    public String getToken() {
         return token;
     }
 }
