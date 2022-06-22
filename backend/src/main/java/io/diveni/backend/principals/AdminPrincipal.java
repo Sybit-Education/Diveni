@@ -9,18 +9,17 @@ import lombok.Getter;
 @Getter
 public class AdminPrincipal implements Principal {
 
-    private final String sessionID;
+  private final String sessionID;
 
-    private final String adminID;
+  private final String adminID;
 
-    public AdminPrincipal(String sessionID, String adminID) {
-        this.adminID = adminID;
-        this.sessionID = sessionID;
-    }
+  public AdminPrincipal(String sessionID, String adminID) {
+    this.adminID = adminID;
+    this.sessionID = sessionID;
+  }
 
-    @Override
-    public String getName() {
-        return adminID;
-    }
-
+  @Override
+  public String getName() {
+    return adminID;
+  }
 }

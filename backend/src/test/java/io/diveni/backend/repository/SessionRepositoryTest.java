@@ -23,30 +23,52 @@ import lombok.val;
 @DataMongoTest
 public class SessionRepositoryTest {
 
-    @Autowired
-    private SessionRepository sessionRepo;
+  @Autowired private SessionRepository sessionRepo;
 
-    @Test
-    public void saveSession_returnsSession() {
-        val adminID = Utils.generateRandomID();
-        val membersID = Utils.generateRandomID();
-        val session = new Session(new ObjectId(), adminID, membersID, null, null, new ArrayList<Member>(),
-            new HashMap<>(), new ArrayList<>(), SessionState.WAITING_FOR_MEMBERS, null, null, null);
+  @Test
+  public void saveSession_returnsSession() {
+    val adminID = Utils.generateRandomID();
+    val membersID = Utils.generateRandomID();
+    val session =
+        new Session(
+            new ObjectId(),
+            adminID,
+            membersID,
+            null,
+            null,
+            new ArrayList<Member>(),
+            new HashMap<>(),
+            new ArrayList<>(),
+            SessionState.WAITING_FOR_MEMBERS,
+            null,
+            null,
+            null);
 
-        assertEquals(session, sessionRepo.save(session));
-    }
+    assertEquals(session, sessionRepo.save(session));
+  }
 
-    @Test
-    public void addMemberToSession_addsMember() {
-        val adminID = Utils.generateRandomID();
-        val membersID = Utils.generateRandomID();
-        val member = new Member(Utils.generateRandomID(), "John", "0x0a0a0a", AvatarAnimal.CAMEL, null);
-        val members = new ArrayList<Member>();
-        members.add(member);
-        val session = new Session(new ObjectId(), adminID, membersID, null, null, members, new HashMap<>(),
-            new ArrayList<>(), SessionState.WAITING_FOR_MEMBERS, null, null, null);
+  @Test
+  public void addMemberToSession_addsMember() {
+    val adminID = Utils.generateRandomID();
+    val membersID = Utils.generateRandomID();
+    val member = new Member(Utils.generateRandomID(), "John", "0x0a0a0a", AvatarAnimal.CAMEL, null);
+    val members = new ArrayList<Member>();
+    members.add(member);
+    val session =
+        new Session(
+            new ObjectId(),
+            adminID,
+            membersID,
+            null,
+            null,
+            members,
+            new HashMap<>(),
+            new ArrayList<>(),
+            SessionState.WAITING_FOR_MEMBERS,
+            null,
+            null,
+            null);
 
-        assertEquals(session, sessionRepo.save(session));
-    }
-
+    assertEquals(session, sessionRepo.save(session));
+  }
 }

@@ -12,17 +12,16 @@ import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 @Component
 public class SessionDisconnectedListener implements ApplicationListener<SessionDisconnectEvent> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(SessionDisconnectedListener.class);
-    @Autowired
-    WebsocketController controller;
+  private static final Logger LOGGER = LoggerFactory.getLogger(SessionDisconnectedListener.class);
+  @Autowired WebsocketController controller;
 
-    @Override
-    public void onApplicationEvent(SessionDisconnectEvent event) {
-        LOGGER.debug("--> onApplicationEvent()");
-        var principal = event.getUser();
-        if (principal instanceof MemberPrincipal) {
-            controller.removeMember(principal);
-        }
-        LOGGER.debug("<-- onApplicationEvent()");
+  @Override
+  public void onApplicationEvent(SessionDisconnectEvent event) {
+    LOGGER.debug("--> onApplicationEvent()");
+    var principal = event.getUser();
+    if (principal instanceof MemberPrincipal) {
+      controller.removeMember(principal);
     }
+    LOGGER.debug("<-- onApplicationEvent()");
+  }
 }

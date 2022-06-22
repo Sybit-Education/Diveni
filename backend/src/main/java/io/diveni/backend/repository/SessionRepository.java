@@ -8,12 +8,13 @@ import org.springframework.data.mongodb.repository.*;
 
 public interface SessionRepository extends MongoRepository<Session, String> {
 
-    Session findBySessionID(String sessionID);
+  Session findBySessionID(String sessionID);
 
-    Session findByAdminCookie(UUID adminCookie);
+  Session findByAdminCookie(UUID adminCookie);
 
-    default Optional<Session> findByMemberID(String memberID) {
-        return findAll().stream().filter(s -> s.getMembers().stream().anyMatch(m -> m.getMemberID().equals(memberID)))
-            .findFirst();
-    }
+  default Optional<Session> findByMemberID(String memberID) {
+    return findAll().stream()
+        .filter(s -> s.getMembers().stream().anyMatch(m -> m.getMemberID().equals(memberID)))
+        .findFirst();
+  }
 }

@@ -11,42 +11,41 @@ import lombok.val;
 
 public class MemberTest {
 
-    @Test
-    public void equal_works() {
-        val memberID = Utils.generateRandomID();
-        val name = "John";
-        val hexColor = "#ffffff";
-        val avatar = AvatarAnimal.WOLF;
-        String estimation = null;
-        val member = new Member(memberID, name, hexColor, avatar, estimation);
-        val sameMember = new Member(memberID, name, hexColor, avatar, estimation);
-        val otherMember = new Member(Utils.generateRandomID(), name, hexColor, avatar, estimation);
+  @Test
+  public void equal_works() {
+    val memberID = Utils.generateRandomID();
+    val name = "John";
+    val hexColor = "#ffffff";
+    val avatar = AvatarAnimal.WOLF;
+    String estimation = null;
+    val member = new Member(memberID, name, hexColor, avatar, estimation);
+    val sameMember = new Member(memberID, name, hexColor, avatar, estimation);
+    val otherMember = new Member(Utils.generateRandomID(), name, hexColor, avatar, estimation);
 
-        assertEquals(member, sameMember);
-        assertNotEquals(member, otherMember);
-        assertEquals(member.hashCode(), sameMember.hashCode());
-    }
+    assertEquals(member, sameMember);
+    assertNotEquals(member, otherMember);
+    assertEquals(member.hashCode(), sameMember.hashCode());
+  }
 
-    @Test
-    public void updateEstimation_works() {
-        val vote = "5";
+  @Test
+  public void updateEstimation_works() {
+    val vote = "5";
 
-        val member = new Member(null, null, null, null, null);
-        val result = member.updateEstimation(vote);
+    val member = new Member(null, null, null, null, null);
+    val result = member.updateEstimation(vote);
 
-        assertEquals(result.getCurrentEstimation(), vote);
-        assertNull(member.getCurrentEstimation());
-    }
+    assertEquals(result.getCurrentEstimation(), vote);
+    assertNull(member.getCurrentEstimation());
+  }
 
-    @Test
-    public void resetEstimation_works() {
-        val vote = "5";
-        val member = new Member(null, null, null, null, vote);
+  @Test
+  public void resetEstimation_works() {
+    val vote = "5";
+    val member = new Member(null, null, null, null, vote);
 
-        val result = member.resetEstimation();
+    val result = member.resetEstimation();
 
-        assertEquals(member.getCurrentEstimation(), vote);
-        assertNull(result.getCurrentEstimation());
-    }
-
+    assertEquals(member.getCurrentEstimation(), vote);
+    assertNull(result.getCurrentEstimation());
+  }
 }

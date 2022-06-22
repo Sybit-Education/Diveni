@@ -12,16 +12,17 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SessionConfig {
 
-    private final List<String> set;
+  private final List<String> set;
 
-    private final List<UserStory> userStories;
+  private final List<UserStory> userStories;
 
-    private final Integer timerSeconds;
-    private final String userStoryMode;
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private final String password;
+  private final Integer timerSeconds;
+  private final String userStoryMode;
 
-    public Optional<Integer> getTimerSeconds() {
-        return Optional.of(timerSeconds);
-    }
+  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+  private final String password;
+
+  public Optional<Integer> getTimerSeconds() {
+    return Optional.of(timerSeconds);
+  }
 }
