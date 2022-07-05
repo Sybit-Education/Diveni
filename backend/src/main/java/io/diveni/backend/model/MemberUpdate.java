@@ -14,7 +14,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MemberUpdate {
-    private List<Member> members;
+  private List<Member> members;
 
-    private List<String> highlightedMembers;
+  private List<String> highlightedMembers;
 }

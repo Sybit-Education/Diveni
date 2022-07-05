@@ -15,9 +15,9 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode
 public class SessionPrincipals {
 
-    private String sessionID;
+  private String sessionID;
 
-    private AdminPrincipal adminPrincipal;
+  private AdminPrincipal adminPrincipal;
 
-    private Set<MemberPrincipal> memberPrincipals;
+  private Set<MemberPrincipal> memberPrincipals;
 }

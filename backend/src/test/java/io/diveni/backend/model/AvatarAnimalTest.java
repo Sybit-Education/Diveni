@@ -8,10 +8,9 @@ import lombok.val;
 
 public class AvatarAnimalTest {
 
-	@Test
-	public void avatarAnimal_ToStringWorks() throws Exception {
-		val animal = AvatarAnimal.WOLF;
-		assertEquals(animal.toString(), "WOLF");
-	}
-
+  @Test
+  public void avatarAnimal_ToStringWorks() throws Exception {
+    val animal = AvatarAnimal.WOLF;
+    assertEquals(animal.toString(), "WOLF");
+  }
 }

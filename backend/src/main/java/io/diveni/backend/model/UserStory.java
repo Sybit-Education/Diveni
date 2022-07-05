@@ -9,14 +9,13 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public class UserStory {
 
-    final String jiraId;
+  final String jiraId;
 
-    final String title;
+  final String title;
 
-    final String description;
+  final String description;
 
-    final String estimation;
+  final String estimation;
 
-    final Boolean isActive;
-
+  final Boolean isActive;
 }

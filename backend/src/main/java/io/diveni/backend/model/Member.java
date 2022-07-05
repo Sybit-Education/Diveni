@@ -11,21 +11,21 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Member {
 
-	private String memberID;
+  private String memberID;
 
-	private String name;
+  private String name;
 
-	private String hexColor;
+  private String hexColor;
 
-	private AvatarAnimal avatarAnimal;
+  private AvatarAnimal avatarAnimal;
 
-	private String currentEstimation;
+  private String currentEstimation;
 
-	public Member updateEstimation(String estimation) {
-		return new Member(this.memberID, this.name, this.hexColor, this.avatarAnimal, estimation);
-	}
+  public Member updateEstimation(String estimation) {
+    return new Member(this.memberID, this.name, this.hexColor, this.avatarAnimal, estimation);
+  }
 
-	public Member resetEstimation() {
-		return new Member(this.memberID, this.name, this.hexColor, this.avatarAnimal, null);
-	}
+  public Member resetEstimation() {
+    return new Member(this.memberID, this.name, this.hexColor, this.avatarAnimal, null);
+  }
 }
