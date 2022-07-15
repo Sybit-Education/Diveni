@@ -10,21 +10,21 @@ The infrastructure is divided in several containers:
 
 ```mermaid
 flowchart TD
-  subgraph Reverse-Proxy-Container
+  subgraph Reverse-Proxy Container
     direction RL
-      Reverse-Proxy
+      Reverse-Proxy(Nginx)
   end  
-  subgraph Frontend-Container
+  subgraph Frontend Container
     direction RL
-      Frontend
+      Frontend(node.js)
   end
-  subgraph Backend-Container
+  subgraph Backend Container
     direction RL
-      Backend
+      Backend(openjdk)
   end
-  subgraph Database-Container
+  subgraph Database Container
     direction RL
-      Database[(Database)]
+      Database(MongoDB)
   end  
 
   Reverse-Proxy <--> Frontend
@@ -45,43 +45,36 @@ version: "3.8"
 
 services:
   database:
-    build: ./database
-    image: diveni_database
+    image: mongo:4.4.11-rc0-focal
     container_name: diveni_database
-    ports:
-      - 27017:27017
-    restart: unless-stopped
+    restart: unless-stopped    
+
   backend:
+    image: ghcr.io/sybit-education/diveni-backend:latest
+    container_name: diveni_backend
     depends_on:
       - database
-    build: ./backend
-    image: diveni_backend
-    container_name: diveni_backend
+    restart: unless-stopped    
     env_file:
       - ./backend/.env
-    ports:
-      - 9090:9090
-    restart: unless-stopped
+
   frontend:
+    image: ghcr.io/sybit-education/diveni-frontend:latest
+    container_name: diveni_frontend
     depends_on:
       - backend
-    image:  diveni_frontend
-    build: ./frontend
-    container_name: diveni_frontend
-    ports:
-      - 8080:8080
-    restart: unless-stopped
+    restart: unless-stopped      
+
   proxy:
-    depends_on:
-        - frontend
-        - backend
-        - database
-    image:  diveni_proxy
-    build: ./proxy
+    image: ghcr.io/sybit-education/diveni_proxy:latest
     container_name: diveni_proxy
+    depends_on:
+      - frontend
+      - backend
+      - database    
     restart: unless-stopped
     ports:
-        - 80:80
+      - "80:80"
 
 ```
 
