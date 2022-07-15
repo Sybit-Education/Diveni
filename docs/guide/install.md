@@ -2,13 +2,41 @@
 
 *Guide to install Diveni on production environments.*
 
-## System Requirements
+## Docker
 
-TBD
+Using Docker is the preferred way to install Diveni.
 
-## Docker Infrastructure
+The infrastructure is divided in several containers:
 
-This is currently the preferred environment to install Diveni.
+```mermaid
+flowchart TD
+  subgraph Reverse-Proxy-Container
+    direction RL
+      Reverse-Proxy
+  end  
+  subgraph Frontend-Container
+    direction RL
+      Frontend
+  end
+  subgraph Backend-Container
+    direction RL
+      Backend
+  end
+  subgraph Database-Container
+    direction RL
+      Database[(Database)]
+  end  
+
+  Reverse-Proxy <--> Frontend
+  Reverse-Proxy <--> Backend  
+  Frontend <--> Backend
+  Backend <--> Database
+  
+````
+
+### System Requirements
+
+TBD 
 
 ### Docker Compose 
 
