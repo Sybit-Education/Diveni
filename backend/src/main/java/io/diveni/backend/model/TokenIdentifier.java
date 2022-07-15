@@ -6,5 +6,5 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public class TokenIdentifier {
-    private final String tokenId;
+  private final String tokenId;
 }

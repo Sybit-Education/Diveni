@@ -37,6 +37,13 @@ Frontend communicates via REST and WebSockets with the backend.
 It uses Spring boot and communicates directly with the mongoDb in a docker container.
 Run the docker container first, then the backend.
 
+### Run Diveni with Docker and Docker Compose
+```shell
+docker-compose up --build -d
+```
+
+### Run Diveni locally
+
 #### Frontend
 - npm, vue2
 

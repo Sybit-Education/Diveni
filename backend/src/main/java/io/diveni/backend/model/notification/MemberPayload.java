@@ -6,5 +6,5 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Getter
 public class MemberPayload extends NotificationPayload {
-    private final String memberID;
+  private final String memberID;
 }

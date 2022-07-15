@@ -89,8 +89,6 @@ export default Vue.extend({
         this.voteSet = JSON.stringify(sessionConfig.set);
         this.timerSeconds = parseInt(JSON.stringify(sessionConfig.timerSeconds), 10);
         this.userStoryMode = sessionConfig.userStoryMode;
-        console.log("session page");
-        console.log(sessionConfig);
         this.$store.commit("setUserStories", {
           stories: sessionConfig.userStories,
         });
@@ -147,7 +145,7 @@ export default Vue.extend({
       if (e.message == "Request failed with status code 401") {
         this.$toast.error(this.$t("session.notification.messages.password"));
       }
-      console.log(e);
+      console.error(e);
     },
   },
 });

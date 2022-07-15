@@ -1,12 +1,13 @@
 {
-  "name": "diveni-website",
+  "name": "diveni-docs",
   "version": "1.0.0",
-  "description": "Diveni - Documentation Site",
+  "description": "Diveni - The Planning-Poker App | Documentation Site",
+  "license": "aGPLv3",
   "authors": {
     "name": "Diveni Development Team",
     "email": "info@diveni.io"
   },
-  "license": "aGPLv3",
+
   "repository": "https://github.com/Sybit-Education/Diveni",
   "directories": {
     "doc": "docs"
@@ -16,7 +17,7 @@
     "build": "vuepress build docs"
   },
   "devDependencies": {
-    "vuepress": "^1.9.2",
+    "vuepress": "^1.9.7",
     "vuepress-plugin-mermaidjs": "^1.9.1"
   }
 }
