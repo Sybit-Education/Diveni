@@ -15,7 +15,6 @@ env:
   JAVA_VERSION: 11
 
 jobs:
-
   formatting:
     runs-on: ubuntu-latest
     steps:
@@ -93,6 +92,7 @@ jobs:
           path: backend/target/site/jacoco/
 
   push-image:
+    name: Backend-Image
     runs-on: ubuntu-latest
     permissions:
       contents: read

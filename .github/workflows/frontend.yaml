@@ -55,6 +55,7 @@ jobs:
         run: npm run lint
 
   push-image:
+    name: Frontend-Image
     runs-on: ubuntu-latest
     permissions:
       contents: read
