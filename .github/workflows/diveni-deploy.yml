@@ -6,9 +6,6 @@ on:
       - main
   workflow_dispatch:
 
-env:
-  JAVA_VERSION: 11
-
 jobs:
   push-image:
     runs-on: ubuntu-latest
