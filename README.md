@@ -64,11 +64,11 @@ It uses Spring boot and communicates directly with the mongoDb in a docker conta
 Run the docker container first, then the backend.
 
 ### Run Diveni with Docker and Docker Compose
-#### Run with pre-built docker images
+#### Run with pre-built docker images using [docker-compose](https://github.com/Sybit-Education/Diveni/blob/main/docker-compose.yml)
 ```shell
 docker-compose up -d
 ```
-#### Run with self-build docker images
+#### Run with self-build docker images using [docker-compose.dev](https://github.com/Sybit-Education/Diveni/blob/main/docker-compose.dev.yml)
 ```shell
 docker-compose -f docker-compose.dev.yml up --build -d
 ```
