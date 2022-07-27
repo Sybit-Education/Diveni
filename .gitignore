@@ -50,3 +50,4 @@ pnpm-debug.log*
 # id_rsa
 id_rsa
 node_modules
+docs/.vuepress/.temp
