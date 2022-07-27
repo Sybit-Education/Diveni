@@ -24,21 +24,21 @@
 
 ### Setup Project
 
-1. Clone repository with Git from Github:
-      git clone https://github.com/Sybit-Education/Diveni.git
+1. Clone repository with Git from Github:<br />
+      *git clone https://github.com/Sybit-Education/Diveni.git* <br />
    Or download the repository and unzip it’s content:
-      https://github.com/Sybit-Education/Diveni/archive/refs/heads/main.zip
+      *https://github.com/Sybit-Education/Diveni/archive/refs/heads/main.zip*
 2. Start backend
-   a. Open  first terminal and enter these commands:
-   b. cd /backend
-   c. mvn spring-boot:run
-   d. The backend should now be running and accessible at http://localhost:8081
+   * Open  first terminal and enter these commands:
+   * cd /backend
+   * mvn spring-boot:run
+   * The backend should now be running and accessible at http://localhost:8081
 3. Start frontend
-   a. Open the second terminal and enter these commands:
-   b. cd /frontend
-   c. npm install
-   d. npm run serve
-   e. The frontend should now be running and accessible at http://localhost:8080
+   * Open the second terminal and enter these commands:
+   * cd /frontend
+   * npm install
+   * npm run serve
+   * The frontend should now be running and accessible at http://localhost:8080
 4. To use Diveni simply enter the following url in your standard browser: <http://localhost:8080>
 
 
