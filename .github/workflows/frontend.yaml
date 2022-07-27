@@ -55,6 +55,7 @@ jobs:
         run: npm run lint
 
   push-image:
+    name: Frontend-Image
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -81,28 +82,3 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-
-  deploy:
-    name: Deploy to server
-    runs-on: ubuntu-latest
-    needs: [build]
-    if: github.ref == 'refs/heads/main'
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Download artifacts
-        uses: actions/download-artifact@v2
-        with:
-          name: frontend
-          path: frontend/dist
-      - name: Copy files to server
-        uses: appleboy/scp-action@v0.1.1
-        with:
-          host: ${{ secrets.DEPLOY_SSH_HOST }}
-          username: ${{ secrets.DEPLOY_SSH_USERNAME }}
-          password: ${{ secrets.DEPLOY_SSH_PASSWORD }}
-          port: ${{ secrets.DEPLOY_SSH_PORT }}
-          source: frontend/dist/
-          target: ${{ secrets.DEPLOY_DIR_FRONTEND }}
-          strip_components: 2
-          rm: true

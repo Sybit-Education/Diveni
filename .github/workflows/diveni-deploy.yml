@@ -1,0 +1,74 @@
+name: Deploy Diveni
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  push-image:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Verify files changed
+        uses: tj-actions/verify-changed-files@v10
+        id: verify-files-changed
+        with:
+          files: proxy
+      - name: Log in to the Container registry
+        uses: docker/login-action@v2
+        if: steps.verify-files-changed.outputs.files_changed == 'true'
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v4
+        if: steps.verify-files-changed.outputs.files_changed == 'true'
+        with:
+          images: ghcr.io/${{ github.repository }}-proxy
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v3
+        if: steps.verify-files-changed.outputs.files_changed == 'true'
+        with:
+          context: proxy
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+  deploy:
+    name: Deploy to server
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Wait for backend workflow to succeed
+        uses: lewagon/wait-on-check-action@v1.1.2
+        with:
+          ref: ${{ github.ref }}
+          check-name: 'Backend-Image'
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          wait-interval: 10
+      - name: Wait for frontend workflow to succeed
+        uses: lewagon/wait-on-check-action@v1.1.2
+        with:
+          ref: ${{ github.ref }}
+          check-name: 'Frontend-Image'
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          wait-interval: 10
+      - name: Start application
+        uses: appleboy/ssh-action@v0.1.1
+        with:
+          host: ${{ secrets.DEPLOY_SSH_HOST }}
+          username: ${{ secrets.DEPLOY_SSH_USERNAME }}
+          password: ${{ secrets.DEPLOY_SSH_PASSWORD }}
+          port: ${{ secrets.DEPLOY_SSH_PORT }}
+          script_stop: true
+          script: |
+            cd ${{ secrets.DEPLOY_DIR }}
+            sudo docker-compose up -d
