@@ -19,8 +19,8 @@ module.exports = {
         link: '/guide/',
       },
       {
-        text: 'Demo',
-        link: '/demo/'
+        text: 'App',
+        link: 'https://diveni.io'
       },
       {
         text: 'License',
