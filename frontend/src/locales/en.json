@@ -1,7 +1,11 @@
 {
   "general": {
     "pleaseWait": "Please wait...",
-    "about": "About",
+    "about": {
+      "label": "About",
+      "repository": "GitHub",
+      "documentation": "Documentation"
+    },
     "licenses": {
       "frontend": "Licenses (Frontend)",
       "backend": "Licenses (Backend)"
