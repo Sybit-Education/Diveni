@@ -1,11 +1,5 @@
 <template>
   <b-container>
-    <div class="d-flex align-items-center">
-      <img src="/img/icons/logo-128x128.png" style="height: 64px; margin-right: 12px" />
-      <h1 class="my-5 mx-2">
-        {{ $t("page.landing.productTitle") }}
-      </h1>
-    </div>
     <b-row class="justify-content-center">
       <landing-page-card
         class="col-md-4 m-2 col-12"
