@@ -5,6 +5,7 @@
       <a href="https://github.com/Sybit-Education/Diveni/blob/main/LICENSE" target="_blank"
         >AGPL-3.0 license</a
       >
+      <about-dropdown />
     </b-container>
   </footer>
 </template>
@@ -19,3 +20,9 @@ a {
   text-decoration: none;
 }
 </style>
+<script>
+import AboutDropdown from "@/components/navigation/AboutDropdown";
+export default {
+  components: { AboutDropdown },
+};
+</script>

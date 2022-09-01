@@ -21,10 +21,7 @@ import FooterBar from "@/components/navigation/FooterBar.vue";
 
 export default Vue.extend({
   name: "App",
-  components: {FooterBar, TopNavigationBar },
-  data: () => ({
-    //
-  }),
+  components: { FooterBar, TopNavigationBar },
   mounted() {
     document.title = "DIVENI";
   },

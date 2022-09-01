@@ -1,6 +1,6 @@
 import constants from "@/constants";
 import { JiraRequestTokenDto, JiraResponseCodeDto } from "@/types";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 
 class ApiService {
   public async getJiraOauth1RequestToken(): Promise<JiraRequestTokenDto> {
@@ -34,17 +34,17 @@ class ApiService {
     return response.data;
   }
 
-  public async getAllProjects(): Promise<any> {
+  public async getAllProjects(): Promise<unknown> {
     const response = await axios.get(`${constants.backendURL}/jira/projects`);
     return response.data;
   }
 
-  public async getUserStoriesFromProject(project): Promise<any> {
+  public async getUserStoriesFromProject(project): Promise<unknown> {
     const response = await axios.get(`${constants.backendURL}/jira/projects/${project}/issues`);
     return response.data;
   }
 
-  public async updateUserStory(story): Promise<any> {
+  public async updateUserStory(story): Promise<unknown> {
     const response = await axios.put(`${constants.backendURL}/jira/issue`, story, {
       headers: {
         "Content-Type": "application/json",
@@ -53,7 +53,7 @@ class ApiService {
     return response;
   }
 
-  public async createUserStory(story, projectID): Promise<any> {
+  public async createUserStory(story, projectID): Promise<AxiosResponse> {
     const response = await axios.post(
       `${constants.backendURL}/jira/issue?projectID=${projectID}`,
       story,
@@ -66,7 +66,7 @@ class ApiService {
     return response;
   }
 
-  public async deleteUserStory(jiraId): Promise<any> {
+  public async deleteUserStory(jiraId): Promise<AxiosResponse> {
     const response = await axios.delete(`${constants.backendURL}/jira/issue/${jiraId}`, {
       headers: {
         "Content-Type": "application/json",

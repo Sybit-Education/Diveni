@@ -1,10 +1,10 @@
 <template>
   <b-nav-dropdown :text="$t('general.about')">
     <b-dropdown-item @click="openFrontendLicenseTab()">
-      {{ $t("general.licenses.frontend")}}
+      {{ $t("general.licenses.frontend") }}
     </b-dropdown-item>
     <b-dropdown-item @click="openBackendLicenseTab()">
-      {{$t("general.licenses.backend")}}
+      {{ $t("general.licenses.backend") }}
     </b-dropdown-item>
   </b-nav-dropdown>
 </template>

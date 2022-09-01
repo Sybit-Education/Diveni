@@ -1,5 +1,4 @@
 import { StoreState } from "@/types";
-import { State } from "@egjs/vue-flicking";
 import SockJS from "sockjs-client";
 import Vue from "vue";
 import Vuex from "vuex";
