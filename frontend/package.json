@@ -66,8 +66,5 @@
   "lint-staged": {
     "*.ts": "npm run fmt",
     "*.vue": "npm run fmt"
-  },
-  "browserslist": [
-    "> 0.1% and last 3 versions and not dead and not ie 11"
-  ]
+  }
 }
