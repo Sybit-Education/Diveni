@@ -14,7 +14,6 @@
   "dependencies": {
     "@egjs/vue-flicking": "^4.3.1",
     "@types/sockjs-client": "^1.5.1",
-    "@vue/composition-api": "^1.4.4",
     "axios": "^0.23.0",
     "bootstrap": "^4.6.1",
     "bootstrap-vue": "^2.22.0",
@@ -54,7 +53,7 @@
     "eslint": "^7.32.0",
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-prettier": "^3.3.1",
-    "eslint-plugin-vue": "^6.2.2",
+    "eslint-plugin-vue": "^7.5.0",
     "license-checker": "^25.0.1",
     "lint-staged": "^13.0.3",
     "prettier": "^2.4.1",
