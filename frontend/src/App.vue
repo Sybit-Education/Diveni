@@ -5,28 +5,30 @@ Copyright (C) 2022 AUME-Team 21/22, HTWG Konstanz
 -->
 
 <template>
-  <b-container>
-    <router-view />
-    <div class="d-flex justify-content-between">
-      <locale-dropdown></locale-dropdown>
-      <about-dropdown></about-dropdown>
-    </div>
-  </b-container>
+  <div>
+    <top-navigation-bar />
+    <main>
+      <router-view />
+    </main>
+    <footer-bar />
+  </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
-import LocaleDropdown from "./components/LocaleDropdown.vue";
-import AboutDropdown from "./components/AboutDropdown.vue";
+import TopNavigationBar from "@/components/navigation/TopNavigationBar.vue";
+import FooterBar from "@/components/navigation/FooterBar.vue";
 
 export default Vue.extend({
   name: "App",
-  components: { LocaleDropdown, AboutDropdown },
-  data: () => ({
-    //
-  }),
+  components: { FooterBar, TopNavigationBar },
   mounted() {
     document.title = "DIVENI";
   },
 });
 </script>
+<style>
+main {
+  min-height: calc(100vh - 9rem);
+}
+</style>
