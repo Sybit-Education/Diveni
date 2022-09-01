@@ -1,17 +1,20 @@
 <template>
   <footer>
     <b-container>
-      &copy; 2022 Diveni |
-      <a href="https://github.com/Sybit-Education/Diveni/blob/main/LICENSE" target="_blank"
-        >AGPL-3.0 license</a
-      >
-      <about-dropdown />
+      &copy; 2022 Diveni | <router-link to="/about">{{ $t("general.about.label") }}</router-link>
     </b-container>
   </footer>
 </template>
+<script lang="ts">
+import Vue from "vue";
+
+export default Vue.extend({
+  name: "FooterBar",
+});
+</script>
 <style scoped>
 footer {
-  min-height: 3rem;
+  min-height: 4rem;
   background-color: #22272e;
   color: #adbac7;
 }
@@ -20,9 +23,3 @@ a {
   text-decoration: none;
 }
 </style>
-<script>
-import AboutDropdown from "@/components/navigation/AboutDropdown";
-export default {
-  components: { AboutDropdown },
-};
-</script>

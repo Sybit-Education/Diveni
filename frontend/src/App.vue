@@ -29,6 +29,6 @@ export default Vue.extend({
 </script>
 <style>
 main {
-  min-height: calc(100vh - 9rem);
+  min-height: calc(100vh - 10rem);
 }
 </style>
