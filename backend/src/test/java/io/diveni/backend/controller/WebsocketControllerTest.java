@@ -104,8 +104,8 @@ public class WebsocketControllerTest {
           }
         }
       };
-  private List<Transport> transports =
-      Collections.<Transport>singletonList(new WebSocketTransport(new StandardWebSocketClient()));
+  private final List<Transport> transports =
+      Collections.singletonList(new WebSocketTransport(new StandardWebSocketClient()));
 
   @BeforeAll
   public static void init() {

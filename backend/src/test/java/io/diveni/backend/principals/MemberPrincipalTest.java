@@ -22,7 +22,7 @@ public class MemberPrincipalTest {
     val principal = new MemberPrincipal(sessionID, memberID);
     assertEquals(principal.getSessionID(), sessionID);
     assertEquals(principal.getMemberID(), memberID);
-    assertEquals(principal.getName(), memberID.toString());
+    assertEquals(principal.getName(), memberID);
   }
 
   @Test

@@ -25,6 +25,6 @@ public class MemberPrincipal implements Principal {
 
   @Override
   public String getName() {
-    return memberID.toString();
+    return memberID;
   }
 }

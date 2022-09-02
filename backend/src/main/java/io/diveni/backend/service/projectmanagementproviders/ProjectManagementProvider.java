@@ -11,17 +11,17 @@ import io.diveni.backend.model.Project;
 import io.diveni.backend.model.UserStory;
 
 public interface ProjectManagementProvider {
-  public List<Project> getProjects(String tokenIdentifier);
+  List<Project> getProjects(String tokenIdentifier);
 
-  public List<UserStory> getIssues(String tokenIdentifier, String projectName);
+  List<UserStory> getIssues(String tokenIdentifier, String projectName);
 
-  public void updateIssue(String tokenIdentifier, UserStory story);
+  void updateIssue(String tokenIdentifier, UserStory story);
 
-  public String createIssue(String tokenIdentifier, String projectID, UserStory story);
+  String createIssue(String tokenIdentifier, String projectID, UserStory story);
 
-  public void deleteIssue(String tokenIdentifier, String jiraID);
+  void deleteIssue(String tokenIdentifier, String jiraID);
 
-  public boolean containsToken(String token);
+  boolean containsToken(String token);
 
-  public String getCurrentUsername(String tokenIdentifier);
+  String getCurrentUsername(String tokenIdentifier);
 }

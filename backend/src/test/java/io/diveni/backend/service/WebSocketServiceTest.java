@@ -45,10 +45,10 @@ public class WebSocketServiceTest {
 
   @InjectMocks private WebSocketService webSocketService;
 
-  private AdminPrincipal defaultAdminPrincipal =
+  private final AdminPrincipal defaultAdminPrincipal =
       new AdminPrincipal(Utils.generateRandomID(), Utils.generateRandomID());
 
-  private MemberPrincipal defaultMemberPrincipal =
+  private final MemberPrincipal defaultMemberPrincipal =
       new MemberPrincipal(defaultAdminPrincipal.getSessionID(), Utils.generateRandomID());
 
   @BeforeEach
@@ -199,11 +199,11 @@ public class WebSocketServiceTest {
             null);
 
     webSocketService.sendSessionStateToMember(
-        session, defaultMemberPrincipal.getMemberID().toString());
+        session, defaultMemberPrincipal.getMemberID());
 
     verify(simpMessagingTemplateMock, times(1))
         .convertAndSendToUser(
-            defaultMemberPrincipal.getMemberID().toString(),
+          defaultMemberPrincipal.getMemberID(),
             WebSocketService.MEMBER_UPDATES_DESTINATION,
             session.getSessionState().toString());
   }
@@ -234,12 +234,12 @@ public class WebSocketServiceTest {
 
     verify(simpMessagingTemplateMock, times(1))
         .convertAndSendToUser(
-            defaultMemberPrincipal.getMemberID().toString(),
+          defaultMemberPrincipal.getMemberID(),
             WebSocketService.MEMBER_UPDATES_DESTINATION,
             session.getSessionState().toString());
     verify(simpMessagingTemplateMock, times(1))
         .convertAndSendToUser(
-            memberPrincipal.getMemberID().toString(),
+          memberPrincipal.getMemberID(),
             WebSocketService.MEMBER_UPDATES_DESTINATION,
             session.getSessionState().toString());
   }
@@ -270,12 +270,12 @@ public class WebSocketServiceTest {
 
     verify(simpMessagingTemplateMock, times(1))
         .convertAndSendToUser(
-            defaultMemberPrincipal.getMemberID().toString(),
+          defaultMemberPrincipal.getMemberID(),
             WebSocketService.US_UPDATES_DESTINATION,
             session.getSessionConfig().getUserStories());
     verify(simpMessagingTemplateMock, times(1))
         .convertAndSendToUser(
-            defaultMemberPrincipal.getMemberID().toString(),
+          defaultMemberPrincipal.getMemberID(),
             WebSocketService.US_UPDATES_DESTINATION,
             session.getSessionConfig().getUserStories());
   }
@@ -307,7 +307,7 @@ public class WebSocketServiceTest {
 
     verify(simpMessagingTemplateMock, times(1))
         .convertAndSendToUser(
-            defaultMemberPrincipal.getMemberID().toString(),
+          defaultMemberPrincipal.getMemberID(),
             WebSocketService.NOTIFICATIONS_DESTINATION,
             notification);
   }

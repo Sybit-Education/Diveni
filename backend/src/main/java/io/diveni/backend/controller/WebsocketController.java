@@ -72,7 +72,7 @@ public class WebsocketController {
         session,
         new Notification(
             NotificationType.MEMBER_JOINED,
-            new MemberPayload(((MemberPrincipal) principal).getMemberID())));
+            new MemberPayload(principal.getMemberID())));
     LOGGER.debug("<-- joinMember()");
   }
 

@@ -22,7 +22,7 @@ public class AdminPrincipalTest {
     val principal = new AdminPrincipal(sessionID, adminID);
     assertEquals(principal.getSessionID(), sessionID);
     assertEquals(principal.getAdminID(), adminID);
-    assertEquals(principal.getName(), adminID.toString());
+    assertEquals(principal.getName(), adminID);
   }
 
   @Test

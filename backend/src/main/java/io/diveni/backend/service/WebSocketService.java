@@ -161,7 +161,7 @@ public class WebSocketService {
         .forEach(
             member ->
                 simpMessagingTemplate.convertAndSendToUser(
-                    member.getMemberID().toString(),
+                  member.getMemberID(),
                     MEMBERS_UPDATED_DESTINATION,
                     new MemberUpdate(session.getMembers(), session.getCurrentHighlights())));
     LOGGER.debug("<-- sendMembersUpdateToMembers()");
@@ -171,7 +171,7 @@ public class WebSocketService {
     LOGGER.debug("--> sendSessionStateToMembers(), sessionID={}", session.getSessionID());
     // TODO: Send highlighted with it
     getSessionPrincipals(session.getSessionID()).memberPrincipals().stream()
-        .forEach(member -> sendSessionStateToMember(session, member.getMemberID().toString()));
+        .forEach(member -> sendSessionStateToMember(session, member.getMemberID()));
     LOGGER.debug("<-- sendSessionStateToMembers()");
   }
 
@@ -180,7 +180,7 @@ public class WebSocketService {
     getSessionPrincipals(session.getSessionID())
         .memberPrincipals()
         .forEach(
-            member -> sendUpdatedUserStoriesToMember(session, member.getMemberID().toString()));
+            member -> sendUpdatedUserStoriesToMember(session, member.getMemberID()));
     LOGGER.debug("<-- sendUpdatedUserStoriesToMembers()");
   }
 
@@ -232,11 +232,11 @@ public class WebSocketService {
         .forEach(
             member -> {
               simpMessagingTemplate.convertAndSendToUser(
-                  member.getMemberID().toString(), NOTIFICATIONS_DESTINATION, notification);
+                member.getMemberID(), NOTIFICATIONS_DESTINATION, notification);
             });
     if (getSessionPrincipals(session.getSessionID()).adminPrincipal() != null) {
       simpMessagingTemplate.convertAndSendToUser(
-          getSessionPrincipals(session.getSessionID()).adminPrincipal().getAdminID().toString(),
+        getSessionPrincipals(session.getSessionID()).adminPrincipal().getAdminID(),
           NOTIFICATIONS_DESTINATION,
           notification);
     }
