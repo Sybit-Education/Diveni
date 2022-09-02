@@ -41,7 +41,7 @@ import lombok.val;
 public class JiraServerService implements ProjectManagementProviderOAuth1 {
   private static final Logger LOGGER = LoggerFactory.getLogger(JiraServerService.class);
   private static final String USER_STORY_ID = "10002";
-  private final int JIRA_SERVER_API_VERSION = 2;
+  private static final int JIRA_SERVER_API_VERSION = 2;
   @Getter private final Map<String, String> accessTokens = new HashMap<>();
 
   @Value("${JIRA_SERVER_JIRAHOME:#{null}}")
@@ -97,8 +97,7 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
       LOGGER.debug("<-- getRequestToken()");
       return jiraRequestToken;
     } catch (Exception e) {
-      LOGGER.error("Failed to get request token!");
-      e.printStackTrace();
+      LOGGER.error("Failed to get request token!", e);
       throw new ResponseStatusException(
           HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToRetrieveRequestTokenErrorMessage);
     }
@@ -116,8 +115,7 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
       LOGGER.debug("<-- getAccessToken()");
       return new TokenIdentifier(id);
     } catch (Exception e) {
-      LOGGER.error("Failed to get access token!");
-      e.printStackTrace();
+      LOGGER.error("Failed to get access token!", e);
       throw new ResponseStatusException(
           HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToRetrieveAccessTokenErrorMessage);
     }
@@ -144,8 +142,7 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
       LOGGER.debug("<-- getProjects()");
       return projects;
     } catch (Exception e) {
-      LOGGER.error("Failed to get projects!");
-      e.printStackTrace();
+      LOGGER.error("Failed to get projects!", e);
       throw new ResponseStatusException(
           HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToRetrieveProjectsErrorMessage);
     }
@@ -206,8 +203,7 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
       LOGGER.debug("<-- getIssues()");
       return userStories;
     } catch (Exception e) {
-      LOGGER.error("Failed to get issues!");
-      e.printStackTrace();
+      LOGGER.error("Failed to get issues!", e);
       throw new ResponseStatusException(
           HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToRetrieveProjectsErrorMessage);
     }
@@ -241,11 +237,10 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
               new GenericUrl(getJiraUrl() + "/issue/" + story.getJiraId()),
               "PUT",
               new JsonHttpContent(GsonFactory.getDefaultInstance(), content));
-      System.out.print(response.parseAsString());
-      LOGGER.debug("<-- updateIssue()");
+
+      LOGGER.debug("<-- updateIssue() {}", response.parseAsString());
     } catch (Exception e) {
-      LOGGER.error("Failed to update issue!");
-      e.printStackTrace();
+      LOGGER.error("Failed to update issue!", e);
       throw new ResponseStatusException(
           HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToEditIssueErrorMessage);
     }
@@ -276,8 +271,7 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
       LOGGER.debug("<-- createIssue()");
       return node.path("id").asText();
     } catch (Exception e) {
-      LOGGER.error("Failed to create issue!");
-      e.printStackTrace();
+      LOGGER.error("Failed to create issue!", e);
       throw new ResponseStatusException(
           HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToDeleteIssueErrorMessage);
     }
@@ -295,10 +289,9 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
           getResponseFromUrl(
               parameters, new GenericUrl(getJiraUrl() + "/issue/" + jiraID), "DELETE", null);
 
-      System.out.print(response.parseAsString());
-      LOGGER.debug("<-- deleteIssue()");
+      LOGGER.debug("<-- deleteIssue() {}", response.parseAsString());
     } catch (Exception e) {
-      e.printStackTrace();
+      LOGGER.error("Deletion failed", e);
       throw new ResponseStatusException(
           HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToDeleteIssueErrorMessage);
     }
@@ -320,8 +313,7 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
       LOGGER.debug("<-- getCurrentUsername()");
       return node.path("name").asText();
     } catch (Exception e) {
-      LOGGER.error("Failed to get current username!");
-      e.printStackTrace();
+      LOGGER.error("Failed to get current username!", e);
       throw new ResponseStatusException(
           HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToRetrieveUsernameErrorMessage);
     }
