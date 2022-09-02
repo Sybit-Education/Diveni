@@ -59,12 +59,12 @@
             }"
           >
             <member-vote-card
-              v-for="(voteOption, index) in voteSet"
+              v-for="(voteOption, idx) in voteSet"
               :key="voteOption"
               :ref="`memberCard${voteOption}`"
               class="flicking-panel mx-2"
               :vote-option="voteOption"
-              :index="index"
+              :index="idx"
               :hex-color="hexColor"
               :dragged="voteOption === draggedVote"
               :is-mobile="true"
@@ -77,13 +77,13 @@
           <b-col>
             <div class="overflow-auto" style="max-height: 500px">
               <member-vote-card
-                v-for="(voteOption, index) in voteSet"
+                v-for="(voteOption, idx) in voteSet"
                 :key="voteOption"
                 :ref="`memberCard${voteOption}`"
                 style="display: inline-block"
                 class="flicking-panel m-2"
                 :vote-option="voteOption"
-                :index="index"
+                :index="idx"
                 :hex-color="hexColor"
                 :dragged="voteOption === draggedVote"
                 :is-mobile="false"

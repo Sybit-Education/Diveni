@@ -1,15 +1,15 @@
 <template>
   <b-container>
-    <b-row class="mt-5 mb-3">
-      <b-col
-        ><h1>
+    <b-row class="mb-3">
+      <b-col>
+        <h1>
           {{
             planningStart
               ? $t("page.session.during.estimation.title")
               : $t("page.session.before.title")
           }}
-        </h1></b-col
-      >
+        </h1>
+      </b-col>
       <b-col v-if="planningStart" align-self="center">
         <copy-session-id-popup class="float-end" :session-id="session_sessionID" />
       </b-col>
@@ -26,7 +26,7 @@
         <h4 class="text-center">
           {{ $t("page.session.before.text.waiting") }}
         </h4>
-        <b-icon-three-dots animation="fade" class="" font-scale="3" />
+        <b-icon-three-dots animation="fade" font-scale="3" />
       </b-row>
       <b-row class="d-flex justify-content-center overflow-auto" style="max-height: 500px">
         <kick-user-wrapper
