@@ -4,7 +4,7 @@
     "about": {
       "label": "About",
       "repository": "GitHub",
-      "documentation": "Documentation"
+      "docs": "Documentation"
     },
     "licenses": {
       "frontend": "Licenses (Frontend)",

@@ -1,7 +1,9 @@
 <template>
   <footer>
     <b-container>
-      &copy; 2022 Diveni | <router-link to="/about">{{ $t("general.about.label") }}</router-link>
+      &copy; 2022 Diveni |
+      <a href="https://docs.diveni.io">{{ $t("general.about.docs") }}</a> |
+      <router-link to="/about">{{ $t("general.about.label") }}</router-link>
     </b-container>
   </footer>
 </template>
