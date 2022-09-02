@@ -161,7 +161,7 @@ public class WebSocketService {
         .forEach(
             member ->
                 simpMessagingTemplate.convertAndSendToUser(
-                  member.getMemberID(),
+                    member.getMemberID(),
                     MEMBERS_UPDATED_DESTINATION,
                     new MemberUpdate(session.getMembers(), session.getCurrentHighlights())));
     LOGGER.debug("<-- sendMembersUpdateToMembers()");
@@ -179,8 +179,7 @@ public class WebSocketService {
     LOGGER.debug("--> sendUpdatedUserStoriesToMembers(), sessionID={}", session.getSessionID());
     getSessionPrincipals(session.getSessionID())
         .memberPrincipals()
-        .forEach(
-            member -> sendUpdatedUserStoriesToMember(session, member.getMemberID()));
+        .forEach(member -> sendUpdatedUserStoriesToMember(session, member.getMemberID()));
     LOGGER.debug("<-- sendUpdatedUserStoriesToMembers()");
   }
 
@@ -232,11 +231,11 @@ public class WebSocketService {
         .forEach(
             member -> {
               simpMessagingTemplate.convertAndSendToUser(
-                member.getMemberID(), NOTIFICATIONS_DESTINATION, notification);
+                  member.getMemberID(), NOTIFICATIONS_DESTINATION, notification);
             });
     if (getSessionPrincipals(session.getSessionID()).adminPrincipal() != null) {
       simpMessagingTemplate.convertAndSendToUser(
-        getSessionPrincipals(session.getSessionID()).adminPrincipal().getAdminID(),
+          getSessionPrincipals(session.getSessionID()).adminPrincipal().getAdminID(),
           NOTIFICATIONS_DESTINATION,
           notification);
     }

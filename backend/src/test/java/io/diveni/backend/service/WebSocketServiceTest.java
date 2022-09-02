@@ -198,12 +198,11 @@ public class WebSocketServiceTest {
             null,
             null);
 
-    webSocketService.sendSessionStateToMember(
-        session, defaultMemberPrincipal.getMemberID());
+    webSocketService.sendSessionStateToMember(session, defaultMemberPrincipal.getMemberID());
 
     verify(simpMessagingTemplateMock, times(1))
         .convertAndSendToUser(
-          defaultMemberPrincipal.getMemberID(),
+            defaultMemberPrincipal.getMemberID(),
             WebSocketService.MEMBER_UPDATES_DESTINATION,
             session.getSessionState().toString());
   }
@@ -234,12 +233,12 @@ public class WebSocketServiceTest {
 
     verify(simpMessagingTemplateMock, times(1))
         .convertAndSendToUser(
-          defaultMemberPrincipal.getMemberID(),
+            defaultMemberPrincipal.getMemberID(),
             WebSocketService.MEMBER_UPDATES_DESTINATION,
             session.getSessionState().toString());
     verify(simpMessagingTemplateMock, times(1))
         .convertAndSendToUser(
-          memberPrincipal.getMemberID(),
+            memberPrincipal.getMemberID(),
             WebSocketService.MEMBER_UPDATES_DESTINATION,
             session.getSessionState().toString());
   }
@@ -270,12 +269,12 @@ public class WebSocketServiceTest {
 
     verify(simpMessagingTemplateMock, times(1))
         .convertAndSendToUser(
-          defaultMemberPrincipal.getMemberID(),
+            defaultMemberPrincipal.getMemberID(),
             WebSocketService.US_UPDATES_DESTINATION,
             session.getSessionConfig().getUserStories());
     verify(simpMessagingTemplateMock, times(1))
         .convertAndSendToUser(
-          defaultMemberPrincipal.getMemberID(),
+            defaultMemberPrincipal.getMemberID(),
             WebSocketService.US_UPDATES_DESTINATION,
             session.getSessionConfig().getUserStories());
   }
@@ -307,7 +306,7 @@ public class WebSocketServiceTest {
 
     verify(simpMessagingTemplateMock, times(1))
         .convertAndSendToUser(
-          defaultMemberPrincipal.getMemberID(),
+            defaultMemberPrincipal.getMemberID(),
             WebSocketService.NOTIFICATIONS_DESTINATION,
             notification);
   }

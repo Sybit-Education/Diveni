@@ -71,8 +71,7 @@ public class WebsocketController {
     webSocketService.sendNotification(
         session,
         new Notification(
-            NotificationType.MEMBER_JOINED,
-            new MemberPayload(principal.getMemberID())));
+            NotificationType.MEMBER_JOINED, new MemberPayload(principal.getMemberID())));
     LOGGER.debug("<-- joinMember()");
   }
 
