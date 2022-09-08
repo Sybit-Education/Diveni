@@ -1,5 +1,5 @@
 <template>
-  <b-container>
+  <b-container id="result-page">
     <h1 class="my-5 mx-2">
       {{ $t("page.results.title") }}
     </h1>

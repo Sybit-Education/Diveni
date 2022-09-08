@@ -1,5 +1,5 @@
 <template>
-  <b-container>
+  <b-container id="landing-page">
     <b-row class="justify-content-center">
       <landing-page-card
         class="col-md-4 m-2 col-12"
