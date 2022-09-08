@@ -1,0 +1,43 @@
+<template>
+  <div v-if="isPlanningStart">
+    <b-button v-b-modal.close-session-modal variant="danger">
+      <b-icon-x />
+      {{ $t("page.session.during.estimation.buttons.finish") }}
+    </b-button>
+    <b-modal
+      id="close-session-modal"
+      :title="$t('page.session.close.popup')"
+      :cancel-title="$t('page.session.close.button.cancel')"
+      :ok-title="$t('page.session.close.button.ok')"
+      @ok="closeSession"
+    >
+      <p class="my-4">
+        {{ $t("page.session.close.description1") }}
+      </p>
+      <p v-if="session_userStoryMode !== 'NO_US'">
+        {{ $t("page.session.close.description2") }}
+      </p>
+    </b-modal>
+  </div>
+</template>
+
+<script lang="ts">
+import Vue from "vue";
+import Constants from "@/constants";
+
+export default Vue.extend({
+  name: "SessionCloseButton",
+  props: {
+    isPlanningStart: {
+      type: Boolean,
+      required: true,
+    },
+  },
+  methods: {
+    sendCloseSessionCommand() {
+      const endPoint = `${Constants.webSocketCloseSessionRoute}`;
+      this.$store.commit("sendViaBackendWS", { endPoint });
+    },
+  },
+});
+</script>
