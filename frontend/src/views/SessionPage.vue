@@ -27,7 +27,7 @@
       </h4>
 
       <b-row class="d-flex justify-content-center overflow-auto" style="max-height: 500px">
-        <kick-user-wrapper v-for="member of members" :key="member.memberID" class="m-4" child="SessionMemberCircle" :member="member" />
+        <kick-user-wrapper v-for="member of members" :key="member.memberID" class="m-4" child="RoundedAvatar" :member="member" />
       </b-row>
       <b-row>
         <b-col class="text-center">
