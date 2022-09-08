@@ -37,9 +37,9 @@ import lombok.val;
 
 @RestController
 @RequestMapping("/sessions")
-public class RoutesController {
+public class SessionController {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(RoutesController.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SessionController.class);
 
   @Autowired JiraServerService jiraServerService;
 

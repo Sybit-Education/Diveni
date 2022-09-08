@@ -27,7 +27,7 @@ import lombok.val;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
-public class RoutesControllerTest {
+public class SessionControllerTest {
 
   public static final MediaType APPLICATION_JSON_UTF8 =
       new MediaType(
