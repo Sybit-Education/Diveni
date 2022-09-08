@@ -10,7 +10,7 @@
         <copy-session-id-popup v-if="planningStart" class="float-end" :session-id="session_sessionID" />
       </b-col>
       <b-col cols="auto">
-        <session-close-button :is-planning-start="planningStart" />
+        <session-close-button :is-planning-start="planningStart" :user-story-mode="session_userStoryMode" />
       </b-col>
     </b-row>
 
@@ -445,16 +445,6 @@ export default Vue.extend({
         const endPoint = Constants.webSocketVotingFinishedRoute;
         this.$store.commit("sendViaBackendWS", { endPoint });
         this.estimateFinished = true;
-      }
-    },
-    closeSession() {
-      this.sendCloseSessionCommand();
-      window.localStorage.removeItem("adminCookie");
-      if (this.session_userStoryMode !== "NO_US") {
-        this.$router.push({ name: "ResultPage" });
-      } else {
-        this.$store.commit("clearStore");
-        this.$router.push({ name: "LandingPage" });
       }
     },
     sendRestartMessage() {

@@ -14,7 +14,7 @@
       <p class="my-4">
         {{ $t("page.session.close.description1") }}
       </p>
-      <p v-if="session_userStoryMode !== 'NO_US'">
+      <p v-if="userStoryMode !== 'NO_US'">
         {{ $t("page.session.close.description2") }}
       </p>
     </b-modal>
@@ -32,8 +32,22 @@ export default Vue.extend({
       type: Boolean,
       required: true,
     },
+    userStoryMode: {
+      type: String,
+      required: true,
+    },
   },
   methods: {
+    closeSession() {
+      this.sendCloseSessionCommand();
+      window.localStorage.removeItem("adminCookie");
+      if (this.session_userStoryMode !== "NO_US") {
+        this.$router.push({ name: "ResultPage" });
+      } else {
+        this.$store.commit("clearStore");
+        this.$router.push({ name: "LandingPage" });
+      }
+    },
     sendCloseSessionCommand() {
       const endPoint = `${Constants.webSocketCloseSessionRoute}`;
       this.$store.commit("sendViaBackendWS", { endPoint });
