@@ -1,6 +1,5 @@
 package io.diveni.backend.config;
 
-import io.diveni.backend.controller.ProjectManagementController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;

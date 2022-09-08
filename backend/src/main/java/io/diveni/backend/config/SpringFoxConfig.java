@@ -16,20 +16,20 @@ public class SpringFoxConfig {
   @Bean
   public Docket api() {
     return new Docket(DocumentationType.SWAGGER_2)
-      .apiInfo(apiInfo())
-      .select()
-      .apis(RequestHandlerSelectors.any())
-      .paths(PathSelectors.any())
-      .build();
+        .apiInfo(apiInfo())
+        .select()
+        .apis(RequestHandlerSelectors.any())
+        .paths(PathSelectors.any())
+        .build();
   }
 
   ApiInfo apiInfo() {
     return new ApiInfoBuilder()
-      .title("Diveni API")
-      .description("REST API of Diveni")
-      .license("AGPL-3.0")
-      .licenseUrl("https://github.com/Sybit-Education/Diveni/blob/main/LICENSE")
-      .build();
+        .title("Diveni API")
+        .description("REST API of Diveni")
+        .license("AGPL-3.0")
+        .licenseUrl("https://github.com/Sybit-Education/Diveni/blob/main/LICENSE")
+        .build();
   }
 
   @Bean
