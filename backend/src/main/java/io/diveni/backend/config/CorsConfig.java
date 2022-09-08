@@ -14,7 +14,7 @@ public class CorsConfig {
   private static final Logger LOGGER = LoggerFactory.getLogger(CorsConfig.class);
 
   @Value("${SERVER_URL:#{null}}")
-  private static String SERVER_URL;
+  private String SERVER_URL;
 
   @Bean
   public WebMvcConfigurer corsConfigurer() {
