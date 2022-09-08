@@ -1,5 +1,5 @@
 <template>
-  <b-container>
+  <b-container id="session-page">
     <b-row class="mb-3">
       <b-col>
         <h1>
@@ -13,6 +13,7 @@
         <session-close-button :is-planning-start="planningStart" />
       </b-col>
     </b-row>
+
     <div v-if="!planningStart">
       <copy-session-id-popup
         :text-before-session-i-d="$t('page.session.before.text.beforeID')"
@@ -30,12 +31,11 @@
       </b-row>
       <b-row>
         <b-col class="text-center">
-          <b-button variant="success" :disabled="!members || members.length < 1" @click="sendStartEstimationMessages">
-            {{ $t("page.session.before.button") }}
-          </b-button>
+          <session-start-button @clicked="onPlanningStarted" />
         </b-col>
       </b-row>
     </div>
+
     <div v-else>
       <b-row class="d-flex justify-content-start pb-3">
         <b-col>
@@ -134,10 +134,12 @@ import UserStorySumComponent from "@/components/UserStorySum.vue";
 import Project from "../model/Project";
 import KickUserWrapper from "@/components/KickUserWrapper.vue";
 import SessionCloseButton from "@/components/actions/SessionCloseButton.vue";
+import SessionStartButton from "@/components/actions/SessionStartButton.vue";
 
 export default Vue.extend({
   name: "SessionPage",
   components: {
+    SessionStartButton,
     SessionCloseButton,
     KickUserWrapper,
     UserStorySumComponent,
@@ -438,11 +440,6 @@ export default Vue.extend({
       this.$store.commit("sendViaBackendWS", { endPoint, data: null });
       this.$store.commit("clearStore");
     },
-    sendStartEstimationMessages() {
-      const endPoint = Constants.webSocketStartPlanningRoute;
-      this.$store.commit("sendViaBackendWS", { endPoint });
-      this.planningStart = true;
-    },
     sendVotingFinishedMessage() {
       if (!this.estimateFinished) {
         const endPoint = Constants.webSocketVotingFinishedRoute;
@@ -467,6 +464,9 @@ export default Vue.extend({
     },
     goToLandingPage() {
       this.$router.push({ name: "LandingPage" });
+    },
+    onPlanningStarted() {
+      this.planningStart = true;
     },
   },
 });
