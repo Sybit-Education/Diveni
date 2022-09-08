@@ -3,31 +3,40 @@
     <b-row class="mb-3">
       <b-col>
         <h1>
-          {{ planningStart ? $t("page.session.during.estimation.title") : $t("page.session.before.title") }}
+          {{
+            planningStart
+              ? $t("page.session.during.estimation.title")
+              : $t("page.session.before.title")
+          }}
         </h1>
       </b-col>
-      <b-col cols="auto" class="mr-auto">
-        <copy-session-id-popup v-if="planningStart" class="float-end" :session-id="session_sessionID" />
-      </b-col>
-      <b-col cols="auto">
-        <session-close-button :is-planning-start="planningStart" />
+      <b-col v-if="planningStart" align-self="center">
+        <copy-session-id-popup class="float-end" :session-id="session_sessionID" />
       </b-col>
     </b-row>
 
     <div v-if="!planningStart">
-      <copy-session-id-popup
-        :text-before-session-i-d="$t('page.session.before.text.beforeID')"
-        :session-id="session_sessionID"
-        :text-after-session-i-d="$t('page.session.before.text.afterID')"
-      />
-
-      <h4 class="text-center m-3">
-        {{ $t("page.session.before.text.waiting") }}
-        <sub><b-icon-three-dots animation="fade" font-scale="1" /></sub>
-      </h4>
-
+      <b-row class="align-items-center">
+        <copy-session-id-popup
+          :text-before-session-i-d="$t('page.session.before.text.beforeID')"
+          :session-id="session_sessionID"
+          :text-after-session-i-d="$t('page.session.before.text.afterID')"
+        />
+      </b-row>
+      <b-row class="mt-5">
+        <h4 class="text-center">
+          {{ $t("page.session.before.text.waiting") }}
+        </h4>
+        <b-icon-three-dots animation="fade" font-scale="3" />
+      </b-row>
       <b-row class="d-flex justify-content-center overflow-auto" style="max-height: 500px">
-        <kick-user-wrapper v-for="member of members" :key="member.memberID" class="m-4" child="SessionMemberCircle" :member="member" />
+        <kick-user-wrapper
+          v-for="member of members"
+          :key="member.memberID"
+          class="m-4"
+          child="SessionMemberCircle"
+          :member="member"
+        />
       </b-row>
       <b-row>
         <b-col class="text-center">
@@ -39,14 +48,32 @@
     <div v-else>
       <b-row class="d-flex justify-content-start pb-3">
         <b-col>
-          <b-button class="mr-3" variant="outline-dark" @click="sendRestartMessage">
+          <b-button variant="outline-dark" @click="sendRestartMessage">
             <b-icon-arrow-clockwise />
             {{ $t("page.session.during.estimation.buttons.new") }}
           </b-button>
-          <b-button class="mr-3" variant="outline-dark" @click="sendVotingFinishedMessage">
+          <b-button variant="outline-dark" class="mx-1" @click="sendVotingFinishedMessage">
             <b-icon-bar-chart />
             {{ $t("page.session.during.estimation.buttons.result") }}
           </b-button>
+          <b-button v-b-modal.close-session-modal variant="danger">
+            <b-icon-x />
+            {{ $t("page.session.during.estimation.buttons.finish") }}
+          </b-button>
+          <b-modal
+            id="close-session-modal"
+            :title="$t('page.session.close.popup')"
+            :cancel-title="$t('page.session.close.button.cancel')"
+            :ok-title="$t('page.session.close.button.ok')"
+            @ok="closeSession"
+          >
+            <p class="my-4">
+              {{ $t("page.session.close.description1") }}
+            </p>
+            <p v-if="session_userStoryMode !== 'NO_US'">
+              {{ $t("page.session.close.description2") }}
+            </p>
+          </b-modal>
         </b-col>
         <b-col>
           <estimate-timer
@@ -57,23 +84,34 @@
           />
         </b-col>
       </b-row>
-
-      <h4 v-if="membersPending.length > 0 && !estimateFinished" class="d-inline">
-        {{ $t("page.session.during.estimation.message.waitingFor") }}
-        {{ membersPending.length }} /
-        {{ membersPending.length + membersEstimated.length }}
-      </h4>
-
+      <b-row v-if="membersPending.length > 0 && !estimateFinished">
+        <h4 class="d-inline">
+          {{ $t("page.session.during.estimation.message.waitingFor") }}
+          {{ membersPending.length }} /
+          {{ membersPending.length + membersEstimated.length }}
+        </h4>
+      </b-row>
       <b-row v-if="!estimateFinished" class="my-1 d-flex justify-content-center flex-wrap">
-        <kick-user-wrapper v-for="member of membersPending" :key="member.memberID" class="mx-2" child="RoundedAvatar" :member="member" />
+        <kick-user-wrapper
+          v-for="member of membersPending"
+          :key="member.memberID"
+          class="mx-2"
+          child="RoundedAvatar"
+          :member="member"
+        />
       </b-row>
       <hr />
-      <h4>
-        {{ $t("page.session.during.estimation.message.finished") }}
-        {{ membersEstimated.length }} /
-        {{ membersPending.length + membersEstimated.length }}
-      </h4>
-      <b-row class="my-1 d-flex justify-content-center flex-wrap overflow-auto" style="max-height: 500px">
+      <b-row>
+        <h4 class="d-inline">
+          {{ $t("page.session.during.estimation.message.finished") }}
+          {{ membersEstimated.length }} /
+          {{ membersPending.length + membersEstimated.length }}
+        </h4>
+      </b-row>
+      <b-row
+        class="my-1 d-flex justify-content-center flex-wrap overflow-auto"
+        style="max-height: 500px"
+      >
         <kick-user-wrapper
           v-for="member of estimateFinished ? members : membersEstimated"
           :key="member.memberID"
@@ -81,7 +119,8 @@
           :member="member"
           :props="{
             estimateFinished: estimateFinished,
-            highlight: highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0,
+            highlight:
+              highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0,
           }"
         />
       </b-row>
@@ -357,10 +396,15 @@ export default Vue.extend({
         } else {
           console.log(`JIRA ID: ${us[idx].jiraID}`);
           if (us[idx].jiraId === null) {
-            response = await apiService.createUserStory(JSON.stringify(us[idx]), this.selectedProject.id);
+            response = await apiService.createUserStory(
+              JSON.stringify(us[idx]),
+              this.selectedProject.id
+            );
             if (response.status === 200) {
               us = this.userStories.map((s) =>
-                s.title === us[idx].title && s.description === us[idx].description ? { ...s, jiraId: response.data } : s
+                s.title === us[idx].title && s.description === us[idx].description
+                  ? { ...s, jiraId: response.data }
+                  : s
               );
               console.log(`assigned id: ${us[idx].jiraId}`);
             }
@@ -395,9 +439,14 @@ export default Vue.extend({
         } else {
           console.log(`JIRA ID: ${story.jiraID}`);
           if (story.jiraId === null) {
-            response = await apiService.createUserStory(JSON.stringify(story), this.selectedProject.id);
+            response = await apiService.createUserStory(
+              JSON.stringify(story),
+              this.selectedProject.id
+            );
             if (response.status === 200) {
-              const updatedStories = this.userStories.map((s) => s.title === story.title && s.description === story.description);
+              const updatedStories = this.userStories.map(
+                (s) => s.title === story.title && s.description === story.description
+              );
               this.$store.commit("setUserStories", updatedStories);
             }
           } else {
