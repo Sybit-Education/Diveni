@@ -78,7 +78,7 @@ import Vue from "vue";
 import UserStory from "../model/UserStory";
 
 export default Vue.extend({
-  name: "UserStoryTitles",
+  name: "UserStories",
   props: {
     cardSet: { type: Array, required: true },
     initialStories: { type: Array, required: true },
@@ -95,9 +95,6 @@ export default Vue.extend({
     };
   },
   watch: {
-    // userStories() {
-    //   this.publishChanges();
-    // },
     initialStories() {
       this.userStories = this.initialStories as Array<UserStory>;
     },
