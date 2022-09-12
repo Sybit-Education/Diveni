@@ -24,15 +24,11 @@ import VueFlicking from "@egjs/vue-flicking";
 import Toast from "vue-toastification";
 import "vue-toastification/dist/index.css";
 
-import VueMarkdownEditor from "@kangc/v-md-editor";
-import "@kangc/v-md-editor/lib/style/base-editor.css";
-
 Vue.use(VueAxios, axios);
 Vue.use(IconsPlugin);
 Vue.use(BootstrapVue);
 Vue.use(VueFlicking);
 Vue.use(Toast, {});
-Vue.use(VueMarkdownEditor);
 
 setupInterceptors();
 
