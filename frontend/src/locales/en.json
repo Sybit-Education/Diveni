@@ -88,7 +88,7 @@
           "description": "Prepare a new session, invite team members and start estimating",
           "buttons": {
             "start": {
-              "label": "GO"
+              "label": "Start ..."
             }
           }
         },
@@ -97,7 +97,7 @@
           "description": "Join an existing session and help your team estimate",
           "buttons": {
             "start": {
-              "label": "GO"
+              "label": "Join ..."
             }
           }
         },
@@ -106,7 +106,7 @@
           "description": "Reconnect to existing session as host",
           "buttons": {
             "start": {
-              "label": "GO"
+              "label": "Rejoin"
             }
           }
         }
