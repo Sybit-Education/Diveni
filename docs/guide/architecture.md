@@ -56,7 +56,6 @@ flowchart TD
 | ProjectSelectionComponent | Dropdown to select project after jira authentication in page "PrepareSession" |
 | RoundedAvatar | Circle with animal emoji and name. Used in pages: "JoinPage"/"MemberVotePage"/"SessionPage" |
 | SessionMemberCard | The cards representing the members with name, emoji and current estimation. Used in page "SessionPage" |
-| SessionMemberCircle | The circle representing the members with name and emoji. Used in pages: "SessionPage"/"MemberVotePage" |
 | SignInWithJiraCloudButtonComponent | Button which redirects to jira (cloud) authentication |
 | SignInWithJiraServerButtonComponent | Button including the login logic for jira server |
 | StoryPointsComponent | Includes text for "Planning without user stories"-Tab in page "PrepareSession" |
