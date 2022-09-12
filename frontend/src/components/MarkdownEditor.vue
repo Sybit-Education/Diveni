@@ -27,9 +27,6 @@ import Vue from "vue";
 import { Editor, Viewer } from "@toast-ui/vue-editor";
 import codeSyntaxHighlight from "@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin-code-syntax-highlight-all";
 
-// highlightjs
-import hljs from "highlight.js";
-
 export default Vue.extend({
   name: "MarkdownEditor",
   components: {

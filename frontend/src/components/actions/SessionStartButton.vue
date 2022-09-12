@@ -1,5 +1,9 @@
 <template>
-  <b-button variant="success" :disabled="!members || members.length < 1" @click="sendStartEstimationMessages">
+  <b-button
+    variant="success"
+    :disabled="!members || members.length < 1"
+    @click="sendStartEstimationMessages"
+  >
     {{ $t("page.session.before.button") }}
   </b-button>
 </template>

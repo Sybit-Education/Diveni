@@ -7,7 +7,9 @@
     <h1 class="fs-3-rem">
       <strong v-if="!props.estimateFinished">?</strong>
       <strong v-if="member.currentEstimation === null && props.estimateFinished">-</strong>
-      <strong v-if="member.currentEstimation !== null && props.estimateFinished">{{ member.currentEstimation }}</strong>
+      <strong v-if="member.currentEstimation !== null && props.estimateFinished">{{
+        member.currentEstimation
+      }}</strong>
     </h1>
     <rounded-avatar :member="member" />
   </div>

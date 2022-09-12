@@ -6,9 +6,7 @@
         <a href="https://docs.diveni.io">{{ $t("general.about.docs") }}</a> |
         <router-link to="/about">{{ $t("general.about.label") }}</router-link>
       </div>
-      <div>
-        Made by Diveni Development Team with ❤️at Lake Constance
-      </div>
+      <div>Made by Diveni Development Team with ❤️at Lake Constance</div>
     </b-container>
   </footer>
 </template>

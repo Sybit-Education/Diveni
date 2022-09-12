@@ -3,14 +3,25 @@
     <b-row class="mb-3">
       <b-col>
         <h1>
-          {{ planningStart ? $t("page.session.during.estimation.title") : $t("page.session.before.title") }}
+          {{
+            planningStart
+              ? $t("page.session.during.estimation.title")
+              : $t("page.session.before.title")
+          }}
         </h1>
       </b-col>
       <b-col cols="auto" class="mr-auto">
-        <copy-session-id-popup v-if="planningStart" class="float-end" :session-id="session_sessionID" />
+        <copy-session-id-popup
+          v-if="planningStart"
+          class="float-end"
+          :session-id="session_sessionID"
+        />
       </b-col>
       <b-col cols="auto">
-        <session-close-button :is-planning-start="planningStart" :user-story-mode="session_userStoryMode" />
+        <session-close-button
+          :is-planning-start="planningStart"
+          :user-story-mode="session_userStoryMode"
+        />
       </b-col>
     </b-row>
 
@@ -27,7 +38,13 @@
       </h4>
 
       <b-row class="d-flex justify-content-center overflow-auto" style="max-height: 500px">
-        <kick-user-wrapper v-for="member of members" :key="member.memberID" class="m-4" child="RoundedAvatar" :member="member" />
+        <kick-user-wrapper
+          v-for="member of members"
+          :key="member.memberID"
+          class="m-4"
+          child="RoundedAvatar"
+          :member="member"
+        />
       </b-row>
       <b-row>
         <b-col class="text-center">
@@ -65,7 +82,13 @@
       </h4>
 
       <b-row v-if="!estimateFinished" class="my-1 d-flex justify-content-center flex-wrap">
-        <kick-user-wrapper v-for="member of membersPending" :key="member.memberID" class="mx-2" child="RoundedAvatar" :member="member" />
+        <kick-user-wrapper
+          v-for="member of membersPending"
+          :key="member.memberID"
+          class="mx-2"
+          child="RoundedAvatar"
+          :member="member"
+        />
       </b-row>
       <hr />
       <h4>
@@ -73,7 +96,10 @@
         {{ membersEstimated.length }} /
         {{ membersPending.length + membersEstimated.length }}
       </h4>
-      <b-row class="my-1 d-flex justify-content-center flex-wrap overflow-auto" style="max-height: 500px">
+      <b-row
+        class="my-1 d-flex justify-content-center flex-wrap overflow-auto"
+        style="max-height: 500px"
+      >
         <kick-user-wrapper
           v-for="member of estimateFinished ? members : membersEstimated"
           :key="member.memberID"
@@ -81,7 +107,8 @@
           :member="member"
           :props="{
             estimateFinished: estimateFinished,
-            highlight: highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0,
+            highlight:
+              highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0,
           }"
         />
       </b-row>
@@ -355,10 +382,15 @@ export default Vue.extend({
         } else {
           console.log(`JIRA ID: ${us[idx].jiraID}`);
           if (us[idx].jiraId === null) {
-            response = await apiService.createUserStory(JSON.stringify(us[idx]), this.selectedProject.id);
+            response = await apiService.createUserStory(
+              JSON.stringify(us[idx]),
+              this.selectedProject.id
+            );
             if (response.status === 200) {
               us = this.userStories.map((s) =>
-                s.title === us[idx].title && s.description === us[idx].description ? { ...s, jiraId: response.data } : s
+                s.title === us[idx].title && s.description === us[idx].description
+                  ? { ...s, jiraId: response.data }
+                  : s
               );
               console.log(`assigned id: ${us[idx].jiraId}`);
             }
@@ -393,9 +425,14 @@ export default Vue.extend({
         } else {
           console.log(`JIRA ID: ${story.jiraID}`);
           if (story.jiraId === null) {
-            response = await apiService.createUserStory(JSON.stringify(story), this.selectedProject.id);
+            response = await apiService.createUserStory(
+              JSON.stringify(story),
+              this.selectedProject.id
+            );
             if (response.status === 200) {
-              const updatedStories = this.userStories.map((s) => s.title === story.title && s.description === story.description);
+              const updatedStories = this.userStories.map(
+                (s) => s.title === story.title && s.description === story.description
+              );
               this.$store.commit("setUserStories", updatedStories);
             }
           } else {
