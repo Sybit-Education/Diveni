@@ -87,25 +87,23 @@
       </b-row>
     </div>
     <b-row v-if="session_userStoryMode !== 'NO_US'" class="mt-5">
-      <b-col md="6">
-        <UserStorySumComponent class="ms-4" />
+      <b-col>
+        <user-story-sum-component />
       </b-col>
     </b-row>
     <b-row v-if="session_userStoryMode !== 'NO_US'">
-      <b-col>
-        <div class="overflow-auto" style="max-height: 700px">
-          <user-stories
-            :card-set="voteSet"
-            :show-estimations="planningStart"
-            :initial-stories="userStories"
-            :show-edit-buttons="true"
-            :select-story="true"
-            @userStoriesChanged="onUserStoriesChanged"
-            @selectedStory="onSelectedStory($event)"
-          />
-        </div>
+      <b-col cols="4">
+        <user-stories
+          :card-set="voteSet"
+          :show-estimations="planningStart"
+          :initial-stories="userStories"
+          :show-edit-buttons="true"
+          :select-story="true"
+          @userStoriesChanged="onUserStoriesChanged"
+          @selectedStory="onSelectedStory($event)"
+        />
       </b-col>
-      <b-col>
+      <b-col cols="8">
         <user-story-descriptions
           :card-set="voteSet"
           :initial-stories="userStories"

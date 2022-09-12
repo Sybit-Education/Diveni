@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="user-story-descriptions">
     <div class="list">
       <b-list-group-item
         v-for="(story, idx) of userStories"
@@ -40,22 +40,17 @@
           </b-dropdown>
         </div>
         <div>
-          <b-form-textarea
+          <markdown-editor
             id="textarea-auto-height"
             v-model="userStories[idx].description"
             class="mt-1"
-            rows="27"
-            max-rows="40"
             :disabled="!editDescription"
             :placeholder="$t('page.session.before.userStories.placeholder.userStoryDescription')"
             @blur="publishChanges(idx)"
           />
         </div>
       </b-list-group-item>
-      <div
-        v-if="userStories.length <= index && userStories.length"
-        class="text-center rounded p-3 m-2"
-      >
+      <div v-if="userStories.length <= index && userStories.length" class="text-center rounded p-3 m-2">
         <b-card class="border-0" :title="$t('page.session.before.userStories.text')" />
       </div>
     </div>
@@ -64,9 +59,11 @@
 
 <script lang="ts">
 import Vue from "vue";
+import MarkdownEditor from "@/components/MarkdownEditor.vue";
 
 export default Vue.extend({
   name: "UserStoryDescriptions",
+  components: { MarkdownEditor },
   props: {
     index: { type: Number, required: true },
     cardSet: { type: Array, required: true },

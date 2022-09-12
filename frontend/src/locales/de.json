@@ -29,7 +29,7 @@
         "userStories": {
           "button": {
             "addFirstUserStory": "Noch keine Stories... Klicke um eine Story hinzuzufügen",
-            "addUserStory": "User Story hinzufügen"
+            "addUserStory": "Hinzufügen"
           },
           "placeholder": {
             "userStoryTitle": "User Story Titel",
