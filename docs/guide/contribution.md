@@ -9,33 +9,6 @@ on GitHub.
 These are mostly guidelines, not rules. Use your best judgment, and feel free to propose
 changes to this document in a pull request.
 
-## Table Of Contents
-
-- [Contributing to Diveni](#contributing-to-Diveni)
-  - [Table Of Contents](#table-of-contents)
-  - [What should I know before I get started?](#what-should-i-know-before-i-get-started)
-    - [Architecture of Diveni](#architecture-of-hai-end-streaming)
-    - [Backend](#backend)
-    - [WebUI](#webui)
-  - [How Can I Contribute?](#how-can-i-contribute)
-    - [Reporting Bugs](#reporting-bugs)
-      - [Before Submitting A Bug Report](#before-submitting-a-bug-report)
-      - [How Do I Submit A (Good) Bug Report?](#how-do-i-submit-a-good-bug-report)
-    - [Suggesting Enhancements](#suggesting-enhancements)
-      - [Before Submitting An Enhancement Suggestion](#before-submitting-an-enhancement-suggestion)
-      - [How Do I Submit A (Good) Enhancement Suggestion?](#how-do-i-submit-a-good-enhancement-suggestion)
-  - [Local development](#local-development)
-    - [VS Code](#vs-code)
-      - [Recommended Extensions and Configuration](#recommended-extensions-and-configuration)
-        - [Backend development (Python)](#backend-development-python)
-        - [WebUI development (Vue.js)](#webui-development-vuejs)
-    - [Merge Requests](#merge-requests)
-  - [Styleguides](#styleguides)
-    - [Git Commit Messages](#git-commit-messages)
-    - [Python Styleguide](#python-styleguide)
-    - [JavaScript and Vue.js Styleguide](#javascript-and-vuejs-styleguide)
-    - [Documentation Styleguide](#documentation-styleguide)
-
 ## What should I know before I get started?
 
 The documentation of the project could be found at [https://docs.diveni.io](https://docs.diveni.io).
@@ -122,9 +95,74 @@ an issue on that repository and provide the following information:
   in those examples, as [Markdown code spans and blocks](https://docs.gitlab.com/ee/user/markdown.html#code-spans-and-blocks).
 - **Describe the current behavior** and **explain which behavior you expected to see instead** and why.
 
-## Local development
+## Development
 
-[Developers Guide](./develop.md)
+### Software Requirements
+
+- Java 11+
+  - We prefere SapMachine but any other Java JDK 11+ is fine.
+  - Download from SapMachine <https://sap.github.io/SapMachine/>
+  
+      <img :src="$withBase('/img/Java11_Installer_Selection.png')" alt="Download_Selection_Java11">
+  - Select the appropriate installer for your OS
+- Maven
+  - Download from Apache <https://maven.apache.org/download.cgi>
+    <img :src="$withBase('/img/Maven_Installer_Selection.png')" alt="Download_Selection_Maven">
+  - Click the link in the marked line
+- Node.js 14+
+  - Download from nodejs <https://nodejs.org/en/download/>
+  
+    <img :src="$withBase('/img/nodejs_Installer_Selection.png')" alt="Download_Selection_nodejs">
+  - Select the appropriate installer for your OS
+- MongoDB 4+
+  - MongoDB is running in the background at port 27017
+  - Select the appropriate installer for your OS and follow the instructions
+    <https://www.mongodb.com/docs/manual/administration/install-community/>
+  
+    <img :src="$withBase('/img/MongoDB_Installer_Selection.png')" alt="Download_Selection_MongoDB">
+
+
+### Setup Project
+
+1. Clone repository with Git from GitHub:
+    ```shell
+       git clone https://github.com/Sybit-Education/Diveni.git
+    ```
+2. Start backend
+  * Open  first terminal and enter these commands:
+    ```shell
+        cd /backend
+        mvn spring-boot:run
+    ```
+  * The backend should now be running and accessible at <http://localhost:8081>
+3. Start frontend
+  * Open the second terminal and enter these commands:
+    ```shell
+        cd /frontend
+        npm install
+        npm run serve
+    ```
+  * The frontend should now be running and accessible at <http://localhost:8080>
+4. To use Diveni simply enter the following url in your standard browser: <http://localhost:8080>
+
+
+## Connectors
+
+### JIRA Cloud
+
+    TODO
+
+### JIRA Enterprise
+
+For setting up the JIRA application, the steps described here should be sufficient:
+<https://developer.atlassian.com/server/jira/platform/oauth/>
+
+It doesn't matter what you enter in remaining fields (URL, name, type, and so on).
+This is because we only want to retrieve data from Jira, therefore we only need to set up a
+one-way (incoming) link from the client to Jira.
+
+Afterwards, you will see the client secret and ID, which needs to be provided for Diveni on
+JIRA-Server.
 
 ### Merge Requests
 
@@ -177,7 +215,17 @@ directory `webui`:
 ### Documentation Styleguide
 
 - Use [Markdown](https://daringfireball.net/projects/markdown).
+- For Use Case / UML diagrams use inline [Mermaid](https://mermaid-js.github.io/mermaid/#/) format.
 - Reference methods and classes in markdown with the custom `{}` notation:
   - Reference classes with `{ClassName}`
   - Reference instance methods with `{ClassName::methodName}`
   - Reference class methods with `{ClassName.methodName}`
+
+
+## Troubleshooting
+
+- When working with IntelliJ and starting Diveni's Backend with IntelliJs editor it may throw an
+  exception when trying to connect with Jira.\
+  This is because it can not find the desired .env file in your working directory (/backend).
+  When this happens make sure to include ```/backend``` to your run working directory in the run
+  configuration settings.
