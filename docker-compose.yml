@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   database:
-    image: mongo:4.4.11-rc0-focal
+    image: mongo:4
     container_name: diveni_database
     restart: unless-stopped
 
@@ -33,4 +33,4 @@ services:
     container_name: diveni_proxy
     restart: unless-stopped
     ports:
-      - 80:80
+      - "80:80"
