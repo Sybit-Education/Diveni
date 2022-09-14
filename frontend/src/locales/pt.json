@@ -1,0 +1,274 @@
+{
+  "general": {
+    "pleaseWait": "Por favor, aguarde...",
+    "about": {
+      "label": "SOBRE",
+      "repository": "GitHub",
+      "docs": "Documentação"
+    },
+    "licenses": {
+      "frontend": "Licenças (Frontend)",
+      "backend": "Licenças (Backend)"
+    }
+  },
+  "page": {
+    "session": {
+      "before": {
+        "copy": {
+          "id": "Copiar código",
+          "link": "Link de cópia",
+          "qr": "Show QR code"
+        },
+        "title": "Esperando os membros ...",
+        "text": {
+          "beforeID": "Compartilhar o código",
+          "afterID": "com companheiros de equipe",
+          "waiting": "Aguardando os membros entrarem"
+        },
+        "button": "Iniciar Planejamento",
+        "userStories": {
+          "button": {
+            "addFirstUserStory": "Não há histórias ainda... clique para adicionar histórias",
+            "addUserStory": "Adicionar história de usuário"
+          },
+          "placeholder": {
+            "userStoryTitle": "Título da história do usuário",
+            "userStoryDescription": "Descrição e critérios de aceitação..."
+          },
+          "text": "Clique em um Título de História de Usuário para ver a descrição",
+          "sum": "Total:"
+        }
+      },
+      "during": {
+        "estimation": {
+          "title": "Estimativa",
+          "message": {
+            "waitingFor": "Aguardando por",
+            "finished": "Estimativa terminada"
+          },
+          "buttons": {
+            "new": "Novidades",
+            "result": "Mostrar resultado",
+            "finish": "Finalizar a sessão"
+          }
+        },
+        "modal": {
+          "title": "Remover membro",
+          "bodyPart1": "Tem certeza de que deseja remover ",
+          "bodyPart2": " da sua sessão atual?",
+          "buttons": {
+            "cancel": "cancelar",
+            "ok": "Excluir"
+          }
+        }
+      },
+      "close": {
+        "popup": "Você tem certeza?",
+        "description1": "Fechar esta sessão remove você e todos os membros.",
+        "description2": "Você pode baixar as histórias de usuários depois disso.",
+        "button": {
+          "cancel": "cancelar",
+          "ok": "Certo"
+        }
+      }
+    },
+    "results": {
+      "title": "Resultados",
+      "noUserStories": "Nenhuma história de usuário definida ...",
+      "button": {
+        "download": "Baixar como CSV",
+        "home": "Vá para casa"
+      }
+    },
+    "landing": {
+      "productTitle": "DIVÊNCIA",
+      "meeting": {
+        "new": {
+          "title": "Nova sessão",
+          "description": "Prepare uma nova sessão, convide membros da equipe e comece a estimar",
+          "buttons": {
+            "start": {
+              "label": "VÁ"
+            }
+          }
+        },
+        "join": {
+          "title": "Entrar na sessão",
+          "description": "Participe de uma sessão existente e ajude a sua equipe a estimar",
+          "buttons": {
+            "start": {
+              "label": "VÁ"
+            }
+          }
+        },
+        "reconnect": {
+          "title": "Reconectar à sessão",
+          "description": "Reconectar à sessão existente como host",
+          "buttons": {
+            "start": {
+              "label": "VÁ"
+            }
+          }
+        }
+      }
+    },
+    "join": {
+      "title": "Participar da sessão",
+      "input": {
+        "code": "Código de convite",
+        "password": "Palavra-passe",
+        "passwordPlaceholder": "(opcional)",
+        "name": "Nome:"
+      },
+      "submit": "VÁ"
+    },
+    "vote": {
+      "title": "Estimativa!",
+      "waiting": "Esperando seu anfitrião começar",
+      "button": {
+        "leave": {
+          "label": "Sair da sessão"
+        }
+      },
+      "hostLeft": "Esperando o anfitrião voltar..."
+    }
+  },
+  "session": {
+    "prepare": {
+      "title": "Prepare sua sessão:",
+      "step": {
+        "selection": {
+          "mode": {
+            "title": "1. Selecione o modo para as suas histórias de usuários",
+            "description": {
+              "withoutUS": {
+                "tab": {
+                  "label": "Planejamento sem histórias de usuários"
+                },
+                "subtitle": "Planejamento sem histórias de usuários",
+                "descriptionLine1": "Você vai votar com seus cartões selecionados",
+                "descriptionLine2": "Você não poderá adicionar histórias de usuários depois de iniciar a sessão"
+              },
+              "withUS": {
+                "tab": {
+                  "label": "Planejamento com histórias de usuários"
+                },
+                "subtitle": "Integrar histórias de usuários em seu Poker-Planejamento",
+                "descriptionLine1": "Crie suas histórias de usuários na próxima página",
+                "descriptionLine2": "Adicionar título e descrição a cada história do usuário",
+                "descriptionLine3": "Use o CSV-Import para integrar histórias de usuários em sua sessão",
+                "descriptionLine4": "Você poderá adicionar e editar histórias de usuários depois de iniciar a sessão",
+                "importButton": "Importar histórias do usuário",
+                "toastSuccessNotification": "Histórias de usuários importadas",
+                "toastErrorNotification": "Erro ao tentar importar"
+              },
+              "withJira": {
+                "tab": {
+                  "label": "Planejando com Jira"
+                },
+                "subtitle": "Selecione Jira para seu Pokémon planejamento",
+                "descriptionLine1": "Entrar com suas credenciais",
+                "descriptionLine2": "Selecione seu projeto",
+                "descriptionLine3": "Depois de clicar no início da sessão, você será redirecionado para a próxima página para editar suas histórias de usuário",
+                "descriptionLine4": "Você poderá adicionar e editar histórias de usuários depois de iniciar a sessão",
+                "formSelection": "Por favor, selecione o seu projeto",
+                "selectedProject": "Projeto Selecionado: ",
+                "allUserStories": "Todas as histórias de usuários",
+                "dialog": {
+                  "description": "Uma nova aba será aberta imediatamente, por favor, conceda acesso a este aplicativo nesta aba e insira o código de verificação aqui."
+                },
+                "inputs": {
+                  "verificationCode": {
+                    "placeholder": "Código de verificação"
+                  }
+                },
+                "buttons": {
+                  "signInWithJiraCloud": {
+                    "label": "Entrar com o Jira Cloud"
+                  },
+                  "signInWithJiraServer": {
+                    "label": "Entrar com o servidor do Jira"
+                  },
+                  "selectProject": {
+                    "label": "Selecione seu projeto jira"
+                  },
+                  "submit": {
+                    "label": "submeter"
+                  }
+                }
+              }
+            }
+          },
+          "cardSet": {
+            "title": "2. Selecione um conjunto de cartões e seus valores",
+            "sets": {
+              "fibonacci": {
+                "label": "Fibonacci",
+                "description": "Cada número é a soma dos dois anteriores"
+              },
+              "tShirtSizes": {
+                "label": "Tamanhos de camisetas",
+                "description": "Tamanho básico da camiseta. Simples e eficaz"
+              },
+              "hours": {
+                "label": "horas",
+                "description": "Simplesmente horas. Ótimo para subtarefas."
+              },
+              "numbers": {
+                "label": "Números",
+                "description": "Números inteiros. O que mais você quer?"
+              },
+              "ownSet": {
+                "label": "Seu cartão foi definido",
+                "description": "Aqui você pode configurar o seu próprio cartão",
+                "hint": {
+                  "label": "Sugestão",
+                  "description": "No campo de texto abaixo você pode definir seu próprio conjunto de cartões. Cada entrada é separada por ponto e vírgula (;). Entradas duplicadas são ignoradas.",
+                  "example": "Ex: 1;2;3;4;5;6;7;"
+                }
+              }
+            }
+          },
+          "time": {
+            "title": "3. Ajuste o tempo por estimativa"
+          },
+          "password": {
+            "title": "4. Escolha uma senha, se necessário",
+            "placeholder": "Senha (deixe em branco para sessão desprotegida)"
+          }
+        }
+      },
+      "button": {
+        "start": "Iniciar sessão"
+      }
+    },
+    "userStory": {
+      "button": {
+        "title": "Histórias",
+        "add": "Adicionar",
+        "edit": "Alterar",
+        "save": "Guardar",
+        "noUserStories": "Sem histórias ainda... Adicione uma história para começar a estimar.",
+        "placeholder": {
+          "title": "Título da história",
+          "description": "Descrição e critérios de aceitação..."
+        }
+      }
+    },
+    "notification": {
+      "messages": {
+        "hostLeft": "O host saiu da sessão",
+        "hostJoined": "Host entrou na sessão",
+        "memberLeft": "Membro abandonou a sessão",
+        "memberJoined": "Membro entrou na sessão",
+        "memberRemoved": "Você foi removido da sessão pelo host",
+        "jiraCredentials": "Credenciais erradas",
+        "jiraLoginFailed": "Falha no login",
+        "jiraSynchronizeSuccess": "Alterações sincronizadas com Jira",
+        "jiraSynchronizeFailed": "Falha ao sincronizar as mudanças com o Jira",
+        "wrongID": "Código de convite incorreto",
+        "password": "Senha errada"
+      }
+    }
+  }
+}
