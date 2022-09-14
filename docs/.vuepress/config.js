@@ -34,6 +34,10 @@ module.exports = {
         link: 'https://diveni.io'
       },
       {
+        text: 'Sponsors',
+        link: '/sponsors'
+      },
+      {
         text: 'License',
         link: '/license'
       }
@@ -45,7 +49,7 @@ module.exports = {
         'contribution',
         'architecture',
         'testing'
-      ],
+      ]
     }
   },
   plugins: [
