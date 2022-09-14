@@ -14,6 +14,10 @@ changes to this document in a pull request.
 The documentation of the project could be found at [https://docs.diveni.io](https://docs.diveni.io).
 Source of these is stored in `/docs` within the repository.
 
+To contact the community meet us at our Discord Server: 
+
+[![Discord](https://img.shields.io/discord/935641426216222730?color=%237289DA&label=Discord&logo=Discord&logoColor=%237289DA)](https://discord.com/channels/935641426216222730/)
+
 ### Architecture of Diveni
 
 Diveni is a web based app which is separated in two main components:
