@@ -8,10 +8,13 @@ import org.junit.jupiter.api.Test;
 
 public class NotificationTest {
 
-    @Test
-    public void adminLeftNotification_correctJson() throws Exception {
-        ObjectMapper mapper = new ObjectMapper();
-        String expectedJson = String.format("{\"type\":\"%s\",\"payload\":null}", NotificationType.ADMIN_LEFT.name());
-        assertEquals(expectedJson, mapper.writeValueAsString(new Notification(NotificationType.ADMIN_LEFT, null)));
-    }
+  @Test
+  public void adminLeftNotification_correctJson() throws Exception {
+    ObjectMapper mapper = new ObjectMapper();
+    String expectedJson =
+        String.format("{\"type\":\"%s\",\"payload\":null}", NotificationType.ADMIN_LEFT.name());
+    assertEquals(
+        expectedJson,
+        mapper.writeValueAsString(new Notification(NotificationType.ADMIN_LEFT, null)));
+  }
 }

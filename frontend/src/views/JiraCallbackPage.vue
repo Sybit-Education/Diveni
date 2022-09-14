@@ -1,12 +1,10 @@
 <template>
-  <div>
-    <b-container>
-      <div class="d-flex justify-content-center align-items-center">
-        <b-spinner variant="success"></b-spinner>
-        <h1 class="m-5">{{ $t("general.pleaseWait") }}</h1>
-      </div>
-    </b-container>
-  </div>
+  <b-container>
+    <div class="d-flex justify-content-center align-items-center">
+      <b-spinner variant="success"></b-spinner>
+      <h1 class="m-5">{{ $t("general.pleaseWait") }}</h1>
+    </div>
+  </b-container>
 </template>
 
 <script lang="ts">

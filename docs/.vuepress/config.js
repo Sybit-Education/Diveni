@@ -1,69 +1,56 @@
-const { description } = require('../../package.json')
-
 module.exports = {
-  /**
-   * Ref：https://v1.vuepress.vuejs.org/config/#title
-   */
+  lang: 'en-US',
   title: 'Diveni',
-  /**
-   * Ref：https://v1.vuepress.vuejs.org/config/#description
-   */
-  description: description,
+  description: 'The Planning-Poker App',
   base: '/Diveni/',
-  /**
-   * Extra tags to be injected to the page HTML `<head>`
-   *
-   * ref：https://v1.vuepress.vuejs.org/config/#head
-   */
   head: [
     ['meta', { name: 'theme-color', content: '#3eaf7c' }],
     ['meta', { name: 'apple-mobile-web-app-capable', content: 'yes' }],
     ['meta', { name: 'apple-mobile-web-app-status-bar-style', content: 'black' }]
   ],
-
-  /**
-   * Theme configuration, here is the default theme configuration for VuePress.
-   *
-   * ref：https://v1.vuepress.vuejs.org/theme/default-theme-config.html
-   */
   themeConfig: {
-    repo: 'https://github.com/Sybit-Education/Diveni/',
-    editLinks: false,
-    docsDir: '',
-    editLinkText: '',
-    lastUpdated: false,
+    repo: 'Sybit-Education/Diveni',
+    docsDir: 'docs',
+    docsBranch: 'main',
+    editLinks: true,
+    editLinkText: 'Help us improve this page!',
+    lastUpdated: 'Last Updated',
+    sidebarDepth: 2,
+    smoothScroll: true,
     nav: [
       {
-        text: 'Guide',
+        text: 'Guides',
         link: '/guide/',
+        items: [
+          { text: "Users Guide", link: '/guide/user/' },
+          { text: "Installation Guide", link: '/guide/install/' },
+          { text: "Contribution Guide", link: "/guide/contribution/"},
+          { text: "Architecture", link: "/guide/architecture/"},
+          { text: "Testing", link: "/guide/testing/"}
+        ]
       },
       {
-        text: 'Demo',
-        link: '/demo/'
+        text: 'App',
+        link: 'https://diveni.io'
+      },
+      {
+        text: 'License',
+        link: '/license'
       }
     ],
     sidebar: {
       '/guide/': [
-        {
-          title: 'Guide',
-          collapsable: false,
-          children: [
-            '',
-            'setup',
-            'architecture',
-            'testing'
-          ]
-        }
+        'user',
+        'install',
+        'contribution',
+        'architecture',
+        'testing'
       ],
     }
   },
-
-  /**
-   * Apply plugins，ref：https://v1.vuepress.vuejs.org/zh/plugin/
-   */
   plugins: [
     '@vuepress/plugin-back-to-top',
     '@vuepress/plugin-medium-zoom',
-    'vuepress-plugin-mermaidjs'
+    'vuepress-plugin-mermaidjs',
   ]
 }

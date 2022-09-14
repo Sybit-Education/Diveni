@@ -88,7 +88,7 @@ export default Vue.extend({
     };
   },
   computed: {
-    filteredCardSet(): any {
+    filteredCardSet(): Array<unknown> {
       return this.cardSet.filter((card) => card !== "?");
     },
   },

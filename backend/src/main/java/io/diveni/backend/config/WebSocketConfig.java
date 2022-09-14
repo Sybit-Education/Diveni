@@ -16,17 +16,20 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
   @Value("${SERVER_URL:#{null}}")
   private String SERVER_URL;
 
-	@Override
-	public void configureMessageBroker(MessageBrokerRegistry registry) {
-		registry.enableSimpleBroker("/updates");
-		// prefix for client sending a websocket message
-		registry.setApplicationDestinationPrefixes("/ws");
-		registry.setUserDestinationPrefix("/users");
-	}
+  @Override
+  public void configureMessageBroker(MessageBrokerRegistry registry) {
+    registry.enableSimpleBroker("/updates");
+    // prefix for client sending a websocket message
+    registry.setApplicationDestinationPrefixes("/ws");
+    registry.setUserDestinationPrefix("/users");
+  }
 
-	@Override
-	public void registerStompEndpoints(StompEndpointRegistry registry) {
-		registry.addEndpoint("/connect").setHandshakeHandler(new PrincipalWebSocketHandler())
-				.setAllowedOrigins(SERVER_URL).withSockJS();
-	}
+  @Override
+  public void registerStompEndpoints(StompEndpointRegistry registry) {
+    registry
+        .addEndpoint("/connect")
+        .setHandshakeHandler(new PrincipalWebSocketHandler())
+        .setAllowedOrigins(SERVER_URL)
+        .withSockJS();
+  }
 }

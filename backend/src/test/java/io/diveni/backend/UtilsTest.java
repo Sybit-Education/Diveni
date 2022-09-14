@@ -11,13 +11,13 @@ import lombok.val;
 
 public class UtilsTest {
 
-    @Test
-    public void getISOTimestamp_works() {
-        val timestamp = "2022-01-18T16:52:50.823Z";
-        val date = Date.from(Instant.parse(timestamp));
+  @Test
+  public void getISOTimestamp_works() {
+    val timestamp = "2022-01-18T16:52:50.823Z";
+    val date = Date.from(Instant.parse(timestamp));
 
-        val result = Utils.getTimestampISO8601(date);
+    val result = Utils.getTimestampISO8601(date);
 
-        assertEquals(result, timestamp);
-    }
+    assertEquals(result, timestamp);
+  }
 }

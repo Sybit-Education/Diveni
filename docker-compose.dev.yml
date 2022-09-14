@@ -1,0 +1,38 @@
+version: "3.8"
+
+services:
+  database:
+    image: mongo:4.4.11-rc0-focal
+    container_name: diveni_database
+    restart: unless-stopped
+
+  backend:
+    depends_on:
+      - database
+    build:
+      ./backend
+    container_name: diveni_backend
+    restart: unless-stopped
+    environment:
+      - "SPRING_PROFILES_ACTIVE=prod"
+    env_file:
+      - ./backend/.env
+
+  frontend:
+    depends_on:
+      - backend
+    build:
+      ./frontend
+    container_name: diveni_frontend
+    restart: unless-stopped
+
+  proxy:
+    depends_on:
+        - frontend
+        - backend
+        - database
+    build: ./proxy
+    container_name: diveni_proxy
+    restart: unless-stopped
+    ports:
+      - 80:80

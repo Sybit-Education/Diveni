@@ -15,6 +15,21 @@ env:
   JAVA_VERSION: 11
 
 jobs:
+  formatting:
+    runs-on: ubuntu-latest
+    steps:
+      - if: github.event_name != 'pull_request'
+        uses: actions/checkout@v2
+      - if: github.event_name == 'pull_request'
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+      - uses: axel-op/googlejavaformat-action@v3
+        with:
+          args: "--skip-sorting-imports --replace"
+          # Recommended if you use MacOS:
+          # githubToken: ${{ secrets.GITHUB_TOKEN }}
+
   build:
     name: Build
     runs-on: ubuntu-latest
@@ -36,6 +51,7 @@ jobs:
         with:
           name: backend
           path: backend/target
+
   test:
     name: Test
     runs-on: ubuntu-latest
@@ -51,7 +67,10 @@ jobs:
         run: mvn install -DskipTests
       - name: Run unit and integration tests
         working-directory: backend
-        run: ./mvnw test --file pom.xml
+        run: ./mvnw test --batch-mode --fail-at-end --file pom.xml
+      - name: Publish Test Report
+        if: ${{ always() }}
+        uses: scacap/action-surefire-report@v1
       - name: Generate JaCoCo Badge
         id: jacoco
         uses: cicirello/jacoco-badge-generator@v2
@@ -74,56 +93,32 @@ jobs:
         with:
           name: jacoco-report
           path: backend/target/site/jacoco/
-  deploy:
-    name: Deploy to server
+
+  push-image:
+    name: Backend-Image
     runs-on: ubuntu-latest
-    needs: [build]
+    permissions:
+      contents: read
+      packages: write
     if: github.ref == 'refs/heads/main'
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
-      - name: Download artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/checkout@v3
+      - name: Log in to the Container registry
+        uses: docker/login-action@v2
         with:
-          name: backend
-          path: backend/target
-      - name: Stop application
-        uses: appleboy/ssh-action@v0.1.1
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v4
         with:
-          host: ${{ secrets.DEPLOY_SSH_HOST }}
-          username: ${{ secrets.DEPLOY_SSH_USERNAME }}
-          password: ${{ secrets.DEPLOY_SSH_PASSWORD }}
-          port: ${{ secrets.DEPLOY_SSH_PORT }}
-          script_stop: true
-          script: sudo systemctl stop ppbackend.service
-      - name: Copy files to server
-        uses: appleboy/scp-action@v0.1.1
+          images: ghcr.io/${{ github.repository }}-backend
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v3
         with:
-          host: ${{ secrets.DEPLOY_SSH_HOST }}
-          username: ${{ secrets.DEPLOY_SSH_USERNAME }}
-          password: ${{ secrets.DEPLOY_SSH_PASSWORD }}
-          port: ${{ secrets.DEPLOY_SSH_PORT }}
-          source: backend/target/
-          target: ${{ secrets.DEPLOY_DIR_BACKEND }}
-          strip_components: 2
-          rm: true
-      - name: Create `.env` file
-        uses: appleboy/ssh-action@v0.1.1
-        with:
-          host: ${{ secrets.DEPLOY_SSH_HOST }}
-          username: ${{ secrets.DEPLOY_SSH_USERNAME }}
-          password: ${{ secrets.DEPLOY_SSH_PASSWORD }}
-          port: ${{ secrets.DEPLOY_SSH_PORT }}
-          script_stop: true
-          script: |
-            cd ${{ secrets.DEPLOY_DIR_BACKEND }}
-            echo "${{ secrets.DEPLOY_BACKEND_ENV_FILE_CONTENT_BASE64 }}" | base64 --decode > .env
-      - name: Start application
-        uses: appleboy/ssh-action@v0.1.1
-        with:
-          host: ${{ secrets.DEPLOY_SSH_HOST }}
-          username: ${{ secrets.DEPLOY_SSH_USERNAME }}
-          password: ${{ secrets.DEPLOY_SSH_PASSWORD }}
-          port: ${{ secrets.DEPLOY_SSH_PORT }}
-          script_stop: true
-          script: sudo systemctl start ppbackend.service
+          context: backend
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}

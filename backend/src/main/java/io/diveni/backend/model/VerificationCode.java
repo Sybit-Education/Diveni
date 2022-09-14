@@ -6,14 +6,14 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public class VerificationCode {
-    private final String code;
-    private final String token;
+  private final String code;
+  private final String token;
 
-    public String getCode(){
-        return code;
-    }
+  public String getCode() {
+    return code;
+  }
 
-    public String getToken(){
-        return token;
-    }
+  public String getToken() {
+    return token;
+  }
 }
