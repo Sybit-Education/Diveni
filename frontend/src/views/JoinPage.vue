@@ -1,6 +1,6 @@
 <template>
   <b-container>
-    <h1 class="my-5 mx-2">
+    <h1 class="my-5 mt-2">
       {{ $t("page.join.title") }}
     </h1>
     <join-page-card

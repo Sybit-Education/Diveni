@@ -31,7 +31,6 @@ flowchart TD
   Reverse-Proxy <--> Backend  
   Frontend <--> Backend
   Backend <--> Database
-  
 ````
 
 ### System Requirements

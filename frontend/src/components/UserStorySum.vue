@@ -16,7 +16,7 @@ export default Vue.extend({
   name: "UserStorySumComponent",
   computed: {
     userStorySum() {
-      var sum = 0;
+      let sum = 0;
       this.$store.state.userStories.forEach((userStory) => {
         if (Number.isInteger(parseInt(userStory.estimation))) {
           sum += parseInt(userStory.estimation);

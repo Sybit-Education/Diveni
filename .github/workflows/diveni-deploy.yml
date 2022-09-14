@@ -71,4 +71,5 @@ jobs:
           script_stop: true
           script: |
             cd ${{ secrets.DEPLOY_DIR }}
+            sudo docker-compose pull
             sudo docker-compose up -d

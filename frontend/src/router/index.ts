@@ -5,7 +5,6 @@ import JoinPage from "../views/JoinPage.vue";
 import SessionPage from "../views/SessionPage.vue";
 import MemberVotePage from "../views/MemberVotePage.vue";
 import PrepareSessionPage from "../views/PrepareSessionPage.vue";
-import JiraCallbackPage from "../views/JiraCallbackPage.vue";
 import ResultPage from "../views/ResultPage.vue";
 
 Vue.use(VueRouter);
@@ -47,7 +46,12 @@ const routes: Array<RouteConfig> = [
   {
     path: "/jiraCallback",
     name: "JiraCallbackPage",
-    component: JiraCallbackPage,
+    component: () => import(/* webpackChunkName: "jira" */ "../views/JiraCallbackPage.vue"),
+  },
+  {
+    path: "/about",
+    name: "AboutPage",
+    component: () => import(/* webpackChunkName: "about" */ "../views/AboutPage.vue"),
   },
   {
     path: "*",
@@ -56,7 +60,7 @@ const routes: Array<RouteConfig> = [
 ];
 
 const router = new VueRouter({
-  mode: "hash",
+  mode: "history",
   base: process.env.BASE_URL,
   routes,
 });

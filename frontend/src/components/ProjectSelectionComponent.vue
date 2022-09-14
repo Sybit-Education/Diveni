@@ -31,7 +31,7 @@ export default Vue.extend({
     projects(): Array<Project> {
       return this.$store.state.projects;
     },
-    getAllProjects(): any {
+    getAllProjects(): Array<unknown> {
       const projectNames = this.projects.map((p) => p.name);
       if (projectNames.length < 1) {
         return [

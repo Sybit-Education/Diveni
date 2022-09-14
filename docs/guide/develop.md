@@ -1,5 +1,10 @@
 # Developers Guide
 
+See also: 
+
+* [Code of Conduct](../code_of_conduct.md)
+* [Contribution](contribution.md)
+
 ## Installation
 
 ### Technical Requirements
