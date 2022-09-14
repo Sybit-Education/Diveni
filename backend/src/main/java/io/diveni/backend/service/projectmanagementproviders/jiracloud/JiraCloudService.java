@@ -6,7 +6,6 @@
 package io.diveni.backend.service.projectmanagementproviders.jiracloud;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,9 +41,9 @@ import lombok.val;
 public class JiraCloudService implements ProjectManagementProviderOAuth2 {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(JiraCloudService.class);
-  private final int JIRA_CLOUD_API_VERSION = 2;
-  private final String JIRA_OAUTH_URL = "https://auth.atlassian.com/oauth";
-  private final String JIRA_HOME = "https://api.atlassian.com/ex/jira/%s/rest/api/";
+  private static final int JIRA_CLOUD_API_VERSION = 2;
+  private static final String JIRA_OAUTH_URL = "https://auth.atlassian.com/oauth";
+  private static final String JIRA_HOME = "https://api.atlassian.com/ex/jira/%s/rest/api/";
   @Getter private final Map<String, String> accessTokens = new HashMap<>();
 
   @Value("${JIRA_CLOUD_CLIENTID:#{null}}")
@@ -72,8 +71,7 @@ public class JiraCloudService implements ProjectManagementProviderOAuth2 {
       LOGGER.debug("<-- getCloudID(), CloudID not found");
       return null;
     } catch (Exception e) {
-      LOGGER.error("Failed to get cloud id!");
-      e.printStackTrace();
+      LOGGER.error("Failed to get cloud id!", e);
       throw new ResponseStatusException(
           HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToRetrieveAccessTokenErrorMessage);
     }
@@ -84,9 +82,9 @@ public class JiraCloudService implements ProjectManagementProviderOAuth2 {
     LOGGER.debug("--> executeRequest()");
     RestTemplate restTemplate = new RestTemplate();
     HttpHeaders headers = new HttpHeaders();
-    headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+    headers.setAccept(List.of(MediaType.APPLICATION_JSON));
     headers.add("Authorization", "Bearer " + accessToken);
-    HttpEntity<Object> request = new HttpEntity<Object>(body, headers);
+    HttpEntity<Object> request = new HttpEntity<>(body, headers);
     LOGGER.debug("<-- executeRequest()");
     return restTemplate.exchange(url, method, request, String.class);
   }
@@ -99,10 +97,10 @@ public class JiraCloudService implements ProjectManagementProviderOAuth2 {
     String encodedCredentials = new String(Base64.encodeBase64(credentials.getBytes()));
 
     HttpHeaders headers = new HttpHeaders();
-    headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+    headers.setAccept(List.of(MediaType.APPLICATION_JSON));
     headers.add("Authorization", "Basic " + encodedCredentials);
 
-    HttpEntity<String> request = new HttpEntity<String>(headers);
+    HttpEntity<String> request = new HttpEntity<>(headers);
 
     String accessTokenURL = JIRA_OAUTH_URL + "/token";
     accessTokenURL += "?code=" + authorizationCode;
@@ -122,8 +120,7 @@ public class JiraCloudService implements ProjectManagementProviderOAuth2 {
       LOGGER.debug("<-- getAccessToken()");
       return new TokenIdentifier(id);
     } catch (Exception e) {
-      LOGGER.error("Failed to get access token!");
-      e.printStackTrace();
+      LOGGER.error("Failed to get access token!", e);
       throw new ResponseStatusException(
           HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToRetrieveAccessTokenErrorMessage);
     }
@@ -150,8 +147,7 @@ public class JiraCloudService implements ProjectManagementProviderOAuth2 {
       LOGGER.debug("<-- getProjects()");
       return projects;
     } catch (Exception e) {
-      LOGGER.error("Failed to get projects!");
-      e.printStackTrace();
+      LOGGER.error("Failed to get projects!", e);
       throw new ResponseStatusException(
           HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToRetrieveProjectsErrorMessage);
     }
@@ -194,8 +190,7 @@ public class JiraCloudService implements ProjectManagementProviderOAuth2 {
       LOGGER.debug("<-- getIssues()");
       return userStories;
     } catch (Exception e) {
-      LOGGER.error("Failed to get issues!");
-      e.printStackTrace();
+      LOGGER.error("Failed to get issues!", e);
       throw new ResponseStatusException(
           HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToRetrieveProjectsErrorMessage);
     }
@@ -227,8 +222,7 @@ public class JiraCloudService implements ProjectManagementProviderOAuth2 {
           content);
       LOGGER.debug("<-- updateIssue()");
     } catch (Exception e) {
-      LOGGER.error("Failed to update issue!");
-      e.printStackTrace();
+      LOGGER.error("Failed to update issue!", e);
       throw new ResponseStatusException(
           HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToEditIssueErrorMessage);
     }
@@ -246,8 +240,7 @@ public class JiraCloudService implements ProjectManagementProviderOAuth2 {
           null);
       LOGGER.debug("<-- deleteIssue()");
     } catch (Exception e) {
-      LOGGER.error("Failed to delete issue!");
-      e.printStackTrace();
+      LOGGER.error("Failed to delete issue!", e);
       throw new ResponseStatusException(
           HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToEditIssueErrorMessage);
     }
