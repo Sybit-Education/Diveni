@@ -34,6 +34,10 @@ module.exports = {
         link: 'https://diveni.io'
       },
       {
+        text: 'Code of Conduct',
+        link: '/code_of_conduct'
+      },
+      {
         text: 'Sponsors',
         link: '/sponsors'
       },
