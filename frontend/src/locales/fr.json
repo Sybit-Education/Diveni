@@ -29,7 +29,7 @@
         "userStories": {
           "button": {
             "addFirstUserStory": "Pas encore d'histoires... cliquez pour ajouter des histoires",
-            "addUserStory": "Ajouter une histoire utilisateur"
+            "addUserStory": "Ajouter"
           },
           "placeholder": {
             "userStoryTitle": "Titre de l'histoire de l'utilisateur",
@@ -88,7 +88,7 @@
           "description": "Préparez une nouvelle session, invitez les membres de l'équipe et commencez à estimer",
           "buttons": {
             "start": {
-              "label": "ALLEZ"
+              "label": "Start ..."
             }
           }
         },
@@ -97,7 +97,7 @@
           "description": "Rejoignez une session existante et aidez votre équipe à estimer",
           "buttons": {
             "start": {
-              "label": "ALLEZ"
+              "label": "Join ..."
             }
           }
         },
@@ -106,7 +106,7 @@
           "description": "Se reconnecter à une session existante en tant qu'hôte",
           "buttons": {
             "start": {
-              "label": "ALLEZ"
+              "label": "Rejoin"
             }
           }
         }
