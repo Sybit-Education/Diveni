@@ -29,7 +29,7 @@
         "userStories": {
           "button": {
             "addFirstUserStory": "Ancora nessuna storia... clicca per aggiungere storie",
-            "addUserStory": "Aggiungi Storia Utente"
+            "addUserStory": "Aggiungi"
           },
           "placeholder": {
             "userStoryTitle": "Titolo Della Storia Utente",
@@ -88,7 +88,7 @@
           "description": "Prepara una nuova sessione, invita i membri del team e inizia a stimare",
           "buttons": {
             "start": {
-              "label": "VAI"
+              "label": "Start ..."
             }
           }
         },
@@ -97,7 +97,7 @@
           "description": "Unisciti a una sessione esistente e aiuta il tuo team a stimare",
           "buttons": {
             "start": {
-              "label": "VAI"
+              "label": "Join ..."
             }
           }
         },
@@ -106,7 +106,7 @@
           "description": "Riconnetti alla sessione esistente come host",
           "buttons": {
             "start": {
-              "label": "VAI"
+              "label": "Rejoin"
             }
           }
         }
