@@ -5,11 +5,10 @@
         :src="require(`@/assets/${member.avatarAnimal.toLowerCase()}.png`)"
         class="rounded-avatar__image"
       />
-      <div v-if="showName">
+      <div v-if="showName" class="rounded-avatar__label">
         {{ member.name }}
       </div>
     </div>
-    <b-tooltip :target="'avatar' + member.name" triggers="hover" top>{{ member.name }}</b-tooltip>
   </div>
 </template>
 
@@ -28,18 +27,21 @@ export default Vue.extend({
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .rounded-avatar {
-  width: 90px;
-  height: 90px;
+  width: 100px;
+  height: 100px;
   padding: 8px;
   display: flex;
   justify-content: center; /* Centering y-axis */
   align-items: center; /* Centering x-axis */
+  overflow: hidden;
 }
 .rounded-avatar__image {
-  width: 45px;
+  width: 50px;
 }
-.rounded-avatar__name {
-  font-size: 1rem;
-  font-weight: 600;
+
+.rounded-avatar__label {
+  font-size: 0.75rem;
+  font-weight: 400;
+  text-overflow: ellipsis;
 }
 </style>
