@@ -29,7 +29,7 @@
         "userStories": {
           "button": {
             "addFirstUserStory": "Brak historii... kliknij aby dodać opowieści",
-            "addUserStory": "Dodaj historię użytkownika"
+            "addUserStory": "Dodaj"
           },
           "placeholder": {
             "userStoryTitle": "Tytuł Historii użytkownika",
@@ -88,7 +88,7 @@
           "description": "Przygotuj nową sesję, zaproś członków zespołu i zacznij szacować",
           "buttons": {
             "start": {
-              "label": "GO"
+              "label": "Start ..."
             }
           }
         },
@@ -97,7 +97,7 @@
           "description": "Dołącz do istniejącej sesji i pomóż swojemu zespołowi oszacować",
           "buttons": {
             "start": {
-              "label": "GO"
+              "label": "Join ..."
             }
           }
         },
@@ -106,7 +106,7 @@
           "description": "Połącz się ponownie z istniejącą sesją jako host",
           "buttons": {
             "start": {
-              "label": "GO"
+              "label": "Rejoin"
             }
           }
         }
