@@ -18,7 +18,7 @@
         <b-col cols="auto">
           <session-leave-button />
           <estimate-timer
-            :key="timerTimestamp"
+            v-if="timerTimestamp"
             class="mt-3"
             :start-timestamp="timerTimestamp"
             :pause-timer="estimateFinished || pauseSession"
