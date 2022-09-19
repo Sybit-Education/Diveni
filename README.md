@@ -1,5 +1,7 @@
 # Diveni - The Planning-Poker App
 
+![GitHub Repo stars](https://img.shields.io/github/stars/Sybit-Education/Diveni?style=social)
+
 [![License](https://img.shields.io/badge/license-GNU%20AGPL%20v3-blue.svg)](LICENSE)
 [![Crowdin](https://badges.crowdin.net/diveni/localized.svg)](https://crowdin.com/project/diveni)
 [![Discord](https://img.shields.io/discord/935641426216222730?color=%237289DA&label=Discord&logo=Discord&logoColor=%237289DA)](https://discord.com/channels/935641426216222730/)
@@ -15,7 +17,7 @@ Supported issue trackers:
 
 - Atlassian JIRA on premise
 - Atlassian JIRA Cloud
-- More connectors planned
+- More connectors are planned
 
 ## Read more
 

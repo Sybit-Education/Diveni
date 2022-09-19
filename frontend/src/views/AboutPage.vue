@@ -1,5 +1,5 @@
 <template>
-  <b-container>
+  <b-container id="about-page">
     <h1>{{ $t("general.about.label") }} Diveni</h1>
     <p>
       WebApp to do Planning Poker with remote teams using external issue tracker as source of

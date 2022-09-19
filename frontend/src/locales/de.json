@@ -19,7 +19,7 @@
           "link": "Link kopieren",
           "qr": "QR-Code anzeigen"
         },
-        "title": "Warte auf die Teammitglieder...",
+        "title": "Warte auf die Teammitglieder ...",
         "text": {
           "beforeID": "Teile den Code",
           "afterID": "mit deinen Teammitgliedern",
@@ -28,14 +28,14 @@
         "button": "Starte das Planning",
         "userStories": {
           "button": {
-            "addFirstUserStory": "Noch keine Stories... Klicke um eine Story hinzuzufügen",
-            "addUserStory": "User Story hinzufügen"
+            "addFirstUserStory": "Noch keine Stories. Klicke, um eine Story hinzuzufügen",
+            "addUserStory": "Hinzufügen"
           },
           "placeholder": {
             "userStoryTitle": "User Story Titel",
             "userStoryDescription": "Beschreibung und Akzeptanzkriterien..."
           },
-          "text": "Klicke auf ein User Story Titel um die Beschreibung zu sehen",
+          "text": "Klicke auf ein User Story Titel, um die Beschreibung zu sehen",
           "sum": "Summe:"
         }
       },
@@ -88,7 +88,7 @@
           "description": "Bereite eine neue Session vor, lade Teammitglieder ein und starte das Schätzen",
           "buttons": {
             "start": {
-              "label": "LOS"
+              "label": "Starten ..."
             }
           }
         },
@@ -97,7 +97,7 @@
           "description": "Trete einer bestehenden Session bei und schätze mit deinem Team",
           "buttons": {
             "start": {
-              "label": "LOS"
+              "label": "Beitreten ..."
             }
           }
         },
@@ -106,7 +106,7 @@
           "description": "Verbinde dich als Organisator erneut mit einer bestehenden Session",
           "buttons": {
             "start": {
-              "label": "LOS"
+              "label": "Wieder aufnehmen"
             }
           }
         }
