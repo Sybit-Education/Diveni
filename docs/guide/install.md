@@ -2,11 +2,44 @@
 
 *Guide to install Diveni on production environments.*
 
-## Docker
+### System Requirements
 
 Using Docker is the preferred way to install Diveni.
 
-The infrastructure is divided in several containers:
+Preferred Docker environment: 
+
+* Docker host: Linus, Windows, Mac
+* CPU: TBD
+* Memory: TBD
+* HD space: TBD
+
+## Preconditions
+
+To install Diveni in combination with JIRA some configuration data to connect the issue 
+tracker are required. These data have to be added to configuration file `backend/.env` (see below).
+
+Connection to JIRA Cloud and JIRA Enterprise is optional. Diveni could also be used without any
+connection.
+
+### JIRA Cloud Connector
+
+    TBD
+
+### JIRA Enterprise Connector
+
+For setting up the JIRA application, the steps described here should be sufficient:
+<https://developer.atlassian.com/server/jira/platform/oauth/>
+
+It doesn't matter what you enter in remaining fields (URL, name, type, and so on).
+This is because we only want to retrieve data from Jira, therefore we only need to set up a
+one-way (incoming) link from the client to Jira.
+
+Afterwards, you will see the `client secret` and `ID`, which needs to be provided for Diveni on
+JIRA-Server.
+
+## Docker
+
+The infrastructure is divided in several Docker containers:
 
 ```mermaid
 flowchart TD
@@ -31,12 +64,8 @@ flowchart TD
   Reverse-Proxy <--> Backend  
   Frontend <--> Backend
   Backend <--> Database
-  
 ````
 
-### System Requirements
-
-TBD 
 
 ### Docker Compose 
 
@@ -45,7 +74,7 @@ version: "3.8"
 
 services:
   database:
-    image: mongo:4.4.11-rc0-focal
+    image: mongo:4
     container_name: diveni_database
     restart: unless-stopped    
 
@@ -78,20 +107,44 @@ services:
 
 ```
 
-## Connectors
+### Configuration using `.env`
 
-### JIRA Cloud
+To configure your local environment, you have to add your configuration to `/backend/.env`
 
-TODO
+See below for example:
 
-### JIRA Enterprise
+```properties 
+#URL the server is running on
+SERVER_URL=http://localhost:8080
 
-For setting up the JIRA application, the steps described here should be sufficient:
-<https://developer.atlassian.com/server/jira/platform/oauth/>
+#ClientId and ClientSecret are shown in the Atlassian Developer app settings
+JIRA_CLOUD_CLIENTID=[xxx]
+JIRA_CLOUD_CLIENTSECRET=[xxx]
 
-It doesn't matter what you enter in remaining fields (URL, name, type, and so on).
-This is because we only want to retrieve data from Jira, therefore we only need to set up a
-one-way (incoming) link from the client to Jira.
+#The estimation field is a customfield which is different for every Jira instance and must therefore be set manually
+JIRA_CLOUD_ESTIMATIONFIELD=customfield_10016
 
-Afterwards, you will see the client secret and ID, which needs to be provided for Diveni on
-JIRA-Server.
+#URL to the Jira Server instance
+JIRA_SERVER_JIRAHOME=https://jira.company.com
+
+#Consumer key can be set in the Jira application link
+JIRA_SERVER_CONSUMERKEY=OauthKey
+
+#Private key from jira_privatekey.pcks8
+JIRA_SERVER_PRIVATEKEY=[xxx]
+
+#The estimation field is a customfield which is different for every Jira instance and must therefore be set manually
+JIRA_SERVER_ESTIMATIONFIELD=customfield_10152
+
+#Used for correct sortation of the issues. Depends on the Jira language e.g. RANK or RANG
+JIRA_SERVER_RANKNAME=RANG
+```
+Copy the configured file to `/backend/.env`
+
+### Starting App 
+
+If all the configuration is done, Diveni could be started:
+
+```shell
+docker-compose up -d
+```

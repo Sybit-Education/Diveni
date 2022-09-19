@@ -11,16 +11,35 @@ module.exports = {
   themeConfig: {
     repo: 'Sybit-Education/Diveni',
     docsDir: 'docs',
-    editLinks: false,
-    lastUpdated: false,
+    docsBranch: 'main',
+    editLinks: true,
+    editLinkText: 'Help us improve this page!',
+    lastUpdated: 'Last Updated',
+    sidebarDepth: 2,
+    smoothScroll: true,
     nav: [
       {
-        text: 'Guide',
+        text: 'Guides',
         link: '/guide/',
+        items: [
+          { text: "Users Guide", link: '/guide/user/' },
+          { text: "Installation Guide", link: '/guide/install/' },
+          { text: "Contribution Guide", link: "/guide/contribution/"},
+          { text: "Architecture", link: "/guide/architecture/"},
+          { text: "Testing", link: "/guide/testing/"}
+        ]
       },
       {
         text: 'App',
         link: 'https://diveni.io'
+      },
+      {
+        text: 'Code of Conduct',
+        link: '/code_of_conduct'
+      },
+      {
+        text: 'Sponsors',
+        link: '/sponsors'
       },
       {
         text: 'License',
@@ -29,18 +48,12 @@ module.exports = {
     ],
     sidebar: {
       '/guide/': [
-        {
-          collapsible: true,
-          children: [
-            '',
-            'user',
-            'install',
-            'develop',
-            'architecture',
-            'testing'
-          ]
-        }
-      ],
+        'user',
+        'install',
+        'contribution',
+        'architecture',
+        'testing'
+      ]
     }
   },
   plugins: [
