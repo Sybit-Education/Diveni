@@ -29,7 +29,7 @@
         "userStories": {
           "button": {
             "addFirstUserStory": "Noch keine Stories... Klicke um eine Story hinzuzufügen",
-            "addUserStory": "User Story hinzufügen"
+            "addUserStory": "Hinzufügen"
           },
           "placeholder": {
             "userStoryTitle": "User Story Titel",
@@ -88,7 +88,7 @@
           "description": "Bereite eine neue Session vor, lade Teammitglieder ein und starte das Schätzen",
           "buttons": {
             "start": {
-              "label": "LOS"
+              "label": "Start ..."
             }
           }
         },
@@ -97,7 +97,7 @@
           "description": "Trete einer bestehenden Session bei und schätze mit deinem Team",
           "buttons": {
             "start": {
-              "label": "LOS"
+              "label": "Join ..."
             }
           }
         },
@@ -106,7 +106,7 @@
           "description": "Verbinde dich als Organisator erneut mit einer bestehenden Session",
           "buttons": {
             "start": {
-              "label": "LOS"
+              "label": "Rejoin"
             }
           }
         }
