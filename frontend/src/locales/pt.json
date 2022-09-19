@@ -29,7 +29,7 @@
         "userStories": {
           "button": {
             "addFirstUserStory": "Não há histórias ainda... clique para adicionar histórias",
-            "addUserStory": "Adicionar história de usuário"
+            "addUserStory": "Adicionar"
           },
           "placeholder": {
             "userStoryTitle": "Título da história do usuário",
@@ -88,7 +88,7 @@
           "description": "Prepare uma nova sessão, convide membros da equipe e comece a estimar",
           "buttons": {
             "start": {
-              "label": "VÁ"
+              "label": "Start ..."
             }
           }
         },
@@ -97,7 +97,7 @@
           "description": "Participe de uma sessão existente e ajude a sua equipe a estimar",
           "buttons": {
             "start": {
-              "label": "VÁ"
+              "label": "Join ..."
             }
           }
         },
@@ -106,7 +106,7 @@
           "description": "Reconectar à sessão existente como host",
           "buttons": {
             "start": {
-              "label": "VÁ"
+              "label": "Rejoin"
             }
           }
         }
