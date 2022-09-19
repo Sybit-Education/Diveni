@@ -41,7 +41,7 @@ export default Vue.extend({
     closeSession() {
       this.sendCloseSessionCommand();
       window.localStorage.removeItem("adminCookie");
-      if (this.session_userStoryMode !== "NO_US") {
+      if (this.userStoryMode !== "NO_US") {
         this.$router.push({ name: "ResultPage" });
       } else {
         this.$store.commit("clearStore");
