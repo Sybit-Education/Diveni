@@ -23,6 +23,12 @@ Supported issue trackers:
 
 see: [Diveni Website](https://sybit-education.github.io/Diveni/)
 
+## Hacktoberfest 2022
+
+Diveni participates on Hacktoberfest 2022! We are looking forward to your support to improve this awesome app!
+
+Have a look on the issues tagged `hacktoberfest` and connect to our Discord: [![Discord](https://img.shields.io/discord/935641426216222730?color=%237289DA&label=Discord&logo=Discord&logoColor=%237289DA)]
+
 ---
 
 ## Some Screenshots
@@ -37,8 +43,7 @@ see: [Diveni Website](https://sybit-education.github.io/Diveni/)
 ### Technologies
 
 Frontend communicates via REST and WebSockets with the backend.
-It uses Spring boot and communicates directly with the mongoDb in a docker container.
-Run the docker container first, then the backend.
+The backend uses Spring boot and communicates with the mongoDb in a docker infrastructure.
 
 ### Run Diveni with Docker and Docker Compose
 #### Run with pre-built docker images using [docker-compose](https://github.com/Sybit-Education/Diveni/blob/main/docker-compose.yml)
@@ -72,32 +77,17 @@ mvn spring-boot:run
 
 - Mongodb in docker on port 27017, no credentials (Run via docker desktop)
 
-
 ---
 
 ## Contributors
 
-
 [![Diveni Contributors](https://contrib.rocks/image?repo=Sybit-Education/Diveni)](https://github.com/Sybit-Education/Diveni/graphs/contributors)
-
 
 Made with [contrib.rocks](https://contrib.rocks).
 
 ## Credits
 
 - Icons: [Animal by Thiago Silva](https://www.iconfinder.com/iconsets/animals-105), License: [CC0 1.0 Universal](https://creativecommons.org/publicdomain/zero/1.0/)
-
-### HTWG Konstanz
-
-TBD
-
-### Sybit GmbH
-
-Sybit supports teaching at the university at HTWG Konstanz and acted as an industry 
-partner in this project. A product owner represented Sybit's requirements to the 
-students and released the sprints in the agile project development.
-
-[Sybit GmbH](https://www.sybit.de) will continue to support and maintain the project as an open source project.
 
 ---
 
