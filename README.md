@@ -9,6 +9,16 @@
 ![Code Coverage Lnies](.github/badges/jacoco.svg)
 ![Code Coverage Branches](.github/badges/branches.svg)
 
+---
+
+## Hacktoberfest 2022
+
+Diveni participates on Hacktoberfest 2022! We are looking forward to your support to improve this awesome app!
+
+Have a look on the issues tagged `hacktoberfest` and connect to our Discord: [![Discord](https://img.shields.io/discord/935641426216222730?color=%237289DA&label=Discord&logo=Discord&logoColor=%237289DA)]
+
+---
+
 ![DIVENI Logo](docs/assets/diveni_banner.png)
 
 WebApp to do Planning Poker with remote teams using external issue tracker as source of stories.
@@ -23,11 +33,6 @@ Supported issue trackers:
 
 see: [Diveni Website](https://sybit-education.github.io/Diveni/)
 
-## Hacktoberfest 2022
-
-Diveni participates on Hacktoberfest 2022! We are looking forward to your support to improve this awesome app!
-
-Have a look on the issues tagged `hacktoberfest` and connect to our Discord: [![Discord](https://img.shields.io/discord/935641426216222730?color=%237289DA&label=Discord&logo=Discord&logoColor=%237289DA)]
 
 ---
 
