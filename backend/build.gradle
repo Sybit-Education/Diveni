@@ -4,6 +4,7 @@
 
 plugins {
     id 'java'
+    id 'jacoco'
     id 'maven-publish'
     id 'org.springframework.boot' version '2.5.5'
 }
@@ -35,6 +36,7 @@ dependencies {
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test:2.5.5'
     testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo:3.0.0'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 group = 'io.diveni'
@@ -56,6 +58,36 @@ tasks.withType(JavaCompile) {
 
 jar {
     manifest {
-        attributes 'Main-Class' : 'src.main.java.io.diveni.backend.DiveniApplication'
+        attributes 'Main-Class': 'src.main.java.io.diveni.backend.DiveniApplication'
     }
+}
+
+test {
+    useJUnitPlatform()
+    finalizedBy jacocoTestReport // report is always generated after tests run
+}
+jacocoTestReport {
+    dependsOn test // tests are required to run before generating the report
+    reports {
+        xml.required = false
+        csv.required = false
+        html.required = true
+        html.outputLocation = layout.buildDirectory.dir('jacoco-report')
+    }
+    afterEvaluate {
+        afterEvaluate {
+            classDirectories.setFrom(files(classDirectories.files.collect {
+                fileTree(dir: it, exclude: [
+                        'io/diveni/backend/service/projectmanagementproviders/jiraserver/*',
+                        'io/diveni/backend/service/projectmanagementproviders/jiracloud/*',
+                        'io/diveni/backend/service/jira/*',
+                        'io/diveni/backend/controller/JiraServerController.class'
+                ])
+            }))
+        }
+    }
+}
+
+jacoco {
+    toolVersion = "0.8.8"
 }
