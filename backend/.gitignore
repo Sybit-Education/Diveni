@@ -1,12 +1,4 @@
 HELP.md
-target/
-!.mvn/wrapper/maven-wrapper.jar
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
 
 .env
 
