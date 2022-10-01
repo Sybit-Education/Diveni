@@ -62,10 +62,10 @@ npm run serve
  
 #### Backend
 
-- maven, springboot, java11
+- gradle, springboot, java11
 
 ```shell
-mvn spring-boot:run
+gradle bootRun
 ```
 
 #### Database
