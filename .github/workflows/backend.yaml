@@ -40,17 +40,17 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: ${{ env.JAVA_VERSION }}
-      - name: Install Maven dependencies
+      - name: Install Gradle dependencies
         working-directory: backend
-        run: mvn install -DskipTests
+        run: gradle build --no-daemon -x test
       - name: Package server
         working-directory: backend
-        run: ./mvnw -B package -DskipTests --file pom.xml
+        run: ./gradlew build --no-daemon -x test
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
         with:
           name: backend
-          path: backend/target
+          path: backend/build
 
   test:
     name: Test
@@ -62,12 +62,12 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: ${{ env.JAVA_VERSION }}
-      - name: Install Maven dependencies
+      - name: Install Gradle dependencies
         working-directory: backend
-        run: mvn install -DskipTests
+        run: gradle build --no-daemon -x test
       - name: Run unit and integration tests
         working-directory: backend
-        run: ./mvnw test --batch-mode --fail-at-end --file pom.xml
+        run: ./gradlew test --no-daemon
       - name: Publish Test Report
         if: ${{ always() }}
         uses: scacap/action-surefire-report@v1
@@ -77,7 +77,7 @@ jobs:
         with:
           generate-branches-badge: true
           jacoco-csv-file: >
-            backend/target/site/jacoco/jacoco.csv
+            backend/build/reports/jacoco/test/jacocoTestReport.csv
       - name: Log coverage percentage
         run: |
           echo "coverage = ${{ steps.jacoco.outputs.coverage }}"
@@ -92,7 +92,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: jacoco-report
-          path: backend/target/site/jacoco/
+          path: backend/build/site/jacoco-report/
 
   push-image:
     name: Backend-Image
