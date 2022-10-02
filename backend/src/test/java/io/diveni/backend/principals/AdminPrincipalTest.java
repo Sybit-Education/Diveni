@@ -1,3 +1,8 @@
+/*
+  SPDX-License-Identifier: AGPL-3.0-or-later
+  Diveni - The Planing-Poker App
+  Copyright (C) 2022 Diveni Team, AUME-Team 21/22, HTWG Konstanz
+*/
 package io.diveni.backend.principals;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -17,7 +22,7 @@ public class AdminPrincipalTest {
     val principal = new AdminPrincipal(sessionID, adminID);
     assertEquals(principal.getSessionID(), sessionID);
     assertEquals(principal.getAdminID(), adminID);
-    assertEquals(principal.getName(), adminID.toString());
+    assertEquals(principal.getName(), adminID);
   }
 
   @Test

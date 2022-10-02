@@ -1,3 +1,8 @@
+/*
+  SPDX-License-Identifier: AGPL-3.0-or-later
+  Diveni - The Planing-Poker App
+  Copyright (C) 2022 Diveni Team, AUME-Team 21/22, HTWG Konstanz
+*/
 package io.diveni.backend.controller;
 
 import java.security.Principal;
@@ -66,8 +71,7 @@ public class WebsocketController {
     webSocketService.sendNotification(
         session,
         new Notification(
-            NotificationType.MEMBER_JOINED,
-            new MemberPayload(((MemberPrincipal) principal).getMemberID())));
+            NotificationType.MEMBER_JOINED, new MemberPayload(principal.getMemberID())));
     LOGGER.debug("<-- joinMember()");
   }
 
