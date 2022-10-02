@@ -71,6 +71,8 @@ jobs:
       - name: Publish Test Report
         if: ${{ always() }}
         uses: scacap/action-surefire-report@v1
+        with:
+          report_paths: '**/build/reports/jacoco/test/*.xml'
       - name: Generate JaCoCo Badge
         id: jacoco
         uses: cicirello/jacoco-badge-generator@v2
