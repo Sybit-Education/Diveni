@@ -66,6 +66,7 @@ docker-compose -f docker-compose.dev.yml up --build -d
 
 #### Frontend
 - npm, vue2
+- switch to directory frontend first
 
 ```shell
 npm install
@@ -75,6 +76,8 @@ npm run serve
 #### Backend
 
 - maven, springboot, java11
+- switch to directory backend first
+- database must be started before
 
 ```shell
 mvn spring-boot:run
@@ -83,6 +86,10 @@ mvn spring-boot:run
 #### Database
 
 - Mongodb in docker on port 27017, no credentials (Run via docker desktop)
+
+```shell
+docker run mongo
+```
 
 ---
 
