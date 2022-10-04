@@ -40,12 +40,9 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: ${{ env.JAVA_VERSION }}
-      - name: Install Gradle dependencies
-        working-directory: backend
-        run: gradle build --no-daemon -x test
       - name: Package server
         working-directory: backend
-        run: ./gradlew build --no-daemon -x test
+        run: ./gradlew --build-cache --no-daemon assemble
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
         with:
@@ -62,12 +59,9 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: ${{ env.JAVA_VERSION }}
-      - name: Install Gradle dependencies
+      - name: Run unit tests
         working-directory: backend
-        run: gradle build --no-daemon -x test
-      - name: Run unit and integration tests
-        working-directory: backend
-        run: ./gradlew test --no-daemon
+        run: ./gradlew --no-daemon test
       - name: Publish Test Report
         if: ${{ always() }}
         uses: scacap/action-surefire-report@v1
