@@ -95,7 +95,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: jacoco-report
-          path: backend/build/site/jacoco-report/
+          path: backend/build/jacoco-report/
 
   push-image:
     name: Backend-Image
