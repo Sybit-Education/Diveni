@@ -74,7 +74,7 @@ jobs:
         uses: scacap/action-surefire-report@v1
         with:
           report_paths: '**/build/test-results/test/TEST-*.xml'
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          skip_publishing: ${{ !github.event.pull_request.head.repo.fork }}
       - name: Generate JaCoCo Badge
         id: jacoco
         uses: cicirello/jacoco-badge-generator@v2
