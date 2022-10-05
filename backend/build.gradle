@@ -50,6 +50,9 @@ jar {
 
 test {
     useJUnitPlatform()
+    reports {
+        junitXml.getRequired().set(true)
+    }
     finalizedBy jacocoTestReport // report is always generated after tests run
 }
 jacocoTestReport {
