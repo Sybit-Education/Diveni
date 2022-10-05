@@ -19,9 +19,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - if: github.event_name != 'pull_request'
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
       - if: github.event_name == 'pull_request'
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
         with:
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           ref: ${{ github.event.pull_request.head.ref }}
@@ -35,13 +35,8 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-      - if: github.event_name != 'pull_request'
+      - name: Checkout
         uses: actions/checkout@v3
-      - if: github.event_name == 'pull_request'
-        uses: actions/checkout@v3
-        with:
-          repository: ${{ github.event.pull_request.head.repo.full_name }}
-          ref: ${{ github.event.pull_request.head.ref }}
       - name: Set up JDK ${{ env.JAVA_VERSION }}
         uses: actions/setup-java@v3
         with:
