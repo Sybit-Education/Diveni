@@ -55,6 +55,7 @@ The backend uses Spring boot and communicates with the mongoDb in a docker infra
 ### Run Diveni with Docker and Docker Compose
 
 - create empty file ``.env`` in directory ``backend`` first
+- detailed documentation on the ``.env`` file can be found in the [docs](https://github.com/Sybit-Education/Diveni/blob/main/docs/guide/install.md)
 
 #### Run with pre-built docker images using [docker-compose](https://github.com/Sybit-Education/Diveni/blob/main/docker-compose.yml)
 ```shell
