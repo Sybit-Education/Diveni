@@ -35,14 +35,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Set up JDK ${{ env.JAVA_VERSION }}
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v3
         with:
           java-version: ${{ env.JAVA_VERSION }}
+          distribution: 'adopt'
       - name: Package server
-        working-directory: backend
-        run: ./gradlew --build-cache --no-daemon assemble
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: assemble
+          build-root-directory: backend
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
         with:
@@ -54,14 +57,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Set up JDK ${{ env.JAVA_VERSION }}
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v3
         with:
           java-version: ${{ env.JAVA_VERSION }}
+          distribution: 'adopt'
       - name: Run unit tests
-        working-directory: backend
-        run: ./gradlew --no-daemon test
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: test
+          build-root-directory: backend
       - name: Publish Test Report
         if: ${{ always() }}
         uses: scacap/action-surefire-report@v1
