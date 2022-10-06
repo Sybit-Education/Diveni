@@ -157,7 +157,8 @@
                 "descriptionLine1": "Utwórz swoje Opowieści Użytkownika na następnej stronie",
                 "descriptionLine2": "Dodaj tytuł i opis do każdej historii użytkownika",
                 "descriptionLine3": "Użyj CSV-Import do integracji Opowieści Użytkowników w twojej sesji",
-                "descriptionLine4": "Po rozpoczęciu sesji będziesz mógł dodać i edytować Opowieści Użytkownika",
+                "descriptionLine4": "First line must contain the field names separated by semicolons: title;description;estimation",
+                "descriptionLine5": "Po rozpoczęciu sesji będziesz mógł dodać i edytować Opowieści Użytkownika",
                 "importButton": "Importuj Historie Użytkownika",
                 "toastSuccessNotification": "Zaimportowano historie użytkownika",
                 "toastErrorNotification": "Błąd podczas próby importu"
