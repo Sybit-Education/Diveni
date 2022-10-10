@@ -157,7 +157,8 @@
                 "descriptionLine1": "Create your User Stories on the next page",
                 "descriptionLine2": "Add title and description to each User Story",
                 "descriptionLine3": "Use the CSV-Import to integrate User Stories in your session",
-                "descriptionLine4": "You will be able to add and edit User Stories once you've started the session",
+                "descriptionLine4": "First line must contain the field names separated by semicolons: title;description;estimation",
+                "descriptionLine5": "You will be able to add and edit User Stories once you've started the session",
                 "importButton": "Import User Stories",
                 "toastSuccessNotification": "User Stories imported",
                 "toastErrorNotification": "Error when trying to import"
