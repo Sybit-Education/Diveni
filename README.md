@@ -15,8 +15,16 @@
 
 Diveni participates on Hacktoberfest 2022! We are looking forward to your support to improve this awesome app!
 
-Have a look on the [issues tagged `hacktoberfest`](https://github.com/Sybit-Education/Diveni/issues?q=is%3Aissue+is%3Aopen+label%3Ahacktoberfest) 
-and connect to our Discord: [![Discord](https://img.shields.io/discord/935641426216222730?color=%237289DA&label=Discord&logo=Discord&logoColor=%237289DA)](https://discord.gg/7JmRyn5dc6)
+How to contribute:
+1) ⭐ the repository
+2) Connect to our Discord: [![Discord](https://img.shields.io/discord/935641426216222730?color=%237289DA&label=Discord&logo=Discord&logoColor=%237289DA)](https://discord.gg/7JmRyn5dc6)
+3) Pick an existing [issue tagged `hacktoberfest`](https://github.com/Sybit-Education/Diveni/issues?q=is%3Aissue+is%3Aopen+label%3Ahacktoberfest) or create a new one (new feature or bug fixing)
+4) Fork the repository and start working on your branch
+5) Create a Pull Request to the original repo and wait for a code review
+6) Have fun and learn new things
+
+Happy coding 🚀
+
 
 ---
 
