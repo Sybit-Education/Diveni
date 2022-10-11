@@ -1,11 +1,24 @@
 # Diveni - The Planning-Poker App
 
+![GitHub Repo stars](https://img.shields.io/github/stars/Sybit-Education/Diveni?style=social)
+
 [![License](https://img.shields.io/badge/license-GNU%20AGPL%20v3-blue.svg)](LICENSE)
 [![Crowdin](https://badges.crowdin.net/diveni/localized.svg)](https://crowdin.com/project/diveni)
 [![Discord](https://img.shields.io/discord/935641426216222730?color=%237289DA&label=Discord&logo=Discord&logoColor=%237289DA)](https://discord.com/channels/935641426216222730/)
 
 ![Code Coverage Lnies](.github/badges/jacoco.svg)
 ![Code Coverage Branches](.github/badges/branches.svg)
+
+---
+
+## Hacktoberfest 2022
+
+Diveni participates on Hacktoberfest 2022! We are looking forward to your support to improve this awesome app!
+
+Have a look on the [issues tagged `hacktoberfest`](https://github.com/Sybit-Education/Diveni/issues?q=is%3Aissue+is%3Aopen+label%3Ahacktoberfest) 
+and connect to our Discord: ![Discord](https://img.shields.io/discord/935641426216222730?color=%237289DA&label=Discord&logo=Discord&logoColor=%237289DA)
+
+---
 
 ![DIVENI Logo](docs/assets/diveni_banner.png)
 
@@ -15,11 +28,13 @@ Supported issue trackers:
 
 - Atlassian JIRA on premise
 - Atlassian JIRA Cloud
-- More connectors planned
+- More connectors are planned
 
 ## Read more
 
 see: [Diveni Website](https://sybit-education.github.io/Diveni/)
+
+<a href="https://www.producthunt.com/posts/diveni?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-diveni" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=361171&theme=light" alt="Diveni - The&#0032;Planning&#0045;Poker&#0032;App | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" /></a>
 
 ---
 
@@ -35,10 +50,13 @@ see: [Diveni Website](https://sybit-education.github.io/Diveni/)
 ### Technologies
 
 Frontend communicates via REST and WebSockets with the backend.
-It uses Spring boot and communicates directly with the mongoDb in a docker container.
-Run the docker container first, then the backend.
+The backend uses Spring boot and communicates with the mongoDb in a docker infrastructure.
 
 ### Run Diveni with Docker and Docker Compose
+
+- create empty file ``.env`` in directory ``backend`` first
+- detailed documentation on the ``.env`` file can be found in the [docs](https://github.com/Sybit-Education/Diveni/blob/main/docs/guide/install.md)
+
 #### Run with pre-built docker images using [docker-compose](https://github.com/Sybit-Education/Diveni/blob/main/docker-compose.yml)
 ```shell
 docker-compose up -d
@@ -52,6 +70,7 @@ docker-compose -f docker-compose.dev.yml up --build -d
 
 #### Frontend
 - npm, vue2
+- switch to directory ``frontend`` first
 
 ```shell
 npm install
@@ -61,6 +80,8 @@ npm run serve
 #### Backend
 
 - maven, springboot, java11
+- switch to directory ``backend`` first
+- database must be started before
 
 ```shell
 mvn spring-boot:run
@@ -70,32 +91,21 @@ mvn spring-boot:run
 
 - Mongodb in docker on port 27017, no credentials (Run via docker desktop)
 
+```shell
+docker run mongo
+```
 
 ---
 
 ## Contributors
 
-
 [![Diveni Contributors](https://contrib.rocks/image?repo=Sybit-Education/Diveni)](https://github.com/Sybit-Education/Diveni/graphs/contributors)
-
 
 Made with [contrib.rocks](https://contrib.rocks).
 
 ## Credits
 
 - Icons: [Animal by Thiago Silva](https://www.iconfinder.com/iconsets/animals-105), License: [CC0 1.0 Universal](https://creativecommons.org/publicdomain/zero/1.0/)
-
-### HTWG Konstanz
-
-TBD
-
-### Sybit GmbH
-
-Sybit supports teaching at the university at HTWG Konstanz and acted as an industry 
-partner in this project. A product owner represented Sybit's requirements to the 
-students and released the sprints in the agile project development.
-
-[Sybit GmbH](https://www.sybit.de) will continue to support and maintain the project as an open source project.
 
 ---
 

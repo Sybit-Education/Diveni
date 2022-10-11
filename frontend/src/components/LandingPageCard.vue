@@ -1,12 +1,9 @@
 <template>
-  <b-card id="landing-page-card" class="p-3 text-center">
-    <h3 class="text-center">
-      {{ title }}
-    </h3>
-    <div class="mt-5">
+  <b-card class="landing-page-card text-center" :title="title">
+    <b-card-text class="my-5">
       {{ description }}
-    </div>
-    <b-button class="mt-5" variant="success" :disabled="false" @click="onClick">
+    </b-card-text>
+    <b-button variant="success" @click="onClick">
       {{ buttonText }}
     </b-button>
   </b-card>
@@ -27,10 +24,7 @@ export default Vue.extend({
 </script>
 
 <style scoped>
-#landing-page-card {
-  border-radius: 20px;
-}
-h3 {
-  font-weight: 500;
+.landing-page-card {
+  border-radius: 0.5rem;
 }
 </style>

@@ -1,9 +1,9 @@
 <template>
-  <div id="estimate-timer" class="d-flex justify-content-end">
-    <h2 :style="`color: ${textColor}`">
+  <b-card id="estimate-timer" class="d-flex justify-content-end estimate-timer">
+    <b-card-text :style="`color: ${textColor}`">
       {{ formatTimer() }}
-    </h2>
-  </div>
+    </b-card-text>
+  </b-card>
 </template>
 
 <script lang="ts">
@@ -89,11 +89,14 @@ export default Vue.extend({
 </script>
 
 <style scoped>
-#estimate-timer {
-  border-radius: 20px;
+.estimate-timer {
+  font-size: 1.5rem;
+  font-weight: 700;
+  border-radius: 0.5rem;
+  min-width: 8rem;
+  text-align: right;
 }
-
-h3 {
-  font-weight: 500;
+.card-body {
+  padding: 0.5rem;
 }
 </style>

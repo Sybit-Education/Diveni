@@ -4,20 +4,25 @@
   Copyright (C) 2022 AUME-Team 21/22, HTWG Konstanz
 */
 import Vue from "vue";
-import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
+
 import axios from "axios";
 import VueAxios from "vue-axios";
-import VueFlicking from "@egjs/vue-flicking";
+
 import App from "./App.vue";
 import "./registerServiceWorker";
 import router from "./router";
 import store from "./store";
 import i18n from "./i18n";
+import setupInterceptors from "./interceptors";
+
+import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
+
+import VueFlicking from "@egjs/vue-flicking";
+
 import Toast from "vue-toastification";
 import "vue-toastification/dist/index.css";
-import setupInterceptors from "./interceptors";
 
 Vue.use(VueAxios, axios);
 Vue.use(IconsPlugin);

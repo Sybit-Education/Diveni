@@ -1,5 +1,5 @@
 <template>
-  <b-container>
+  <b-container id="join-page">
     <h1 class="my-5 mt-2">
       {{ $t("page.join.title") }}
     </h1>

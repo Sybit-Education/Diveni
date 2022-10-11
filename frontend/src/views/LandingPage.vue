@@ -1,15 +1,13 @@
 <template>
-  <b-container>
-    <b-row class="justify-content-center">
+  <b-container id="landing-page">
+    <b-card-group deck class="justify-content-center">
       <landing-page-card
-        class="col-md-4 m-2 col-12"
         :title="$t('page.landing.meeting.new.title')"
         :description="$t('page.landing.meeting.new.description')"
         :button-text="$t('page.landing.meeting.new.buttons.start.label')"
         :on-click="goToPrepareSessionPage"
       />
       <landing-page-card
-        class="col-md-4 m-2 col-12"
         :title="$t('page.landing.meeting.join.title')"
         :description="$t('page.landing.meeting.join.description')"
         :button-text="$t('page.landing.meeting.join.buttons.start.label')"
@@ -17,13 +15,12 @@
       />
       <landing-page-card
         v-if="sessionWrapper.session"
-        class="col-md-4 m-2 col-12"
         :title="$t('page.landing.meeting.reconnect.title')"
         :description="$t('page.landing.meeting.reconnect.description')"
         :button-text="$t('page.landing.meeting.reconnect.buttons.start.label')"
         :on-click="goToSessionPage"
       />
-    </b-row>
+    </b-card-group>
   </b-container>
 </template>
 
