@@ -79,12 +79,12 @@ npm run serve
  
 #### Backend
 
-- maven, springboot, java11
+- gradle, springboot, java11
 - switch to directory ``backend`` first
 - database must be started before
 
 ```shell
-mvn spring-boot:run
+gradle bootRun
 ```
 
 #### Database
