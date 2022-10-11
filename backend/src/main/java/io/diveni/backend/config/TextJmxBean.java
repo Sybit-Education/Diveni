@@ -19,17 +19,16 @@ public class TextJmxBean {
   }
 
   @ManagedOperation
-  public String get( String key ) {
-    return map.get( key );
+  public String get(String key) {
+    return map.get(key);
   }
-
 
   @ManagedOperation
-  public String put( String key, String value ) {
-    return map.put( key, value );
+  public String put(String key, String value) {
+    return map.put(key, value);
   }
 
-  public void remove( String key ) {
-    map.remove( key );
+  public void remove(String key) {
+    map.remove(key);
   }
 }
