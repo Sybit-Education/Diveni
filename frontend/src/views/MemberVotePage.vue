@@ -1,39 +1,29 @@
 <template>
-  <b-overlay :show="pauseSession">
-    <template #overlay>
-      <b-spinner class="me-2" />
-      <span class="overlayText">
-        {{ $t("page.vote.hostLeft") }}
-      </span>
-    </template>
-    <b-container>
+  <b-container id="member-vote-page">
+    <b-overlay :show="pauseSession">
+      <template #overlay>
+        <b-spinner class="me-2" />
+        <span class="overlayText">
+          {{ $t("page.vote.hostLeft") }}
+        </span>
+      </template>
+
       <b-row class="mt-5">
         <b-col>
           <h1>{{ $t("page.vote.title") }}</h1>
         </b-col>
-        <b-col>
+        <b-col cols="auto" class="mr-auto">
+          <rounded-avatar :member="getMember" />
+        </b-col>
+        <b-col cols="auto">
+          <session-leave-button />
           <estimate-timer
-            :key="timerTimestamp"
+            v-if="timerTimestamp"
+            class="mt-3"
             :start-timestamp="timerTimestamp"
             :pause-timer="estimateFinished || pauseSession"
             :duration="timerCountdownNumber"
           />
-        </b-col>
-      </b-row>
-      <b-row class="d-flex justify-content-end horizontal">
-        <b-col>
-          <b-button
-            v-b-modal.close-session-modal
-            style="max-height: 40px"
-            variant="danger"
-            class="mt-4"
-            @click="leaveMeeting"
-          >
-            {{ $t("page.vote.button.leave.label") }}
-          </b-button>
-        </b-col>
-        <b-col class="d-flex justify-content-end">
-          <rounded-avatar :member="getMember" />
         </b-col>
       </b-row>
       <b-row v-if="isMobile">
@@ -94,16 +84,18 @@
           </b-col>
         </b-row>
       </b-row>
-      <b-row v-if="!isStartVoting && !votingFinished" class="my-5 text-center">
-        <h1>{{ $t("page.vote.waiting") }}</h1>
-        <b-icon-three-dots animation="fade" class="my-5" font-scale="4" />
+      <b-row v-if="!isStartVoting && !votingFinished" class="my-5">
+        <h3>
+          {{ $t("page.vote.waiting") }}
+          <sub><b-icon-three-dots animation="fade" font-scale="1" /></sub>
+        </h3>
       </b-row>
       <b-row
         v-if="votingFinished"
         class="my-1 d-flex justify-content-center flex-wrap overflow-auto"
         style="max-height: 500px"
       >
-        <SessionMemberCard
+        <session-member-card
           v-for="member of members"
           :key="member.memberID"
           :member="member"
@@ -116,7 +108,7 @@
       </b-row>
       <b-row v-if="userStoryMode !== 'NO_US'" class="mt-5">
         <b-col md="6">
-          <UserStorySumComponent class="ms-4" />
+          <user-story-sum-component class="ms-4" />
         </b-col>
       </b-row>
       <b-row v-if="userStoryMode !== 'NO_US' && !isMobile">
@@ -152,8 +144,8 @@
         </div>
       </b-col>
       <notify-member-component @hostLeft="reactOnHostLeave" @hostJoined="reactOnHostJoin" />
-    </b-container>
-  </b-overlay>
+    </b-overlay>
+  </b-container>
 </template>
 
 <script lang="ts">
@@ -171,10 +163,12 @@ import UserStoryDescriptions from "../components/UserStoryDescriptions.vue";
 import MobileStoryList from "../components/MobileStoryList.vue";
 import MobileStoryTitle from "../components/MobileStoryTitle.vue";
 import UserStorySumComponent from "@/components/UserStorySum.vue";
+import SessionLeaveButton from "@/components/actions/SessionLeaveButton.vue";
 
 export default Vue.extend({
   name: "MemberVotePage",
   components: {
+    SessionLeaveButton,
     RoundedAvatar,
     MemberVoteCard,
     EstimateTimer,
@@ -313,12 +307,9 @@ export default Vue.extend({
     goToJoinPage() {
       this.$router.push({ name: "JoinPage" });
     },
-    goToLandingPage() {
+    leaveMeeting() {
       window.localStorage.removeItem("memberCookie");
       this.$router.push({ name: "LandingPage" });
-    },
-    leaveMeeting() {
-      this.goToLandingPage();
     },
     reactOnHostLeave() {
       this.pauseSession = true;

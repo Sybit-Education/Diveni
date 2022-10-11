@@ -1,7 +1,7 @@
 <template>
   <div
     :style="`background-color: ${member.hexColor};`"
-    class="text-center card m-2"
+    class="session-member-card text-center card m-2"
     :class="{ greyOut: !props.highlight && props.estimateFinished }"
   >
     <h1 class="fs-3-rem">
@@ -11,22 +11,17 @@
         member.currentEstimation
       }}</strong>
     </h1>
-    <img
-      :src="require(`@/assets/${member.avatarAnimal.toLowerCase()}.png`)"
-      width="40"
-      alt="image"
-    />
-    <h4 class="mt-2">
-      <strong>{{ member.name }}</strong>
-    </h4>
+    <rounded-avatar :member="member" />
   </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
+import RoundedAvatar from "@/components/RoundedAvatar.vue";
 
 export default Vue.extend({
   name: "SessionMemberCard",
+  components: { RoundedAvatar },
   props: {
     member: { type: Object, required: true },
     props: {

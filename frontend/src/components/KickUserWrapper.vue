@@ -36,7 +36,6 @@ import Constants from "@/constants";
 
 export default Vue.extend({
   components: {
-    SessionMemberCircle: () => import("@/components/SessionMemberCircle.vue"),
     RoundedAvatar: () => import("@/components/RoundedAvatar.vue"),
     SessionMemberCard: () => import("@/components/SessionMemberCard.vue"),
   },
@@ -48,8 +47,6 @@ export default Vue.extend({
   computed: {
     width() {
       switch (this.child) {
-        case "SessionMemberCircle":
-          return "150px";
         case "RoundedAvatar":
           return "100px";
         case "SessionMemberCard":

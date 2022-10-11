@@ -1,11 +1,9 @@
 <template>
-  <div>
-    <b-row v-if="userStorySum > 0" align-h="between">
-      <b-col>
-        <h4 class="float-start">{{ $t("page.session.before.userStories.sum") }}</h4>
-        <h4 class="float-end me-4">{{ userStorySum }}</h4>
-      </b-col>
-    </b-row>
+  <div v-if="userStorySum > 0" align-h="between">
+    <h4>
+      {{ $t("page.session.before.userStories.sum") }}
+      <span>{{ userStorySum }}</span>
+    </h4>
   </div>
 </template>
 

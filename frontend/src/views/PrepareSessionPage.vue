@@ -1,5 +1,5 @@
 <template>
-  <b-container>
+  <b-container id="prepare-session-page">
     <h1 class="my-5">
       {{ $t("session.prepare.title") }}
     </h1>

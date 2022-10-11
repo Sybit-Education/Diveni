@@ -19,7 +19,7 @@
           "link": "Link kopieren",
           "qr": "QR-Code anzeigen"
         },
-        "title": "Warte auf die Teammitglieder...",
+        "title": "Warte auf die Teammitglieder ...",
         "text": {
           "beforeID": "Teile den Code",
           "afterID": "mit deinen Teammitgliedern",
@@ -28,14 +28,14 @@
         "button": "Starte das Planning",
         "userStories": {
           "button": {
-            "addFirstUserStory": "Noch keine Stories... Klicke um eine Story hinzuzufügen",
+            "addFirstUserStory": "Noch keine Stories. Klicke, um eine Story hinzuzufügen",
             "addUserStory": "Hinzufügen"
           },
           "placeholder": {
             "userStoryTitle": "User Story Titel",
             "userStoryDescription": "Beschreibung und Akzeptanzkriterien..."
           },
-          "text": "Klicke auf ein User Story Titel um die Beschreibung zu sehen",
+          "text": "Klicke auf ein User Story Titel, um die Beschreibung zu sehen",
           "sum": "Summe:"
         }
       },
@@ -88,7 +88,7 @@
           "description": "Bereite eine neue Session vor, lade Teammitglieder ein und starte das Schätzen",
           "buttons": {
             "start": {
-              "label": "Start ..."
+              "label": "Starten ..."
             }
           }
         },
@@ -97,7 +97,7 @@
           "description": "Trete einer bestehenden Session bei und schätze mit deinem Team",
           "buttons": {
             "start": {
-              "label": "Join ..."
+              "label": "Beitreten ..."
             }
           }
         },
@@ -106,7 +106,7 @@
           "description": "Verbinde dich als Organisator erneut mit einer bestehenden Session",
           "buttons": {
             "start": {
-              "label": "Rejoin"
+              "label": "Wieder aufnehmen"
             }
           }
         }
@@ -157,7 +157,7 @@
                 "descriptionLine1": "Erstelle deine eigenen User Stories auf der nächsten Seite",
                 "descriptionLine2": "Füge jeder User Story Titel und Beschreibung hinzu",
                 "descriptionLine3": "Du kannst auch einen CSV-Import nutzen, um User Stories zu integrieren",
-                "descriptionLine4": "First line must contain the field names separated by semicolons: title;description;estimation",
+                "descriptionLine4": "Die erste Zeile muss die durch Semikolons getrennten Feldnamen enthalten: title;description;estimation",
                 "descriptionLine5": "Du kannst nach Start der Session User Stories bearbeiten oder neue hinzufügen",
                 "importButton": "User Stories importieren",
                 "toastSuccessNotification": "User Stories importiert",

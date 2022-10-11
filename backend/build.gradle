@@ -1,0 +1,76 @@
+
+plugins {
+    id 'org.springframework.boot' version '2.5.5'
+    id 'io.spring.dependency-management' version '1.0.14.RELEASE'
+    id 'java'
+    id 'jacoco'
+    id "io.freefair.lombok" version "6.5.1"
+}
+
+configurations {
+    developmentOnly
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
+    implementation 'com.google.oauth-client:google-oauth-client:1.33.3'
+    implementation 'com.google.api-client:google-api-client-gson:1.33.0'
+    implementation 'com.google.code.gson:gson:2.8.9'
+    implementation 'io.springfox:springfox-boot-starter:3.0.0'
+    implementation 'io.springfox:springfox-swagger-ui:3.0.0'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo'
+}
+
+group = 'io.diveni'
+version = '1.0.0-SNAPSHOT'
+description = 'Diveni-backend'
+java.sourceCompatibility = JavaVersion.VERSION_11
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+test {
+    useJUnitPlatform()
+    reports {
+        junitXml.getRequired().set(true)
+    }
+    finalizedBy jacocoTestReport // report is always generated after tests run
+}
+jacocoTestReport {
+    dependsOn test // tests are required to run before generating the report
+    reports {
+        xml.required = true
+        csv.required = true
+        html.required = true
+        html.outputLocation = layout.buildDirectory.dir('jacoco-report')
+    }
+    afterEvaluate {
+        afterEvaluate {
+            classDirectories.setFrom(files(classDirectories.files.collect {
+                fileTree(dir: it, exclude: [
+                        'io/diveni/backend/service/projectmanagementproviders/jiraserver/*',
+                        'io/diveni/backend/service/projectmanagementproviders/jiracloud/*',
+                        'io/diveni/backend/service/jira/*',
+                        'io/diveni/backend/controller/JiraServerController.class'
+                ])
+            }))
+        }
+    }
+}
+
+jacoco {
+    toolVersion = "0.8.8"
+}

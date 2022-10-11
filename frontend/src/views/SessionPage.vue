@@ -1,5 +1,5 @@
 <template>
-  <b-container>
+  <b-container id="session-page">
     <b-row class="mb-3">
       <b-col>
         <h1>
@@ -10,76 +10,62 @@
           }}
         </h1>
       </b-col>
-      <b-col v-if="planningStart" align-self="center">
-        <copy-session-id-popup class="float-end" :session-id="session_sessionID" />
+      <b-col cols="auto" class="mr-auto">
+        <copy-session-id-popup
+          v-if="planningStart"
+          class="float-end"
+          :session-id="session_sessionID"
+        />
+      </b-col>
+      <b-col cols="auto">
+        <session-close-button
+          :is-planning-start="planningStart"
+          :user-story-mode="session_userStoryMode"
+        />
       </b-col>
     </b-row>
+
     <div v-if="!planningStart">
-      <b-row class="align-items-center">
-        <copy-session-id-popup
-          :text-before-session-i-d="$t('page.session.before.text.beforeID')"
-          :session-id="session_sessionID"
-          :text-after-session-i-d="$t('page.session.before.text.afterID')"
-        />
-      </b-row>
-      <b-row class="mt-5">
-        <h4 class="text-center">
-          {{ $t("page.session.before.text.waiting") }}
-        </h4>
-        <b-icon-three-dots animation="fade" font-scale="3" />
-      </b-row>
+      <copy-session-id-popup
+        :text-before-session-i-d="$t('page.session.before.text.beforeID')"
+        :session-id="session_sessionID"
+        :text-after-session-i-d="$t('page.session.before.text.afterID')"
+      />
+
+      <h4 class="text-center m-3">
+        {{ $t("page.session.before.text.waiting") }}
+        <sub><b-icon-three-dots animation="fade" font-scale="1" /></sub>
+      </h4>
+
       <b-row class="d-flex justify-content-center overflow-auto" style="max-height: 500px">
         <kick-user-wrapper
           v-for="member of members"
           :key="member.memberID"
           class="m-4"
-          child="SessionMemberCircle"
+          child="RoundedAvatar"
           :member="member"
         />
       </b-row>
       <b-row>
         <b-col class="text-center">
-          <b-button
-            variant="success"
-            :disabled="!members || members.length < 1"
-            @click="sendStartEstimationMessages"
-          >
-            {{ $t("page.session.before.button") }}
-          </b-button>
+          <session-start-button @clicked="onPlanningStarted" />
         </b-col>
       </b-row>
     </div>
+
     <div v-else>
       <b-row class="d-flex justify-content-start pb-3">
-        <b-col>
-          <b-button variant="outline-dark" @click="sendRestartMessage">
+        <b-col cols="auto" class="mr-auto">
+          <b-button class="mr-3" variant="outline-dark" @click="sendRestartMessage">
             <b-icon-arrow-clockwise />
             {{ $t("page.session.during.estimation.buttons.new") }}
           </b-button>
-          <b-button variant="outline-dark" class="mx-1" @click="sendVotingFinishedMessage">
+          <b-button class="mr-3" variant="outline-dark" @click="sendVotingFinishedMessage">
             <b-icon-bar-chart />
             {{ $t("page.session.during.estimation.buttons.result") }}
           </b-button>
-          <b-button v-b-modal.close-session-modal variant="danger">
-            <b-icon-x />
-            {{ $t("page.session.during.estimation.buttons.finish") }}
-          </b-button>
-          <b-modal
-            id="close-session-modal"
-            :title="$t('page.session.close.popup')"
-            :cancel-title="$t('page.session.close.button.cancel')"
-            :ok-title="$t('page.session.close.button.ok')"
-            @ok="closeSession"
-          >
-            <p class="my-4">
-              {{ $t("page.session.close.description1") }}
-            </p>
-            <p v-if="session_userStoryMode !== 'NO_US'">
-              {{ $t("page.session.close.description2") }}
-            </p>
-          </b-modal>
         </b-col>
-        <b-col>
+        <b-col cols="auto">
           <estimate-timer
             :start-timestamp="timerTimestamp"
             :pause-timer="estimateFinished"
@@ -88,13 +74,13 @@
           />
         </b-col>
       </b-row>
-      <b-row v-if="membersPending.length > 0 && !estimateFinished">
-        <h4 class="d-inline">
-          {{ $t("page.session.during.estimation.message.waitingFor") }}
-          {{ membersPending.length }} /
-          {{ membersPending.length + membersEstimated.length }}
-        </h4>
-      </b-row>
+
+      <h4 v-if="membersPending.length > 0 && !estimateFinished" class="d-inline">
+        {{ $t("page.session.during.estimation.message.waitingFor") }}
+        {{ membersPending.length }} /
+        {{ membersPending.length + membersEstimated.length }}
+      </h4>
+
       <b-row v-if="!estimateFinished" class="my-1 d-flex justify-content-center flex-wrap">
         <kick-user-wrapper
           v-for="member of membersPending"
@@ -105,13 +91,11 @@
         />
       </b-row>
       <hr />
-      <b-row>
-        <h4 class="d-inline">
-          {{ $t("page.session.during.estimation.message.finished") }}
-          {{ membersEstimated.length }} /
-          {{ membersPending.length + membersEstimated.length }}
-        </h4>
-      </b-row>
+      <h4>
+        {{ $t("page.session.during.estimation.message.finished") }}
+        {{ membersEstimated.length }} /
+        {{ membersPending.length + membersEstimated.length }}
+      </h4>
       <b-row
         class="my-1 d-flex justify-content-center flex-wrap overflow-auto"
         style="max-height: 500px"
@@ -130,25 +114,23 @@
       </b-row>
     </div>
     <b-row v-if="session_userStoryMode !== 'NO_US'" class="mt-5">
-      <b-col md="6">
-        <UserStorySumComponent class="ms-4" />
+      <b-col>
+        <user-story-sum-component />
       </b-col>
     </b-row>
     <b-row v-if="session_userStoryMode !== 'NO_US'">
-      <b-col>
-        <div class="overflow-auto" style="max-height: 700px">
-          <user-stories
-            :card-set="voteSet"
-            :show-estimations="planningStart"
-            :initial-stories="userStories"
-            :show-edit-buttons="true"
-            :select-story="true"
-            @userStoriesChanged="onUserStoriesChanged"
-            @selectedStory="onSelectedStory($event)"
-          />
-        </div>
+      <b-col cols="4">
+        <user-stories
+          :card-set="voteSet"
+          :show-estimations="planningStart"
+          :initial-stories="userStories"
+          :show-edit-buttons="true"
+          :select-story="true"
+          @userStoriesChanged="onUserStoriesChanged"
+          @selectedStory="onSelectedStory($event)"
+        />
       </b-col>
-      <b-col>
+      <b-col cols="8">
         <user-story-descriptions
           :card-set="voteSet"
           :initial-stories="userStories"
@@ -176,10 +158,14 @@ import apiService from "@/services/api.service";
 import UserStorySumComponent from "@/components/UserStorySum.vue";
 import Project from "../model/Project";
 import KickUserWrapper from "@/components/KickUserWrapper.vue";
+import SessionCloseButton from "@/components/actions/SessionCloseButton.vue";
+import SessionStartButton from "@/components/actions/SessionStartButton.vue";
 
 export default Vue.extend({
   name: "SessionPage",
   components: {
+    SessionStartButton,
+    SessionCloseButton,
     KickUserWrapper,
     UserStorySumComponent,
     UserStories,
@@ -489,30 +475,11 @@ export default Vue.extend({
       this.$store.commit("sendViaBackendWS", { endPoint, data: null });
       this.$store.commit("clearStore");
     },
-    sendCloseSessionCommand() {
-      const endPoint = `${Constants.webSocketCloseSessionRoute}`;
-      this.$store.commit("sendViaBackendWS", { endPoint });
-    },
-    sendStartEstimationMessages() {
-      const endPoint = Constants.webSocketStartPlanningRoute;
-      this.$store.commit("sendViaBackendWS", { endPoint });
-      this.planningStart = true;
-    },
     sendVotingFinishedMessage() {
       if (!this.estimateFinished) {
         const endPoint = Constants.webSocketVotingFinishedRoute;
         this.$store.commit("sendViaBackendWS", { endPoint });
         this.estimateFinished = true;
-      }
-    },
-    closeSession() {
-      this.sendCloseSessionCommand();
-      window.localStorage.removeItem("adminCookie");
-      if (this.session_userStoryMode !== "NO_US") {
-        this.$router.push({ name: "ResultPage" });
-      } else {
-        this.$store.commit("clearStore");
-        this.$router.push({ name: "LandingPage" });
       }
     },
     sendRestartMessage() {
@@ -522,6 +489,9 @@ export default Vue.extend({
     },
     goToLandingPage() {
       this.$router.push({ name: "LandingPage" });
+    },
+    onPlanningStarted() {
+      this.planningStart = true;
     },
   },
 });

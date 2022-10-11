@@ -1,3 +1,8 @@
+/*
+  SPDX-License-Identifier: AGPL-3.0-or-later
+  Diveni - The Planing-Poker App
+  Copyright (C) 2022 Diveni Team, AUME-Team 21/22, HTWG Konstanz
+*/
 package io.diveni.backend.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -99,8 +104,8 @@ public class WebsocketControllerTest {
           }
         }
       };
-  private List<Transport> transports =
-      Collections.<Transport>singletonList(new WebSocketTransport(new StandardWebSocketClient()));
+  private final List<Transport> transports =
+      Collections.singletonList(new WebSocketTransport(new StandardWebSocketClient()));
 
   @BeforeAll
   public static void init() {
