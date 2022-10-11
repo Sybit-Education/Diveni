@@ -1,0 +1,23 @@
+version: "3.8"
+
+services:
+  database:
+    image: mongo:4
+    container_name: diveni_database
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+  admin:
+    image: slydeveloper/spring-boot-admin
+    environment:
+      - SPRING_BOOT_ADMIN_TITLE=Custom Spring Boot Admin title
+    volumes:
+      - ./admin/application-docker.properties:/opt/spring-boot-admin-docker/application-docker.properties
+    ports:
+      - "2222:2222"
+    healthcheck:
+      test: "curl -sS http://localhost:2222/health"
+      interval: 1s
+      timeout: 60s
+      retries: 120
+    container_name: diveni_admin
