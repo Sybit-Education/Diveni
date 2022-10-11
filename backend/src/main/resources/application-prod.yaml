@@ -1,7 +1,0 @@
-spring:
-  data:
-    mongodb:
-      uri: mongodb://diveni_database:27017
-      database: diveni
-server:
-  port: 9090
