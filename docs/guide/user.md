@@ -7,6 +7,8 @@ meet to estimate and plan user stories. With Diveni more flexibility is provided
 do interactive planning from different locations. In addition, the mobile application offers JIRA
 integration.
 
+By the way: "diveni" is Esperanto for "guess": <https://en.wiktionary.org/wiki/diveni>
+
 ## Roles
 
 There are two roles of users:
