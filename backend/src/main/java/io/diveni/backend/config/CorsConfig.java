@@ -11,11 +11,19 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import javax.annotation.PostConstruct;
+
 @Configuration
 public class CorsConfig {
 
   @Value("${SERVER_URL:#{null}}")
   private String SERVER_URL;
+
+  @PostConstruct
+  public void logConfig() {
+    LOGGER.info("CorsConfig:");
+    LOGGER.info("    SERVER_URL={}", SERVER_URL);
+  }
 
   @Bean
   public WebMvcConfigurer corsConfigurer() {

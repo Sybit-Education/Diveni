@@ -37,6 +37,8 @@ import io.diveni.backend.controller.ErrorMessages;
 import lombok.Getter;
 import lombok.val;
 
+import javax.annotation.PostConstruct;
+
 @Service
 public class JiraCloudService implements ProjectManagementProviderOAuth2 {
 
@@ -54,6 +56,15 @@ public class JiraCloudService implements ProjectManagementProviderOAuth2 {
 
   @Value("${JIRA_CLOUD_ESTIMATIONFIELD:customfield_10016}")
   private String ESTIMATION_FIELD;
+
+  @PostConstruct
+  public void logConfig() {
+    LOGGER.info("Jira-Cloud Service:");
+
+    LOGGER.info("    JIRA_CLOUD_CLIENTID={}", CLIENT_ID == null ? "null" : "********");
+    LOGGER.info("    JIRA_CLOUD_CLIENTSECRET={}", CLIENT_SECRET == null ? "null" : "********");
+    LOGGER.info("    JIRA_SERVER_ESTIMATIONFIELD={}", ESTIMATION_FIELD);
+  }
 
   static String getCloudID(String accessToken) {
     LOGGER.debug("--> getCloudID()");
