@@ -72,7 +72,7 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
 
     LOGGER.info("    JIRA_SERVER_JIRAHOME={}", JIRA_HOME);
     LOGGER.info("    JIRA_SERVER_CONSUMERKEY={}", CONSUMER_KEY);
-    LOGGER.info("    JIRA_SERVER_PRIVATEKEY={}", PRIVATE_KEY == null ? "null": "********");
+    LOGGER.info("    JIRA_SERVER_PRIVATEKEY={}", PRIVATE_KEY == null ? "null" : "********");
     LOGGER.info("    JIRA_SERVER_ESTIMATIONFIELD={}", ESTIMATION_FIELD);
     LOGGER.info("    JIRA_SERVER_RANKNAME={}", RANK_NAME);
   }
