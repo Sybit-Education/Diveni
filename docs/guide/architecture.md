@@ -140,7 +140,6 @@ backend
 
 | Component                       | Description                                                                                                                                                                |
 |---------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| SpringFoxConfig                 | Configuration for automatic Swagger API generation                                                                                                                         |
 | WebSocketConfig                 | Configurations (e.g. prefixes, CORS) for Websockets                                                                                                                        |
 | -----------                     |                                                                                                                                                                            |
 | ControllerUtils                 | Helper functions for all controllers                                                                                                                                       |
@@ -199,7 +198,8 @@ backend
 
 ### REST API
 
-The current documentation for the REST API can be found as Swagger doc: <https://diveni.io/api/swagger-ui.html>.
+The current documentation for the REST API can be found as Swagger doc: <https://diveni.io/api/swagger-ui/index.html>.
+Or on __local development__ environment at <http://localhost:8081/swagger-ui/index.html>.
 
 ### Websocket
 

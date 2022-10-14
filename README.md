@@ -4,7 +4,7 @@
 
 [![License](https://img.shields.io/badge/license-GNU%20AGPL%20v3-blue.svg)](LICENSE)
 [![Crowdin](https://badges.crowdin.net/diveni/localized.svg)](https://crowdin.com/project/diveni)
-[![Discord](https://img.shields.io/discord/935641426216222730?color=%237289DA&label=Discord&logo=Discord&logoColor=%237289DA)](https://discord.com/channels/935641426216222730/)
+[![Discord](https://img.shields.io/discord/935641426216222730?color=%237289DA&label=Discord&logo=Discord&logoColor=%237289DA)](https://discord.gg/7JmRyn5dc6)
 
 ![Code Coverage Lnies](.github/badges/jacoco.svg)
 ![Code Coverage Branches](.github/badges/branches.svg)
@@ -15,8 +15,16 @@
 
 Diveni participates on Hacktoberfest 2022! We are looking forward to your support to improve this awesome app!
 
-Have a look on the [issues tagged `hacktoberfest`](https://github.com/Sybit-Education/Diveni/issues?q=is%3Aissue+is%3Aopen+label%3Ahacktoberfest) 
-and connect to our Discord: ![Discord](https://img.shields.io/discord/935641426216222730?color=%237289DA&label=Discord&logo=Discord&logoColor=%237289DA)
+How to contribute:
+1) ⭐ the repository
+2) Connect to our Discord: [![Discord](https://img.shields.io/discord/935641426216222730?color=%237289DA&label=Discord&logo=Discord&logoColor=%237289DA)](https://discord.gg/7JmRyn5dc6)
+3) Pick an existing [issue tagged `hacktoberfest`](https://github.com/Sybit-Education/Diveni/issues?q=is%3Aissue+is%3Aopen+label%3Ahacktoberfest) or create a new one (new feature or bug fixing)
+4) Fork the repository and start working on your branch
+5) Create a Pull Request to the original repo and wait for a code review
+6) Have fun and learn new things
+
+Happy coding 🚀
+
 
 ---
 
@@ -53,6 +61,10 @@ Frontend communicates via REST and WebSockets with the backend.
 The backend uses Spring boot and communicates with the mongoDb in a docker infrastructure.
 
 ### Run Diveni with Docker and Docker Compose
+
+- create empty file ``.env`` in directory ``backend`` first
+- detailed documentation on the ``.env`` file can be found in the [docs](https://github.com/Sybit-Education/Diveni/blob/main/docs/guide/install.md)
+
 #### Run with pre-built docker images using [docker-compose](https://github.com/Sybit-Education/Diveni/blob/main/docker-compose.yml)
 ```shell
 docker-compose up -d
@@ -66,6 +78,7 @@ docker-compose -f docker-compose.dev.yml up --build -d
 
 #### Frontend
 - npm, vue2
+- switch to directory ``frontend`` first
 
 ```shell
 npm install
@@ -74,15 +87,21 @@ npm run serve
  
 #### Backend
 
-- maven, springboot, java11
+- gradle, springboot, java11
+- switch to directory ``backend`` first
+- database must be started before
 
 ```shell
-mvn spring-boot:run
+gradle bootRun
 ```
 
 #### Database
 
 - Mongodb in docker on port 27017, no credentials (Run via docker desktop)
+
+```shell
+docker run mongo
+```
 
 ---
 

@@ -157,7 +157,8 @@
                 "descriptionLine1": "Створити розповіді користувача на наступній сторінці",
                 "descriptionLine2": "Додати заголовок і опис до кожної історії користувача",
                 "descriptionLine3": "Використовуйте CSV-імпорт для інтеграції розповіді користувачів у вашому сеансі",
-                "descriptionLine4": "Ви зможете додавати і редагувати історії користувачів після запуску сесії",
+                "descriptionLine4": "First line must contain the field names separated by semicolons: title;description;estimation",
+                "descriptionLine5": "Ви зможете додавати і редагувати історії користувачів після запуску сесії",
                 "importButton": "Імпорт історій користувача",
                 "toastSuccessNotification": "Історії користувача імпортовано",
                 "toastErrorNotification": "Помилка при спробі імпорту"

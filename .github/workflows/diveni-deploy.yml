@@ -16,7 +16,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Verify files changed
-        uses: tj-actions/verify-changed-files@v10
+        uses: tj-actions/verify-changed-files@v11
         id: verify-files-changed
         with:
           files: proxy

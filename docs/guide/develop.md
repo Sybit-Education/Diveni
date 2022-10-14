@@ -1,5 +1,7 @@
 # Developers Guide
 
+![GitHub Repo stars](https://img.shields.io/github/stars/Sybit-Education/Diveni?style=social)
+
 See also: 
 
 * [Code of Conduct](../code_of_conduct.md)
@@ -13,10 +15,8 @@ See also:
   - Download from SAPMachine <https://sap.github.io/SapMachine/>
     <img :src="$withBase('/img/Java11_Installer_Selection.png')" alt="Download_Selection_Java11">
   - Select the appropriate installer for your OS
-- Maven
-  - Download from Apache <https://maven.apache.org/download.cgi>
-    <img :src="$withBase('/img/Maven_Installer_Selection.png')" alt="Download_Selection_Maven">
-  - Click the link in the marked line
+- Gradle
+  - Download from Gradle official site <https://gradle.org/install/>
 - Node.js
   - Download from nodejs <https://nodejs.org/en/download/>
     <img :src="$withBase('/img/nodejs_Installer_Selection.png')" alt="Download_Selection_nodejs">
