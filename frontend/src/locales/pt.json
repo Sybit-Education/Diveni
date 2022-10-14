@@ -27,6 +27,9 @@
         },
         "button": "Iniciar Planejamento",
         "userStories": {
+          "filter" : {
+            "noStoryFound": "Não foram encontradas histórias !"
+          },
           "button": {
             "addFirstUserStory": "Não há histórias ainda... clique para adicionar histórias",
             "addUserStory": "Adicionar"

@@ -27,6 +27,9 @@
         },
         "button": "Rozpocznij planowanie",
         "userStories": {
+          "filter" : {
+            "noStoryFound": "Nie znaleziono żadnych opowiadań !"
+          },
           "button": {
             "addFirstUserStory": "Brak historii... kliknij aby dodać opowieści",
             "addUserStory": "Dodaj"

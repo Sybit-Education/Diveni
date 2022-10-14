@@ -1,5 +1,15 @@
 <template>
   <div class="user-stories">
+    <div v-if="userStories.length > 0 || filterActive" class="filterSearchBar">
+      <input
+        v-model="input"
+        type="text"
+        placeholder="Search user stories..."
+        class="w-45 mb-3"
+        @keyup.enter="swapPriority"
+      />
+      <div v-for="stories in userStoryFilter" :key="stories.title"></div>
+    </div>
     <b-card-group class="my-3 overflow-auto" style="max-height: 70vh">
       <b-list-group-item
         v-for="(story, index) of userStories"
@@ -44,7 +54,7 @@
     </b-card-group>
 
     <b-button
-      v-if="userStories.length < 1 && showEditButtons"
+      v-if="userStories.length < 1 && showEditButtons && !filterActive"
       class="w-100 mb-3"
       variant="success"
       @click="addUserStory()"
@@ -53,8 +63,16 @@
       {{ $t("page.session.before.userStories.button.addFirstUserStory") }}
     </b-button>
 
+    <b-alert
+      v-if="userStories.length < 1 && showEditButtons && filterActive"
+      show
+      variant="warning"
+    >
+      {{ $t("page.session.before.userStories.filter.noStoryFound") }}
+    </b-alert>
+
     <b-button
-      v-if="userStories.length > 0 && showEditButtons"
+      v-if="userStories.length > 0 && showEditButtons && !filterActive"
       class="w-100 mb-3"
       variant="success"
       @click="addUserStory()"
@@ -68,7 +86,6 @@
 <script lang="ts">
 import Vue from "vue";
 import UserStory from "../model/UserStory";
-
 export default Vue.extend({
   name: "UserStories",
   props: {
@@ -84,6 +101,9 @@ export default Vue.extend({
       sideBarOpen: false,
       userStories: [] as Array<UserStory>,
       hover: null,
+      input: "",
+      filterActive: false,
+      safedStories: [] as Array<UserStory>,
     };
   },
   watch: {
@@ -109,11 +129,37 @@ export default Vue.extend({
       };
       this.userStories.push(story);
     },
-    deleteStory(index) {
-      this.publishChanges(index, true);
+    swapPriority: function (e) {
+      if (e.key == "Enter") {
+        if (!this.filterActive) {
+          this.safedStories = this.userStories;
+        }
+        this.userStories = this.safedStories;
+        if (this.input !== "") {
+          let filteredUserStories: UserStory[] = [];
+          this.userStories.forEach((userStory) => {
+            if (userStory.title.toLowerCase().includes(this.input.toLowerCase())) {
+              filteredUserStories.push(userStory);
+            }
+          });
+          if (filteredUserStories.length > 0) {
+            this.filterActive = true;
+            this.publishChanges(null, false, filteredUserStories);
+          } else {
+            this.filterActive = true;
+            this.publishChanges(null, false, []);
+          }
+        } else {
+          this.filterActive = false;
+          this.publishChanges(null, false, this.safedStories);
+        }
+      }
     },
-    publishChanges(index, remove) {
-      this.$emit("userStoriesChanged", { us: this.userStories, idx: index, doRemove: remove });
+    deleteStory(index) {
+      this.publishChanges(index, true, this.userStories);
+    },
+    publishChanges(index, remove, stories) {
+      this.$emit("userStoriesChanged", { us: stories, idx: index, doRemove: remove });
     },
     markUserStory(index) {
       const stories = this.userStories.map((s) => ({
@@ -125,7 +171,7 @@ export default Vue.extend({
       }));
       stories[index].isActive = true;
       this.userStories = stories;
-      this.publishChanges(index, false);
+      this.publishChanges(index, false, this.userStories);
     },
   },
 });
