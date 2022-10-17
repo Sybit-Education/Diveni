@@ -8,7 +8,8 @@
     },
     "licenses": {
       "frontend": "Lizenzen (Frontend)",
-      "backend": "Lizenzen (Backend)"
+      "backend": "Lizenzen (Backend)",
+      "translations": "Übersetzung verbessern"
     }
   },
   "page": {

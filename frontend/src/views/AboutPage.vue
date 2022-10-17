@@ -58,7 +58,7 @@
         </a>
       </li>
       <li>
-        <a href="https://crowdin.com/project/diveni" target="_blank"> Translations </a>
+        <a href="https://crowdin.com/project/diveni" target="_blank"> {{ $t("general.licenses.translations") }} </a>
       </li>
     </ul>
   </b-container>
