@@ -1,3 +1,8 @@
+/*
+  SPDX-License-Identifier: AGPL-3.0-or-later
+  Diveni - The Planing-Poker App
+  Copyright (C) 2022 Diveni Team, AUME-Team 21/22, HTWG Konstanz
+*/
 package io.diveni.backend.service;
 
 import java.util.List;
@@ -156,7 +161,7 @@ public class WebSocketService {
         .forEach(
             member ->
                 simpMessagingTemplate.convertAndSendToUser(
-                    member.getMemberID().toString(),
+                    member.getMemberID(),
                     MEMBERS_UPDATED_DESTINATION,
                     new MemberUpdate(session.getMembers(), session.getCurrentHighlights())));
     LOGGER.debug("<-- sendMembersUpdateToMembers()");
@@ -166,7 +171,7 @@ public class WebSocketService {
     LOGGER.debug("--> sendSessionStateToMembers(), sessionID={}", session.getSessionID());
     // TODO: Send highlighted with it
     getSessionPrincipals(session.getSessionID()).memberPrincipals().stream()
-        .forEach(member -> sendSessionStateToMember(session, member.getMemberID().toString()));
+        .forEach(member -> sendSessionStateToMember(session, member.getMemberID()));
     LOGGER.debug("<-- sendSessionStateToMembers()");
   }
 
@@ -174,8 +179,7 @@ public class WebSocketService {
     LOGGER.debug("--> sendUpdatedUserStoriesToMembers(), sessionID={}", session.getSessionID());
     getSessionPrincipals(session.getSessionID())
         .memberPrincipals()
-        .forEach(
-            member -> sendUpdatedUserStoriesToMember(session, member.getMemberID().toString()));
+        .forEach(member -> sendUpdatedUserStoriesToMember(session, member.getMemberID()));
     LOGGER.debug("<-- sendUpdatedUserStoriesToMembers()");
   }
 
@@ -227,11 +231,11 @@ public class WebSocketService {
         .forEach(
             member -> {
               simpMessagingTemplate.convertAndSendToUser(
-                  member.getMemberID().toString(), NOTIFICATIONS_DESTINATION, notification);
+                  member.getMemberID(), NOTIFICATIONS_DESTINATION, notification);
             });
     if (getSessionPrincipals(session.getSessionID()).adminPrincipal() != null) {
       simpMessagingTemplate.convertAndSendToUser(
-          getSessionPrincipals(session.getSessionID()).adminPrincipal().getAdminID().toString(),
+          getSessionPrincipals(session.getSessionID()).adminPrincipal().getAdminID(),
           NOTIFICATIONS_DESTINATION,
           notification);
     }

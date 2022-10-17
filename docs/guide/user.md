@@ -7,6 +7,8 @@ meet to estimate and plan user stories. With Diveni more flexibility is provided
 do interactive planning from different locations. In addition, the mobile application offers JIRA
 integration.
 
+By the way: "diveni" is Esperanto for "guess": <https://en.wiktionary.org/wiki/diveni>
+
 ## Roles
 
 There are two roles of users:
@@ -40,7 +42,7 @@ Any mode specific information is given below the chosen mode.
 
 ## 1.1 Create new Session without User Stories
 
-At planning without User Stories you will vote with your selected cards and will not be able to add
+At "Planning without User Stories" you will vote with your selected cards and will not be able to add
 User Stories once you've started the session.
 
 - In the second row, you can decide which poker card set will be used for the upcoming voting
@@ -79,8 +81,25 @@ User Stories once you've started the session.
       <img :src="$withBase('/img/join_session.png')" alt="Join session">
     - After joining the session you have to wait until the host starts a voting. Depending oft the choice of the card set with its values from the host you see the cards you can choose between. In this example it's the Fibonacci-card set with values from 1 to 21. By selecting the value you think is most appropriate, you give your estimation. 
       <img :src="$withBase('/img/Estimate.png')" alt="Estimate">
+
 ## 1.2 Create new Session with User Stories
 
+At "Planning with User Stories" you can import user stories before starting the session. You can add more stories and vote with your selected 
+cards once you've started the session.
+
+  - Import User Stories
+    - You can import user stories from a comma separated values file (CSV). The CSV file has the following format:
+  
+      ```
+      title;description;estimation
+      Test User Story;Test description of user story;2
+      ...
+      ```
+    - The first line contains the header with the description of the fields. It will be ignored by the import.
+    - The import is started by pressing the "Import User Stories" button
+  - All following steps for the creation of a new session are the same as described under 1.1.
+
+## 1.3 Create new Session with connection to Jira
 
 ## 2 Join Session
 

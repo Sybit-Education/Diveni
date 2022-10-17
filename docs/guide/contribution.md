@@ -116,10 +116,8 @@ If you find a mistake or if your prefered language is still missing you can repo
   
       <img :src="$withBase('/img/Java11_Installer_Selection.png')" alt="Download_Selection_Java11">
   - Select the appropriate installer for your OS
-- Maven
-  - Download from Apache <https://maven.apache.org/download.cgi>
-    <img :src="$withBase('/img/Maven_Installer_Selection.png')" alt="Download_Selection_Maven">
-  - Click the link in the marked line
+- Gradle
+  - Download from Gradle official site <https://gradle.org/install/>
 - Node.js 14+
   - Download from nodejs <https://nodejs.org/en/download/>
   

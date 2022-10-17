@@ -1,3 +1,8 @@
+/*
+  SPDX-License-Identifier: AGPL-3.0-or-later
+  Diveni - The Planing-Poker App
+  Copyright (C) 2022 Diveni Team, AUME-Team 21/22, HTWG Konstanz
+*/
 package io.diveni.backend.service.projectmanagementproviders.jiraserver;
 
 import java.io.IOException;
@@ -37,6 +42,8 @@ import io.diveni.backend.service.projectmanagementproviders.ProjectManagementPro
 import lombok.Getter;
 import lombok.val;
 
+import javax.annotation.PostConstruct;
+
 @Service
 public class JiraServerService implements ProjectManagementProviderOAuth1 {
   private static final Logger LOGGER = LoggerFactory.getLogger(JiraServerService.class);
@@ -59,8 +66,19 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
   @Value("${JIRA_SERVER_RANKNAME:RANK}")
   private String RANK_NAME;
 
+  @PostConstruct
+  public void logConfig() {
+    LOGGER.info("Jira-Server Service:");
+
+    LOGGER.info("    JIRA_SERVER_JIRAHOME={}", JIRA_HOME);
+    LOGGER.info("    JIRA_SERVER_CONSUMERKEY={}", CONSUMER_KEY);
+    LOGGER.info("    JIRA_SERVER_PRIVATEKEY={}", PRIVATE_KEY == null ? "null" : "********");
+    LOGGER.info("    JIRA_SERVER_ESTIMATIONFIELD={}", ESTIMATION_FIELD);
+    LOGGER.info("    JIRA_SERVER_RANKNAME={}", RANK_NAME);
+  }
+
   /**
-   * Authanticates to JIRA with given OAuthParameters and makes request to url
+   * Authenticates to JIRA with given OAuthParameters and makes request to url
    *
    * @param parameters
    * @param jiraUrl

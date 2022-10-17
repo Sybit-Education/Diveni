@@ -158,7 +158,8 @@
                 "descriptionLine1": "Créez vos Histoires d'utilisateur sur la page suivante",
                 "descriptionLine2": "Ajouter un titre et une description à chaque histoire utilisateur",
                 "descriptionLine3": "Utilisez le CSV-Import pour intégrer les Histoires d'utilisateur dans votre session",
-                "descriptionLine4": "Vous serez en mesure d'ajouter et de modifier des Histoires d'utilisateur une fois que vous aurez commencé la session",
+                "descriptionLine4": "First line must contain the field names separated by semicolons: title;description;estimation",
+                "descriptionLine5": "Vous serez en mesure d'ajouter et de modifier des Histoires d'utilisateur une fois que vous aurez commencé la session",
                 "importButton": "Importer des Histoires Utilisateur",
                 "toastSuccessNotification": "Histoires d'utilisateur importées",
                 "toastErrorNotification": "Erreur lors de la tentative d'importation"
