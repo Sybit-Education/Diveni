@@ -57,6 +57,11 @@
           {{ $t("general.licenses.backend") }}
         </a>
       </li>
+      <li>
+        <a href="https://crowdin.com/project/diveni" target="_blank">
+          {{ $t("general.licenses.translations") }}
+        </a>
+      </li>
     </ul>
   </b-container>
 </template>

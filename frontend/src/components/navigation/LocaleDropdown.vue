@@ -20,6 +20,12 @@ export default Vue.extend({
       locales: {
         de: "Deutsch",
         en: "English",
+        fr: "Français",
+        it: "Italiano",
+        es: "Español",
+        pl: "Polski",
+        pt: "Português",
+        uk: "українська",
       },
     };
   },

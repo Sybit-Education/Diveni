@@ -99,6 +99,13 @@ an issue on that repository and provide the following information:
   in those examples, as [Markdown code spans and blocks](https://docs.gitlab.com/ee/user/markdown.html#code-spans-and-blocks).
 - **Describe the current behavior** and **explain which behavior you expected to see instead** and why.
 
+### Improve Translations
+
+You can also contribute by helping us to improve and extend our translations for Diveni.
+If you find a mistake or if your prefered language is still missing you can report it 
+[here](https://crowdin.com/project/diveni).
+
+
 ## Development
 
 ### Software Requirements

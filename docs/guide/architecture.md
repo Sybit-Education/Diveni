@@ -140,7 +140,6 @@ backend
 
 | Component                       | Description                                                                                                                                                                |
 |---------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| SpringFoxConfig                 | Configuration for automatic Swagger API generation                                                                                                                         |
 | WebSocketConfig                 | Configurations (e.g. prefixes, CORS) for Websockets                                                                                                                        |
 | -----------                     |                                                                                                                                                                            |
 | ControllerUtils                 | Helper functions for all controllers                                                                                                                                       |
