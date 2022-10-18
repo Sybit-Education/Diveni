@@ -169,8 +169,17 @@ public class WebsocketController {
     val session =
         ControllerUtils.getSessionByMemberIDOrThrowResponse(databaseService, member.getMemberID())
             .updateEstimation(member.getMemberID(), vote);
+    boolean votingCompleted = session.isAllMemberVoted();
+    if(votingCompleted) {
+      session.updateSessionState(SessionState.VOTING_FINISHED)
+        .selectHighlightedMembers()
+        .resetTimerTimestamp();
+    }
     databaseService.saveSession(session);
     webSocketService.sendMembersUpdate(session);
+    if(votingCompleted) {
+      webSocketService.sendSessionStateToMembers(session);
+    }
     LOGGER.debug("<-- processVote()");
   }
 
