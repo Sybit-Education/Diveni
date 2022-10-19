@@ -169,7 +169,7 @@ public class WebsocketController {
     val session =
         ControllerUtils.getSessionByMemberIDOrThrowResponse(databaseService, member.getMemberID())
             .updateEstimation(member.getMemberID(), vote);
-    boolean votingCompleted = session.isAllMemberVoted();
+    boolean votingCompleted = session.getMembers().size() == session.getMemberVoted().size();
     if(votingCompleted) {
       session.updateSessionState(SessionState.VOTING_FINISHED)
         .selectHighlightedMembers()

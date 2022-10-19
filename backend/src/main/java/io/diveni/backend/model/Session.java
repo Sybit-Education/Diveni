@@ -62,8 +62,6 @@ public class Session {
 
   private final String timerTimestamp;
 
-  private final boolean allMemberVoted;
-
   static Comparator<String> estimationByIndex(List<String> set) {
     return Comparator.comparingInt((str) -> set.indexOf(str));
   }
@@ -79,7 +77,6 @@ public class Session {
         members.stream()
             .map(m -> m.getMemberID().equals(memberID) ? m.updateEstimation(vote) : m)
             .collect(Collectors.toList());
-    boolean allMemberVoted = checkIfEveryOneVoted(updatedMembers);
     return new Session(
         databaseID,
         sessionID,
@@ -92,19 +89,7 @@ public class Session {
         sessionState,
         lastModified,
         accessToken,
-        timerTimestamp,
-        allMemberVoted);
-  }
-
-  private boolean checkIfEveryOneVoted(List<Member> members) {
-    boolean allMemberVoted = false;
-    List<Member> memberWithoutVote = members.stream()
-      .filter(m -> m.getCurrentEstimation() == null || m.getCurrentEstimation() == "?")
-      .collect(Collectors.toList());
-    if(memberWithoutVote.size() == 0) {
-      allMemberVoted = true;
-    }
-    return allMemberVoted;
+        timerTimestamp);
   }
 
   public Session selectHighlightedMembers() {
@@ -123,7 +108,6 @@ public class Session {
         getFilteredEstimationStream(this.members).min(estimationByIndex(filteredSet));
 
     if (maxEstimation.equals(minEstimation)) {
-      boolean allMemberVoted = checkIfEveryOneVoted(members);
       return new Session(
           databaseID,
           sessionID,
@@ -136,8 +120,7 @@ public class Session {
           sessionState,
           lastModified,
           accessToken,
-          timerTimestamp,
-          allMemberVoted);
+          timerTimestamp);
     }
     val maxEstimationMembers =
         this.members.stream()
@@ -198,7 +181,6 @@ public class Session {
                   return b1 ? -1 : 1;
                 })
             .collect(Collectors.toList());
-    boolean allMemberVoted = checkIfEveryOneVoted(sortedMembers);
 
     return new Session(
         databaseID,
@@ -212,8 +194,7 @@ public class Session {
         sessionState,
         lastModified,
         accessToken,
-        timerTimestamp,
-        allMemberVoted);
+        timerTimestamp);
   }
 
   public Session resetCurrentHighlights() {
@@ -229,8 +210,7 @@ public class Session {
         sessionState,
         lastModified,
         accessToken,
-        timerTimestamp,
-        false);
+        timerTimestamp);
   }
 
   public Session updateUserStories(List<UserStory> userStories) {
@@ -253,8 +233,7 @@ public class Session {
         sessionState,
         lastModified,
         accessToken,
-        timerTimestamp,
-        false);
+        timerTimestamp);
   }
 
   public Session resetEstimations() {
@@ -272,8 +251,7 @@ public class Session {
         sessionState,
         lastModified,
         accessToken,
-        timerTimestamp,
-        false);
+        timerTimestamp);
   }
 
   public Session updateMembers(List<Member> updatedMembers) {
@@ -289,12 +267,10 @@ public class Session {
         sessionState,
         lastModified,
         accessToken,
-        timerTimestamp,
-        false);
+        timerTimestamp);
   }
 
   public Session updateSessionState(SessionState updatedSessionState) {
-    boolean allMemberVoted = checkIfEveryOneVoted(members);
     return new Session(
         databaseID,
         sessionID,
@@ -307,8 +283,7 @@ public class Session {
         updatedSessionState,
         lastModified,
         accessToken,
-        timerTimestamp,
-        allMemberVoted);
+        timerTimestamp);
   }
 
   public Session addMember(Member member) {
@@ -326,8 +301,7 @@ public class Session {
         sessionState,
         lastModified,
         accessToken,
-        timerTimestamp,
-        false);
+        timerTimestamp);
   }
 
   public Session removeMember(String memberID) {
@@ -335,7 +309,6 @@ public class Session {
         members.stream()
             .filter(m -> !m.getMemberID().equals(memberID))
             .collect(Collectors.toList());
-    boolean allMemberVoted = checkIfEveryOneVoted(updatedMembers);
 
     return new Session(
         databaseID,
@@ -349,12 +322,10 @@ public class Session {
         sessionState,
         lastModified,
         accessToken,
-        timerTimestamp,
-      allMemberVoted);
+        timerTimestamp);
   }
 
   public Session setTimerTimestamp(String timestamp) {
-    boolean allMemberVoted = checkIfEveryOneVoted(members);
     return new Session(
         databaseID,
         sessionID,
@@ -367,12 +338,10 @@ public class Session {
         sessionState,
         lastModified,
         accessToken,
-        timestamp,
-        allMemberVoted);
+        timestamp);
   }
 
   public Session resetTimerTimestamp() {
-    boolean allMemberVoted = checkIfEveryOneVoted(members);
     return new Session(
         databaseID,
         sessionID,
@@ -385,12 +354,10 @@ public class Session {
         sessionState,
         lastModified,
         accessToken,
-        null,
-        allMemberVoted);
+        null);
   }
 
   public Session setLastModified(Date lastModified) {
-    boolean allMemberVoted = checkIfEveryOneVoted(members);
     return new Session(
         databaseID,
         sessionID,
@@ -403,12 +370,10 @@ public class Session {
         sessionState,
         lastModified,
         accessToken,
-        timerTimestamp,
-        allMemberVoted);
+        timerTimestamp);
   }
 
   public Session setAccessToken(String token) {
-    boolean allMemberVoted = checkIfEveryOneVoted(members);
     return new Session(
         databaseID,
         sessionID,
@@ -421,7 +386,6 @@ public class Session {
         sessionState,
         lastModified,
         token,
-        timerTimestamp,
-        allMemberVoted);
+        timerTimestamp);
   }
 }
