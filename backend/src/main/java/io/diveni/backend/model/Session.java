@@ -181,7 +181,6 @@ public class Session {
                   return b1 ? -1 : 1;
                 })
             .collect(Collectors.toList());
-
     return new Session(
         databaseID,
         sessionID,
@@ -309,7 +308,6 @@ public class Session {
         members.stream()
             .filter(m -> !m.getMemberID().equals(memberID))
             .collect(Collectors.toList());
-
     return new Session(
         databaseID,
         sessionID,
