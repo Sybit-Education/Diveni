@@ -1,14 +1,13 @@
 <template>
   <div class="user-stories">
-    <div v-if="userStories.length > 0 || filterActive" class="filterSearchBar">
+    <div v-if="userStories.length > 0 || filterActive" class="w-100 d-flex justify-content-left">
       <input
         v-model="input"
+        class="search"
         type="text"
         placeholder="Search user stories..."
-        class="w-45 mb-3"
         @keyup.enter="swapPriority"
       />
-      <div v-for="stories in userStoryFilter" :key="stories.title"></div>
     </div>
     <b-card-group class="my-3 overflow-auto" style="max-height: 70vh">
       <b-list-group-item
@@ -181,5 +180,15 @@ export default Vue.extend({
 .list-group-item.active {
   background-color: transparent;
   border-width: 3px;
+}
+
+.search {
+  background-image: url("@/assets/magnifying glass.png");
+  background-position: 3px;
+  background-repeat: no-repeat;
+  background-size: 22px 25px;
+  padding-left: 30px;
+  border-color: black;
+  overflow: auto;
 }
 </style>
