@@ -13,22 +13,5 @@ module.exports = {
       maskIcon: "./favicon.ico",
       msTileImage: "./favicon.ico",
     },
-  },
-  chainWebpack: (config) => {
-    config.resolve.alias.set('vue', '@vue/compat')
-
-    config.module
-      .rule('vue')
-      .use('vue-loader')
-      .tap((options) => {
-        return {
-          ...options,
-          compilerOptions: {
-            compatConfig: {
-              MODE: 2
-            }
-          }
-        }
-      })
   }
 };
