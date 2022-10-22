@@ -19,7 +19,6 @@ import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
 
-import VueFlicking from "@egjs/vue-flicking";
 
 import Toast from "vue-toastification";
 import "vue-toastification/dist/index.css";
@@ -27,7 +26,6 @@ import "vue-toastification/dist/index.css";
 Vue.use(VueAxios, axios);
 Vue.use(IconsPlugin);
 Vue.use(BootstrapVue);
-Vue.use(VueFlicking);
 Vue.use(Toast, {});
 
 setupInterceptors();

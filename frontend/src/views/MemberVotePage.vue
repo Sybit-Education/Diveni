@@ -164,6 +164,7 @@ import MobileStoryList from "../components/MobileStoryList.vue";
 import MobileStoryTitle from "../components/MobileStoryTitle.vue";
 import UserStorySumComponent from "@/components/UserStorySum.vue";
 import SessionLeaveButton from "@/components/actions/SessionLeaveButton.vue";
+import Flicking from "@egjs/vue3-flicking";
 
 export default Vue.extend({
   name: "MemberVotePage",
@@ -179,6 +180,7 @@ export default Vue.extend({
     MobileStoryList,
     MobileStoryTitle,
     UserStorySumComponent,
+    Flicking,
   },
   props: {
     memberID: { type: String, default: undefined },
