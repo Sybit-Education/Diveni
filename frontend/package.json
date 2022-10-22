@@ -28,14 +28,13 @@
     "register-service-worker": "^1.7.1",
     "sockjs-client": "^1.5.2",
     "uuid": "^8.3.2",
-    "vue": "^3.1.0",
-    "@vue/compat": "^3.1.0",
+    "vue": "^3.2.41",
     "vue-axios": "^3.3.7",
     "vue-i18n": "^8.26.8",
-    "vue-router": "^3.2.0",
-    "vue-toastification": "^1.7.14",
+    "vue-router": "^4.1.5",
+    "vue-toastification": "^2.0.0-rc.5",
     "vue2-interact": "0.0.3",
-    "vuex": "^3.4.0",
+    "vuex": "^4.1.0",
     "webstomp-client": "^1.2.6"
   },
   "devDependencies": {
