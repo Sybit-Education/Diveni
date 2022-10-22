@@ -7,18 +7,22 @@
       @change="getUserStories"
     ></b-form-select>
     <div class="mt-3">
-      {{ $t("session.prepare.step.selection.mode.description.withJira.selectedProject") }}
+      {{
+        $t(
+          "session.prepare.step.selection.mode.description.withJira.selectedProject"
+        )
+      }}
       <strong>{{ selected }}</strong>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
 import apiService from "@/services/api.service";
 import Project from "../model/Project";
 
-export default Vue.extend({
+export default defineComponent({
   name: "ProjectSelectionComponent",
 
   data() {
@@ -37,14 +41,18 @@ export default Vue.extend({
         return [
           {
             value: null,
-            text: this.$t("session.prepare.step.selection.mode.description.withJira.formSelection"),
+            text: this.$t(
+              "session.prepare.step.selection.mode.description.withJira.formSelection"
+            ),
           },
         ];
       } else {
         return [
           {
             value: null,
-            text: this.$t("session.prepare.step.selection.mode.description.withJira.formSelection"),
+            text: this.$t(
+              "session.prepare.step.selection.mode.description.withJira.formSelection"
+            ),
           },
           ...projectNames,
         ];

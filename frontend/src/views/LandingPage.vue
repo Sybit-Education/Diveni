@@ -25,12 +25,12 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
 import LandingPageCard from "../components/LandingPageCard.vue";
 import Constants from "../constants";
 import Session from "../model/Session";
 
-export default Vue.extend({
+export default defineComponent({
   name: "LandingPage",
   components: {
     LandingPageCard,
@@ -97,11 +97,16 @@ export default Vue.extend({
         params: {
           sessionID: this.sessionWrapper.session.sessionID,
           adminID: this.sessionWrapper.session.adminID,
-          voteSetJson: JSON.stringify(this.sessionWrapper.session.sessionConfig.set),
+          voteSetJson: JSON.stringify(
+            this.sessionWrapper.session.sessionConfig.set
+          ),
           sessionState: this.sessionWrapper.session.sessionState,
-          timerSecondsString: this.sessionWrapper.session.sessionConfig.timerSeconds.toString(),
-          startNewSessionOnMountedString: this.startNewSessionOnMounted.toString(),
-          userStoryMode: this.sessionWrapper.session.sessionConfig.userStoryMode,
+          timerSecondsString:
+            this.sessionWrapper.session.sessionConfig.timerSeconds.toString(),
+          startNewSessionOnMountedString:
+            this.startNewSessionOnMounted.toString(),
+          userStoryMode:
+            this.sessionWrapper.session.sessionConfig.userStoryMode,
         },
       });
     },

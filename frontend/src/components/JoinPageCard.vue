@@ -29,7 +29,12 @@
         </b-col>
         <b-col class="mt-2 mt-md-0" cols="12" md="6">
           <h6>{{ $t("page.join.input.password") }}</h6>
-          <b-form-input v-model="password" class="mt-3" type="password" placeholder="(optional)" />
+          <b-form-input
+            v-model="password"
+            class="mt-3"
+            type="password"
+            placeholder="(optional)"
+          />
         </b-col>
       </b-row>
       <b-row>
@@ -50,11 +55,11 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
 import JoinCommand from "../model/JoinCommand";
 import RoundedAvatar from "./RoundedAvatar.vue";
 
-export default Vue.extend({
+export default defineComponent({
   name: "JoinPageCard",
   components: {
     RoundedAvatar,

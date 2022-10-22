@@ -24,7 +24,9 @@
           :disabled="true"
           class="mx-1 w-100"
           size="sm"
-          :placeholder="$t('page.session.before.userStories.placeholder.userStoryTitle')"
+          :placeholder="
+            $t('page.session.before.userStories.placeholder.userStoryTitle')
+          "
           @blur="publishChanges"
         />
 
@@ -66,10 +68,10 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
 import UserStory from "../model/UserStory";
 
-export default Vue.extend({
+export default defineComponent({
   name: "UserStories",
   props: {
     cardSet: { type: Array, required: true },
@@ -113,7 +115,11 @@ export default Vue.extend({
       this.publishChanges(index, true);
     },
     publishChanges(index, remove) {
-      this.$emit("userStoriesChanged", { us: this.userStories, idx: index, doRemove: remove });
+      this.$emit("userStoriesChanged", {
+        us: this.userStories,
+        idx: index,
+        doRemove: remove,
+      });
     },
     markUserStory(index) {
       const stories = this.userStories.map((s) => ({

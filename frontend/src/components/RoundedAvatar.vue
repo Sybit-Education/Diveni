@@ -1,5 +1,8 @@
 <template>
-  <div class="rounded-avatar rounded-circle" :style="`background-color: ${member.hexColor}`">
+  <div
+    class="rounded-avatar rounded-circle"
+    :style="`background-color: ${member.hexColor}`"
+  >
     <div :id="'avatar' + member.name" class="text-center">
       <b-img
         :src="require(`@/assets/${member.avatarAnimal.toLowerCase()}.png`)"
@@ -13,9 +16,9 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
 
-export default Vue.extend({
+export default defineComponent({
   name: "RoundedAvatar",
   props: {
     member: { type: Object, required: true },

@@ -4,7 +4,7 @@
       <b-list-group-item
         v-for="(story, idx) of userStories"
         v-show="story.isActive"
-        :key="story.name"
+        :key="idx"
         class="border-0"
         variant="outline-secondary"
       >
@@ -16,7 +16,9 @@
             :disabled="true"
             class="border"
             size="lg"
-            :placeholder="$t('page.session.before.userStories.placeholder.userStoryTitle')"
+            :placeholder="
+              $t('page.session.before.userStories.placeholder.userStoryTitle')
+            "
             @blur="publishChanges"
           />
         </div>
@@ -26,9 +28,9 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
 
-export default Vue.extend({
+export default defineComponent({
   name: "MobileStoryTitle",
   props: {
     index: { type: Number, required: true },

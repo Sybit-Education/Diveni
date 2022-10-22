@@ -12,7 +12,10 @@
       :interact-lock-swipe-down="true"
       @draggedUp="draggedUp"
     >
-      <div class="flicking-panel swipe-card" :style="swipeableCardBackgroundColor">
+      <div
+        class="flicking-panel swipe-card"
+        :style="swipeableCardBackgroundColor"
+      >
         <div class="text" @click="onCardClicked()">
           {{ dragged ? "💪" : voteOption }}
         </div>
@@ -33,12 +36,12 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
 import { Vue2InteractDraggable } from "vue2-interact";
 import confetti from "canvas-confetti";
 import Constants from "../constants";
 
-export default Vue.extend({
+export default defineComponent({
   name: "MemberVoteCard",
   components: {
     Vue2InteractDraggable,

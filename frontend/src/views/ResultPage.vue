@@ -7,7 +7,11 @@
       {{ $t("page.results.noUserStories") }}
     </div>
     <b-list-group v-else>
-      <b-list-group-item v-for="(story, index) of userStories" :key="index" class="text-center">
+      <b-list-group-item
+        v-for="(story, index) of userStories"
+        :key="index"
+        class="text-center"
+      >
         {{ story.title ? story.title : "No title ..." }}
         <b-button class="mx-2" pill variant="info">
           {{ story.estimation ? story.estimation : "?" }}
@@ -32,10 +36,10 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
 import papaparse from "papaparse";
 
-export default Vue.extend({
+export default defineComponent({
   name: "SessionPage",
   components: {},
   computed: {

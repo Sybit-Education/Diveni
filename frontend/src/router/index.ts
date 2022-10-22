@@ -1,5 +1,6 @@
 import Vue from "vue";
-import VueRouter, { RouteConfig } from "vue-router";
+import { createWebHistory, createRouter } from "vue-router";
+import { RouteRecordRaw } from "vue-router";
 import LandingPage from "../views/LandingPage.vue";
 import JoinPage from "../views/JoinPage.vue";
 import SessionPage from "../views/SessionPage.vue";
@@ -7,9 +8,7 @@ import MemberVotePage from "../views/MemberVotePage.vue";
 import PrepareSessionPage from "../views/PrepareSessionPage.vue";
 import ResultPage from "../views/ResultPage.vue";
 
-Vue.use(VueRouter);
-
-const routes: Array<RouteConfig> = [
+const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
     name: "LandingPage",
@@ -59,8 +58,8 @@ const routes: Array<RouteConfig> = [
   },
 ];
 
-const router = new VueRouter({
-  mode: "history",
+const router = createRouter({
+  mode: createWebHistory(),
   base: process.env.BASE_URL,
   routes,
 });

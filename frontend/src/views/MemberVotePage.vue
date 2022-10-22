@@ -63,7 +63,10 @@
             />
           </flicking>
         </div>
-        <b-row v-else class="d-flex justify-content-between flex-wrap text-center">
+        <b-row
+          v-else
+          class="d-flex justify-content-between flex-wrap text-center"
+        >
           <b-col>
             <div class="overflow-auto" style="max-height: 500px">
               <member-vote-card
@@ -102,7 +105,8 @@
           :props="{
             estimateFinished: votingFinished,
             highlight:
-              highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0,
+              highlightedMembers.includes(member.memberID) ||
+              highlightedMembers.length === 0,
           }"
         />
       </b-row>
@@ -143,13 +147,16 @@
           />
         </div>
       </b-col>
-      <notify-member-component @hostLeft="reactOnHostLeave" @hostJoined="reactOnHostJoin" />
+      <notify-member-component
+        @hostLeft="reactOnHostLeave"
+        @hostJoined="reactOnHostJoin"
+      />
     </b-overlay>
   </b-container>
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
 import RoundedAvatar from "../components/RoundedAvatar.vue";
 import MemberVoteCard from "../components/MemberVoteCard.vue";
 import Constants from "../constants";
@@ -166,7 +173,7 @@ import UserStorySumComponent from "@/components/UserStorySum.vue";
 import SessionLeaveButton from "@/components/actions/SessionLeaveButton.vue";
 import Flicking from "@egjs/vue3-flicking";
 
-export default Vue.extend({
+export default defineComponent({
   name: "MemberVotePage",
   components: {
     SessionLeaveButton,
@@ -215,22 +222,31 @@ export default Vue.extend({
       return this.$store.state.memberUpdates;
     },
     isStartVoting(): boolean {
-      return this.memberUpdates.at(-1) === Constants.memberUpdateCommandStartVoting;
+      return (
+        this.memberUpdates.at(-1) === Constants.memberUpdateCommandStartVoting
+      );
     },
     votingFinished(): boolean {
-      return this.memberUpdates.at(-1) === Constants.memberUpdateCommandVotingFinished;
+      return (
+        this.memberUpdates.at(-1) ===
+        Constants.memberUpdateCommandVotingFinished
+      );
     },
     members() {
       return this.$store.state.members;
     },
     membersEstimated(): Member[] {
-      return this.members.filter((member: Member) => member.currentEstimation !== null);
+      return this.members.filter(
+        (member: Member) => member.currentEstimation !== null
+      );
     },
     highlightedMembers() {
       return this.$store.state.highlightedMembers;
     },
     timerTimestamp() {
-      return this.$store.state.timerTimestamp ? this.$store.state.timerTimestamp : "";
+      return this.$store.state.timerTimestamp
+        ? this.$store.state.timerTimestamp
+        : "";
     },
     notifications() {
       return this.$store.state.notifications;
@@ -249,7 +265,9 @@ export default Vue.extend({
         this.draggedVote = null;
         this.estimateFinished = false;
         this.triggerTimer = (this.triggerTimer + 1) % 5;
-      } else if (updates.at(-1) === Constants.memberUpdateCommandVotingFinished) {
+      } else if (
+        updates.at(-1) === Constants.memberUpdateCommandVotingFinished
+      ) {
         this.estimateFinished = true;
       } else if (updates.at(-1) === Constants.memberUpdateCloseSession) {
         this.goToJoinPage();
@@ -269,7 +287,9 @@ export default Vue.extend({
         notifications.at(-1).type === "MEMBER_LEFT" &&
         notifications.at(-1).payload.memberID === this.memberID
       ) {
-        this.$toast.error(this.$t("session.notification.messages.memberRemoved"));
+        this.$toast.error(
+          this.$t("session.notification.messages.memberRemoved")
+        );
         this.leaveMeeting();
       }
     },

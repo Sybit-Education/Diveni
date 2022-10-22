@@ -14,13 +14,13 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
 import { v4 as uuidv4 } from "uuid";
 import JoinPageCard from "../components/JoinPageCard.vue";
 import JoinCommand from "../model/JoinCommand";
 import Constants from "../constants";
 
-export default Vue.extend({
+export default defineComponent({
   name: "JoinPage",
   components: {
     JoinPageCard,
@@ -66,7 +66,9 @@ export default Vue.extend({
     async sendJoinSessionRequest(data: JoinCommand) {
       this.$store.commit("clearStore");
       this.name = data.name;
-      const url = `${Constants.backendURL}${Constants.joinSessionRoute(data.sessionID)}`;
+      const url = `${Constants.backendURL}${Constants.joinSessionRoute(
+        data.sessionID
+      )}`;
       const joinInfo = {
         password: data.password,
         member: {
@@ -83,11 +85,18 @@ export default Vue.extend({
         const sessionConfig = result.data as {
           set: Array<string>;
           timerSeconds: number;
-          userStories: Array<{ title: string; description: string; estimation: string | null }>;
+          userStories: Array<{
+            title: string;
+            description: string;
+            estimation: string | null;
+          }>;
           userStoryMode: string;
         };
         this.voteSet = JSON.stringify(sessionConfig.set);
-        this.timerSeconds = parseInt(JSON.stringify(sessionConfig.timerSeconds), 10);
+        this.timerSeconds = parseInt(
+          JSON.stringify(sessionConfig.timerSeconds),
+          10
+        );
         this.userStoryMode = sessionConfig.userStoryMode;
         this.$store.commit("setUserStories", {
           stories: sessionConfig.userStories,
@@ -99,7 +108,9 @@ export default Vue.extend({
       }
     },
     convertAvatarAssetNameToBackendAnimal() {
-      return Constants.avatarAnimalAssetNameToBackendEnum(this.avatarAnimalAssetName);
+      return Constants.avatarAnimalAssetNameToBackendEnum(
+        this.avatarAnimalAssetName
+      );
     },
     connectToWebSocket(sessionID: string, memberID: string) {
       const url = `${Constants.backendURL}/connect?sessionID=${sessionID}&memberID=${memberID}`;

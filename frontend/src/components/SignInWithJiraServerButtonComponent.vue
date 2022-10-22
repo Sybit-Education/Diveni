@@ -22,7 +22,13 @@
       @hidden="resetModal"
       @ok="handleOk"
     >
-      <p>{{ $t("session.prepare.step.selection.mode.description.withJira.dialog.description") }}</p>
+      <p>
+        {{
+          $t(
+            "session.prepare.step.selection.mode.description.withJira.dialog.description"
+          )
+        }}
+      </p>
       <form ref="form" @submit.stop.prevent="handleSubmit">
         <b-form-group
           label="Verification code"
@@ -48,10 +54,10 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent, Vue } from "vue";
 import apiService from "@/services/api.service";
 
-export default Vue.extend({
+export default defineComponent({
   name: "SignInWithJiraServerButtonComponent",
   props: {
     disabled: {
@@ -69,7 +75,9 @@ export default Vue.extend({
   },
   methods: {
     checkFormValidity() {
-      const valid = (this.$refs.form as Vue & { checkValidity: () => boolean }).checkValidity();
+      const valid = (
+        this.$refs.form as Vue & { checkValidity: () => boolean }
+      ).checkValidity();
       this.verificationCodeState = valid;
       return valid;
     },
@@ -112,9 +120,13 @@ export default Vue.extend({
     },
     showToast(error) {
       if (error.message == "failed to retrieve access token") {
-        this.$toast.error(this.$t("session.notification.messages.jiraCredentials"));
+        this.$toast.error(
+          this.$t("session.notification.messages.jiraCredentials")
+        );
       } else {
-        this.$toast.error(this.$t("session.notification.messages.jiraLoginFailed"));
+        this.$toast.error(
+          this.$t("session.notification.messages.jiraLoginFailed")
+        );
       }
       console.error(error);
     },

@@ -9,10 +9,10 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
 import Constants from "@/constants";
 
-export default Vue.extend({
+export default defineComponent({
   name: "SessionStartButton",
   computed: {
     members() {

@@ -1,22 +1,54 @@
 <template>
   <div>
     <h5>
-      <i>{{ $t("session.prepare.step.selection.mode.description.withUS.subtitle") }}</i>
+      <i>{{
+        $t("session.prepare.step.selection.mode.description.withUS.subtitle")
+      }}</i>
     </h5>
     <ul>
-      <li>{{ $t("session.prepare.step.selection.mode.description.withUS.descriptionLine1") }}</li>
-      <li>{{ $t("session.prepare.step.selection.mode.description.withUS.descriptionLine2") }}</li>
-      <li>{{ $t("session.prepare.step.selection.mode.description.withUS.descriptionLine3") }}</li>
-      <li>{{ $t("session.prepare.step.selection.mode.description.withUS.descriptionLine4") }}</li>
-      <li>{{ $t("session.prepare.step.selection.mode.description.withUS.descriptionLine5") }}</li>
+      <li>
+        {{
+          $t(
+            "session.prepare.step.selection.mode.description.withUS.descriptionLine1"
+          )
+        }}
+      </li>
+      <li>
+        {{
+          $t(
+            "session.prepare.step.selection.mode.description.withUS.descriptionLine2"
+          )
+        }}
+      </li>
+      <li>
+        {{
+          $t(
+            "session.prepare.step.selection.mode.description.withUS.descriptionLine3"
+          )
+        }}
+      </li>
+      <li>
+        {{
+          $t(
+            "session.prepare.step.selection.mode.description.withUS.descriptionLine4"
+          )
+        }}
+      </li>
+      <li>
+        {{
+          $t(
+            "session.prepare.step.selection.mode.description.withUS.descriptionLine5"
+          )
+        }}
+      </li>
     </ul>
   </div>
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
 
-export default Vue.extend({
+export default defineComponent({
   name: "UserStoryComponent",
 });
 </script>

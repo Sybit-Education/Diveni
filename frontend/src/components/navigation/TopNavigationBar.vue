@@ -1,7 +1,10 @@
 <template>
   <b-navbar toggleable="md" class="top-navigation">
     <b-navbar-brand class="top-navigation__title" to="/">
-      <b-img src="/img/icons/logo-128x128.png" class="top-navigation__nav-logo" />
+      <b-img
+        src="/img/icons/logo-128x128.png"
+        class="top-navigation__nav-logo"
+      />
       {{ $t("page.landing.productTitle") }}
     </b-navbar-brand>
     <b-navbar-nav class="ml-auto">
@@ -11,10 +14,10 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
 import LocaleDropdown from "@/components/navigation/LocaleDropdown.vue";
 
-export default Vue.extend({
+export default defineComponent({
   name: "TopNavigationBar",
   components: { LocaleDropdown },
 });

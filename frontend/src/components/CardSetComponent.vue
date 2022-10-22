@@ -4,7 +4,9 @@
       <b-col>
         <div class="d-flex justify-content-around">
           <div
-            v-for="item of userStoryMode === jiraTag ? allCardSetsWithJiraMode : allCardSets"
+            v-for="item of userStoryMode === jiraTag
+              ? allCardSetsWithJiraMode
+              : allCardSets"
             :key="item.name"
             class="swipe-card"
             :style="`background-color: ${
@@ -20,18 +22,36 @@
               <div v-if="item.values.length === 0">
                 <span id="createSetHint">
                   <b-icon-info-circle class="mt-3 me-1" />{{
-                    $t("session.prepare.step.selection.cardSet.sets.ownSet.hint.label")
+                    $t(
+                      "session.prepare.step.selection.cardSet.sets.ownSet.hint.label"
+                    )
                   }}</span
                 >
-                <b-popover target="createSetHint" triggers="hover" placement="top">
+                <b-popover
+                  target="createSetHint"
+                  triggers="hover"
+                  placement="top"
+                >
                   <template #title>
-                    {{ $t("session.prepare.step.selection.cardSet.sets.ownSet.hint.label") }}
+                    {{
+                      $t(
+                        "session.prepare.step.selection.cardSet.sets.ownSet.hint.label"
+                      )
+                    }}
                   </template>
                   <p>
-                    {{ $t("session.prepare.step.selection.cardSet.sets.ownSet.hint.description") }}
+                    {{
+                      $t(
+                        "session.prepare.step.selection.cardSet.sets.ownSet.hint.description"
+                      )
+                    }}
                   </p>
                   <p>
-                    {{ $t("session.prepare.step.selection.cardSet.sets.ownSet.hint.example") }}
+                    {{
+                      $t(
+                        "session.prepare.step.selection.cardSet.sets.ownSet.hint.example"
+                      )
+                    }}
                   </p>
                 </b-popover>
               </div>
@@ -58,7 +78,11 @@
         <b-col sm="6">
           <b-form-input
             v-model="createSetInput"
-            :placeholder="$t('session.prepare.step.selection.cardSet.sets.ownSet.hint.example')"
+            :placeholder="
+              $t(
+                'session.prepare.step.selection.cardSet.sets.ownSet.hint.example'
+              )
+            "
           ></b-form-input>
         </b-col>
         <b-col sm="6">
@@ -79,9 +103,9 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
 
-export default Vue.extend({
+export default defineComponent({
   name: "CardSetComponent",
   props: {
     userStoryMode: { type: String, required: true },
@@ -97,13 +121,19 @@ export default Vue.extend({
       createSetInput: "",
       allCardSets: [
         {
-          name: this.$t("session.prepare.step.selection.cardSet.sets.fibonacci.label"),
-          description: this.$t("session.prepare.step.selection.cardSet.sets.fibonacci.description"),
+          name: this.$t(
+            "session.prepare.step.selection.cardSet.sets.fibonacci.label"
+          ),
+          description: this.$t(
+            "session.prepare.step.selection.cardSet.sets.fibonacci.description"
+          ),
           values: ["1", "2", "3", "5", "8", "13", "21", "34", "55", "?"],
           activeValues: ["1", "2", "3", "5", "8", "13", "21"],
         },
         {
-          name: this.$t("session.prepare.step.selection.cardSet.sets.tShirtSizes.label"),
+          name: this.$t(
+            "session.prepare.step.selection.cardSet.sets.tShirtSizes.label"
+          ),
           description: this.$t(
             "session.prepare.step.selection.cardSet.sets.tShirtSizes.description"
           ),
@@ -111,40 +141,64 @@ export default Vue.extend({
           activeValues: ["XS", "S", "M", "L", "XL"],
         },
         {
-          name: this.$t("session.prepare.step.selection.cardSet.sets.hours.label"),
-          description: this.$t("session.prepare.step.selection.cardSet.sets.hours.description"),
+          name: this.$t(
+            "session.prepare.step.selection.cardSet.sets.hours.label"
+          ),
+          description: this.$t(
+            "session.prepare.step.selection.cardSet.sets.hours.description"
+          ),
           values: ["1", "2", "3", "4", "5", "6", "8", "10", "12", "16", "?"],
           activeValues: ["1", "2", "3", "4", "5", "6", "8", "10", "12", "16"],
         },
         {
-          name: this.$t("session.prepare.step.selection.cardSet.sets.numbers.label"),
-          description: this.$t("session.prepare.step.selection.cardSet.sets.numbers.description"),
+          name: this.$t(
+            "session.prepare.step.selection.cardSet.sets.numbers.label"
+          ),
+          description: this.$t(
+            "session.prepare.step.selection.cardSet.sets.numbers.description"
+          ),
           values: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "?"],
           activeValues: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
         },
         {
-          name: this.$t("session.prepare.step.selection.cardSet.sets.ownSet.label"),
-          description: this.$t("session.prepare.step.selection.cardSet.sets.ownSet.description"),
+          name: this.$t(
+            "session.prepare.step.selection.cardSet.sets.ownSet.label"
+          ),
+          description: this.$t(
+            "session.prepare.step.selection.cardSet.sets.ownSet.description"
+          ),
           values: [],
           activeValues: [],
         },
       ],
       allCardSetsWithJiraMode: [
         {
-          name: this.$t("session.prepare.step.selection.cardSet.sets.fibonacci.label"),
-          description: this.$t("session.prepare.step.selection.cardSet.sets.fibonacci.description"),
+          name: this.$t(
+            "session.prepare.step.selection.cardSet.sets.fibonacci.label"
+          ),
+          description: this.$t(
+            "session.prepare.step.selection.cardSet.sets.fibonacci.description"
+          ),
           values: ["1", "2", "3", "5", "8", "13", "21", "34", "55", "?"],
           activeValues: ["1", "2", "3", "5", "8", "13", "21"],
         },
         {
-          name: this.$t("session.prepare.step.selection.cardSet.sets.hours.label"),
-          description: this.$t("session.prepare.step.selection.cardSet.sets.hours.description"),
+          name: this.$t(
+            "session.prepare.step.selection.cardSet.sets.hours.label"
+          ),
+          description: this.$t(
+            "session.prepare.step.selection.cardSet.sets.hours.description"
+          ),
           values: ["1", "2", "3", "4", "5", "6", "8", "10", "12", "16", "?"],
           activeValues: ["1", "2", "3", "4", "5", "6", "8", "10", "12", "16"],
         },
         {
-          name: this.$t("session.prepare.step.selection.cardSet.sets.numbers.label"),
-          description: this.$t("session.prepare.step.selection.cardSet.sets.numbers.description"),
+          name: this.$t(
+            "session.prepare.step.selection.cardSet.sets.numbers.label"
+          ),
+          description: this.$t(
+            "session.prepare.step.selection.cardSet.sets.numbers.description"
+          ),
           values: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "?"],
           activeValues: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
         },
@@ -166,7 +220,9 @@ export default Vue.extend({
   },
   methods: {
     isActiveCardSetNumber(num) {
-      return this.selectedCardSet.activeValues.includes(num) ? "success" : "outline-secondary";
+      return this.selectedCardSet.activeValues.includes(num)
+        ? "success"
+        : "outline-secondary";
     },
     onCardSetSelected(set) {
       this.selectedCardSet = set;
@@ -177,13 +233,12 @@ export default Vue.extend({
     },
     onCardSetNumberSelected(number) {
       if (this.selectedCardSet.activeValues.includes(number)) {
-        this.selectedCardSet.activeValues = this.selectedCardSet.activeValues.filter(
-          (num) => num !== number
-        );
+        this.selectedCardSet.activeValues =
+          this.selectedCardSet.activeValues.filter((num) => num !== number);
       } else {
         const newActiveValues = [...this.selectedCardSet.activeValues, number];
-        this.selectedCardSet.activeValues = this.selectedCardSet.values.filter((num) =>
-          newActiveValues.includes(num)
+        this.selectedCardSet.activeValues = this.selectedCardSet.values.filter(
+          (num) => newActiveValues.includes(num)
         );
       }
       this.emitChanges();

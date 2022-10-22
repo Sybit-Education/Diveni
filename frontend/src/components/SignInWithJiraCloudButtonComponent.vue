@@ -11,11 +11,11 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
 import { v4 as uuidv4 } from "uuid";
 import constants from "@/constants";
 
-export default Vue.extend({
+export default defineComponent({
   name: "SignInWithJiraCloudButtonComponent",
   props: {
     disabled: {

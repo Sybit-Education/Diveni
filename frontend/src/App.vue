@@ -15,11 +15,11 @@ Copyright (C) 2022 AUME-Team 21/22, HTWG Konstanz
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
 import TopNavigationBar from "@/components/navigation/TopNavigationBar.vue";
 import FooterBar from "@/components/navigation/FooterBar.vue";
 
-export default Vue.extend({
+export default defineComponent({
   name: "App",
   components: { FooterBar, TopNavigationBar },
   mounted() {

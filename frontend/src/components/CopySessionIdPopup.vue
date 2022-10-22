@@ -7,14 +7,23 @@
       </b-link>
     </strong>
     {{ textAfterSessionID }}
-    <b-popover id="popover" target="popover-link" triggers="hover" placement="top">
+    <b-popover
+      id="popover"
+      target="popover-link"
+      triggers="hover"
+      placement="top"
+    >
       <b-button class="mx-1" variant="success" @click="copyIdToClipboard()">
         {{ $t("page.session.before.copy.id") }}
       </b-button>
       <b-button class="mx-1" variant="success" @click="copyLinkToClipboard()">
         {{ $t("page.session.before.copy.link") }}
       </b-button>
-      <b-button class="mx-1" variant="success" @click="$bvModal.show('qr-modal')">
+      <b-button
+        class="mx-1"
+        variant="success"
+        @click="$bvModal.show('qr-modal')"
+      >
         {{ $t("page.session.before.copy.qr") }}
       </b-button>
     </b-popover>
@@ -28,10 +37,10 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
 import QrcodeVue from "qrcode.vue";
 
-export default Vue.extend({
+export default defineComponent({
   name: "CopySessionIdPopup",
   components: {
     QrcodeVue,
@@ -46,7 +55,9 @@ export default Vue.extend({
   }),
   computed: {
     sessionLink(): string {
-      return `${document.URL.toString().replace("session", "join?sessionID=")}${this.sessionId}`;
+      return `${document.URL.toString().replace("session", "join?sessionID=")}${
+        this.sessionId
+      }`;
     },
   },
   mounted() {

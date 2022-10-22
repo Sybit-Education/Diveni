@@ -1,12 +1,18 @@
 <template>
   <div>
     <h5>
-      <i>{{ $t("session.prepare.step.selection.mode.description.withJira.subtitle") }}</i>
+      <i>{{
+        $t("session.prepare.step.selection.mode.description.withJira.subtitle")
+      }}</i>
     </h5>
 
     <ul>
       <li>
-        {{ $t("session.prepare.step.selection.mode.description.withJira.descriptionLine1") }}
+        {{
+          $t(
+            "session.prepare.step.selection.mode.description.withJira.descriptionLine1"
+          )
+        }}
         <sign-in-with-jira-cloud-button-component
           v-if="isJiraCloudEnabled"
           class="my-1"
@@ -17,17 +23,29 @@
         ></sign-in-with-jira-server-button-component>
       </li>
       <li>
-        {{ $t("session.prepare.step.selection.mode.description.withJira.descriptionLine2") }}
+        {{
+          $t(
+            "session.prepare.step.selection.mode.description.withJira.descriptionLine2"
+          )
+        }}
         <project-selection-component
           v-if="isLoggedInWithJira"
           class="my-1"
         ></project-selection-component>
       </li>
       <li>
-        {{ $t("session.prepare.step.selection.mode.description.withJira.descriptionLine3") }}
+        {{
+          $t(
+            "session.prepare.step.selection.mode.description.withJira.descriptionLine3"
+          )
+        }}
       </li>
       <li>
-        {{ $t("session.prepare.step.selection.mode.description.withJira.descriptionLine4") }}
+        {{
+          $t(
+            "session.prepare.step.selection.mode.description.withJira.descriptionLine4"
+          )
+        }}
       </li>
     </ul>
   </div>
@@ -35,13 +53,13 @@
 
 <script lang="ts">
 import constants from "@/constants";
-import Vue from "vue";
+import { defineComponent } from "vue";
 import SignInWithJiraCloudButtonComponent from "./SignInWithJiraCloudButtonComponent.vue";
 import SignInWithJiraServerButtonComponent from "./SignInWithJiraServerButtonComponent.vue";
 import ProjectSelectionComponent from "./ProjectSelectionComponent.vue";
 import apiService from "@/services/api.service";
 
-export default Vue.extend({
+export default defineComponent({
   name: "JiraComponent",
   components: {
     SignInWithJiraCloudButtonComponent,

@@ -37,7 +37,10 @@
         <sub><b-icon-three-dots animation="fade" font-scale="1" /></sub>
       </h4>
 
-      <b-row class="d-flex justify-content-center overflow-auto" style="max-height: 500px">
+      <b-row
+        class="d-flex justify-content-center overflow-auto"
+        style="max-height: 500px"
+      >
         <kick-user-wrapper
           v-for="member of members"
           :key="member.memberID"
@@ -56,11 +59,19 @@
     <div v-else>
       <b-row class="d-flex justify-content-start pb-3">
         <b-col cols="auto" class="mr-auto">
-          <b-button class="mr-3" variant="outline-dark" @click="sendRestartMessage">
+          <b-button
+            class="mr-3"
+            variant="outline-dark"
+            @click="sendRestartMessage"
+          >
             <b-icon-arrow-clockwise />
             {{ $t("page.session.during.estimation.buttons.new") }}
           </b-button>
-          <b-button class="mr-3" variant="outline-dark" @click="sendVotingFinishedMessage">
+          <b-button
+            class="mr-3"
+            variant="outline-dark"
+            @click="sendVotingFinishedMessage"
+          >
             <b-icon-bar-chart />
             {{ $t("page.session.during.estimation.buttons.result") }}
           </b-button>
@@ -75,13 +86,19 @@
         </b-col>
       </b-row>
 
-      <h4 v-if="membersPending.length > 0 && !estimateFinished" class="d-inline">
+      <h4
+        v-if="membersPending.length > 0 && !estimateFinished"
+        class="d-inline"
+      >
         {{ $t("page.session.during.estimation.message.waitingFor") }}
         {{ membersPending.length }} /
         {{ membersPending.length + membersEstimated.length }}
       </h4>
 
-      <b-row v-if="!estimateFinished" class="my-1 d-flex justify-content-center flex-wrap">
+      <b-row
+        v-if="!estimateFinished"
+        class="my-1 d-flex justify-content-center flex-wrap"
+      >
         <kick-user-wrapper
           v-for="member of membersPending"
           :key="member.memberID"
@@ -108,7 +125,8 @@
           :props="{
             estimateFinished: estimateFinished,
             highlight:
-              highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0,
+              highlightedMembers.includes(member.memberID) ||
+              highlightedMembers.length === 0,
           }"
         />
       </b-row>
@@ -145,7 +163,7 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
 import Constants from "../constants";
 import Member from "../model/Member";
 import UserStories from "../components/UserStories.vue";
@@ -161,7 +179,7 @@ import KickUserWrapper from "@/components/KickUserWrapper.vue";
 import SessionCloseButton from "@/components/actions/SessionCloseButton.vue";
 import SessionStartButton from "@/components/actions/SessionStartButton.vue";
 
-export default Vue.extend({
+export default defineComponent({
   name: "SessionPage",
   components: {
     SessionStartButton,
@@ -225,13 +243,19 @@ export default Vue.extend({
       return this.$store.state.highlightedMembers;
     },
     membersPending(): Member[] {
-      return this.members.filter((member: Member) => member.currentEstimation === null);
+      return this.members.filter(
+        (member: Member) => member.currentEstimation === null
+      );
     },
     membersEstimated(): Member[] {
-      return this.members.filter((member: Member) => member.currentEstimation !== null);
+      return this.members.filter(
+        (member: Member) => member.currentEstimation !== null
+      );
     },
     timerTimestamp() {
-      return this.$store.state.timerTimestamp ? this.$store.state.timerTimestamp : "";
+      return this.$store.state.timerTimestamp
+        ? this.$store.state.timerTimestamp
+        : "";
     },
   },
   watch: {
@@ -281,10 +305,14 @@ export default Vue.extend({
   mounted() {
     this.voteSet = JSON.parse(this.session_voteSetJson);
     this.connectToWebSocket();
-    if (this.session_sessionState === Constants.memberUpdateCommandStartVoting) {
+    if (
+      this.session_sessionState === Constants.memberUpdateCommandStartVoting
+    ) {
       this.planningStart = true;
       this.sendRestartMessage();
-    } else if (this.session_sessionState === Constants.memberUpdateCommandVotingFinished) {
+    } else if (
+      this.session_sessionState === Constants.memberUpdateCommandVotingFinished
+    ) {
       this.planningStart = true;
       this.estimateFinished = true;
     }
@@ -343,7 +371,8 @@ export default Vue.extend({
         this.session_adminID = session.adminID;
         this.session_sessionID = session.sessionID;
         this.session_sessionState = session.sessionState;
-        this.session_timerSecondsString = session.sessionConfig.timerSeconds.toString();
+        this.session_timerSecondsString =
+          session.sessionConfig.timerSeconds.toString();
         this.session_voteSetJson = JSON.stringify(session.sessionConfig.set);
         this.session_userStoryMode = session.sessionConfig.userStoryMode;
         this.$store.commit("setUserStories", {
@@ -354,12 +383,17 @@ export default Vue.extend({
     },
     handleReload() {
       if (
-        this.session_sessionState === Constants.memberUpdateCommandStartVoting ||
-        this.session_sessionState === Constants.memberUpdateCommandVotingFinished
+        this.session_sessionState ===
+          Constants.memberUpdateCommandStartVoting ||
+        this.session_sessionState ===
+          Constants.memberUpdateCommandVotingFinished
       ) {
         this.planningStart = true;
       }
-      if (this.session_sessionState === Constants.memberUpdateCommandVotingFinished) {
+      if (
+        this.session_sessionState ===
+        Constants.memberUpdateCommandVotingFinished
+      ) {
         this.estimateFinished = true;
       }
       this.timerCountdownNumber = parseInt(this.session_timerSecondsString, 10);
@@ -388,20 +422,27 @@ export default Vue.extend({
             );
             if (response.status === 200) {
               us = this.userStories.map((s) =>
-                s.title === us[idx].title && s.description === us[idx].description
+                s.title === us[idx].title &&
+                s.description === us[idx].description
                   ? { ...s, jiraId: response.data }
                   : s
               );
               console.log(`assigned id: ${us[idx].jiraId}`);
             }
           } else {
-            response = await apiService.updateUserStory(JSON.stringify(us[idx]));
+            response = await apiService.updateUserStory(
+              JSON.stringify(us[idx])
+            );
           }
         }
         if (response.status === 200) {
-          this.$toast.success(this.$t("session.notification.messages.jiraSynchronizeSuccess"));
+          this.$toast.success(
+            this.$t("session.notification.messages.jiraSynchronizeSuccess")
+          );
         } else {
-          this.$toast.error(this.$t("session.notification.messages.jiraSynchronizeFailed"));
+          this.$toast.error(
+            this.$t("session.notification.messages.jiraSynchronizeFailed")
+          );
         }
       }
       // WS send
@@ -431,7 +472,8 @@ export default Vue.extend({
             );
             if (response.status === 200) {
               const updatedStories = this.userStories.map(
-                (s) => s.title === story.title && s.description === story.description
+                (s) =>
+                  s.title === story.title && s.description === story.description
               );
               this.$store.commit("setUserStories", updatedStories);
             }
@@ -440,9 +482,13 @@ export default Vue.extend({
           }
         }
         if (response.status === 200) {
-          this.$toast.success(this.$t("session.notification.messages.jiraSynchronizeSuccess"));
+          this.$toast.success(
+            this.$t("session.notification.messages.jiraSynchronizeSuccess")
+          );
         } else {
-          this.$toast.error(this.$t("session.notification.messages.jiraSynchronizeFailed"));
+          this.$toast.error(
+            this.$t("session.notification.messages.jiraSynchronizeFailed")
+          );
         }
       }
     },

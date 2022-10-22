@@ -8,17 +8,24 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
 import apiService from "@/services/api.service";
 
-export default Vue.extend({
+export default defineComponent({
   name: "JiraCallbackPage",
   created() {
     const urlSearchParams = new URLSearchParams(window.location.search);
     const params = Object.fromEntries(urlSearchParams.entries());
     const jiraStateId = localStorage.getItem("jiraStateId");
-    if (!params.code || !params.state || !jiraStateId || jiraStateId !== params.state) {
-      this.$toast.error(this.$t("session.notification.messages.jiraLoginFailed"));
+    if (
+      !params.code ||
+      !params.state ||
+      !jiraStateId ||
+      jiraStateId !== params.state
+    ) {
+      this.$toast.error(
+        this.$t("session.notification.messages.jiraLoginFailed")
+      );
       this.$router.push({ name: "PrepareSessionPage" });
       return;
     }
@@ -33,13 +40,20 @@ export default Vue.extend({
       } catch (e) {
         this.showToast(e);
       }
-      this.$router.push({ name: "PrepareSessionPage", query: { tabIndex: "2" } });
+      this.$router.push({
+        name: "PrepareSessionPage",
+        query: { tabIndex: "2" },
+      });
     },
     showToast(error) {
       if (error.message == "failed to retrieve access token") {
-        this.$toast.error(this.$t("session.notification.messages.jiraCredentials"));
+        this.$toast.error(
+          this.$t("session.notification.messages.jiraCredentials")
+        );
       } else {
-        this.$toast.error(this.$t("session.notification.messages.jiraLoginFailed"));
+        this.$toast.error(
+          this.$t("session.notification.messages.jiraLoginFailed")
+        );
       }
       console.error(error);
     },

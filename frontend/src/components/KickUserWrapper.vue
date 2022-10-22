@@ -1,5 +1,9 @@
 <template>
-  <div :id="`user${member.memberID}`" class="component" :style="{ width: width }">
+  <div
+    :id="`user${member.memberID}`"
+    class="component"
+    :style="{ width: width }"
+  >
     <Component :is="child" :member="member" :props="props" />
     <b-popover
       :target="`user${member.memberID}`"
@@ -31,10 +35,10 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
 import Constants from "@/constants";
 
-export default Vue.extend({
+export default defineComponent({
   components: {
     RoundedAvatar: () => import("@/components/RoundedAvatar.vue"),
     SessionMemberCard: () => import("@/components/SessionMemberCard.vue"),
@@ -59,14 +63,25 @@ export default Vue.extend({
   methods: {
     openModal() {
       this.$root.$emit("bv::hide::popover");
-      this.$root.$emit("bv::show::modal", `modal${this.member.memberID}`, "#btnShow");
+      this.$root.$emit(
+        "bv::show::modal",
+        `modal${this.member.memberID}`,
+        "#btnShow"
+      );
     },
     closeModal() {
-      this.$root.$emit("bv::hide::modal", `modal${this.member.memberID}`, "#btnShow");
+      this.$root.$emit(
+        "bv::hide::modal",
+        `modal${this.member.memberID}`,
+        "#btnShow"
+      );
     },
     removeMember() {
       const endPoint = Constants.webSocketKickMemberRoute;
-      this.$store.commit("sendViaBackendWS", { endPoint, data: this.member.memberID });
+      this.$store.commit("sendViaBackendWS", {
+        endPoint,
+        data: this.member.memberID,
+      });
       this.closeModal();
     },
   },

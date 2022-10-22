@@ -16,13 +16,19 @@
             :disabled="!editDescription"
             class="border"
             size="lg"
-            :placeholder="$t('page.session.before.userStories.placeholder.userStoryTitle')"
+            :placeholder="
+              $t('page.session.before.userStories.placeholder.userStoryTitle')
+            "
             @blur="publishChanges(idx)"
           />
           <b-dropdown
             v-show="editDescription"
             class="mx-1"
-            :text="(userStories[idx].estimation ? userStories[idx].estimation : '?') + '    '"
+            :text="
+              (userStories[idx].estimation
+                ? userStories[idx].estimation
+                : '?') + '    '
+            "
             variant="info"
           >
             <b-dropdown-item
@@ -45,7 +51,11 @@
             v-model="userStories[idx].description"
             class="mt-1"
             :disabled="!editDescription"
-            :placeholder="$t('page.session.before.userStories.placeholder.userStoryDescription')"
+            :placeholder="
+              $t(
+                'page.session.before.userStories.placeholder.userStoryDescription'
+              )
+            "
             @blur="publishChanges(idx)"
           />
         </div>
@@ -54,17 +64,20 @@
         v-if="userStories.length <= index && userStories.length"
         class="text-center rounded p-3 m-2"
       >
-        <b-card class="border-0" :title="$t('page.session.before.userStories.text')" />
+        <b-card
+          class="border-0"
+          :title="$t('page.session.before.userStories.text')"
+        />
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
 import MarkdownEditor from "@/components/MarkdownEditor.vue";
 
-export default Vue.extend({
+export default defineComponent({
   name: "UserStoryDescriptions",
   components: { MarkdownEditor },
   props: {
@@ -135,7 +148,11 @@ export default Vue.extend({
       });
     },
     publishChanges(idx) {
-      this.$emit("userStoriesChanged", { us: this.userStories, idx: idx, doRemove: false });
+      this.$emit("userStoriesChanged", {
+        us: this.userStories,
+        idx: idx,
+        doRemove: false,
+      });
     },
     // synchronizeJira(idx) {
     //   this.$emit("synchronizeJira", { story: this.userStories[idx], doRemove: false });
