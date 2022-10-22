@@ -169,18 +169,14 @@ public class WebsocketController {
   public synchronized void processVote(@Payload String vote, MemberPrincipal member) {
     LOGGER.debug("--> processVote()");
     val session =
-        ControllerUtils.getSessionByMemberIDOrThrowResponse(databaseService, member.getMemberID())
-            .updateEstimation(member.getMemberID(), vote);
-    boolean votingCompleted = checkIfAllMembersVoted(session.getMembers());
-    if(votingCompleted) {
-      session.updateSessionState(SessionState.VOTING_FINISHED)
-        .selectHighlightedMembers()
-        .resetTimerTimestamp();
-    }
-    databaseService.saveSession(session);
+      ControllerUtils.getSessionByMemberIDOrThrowResponse(databaseService, member.getMemberID())
+        .updateEstimation(member.getMemberID(), vote);
     webSocketService.sendMembersUpdate(session);
-    if(votingCompleted) {
-      webSocketService.sendSessionStateToMembers(session);
+    databaseService.saveSession(session);
+
+    boolean votingCompleted = checkIfAllMembersVoted(session.getMembers());
+    if (votingCompleted) {
+      votingFinished(new AdminPrincipal(member.getSessionID(),databaseService.getSessionByID(member.getSessionID()).get().getAdminID()));
     }
     LOGGER.debug("<-- processVote()");
   }
