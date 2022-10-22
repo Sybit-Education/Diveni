@@ -1,12 +1,12 @@
 <template>
-  <footer class="py-5">
+  <footer>
     <b-container>
       <div>
         &copy; 2022 Diveni |
         <a href="https://docs.diveni.io">{{ $t("general.about.docs") }}</a> |
         <router-link to="/about">{{ $t("general.about.label") }}</router-link>
       </div>
-      <div>Made with ❤️ by Diveni Development Team</div>
+      <div>Made by Diveni Development Team with ❤️at Lake Constance</div>
     </b-container>
   </footer>
 </template>
