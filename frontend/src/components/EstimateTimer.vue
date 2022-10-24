@@ -73,7 +73,7 @@ export default defineComponent({
       if (this.duration === 0) {
         return;
       }
-      this.intervalHandler = setInterval(() => {
+      this.intervalHandler = window.setInterval(() => {
         if (this.timerCount > 0) {
           const startTime = new Date(this.startTimestamp).getTime();
           const currentTime = new Date().getTime();
