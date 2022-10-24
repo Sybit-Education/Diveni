@@ -318,7 +318,7 @@ export default defineComponent({
       this.estimateFinished = true;
     }
   },
-  destroyed() {
+  unmounted() {
     window.removeEventListener("beforeunload", this.sendUnregisterCommand);
   },
   methods: {

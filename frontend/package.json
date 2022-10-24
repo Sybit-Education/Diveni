@@ -6,9 +6,8 @@
     "serve": "vue-cli-service serve --port 8080",
     "serve:remote": "vue-cli-service serve --port 8080 --mode remote",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint --no-fix && npm run prettier -- --check",
-    "lnit:fix": "vue-cli-service lint && npm run prettier -- --write",
-    "prettier": "prettier \"src/**/*.{vue,css,html,ts,js}\"",
+    "lint": "vue-cli-service lint --no-fix",
+    "lint:fix": "vue-cli-service lint",
     "licenses:update": "license-checker --json > ./public/frontend-dependencies.json"
   },
   "dependencies": {
@@ -21,7 +20,7 @@
     "bootstrap": "^5.2.2",
     "bootstrap-vue-3": "^0.3.12",
     "canvas-confetti": "^1.4.0",
-    "core-js": "^3.6.5",
+    "core-js": "^3.8.3",
     "papaparse": "^5.3.1",
     "qrcode.vue": "^3.3.3",
     "register-service-worker": "^1.7.1",
@@ -32,7 +31,7 @@
     "vue-i18n": "^9",
     "vue-router": "^4.1.5",
     "vue-toastification": "^2.0.0-rc.5",
-    "vue2-interact": "0.0.3",
+    "vue-interact": "^0.4.1",
     "vue3-portal": "^1.0.3",
     "vuex": "^4.1.0",
     "webstomp-client": "^1.2.6"
@@ -40,8 +39,7 @@
   "devDependencies": {
     "@crowdin/cli": "^3.7.6",
     "@types/uuid": "^8.3.1",
-    "@typescript-eslint/eslint-plugin": "^4.18.0",
-    "@typescript-eslint/parser": "^4.18.0",
+    "@typescript-eslint/parser": "^5.4.0",
     "@vue/cli-plugin-babel": "^5.0.8",
     "@vue/cli-plugin-eslint": "^5.0.8",
     "@vue/cli-plugin-pwa": "^5.0.8",
@@ -49,20 +47,18 @@
     "@vue/cli-plugin-typescript": "^5.0.8",
     "@vue/cli-plugin-vuex": "^5.0.8",
     "@vue/cli-service": "^5.0.8",
-    "@vue/compiler-sfc": "^3.1.0",
-    "@vue/eslint-config-prettier": "^6.0.0",
     "@vue/eslint-config-typescript": "^7.0.0",
     "babel-plugin-transform-remove-console": "^6.9.4",
     "eslint": "^7.32.0",
-    "eslint-plugin-import": "^2.20.2",
+    "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^3.3.1",
-    "eslint-plugin-vue": "^7.5.0",
+    "eslint-plugin-vue": "^8.0.3",
     "license-checker": "^25.0.1",
     "lint-staged": "^13.0.3",
     "prettier": "^2.4.1",
     "sass": "~1.32.0",
     "sass-loader": "^10.0.0",
-    "typescript": "~4.1.5"
+    "typescript": "~4.5.5"
   },
   "lint-staged": {
     "*.ts": "npm run fmt",

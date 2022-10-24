@@ -310,7 +310,7 @@ export default defineComponent({
     }
     this.voteSet = JSON.parse(this.voteSetJson);
   },
-  beforeDestroy() {
+  beforeUnmount() {
     this.sendUnregisterCommand();
   },
   methods: {

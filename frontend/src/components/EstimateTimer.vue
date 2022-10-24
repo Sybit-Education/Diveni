@@ -53,7 +53,7 @@ export default defineComponent({
       this.startInterval();
     }
   },
-  beforeDestroy() {
+  beforeUnmount() {
     clearInterval(this.intervalHandler);
   },
   methods: {
