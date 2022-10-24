@@ -3,6 +3,7 @@
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
+import { useToast } from "vue-toastification";
 
 export default defineComponent({
   name: "NotifyHostComponent",
@@ -20,11 +21,9 @@ export default defineComponent({
   methods: {
     showToast(message) {
       if (message.type == "MEMBER_LEFT") {
-        this.$toast.warning(
-          this.$t("session.notification.messages.memberLeft")
-        );
+        useToast().warning(this.$t("session.notification.messages.memberLeft"));
       } else if (message.type == "MEMBER_JOINED") {
-        this.$toast.info(this.$t("session.notification.messages.memberJoined"));
+        useToast().info(this.$t("session.notification.messages.memberJoined"));
       }
     },
   },

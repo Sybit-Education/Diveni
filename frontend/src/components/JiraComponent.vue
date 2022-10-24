@@ -57,6 +57,7 @@ import { defineComponent } from "vue";
 import SignInWithJiraCloudButtonComponent from "./SignInWithJiraCloudButtonComponent.vue";
 import SignInWithJiraServerButtonComponent from "./SignInWithJiraServerButtonComponent.vue";
 import ProjectSelectionComponent from "./ProjectSelectionComponent.vue";
+import { useToast } from "vue-toastification";
 import apiService from "@/services/api.service";
 
 export default defineComponent({
@@ -88,7 +89,7 @@ export default defineComponent({
           apiService.getAllProjects().then((pr) => {
             this.$store.commit("setProjects", pr);
           });
-          this.$toast.success("Logged in");
+          useToast().success("Logged in");
         }
       },
       immediate: true,

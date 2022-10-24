@@ -122,6 +122,7 @@ import CardSetComponent from "../components/CardSetComponent.vue";
 import UserStoryComponent from "../components/UserStoryComponent.vue";
 import JiraComponent from "../components/JiraComponent.vue";
 import StroyPointsComponent from "@/components/StroyPointsComponent.vue";
+import { useToast } from "vue-toastification";
 import constants from "../constants";
 import UserStory from "@/model/UserStory";
 import papaparse from "papaparse";
@@ -293,14 +294,14 @@ export default defineComponent({
           this.$store.commit("setUserStories", {
             stories: stories,
           });
-          this.$toast.success(
+          useToast().success(
             this.$t(
               "session.prepare.step.selection.mode.description.withUS.toastSuccessNotification"
             )
           );
         },
         error: () => {
-          this.$toast.error(
+          useToast().error(
             this.$t(
               "session.prepare.step.selection.mode.description.withUS.toastErrorNotification"
             )

@@ -9,6 +9,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import { useToast } from "vue-toastification";
 import apiService from "@/services/api.service";
 
 export default defineComponent({
@@ -23,7 +24,7 @@ export default defineComponent({
       !jiraStateId ||
       jiraStateId !== params.state
     ) {
-      this.$toast.error(
+      useToast().error(
         this.$t("session.notification.messages.jiraLoginFailed")
       );
       this.$router.push({ name: "PrepareSessionPage" });
@@ -47,11 +48,11 @@ export default defineComponent({
     },
     showToast(error) {
       if (error.message == "failed to retrieve access token") {
-        this.$toast.error(
+        useToast().error(
           this.$t("session.notification.messages.jiraCredentials")
         );
       } else {
-        this.$toast.error(
+        useToast().error(
           this.$t("session.notification.messages.jiraLoginFailed")
         );
       }

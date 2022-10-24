@@ -17,6 +17,7 @@
 import { defineComponent } from "vue";
 import { v4 as uuidv4 } from "uuid";
 import JoinPageCard from "../components/JoinPageCard.vue";
+ import { useToast } from "vue-toastification";
 import JoinCommand from "../model/JoinCommand";
 import Constants from "../constants";
 
@@ -151,10 +152,10 @@ export default defineComponent({
     },
     showToast(e) {
       if (e.message == "Request failed with status code 404") {
-        this.$toast.error(this.$t("session.notification.messages.wrongID"));
+        useToast().error(this.$t("session.notification.messages.wrongID"));
       }
       if (e.message == "Request failed with status code 401") {
-        this.$toast.error(this.$t("session.notification.messages.password"));
+        useToast().error(this.$t("session.notification.messages.password"));
       }
       console.error(e);
     },

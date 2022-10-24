@@ -172,6 +172,7 @@ import MobileStoryTitle from "../components/MobileStoryTitle.vue";
 import UserStorySumComponent from "@/components/UserStorySum.vue";
 import SessionLeaveButton from "@/components/actions/SessionLeaveButton.vue";
 import Flicking from "@egjs/vue3-flicking";
+import { useToast } from "vue-toastification";
 
 export default defineComponent({
   name: "MemberVotePage",
@@ -287,7 +288,7 @@ export default defineComponent({
         notifications.at(-1).type === "MEMBER_LEFT" &&
         notifications.at(-1).payload.memberID === this.memberID
       ) {
-        this.$toast.error(
+        useToast().error(
           this.$t("session.notification.messages.memberRemoved")
         );
         this.leaveMeeting();

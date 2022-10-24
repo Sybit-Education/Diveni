@@ -178,6 +178,7 @@ import Project from "../model/Project";
 import KickUserWrapper from "@/components/KickUserWrapper.vue";
 import SessionCloseButton from "@/components/actions/SessionCloseButton.vue";
 import SessionStartButton from "@/components/actions/SessionStartButton.vue";
+import { useToast } from "vue-toastification";
 
 export default defineComponent({
   name: "SessionPage",
@@ -436,11 +437,11 @@ export default defineComponent({
           }
         }
         if (response.status === 200) {
-          this.$toast.success(
+          useToast().success(
             this.$t("session.notification.messages.jiraSynchronizeSuccess")
           );
         } else {
-          this.$toast.error(
+          useToast().error(
             this.$t("session.notification.messages.jiraSynchronizeFailed")
           );
         }
@@ -482,11 +483,11 @@ export default defineComponent({
           }
         }
         if (response.status === 200) {
-          this.$toast.success(
+          useToast().success(
             this.$t("session.notification.messages.jiraSynchronizeSuccess")
           );
         } else {
-          this.$toast.error(
+          useToast().error(
             this.$t("session.notification.messages.jiraSynchronizeFailed")
           );
         }
