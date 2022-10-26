@@ -82,13 +82,16 @@
       </h4>
 
       <div id="demo">
-        <div v-if="membersEstimated.length === (membersPending.length + membersEstimated.length)" style="display: none;">
-          {{ estimateFinished = true }}
+        <div
+          v-if="membersEstimated.length === membersPending.length + membersEstimated.length"
+          style="display: none"
+        >
+          {{ (estimateFinished = true) }}
         </div>
       </div>
       <div id="demo">
-        <div v-if="membersEstimated.length === 0" style="display: none;">
-          {{ estimateFinished = false }}
+        <div v-if="membersEstimated.length === 0" style="display: none">
+          {{ (estimateFinished = false) }}
         </div>
       </div>
 

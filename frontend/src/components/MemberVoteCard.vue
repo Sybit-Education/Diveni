@@ -33,6 +33,7 @@
 </template>
 
 <script lang="ts">
+// eslint-disable-next-line
 import Vue from "vue";
 import { Vue2InteractDraggable } from "vue2-interact";
 import confetti from "canvas-confetti";
