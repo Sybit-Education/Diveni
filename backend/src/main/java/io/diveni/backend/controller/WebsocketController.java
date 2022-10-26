@@ -8,8 +8,10 @@ package io.diveni.backend.controller;
 import java.security.Principal;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import io.diveni.backend.Utils;
+import io.diveni.backend.model.Member;
 import io.diveni.backend.model.Session;
 import io.diveni.backend.model.SessionState;
 import io.diveni.backend.model.UserStory;
@@ -167,11 +169,20 @@ public class WebsocketController {
   public synchronized void processVote(@Payload String vote, MemberPrincipal member) {
     LOGGER.debug("--> processVote()");
     val session =
-        ControllerUtils.getSessionByMemberIDOrThrowResponse(databaseService, member.getMemberID())
-            .updateEstimation(member.getMemberID(), vote);
-    databaseService.saveSession(session);
+      ControllerUtils.getSessionByMemberIDOrThrowResponse(databaseService, member.getMemberID())
+        .updateEstimation(member.getMemberID(), vote);
     webSocketService.sendMembersUpdate(session);
+    databaseService.saveSession(session);
+
+    boolean votingCompleted = checkIfAllMembersVoted(session.getMembers());
+    if (votingCompleted) {
+      votingFinished(new AdminPrincipal(member.getSessionID(),databaseService.getSessionByID(member.getSessionID()).get().getAdminID()));
+    }
     LOGGER.debug("<-- processVote()");
+  }
+
+  private boolean checkIfAllMembersVoted(List<Member> members) {
+    return members.stream().filter(m -> m.getCurrentEstimation() == null).count() == 0;
   }
 
   @MessageMapping("/restart")
