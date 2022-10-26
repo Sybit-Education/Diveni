@@ -8,7 +8,6 @@ package io.diveni.backend.controller;
 import java.security.Principal;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import io.diveni.backend.Utils;
 import io.diveni.backend.model.Member;
@@ -169,14 +168,17 @@ public class WebsocketController {
   public synchronized void processVote(@Payload String vote, MemberPrincipal member) {
     LOGGER.debug("--> processVote()");
     val session =
-      ControllerUtils.getSessionByMemberIDOrThrowResponse(databaseService, member.getMemberID())
-        .updateEstimation(member.getMemberID(), vote);
+        ControllerUtils.getSessionByMemberIDOrThrowResponse(databaseService, member.getMemberID())
+            .updateEstimation(member.getMemberID(), vote);
     webSocketService.sendMembersUpdate(session);
     databaseService.saveSession(session);
 
     boolean votingCompleted = checkIfAllMembersVoted(session.getMembers());
     if (votingCompleted) {
-      votingFinished(new AdminPrincipal(member.getSessionID(),databaseService.getSessionByID(member.getSessionID()).get().getAdminID()));
+      votingFinished(
+          new AdminPrincipal(
+              member.getSessionID(),
+              databaseService.getSessionByID(member.getSessionID()).get().getAdminID()));
     }
     LOGGER.debug("<-- processVote()");
   }
