@@ -8,10 +8,10 @@ Using Docker is the preferred way to install Diveni.
 
 Preferred Docker environment: 
 
-* Docker host: Linus, Windows, Mac
+* Docker host: Linux, Windows, Mac
 * CPU: TBD
 * Memory: TBD
-* HD space: TBD
+* HDD space: TBD
 
 ## Preconditions
 
@@ -36,6 +36,8 @@ one-way (incoming) link from the client to Jira.
 
 Afterwards, you will see the `client secret` and `ID`, which needs to be provided for Diveni on
 JIRA-Server.
+
+In the end make sure to enable Jira Server by setting `VUE_APP_ENABLE_JIRA_SERVER` in `frontend/.env` to `true`.
 
 ## Docker
 
