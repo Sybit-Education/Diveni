@@ -70,6 +70,4 @@ jobs:
           port: ${{ secrets.DEPLOY_SSH_PORT }}
           script_stop: true
           script: |
-            cd ${{ secrets.DEPLOY_DIR }}
-            sudo docker-compose pull
-            sudo docker-compose up -d
+            bash startDiveni.sh
