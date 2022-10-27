@@ -7,7 +7,7 @@
     "serve:remote": "vue-cli-service serve --port 8080 --mode remote",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint --no-fix && npm run prettier -- --check",
-    "lnit:fix": "vue-cli-service lint && npm run prettier -- --write",
+    "lint:fix": "vue-cli-service lint && npm run prettier -- --write",
     "prettier": "prettier \"src/**/*.{vue,css,html,ts,js}\"",
     "licenses:update": "license-checker --json > ./public/frontend-dependencies.json"
   },
