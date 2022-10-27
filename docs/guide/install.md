@@ -8,10 +8,10 @@ Using Docker is the preferred way to install Diveni.
 
 Preferred Docker environment: 
 
-* Docker host: Linus, Windows, Mac
+* Docker host: Linux, Windows, Mac
 * CPU: TBD
 * Memory: TBD
-* HD space: TBD
+* HDD space: TBD
 
 ## Preconditions
 
