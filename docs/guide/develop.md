@@ -1,5 +1,7 @@
 # Developers Guide
 
+![GitHub Repo stars](https://img.shields.io/github/stars/Sybit-Education/Diveni?style=social)
+
 See also: 
 
 * [Code of Conduct](../code_of_conduct.md)

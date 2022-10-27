@@ -149,6 +149,7 @@
 </template>
 
 <script lang="ts">
+// eslint-disable-next-line
 import Vue from "vue";
 import RoundedAvatar from "../components/RoundedAvatar.vue";
 import MemberVoteCard from "../components/MemberVoteCard.vue";
