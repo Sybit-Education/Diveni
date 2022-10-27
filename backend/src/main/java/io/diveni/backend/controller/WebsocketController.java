@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.List;
 
 import io.diveni.backend.Utils;
+import io.diveni.backend.model.Member;
 import io.diveni.backend.model.Session;
 import io.diveni.backend.model.SessionState;
 import io.diveni.backend.model.UserStory;
@@ -169,9 +170,21 @@ public class WebsocketController {
     val session =
         ControllerUtils.getSessionByMemberIDOrThrowResponse(databaseService, member.getMemberID())
             .updateEstimation(member.getMemberID(), vote);
-    databaseService.saveSession(session);
     webSocketService.sendMembersUpdate(session);
+    databaseService.saveSession(session);
+
+    boolean votingCompleted = checkIfAllMembersVoted(session.getMembers());
+    if (votingCompleted) {
+      votingFinished(
+          new AdminPrincipal(
+              member.getSessionID(),
+              databaseService.getSessionByID(member.getSessionID()).get().getAdminID()));
+    }
     LOGGER.debug("<-- processVote()");
+  }
+
+  private boolean checkIfAllMembersVoted(List<Member> members) {
+    return members.stream().filter(m -> m.getCurrentEstimation() == null).count() == 0;
   }
 
   @MessageMapping("/restart")

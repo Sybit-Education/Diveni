@@ -3,9 +3,11 @@
     <b-card-text class="my-5">
       {{ description }}
     </b-card-text>
-    <b-button variant="success" @click="onClick">
-      {{ buttonText }}
-    </b-button>
+    <template #footer>
+      <b-button variant="success" @click="onClick">
+        {{ buttonText }}
+      </b-button>
+    </template>
   </b-card>
 </template>
 
@@ -26,5 +28,6 @@ export default defineComponent({
 <style scoped>
 .landing-page-card {
   border-radius: 0.5rem;
+  background-color: rgba(200, 200, 200, 0.5);
 }
 </style>

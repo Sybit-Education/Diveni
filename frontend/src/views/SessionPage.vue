@@ -95,10 +95,21 @@
         {{ membersPending.length + membersEstimated.length }}
       </h4>
 
-      <b-row
-        v-if="!estimateFinished"
-        class="my-1 d-flex justify-content-center flex-wrap"
-      >
+      <div id="demo">
+        <div
+          v-if="membersEstimated.length === membersPending.length + membersEstimated.length"
+          style="display: none"
+        >
+          {{ (estimateFinished = true) }}
+        </div>
+      </div>
+      <div id="demo">
+        <div v-if="membersEstimated.length === 0" style="display: none">
+          {{ (estimateFinished = false) }}
+        </div>
+      </div>
+
+      <b-row v-if="!estimateFinished" class="my-1 d-flex justify-content-center flex-wrap">
         <kick-user-wrapper
           v-for="member of membersPending"
           :key="member.memberID"
