@@ -8,10 +8,16 @@
       <b-form>
         <b-button :to="{ name: 'JoinPage' }" variant="success" class="px-2 mr-2">
           {{ $t("page.landing.meeting.join.buttons.start.label") }}</b-button
-        >
+          >
       </b-form>
       <b-form>
         <b-button :to="{ name: 'PrepareSessionPage' }" class="px-2 mr-2">New Session</b-button>
+      </b-form>
+      <b-form class="px-2 mr-2">
+        
+        <a href="https://github.com/Sybit-Education/Diveni" target="_blank">
+          <img :src = "require('./images/GitHub-Mark-32px.png')" height="40px" width="40px"/>
+        </a> 
       </b-form>
       <locale-dropdown />
     </b-navbar-nav>
