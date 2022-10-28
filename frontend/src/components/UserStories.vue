@@ -6,7 +6,7 @@
         class="search"
         type="text"
         placeholder="Search user stories..."
-        @keyup.enter="swapPriority"
+        @input="swapPriority"
       />
     </div>
     <b-card-group class="my-3 overflow-auto" style="max-height: 70vh">
@@ -128,30 +128,31 @@ export default Vue.extend({
       };
       this.userStories.push(story);
     },
-    swapPriority: function (e) {
-      if (e.key == "Enter") {
-        if (!this.filterActive) {
-          this.safedStories = this.userStories;
-        }
-        this.userStories = this.safedStories;
-        if (this.input !== "") {
-          let filteredUserStories: UserStory[] = [];
-          this.userStories.forEach((userStory) => {
-            if (userStory.title.toLowerCase().includes(this.input.toLowerCase())) {
-              filteredUserStories.push(userStory);
-            }
-          });
-          if (filteredUserStories.length > 0) {
-            this.filterActive = true;
-            this.publishChanges(null, false, filteredUserStories);
-          } else {
-            this.filterActive = true;
-            this.publishChanges(null, false, []);
+    swapPriority: function () {
+      if (!this.filterActive) {
+        this.safedStories = this.userStories;
+      }
+      this.userStories = this.safedStories;
+      if (this.input !== "") {
+        let filteredUserStories: UserStory[] = [];
+        this.userStories.forEach((userStory) => {
+          if (userStory.title.toLowerCase().includes(this.input.toLowerCase())) {
+            filteredUserStories.push(userStory);
           }
+        });
+        if (filteredUserStories.length > 0) {
+          this.filterActive = true;
+          this.userStories = filteredUserStories;
+          this.publishChanges(null, false, this.userStories);
         } else {
-          this.filterActive = false;
-          this.publishChanges(null, false, this.safedStories);
+          this.filterActive = true;
+          this.userStories = [];
+          this.publishChanges(null, false, this.userStories);
         }
+      } else {
+        this.filterActive = false;
+        this.userStories = this.safedStories;
+        this.publishChanges(null, false, this.userStories);
       }
     },
     deleteStory(index) {

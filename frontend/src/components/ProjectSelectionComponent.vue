@@ -1,5 +1,14 @@
 <template>
   <div>
+    <div id="inputField">
+      <input
+        v-model="input"
+        class="search"
+        type="text"
+        placeholder="Filter your Project"
+        @input="getAllProjects"
+      />
+    </div>
     <b-form-select
       v-model="selected"
       class="form-select"
@@ -25,6 +34,8 @@ export default Vue.extend({
     return {
       selected: null,
       project: "",
+      projectArray: [] as Array<Project>,
+      input: "",
     };
   },
   computed: {
@@ -32,7 +43,12 @@ export default Vue.extend({
       return this.$store.state.projects;
     },
     getAllProjects(): Array<unknown> {
-      const projectNames = this.projects.map((p) => p.name);
+      let projectNames;
+      if (this.input.length > 0) {
+        projectNames = this.getFilteredProjects(this.projects).map((p) => p.name);
+      } else {
+        projectNames = this.projects.map((p) => p.name);
+      }
       if (projectNames.length < 1) {
         return [
           {
@@ -53,6 +69,17 @@ export default Vue.extend({
   },
 
   methods: {
+    getFilteredProjects(projects): Array<Project> {
+      let returnArray: Array<Project>;
+      returnArray = [];
+      projects.forEach((project) => {
+        if (project.name.toLowerCase().includes(this.input.toLowerCase())) {
+          returnArray.push(project);
+        }
+      });
+      return returnArray;
+    },
+
     async getUserStories(project) {
       console.log(`Trying to select ${project}`);
       const selectedProject = this.projects.find((p) => p.name === project);
@@ -64,3 +91,15 @@ export default Vue.extend({
   },
 });
 </script>
+
+<style scoped>
+.search {
+  background-image: url("@/assets/magnifying glass.png");
+  background-position: 3px;
+  background-repeat: no-repeat;
+  background-size: 22px 25px;
+  padding-left: 30px;
+  border-color: black;
+  overflow: auto;
+}
+</style>
