@@ -3,7 +3,7 @@
   Diveni - The Planing-Poker App
   Copyright (C) 2022 AUME-Team 21/22, HTWG Konstanz
 */
-import { createApp } from "vue";
+import Vue, { createApp } from "vue";
 
 import axios from "axios";
 import VueAxios from "vue-axios";
@@ -15,20 +15,25 @@ import store from "./store";
 import { i18n } from "./i18n";
 import setupInterceptors from "./interceptors";
 
-import BootstrapVue3 from "bootstrap-vue-3";
+import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
+// Import Bootstrap and BootstrapVue CSS files (order is important)
 import "bootstrap/dist/css/bootstrap.css";
-import "bootstrap-vue-3/dist/bootstrap-vue-3.css";
+import "bootstrap-vue/dist/bootstrap-vue.css";
 
 import Toast from "vue-toastification";
 import "vue-toastification/dist/index.css";
 
 setupInterceptors();
 
-createApp(App)
-  .use(VueAxios, axios)
-  .use(BootstrapVue3)
-  .use(Toast, {})
-  .use(router)
-  .use(store)
-  .use(i18n)
-  .mount('#app');
+const app = createApp({
+  router,
+  store,
+  i18n,
+  ...App,
+});
+
+app.use(VueAxios, axios);
+app.use(Toast, {});
+app.use(BootstrapVue);
+
+app.mount("#app");
