@@ -16,6 +16,7 @@ export default defineComponent({
     duration: { type: Number, required: true },
     pauseTimer: { type: Boolean, required: true },
   },
+  emits: [ 'timerFinished' ],
   data() {
     return {
       timerCount: 0,

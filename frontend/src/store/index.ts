@@ -5,7 +5,6 @@ import Vuex from "vuex";
 import webstomp from "webstomp-client";
 import Constants from "../constants";
 
-Vue.use(Vuex);
 export default new Vuex.Store<StoreState>({
   state: {
     stompClient: undefined,

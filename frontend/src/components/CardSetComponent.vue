@@ -110,6 +110,7 @@ export default defineComponent({
   props: {
     userStoryMode: { type: String, required: true },
   },
+  emits: [ 'selectedCardSetOptions' ],
   data() {
     return {
       jiraTag: "US_JIRA",

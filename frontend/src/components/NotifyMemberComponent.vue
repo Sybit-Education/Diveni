@@ -12,6 +12,7 @@ export default defineComponent({
       return this.$store.state.notifications;
     },
   },
+  emits: [ 'hostLeft', 'hostJoined' ],
   watch: {
     notifications(notifications) {
       this.showToast(notifications.at(-1));

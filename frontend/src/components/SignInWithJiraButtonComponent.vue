@@ -15,7 +15,7 @@
     </b-button>
     <b-modal
       id="modal-verification-code"
-      ref="modal"
+      ref="modal-verification-code"
       title="Verification code"
       @show="resetModal"
       @hidden="resetModal"
@@ -39,11 +39,7 @@
             id="input-verification-code"
             v-model="verificationCode"
             required
-            :placeholder="
-              $t(
-                'session.prepare.step.selection.mode.description.withJira.inputs.verificationCode.placeholder'
-              )
-            "
+            :placeholder="$t('session.prepare.step.selection.mode.description.withJira.inputs.verificationCode.placeholder')"
             :state="verificationCodeState"
           />
         </b-form-group>
@@ -53,8 +49,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, nextTick } from "vue";
 import apiService from "@/services/api.service";
+import { BModal } from "bootstrap-vue";
 
 export default defineComponent({
   name: "SignInWithJiraButtonComponent",
@@ -68,7 +65,7 @@ export default defineComponent({
   methods: {
     checkFormValidity() {
       const valid = (
-        this.$refs.form as Vue & { checkValidity: () => boolean }
+        this.$refs.form as HTMLFormElement & { checkValidity: () => boolean }
       ).checkValidity();
       this.verificationCodeState = valid;
       return valid;
@@ -79,8 +76,11 @@ export default defineComponent({
       window.open(tokenDto.url, "_blank")?.focus();
     },
     openModal() {
-      this.$nextTick(() => {
-        this.$bvModal.show("modal-verification-code");
+      nextTick(() => {
+        if (this.$refs?.["modal-verification-code"]) {
+          const modal = this.$refs?.["modal-verification-code"] as BModal;
+          modal.show();
+        }
       });
     },
     resetModal() {
@@ -100,8 +100,11 @@ export default defineComponent({
         this.verificationCode,
         this.token
       );
-      this.$nextTick(() => {
-        this.$bvModal.hide("modal-verification-code");
+      nextTick(() => {
+        if (this.$refs?.["modal-verification-code"]) {
+          const modal = this.$refs?.["modal-verification-code"] as BModal;
+          modal.hide();
+        }
       });
     },
   },

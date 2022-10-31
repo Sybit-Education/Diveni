@@ -19,13 +19,13 @@
       <b-row class="mt-2">
         <b-col>
           <h6>{{ $t("page.join.input.name") }}</h6>
-          <b-form-input ref="name" v-model="name" class="mt-3" type="text" />
+          <b-form-input ref="name" v-model="name" class="mt-3" type="text" name="firstname"/>
         </b-col>
       </b-row>
       <b-row class="mt-4">
         <b-col cols="12" :md="'6'">
           <h6>{{ $t("page.join.input.code") }}</h6>
-          <b-form-input v-model="sessionID" class="mt-3" type="text" />
+          <b-form-input v-model="sessionID" class="mt-3" type="text" name="sessionid"/>
         </b-col>
         <b-col class="mt-2 mt-md-0" cols="12" md="6">
           <h6>{{ $t("page.join.input.password") }}</h6>
@@ -34,6 +34,7 @@
             class="mt-3"
             type="password"
             placeholder="(optional)"
+            name="password"
           />
         </b-col>
       </b-row>
@@ -55,6 +56,7 @@
 </template>
 
 <script lang="ts">
+import { BFormInput } from "bootstrap-vue";
 import { defineComponent } from "vue";
 import JoinCommand from "../model/JoinCommand";
 import RoundedAvatar from "./RoundedAvatar.vue";
@@ -70,6 +72,7 @@ export default defineComponent({
     buttonText: { type: String, required: true },
     sessionIdFromUrl: { type: String, required: true },
   },
+  emits: ['clicked'],
   data() {
     return {
       sessionID: "",
@@ -88,7 +91,10 @@ export default defineComponent({
     });
   },
   mounted() {
-    this?.$refs?.name?.["$el"]?.focus();
+    if (this.$refs?.name) {
+      const nameControl = this.$refs?.name as BFormInput;
+      nameControl.focus();
+    }
   },
   methods: {
     onClickButton() {

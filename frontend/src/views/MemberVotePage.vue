@@ -297,7 +297,9 @@ export default defineComponent({
   },
   created() {
     // window.addEventListener("beforeunload", this.sendUnregisterCommand);
-    this.timerCountdownNumber = JSON.parse(this.timerSecondsString);
+    if (this.timerSecondsString) {
+      this.timerCountdownNumber = JSON.parse(this.timerSecondsString);
+    }
   },
   mounted() {
     if (
@@ -308,7 +310,9 @@ export default defineComponent({
     ) {
       this.goToJoinPage();
     }
-    this.voteSet = JSON.parse(this.voteSetJson);
+    if (this.voteSetJson) {
+      this.voteSet = JSON.parse(this.voteSetJson);
+    }
   },
   beforeUnmount() {
     this.sendUnregisterCommand();

@@ -80,6 +80,7 @@ export default defineComponent({
     showEditButtons: { type: Boolean, required: false, default: true },
     selectStory: { type: Boolean, required: false, default: false },
   },
+  emits: [ 'selectedStory', 'userStoriesChanged' ],
   data() {
     return {
       selectedStoryIndex: null,

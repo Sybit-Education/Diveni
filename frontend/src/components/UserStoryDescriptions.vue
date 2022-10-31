@@ -88,6 +88,7 @@ export default defineComponent({
     showEstimations: { type: Boolean, required: false },
     showEditButtons: { type: Boolean, required: false, default: true },
   },
+  emits: [ 'userStoriesChanged' ],
   data() {
     return {
       sideBarOpen: false,

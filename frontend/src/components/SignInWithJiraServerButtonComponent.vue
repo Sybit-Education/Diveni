@@ -54,7 +54,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, Vue } from "vue";
+import { defineComponent, nextTick } from "vue";
+import { BModal } from "bootstrap-vue";
 import { useToast } from "vue-toastification";
 import apiService from "@/services/api.service";
 
@@ -77,7 +78,7 @@ export default defineComponent({
   methods: {
     checkFormValidity() {
       const valid = (
-        this.$refs.form as Vue & { checkValidity: () => boolean }
+        this.$refs.form as HTMLFormElement & { checkValidity: () => boolean }
       ).checkValidity();
       this.verificationCodeState = valid;
       return valid;
@@ -88,8 +89,11 @@ export default defineComponent({
       window.open(tokenDto.url, "_blank")?.focus();
     },
     openModal() {
-      this.$nextTick(() => {
-        this.$bvModal.show("modal-verification-code");
+      nextTick(() => {
+        if (this.$refs?.["modal-verification-code"]) {
+          const modal = this.$refs?.["modal-verification-code"] as BModal;
+          modal.show();
+        }
       });
     },
     resetModal() {
@@ -115,8 +119,11 @@ export default defineComponent({
       } catch (e) {
         this.showToast(e);
       }
-      this.$nextTick(() => {
-        this.$bvModal.hide("modal-verification-code");
+      nextTick(() => {
+        if (this.$refs?.["modal-verification-code"]) {
+          const modal = this.$refs?.["modal-verification-code"] as BModal;
+          modal.hide();
+        }
       });
     },
     showToast(error) {

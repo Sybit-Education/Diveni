@@ -14,6 +14,7 @@ import Constants from "@/constants";
 
 export default defineComponent({
   name: "SessionStartButton",
+  emits: [ 'clicked' ],
   computed: {
     members() {
       return this.$store.state.members;
