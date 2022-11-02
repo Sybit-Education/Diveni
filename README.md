@@ -1,17 +1,18 @@
 # Diveni - The Planning-Poker App
 
 ![GitHub Repo stars](https://img.shields.io/github/stars/Sybit-Education/Diveni?style=social)
-
 [![License](https://img.shields.io/badge/license-GNU%20AGPL%20v3-blue.svg)](LICENSE)
 [![Crowdin](https://badges.crowdin.net/diveni/localized.svg)](https://crowdin.com/project/diveni)
 [![Discord](https://img.shields.io/discord/935641426216222730?color=%237289DA&label=Discord&logo=Discord&logoColor=%237289DA)](https://discord.gg/7JmRyn5dc6)
-
-![Code Coverage Lnies](.github/badges/jacoco.svg)
+![Code Coverage Lines](.github/badges/jacoco.svg)
 ![Code Coverage Branches](.github/badges/branches.svg)
 
 ---
 
 ## Hacktoberfest 2022
+
+**Update 2022-11-02: Many thanks all contributors supporting us during Hacktoberfest 2022!** We are happy to announce that we had **15 PRs** where **11 PRs** have been merged successful during Hacktoberfest 🚀 
+
 
 Diveni participates on Hacktoberfest 2022! We are looking forward to your support to improve this awesome app!
 
