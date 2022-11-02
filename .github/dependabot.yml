@@ -4,10 +4,11 @@
 # https://docs.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
 
 version: 2
+
 updates:
-  - package-ecosystem: "npm" # See documentation for possible values 
+  - package-ecosystem: "npm" # See documentation for possible values
     directory: "/" # Location of package manifests
-    registries: 
+    registries:
       - npm-github
     target-branch: "main"
     schedule:
@@ -15,3 +16,32 @@ updates:
     ignore:
       - dependency-name: "*" #All the dependency it gonna ignore for major update
         update-types: [ "version-update:semver-major" ]
+    labels:
+      - "npm dependencies"
+      - "documentation"
+
+  - package-ecosystem: "npm" # See documentation for possible values
+    directory: "/frontend" # Location of package manifests
+    registries:
+      - npm-github
+    target-branch: "main"
+    schedule:
+      interval: "weekly"
+    ignore:
+      - dependency-name: "*" #All the dependency it gonna ignore for major update
+        update-types: [ "version-update:semver-major" ]
+    labels:
+      - "npm dependencies"
+      - "frontend"
+
+  - package-ecosystem: "gradle"
+    directory: "/backend"
+    target-branch: "main"
+    schedule:
+      interval: "weekly"
+    ignore:
+      - dependency-name: "*" #All the dependency it gonna ignore for major update
+        update-types: [ "version-update:semver-major" ]
+    labels:
+      - "gradle dependencies"
+      - "backend"
