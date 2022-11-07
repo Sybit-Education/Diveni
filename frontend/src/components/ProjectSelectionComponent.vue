@@ -1,20 +1,14 @@
 <template>
   <div>
-    <div id="inputField">
-      <input
-        v-model="input"
-        class="search"
-        type="text"
-        placeholder="Filter your Project"
-        @input="getAllProjects"
+    <div>
+      <autocomplete
+        v-model="selected"
+        class="input"
+        :items="getProjectNames"
+        @input="getUserStories"
       />
     </div>
-    <b-form-select
-      v-model="selected"
-      class="form-select"
-      :options="getAllProjects"
-      @change="getUserStories"
-    ></b-form-select>
+
     <div class="mt-3">
       {{ $t("session.prepare.step.selection.mode.description.withJira.selectedProject") }}
       <strong>{{ selected }}</strong>
@@ -26,14 +20,18 @@
 import Vue from "vue";
 import apiService from "@/services/api.service";
 import Project from "../model/Project";
+import autocomplete from "vue2-autocomplete-input-tag";
 
 export default Vue.extend({
   name: "ProjectSelectionComponent",
 
+  components: {
+    autocomplete,
+  },
+
   data() {
     return {
       selected: null,
-      project: "",
       projectArray: [] as Array<Project>,
       input: "",
     };
@@ -42,64 +40,59 @@ export default Vue.extend({
     projects(): Array<Project> {
       return this.$store.state.projects;
     },
-    getAllProjects(): Array<unknown> {
+
+    getProjectNames(): Array<string> {
       let projectNames;
-      if (this.input.length > 0) {
-        projectNames = this.getFilteredProjects(this.projects).map((p) => p.name);
-      } else {
-        projectNames = this.projects.map((p) => p.name);
-      }
-      if (projectNames.length < 1) {
-        return [
-          {
-            value: null,
-            text: this.$t("session.prepare.step.selection.mode.description.withJira.formSelection"),
-          },
-        ];
-      } else {
-        return [
-          {
-            value: null,
-            text: this.$t("session.prepare.step.selection.mode.description.withJira.formSelection"),
-          },
-          ...projectNames,
-        ];
-      }
+      projectNames = this.projects.map((p) => p.name);
+      return projectNames;
     },
   },
 
   methods: {
-    getFilteredProjects(projects): Array<Project> {
-      let returnArray: Array<Project>;
-      returnArray = [];
-      projects.forEach((project) => {
-        if (project.name.toLowerCase().includes(this.input.toLowerCase())) {
-          returnArray.push(project);
-        }
-      });
-      return returnArray;
-    },
-
-    async getUserStories(project) {
-      console.log(`Trying to select ${project}`);
-      const selectedProject = this.projects.find((p) => p.name === project);
-      console.log(`Selected: ${selectedProject}`);
-      this.$store.commit("setSelectedProject", selectedProject);
-      const response = await apiService.getUserStoriesFromProject(project);
-      this.$store.commit("setUserStories", { stories: response });
+    async getUserStories() {
+      console.log(`Trying to select ${this.selected}`);
+      const selectedProject = this.projects.find((p) => p.name === this.selected);
+      if (selectedProject) {
+        console.log(`Selected: ${selectedProject}`);
+        this.$store.commit("setSelectedProject", selectedProject);
+        console.log(`Selected Project: ${this.selected}`);
+        const response = await apiService.getUserStoriesFromProject(this.selected);
+        this.$store.commit("setUserStories", { stories: response });
+      }
     },
   },
 });
 </script>
 
 <style scoped>
-.search {
-  background-image: url("@/assets/magnifying glass.png");
-  background-position: 3px;
-  background-repeat: no-repeat;
-  background-size: 22px 25px;
-  padding-left: 30px;
-  border-color: black;
+.input {
+  width: 100%;
+  border: 1px solid #ccc;
+  color: #666;
+  border-radius: 10px;
+  outline: none;
+  padding: 9px 14px;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+.vue2-autocomplete-input-tag-items {
+  border: 1px solid #ccc;
+  max-height: 200px;
+  margin-top: 8px;
+  width: 100%;
+  background-color: white;
+  border-radius: 8px;
   overflow: auto;
+}
+.vue2-autocomplete-input-tag-item {
+  padding: 6px 16px;
+  color: #4a4a4a;
+  max-width: 100%;
+  cursor: pointer;
+  text-align: left;
+  font-size: 14px;
+}
+.vue2-autocomplete-input-tag-item:hover {
+  background-color: #e8e8e8;
 }
 </style>
