@@ -1,17 +1,12 @@
 <template>
-  <div>
-    <div>
-      <autocomplete
-        v-model="selected"
-        class="input"
-        :items="getProjectNames"
-        @input="getUserStories"
-      />
+  <div class="Test ?">
+    <div class="test123">
+      <autocomplete v-model="selected" :items="getProjectNames" @input="getUserStories" />
     </div>
 
     <div class="mt-3">
       {{ $t("session.prepare.step.selection.mode.description.withJira.selectedProject") }}
-      <strong>{{ selected }}</strong>
+      <strong>{{ aCorrectProject ? selected : "-" }}</strong>
     </div>
   </div>
 </template>
@@ -34,6 +29,7 @@ export default Vue.extend({
       selected: null,
       projectArray: [] as Array<Project>,
       input: "",
+      aCorrectProject: false,
     };
   },
   computed: {
@@ -50,9 +46,11 @@ export default Vue.extend({
 
   methods: {
     async getUserStories() {
+      this.aCorrectProject = false;
       console.log(`Trying to select ${this.selected}`);
       const selectedProject = this.projects.find((p) => p.name === this.selected);
       if (selectedProject) {
+        this.aCorrectProject = true;
         console.log(`Selected: ${selectedProject}`);
         this.$store.commit("setSelectedProject", selectedProject);
         console.log(`Selected Project: ${this.selected}`);
@@ -64,8 +62,8 @@ export default Vue.extend({
 });
 </script>
 
-<style scoped>
-.input {
+<style>
+input {
   width: 100%;
   border: 1px solid #ccc;
   color: #666;

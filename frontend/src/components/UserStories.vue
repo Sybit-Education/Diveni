@@ -143,23 +143,23 @@ export default Vue.extend({
         if (filteredUserStories.length > 0) {
           this.filterActive = true;
           this.userStories = filteredUserStories;
-          this.publishChanges(null, false, this.userStories);
+          this.publishChanges(null, false);
         } else {
           this.filterActive = true;
           this.userStories = [];
-          this.publishChanges(null, false, this.userStories);
+          this.publishChanges(null, false);
         }
       } else {
         this.filterActive = false;
         this.userStories = this.safedStories;
-        this.publishChanges(null, false, this.userStories);
+        this.publishChanges(null, false);
       }
     },
     deleteStory(index) {
-      this.publishChanges(index, true, this.userStories);
+      this.publishChanges(index, true);
     },
-    publishChanges(index, remove, stories) {
-      this.$emit("userStoriesChanged", { us: stories, idx: index, doRemove: remove });
+    publishChanges(index, remove) {
+      this.$emit("userStoriesChanged", { us: this.userStories, idx: index, doRemove: remove });
     },
     markUserStory(index) {
       const stories = this.userStories.map((s) => ({
@@ -171,7 +171,7 @@ export default Vue.extend({
       }));
       stories[index].isActive = true;
       this.userStories = stories;
-      this.publishChanges(index, false, this.userStories);
+      this.publishChanges(index, false);
     },
   },
 });
