@@ -169,7 +169,8 @@ public class WebSocketServiceTest {
             null,
             null,
             null,
-            null, null);
+            null,
+            null);
 
     webSocketService.sendMembersUpdate(session);
 
@@ -196,7 +197,8 @@ public class WebSocketServiceTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
-            null, null);
+            null,
+            null);
 
     webSocketService.sendSessionStateToMember(session, defaultMemberPrincipal.getMemberID());
 
@@ -227,7 +229,8 @@ public class WebSocketServiceTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
-            null, null);
+            null,
+            null);
 
     webSocketService.sendSessionStateToMembers(session);
 
@@ -263,7 +266,8 @@ public class WebSocketServiceTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
-            null, null);
+            null,
+            null);
 
     webSocketService.sendUpdatedUserStoriesToMembers(session);
 
@@ -299,7 +303,8 @@ public class WebSocketServiceTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
-            null, null);
+            null,
+            null);
     val notification = new Notification(NotificationType.ADMIN_LEFT, null);
 
     webSocketService.sendNotification(session, notification);
@@ -327,7 +332,8 @@ public class WebSocketServiceTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
-            null, null);
+            null,
+            null);
 
     webSocketService.removeSession(session);
 
