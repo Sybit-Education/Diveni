@@ -52,5 +52,4 @@ public class DatabaseService {
   public List<Session> getDeletedSessions() {
     return this.deletedSessions;
   }
-
 }

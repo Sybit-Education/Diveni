@@ -90,8 +90,7 @@ public class RoutesController {
             null,
             accessToken,
             null,
-            LocalDate.now()
-          );
+            LocalDate.now());
     databaseService.saveSession(session);
     val responseMap = Map.of("session", session, "adminCookie", session.getAdminCookie());
 
@@ -117,11 +116,17 @@ public class RoutesController {
   @GetMapping(value = "/data")
   public ResponseEntity<DiveniData> getDiveniData() {
     LOGGER.debug("--> getDiveniData()");
-    int amountOfSessions = databaseService.getSessions().size() + databaseService.getDeletedSessions().size();
-    int amountOfAttendees = databaseService.getSessions().stream().collect(Collectors.summingInt(s -> s.getMembers().size())); //existing Sessions
-    amountOfAttendees += databaseService.getDeletedSessions().stream().collect(Collectors.summingInt(deletedSess -> deletedSess.getMembers().size()));
+    int amountOfSessions =
+        databaseService.getSessions().size() + databaseService.getDeletedSessions().size();
+    int amountOfAttendees =
+        databaseService.getSessions().stream()
+            .collect(Collectors.summingInt(s -> s.getMembers().size())); // existing Sessions
+    amountOfAttendees +=
+        databaseService.getDeletedSessions().stream()
+            .collect(Collectors.summingInt(deletedSess -> deletedSess.getMembers().size()));
     LOGGER.debug("<-- getDiveniData()");
-    return new ResponseEntity<DiveniData>(new DiveniData(amountOfAttendees, amountOfSessions), HttpStatus.OK);
+    return new ResponseEntity<DiveniData>(
+        new DiveniData(amountOfAttendees, amountOfSessions), HttpStatus.OK);
   }
 
   @GetMapping(value = "/data/lastMonth")
@@ -137,35 +142,44 @@ public class RoutesController {
     int lastMonth2 = lastMonth + counter;
     int year = LocalDate.now().getYear();
     LOGGER.debug("letzter Monat: " + lastMonth2 + " Jahr: " + year);
-    List<Session> sessionFromLastMonth = databaseService.getSessions()
-    .stream()
-    .filter(s -> s.getCreationTime().getMonthValue() == lastMonth2 && s.getCreationTime().getYear() == year)
-    .collect(Collectors.toList());
+    List<Session> sessionFromLastMonth =
+        databaseService.getSessions().stream()
+            .filter(
+                s ->
+                    s.getCreationTime().getMonthValue() == lastMonth2
+                        && s.getCreationTime().getYear() == year)
+            .collect(Collectors.toList());
 
-    List<Session> deletedsessionFromLastMonth = databaseService.getDeletedSessions()
-    .stream()
-    .filter(s -> s.getCreationTime().getMonthValue() == lastMonth2 && s.getCreationTime().getYear() == year)
-    .collect(Collectors.toList());
+    List<Session> deletedsessionFromLastMonth =
+        databaseService.getDeletedSessions().stream()
+            .filter(
+                s ->
+                    s.getCreationTime().getMonthValue() == lastMonth2
+                        && s.getCreationTime().getYear() == year)
+            .collect(Collectors.toList());
 
     int amountOfSessions = sessionFromLastMonth.size() + deletedsessionFromLastMonth.size();
-    int amountOfAttendees = sessionFromLastMonth
-    .stream()
-    .collect(Collectors.summingInt(s -> s.getMembers().size()));
+    int amountOfAttendees =
+        sessionFromLastMonth.stream().collect(Collectors.summingInt(s -> s.getMembers().size()));
 
-    amountOfAttendees += deletedsessionFromLastMonth
-    .stream()
-    .collect(Collectors.summingInt(s -> s.getMembers().size()));
+    amountOfAttendees +=
+        deletedsessionFromLastMonth.stream()
+            .collect(Collectors.summingInt(s -> s.getMembers().size()));
     LOGGER.debug("<-- getDiveniDataFromLastMont()");
-    return new ResponseEntity<DiveniData>(new DiveniData(amountOfAttendees, amountOfSessions), HttpStatus.OK);
+    return new ResponseEntity<DiveniData>(
+        new DiveniData(amountOfAttendees, amountOfSessions), HttpStatus.OK);
   }
 
   @GetMapping(value = "/data/current")
   public ResponseEntity<DiveniData> getCurrentDiveniData() {
     LOGGER.debug("--> getCurrentDiveniData()");
     int amountOfSessions = databaseService.getSessions().size();
-    int amountOfAttendees = databaseService.getSessions().stream().collect(Collectors.summingInt(s -> s.getMembers().size())); //existing Sessions
+    int amountOfAttendees =
+        databaseService.getSessions().stream()
+            .collect(Collectors.summingInt(s -> s.getMembers().size())); // existing Sessions
     LOGGER.debug("<-- getCurrentDiveniData()");
-    return new ResponseEntity<DiveniData>(new DiveniData(amountOfAttendees, amountOfSessions), HttpStatus.OK);
+    return new ResponseEntity<DiveniData>(
+        new DiveniData(amountOfAttendees, amountOfSessions), HttpStatus.OK);
   }
 
   @PostMapping(value = "/sessions/{sessionID}/join")
