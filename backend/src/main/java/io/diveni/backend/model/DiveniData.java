@@ -12,8 +12,7 @@ import lombok.RequiredArgsConstructor;
 @Document("data")
 public class DiveniData {
 
-    private final int amountOfAttendees;
+  private final int amountOfAttendees;
 
-    private final int amountOfSessions;
-    
+  private final int amountOfSessions;
 }
