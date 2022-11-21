@@ -11,6 +11,12 @@ class Constants {
 
   createSessionRoute = "/sessions";
 
+  createDiveniData = "/data";
+
+  createDiveniDataFromLastMonth = "/data/lastMonth";
+
+  createCurrentDiveniData = "/data/current";
+
   webSocketRegisterAdminUserRoute = "/ws/registerAdminUser";
 
   webSocketRegisterMemberRoute = "/ws/registerMember";

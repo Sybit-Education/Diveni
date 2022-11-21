@@ -28,6 +28,29 @@
         />
       </b-card-group>
     </b-container>
+    <b-container>
+      <h1>Statistics of Diveni</h1>
+      <b-card-group deck>
+        <b-card title="Overall created Sessions">
+          <b-card-text>
+            Overall created Sessions: {{ overAllSessions }} <br />
+            Overall Attendees: {{ overAllAttendees }}
+          </b-card-text>
+        </b-card>
+        <b-card title="Created Sessions over the last Month">
+          <b-card-text>
+            Created Sessions over the last Month: {{ overAllSessionsFromLastMonth }} <br />
+            Attendees over the last Month: {{ overAllAttendeesFromLastMonth }}
+          </b-card-text>
+        </b-card>
+        <b-card title="Currently Active Sessions">
+          <b-card-text>
+            Currently Active Sessions: {{ currentSessions }} <br />
+            Current Number of Attendees: {{ currentAttendees }}
+          </b-card-text>
+        </b-card>
+      </b-card-group>
+    </b-container>
     <b-container class="py-5">
       <h1>Remote Planning Poker using DIVENI</h1>
       <b-card-group deck>
@@ -92,12 +115,60 @@ export default Vue.extend({
     return {
       sessionWrapper: {} as { session: Session },
       startNewSessionOnMounted: false,
+      overAllSessions: 0,
+      overAllAttendees: 0,
+      overAllSessionsFromLastMonth: 0,
+      overAllAttendeesFromLastMonth: 0,
+      currentSessions: 0,
+      currentAttendees: 0,
     };
   },
   created() {
+    this.checkDiveniData(Constants.createDiveniData);
+    this.checkDiveniData(Constants.createDiveniDataFromLastMonth);
+    this.checkDiveniData(Constants.createCurrentDiveniData);
     this.checkAdminCookie();
   },
   methods: {
+    async checkDiveniData(urlData) {
+      const url = Constants.backendURL + urlData;
+      try {
+        const diveniData = (await this.axios.get(url)).data as {
+          amountOfAttendees: number;
+          amountOfSessions: number;
+        };
+        if (urlData === Constants.createDiveniData) {
+          this.overAllSessions = diveniData.amountOfSessions;
+          this.overAllAttendees = diveniData.amountOfAttendees;
+        } else if (urlData === Constants.createDiveniDataFromLastMonth) {
+          this.overAllSessionsFromLastMonth = diveniData.amountOfSessions;
+          this.overAllAttendeesFromLastMonth = diveniData.amountOfAttendees;
+        } else if (urlData === Constants.createCurrentDiveniData) {
+          this.currentSessions = diveniData.amountOfSessions;
+          this.currentAttendees = diveniData.amountOfAttendees;
+        }
+      } catch (e) {
+        console.error(`got error: ${e}`);
+      }
+    },
+
+    async checkDiveniDataFromLastMonth() {
+      const url = Constants.backendURL + Constants.createDiveniDataFromLastMonth;
+      try {
+        const diveniData = (await this.axios.get(url)).data as {
+          amountOfAttendees: number;
+          amountOfSessions: number;
+        };
+        this.overAllSessionsFromLastMonth = diveniData.amountOfSessions;
+        this.overAllAttendeesFromLastMonth = diveniData.amountOfAttendees;
+        console.log(
+          `Sessions: ${this.overAllSessionsFromLastMonth} : Attendees: ${this.overAllAttendeesFromLastMonth}`
+        );
+      } catch (e) {
+        console.error(`got error: ${e}`);
+      }
+    },
+
     async checkAdminCookie() {
       const cookie = window.localStorage.getItem("adminCookie");
       if (cookie !== null) {
@@ -126,6 +197,7 @@ export default Vue.extend({
               userStoryMode: string;
             };
             sessionState: string;
+            members: Array<string>;
           };
           this.sessionWrapper = { session };
         } catch (e) {

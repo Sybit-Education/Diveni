@@ -11,6 +11,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -20,6 +21,8 @@ import io.diveni.backend.model.Session;
 import io.diveni.backend.model.SessionConfig;
 import io.diveni.backend.model.SessionState;
 import io.diveni.backend.repository.SessionRepository;
+import io.diveni.backend.service.DatabaseService;
+
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +46,8 @@ public class RoutesControllerTest {
   @Autowired SessionRepository sessionRepo;
 
   @Autowired private MockMvc mockMvc;
+
+  @Autowired DatabaseService databaseService;
 
   private static String sessionConfigToJson(SessionConfig config) {
     val set = config.getSet().stream().map(s -> "\"" + s + "\"").collect(Collectors.joining(","));
@@ -105,7 +110,8 @@ public class RoutesControllerTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
-            null));
+            null,
+            LocalDate.of(2000,12,12)));
 
     // @formatter:off
     var memberAsJson =
@@ -148,7 +154,8 @@ public class RoutesControllerTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
-            null));
+            null,
+            LocalDate.of(2000,12,12)));
 
     // @formatter:off
     var memberAsJson =
@@ -194,7 +201,8 @@ public class RoutesControllerTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
-            null));
+            null,
+            LocalDate.of(2000,12,12)));
     // @formatter:off
     var memberAsJson =
         "{"
@@ -240,7 +248,8 @@ public class RoutesControllerTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
-            null));
+            null,
+            LocalDate.of(2000,12,12)));
 
     // @formatter:off
     var memberAsJson =
@@ -284,7 +293,8 @@ public class RoutesControllerTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
-            null));
+            null,
+            LocalDate.of(2000,12,12)));
 
     // @formatter:off
     var memberAsJson =
@@ -324,7 +334,8 @@ public class RoutesControllerTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
-            null));
+            null,
+            LocalDate.of(2000,12,12)));
 
     // @formatter:off
     var memberAsJson =
@@ -364,7 +375,8 @@ public class RoutesControllerTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
-            null));
+            null,
+            LocalDate.of(2000,12,12)));
 
     // @formatter:off
     var memberAsJson =
@@ -431,7 +443,8 @@ public class RoutesControllerTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
-            null));
+            null,
+            LocalDate.of(2000,12,12)));
 
     // @formatter:off
     var memberAsJson =
@@ -480,7 +493,8 @@ public class RoutesControllerTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
-            null));
+            null,
+            LocalDate.of(2000,12,12)));
     this.mockMvc
         .perform(get("/sessions/{sessionID}", sessionUUID))
         .andExpect(status().isOk())
@@ -504,11 +518,309 @@ public class RoutesControllerTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
-            null));
+            null,
+            LocalDate.of(2000,12,12)));
 
     this.mockMvc
         .perform(get("/sessions/{sessionID}", UUID.randomUUID()))
         .andExpect(status().isNotFound())
         .andExpect(status().reason(ErrorMessages.sessionNotFoundErrorMessage));
   }
+
+  @Test
+  public void getDiveniData_oneSessionWith0Attendees() throws Exception {
+    sessionRepo.save(
+        new Session(
+            new ObjectId(),
+            Utils.generateRandomID(),
+            Utils.generateRandomID(),
+            new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+            null,
+            new ArrayList<Member>(),
+            new HashMap<>(),
+            new ArrayList<>(),
+            SessionState.WAITING_FOR_MEMBERS,
+            null,
+            null,
+            null,
+            LocalDate.of(2000,12,12)));
+
+
+    this.mockMvc
+    .perform(get("/data"))
+    .andExpect(status().isOk())
+    .andExpect(jsonPath("$.amountOfSessions").value(1))
+    .andExpect(jsonPath("$.amountOfAttendees").value(0));
+  }
+  @Test
+  public void getDiveniData_oneSessionWith0AttendeesAndOneDeletedSessionWith2Attendees() throws Exception {
+    sessionRepo.save(
+        new Session(
+            new ObjectId(),
+            Utils.generateRandomID(),
+            Utils.generateRandomID(),
+            new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+            null,
+            new ArrayList<Member>(),
+            new HashMap<>(),
+            new ArrayList<>(),
+            SessionState.WAITING_FOR_MEMBERS,
+            null,
+            null,
+            null,
+            LocalDate.of(2000,12,12)));
+    Session willBeDelted = 
+    new Session(
+            new ObjectId(),
+            Utils.generateRandomID(),
+            Utils.generateRandomID(),
+            new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+            null,
+            List.of(new Member(), new Member()),
+            new HashMap<>(),
+            new ArrayList<>(),
+            SessionState.WAITING_FOR_MEMBERS,
+            null,
+            null,
+            null,
+            LocalDate.of(2000,12,12));
+    databaseService.saveSession(willBeDelted);
+    databaseService.deleteSession(willBeDelted);
+    this.mockMvc
+    .perform(get("/data"))
+    .andExpect(status().isOk())
+    .andExpect(jsonPath("$.amountOfSessions").value(2))
+    .andExpect(jsonPath("$.amountOfAttendees").value(2));
+  }
+
+  @Test
+  public void getCurrentDiveniData_oneSessionWith3Attendees() throws Exception {
+    sessionRepo.save(
+        new Session(
+            new ObjectId(),
+            Utils.generateRandomID(),
+            Utils.generateRandomID(),
+            new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+            null,
+            List.of(new Member(), new Member(), new Member()),
+            new HashMap<>(),
+            new ArrayList<>(),
+            SessionState.WAITING_FOR_MEMBERS,
+            null,
+            null,
+            null,
+            LocalDate.of(2000,12,12)));
+
+
+    this.mockMvc
+    .perform(get("/data/current"))
+    .andExpect(status().isOk())
+    .andExpect(jsonPath("$.amountOfSessions").value(1))
+    .andExpect(jsonPath("$.amountOfAttendees").value(3));
+  }
+
+  @Test
+  public void getCurrentDiveniData_oneSessionWith2AttendeesAndOneDeletedSessionGetOnlyTheStillRunningSession() throws Exception {
+    sessionRepo.save(
+        new Session(
+            new ObjectId(),
+            Utils.generateRandomID(),
+            Utils.generateRandomID(),
+            new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+            null,
+            List.of(new Member(), new Member()),
+            new HashMap<>(),
+            new ArrayList<>(),
+            SessionState.WAITING_FOR_MEMBERS,
+            null,
+            null,
+            null,
+            LocalDate.of(2000,12,12)));
+
+    Session willBeDelted = 
+        new Session(
+                new ObjectId(),
+                Utils.generateRandomID(),
+                Utils.generateRandomID(),
+                new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+                null,
+                List.of(new Member()),
+                new HashMap<>(),
+                new ArrayList<>(),
+                SessionState.WAITING_FOR_MEMBERS,
+                null,
+                null,
+                null,
+                LocalDate.of(2000,12,12));
+    databaseService.saveSession(willBeDelted);
+    databaseService.deleteSession(willBeDelted);
+
+    this.mockMvc
+    .perform(get("/data/current"))
+    .andExpect(status().isOk())
+    .andExpect(jsonPath("$.amountOfSessions").value(1))
+    .andExpect(jsonPath("$.amountOfAttendees").value(2));
+  }
+
+
+  @Test
+  public void getDiveniDataFromLastMonth_oneSessionWith3Attendees() throws Exception {
+    sessionRepo.save(
+        new Session(
+            new ObjectId(),
+            Utils.generateRandomID(),
+            Utils.generateRandomID(),
+            new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+            null,
+            List.of(new Member(), new Member(), new Member()),
+            new HashMap<>(),
+            new ArrayList<>(),
+            SessionState.WAITING_FOR_MEMBERS,
+            null,
+            null,
+            null,
+            LocalDate.of(LocalDate.now().getYear(),LocalDate.now().getMonthValue() - 1,12)));
+
+
+    this.mockMvc
+    .perform(get("/data/lastMonth"))
+    .andExpect(status().isOk())
+    .andExpect(jsonPath("$.amountOfSessions").value(1))
+    .andExpect(jsonPath("$.amountOfAttendees").value(3));
+  }
+
+  @Test
+  public void getDiveniDataFromLastMonth_oneSessionWith3AttendeesAndOneSessionWith2AttendesButNotLastMonth() throws Exception {
+    sessionRepo.save(
+        new Session(
+            new ObjectId(),
+            Utils.generateRandomID(),
+            Utils.generateRandomID(),
+            new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+            null,
+            List.of(new Member(), new Member(), new Member()),
+            new HashMap<>(),
+            new ArrayList<>(),
+            SessionState.WAITING_FOR_MEMBERS,
+            null,
+            null,
+            null,
+            LocalDate.of(LocalDate.now().getYear(),LocalDate.now().getMonthValue() - 1,12)));
+
+    sessionRepo.save(
+        new Session(
+            new ObjectId(),
+            Utils.generateRandomID(),
+            Utils.generateRandomID(),
+            new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+            null,
+            List.of(new Member(), new Member()),
+            new HashMap<>(),
+            new ArrayList<>(),
+            SessionState.WAITING_FOR_MEMBERS,
+            null,
+            null,
+            null,
+            LocalDate.of(LocalDate.now().getYear(),LocalDate.now().getMonthValue(),12)));
+
+
+    this.mockMvc
+    .perform(get("/data/lastMonth"))
+    .andExpect(status().isOk())
+    .andExpect(jsonPath("$.amountOfSessions").value(1))
+    .andExpect(jsonPath("$.amountOfAttendees").value(3));
+  }
+
+  @Test
+  public void getDiveniDataFromLastMonth_oneSessionWith3AttendeesAndOneSessionWith2AttendesAndDeletedAndFromLastMonth() throws Exception {
+    sessionRepo.save(
+        new Session(
+            new ObjectId(),
+            Utils.generateRandomID(),
+            Utils.generateRandomID(),
+            new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+            null,
+            List.of(new Member(), new Member(), new Member()),
+            new HashMap<>(),
+            new ArrayList<>(),
+            SessionState.WAITING_FOR_MEMBERS,
+            null,
+            null,
+            null,
+            LocalDate.of(LocalDate.now().getYear(),LocalDate.now().getMonthValue() - 1,12)));
+
+    
+    Session willbeDelted = 
+        new Session(
+            new ObjectId(),
+            Utils.generateRandomID(),
+            Utils.generateRandomID(),
+            new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+            null,
+            List.of(new Member(), new Member()),
+            new HashMap<>(),
+            new ArrayList<>(),
+            SessionState.WAITING_FOR_MEMBERS,
+            null,
+            null,
+            null,
+            LocalDate.of(LocalDate.now().getYear(),LocalDate.now().getMonthValue() - 1,12));
+
+    databaseService.saveSession(willbeDelted);
+    databaseService.deleteSession(willbeDelted);
+
+
+    this.mockMvc
+    .perform(get("/data/lastMonth"))
+    .andExpect(status().isOk())
+    .andExpect(jsonPath("$.amountOfSessions").value(2))
+    .andExpect(jsonPath("$.amountOfAttendees").value(5));
+  }
+
+  @Test
+  public void getDiveniDataFromLastMonth_oneSessionWith3AttendeesAndOneSessionWith2AttendesAndDeletedAndNotFromLastMonth() throws Exception {
+    sessionRepo.save(
+        new Session(
+            new ObjectId(),
+            Utils.generateRandomID(),
+            Utils.generateRandomID(),
+            new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+            null,
+            List.of(new Member(), new Member(), new Member()),
+            new HashMap<>(),
+            new ArrayList<>(),
+            SessionState.WAITING_FOR_MEMBERS,
+            null,
+            null,
+            null,
+            LocalDate.of(LocalDate.now().getYear(),LocalDate.now().getMonthValue() - 1,12)));
+
+    
+    Session willbeDelted = 
+        new Session(
+            new ObjectId(),
+            Utils.generateRandomID(),
+            Utils.generateRandomID(),
+            new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+            null,
+            List.of(new Member(), new Member()),
+            new HashMap<>(),
+            new ArrayList<>(),
+            SessionState.WAITING_FOR_MEMBERS,
+            null,
+            null,
+            null,
+            LocalDate.of(LocalDate.now().getYear(),LocalDate.now().getMonthValue() - 3,12));
+
+    databaseService.saveSession(willbeDelted);
+    databaseService.deleteSession(willbeDelted);
+
+
+    this.mockMvc
+    .perform(get("/data/lastMonth"))
+    .andExpect(status().isOk())
+    .andExpect(jsonPath("$.amountOfSessions").value(1))
+    .andExpect(jsonPath("$.amountOfAttendees").value(3));
+  }
+
 }

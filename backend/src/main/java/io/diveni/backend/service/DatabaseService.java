@@ -5,6 +5,7 @@
 */
 package io.diveni.backend.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -20,6 +21,8 @@ import io.diveni.backend.repository.SessionRepository;
 public class DatabaseService {
 
   @Autowired SessionRepository sessionRepo;
+
+  private List<Session> deletedSessions = new ArrayList<>();
 
   public Optional<Session> getSessionByID(String sessionID) {
     return Optional.ofNullable(sessionRepo.findBySessionID(sessionID));
@@ -42,6 +45,12 @@ public class DatabaseService {
   }
 
   public void deleteSession(Session session) {
+    deletedSessions.add(session);
     sessionRepo.delete(session);
   }
+
+  public List<Session> getDeletedSessions() {
+    return this.deletedSessions;
+  }
+
 }
