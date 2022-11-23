@@ -15,6 +15,23 @@ env:
   NODE_VERSION: 14
 
 jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set up Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - name: Install Node.js dependencies
+        working-directory: frontend
+        run: npm ci
+      - name: Run ESLint
+        working-directory: frontend
+        run: npm run lint:fix
+
   build:
     name: Build
     runs-on: ubuntu-latest
@@ -36,23 +53,6 @@ jobs:
         with:
           name: frontend
           path: frontend/dist
-
-  lint:
-    name: Lint
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Set up Node.js ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v2
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-      - name: Install Node.js dependencies
-        working-directory: frontend
-        run: npm ci
-      - name: Run ESLint
-        working-directory: frontend
-        run: npm run lint
 
   push-image:
     name: Frontend-Image
