@@ -14,13 +14,13 @@ public class AnalyticsData {
 
   private final int amountOfAttendees;
 
-    private final int amountOfSessions;
+  private final int amountOfSessions;
 
-    private final int amountofAttendeesLastMonth;
-    
-    private final int amountOfSessionsLastMonth;
+  private final int amountofAttendeesLastMonth;
 
-    private final int amountOfAttendeesCurrently;
+  private final int amountOfSessionsLastMonth;
 
-    private final int amountOfSessionsCurrently;
+  private final int amountOfAttendeesCurrently;
+
+  private final int amountOfSessionsCurrently;
 }
