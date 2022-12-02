@@ -110,6 +110,18 @@
               "label": "Rejoin"
             }
           }
+        },
+        "analytics": {
+          "title": "Statistics of Diveni",
+          "allCreatedSessionsTitle": "Overall created Sessions",
+          "allCreatedSessionsNumber": "Overall created Sessions:",
+          "allCreatedSessionsNumberAttendees": "Overall Attendees:",
+          "lastMonthTitle": "Created Sessions over the last Month:",
+          "lastMonthSessions": "Created Sessions over the last Month:",
+          "lastMonthAttendees": "Attendees over the last Month:",
+          "activeTitle": "Currently Active Sessions",
+          "activeSessions": "Currently Active Sessions:",
+          "activeAttendees": "Current Number of Attendees:"
         }
       }
     },

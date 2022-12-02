@@ -12,6 +12,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 import io.diveni.backend.model.Session;
+import io.diveni.backend.principals.MemberPrincipal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +25,8 @@ public class DatabaseService {
   @Autowired SessionRepository sessionRepo;
 
   private List<Session> deletedSessions = new ArrayList<>();
+
+  private List<MemberPrincipal> removedMembers = new ArrayList<>();
 
   public Optional<Session> getSessionByID(String sessionID) {
     return Optional.ofNullable(sessionRepo.findBySessionID(sessionID));
@@ -47,6 +51,14 @@ public class DatabaseService {
   public void deleteSession(Session session) {
     deletedSessions.add(session);
     sessionRepo.delete(session);
+  }
+
+  public void addRemovedMember(MemberPrincipal removedMember) {
+    this.removedMembers.add(removedMember);
+  }
+
+  public List<MemberPrincipal> getRemovedMember() {
+    return this.removedMembers;
   }
 
   public List<Session> getDeletedSessions() {

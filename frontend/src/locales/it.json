@@ -110,6 +110,18 @@
               "label": "Rejoin"
             }
           }
+        },
+        "analytics": {
+          "title": "Statistiche da Diveni",
+          "allCreatedSessionsTitle": "Sessioni complessive create",
+          "allCreatedSessionsNumber": "Sessioni complessive create:",
+          "allCreatedSessionsNumberAttendees": "Partecipanti complessivi:",
+          "lastMonthTitle": "Sessioni create nell'ultimo mese",
+          "lastMonthSessions": "Sessioni create nell'ultimo mese:",
+          "lastMonthAttendees": "Partecipanti nell'ultimo mese:",
+          "activeTitle": "Sessioni attualmente attive",
+          "activeSessions": "Sessioni attualmente attive:",
+          "activeAttendees": "Numero attuale di partecipanti:"
         }
       }
     },

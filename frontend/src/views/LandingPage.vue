@@ -28,29 +28,9 @@
         />
       </b-card-group>
     </b-container>
-    <b-container>
-      <h1>Statistics of Diveni</h1>
-      <b-card-group deck>
-        <b-card title="Overall created Sessions">
-          <b-card-text>
-            Overall created Sessions: {{ overAllSessions }} <br />
-            Overall Attendees: {{ overAllAttendees }}
-          </b-card-text>
-        </b-card>
-        <b-card title="Created Sessions over the last Month">
-          <b-card-text>
-            Created Sessions over the last Month: {{ overAllSessionsFromLastMonth }} <br />
-            Attendees over the last Month: {{ overAllAttendeesFromLastMonth }}
-          </b-card-text>
-        </b-card>
-        <b-card title="Currently Active Sessions">
-          <b-card-text>
-            Currently Active Sessions: {{ currentSessions }} <br />
-            Current Number of Attendees: {{ currentAttendees }}
-          </b-card-text>
-        </b-card>
-      </b-card-group>
-    </b-container>
+    <AnalyticsDataComponent ref="dataComponent">
+
+    </AnalyticsDataComponent>
     <b-container class="py-5">
       <h1>Remote Planning Poker using DIVENI</h1>
       <b-card-group deck>
@@ -105,12 +85,13 @@ import Vue from "vue";
 import LandingPageCard from "../components/LandingPageCard.vue";
 import Constants from "../constants";
 import Session from "../model/Session";
-
+import AnalyticsDataComponent from "../components/AnalyticsDataComponent.vue";
 export default Vue.extend({
   name: "LandingPage",
   components: {
     LandingPageCard,
-  },
+    AnalyticsDataComponent,
+},
   data() {
     return {
       sessionWrapper: {} as { session: Session },
@@ -124,51 +105,9 @@ export default Vue.extend({
     };
   },
   created() {
-    this.checkDiveniData(Constants.createDiveniData);
-    this.checkDiveniData(Constants.createDiveniDataFromLastMonth);
-    this.checkDiveniData(Constants.createCurrentDiveniData);
     this.checkAdminCookie();
   },
   methods: {
-    async checkDiveniData(urlData) {
-      const url = Constants.backendURL + urlData;
-      try {
-        const diveniData = (await this.axios.get(url)).data as {
-          amountOfAttendees: number;
-          amountOfSessions: number;
-        };
-        if (urlData === Constants.createDiveniData) {
-          this.overAllSessions = diveniData.amountOfSessions;
-          this.overAllAttendees = diveniData.amountOfAttendees;
-        } else if (urlData === Constants.createDiveniDataFromLastMonth) {
-          this.overAllSessionsFromLastMonth = diveniData.amountOfSessions;
-          this.overAllAttendeesFromLastMonth = diveniData.amountOfAttendees;
-        } else if (urlData === Constants.createCurrentDiveniData) {
-          this.currentSessions = diveniData.amountOfSessions;
-          this.currentAttendees = diveniData.amountOfAttendees;
-        }
-      } catch (e) {
-        console.error(`got error: ${e}`);
-      }
-    },
-
-    async checkDiveniDataFromLastMonth() {
-      const url = Constants.backendURL + Constants.createDiveniDataFromLastMonth;
-      try {
-        const diveniData = (await this.axios.get(url)).data as {
-          amountOfAttendees: number;
-          amountOfSessions: number;
-        };
-        this.overAllSessionsFromLastMonth = diveniData.amountOfSessions;
-        this.overAllAttendeesFromLastMonth = diveniData.amountOfAttendees;
-        console.log(
-          `Sessions: ${this.overAllSessionsFromLastMonth} : Attendees: ${this.overAllAttendeesFromLastMonth}`
-        );
-      } catch (e) {
-        console.error(`got error: ${e}`);
-      }
-    },
-
     async checkAdminCookie() {
       const cookie = window.localStorage.getItem("adminCookie");
       if (cookie !== null) {

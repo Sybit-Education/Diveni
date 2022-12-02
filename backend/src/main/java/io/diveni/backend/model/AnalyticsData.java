@@ -10,10 +10,17 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @EqualsAndHashCode
 @Document("data")
-public class DiveniData {
+public class AnalyticsData {
 
     private final int amountOfAttendees;
 
     private final int amountOfSessions;
+
+    private final int amountofAttendeesLastMonth;
     
+    private final int amountOfSessionsLastMonth;
+
+    private final int amountOfAttendeesCurrently;
+
+    private final int amountOfSessionsCurrently;
 }
