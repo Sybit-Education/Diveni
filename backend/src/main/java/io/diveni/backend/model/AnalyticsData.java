@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 @Document("data")
 public class AnalyticsData {
 
-    private final int amountOfAttendees;
+  private final int amountOfAttendees;
 
     private final int amountOfSessions;
 
