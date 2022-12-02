@@ -45,6 +45,8 @@ public class WebSocketServiceTest {
 
   @InjectMocks private WebSocketService webSocketService;
 
+  @Mock private DatabaseService databaseService;
+
   private final AdminPrincipal defaultAdminPrincipal =
       new AdminPrincipal(Utils.generateRandomID(), Utils.generateRandomID());
 
