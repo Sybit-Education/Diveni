@@ -27,6 +27,7 @@
           "waiting": "In attesa che i membri si uniscano"
         },
         "button": "Avvia La Pianificazione",
+        "refreshStories": "Aggiornare le User Story",
         "userStories": {
           "button": {
             "addFirstUserStory": "Ancora nessuna storia... clicca per aggiungere storie",

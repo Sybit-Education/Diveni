@@ -27,6 +27,7 @@
           "waiting": "Esperando a que los miembros se unan"
         },
         "button": "Empezar a planear",
+        "refreshStories": "Actualizar las Historias de Usuario",
         "userStories": {
           "button": {
             "addFirstUserStory": "Aún no hay historias... haz clic para añadir historias",

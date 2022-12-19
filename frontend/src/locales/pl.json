@@ -27,6 +27,7 @@
           "waiting": "Oczekiwanie na dołączenie członków"
         },
         "button": "Rozpocznij planowanie",
+        "refreshStories": "Odśwież Historie użytkowników",
         "userStories": {
           "button": {
             "addFirstUserStory": "Brak historii... kliknij aby dodać opowieści",
