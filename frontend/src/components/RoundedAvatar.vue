@@ -7,6 +7,7 @@
       />
       <div v-if="showName" class="rounded-avatar__label">
         {{ member.name }}
+        {{ member.jobTitle }}
       </div>
     </div>
   </div>

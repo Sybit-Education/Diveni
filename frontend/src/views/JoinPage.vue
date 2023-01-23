@@ -8,6 +8,7 @@
       :animal-asset-name="avatarAnimalAssetName"
       :button-text="$t('page.join.submit')"
       :session-id-from-url="sessionID"
+      :job-title-required="voteSetName"
       @clicked="sendJoinSessionRequest"
     />
   </b-container>
@@ -35,6 +36,8 @@ export default Vue.extend({
       voteSet: "",
       timerSeconds: 0,
       userStoryMode: "",
+      jobTitle: "",
+      voteSetName: "",
     };
   },
   computed: {
@@ -49,6 +52,7 @@ export default Vue.extend({
         this.registerMemberPrincipalOnBackend();
         this.subscribeWSMemberUpdates();
         this.subscribeWSadminUpdatedUserStories();
+        this.subscribeWSadminUpdatedTeams();
         this.subscribeWSMemberUpdated();
         this.subscribeOnTimerStart();
         this.subscribeWSNotification();
@@ -58,9 +62,16 @@ export default Vue.extend({
   },
   created() {
     const id = this.$route.query as unknown as { sessionID: string };
+
     if (id.sessionID) {
-      this.sessionID = id.sessionID;
+      let urlInformation = id.sessionID.toString().split("?");
+      this.sessionID = urlInformation[0];
+      if (urlInformation.length > 1) {
+        this.voteSetName = urlInformation[1].split("=")[1];
+      }
     }
+    console.log(this.sessionID);
+    console.log(this.voteSetName + "  VoteSetName");
   },
   methods: {
     async sendJoinSessionRequest(data: JoinCommand) {
@@ -75,6 +86,7 @@ export default Vue.extend({
           hexColor: this.hexColor,
           avatarAnimal: this.convertAvatarAssetNameToBackendAnimal(),
           currentEstimation: null,
+          jobTitle: data.jobTitle,
         },
       };
       try {
@@ -118,6 +130,9 @@ export default Vue.extend({
     subscribeWSadminUpdatedUserStories() {
       this.$store.commit("subscribeOnBackendWSStoriesUpdated");
     },
+    subscribeWSadminUpdatedTeams() {
+      this.$store.commit("subscribeOnBackendWSTeamsUpdated");
+    },
     subscribeWSMemberUpdated() {
       this.$store.commit("subscribeOnBackendWSAdminUpdate");
     },
@@ -135,6 +150,7 @@ export default Vue.extend({
           voteSetJson: this.voteSet,
           timerSecondsString: this.timerSeconds.toString(),
           userStoryMode: this.userStoryMode,
+          jobTitle: this.jobTitle,
         },
       });
     },

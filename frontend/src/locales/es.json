@@ -228,6 +228,10 @@
                   "description": "En el campo de texto de abajo puede configurar su propio conjunto de tarjetas. Cada entrada está separada por punto y coma (;). Se omiten entradas duplicadas.",
                   "example": "Ej.: 1;2;3;4;5;6;7;"
                 }
+              },
+              "seperateEstimation": {
+                "label": "FE & BE",
+                "description": "Hier kann das Backend und das Frontend Team seperat schätzen."
               }
             }
           },

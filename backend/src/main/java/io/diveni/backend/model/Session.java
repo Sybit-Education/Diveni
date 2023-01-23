@@ -216,9 +216,36 @@ public class Session {
     val updatedSessionConfig =
         new SessionConfig(
             sessionConfig.getSet(),
+            sessionConfig.getSetName(),
             userStories,
             sessionConfig.getTimerSeconds().orElse(null),
             sessionConfig.getUserStoryMode(),
+            sessionConfig.getTeam(),
+            sessionConfig.getPassword());
+    return new Session(
+        databaseID,
+        sessionID,
+        adminID,
+        updatedSessionConfig,
+        adminCookie,
+        members,
+        memberVoted,
+        currentHighlights,
+        sessionState,
+        lastModified,
+        accessToken,
+        timerTimestamp);
+  }
+
+  public Session updateTeam(final String team) {
+    val updatedSessionConfig =
+        new SessionConfig(
+            sessionConfig.getSet(),
+            sessionConfig.getSetName(),
+            sessionConfig.getUserStories(),
+            sessionConfig.getTimerSeconds().orElse(null),
+            sessionConfig.getUserStoryMode(),
+            team,
             sessionConfig.getPassword());
     return new Session(
         databaseID,
@@ -238,6 +265,24 @@ public class Session {
   public Session resetEstimations() {
     val updatedMembers =
         members.stream().map(m -> m.resetEstimation()).collect(Collectors.toList());
+    return new Session(
+        databaseID,
+        sessionID,
+        adminID,
+        sessionConfig,
+        adminCookie,
+        updatedMembers,
+        memberVoted,
+        currentHighlights,
+        sessionState,
+        lastModified,
+        accessToken,
+        timerTimestamp);
+  }
+
+  public Session resetEstimationOfCertainMembers(List<String> memberIDs) {
+    List<Member> updatedMembers = members.stream().filter(member -> memberIDs.contains(member.getMemberID())).map(member -> member.resetEstimation()).collect(Collectors.toList());
+    updatedMembers.addAll(members.stream().filter(member -> !memberIDs.contains(member.getMemberID())).collect(Collectors.toList()));
     return new Session(
         databaseID,
         sessionID,

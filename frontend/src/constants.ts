@@ -27,15 +27,23 @@ class Constants {
 
   webSocketStartPlanningRoute = "/ws/startVoting";
 
+  webSocketStartPlanningWithTeamsRoute = "/ws/startVotingTeams";
+
   webSocketVotingFinishedRoute = "/ws/votingFinished";
 
   webSocketRestartPlanningRoute = "/ws/restart";
+
+  webSocketRestartPlanningRouteTeams = "/ws/restartTeams";
 
   webSocketVoteRoute = "/ws/vote";
 
   webSocketAdminUpdatedUserStoriesRoute = "/ws/adminUpdatedUserStories";
 
+  websocketAdminUpdatedTeamsRoute = "/ws/adminUpdatedTeams";
+
   webSocketMemberListenUserStoriesRoute = "/users/updates/userStories";
+
+  webSocketMemberListenTeamsRoute = "/users/updates/teams";
 
   webSocketTimerStartRoute = "/users/updates/startTimer";
 

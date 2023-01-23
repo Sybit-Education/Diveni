@@ -26,11 +26,13 @@ public class Member {
 
   private String currentEstimation;
 
+  private String jobTitle;
+
   public Member updateEstimation(String estimation) {
-    return new Member(this.memberID, this.name, this.hexColor, this.avatarAnimal, estimation);
+    return new Member(this.memberID, this.name, this.hexColor, this.avatarAnimal, estimation, this.jobTitle);
   }
 
   public Member resetEstimation() {
-    return new Member(this.memberID, this.name, this.hexColor, this.avatarAnimal, null);
+    return new Member(this.memberID, this.name, this.hexColor, this.avatarAnimal, null, this.jobTitle);
   }
 }

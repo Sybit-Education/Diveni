@@ -22,10 +22,11 @@ public class MemberTest {
     val name = "John";
     val hexColor = "#ffffff";
     val avatar = AvatarAnimal.WOLF;
+    val jobTitle = "Frontend";
     String estimation = null;
-    val member = new Member(memberID, name, hexColor, avatar, estimation);
-    val sameMember = new Member(memberID, name, hexColor, avatar, estimation);
-    val otherMember = new Member(Utils.generateRandomID(), name, hexColor, avatar, estimation);
+    val member = new Member(memberID, name, hexColor, avatar, estimation, jobTitle);
+    val sameMember = new Member(memberID, name, hexColor, avatar, estimation, jobTitle);
+    val otherMember = new Member(Utils.generateRandomID(), name, hexColor, avatar, estimation, jobTitle);
 
     assertEquals(member, sameMember);
     assertNotEquals(member, otherMember);
@@ -36,7 +37,7 @@ public class MemberTest {
   public void updateEstimation_works() {
     val vote = "5";
 
-    val member = new Member(null, null, null, null, null);
+    val member = new Member(null, null, null, null, null,null);
     val result = member.updateEstimation(vote);
 
     assertEquals(result.getCurrentEstimation(), vote);
@@ -46,7 +47,7 @@ public class MemberTest {
   @Test
   public void resetEstimation_works() {
     val vote = "5";
-    val member = new Member(null, null, null, null, vote);
+    val member = new Member(null, null, null, null, vote, null);
 
     val result = member.resetEstimation();
 

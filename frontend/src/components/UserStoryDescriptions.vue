@@ -1,6 +1,6 @@
 <template>
   <div class="user-story-descriptions">
-    <div class="list">
+    <div v-if="isActiveStory === false || isAdmin === true" class="list">
       <b-list-group-item
         v-for="(story, idx) of userStories"
         v-show="idx === index"
@@ -39,10 +39,72 @@
             </b-dropdown-item>
           </b-dropdown>
         </div>
+
         <div>
           <markdown-editor
             id="textarea-auto-height"
             v-model="userStories[idx].description"
+            class="mt-1"
+            :disabled="!editDescription"
+            :placeholder="$t('page.session.before.userStories.placeholder.userStoryDescription')"
+            @blur="publishChanges(idx)"
+          />
+        </div>
+      </b-list-group-item>
+      <div
+        v-if="userStories.length <= index && userStories.length"
+        class="text-center rounded p-3 m-2"
+      >
+        <b-card class="border-0" :title="$t('page.session.before.userStories.text')" />
+      </div>
+    </div>
+    <div v-if="isActiveStory && isAdmin === false" class="list">
+      <b-list-group-item
+        v-for="(story, idx) of getActiveStory"
+        v-show="idx === index"
+        :key="story.name"
+        class="border-0"
+        variant="outline-secondary"
+      >
+        <div class="list-group list-group-horizontal">
+          <b-form-textarea
+            v-model="activeUserStories[idx].title"
+            rows="1"
+            max-rows="3"
+            :disabled="!editDescription"
+            class="border"
+            size="lg"
+            :placeholder="$t('page.session.before.userStories.placeholder.userStoryTitle')"
+            @blur="publishChanges(idx)"
+          />
+          <b-dropdown
+            v-show="editDescription"
+            class="mx-1"
+            :text="(userStories[idx].estimation ? userStories[idx].estimation : '?') + '    '"
+            variant="info"
+          >
+            <b-dropdown-item
+              v-for="num in filteredCardSet"
+              :key="num"
+              :disabled="!editDescription"
+              :value="num"
+              @click="
+                userStories[idx].estimation = num;
+                publishChanges(idx);
+              "
+            >
+              {{ num }}
+            </b-dropdown-item>
+          </b-dropdown>
+        </div>
+
+        <div>
+          <markdown-editor
+            v-for="(story, idx) of getActiveStory"
+            v-show="idx === index"
+            id="textarea-auto-height"
+            :key="story.title"
+            v-model="story.description"
             class="mt-1"
             :disabled="!editDescription"
             :placeholder="$t('page.session.before.userStories.placeholder.userStoryDescription')"
@@ -74,6 +136,7 @@ export default Vue.extend({
     editDescription: { type: Boolean, required: true, default: false },
     showEstimations: { type: Boolean, required: false },
     showEditButtons: { type: Boolean, required: false, default: true },
+    isAdmin: { type: Boolean, required: false, default: false },
   },
   data() {
     return {
@@ -85,11 +148,43 @@ export default Vue.extend({
         estimation: string | null;
         isActive: boolean;
       }>,
+      activeUserStories: [] as Array<{
+        jiraId: string | null;
+        title: string;
+        description: string;
+        estimation: string | null;
+        isActive: boolean;
+      }>,
     };
   },
   computed: {
     filteredCardSet(): Array<unknown> {
       return this.cardSet.filter((card) => card !== "?");
+    },
+    isActiveStory() {
+      let rtn = false;
+      this.userStories.forEach((story) => {
+        if (story.isActive) {
+          rtn = true;
+        }
+      });
+      return rtn;
+    },
+    getActiveStory() {
+      let newList = [] as Array<{
+        jiraId: string | null;
+        title: string;
+        description: string;
+        estimation: string | null;
+        isActive: boolean;
+      }>;
+      this.userStories.forEach((story) => {
+        if (story.isActive) {
+          newList.push(story);
+        }
+      });
+      this.fillActiveList(newList);
+      return newList;
     },
   },
   watch: {
@@ -113,6 +208,9 @@ export default Vue.extend({
     }>;
   },
   methods: {
+    fillActiveList(newList) {
+      this.activeUserStories = newList;
+    },
     setUserStoryAsActive(index) {
       const stories = this.userStories.map((s) => ({
         jiraId: s.jiraId,

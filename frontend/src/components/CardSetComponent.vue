@@ -128,6 +128,33 @@ export default Vue.extend({
           values: [],
           activeValues: [],
         },
+        {
+          name: this.$t("session.prepare.step.selection.cardSet.sets.seperateEstimation.label"),
+          description: this.$t(
+            "session.prepare.step.selection.cardSet.sets.seperateEstimation.description"
+          ),
+          values: [
+            "0",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+            "11",
+            "12",
+            "13",
+            "14",
+            "15",
+            "16",
+            "?",
+          ],
+          activeValues: ["0", "1", "2", "3", "4", "5", "6", "7", "8"],
+        },
       ],
       allCardSetsWithJiraMode: [
         {
@@ -147,6 +174,33 @@ export default Vue.extend({
           description: this.$t("session.prepare.step.selection.cardSet.sets.numbers.description"),
           values: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "?"],
           activeValues: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
+        },
+        {
+          name: this.$t("session.prepare.step.selection.cardSet.sets.seperateEstimation.label"),
+          description: this.$t(
+            "session.prepare.step.selection.cardSet.sets.seperateEstimation.description"
+          ),
+          values: [
+            "0",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+            "11",
+            "12",
+            "13",
+            "14",
+            "15",
+            "16",
+            "?",
+          ],
+          activeValues: ["0", "1", "2", "3", "4", "5", "6", "7", "8"],
         },
       ],
     };
@@ -174,6 +228,7 @@ export default Vue.extend({
     },
     emitChanges() {
       this.$emit("selectedCardSetOptions", this.selectedCardSet.activeValues);
+      this.$emit("selectedCardSetName", this.selectedCardSet.name);
     },
     onCardSetNumberSelected(number) {
       if (this.selectedCardSet.activeValues.includes(number)) {

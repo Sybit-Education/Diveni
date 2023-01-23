@@ -43,6 +43,8 @@ public class WebSocketService {
 
   public static String START_TIMER_DESTINATION = "/updates/startTimer";
 
+  public static String TEAM_UPDATES_DESTINATION = "/updates/teams";
+
   @Autowired private SimpMessagingTemplate simpMessagingTemplate;
 
   @Getter private List<SessionPrincipals> sessionPrincipalList = List.of();
@@ -175,12 +177,39 @@ public class WebSocketService {
     LOGGER.debug("<-- sendSessionStateToMembers()");
   }
 
+  public void sendSessionStateToCertainMembers(Session session, List<String> members) {
+    LOGGER.debug("--> sendSessionStateToCertainMembers()");
+    members.stream().forEach(member -> sendSessionStateToMember(session,member));
+    LOGGER.debug("<-- sendSessionStateToCertainMembers");
+  }
+
   public void sendUpdatedUserStoriesToMembers(Session session) {
     LOGGER.debug("--> sendUpdatedUserStoriesToMembers(), sessionID={}", session.getSessionID());
     getSessionPrincipals(session.getSessionID())
         .memberPrincipals()
         .forEach(member -> sendUpdatedUserStoriesToMember(session, member.getMemberID()));
     LOGGER.debug("<-- sendUpdatedUserStoriesToMembers()");
+  }
+
+  public void sendUpdatedTeamsToMembers(Session session) {
+    LOGGER.debug("--> sendUpdatedTeamsToMembers(), sessionID={}", session.getSessionID());
+    getSessionPrincipals(session.getSessionID())
+    .memberPrincipals()
+    .forEach(member -> sendUpdatedTeamsToMembers(session, member.getMemberID()));
+    LOGGER.debug("<-- sendUpdatedTeamsToMembers()");
+  }
+
+  public void sendUpdatedTeamsToMembers(Session session, String memberID) {
+    LOGGER.debug(
+        "--> sendUpdatedTeamsToMembers(), sessionID={}, memberID={}",
+        session.getSessionID(),
+        memberID);
+        if (session.getSessionConfig().getTeam() != null) {
+          simpMessagingTemplate.convertAndSendToUser(
+        memberID, TEAM_UPDATES_DESTINATION, session.getSessionConfig().getTeam());
+        }
+    
+    LOGGER.debug("<-- sendUpdatedTeamsToMembers()");
   }
 
   public void sendSessionStateToMember(Session session, String memberID) {

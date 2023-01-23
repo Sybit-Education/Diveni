@@ -40,13 +40,22 @@ export default Vue.extend({
     textBeforeSessionID: { type: String, required: false, default: "" },
     sessionId: { type: String, required: true },
     textAfterSessionID: { type: String, required: false, default: "" },
+    voteSetName: { type: String, required: true, default: "" },
   },
   data: () => ({
     canCopy: false,
   }),
   computed: {
     sessionLink(): string {
-      return `${document.URL.toString().replace("session", "join?sessionID=")}${this.sessionId}`;
+      console.log(document.URL.toString());
+      if (this.voteSetName !== "FE & BE") {
+        return `${document.URL.toString().replace("session", "join?sessionID=")}${this.sessionId}`;
+      }
+      let urlWithoutName = `${document.URL.toString().replace("session", "join?sessionID=")}${
+        this.sessionId
+      }`;
+      urlWithoutName += "?voteSetName=FB";
+      return urlWithoutName;
     },
   },
   mounted() {

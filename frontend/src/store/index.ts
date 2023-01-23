@@ -19,6 +19,7 @@ export default new Vuex.Store<StoreState>({
     tokenId: undefined,
     projects: [],
     selectedProject: undefined,
+    team: undefined,
   },
   mutations: {
     setMembers(state, members) {
@@ -49,6 +50,11 @@ export default new Vuex.Store<StoreState>({
     subscribeOnBackendWSStoriesUpdated(state) {
       state.stompClient?.subscribe(Constants.webSocketMemberListenUserStoriesRoute, (frame) => {
         state.userStories = JSON.parse(frame.body);
+      });
+    },
+    subscribeOnBackendWSTeamsUpdated(state) {
+      state.stompClient?.subscribe(Constants.webSocketMemberListenTeamsRoute, (frame) => {
+        state.team = JSON.parse(frame.body);
       });
     },
     subscribeOnBackendWSAdminUpdate(state) {

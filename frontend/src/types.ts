@@ -13,6 +13,7 @@ export interface StoreState {
   tokenId: string | undefined;
   projects: Record<string, unknown>[];
   selectedProject: Project | undefined;
+  team: string | undefined;
 }
 
 export interface JiraRequestTokenDto {

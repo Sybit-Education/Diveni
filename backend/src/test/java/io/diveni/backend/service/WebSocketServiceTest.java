@@ -163,7 +163,7 @@ public class WebSocketServiceTest {
             defaultAdminPrincipal.getAdminID(),
             null,
             null,
-            List.of(new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null)),
+            List.of(new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null, null)),
             new HashMap<>(),
             new ArrayList<>(),
             null,
@@ -181,6 +181,33 @@ public class WebSocketServiceTest {
   }
 
   @Test
+  public void sendTeamsUpdate_sendsUpdate() throws Exception {
+    setDefaultAdminPrincipal(Set.of(defaultMemberPrincipal));
+    val session =
+        new Session(
+            new ObjectId(),
+            defaultAdminPrincipal.getSessionID(),
+            defaultAdminPrincipal.getAdminID(),
+            new SessionConfig(null, null, null, 30, null, "Backend", null),
+            null,
+            List.of(new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null, null)),
+            new HashMap<>(),
+            new ArrayList<>(),
+            null,
+            null,
+            null,
+            null);
+
+    webSocketService.sendUpdatedTeamsToMembers(session);
+
+    verify(simpMessagingTemplateMock, times(1))
+        .convertAndSendToUser(
+            defaultMemberPrincipal.getMemberID(),
+            WebSocketService.TEAM_UPDATES_DESTINATION,
+            session.getSessionConfig().getTeam());
+  }
+
+  @Test
   public void sendSessionState_sendsState() throws Exception {
     setDefaultAdminPrincipal(Set.of(defaultMemberPrincipal));
     val session =
@@ -190,7 +217,7 @@ public class WebSocketServiceTest {
             defaultAdminPrincipal.getAdminID(),
             null,
             null,
-            List.of(new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null)),
+            List.of(new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null, null)),
             new HashMap<>(),
             new ArrayList<>(),
             SessionState.WAITING_FOR_MEMBERS,
@@ -220,8 +247,8 @@ public class WebSocketServiceTest {
             null,
             null,
             List.of(
-                new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null),
-                new Member(memberPrincipal.getMemberID(), null, null, null, null)),
+                new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null, null),
+                new Member(memberPrincipal.getMemberID(), null, null, null, null, null)),
             new HashMap<>(),
             new ArrayList<>(),
             SessionState.WAITING_FOR_MEMBERS,
@@ -253,11 +280,11 @@ public class WebSocketServiceTest {
             new ObjectId(),
             defaultAdminPrincipal.getSessionID(),
             defaultAdminPrincipal.getAdminID(),
-            new SessionConfig(List.of(), List.of(), null, "US_MANUALLY", "password"),
+            new SessionConfig(List.of(), "",List.of(), null, "US_MANUALLY","Frontend", "password"),
             null,
             List.of(
-                new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null),
-                new Member(memberPrincipal.getMemberID(), null, null, null, null)),
+                new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null, null),
+                new Member(memberPrincipal.getMemberID(), null, null, null, null, null)),
             new HashMap<>(),
             new ArrayList<>(),
             SessionState.WAITING_FOR_MEMBERS,
@@ -289,11 +316,11 @@ public class WebSocketServiceTest {
             new ObjectId(),
             defaultAdminPrincipal.getSessionID(),
             defaultAdminPrincipal.getAdminID(),
-            new SessionConfig(List.of(), List.of(), null, "US_MANUALLY", "password"),
+            new SessionConfig(List.of(), "",List.of(), null, "US_MANUALLY",null, "password"),
             null,
             List.of(
-                new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null),
-                new Member(memberPrincipal.getMemberID(), null, null, null, null)),
+                new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null, null),
+                new Member(memberPrincipal.getMemberID(), null, null, null, null, null)),
             new HashMap<>(),
             new ArrayList<>(),
             SessionState.WAITING_FOR_MEMBERS,
@@ -321,7 +348,7 @@ public class WebSocketServiceTest {
             defaultAdminPrincipal.getAdminID(),
             null,
             null,
-            List.of(new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null)),
+            List.of(new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null, null)),
             new HashMap<>(),
             new ArrayList<>(),
             SessionState.WAITING_FOR_MEMBERS,

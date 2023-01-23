@@ -8,6 +8,7 @@ package io.diveni.backend.controller;
 import java.security.Principal;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import io.diveni.backend.Utils;
 import io.diveni.backend.model.Member;
@@ -64,6 +65,7 @@ public class WebsocketController {
         ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID());
     webSocketService.addMemberIfNew(principal);
     webSocketService.sendMembersUpdate(session);
+    webSocketService.sendUpdatedTeamsToMembers(session);
     webSocketService.sendSessionStateToMember(session, principal.getName());
     if (session.getTimerTimestamp() != null) {
       webSocketService.sendTimerStartMessageToUser(
@@ -150,6 +152,21 @@ public class WebsocketController {
     LOGGER.debug("<-- startEstimation()");
   }
 
+  @MessageMapping("/startVotingTeams")
+  public void startEstimationForTeam(AdminPrincipal principal, List<Member> members) {
+    LOGGER.debug("--> startEstimationForTeam()");
+    val session =
+        ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID())
+            .updateSessionState(SessionState.START_VOTING)
+            .resetCurrentHighlights()
+            .setTimerTimestamp(Utils.getTimestampISO8601(new Date()));
+    databaseService.saveSession(session);
+    List<String> memberIDs = members.stream().map(member -> member.getMemberID()).collect(Collectors.toList());
+    webSocketService.sendSessionStateToCertainMembers(session, memberIDs);
+    webSocketService.sendTimerStartMessage(session, session.getTimerTimestamp());
+    LOGGER.debug("<-- startEstimation()");    
+  }
+
   @MessageMapping("/votingFinished")
   public void votingFinished(AdminPrincipal principal) {
     LOGGER.debug("--> votingFinished()");
@@ -202,6 +219,22 @@ public class WebsocketController {
     LOGGER.debug("<-- restartVote()");
   }
 
+  @MessageMapping("/restartTeams")
+  public synchronized void restartVoteTeams(AdminPrincipal principal, List<Member> members) {
+    LOGGER.debug("--> restartVoteTeams()");
+    List<String> memberIDs = members.stream().map(member -> member.getMemberID()).collect(Collectors.toList());
+    val session =
+        ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID())
+            .updateSessionState(SessionState.START_VOTING)
+            .resetEstimationOfCertainMembers(memberIDs)
+            .setTimerTimestamp(Utils.getTimestampISO8601(new Date()));
+    databaseService.saveSession(session);
+    webSocketService.sendMembersUpdate(session);
+    webSocketService.sendSessionStateToCertainMembers(session, memberIDs);
+    webSocketService.sendTimerStartMessage(session, session.getTimerTimestamp());
+    LOGGER.debug("<-- restartVoteTeams()");
+  }
+
   @MessageMapping("/adminUpdatedUserStories")
   public synchronized void adminUpdatedUserStories(
       AdminPrincipal principal, @Payload List<UserStory> userStories) {
@@ -213,4 +246,16 @@ public class WebsocketController {
     webSocketService.sendUpdatedUserStoriesToMembers(session);
     LOGGER.debug("<-- adminUpdatedUserStories()");
   }
+
+  @MessageMapping("/adminUpdatedTeams")
+  public synchronized void adminUpdatedTeams(
+    AdminPrincipal principal, @Payload String team) {
+      LOGGER.debug("--> adminUpdatedTeams()");
+      val session = ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID())
+                    .updateTeam(team);
+      databaseService.saveSession(session);
+      webSocketService.sendUpdatedTeamsToMembers(session);
+      LOGGER.debug("<-- adminUpdatedTeams()");
+    }
+
 }

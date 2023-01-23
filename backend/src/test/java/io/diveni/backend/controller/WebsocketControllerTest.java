@@ -69,7 +69,13 @@ public class WebsocketControllerTest {
 
   private static final String START_VOTING = "/ws/startVoting";
 
+  private static final String START_VOTING_TEAMS = "/ws/startVotingTeams";
+
   private static final String RESTART = "/ws/restart";
+
+  private static final String RESTART_TEAMS = "/ws/restartTeams";
+
+  private static final String ADMIN_UPDATED_TEAMS = "/ws/adminUpdatedTeams";
 
   private static final String VOTE = "/ws/vote";
 
@@ -167,7 +173,7 @@ public class WebsocketControllerTest {
             dbID,
             sessionID,
             adminID,
-            new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+            new SessionConfig(new ArrayList<>(), "",List.of(), 10, "US_MANUALLY", null, null),
             null,
             new ArrayList<Member>(),
             new HashMap<>(),
@@ -196,14 +202,14 @@ public class WebsocketControllerTest {
     val sessionID = Utils.generateRandomID();
     val adminID = Utils.generateRandomID();
     val memberID = Utils.generateRandomID();
-    val member = new Member(memberID, null, null, null, null);
+    val member = new Member(memberID, null, null, null, null, null);
     val adminPrincipal = new AdminPrincipal(sessionID, adminID);
     sessionRepo.save(
         new Session(
             dbID,
             sessionID,
             adminID,
-            new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+            new SessionConfig(new ArrayList<>(), "",List.of(), 10, "US_MANUALLY", null, null),
             null,
             List.of(member),
             new HashMap<>(),
@@ -239,15 +245,15 @@ public class WebsocketControllerTest {
     val memberID = Utils.generateRandomID();
     val memberList =
         List.of(
-            new Member(memberID, null, null, null, null),
-            new Member(Utils.generateRandomID(), null, null, null, null));
+            new Member(memberID, null, null, null, null, null),
+            new Member(Utils.generateRandomID(), null, null, null, null, null));
     val adminPrincipal = new AdminPrincipal(sessionID, adminID);
     sessionRepo.save(
         new Session(
             dbID,
             sessionID,
             adminID,
-            new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+            new SessionConfig(new ArrayList<>(), "",List.of(), 10, "US_MANUALLY", null, null),
             null,
             memberList,
             new HashMap<>(),
@@ -304,7 +310,7 @@ public class WebsocketControllerTest {
             dbID,
             sessionID,
             adminID,
-            new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+            new SessionConfig(new ArrayList<>(), "",List.of(), 10, "US_MANUALLY", null, null),
             null,
             new ArrayList<Member>(),
             new HashMap<>(),
@@ -330,13 +336,13 @@ public class WebsocketControllerTest {
     val sessionID = Utils.generateRandomID();
     val adminID = Utils.generateRandomID();
     val memberID = Utils.generateRandomID();
-    val member = new Member(memberID, null, null, null, null);
+    val member = new Member(memberID, null, null, null, null, null);
     sessionRepo.save(
         new Session(
             new ObjectId(),
             adminID,
             Utils.generateRandomID(),
-            new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+            new SessionConfig(new ArrayList<>(), "",List.of(), 10, "US_MANUALLY", null, null),
             null,
             List.of(member),
             new HashMap<>(),
@@ -367,7 +373,7 @@ public class WebsocketControllerTest {
     val sessionID = Utils.generateRandomID();
     val adminID = Utils.generateRandomID();
     val memberID = Utils.generateRandomID();
-    val member = new Member(memberID, null, null, null, null);
+    val member = new Member(memberID, null, null, null, null, null);
     val memberList = List.of(member);
     val adminPrincipal = new AdminPrincipal(sessionID, adminID);
     sessionRepo.save(
@@ -375,7 +381,7 @@ public class WebsocketControllerTest {
             dbID,
             sessionID,
             adminID,
-            new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+            new SessionConfig(new ArrayList<>(), "",List.of(), 10, "US_MANUALLY", null, null),
             null,
             memberList,
             new HashMap<>(),
@@ -404,7 +410,7 @@ public class WebsocketControllerTest {
     val sessionID = Utils.generateRandomID();
     val adminID = Utils.generateRandomID();
     val memberID = Utils.generateRandomID();
-    val member = new Member(memberID, null, null, null, null);
+    val member = new Member(memberID, null, null, null, null, null);
     val memberList = List.of(member);
     val adminPrincipal = new AdminPrincipal(sessionID, adminID);
     sessionRepo.save(
@@ -412,7 +418,7 @@ public class WebsocketControllerTest {
             dbID,
             sessionID,
             adminID,
-            new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+            new SessionConfig(new ArrayList<>(), "",List.of(), 10, "US_MANUALLY", null, null),
             null,
             memberList,
             new HashMap<>(),
@@ -442,7 +448,7 @@ public class WebsocketControllerTest {
     val sessionID = Utils.generateRandomID();
     val adminID = Utils.generateRandomID();
     val memberID = Utils.generateRandomID();
-    val member = new Member(memberID, null, null, null, null);
+    val member = new Member(memberID, null, null, null, null, null);
     val memberList = List.of(member);
     val adminPrincipal = new AdminPrincipal(sessionID, adminID);
     val oldSession =
@@ -450,7 +456,7 @@ public class WebsocketControllerTest {
             dbID,
             sessionID,
             adminID,
-            new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+            new SessionConfig(new ArrayList<>(), "",List.of(), 10, "US_MANUALLY", null, null),
             null,
             memberList,
             new HashMap<>(),
@@ -472,12 +478,12 @@ public class WebsocketControllerTest {
   }
 
   @Test
-  public void restartVoting_resetsEstimations() throws Exception {
+  public void startVotingTeams_updatesState() throws Exception {
     val dbID = new ObjectId();
     val sessionID = Utils.generateRandomID();
     val adminID = Utils.generateRandomID();
     val memberID = Utils.generateRandomID();
-    val member = new Member(memberID, null, null, null, "5");
+    val member = new Member(memberID, null, null, null, null, "Frontend");
     val memberList = List.of(member);
     val adminPrincipal = new AdminPrincipal(sessionID, adminID);
     val oldSession =
@@ -485,7 +491,42 @@ public class WebsocketControllerTest {
             dbID,
             sessionID,
             adminID,
-            new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+            new SessionConfig(new ArrayList<>(), "",List.of(), 10, "US_MANUALLY", null, null),
+            null,
+            memberList,
+            new HashMap<>(),
+            new ArrayList<>(),
+            SessionState.WAITING_FOR_MEMBERS,
+            null,
+            null,
+            null);
+    sessionRepo.save(oldSession);
+    webSocketService.setAdminUser(adminPrincipal);
+    StompSession adminSession = getAdminSession(sessionID, adminID);
+
+    adminSession.send(START_VOTING_TEAMS, memberList);
+    // Wait for server-side handling
+    TimeUnit.MILLISECONDS.sleep(TIMEOUT);
+
+    val newSession = sessionRepo.findBySessionID(oldSession.getSessionID());
+    Assertions.assertEquals(SessionState.START_VOTING, newSession.getSessionState());
+  }
+
+  @Test
+  public void restartVoting_resetsEstimations() throws Exception {
+    val dbID = new ObjectId();
+    val sessionID = Utils.generateRandomID();
+    val adminID = Utils.generateRandomID();
+    val memberID = Utils.generateRandomID();
+    val member = new Member(memberID, null, null, null, "5", null);
+    val memberList = List.of(member);
+    val adminPrincipal = new AdminPrincipal(sessionID, adminID);
+    val oldSession =
+        new Session(
+            dbID,
+            sessionID,
+            adminID,
+            new SessionConfig(new ArrayList<>(), "",List.of(), 10, "US_MANUALLY", null, null),
             null,
             memberList,
             new HashMap<>(),
@@ -504,5 +545,82 @@ public class WebsocketControllerTest {
 
     val newMembers = sessionRepo.findBySessionID(oldSession.getSessionID()).getMembers();
     Assertions.assertTrue(newMembers.stream().allMatch(m -> m.getCurrentEstimation() == null));
+  }
+
+  @Test
+  public void restartVotingTeams_resetsEstimationsOnlyForTheTeam() throws Exception {
+    val dbID = new ObjectId();
+    val sessionID = Utils.generateRandomID();
+    val adminID = Utils.generateRandomID();
+    val memberID = Utils.generateRandomID();
+    val member = new Member(memberID, "Member 1", null, null, "5", "Frontend");
+    val member2 = new Member("123123", "Member 2", null, null, "3", "Frontend");
+    val member3 = new Member("456", "Member 3", null, null, "8", "Backend");
+    val memberList = List.of(member, member2, member3);
+    val adminPrincipal = new AdminPrincipal(sessionID, adminID);
+    val oldSession =
+        new Session(
+            dbID,
+            sessionID,
+            adminID,
+            new SessionConfig(new ArrayList<>(), "",List.of(), 10, "US_MANUALLY", null, null),
+            null,
+            memberList,
+            new HashMap<>(),
+            new ArrayList<>(),
+            SessionState.WAITING_FOR_MEMBERS,
+            null,
+            null,
+            null);
+    sessionRepo.save(oldSession);
+    webSocketService.setAdminUser(adminPrincipal);
+    StompSession adminSession = getAdminSession(sessionID, adminID);
+
+    adminSession.send(RESTART_TEAMS, List.of(member, member2));
+    // Wait for server-side handling
+    TimeUnit.MILLISECONDS.sleep(TIMEOUT);
+
+    val newMembers = sessionRepo.findBySessionID(oldSession.getSessionID()).getMembers();
+    Assertions.assertTrue(newMembers.stream().filter(m-> m.getJobTitle().equals("Frontend")).allMatch(m -> m.getCurrentEstimation() == null));
+    assertEquals(3, newMembers.size());
+    Assertions.assertTrue(newMembers.stream().filter(m-> m.getJobTitle().equals("Backend")).allMatch(m -> m.getCurrentEstimation() != null));
+  }
+
+  @Test
+  public void adminUpdatedTeams_newSessionShouldHaveTheTeam() throws Exception {
+    val dbID = new ObjectId();
+    val sessionID = Utils.generateRandomID();
+    val adminID = Utils.generateRandomID();
+    val memberID = Utils.generateRandomID();
+    val member = new Member(memberID, "Member 1", null, null, "5", "Frontend");
+    val member2 = new Member("123123", "Member 2", null, null, "3", "Frontend");
+    val member3 = new Member("456", "Member 3", null, null, "8", "Backend");
+    val memberList = List.of(member, member2, member3);
+    val adminPrincipal = new AdminPrincipal(sessionID, adminID);
+    val oldSession =
+        new Session(
+            dbID,
+            sessionID,
+            adminID,
+            new SessionConfig(new ArrayList<>(), "",List.of(), 10, "US_MANUALLY", null, null),
+            null,
+            memberList,
+            new HashMap<>(),
+            new ArrayList<>(),
+            SessionState.WAITING_FOR_MEMBERS,
+            null,
+            null,
+            null);
+    sessionRepo.save(oldSession);
+    webSocketService.setAdminUser(adminPrincipal);
+    StompSession adminSession = getAdminSession(sessionID, adminID);
+
+    adminSession.send(ADMIN_UPDATED_TEAMS, "Frontend");
+    // Wait for server-side handling
+    TimeUnit.MILLISECONDS.sleep(TIMEOUT);
+
+    val result = sessionRepo.findBySessionID(oldSession.getSessionID());
+
+    Assertions.assertEquals("Frontend", result.getSessionConfig().getTeam());
   }
 }

@@ -19,10 +19,15 @@ public class SessionConfig {
 
   private final List<String> set;
 
+  private final String setName;
+
   private final List<UserStory> userStories;
 
   private final Integer timerSeconds;
+
   private final String userStoryMode;
+
+  private final String team;
 
   @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
   private final String password;

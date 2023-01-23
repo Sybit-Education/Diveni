@@ -9,7 +9,7 @@
       </template>
 
       <b-row class="mt-5">
-        <b-col>
+        <b-col class="overflow-auto">
           <h1>{{ $t("page.vote.title") }}</h1>
         </b-col>
         <b-col cols="auto" class="mr-auto">
@@ -85,7 +85,7 @@
         </b-row>
       </b-row>
       <b-row v-if="!isStartVoting && !votingFinished" class="my-5">
-        <h3>
+        <h3 style="margin-left: 15px">
           {{ $t("page.vote.waiting") }}
           <sub><b-icon-three-dots animation="fade" font-scale="1" /></sub>
         </h3>
@@ -114,6 +114,7 @@
       <b-row v-if="userStoryMode !== 'NO_US' && !isMobile">
         <b-col class="mt-2">
           <div class="overflow-auto" style="height: 700px">
+            <h3>{{ teams }}</h3>
             <user-stories
               :card-set="voteSet"
               :show-estimations="true"
@@ -165,7 +166,8 @@ import MobileStoryList from "../components/MobileStoryList.vue";
 import MobileStoryTitle from "../components/MobileStoryTitle.vue";
 import UserStorySumComponent from "@/components/UserStorySum.vue";
 import SessionLeaveButton from "@/components/actions/SessionLeaveButton.vue";
-
+// Die Seite sollte nur die abzustimmende UserStory anzeigen. Außerdem sollte noch durchkommen, welches Team voten darf (Frontend oder Backend).
+// Hierzu sollte ich durch das Backend ein Update schicken, wenn ich als Admin die Aktive UserStory wechsel und oder das Team wechsel.
 export default Vue.extend({
   name: "MemberVotePage",
   components: {
@@ -186,6 +188,7 @@ export default Vue.extend({
     name: { type: String, default: undefined },
     hexColor: { type: String, default: undefined },
     avatarAnimalAssetName: { type: String, default: undefined },
+    jobTitle: { type: String, default: undefined },
     voteSetJson: { type: String, default: undefined },
     timerSecondsString: { type: String, default: undefined },
     userStoryMode: { type: String, default: undefined },
@@ -209,6 +212,9 @@ export default Vue.extend({
     },
     userStories() {
       return this.$store.state.userStories;
+    },
+    teams() {
+      return this.$store.state.team;
     },
     memberUpdates() {
       return this.$store.state.memberUpdates;
@@ -235,10 +241,13 @@ export default Vue.extend({
       return this.$store.state.notifications;
     },
     getMember() {
+      console.log("JobTitle:" + this.jobTitle);
+      console.log("this.hexColor:" + this.hexColor);
       return {
         hexColor: this.hexColor,
         avatarAnimal: this.avatarAnimalAssetName,
         name: this.name,
+        jobTitle: this.jobTitle,
       };
     },
   },
@@ -282,7 +291,8 @@ export default Vue.extend({
       this.memberID === undefined ||
       this.name === undefined ||
       this.hexColor === undefined ||
-      this.avatarAnimalAssetName === undefined
+      this.avatarAnimalAssetName === undefined ||
+      this.jobTitle === undefined
     ) {
       this.goToJoinPage();
     }

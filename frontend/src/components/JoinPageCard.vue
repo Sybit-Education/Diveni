@@ -32,6 +32,12 @@
           <b-form-input v-model="password" class="mt-3" type="password" placeholder="(optional)" />
         </b-col>
       </b-row>
+      <b-row v-if="jobTitleRequired !== ''" class="mt-2">
+        <b-col>
+          <h6>Job-Title</h6>
+          <autocomplete v-model="jobTitle" :items="getJobTitles"></autocomplete>
+        </b-col>
+      </b-row>
       <b-row>
         <b-button
           class="mt-5"
@@ -53,24 +59,35 @@
 import Vue from "vue";
 import JoinCommand from "../model/JoinCommand";
 import RoundedAvatar from "./RoundedAvatar.vue";
+import autocomplete from "vue2-autocomplete-input-tag";
 
 export default Vue.extend({
   name: "JoinPageCard",
   components: {
     RoundedAvatar,
+    autocomplete,
   },
   props: {
     color: { type: String, required: true },
     animalAssetName: { type: String, required: true },
     buttonText: { type: String, required: true },
     sessionIdFromUrl: { type: String, required: true },
+    jobTitleRequired: { type: String, required: true },
   },
   data() {
     return {
       sessionID: "",
       password: "",
       name: "",
+      jobTitle: "",
     };
+  },
+  computed: {
+    getJobTitles(): Array<string> {
+      // evenutell kann der Admin dann auch die Jobs verschicken über Sessionconfig ?
+      let jobTitles = Array.of("Frontend", "Backend", "FullStack", "Product Owner", "Scrummaster");
+      return jobTitles;
+    },
   },
   created() {
     if (this.sessionIdFromUrl) {
@@ -88,10 +105,12 @@ export default Vue.extend({
   methods: {
     onClickButton() {
       if (this.name.length > 1 && this.sessionID.length > 1) {
+        console.log("JoinPageCard: ", this.jobTitle);
         const data: JoinCommand = {
           sessionID: this.sessionID.split(" ").join(""),
           password: this.password,
           name: this.name.trim(),
+          jobTitle: this.jobTitle,
         };
         this.$emit("clicked", data);
       }
@@ -107,5 +126,38 @@ export default Vue.extend({
 
 h6 {
   font-weight: 700;
+}
+</style>
+
+<style>
+input.autocomplete {
+  width: 100%;
+  border: 1px solid #ccc;
+  color: #666;
+  border-radius: 5px;
+  outline: none;
+  padding: 7px 14px;
+  box-sizing: border-box;
+  font-size: 15px;
+}
+.vue2-autocomplete-input-tag-items {
+  border: 1px solid #ccc;
+  max-height: 200px;
+  margin-top: 8px;
+  width: 100%;
+  background-color: white;
+  border-radius: 8px;
+  overflow: auto;
+}
+.vue2-autocomplete-input-tag-item {
+  padding: 6px 16px;
+  color: #4a4a4a;
+  max-width: 100%;
+  cursor: pointer;
+  text-align: left;
+  font-size: 14px;
+}
+.vue2-autocomplete-input-tag-item:hover {
+  background-color: #e8e8e8;
 }
 </style>

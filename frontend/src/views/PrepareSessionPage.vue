@@ -45,6 +45,7 @@
       class="mt-3"
       :user-story-mode="userStoryMode"
       @selectedCardSetOptions="setCardSetOptions"
+      @selectedCardSetName="setCardSetName"
     />
     <h4 class="mt-3">
       {{ $t("session.prepare.step.selection.time.title") }}
@@ -117,6 +118,7 @@ export default Vue.extend({
       warningWhenUnderZero: "",
       tabIndex: 0,
       isJiraEnabled: constants.isJiraEnabled,
+      selectedCardSetName: "",
     };
   },
   computed: {
@@ -161,6 +163,7 @@ export default Vue.extend({
       const url = Constants.backendURL + Constants.createSessionRoute;
       const sessionConfig = {
         set: this.selectedCardSetOptions,
+        setName: this.selectedCardSetName,
         timerSeconds: this.timer,
         password: this.password === "" ? null : this.password,
         userStories: this.userStories,
@@ -173,6 +176,7 @@ export default Vue.extend({
             adminID: string;
             sessionConfig: {
               set: Array<string>;
+              setName: string;
               timerSeconds: number;
               userStories: Array<{
                 title: string;
@@ -200,10 +204,14 @@ export default Vue.extend({
           adminID: session.adminID,
           timerSecondsString: this.timer.toString(),
           voteSetJson: JSON.stringify(session.sessionConfig.set),
+          voteSetNameJson: JSON.stringify(session.sessionConfig.setName),
           sessionState: session.sessionState,
           userStoryMode: session.sessionConfig.userStoryMode,
         },
       });
+    },
+    setCardSetName($event) {
+      this.selectedCardSetName = $event;
     },
     setCardSetOptions($event) {
       this.selectedCardSetOptions = $event;

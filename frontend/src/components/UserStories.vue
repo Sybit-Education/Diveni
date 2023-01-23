@@ -1,8 +1,58 @@
 <template>
   <div class="user-stories">
-    <b-card-group class="my-3 overflow-auto" style="max-height: 70vh">
+    <b-card-group
+      v-if="isActiveStory === false || isAdmin === true"
+      class="my-3 overflow-auto"
+      style="max-height: 70vh"
+    >
       <b-list-group-item
         v-for="(story, index) of userStories"
+        :key="index"
+        :active="index === selectedStoryIndex"
+        class="w-100 p-1 d-flex justify-content-left"
+        @mouseover="hover = index"
+        @mouseleave="hover = null"
+        @click="setUserStoryAsActive(index)"
+      >
+        <b-button
+          v-if="showEditButtons"
+          :variant="story.isActive ? 'success' : 'outline-success'"
+          size="sm"
+          @click="markUserStory(index)"
+        >
+          <b-icon-check2 />
+        </b-button>
+
+        <b-form-input
+          v-model="story.title"
+          :disabled="true"
+          class="mx-1 w-100"
+          size="sm"
+          :placeholder="$t('page.session.before.userStories.placeholder.userStoryTitle')"
+          @blur="publishChanges"
+        />
+
+        <b-badge variant="info" class="p-2">
+          {{ story.estimation == null ? "?" : story.estimation }}
+        </b-badge>
+        <b-button
+          v-show="showEditButtons && hover === index"
+          variant="outline-danger"
+          class="border-0"
+          size="sm"
+          @click="deleteStory(index)"
+        >
+          <b-icon-trash />
+        </b-button>
+      </b-list-group-item>
+    </b-card-group>
+    <b-card-group
+      v-if="isActiveStory && isAdmin === false"
+      class="my-3 overflow-auto"
+      style="max-height: 70vh"
+    >
+      <b-list-group-item
+        v-for="(story, index) of getActiveStory"
         :key="index"
         :active="index === selectedStoryIndex"
         class="w-100 p-1 d-flex justify-content-left"
@@ -77,6 +127,7 @@ export default Vue.extend({
     showEstimations: { type: Boolean, required: true },
     showEditButtons: { type: Boolean, required: false, default: true },
     selectStory: { type: Boolean, required: false, default: false },
+    isAdmin: { type: Boolean, required: false, default: false },
   },
   data() {
     return {
@@ -85,6 +136,26 @@ export default Vue.extend({
       userStories: [] as Array<UserStory>,
       hover: null,
     };
+  },
+  computed: {
+    isActiveStory() {
+      let rtn = false;
+      this.userStories.forEach((story) => {
+        if (story.isActive) {
+          rtn = true;
+        }
+      });
+      return rtn;
+    },
+    getActiveStory() {
+      let newList: UserStory[] = [];
+      this.userStories.forEach((story) => {
+        if (story.isActive) {
+          newList.push(story);
+        }
+      });
+      return newList;
+    },
   },
   watch: {
     initialStories() {

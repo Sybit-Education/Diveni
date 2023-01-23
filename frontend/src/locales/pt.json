@@ -228,6 +228,10 @@
                   "description": "No campo de texto abaixo você pode definir seu próprio conjunto de cartões. Cada entrada é separada por ponto e vírgula (;). Entradas duplicadas são ignoradas.",
                   "example": "Ex: 1;2;3;4;5;6;7;"
                 }
+              },
+              "seperateEstimation": {
+                "label": "FE & BE",
+                "description": "Hier kann das Backend und das Frontend Team seperat schätzen."
               }
             }
           },

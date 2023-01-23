@@ -15,6 +15,7 @@
           v-if="planningStart"
           class="float-end"
           :session-id="session_sessionID"
+          :vote-set-name="voteSetName"
         />
       </b-col>
       <b-col cols="auto">
@@ -30,6 +31,7 @@
         :text-before-session-i-d="$t('page.session.before.text.beforeID')"
         :session-id="session_sessionID"
         :text-after-session-i-d="$t('page.session.before.text.afterID')"
+        :vote-set-name="voteSetName"
       />
 
       <h4 class="text-center m-3">
@@ -48,7 +50,7 @@
       </b-row>
       <b-row>
         <b-col class="text-center">
-          <session-start-button @clicked="onPlanningStarted" />
+          <session-start-button :team="team" :members="members" @clicked="onPlanningStarted" />
         </b-col>
       </b-row>
     </div>
@@ -74,7 +76,6 @@
           />
         </b-col>
       </b-row>
-
       <h4 v-if="membersPending.length > 0 && !estimateFinished" class="d-inline">
         {{ $t("page.session.during.estimation.message.waitingFor") }}
         {{ membersPending.length }} /
@@ -127,7 +128,38 @@
         />
       </b-row>
     </div>
+    <div v-if="voteSetName === 'FE & BE'" class="inputFieldsForFrontAndBackend">
+      <h3>Frontend: {{ frontendEstimation }}</h3>
+      <input id="frontEndInput" v-model="frontendEstimation" type="text" />
+      <br />
+      <h3>Backend: {{ backendEstimation }}</h3>
+      <input id="backEndInput" v-model="backendEstimation" type="text" />
+    </div>
     <b-row v-if="session_userStoryMode !== 'NO_US'" class="mt-5">
+      <b-col v-if="voteSetName === 'FE & BE'">
+        <div v-if="getSelectedStory !== ''" class="storyInfo">
+          <input
+            id="frontend"
+            v-model="team"
+            class="test"
+            type="radio"
+            value="Frontend"
+            @change="updateTeams(team)"
+          />
+          <label for="frontend">Frontend</label>
+
+          <input
+            id="backend"
+            v-model="team"
+            class="test"
+            type="radio"
+            value="Backend"
+            style="margin-right: 10"
+            @change="updateTeams(team)"
+          />
+          <label for="backend">Backend</label>
+        </div>
+      </b-col>
       <b-col>
         <user-story-sum-component />
       </b-col>
@@ -140,6 +172,7 @@
           :initial-stories="userStories"
           :show-edit-buttons="true"
           :select-story="true"
+          :is-admin="true"
           @userStoriesChanged="onUserStoriesChanged"
           @selectedStory="onSelectedStory($event)"
         />
@@ -150,6 +183,7 @@
           :initial-stories="userStories"
           :edit-description="true"
           :index="index"
+          :is-admin="true"
           @userStoriesChanged="onUserStoriesChanged"
         />
       </b-col>
@@ -192,6 +226,7 @@ export default Vue.extend({
     adminID: { type: String, required: true },
     sessionID: { type: String, required: true },
     voteSetJson: { type: String, required: true },
+    voteSetNameJson: { type: String, required: true },
     sessionState: { type: String, required: true },
     timerSecondsString: { type: String, required: true },
     startNewSessionOnMountedString: {
@@ -207,6 +242,7 @@ export default Vue.extend({
       session_adminID: "",
       session_sessionID: "",
       session_voteSetJson: "",
+      session_voteSetNameJson: "",
       session_sessionState: "",
       session_timerSecondsString: "",
       session_userStoryMode: "",
@@ -216,10 +252,14 @@ export default Vue.extend({
       stageLabelWaiting: "Waiting room",
       planningStart: false,
       voteSet: [] as string[],
+      voteSetName: "",
       timerCountdownNumber: 0,
       startTimerOnComponentCreation: true,
       estimateFinished: false,
       session: {},
+      team: "",
+      frontendEstimation: "0",
+      backendEstimation: "0",
     };
   },
   computed: {
@@ -246,6 +286,15 @@ export default Vue.extend({
     },
     timerTimestamp() {
       return this.$store.state.timerTimestamp ? this.$store.state.timerTimestamp : "";
+    },
+    getSelectedStory() {
+      let rtn = "";
+      this.userStories.forEach((s) => {
+        if (s.isActive === true) {
+          rtn = s.title;
+        }
+      });
+      return rtn;
     },
   },
   watch: {
@@ -294,6 +343,7 @@ export default Vue.extend({
   },
   mounted() {
     this.voteSet = JSON.parse(this.session_voteSetJson);
+    this.voteSetName = JSON.parse(this.session_voteSetNameJson);
     this.connectToWebSocket();
     if (this.session_sessionState === Constants.memberUpdateCommandStartVoting) {
       this.planningStart = true;
@@ -325,7 +375,9 @@ export default Vue.extend({
             adminID: string;
             sessionConfig: {
               set: Array<string>;
+              setName: string;
               timerSeconds: number;
+              team: string;
               userStories: Array<{
                 title: string;
                 description: string;
@@ -350,6 +402,8 @@ export default Vue.extend({
       this.session_sessionState = this.sessionState;
       this.session_timerSecondsString = this.timerSecondsString;
       this.session_voteSetJson = this.voteSetJson;
+      this.session_voteSetNameJson = this.voteSetNameJson;
+      console.log("In der Session Page: " + this.session_voteSetNameJson);
       this.session_userStoryMode = this.userStoryMode;
     },
     assignSessionToData(session) {
@@ -359,11 +413,14 @@ export default Vue.extend({
         this.session_sessionState = session.sessionState;
         this.session_timerSecondsString = session.sessionConfig.timerSeconds.toString();
         this.session_voteSetJson = JSON.stringify(session.sessionConfig.set);
+        this.session_voteSetNameJson = JSON.stringify(session.sessionConfig.setName);
         this.session_userStoryMode = session.sessionConfig.userStoryMode;
         this.$store.commit("setUserStories", {
           stories: session.sessionConfig.userStories,
         });
         this.voteSet = JSON.parse(this.session_voteSetJson);
+        this.voteSetName = JSON.parse(this.session_voteSetNameJson);
+        console.log("VoteSetName: " + this.voteSetName);
       }
     },
     handleReload() {
@@ -380,6 +437,16 @@ export default Vue.extend({
       //reconnect and reload member
       this.connectToWebSocket();
       this.requestMemberUpdate();
+    },
+    async updateTeams(teams) {
+      if (this.webSocketIsConnected) {
+        this.team = teams;
+        const endPoint = `${Constants.websocketAdminUpdatedTeamsRoute}`;
+        this.$store.commit("sendViaBackendWS", {
+          endPoint,
+          data: JSON.stringify(teams),
+        });
+      }
     },
     async onUserStoriesChanged({ us, idx, doRemove }) {
       console.log(`stories: ${us}`);
@@ -497,9 +564,38 @@ export default Vue.extend({
       }
     },
     sendRestartMessage() {
-      this.estimateFinished = false;
-      const endPoint = Constants.webSocketRestartPlanningRoute;
-      this.$store.commit("sendViaBackendWS", { endPoint });
+      if (this.voteSetName !== "FE & BE") {
+        this.estimateFinished = false;
+        const endPoint = Constants.webSocketRestartPlanningRoute;
+        this.$store.commit("sendViaBackendWS", { endPoint });
+      } else {
+        let currentMembers = [] as Array<Member>;
+        if (this.team === "") {
+          const endPoint = Constants.webSocketStartPlanningRoute;
+          this.$store.commit("sendViaBackendWS", { endPoint });
+          this.$emit("clicked");
+        } else {
+          if (this.team === "Frontend") {
+            this.members.forEach((member) => {
+              if (member.jobTitle === "Frontend" || member.jobTitle === "FullStack") {
+                currentMembers.push(member);
+              }
+            });
+          } else {
+            this.members.forEach((member) => {
+              if (member.jobTitle === "Backend" || member.jobTitle === "FullStack") {
+                currentMembers.push(member);
+              }
+            });
+          }
+          const endPoint = Constants.webSocketRestartPlanningRouteTeams;
+          this.$store.commit("sendViaBackendWS", {
+            endPoint,
+            data: JSON.stringify(currentMembers),
+          });
+          this.$emit("clicked");
+        }
+      }
     },
     goToLandingPage() {
       this.$router.push({ name: "LandingPage" });
@@ -512,4 +608,11 @@ export default Vue.extend({
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped></style>
+<style scoped>
+input[type="radio"] {
+  margin-right: 5px;
+}
+label {
+  margin-right: 5px;
+}
+</style>

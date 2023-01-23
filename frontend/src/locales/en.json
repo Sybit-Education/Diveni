@@ -228,6 +228,10 @@
                   "description": "In the text field below you can set up your own card set. Every entry is separated by a semicolon (;). Duplicated entries are skipped.",
                   "example": "E.g: 1;2;3;4;5;6;7;"
                 }
+              },
+              "seperateEstimation": {
+                "label": "FE & BE",
+                "description": "Hier kann das Backend und das Frontend Team seperat schätzen."
               }
             }
           },
