@@ -179,7 +179,7 @@ public class WebSocketService {
 
   public void sendSessionStateToCertainMembers(Session session, List<String> members) {
     LOGGER.debug("--> sendSessionStateToCertainMembers()");
-    members.stream().forEach(member -> sendSessionStateToMember(session,member));
+    members.stream().forEach(member -> sendSessionStateToMember(session, member));
     LOGGER.debug("<-- sendSessionStateToCertainMembers");
   }
 
@@ -194,8 +194,8 @@ public class WebSocketService {
   public void sendUpdatedTeamsToMembers(Session session) {
     LOGGER.debug("--> sendUpdatedTeamsToMembers(), sessionID={}", session.getSessionID());
     getSessionPrincipals(session.getSessionID())
-    .memberPrincipals()
-    .forEach(member -> sendUpdatedTeamsToMembers(session, member.getMemberID()));
+        .memberPrincipals()
+        .forEach(member -> sendUpdatedTeamsToMembers(session, member.getMemberID()));
     LOGGER.debug("<-- sendUpdatedTeamsToMembers()");
   }
 
@@ -204,11 +204,11 @@ public class WebSocketService {
         "--> sendUpdatedTeamsToMembers(), sessionID={}, memberID={}",
         session.getSessionID(),
         memberID);
-        if (session.getSessionConfig().getTeam() != null) {
-          simpMessagingTemplate.convertAndSendToUser(
-        memberID, TEAM_UPDATES_DESTINATION, session.getSessionConfig().getTeam());
-        }
-    
+    if (session.getSessionConfig().getTeam() != null) {
+      simpMessagingTemplate.convertAndSendToUser(
+          memberID, TEAM_UPDATES_DESTINATION, session.getSessionConfig().getTeam());
+    }
+
     LOGGER.debug("<-- sendUpdatedTeamsToMembers()");
   }
 

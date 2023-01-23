@@ -161,10 +161,11 @@ public class WebsocketController {
             .resetCurrentHighlights()
             .setTimerTimestamp(Utils.getTimestampISO8601(new Date()));
     databaseService.saveSession(session);
-    List<String> memberIDs = members.stream().map(member -> member.getMemberID()).collect(Collectors.toList());
+    List<String> memberIDs =
+        members.stream().map(member -> member.getMemberID()).collect(Collectors.toList());
     webSocketService.sendSessionStateToCertainMembers(session, memberIDs);
     webSocketService.sendTimerStartMessage(session, session.getTimerTimestamp());
-    LOGGER.debug("<-- startEstimation()");    
+    LOGGER.debug("<-- startEstimation()");
   }
 
   @MessageMapping("/votingFinished")
@@ -222,7 +223,8 @@ public class WebsocketController {
   @MessageMapping("/restartTeams")
   public synchronized void restartVoteTeams(AdminPrincipal principal, List<Member> members) {
     LOGGER.debug("--> restartVoteTeams()");
-    List<String> memberIDs = members.stream().map(member -> member.getMemberID()).collect(Collectors.toList());
+    List<String> memberIDs =
+        members.stream().map(member -> member.getMemberID()).collect(Collectors.toList());
     val session =
         ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID())
             .updateSessionState(SessionState.START_VOTING)
@@ -248,14 +250,13 @@ public class WebsocketController {
   }
 
   @MessageMapping("/adminUpdatedTeams")
-  public synchronized void adminUpdatedTeams(
-    AdminPrincipal principal, @Payload String team) {
-      LOGGER.debug("--> adminUpdatedTeams()");
-      val session = ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID())
-                    .updateTeam(team);
-      databaseService.saveSession(session);
-      webSocketService.sendUpdatedTeamsToMembers(session);
-      LOGGER.debug("<-- adminUpdatedTeams()");
-    }
-
+  public synchronized void adminUpdatedTeams(AdminPrincipal principal, @Payload String team) {
+    LOGGER.debug("--> adminUpdatedTeams()");
+    val session =
+        ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID())
+            .updateTeam(team);
+    databaseService.saveSession(session);
+    webSocketService.sendUpdatedTeamsToMembers(session);
+    LOGGER.debug("<-- adminUpdatedTeams()");
+  }
 }

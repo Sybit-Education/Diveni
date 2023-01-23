@@ -254,7 +254,7 @@ public class SessionTest {
             null,
             null,
             null,
-            new SessionConfig(set, "",List.of(), 30, "US_MANUALLY", null, null),
+            new SessionConfig(set, "", List.of(), 30, "US_MANUALLY", null, null),
             null,
             List.of(member1, member2, member3),
             new HashMap<>(),
@@ -285,7 +285,7 @@ public class SessionTest {
             null,
             null,
             null,
-            new SessionConfig(set, "",List.of(), 30, null, null, null),
+            new SessionConfig(set, "", List.of(), 30, null, null, null),
             null,
             List.of(member1, member2, member3, member4),
             new HashMap<>(),
@@ -318,7 +318,7 @@ public class SessionTest {
             null,
             null,
             null,
-            new SessionConfig(set, "",List.of(), 30, "US_MANUALLY", null, null),
+            new SessionConfig(set, "", List.of(), 30, "US_MANUALLY", null, null),
             null,
             List.of(member1, member2, member3),
             map,
@@ -403,6 +403,7 @@ public class SessionTest {
 
     assertNull(result.getTimerTimestamp());
   }
+
   @Test
   public void updateUserStories_works() {
     SessionConfig sessionConfig = new SessionConfig(null, null, null, 30, null, null, null);
@@ -421,7 +422,9 @@ public class SessionTest {
             null,
             Utils.getTimestampISO8601(new Date()));
     val result = session.updateUserStories(List.of(new UserStory("123", "Hallo", "-", "", true)));
-    assertEquals(List.of(new UserStory("123", "Hallo", "-", "", true)), result.getSessionConfig().getUserStories());
+    assertEquals(
+        List.of(new UserStory("123", "Hallo", "-", "", true)),
+        result.getSessionConfig().getUserStories());
   }
 
   @Test

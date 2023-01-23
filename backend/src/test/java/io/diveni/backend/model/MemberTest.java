@@ -26,7 +26,8 @@ public class MemberTest {
     String estimation = null;
     val member = new Member(memberID, name, hexColor, avatar, estimation, jobTitle);
     val sameMember = new Member(memberID, name, hexColor, avatar, estimation, jobTitle);
-    val otherMember = new Member(Utils.generateRandomID(), name, hexColor, avatar, estimation, jobTitle);
+    val otherMember =
+        new Member(Utils.generateRandomID(), name, hexColor, avatar, estimation, jobTitle);
 
     assertEquals(member, sameMember);
     assertNotEquals(member, otherMember);
@@ -37,7 +38,7 @@ public class MemberTest {
   public void updateEstimation_works() {
     val vote = "5";
 
-    val member = new Member(null, null, null, null, null,null);
+    val member = new Member(null, null, null, null, null, null);
     val result = member.updateEstimation(vote);
 
     assertEquals(result.getCurrentEstimation(), vote);

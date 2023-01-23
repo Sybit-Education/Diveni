@@ -281,8 +281,15 @@ public class Session {
   }
 
   public Session resetEstimationOfCertainMembers(List<String> memberIDs) {
-    List<Member> updatedMembers = members.stream().filter(member -> memberIDs.contains(member.getMemberID())).map(member -> member.resetEstimation()).collect(Collectors.toList());
-    updatedMembers.addAll(members.stream().filter(member -> !memberIDs.contains(member.getMemberID())).collect(Collectors.toList()));
+    List<Member> updatedMembers =
+        members.stream()
+            .filter(member -> memberIDs.contains(member.getMemberID()))
+            .map(member -> member.resetEstimation())
+            .collect(Collectors.toList());
+    updatedMembers.addAll(
+        members.stream()
+            .filter(member -> !memberIDs.contains(member.getMemberID()))
+            .collect(Collectors.toList()));
     return new Session(
         databaseID,
         sessionID,

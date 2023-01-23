@@ -280,7 +280,8 @@ public class WebSocketServiceTest {
             new ObjectId(),
             defaultAdminPrincipal.getSessionID(),
             defaultAdminPrincipal.getAdminID(),
-            new SessionConfig(List.of(), "",List.of(), null, "US_MANUALLY","Frontend", "password"),
+            new SessionConfig(
+                List.of(), "", List.of(), null, "US_MANUALLY", "Frontend", "password"),
             null,
             List.of(
                 new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null, null),
@@ -316,7 +317,7 @@ public class WebSocketServiceTest {
             new ObjectId(),
             defaultAdminPrincipal.getSessionID(),
             defaultAdminPrincipal.getAdminID(),
-            new SessionConfig(List.of(), "",List.of(), null, "US_MANUALLY",null, "password"),
+            new SessionConfig(List.of(), "", List.of(), null, "US_MANUALLY", null, "password"),
             null,
             List.of(
                 new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null, null),
