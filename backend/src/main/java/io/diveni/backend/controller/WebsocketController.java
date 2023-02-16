@@ -207,7 +207,7 @@ public class WebsocketController {
     webSocketService.sendMembersUpdate(session);
     databaseService.saveSession(session);
 
-    if(data[1].equals("true")) {
+    if (data[1].equals("true")) {
       boolean votingCompleted = checkIfAllMembersVoted(session.getMembers());
       if (votingCompleted) {
         votingFinished(
@@ -239,7 +239,8 @@ public class WebsocketController {
   }
 
   @MessageMapping("/restart/autoreveal")
-  public synchronized void restartVoteWithAutoReveal(AdminPrincipal principal, @Payload boolean autoReveal) {
+  public synchronized void restartVoteWithAutoReveal(
+      AdminPrincipal principal, @Payload boolean autoReveal) {
     LOGGER.debug("--> restartVoteWithAutoReveal()");
     val session =
         ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID())

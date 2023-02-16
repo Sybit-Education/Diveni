@@ -37,7 +37,7 @@ public class WebSocketService {
 
   public static String MEMBER_UPDATES_DESTINATION = "/updates/member";
 
-  public static String MEMBER_UPDATES_DESTINATION_AUTOREVEAL="/updates/member/autoreveal";
+  public static String MEMBER_UPDATES_DESTINATION_AUTOREVEAL = "/updates/member/autoreveal";
 
   public static String US_UPDATES_DESTINATION = "/updates/userStories";
 
@@ -181,7 +181,9 @@ public class WebSocketService {
     LOGGER.debug("--> sendSessionStateToMembers(), sessionID={}", session.getSessionID());
     // TODO: Send highlighted with it
     getSessionPrincipals(session.getSessionID()).memberPrincipals().stream()
-        .forEach(member -> sendSessionStateToMemberWithAutoReveal(session, member.getMemberID(), autoReveal));
+        .forEach(
+            member ->
+                sendSessionStateToMemberWithAutoReveal(session, member.getMemberID(), autoReveal));
     LOGGER.debug("<-- sendSessionStateToMembers()");
   }
 
@@ -193,13 +195,16 @@ public class WebSocketService {
     LOGGER.debug("<-- sendUpdatedUserStoriesToMembers()");
   }
 
-  public void sendSessionStateToMemberWithAutoReveal(Session session, String memberID, boolean autoReveal) {
+  public void sendSessionStateToMemberWithAutoReveal(
+      Session session, String memberID, boolean autoReveal) {
     LOGGER.debug(
         "--> sendSessionStateToMember(), sessionID={}, memberID={}",
         session.getSessionID(),
         memberID);
     simpMessagingTemplate.convertAndSendToUser(
-        memberID, MEMBER_UPDATES_DESTINATION_AUTOREVEAL, session.getSessionState().toString() + "|" +  autoReveal);
+        memberID,
+        MEMBER_UPDATES_DESTINATION_AUTOREVEAL,
+        session.getSessionState().toString() + "|" + autoReveal);
     LOGGER.debug("<-- sendSessionStateToMember()");
   }
 
