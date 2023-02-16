@@ -19,6 +19,7 @@ export default new Vuex.Store<StoreState>({
     tokenId: undefined,
     projects: [],
     selectedProject: undefined,
+    autoReveal: undefined,
   },
   mutations: {
     setMembers(state, members) {
@@ -45,6 +46,15 @@ export default new Vuex.Store<StoreState>({
       state.stompClient?.subscribe(Constants.webSocketMemberListenRoute, (frame) => {
         state.memberUpdates = state.memberUpdates.concat([frame.body]);
       });
+    },
+    subscribeOnBackendWSMemberUpdatesWithAutoReveal(state) {
+      state.stompClient?.subscribe(Constants.webSocketMemberAutoRevealListenRoute, (frame) => {
+        const splittedFrame = frame.body.split('|');
+        state.memberUpdates = state.memberUpdates.concat([splittedFrame[0]]);
+        state.autoReveal = splittedFrame[1];
+        console.log("state.memberUpdates :", state.memberUpdates);
+        console.log("state.autoReveal: ", state.autoReveal);
+      })
     },
     subscribeOnBackendWSStoriesUpdated(state) {
       state.stompClient?.subscribe(Constants.webSocketMemberListenUserStoriesRoute, (frame) => {

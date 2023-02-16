@@ -216,6 +216,9 @@ export default Vue.extend({
     isStartVoting(): boolean {
       return this.memberUpdates.at(-1) === Constants.memberUpdateCommandStartVoting;
     },
+    isAutoRevealActive() : string {
+      return this.$store.state.autoReveal;
+    },
     votingFinished(): boolean {
       return this.memberUpdates.at(-1) === Constants.memberUpdateCommandVotingFinished;
     },
@@ -244,18 +247,21 @@ export default Vue.extend({
   },
   watch: {
     memberUpdates(updates) {
-      if (updates.at(-1) === Constants.memberUpdateCommandStartVoting) {
+      if (updates.at(-1) === Constants.memberUpdateCommandStartVoting || (this.isAutoRevealActive === 'false' && this.userStoryMode !== 'NO_US')) {
+        console.log("ERSTER FALL ------------------------");
         this.draggedVote = null;
         this.estimateFinished = false;
         this.triggerTimer = (this.triggerTimer + 1) % 5;
       } else if (updates.at(-1) === Constants.memberUpdateCommandVotingFinished) {
+        console.log("hier ??? ");
         this.estimateFinished = true;
       } else if (updates.at(-1) === Constants.memberUpdateCloseSession) {
         this.goToJoinPage();
       }
     },
     votingFinished(isFinished) {
-      if (isFinished && this.highlightedMembers.length === 0) {
+      console.log("VOTING FINISHED METHODE");
+      if ((isFinished && this.highlightedMembers.length === 0)) {
         confetti({
           particleCount: 100,
           startVelocity: 50,
@@ -297,8 +303,13 @@ export default Vue.extend({
     },
     onSendVote({ vote }) {
       this.draggedVote = vote;
-      const endPoint = `${Constants.webSocketVoteRoute}`;
-      this.$store.commit("sendViaBackendWS", { endPoint, data: vote });
+      if (this.userStoryMode === 'NO_US') {
+        const endPoint = `${Constants.webSocketVoteRoute}`;
+        this.$store.commit("sendViaBackendWS", { endPoint, data: vote });
+      } else {
+        const endPoint = `${Constants.webSocketVoteRouteWithAutoReveal}`;
+        this.$store.commit("sendViaBackendWS", { endPoint, data: vote + "|" + this.isAutoRevealActive });
+      }
     },
     sendUnregisterCommand() {
       const endPoint = `${Constants.webSocketUnregisterRoute}`;
