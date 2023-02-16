@@ -225,7 +225,8 @@ public class WebSocketServiceTest {
             null,
             null);
 
-    webSocketService.sendSessionStateToMemberWithAutoReveal(session, defaultMemberPrincipal.getMemberID(), true);
+    webSocketService.sendSessionStateToMemberWithAutoReveal(
+        session, defaultMemberPrincipal.getMemberID(), true);
 
     verify(simpMessagingTemplateMock, times(1))
         .convertAndSendToUser(
@@ -252,7 +253,8 @@ public class WebSocketServiceTest {
             null,
             null);
 
-    webSocketService.sendSessionStateToMemberWithAutoReveal(session, defaultMemberPrincipal.getMemberID(), false);
+    webSocketService.sendSessionStateToMemberWithAutoReveal(
+        session, defaultMemberPrincipal.getMemberID(), false);
 
     verify(simpMessagingTemplateMock, times(1))
         .convertAndSendToUser(

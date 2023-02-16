@@ -723,5 +723,4 @@ public class WebsocketControllerTest {
     val newMembers = sessionRepo.findBySessionID(oldSession.getSessionID()).getMembers();
     Assertions.assertTrue(newMembers.stream().allMatch(m -> m.getCurrentEstimation() == null));
   }
-
 }
