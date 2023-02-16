@@ -47,8 +47,18 @@
         />
       </b-row>
       <b-row>
-        <b-col class="text-center">
-          <session-start-button @clicked="onPlanningStarted" />
+        <b-col class="text-center" v-if="session_userStoryMode !== 'NO_US'">
+          <session-start-button @clicked="onPlanningStarted"
+          :members="members"
+          :autoReveal="autoReveal"
+          :withUs="true"
+          />
+        </b-col>
+        <b-col class="text-center" v-else>
+          <session-start-button @clicked="onPlanningStarted"
+          :members="members"
+          :withUs="false"
+          />
         </b-col>
       </b-row>
     </div>
@@ -80,13 +90,24 @@
         {{ membersPending.length }} /
         {{ membersPending.length + membersEstimated.length }}
       </h4>
-
       <div id="demo">
-        <div
+        <div v-if="session_userStoryMode !== 'NO_US'">
+        
+          <div v-if="membersEstimated.length === members.length && autoReveal">
+            {{ (sendVotingFinishedMessage()) }}
+          </div>
+        
+        </div>
+        <div v-if="session_userStoryMode === 'NO_US'">
+
+          <div
           v-if="membersEstimated.length === membersPending.length + membersEstimated.length"
           style="display: none"
-        >
-          {{ (estimateFinished = true) }}
+          >
+            {{ (estimateFinished = true) }}
+          </div>
+
+
         </div>
       </div>
       <div id="demo">
@@ -134,6 +155,10 @@
     </b-row>
     <b-row v-if="session_userStoryMode !== 'NO_US'">
       <b-col cols="4">
+        <div class="autoReveal-Container autoReveal-green autoReveal-leftbar autoReveal-border-green">
+          <input type="checkbox" id="autoRevealCheckBox" v-model="autoReveal" :disabled="planningStart == true && estimateFinished == false"/>
+          <label for="autoRevealCheckBox" id="autoRevealLabel"> Autoreveal: {{ autoReveal }}</label>
+        </div>
         <user-stories
           :card-set="voteSet"
           :show-estimations="planningStart"
@@ -220,6 +245,8 @@ export default Vue.extend({
       startTimerOnComponentCreation: true,
       estimateFinished: false,
       session: {},
+      autoReveal: false,
+      finishAlreadySent: false,
     };
   },
   computed: {
@@ -490,16 +517,27 @@ export default Vue.extend({
       this.$store.commit("clearStore");
     },
     sendVotingFinishedMessage() {
-      if (!this.estimateFinished) {
-        const endPoint = Constants.webSocketVotingFinishedRoute;
+      setTimeout(() => {
+        if (this.membersEstimated.length === 0) {
+          this.sendRestartMessage();
+        }
+      }, 0);
+      if (!this.estimateFinished && !this.finishAlreadySent) {
+        const endPoint = `${Constants.webSocketVotingFinishedRoute}`;
         this.$store.commit("sendViaBackendWS", { endPoint });
         this.estimateFinished = true;
       }
     },
     sendRestartMessage() {
       this.estimateFinished = false;
-      const endPoint = Constants.webSocketRestartPlanningRoute;
-      this.$store.commit("sendViaBackendWS", { endPoint });
+      this.finishAlreadySent = false;
+      if (this.session_userStoryMode === 'NO_US') {
+        const endPoint = Constants.webSocketRestartPlanningRoute;
+        this.$store.commit("sendViaBackendWS", { endPoint });
+      } else {
+        const endPoint = Constants.webSocketRestartPlanningRouteWithAutoReveal;
+        this.$store.commit("sendViaBackendWS", { endPoint, data: JSON.stringify(this.autoReveal) });
+      }
     },
     goToLandingPage() {
       this.$router.push({ name: "LandingPage" });
@@ -512,4 +550,32 @@ export default Vue.extend({
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped></style>
+<style scoped>
+
+.autoReveal-green{
+    color: #000!important;
+    background-color: #acdbb4!important;
+}
+
+.autoReveal-leftbar {
+    border-left: 6px solid #30a444!important;
+}
+
+.autoReveal-Container {
+    padding: 0.01em 16px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+}
+
+
+#autoRevealCheckBox {
+  transform: scale(1.5);
+}
+
+#autoRevealLabel {
+  padding-left: 10px;
+  margin-top: 2%;
+}
+
+</style>
