@@ -48,7 +48,9 @@
       </b-row>
       <b-row>
         <b-col class="text-center">
-          <session-start-button @clicked="onPlanningStarted" />
+          <session-start-button @clicked="onPlanningStarted"
+          :members="members"
+          :hostVoting="hostVoting" />
         </b-col>
       </b-row>
     </div>
@@ -134,6 +136,10 @@
     </b-row>
     <b-row v-if="session_userStoryMode !== 'NO_US'">
       <b-col cols="4">
+        <div class="autoReveal-Container autoReveal-green autoReveal-leftbar autoReveal-border-green">
+          <input type="checkbox" id="hostVotingCheckBox" v-model="hostVoting" :disabled="planningStart == true && estimateFinished == false"/>
+          <label for="hostVotingCheckBox" id="hostVotingLabel">Host can vote: {{ hostVoting }}</label>
+        </div>
         <user-stories
           :card-set="voteSet"
           :show-estimations="planningStart"
@@ -220,6 +226,7 @@ export default Vue.extend({
       startTimerOnComponentCreation: true,
       estimateFinished: false,
       session: {},
+      hostVoting: false,
     };
   },
   computed: {
@@ -512,4 +519,26 @@ export default Vue.extend({
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped></style>
+<style scoped>
+.autoReveal-green{
+    color: #000!important;
+    background-color: #acdbb4!important;
+}
+.autoReveal-leftbar {
+    border-left: 6px solid #30a444!important;
+}
+.autoReveal-Container {
+    padding: 0.01em 16px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+}
+#hostVotingCheckBox {
+  transform: scale(1.5);
+}
+#hostVotingLabel {
+  padding-left: 10px;
+  margin-top: 2%;
+}
+
+</style>
