@@ -28,6 +28,7 @@
 <script lang="ts">
 import Vue from "vue";
 import Constants from "../constants";
+import apiService from "@/services/api.service";
 export default Vue.extend({
   name: "AnalyticsDataComponent",
   components: {
@@ -69,28 +70,25 @@ export default Vue.extend({
     }
   },
   methods: {
-
     async getAllDiveniData() {
-      const url = Constants.backendURL + Constants.getDiveniAnalytics;
+      let response = apiService.getAllDiveniData();
+      let allData  = await response.then(function(result) {
+        let returnArray: Array<number> = [];
+        returnArray.push(result.amountOfSessions);
+        returnArray.push(result.amountOfAttendees);
+        returnArray.push(result.amountOfSessionsLastMonth);
+        returnArray.push(result.amountofAttendeesLastMonth);
+        returnArray.push(result.amountOfSessionsCurrently);
+        returnArray.push(result.amountOfAttendeesCurrently);
+        return returnArray;
+      });
 
-      try {
-        const listOfData = (await this.axios.get(url)).data as {
-          amountOfAttendees: number;
-          amountOfSessions: number;
-          amountofAttendeesLastMonth: number;
-          amountOfSessionsLastMonth: number;
-          amountOfAttendeesCurrently: number;
-          amountOfSessionsCurrently: number;
-        }
-        this.overAllSessions = listOfData.amountOfSessions;
-        this.overAllAttendees = listOfData.amountOfAttendees;
-        this.overAllSessionsFromLastMonth = listOfData.amountOfSessionsLastMonth;
-        this.overAllAttendeesFromLastMonth = listOfData.amountofAttendeesLastMonth;
-        this.currentSessions = listOfData.amountOfSessionsCurrently;
-        this.currentAttendees = listOfData.amountOfAttendeesCurrently;
-      } catch (e) {
-        console.error("Got this Error: " + e);
-      }
+      this.overAllSessions = allData[0];
+      this.overAllAttendees = allData[1];
+      this.overAllSessionsFromLastMonth = allData[2];
+      this.overAllAttendeesFromLastMonth = allData[3];
+      this.currentSessions = allData[4];
+      this.currentAttendees = allData[5];
     },
   },
 });
