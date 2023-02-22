@@ -303,6 +303,13 @@ public class AnalyticsControllerTest {
   public void
       getDiveniDataFromLastMonth_oneSessionWith3AttendeesAndOneSessionWith2AttendesAndDeletedAndNotFromLastMonth()
           throws Exception {
+    int lastMonth = LocalDate.now().getMonthValue() - 1;
+    int outDatedMonth;
+    if (lastMonth == 1) {
+        outDatedMonth = 12;
+    } else {
+        outDatedMonth = lastMonth - 1;
+    }
     sessionRepo.deleteAll();
     databaseService.saveSession(
         new Session(
@@ -334,7 +341,7 @@ public class AnalyticsControllerTest {
             null,
             null,
             null,
-            LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonthValue() - 3, 12));
+            LocalDate.of(LocalDate.now().getYear(), outDatedMonth, 12));
 
     databaseService.saveSession(willbeDelted);
     databaseService.deleteSession(willbeDelted);
