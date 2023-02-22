@@ -98,14 +98,28 @@
         <session-member-card
           v-for="member of members"
           :key="member.memberID"
+          :ownMemberID="memberID" 
           :member="member"
           :props="{
             estimateFinished: votingFinished,
             highlight:
               highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0,
           }"
+          v-on:switchClickInMemberVotePage="switchClickedBoolean"
         />
       </b-row>
+        <div v-if="clicked && estimateFinished" class="newVotes">
+          <b-button
+              v-for="item in voteSet"
+              :key="item"
+              class="m-1"
+              pill
+              style="width: 60px"
+              @click="reSendVote(item)"
+            >
+              {{ item }}
+          </b-button>
+        </div>
       <b-row v-if="userStoryMode !== 'NO_US'" class="mt-5">
         <b-col md="6">
           <user-story-sum-component class="ms-4" />
@@ -199,6 +213,7 @@ export default Vue.extend({
       triggerTimer: 0,
       estimateFinished: false,
       pauseSession: false,
+      clicked:false,
     };
   },
   computed: {
@@ -292,13 +307,22 @@ export default Vue.extend({
     this.sendUnregisterCommand();
   },
   methods: {
+    switchClickedBoolean() {
+      this.clicked = !this.clicked;
+    },
     onSelectedStory($event) {
       this.index = $event;
+    },
+    reSendVote(vote: string) {
+      const endPoint = `${Constants.webSocketVoteRoute}`;
+      this.$store.commit("sendViaBackendWS", { endPoint, data: vote });
+      this.clicked = false;
     },
     onSendVote({ vote }) {
       this.draggedVote = vote;
       const endPoint = `${Constants.webSocketVoteRoute}`;
       this.$store.commit("sendViaBackendWS", { endPoint, data: vote });
+      this.clicked = false;
     },
     sendUnregisterCommand() {
       const endPoint = `${Constants.webSocketUnregisterRoute}`;
@@ -332,5 +356,8 @@ export default Vue.extend({
   font-size: 2em;
   margin: 0.67em 0;
   font-weight: bold;
+}
+.newVotes {
+  text-align: center;
 }
 </style>

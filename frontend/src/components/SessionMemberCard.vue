@@ -1,17 +1,26 @@
 <template>
-  <div
+  <div>
+    <div
     :style="`background-color: ${member.hexColor};`"
     class="session-member-card text-center card m-2"
     :class="{ greyOut: !props.highlight && props.estimateFinished }"
-  >
-    <h1 class="fs-3-rem">
-      <strong v-if="!props.estimateFinished">?</strong>
-      <strong v-if="member.currentEstimation === null && props.estimateFinished">-</strong>
-      <strong v-if="member.currentEstimation !== null && props.estimateFinished">{{
-        member.currentEstimation
-      }}</strong>
-    </h1>
-    <rounded-avatar :member="member" />
+    >
+      <h1 class="fs-3-rem">
+        <strong v-if="!props.estimateFinished">?</strong>
+        <strong v-if="member.currentEstimation === null && props.estimateFinished">-</strong>
+        <strong v-if="member.currentEstimation !== null && props.estimateFinished">{{
+          member.currentEstimation
+        }}</strong>
+      </h1>
+      <rounded-avatar :member="member" />
+      <div v-if="member.memberID === ownMemberID">
+        <b-img
+          :src="require(`@/assets/down-arrow.png`)"
+          class="arrow"
+          @click="notifyMemberVotePagePictureHasBeenClicked"
+        />
+      </div>  
+    </div>
   </div>
 </template>
 
@@ -23,11 +32,17 @@ export default Vue.extend({
   name: "SessionMemberCard",
   components: { RoundedAvatar },
   props: {
+    ownMemberID: { type: String, required: false},
     member: { type: Object, required: true },
     props: {
       type: Object,
       required: false,
       default: () => ({ estimateFinished: false, highlight: false }),
+    },
+  },
+  methods: {
+    notifyMemberVotePagePictureHasBeenClicked() {
+      this.$emit("switchClickInMemberVotePage");
     },
   },
 });
@@ -59,5 +74,10 @@ h4 {
   transform: scale(0.8);
   /*border-width: 5px;*/
   /*border-color: darkred;*/
+}
+
+.arrow {
+  height: 50px;
+  width: 50px;
 }
 </style>
