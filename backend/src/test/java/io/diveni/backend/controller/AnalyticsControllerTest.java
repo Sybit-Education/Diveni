@@ -306,9 +306,9 @@ public class AnalyticsControllerTest {
     int lastMonth = LocalDate.now().getMonthValue() - 1;
     int outDatedMonth;
     if (lastMonth == 1) {
-        outDatedMonth = 12;
+      outDatedMonth = 12;
     } else {
-        outDatedMonth = lastMonth - 1;
+      outDatedMonth = lastMonth - 1;
     }
     sessionRepo.deleteAll();
     databaseService.saveSession(
