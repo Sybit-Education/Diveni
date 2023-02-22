@@ -437,7 +437,6 @@ export default Vue.extend({
       }
     },
     async refreshUserStories() {
-      console.log("refreshUserStories() -->");
       const response = await apiService.getUserStoriesFromProject(this.selectedProject.name);
       this.$store.commit("setUserStories", { stories: response });
       if (this.webSocketIsConnected) {
