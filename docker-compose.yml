@@ -7,7 +7,7 @@ services:
     restart: unless-stopped
 
   backend:
-    image: ghcr.io/sybit-education/diveni-backend:main
+    image: ghcr.io/sybit-education/diveni-backend:latest
     depends_on:
       - database
     container_name: diveni_backend
@@ -18,14 +18,14 @@ services:
       - ./backend/.env
 
   frontend:
-    image: ghcr.io/sybit-education/diveni-frontend:main
+    image: ghcr.io/sybit-education/diveni-frontend:latest
     depends_on:
       - backend
     container_name: diveni_frontend
     restart: unless-stopped
 
   proxy:
-    image: ghcr.io/sybit-education/diveni-proxy:main
+    image: ghcr.io/sybit-education/diveni-proxy:latest
     depends_on:
       - frontend
       - backend
