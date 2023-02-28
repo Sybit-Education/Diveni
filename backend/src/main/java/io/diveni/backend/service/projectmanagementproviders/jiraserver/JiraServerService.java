@@ -49,7 +49,9 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
   private static final Logger LOGGER = LoggerFactory.getLogger(JiraServerService.class);
   private static final String USER_STORY_ID = "10002";
   private static final int JIRA_SERVER_API_VERSION = 2;
-  @Getter private final Map<String, String> accessTokens = new HashMap<>();
+  private boolean serviceEnabled = false;
+  @Getter
+  private final Map<String, String> accessTokens = new HashMap<>();
 
   @Value("${JIRA_SERVER_JIRAHOME:#{null}}")
   private String JIRA_HOME;
@@ -67,14 +69,23 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
   private String RANK_NAME;
 
   @PostConstruct
-  public void logConfig() {
-    LOGGER.info("Jira-Server Service:");
+  public void setupAndLogConfig() {
+    if (JIRA_HOME != null && CONSUMER_KEY != null && PRIVATE_KEY != null && ESTIMATION_FIELD != null && RANK_NAME != null) {
+      serviceEnabled = true;
+    }
+
+    LOGGER.info("Jira-Server Service: (enabled:" + serviceEnabled + ")");
 
     LOGGER.info("    JIRA_SERVER_JIRAHOME={}", JIRA_HOME);
     LOGGER.info("    JIRA_SERVER_CONSUMERKEY={}", CONSUMER_KEY);
     LOGGER.info("    JIRA_SERVER_PRIVATEKEY={}", PRIVATE_KEY == null ? "null" : "********");
     LOGGER.info("    JIRA_SERVER_ESTIMATIONFIELD={}", ESTIMATION_FIELD);
     LOGGER.info("    JIRA_SERVER_RANKNAME={}", RANK_NAME);
+  }
+
+  @Override
+  public boolean serviceEnabled() {
+    return serviceEnabled;
   }
 
   /**

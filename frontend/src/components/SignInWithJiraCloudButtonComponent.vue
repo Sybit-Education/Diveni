@@ -12,8 +12,8 @@
 
 <script lang="ts">
 import Vue from "vue";
-import { v4 as uuidv4 } from "uuid";
-import constants from "@/constants";
+import {v4 as uuidv4} from "uuid";
+import apiService from "@/services/api.service";
 
 export default Vue.extend({
   name: "SignInWithJiraCloudButtonComponent",
@@ -28,8 +28,9 @@ export default Vue.extend({
     async redirectToJira() {
       const stateId = uuidv4();
       localStorage.setItem("jiraStateId", stateId);
-      const url = `${constants.jiraCloudAuthorizeUrl}&state=${stateId}`;
-      window.location.href = url;
+      apiService.getIssueTrackerConfig().then((result) => {
+        window.location.href = `${result.jiraCloudAuthorizeUrl}&state=${stateId}`;
+      });
     },
   },
 });

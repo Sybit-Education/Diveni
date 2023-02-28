@@ -50,6 +50,10 @@ public class ProjectManagementController {
   @GetMapping(value = "/oauth1/requestToken")
   public ResponseEntity<JiraRequestToken> getRequestToken() {
     LOGGER.debug("--> getRequestToken()");
+    if (!jiraServerService.serviceEnabled()) {
+      LOGGER.warn("Jira Server is not configured!");
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
     ResponseEntity<JiraRequestToken> response =
         new ResponseEntity<>(jiraServerService.getRequestToken(), HttpStatus.OK);
     LOGGER.debug("<-- getRequestToken()");
@@ -60,6 +64,10 @@ public class ProjectManagementController {
   public ResponseEntity<TokenIdentifier> getOauth1AccessToken(
       @RequestBody VerificationCode verificationCode) {
     LOGGER.debug("--> getOauth1AccessToken()");
+    if (!jiraServerService.serviceEnabled()) {
+      LOGGER.warn("Jira Server is not configured!");
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
     ResponseEntity<TokenIdentifier> response =
         new ResponseEntity<>(
             jiraServerService.getAccessToken(
@@ -73,6 +81,10 @@ public class ProjectManagementController {
   public ResponseEntity<TokenIdentifier> getOAuth2AccessToken(
       @RequestHeader("Origin") String origin, @RequestBody VerificationCode authorizationCode) {
     LOGGER.debug("--> getOAuth2AccessToken(), origin={}", origin);
+    if (!jiraCloudService.serviceEnabled()) {
+      LOGGER.warn("Jira Cloud is not configured!");
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
     ResponseEntity<TokenIdentifier> response =
         new ResponseEntity<>(
             jiraCloudService.getAccessToken(authorizationCode.getCode(), origin), HttpStatus.OK);
@@ -90,6 +102,9 @@ public class ProjectManagementController {
     if (projectManagementProvider == null) {
       LOGGER.warn("Bad Request: projectManagementProvider is null!");
       response = new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+    } else if (!projectManagementProvider.serviceEnabled()) {
+      LOGGER.warn("projectManagementProvider is not configured!");
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
     } else {
       response =
           new ResponseEntity<>(
@@ -109,6 +124,9 @@ public class ProjectManagementController {
     if (projectManagementProvider == null) {
       LOGGER.warn("Bad Request: projectManagementProvider is null!");
       response = new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+    } else if (!projectManagementProvider.serviceEnabled()) {
+      LOGGER.warn("projectManagementProvider is not configured!");
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
     } else {
       response =
           new ResponseEntity<>(
@@ -124,7 +142,7 @@ public class ProjectManagementController {
     LOGGER.debug("--> updateIssue(), userStoryId={}", userStory.getJiraId());
     val projectManagementProvider = getProjectManagementProvider(tokenIdentifier);
 
-    if (projectManagementProvider != null) {
+    if (projectManagementProvider != null && projectManagementProvider.serviceEnabled()) {
       projectManagementProvider.updateIssue(tokenIdentifier, userStory);
     } else {
       LOGGER.error("Could not update issue!");
@@ -145,6 +163,9 @@ public class ProjectManagementController {
     if (projectManagementProvider == null) {
       LOGGER.error("Failed to create issue!");
       throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to create issue");
+    } else if (!projectManagementProvider.serviceEnabled()) {
+      LOGGER.warn("projectManagementProvider is not configured!");
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     ResponseEntity<String> response =
@@ -163,6 +184,9 @@ public class ProjectManagementController {
 
     if (projectManagementProvider == null) {
       LOGGER.error("Could not delete issue!");
+    } else if (!projectManagementProvider.serviceEnabled()) {
+      LOGGER.warn("projectManagementProvider is not configured!");
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
     } else {
       projectManagementProvider.deleteIssue(tokenIdentifier, jiraID);
     }
