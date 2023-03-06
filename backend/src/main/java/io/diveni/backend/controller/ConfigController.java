@@ -15,9 +15,9 @@ import java.util.Map;
 @RequestMapping("/config")
 public class ConfigController {
 
-  @Autowired JiraServerService jiraServerService;
+  @Autowired private JiraServerService jiraServerService;
 
-  @Autowired JiraCloudService jiraCloudService;
+  @Autowired private JiraCloudService jiraCloudService;
 
   @Value("${LOCALE:en}")
   private String LOCALE;
