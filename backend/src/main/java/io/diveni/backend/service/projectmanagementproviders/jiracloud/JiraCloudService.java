@@ -63,7 +63,10 @@ public class JiraCloudService implements ProjectManagementProviderOAuth2 {
 
   @PostConstruct
   public void setupAndLogConfig() {
-    if (CLIENT_ID != null && CLIENT_SECRET != null && ESTIMATION_FIELD != null && JIRA_CLOUD_AUTHORIZE_URL != null) {
+    if (CLIENT_ID != null
+        && CLIENT_SECRET != null
+        && ESTIMATION_FIELD != null
+        && JIRA_CLOUD_AUTHORIZE_URL != null) {
       serviceEnabled = true;
     }
 

@@ -50,8 +50,7 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
   private static final String USER_STORY_ID = "10002";
   private static final int JIRA_SERVER_API_VERSION = 2;
   private boolean serviceEnabled = false;
-  @Getter
-  private final Map<String, String> accessTokens = new HashMap<>();
+  @Getter private final Map<String, String> accessTokens = new HashMap<>();
 
   @Value("${JIRA_SERVER_JIRAHOME:#{null}}")
   private String JIRA_HOME;
@@ -70,7 +69,11 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
 
   @PostConstruct
   public void setupAndLogConfig() {
-    if (JIRA_HOME != null && CONSUMER_KEY != null && PRIVATE_KEY != null && ESTIMATION_FIELD != null && RANK_NAME != null) {
+    if (JIRA_HOME != null
+        && CONSUMER_KEY != null
+        && PRIVATE_KEY != null
+        && ESTIMATION_FIELD != null
+        && RANK_NAME != null) {
       serviceEnabled = true;
     }
 

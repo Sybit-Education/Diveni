@@ -15,11 +15,9 @@ import java.util.Map;
 @RequestMapping("/config")
 public class ConfigController {
 
-  @Autowired
-  JiraServerService jiraServerService;
+  @Autowired JiraServerService jiraServerService;
 
-  @Autowired
-  JiraCloudService jiraCloudService;
+  @Autowired JiraCloudService jiraCloudService;
 
   @Value("${LOCALE:en}")
   private String LOCALE;
@@ -27,8 +25,10 @@ public class ConfigController {
   @GetMapping("/issueTracker")
   public Map<String, String> getIssueTrackerConfig() {
     Map<String, String> issueTrackerConfig = new HashMap<>();
-    issueTrackerConfig.put("isJiraServerEnabled", Boolean.toString(jiraServerService.serviceEnabled()));
-    issueTrackerConfig.put("isJiraCloudEnabled", Boolean.toString(jiraCloudService.serviceEnabled()));
+    issueTrackerConfig.put(
+        "isJiraServerEnabled", Boolean.toString(jiraServerService.serviceEnabled()));
+    issueTrackerConfig.put(
+        "isJiraCloudEnabled", Boolean.toString(jiraCloudService.serviceEnabled()));
     issueTrackerConfig.put("jiraCloudAuthorizeUrl", jiraCloudService.getJiraCloudAuthorizeUrl());
     return issueTrackerConfig;
   }

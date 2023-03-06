@@ -17,29 +17,33 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @ActiveProfiles("test")
 public class ConfigControllerTest {
 
-  @Autowired
-  private MockMvc mockMvc;
+  @Autowired private MockMvc mockMvc;
 
-  @Autowired
-  private JiraServerService jiraServerService;
+  @Autowired private JiraServerService jiraServerService;
 
-  @Autowired
-  private JiraCloudService jiraCloudService;
-
+  @Autowired private JiraCloudService jiraCloudService;
 
   @Test
   public void getLocale_returnsDE() throws Exception {
-    this.mockMvc.perform(get("/config/locale"))
-      .andExpect(MockMvcResultMatchers.status().isOk())
-      .andExpect(MockMvcResultMatchers.jsonPath("$.locale").value("de"));
+    this.mockMvc
+        .perform(get("/config/locale"))
+        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andExpect(MockMvcResultMatchers.jsonPath("$.locale").value("de"));
   }
 
   @Test
   public void getIssueTrackerConfig_returnsConfig() throws Exception {
-    this.mockMvc.perform(get("/config/issueTracker"))
-      .andExpect(MockMvcResultMatchers.status().isOk())
-      .andExpect(MockMvcResultMatchers.jsonPath("$.isJiraServerEnabled").value(Boolean.valueOf(jiraServerService.serviceEnabled()).toString()))
-      .andExpect(MockMvcResultMatchers.jsonPath("$.isJiraCloudEnabled").value(Boolean.valueOf(jiraCloudService.serviceEnabled()).toString()))
-      .andExpect(MockMvcResultMatchers.jsonPath("$.jiraCloudAuthorizeUrl").value(jiraCloudService.getJiraCloudAuthorizeUrl()));
+    this.mockMvc
+        .perform(get("/config/issueTracker"))
+        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andExpect(
+            MockMvcResultMatchers.jsonPath("$.isJiraServerEnabled")
+                .value(Boolean.valueOf(jiraServerService.serviceEnabled()).toString()))
+        .andExpect(
+            MockMvcResultMatchers.jsonPath("$.isJiraCloudEnabled")
+                .value(Boolean.valueOf(jiraCloudService.serviceEnabled()).toString()))
+        .andExpect(
+            MockMvcResultMatchers.jsonPath("$.jiraCloudAuthorizeUrl")
+                .value(jiraCloudService.getJiraCloudAuthorizeUrl()));
   }
 }
