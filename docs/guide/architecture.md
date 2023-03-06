@@ -142,8 +142,9 @@ backend
 |---------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | WebSocketConfig                 | Configurations (e.g. prefixes, CORS) for Websockets                                                                                                                        |
 | -----------                     |                                                                                                                                                                            |
+| ConfigController                | REST Controller for project configuration                                                                                                                                      |
 | ControllerUtils                 | Helper functions for all controllers                                                                                                                                       |
-| ErrrorMessages                  | All error messages which can be thrown in exceptions                                                                                                                       |
+| ErrorMessages                   | All error messages which can be thrown in exceptions                                                                                                                       |
 | ProjectManagementController     | REST Controller for project management software (e.g. Jira)                                                                                                                |
 | RoutesController                | REST Controller                                                                                                                                                            |
 | WebsocketController             | WebSocket Controller                                                                                                                                                       |
