@@ -1,8 +1,13 @@
 <template>
-  <div class="Test ?">
-    <div class="test123">
-      <autocomplete v-model="selected" :items="getProjectNames" @input="getUserStories" />
-    </div>
+  <div>
+    <autocomplete
+      v-model="selected"
+      :items="getProjectNames"
+      :placeholder="
+        $t('session.prepare.step.selection.mode.description.withJira.placeholder.searchProjects')
+      "
+      @input="getUserStories"
+    />
 
     <div class="mt-3">
       {{ $t("session.prepare.step.selection.mode.description.withJira.selectedProject") }}
@@ -47,7 +52,6 @@ export default Vue.extend({
   methods: {
     async getUserStories() {
       this.aCorrectProject = false;
-      console.log(`Trying to select ${this.selected}`);
       const selectedProject = this.projects.find((p) => p.name === this.selected);
       if (selectedProject) {
         this.aCorrectProject = true;

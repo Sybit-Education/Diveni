@@ -37,7 +37,8 @@
           },
           "placeholder": {
             "userStoryTitle": "Назва історії користувача",
-            "userStoryDescription": "Опис і критерії прийняття..."
+            "userStoryDescription": "Опис і критерії прийняття...",
+            "searchUserStories": "Пошук історій користувачів..."
           },
           "text": "Натисніть на назву історії користувача, щоб побачити опис",
           "sum": "Загалом:"
@@ -200,6 +201,9 @@
                   "submit": {
                     "label": "Відправити"
                   }
+                },
+                "placeholder": {
+                  "searchProjects": "Пошукові проекти..."
                 }
               }
             }

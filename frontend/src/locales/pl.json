@@ -29,7 +29,7 @@
         "button": "Rozpocznij planowanie",
         "userStories": {
           "filter" : {
-            "noStoryFound": "Nie znaleziono żadnych opowiadań !"
+            "noStoryFound": "Nie znaleziono żadnych opowiadań!"
           },
           "button": {
             "addFirstUserStory": "Brak historii... kliknij aby dodać opowieści",
@@ -37,7 +37,8 @@
           },
           "placeholder": {
             "userStoryTitle": "Tytuł Historii użytkownika",
-            "userStoryDescription": "Opis i kryteria akceptacji..."
+            "userStoryDescription": "Opis i kryteria akceptacji...",
+            "searchUserStories": "Wyszukiwanie historii użytkowników..."
           },
           "text": "Kliknij na Tytuł Historii Użytkownika, aby zobaczyć opis",
           "sum": "Łącznie:"
@@ -200,6 +201,9 @@
                   "submit": {
                     "label": "Prześlij"
                   }
+                },
+                "placeholder": {
+                  "searchProjects": "Wyszukaj projekty..."
                 }
               }
             }

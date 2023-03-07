@@ -29,7 +29,7 @@
         "button": "Starte das Planning",
         "userStories": {
           "filter" : {
-            "noStoryFound": "Keine Stories gefunden !"
+            "noStoryFound": "Keine Stories gefunden!"
           },
           "button": {
             "addFirstUserStory": "Noch keine Stories... Klicke um eine Story hinzuzufügen",
@@ -37,7 +37,8 @@
           },
           "placeholder": {
             "userStoryTitle": "User Story Titel",
-            "userStoryDescription": "Beschreibung und Akzeptanzkriterien..."
+            "userStoryDescription": "Beschreibung und Akzeptanzkriterien...",
+            "searchUserStories": "User Stories durchsuchen..."
           },
           "text": "Klicke auf ein User Story Titel um die Beschreibung zu sehen",
           "sum": "Summe:"
@@ -200,6 +201,9 @@
                   "submit": {
                     "label": "Senden"
                   }
+                },
+                "placeholder": {
+                  "searchProjects": "Projekte durchsuchen..."
                 }
               }
             }

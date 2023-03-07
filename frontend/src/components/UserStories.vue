@@ -1,11 +1,11 @@
 <template>
   <div class="user-stories">
     <div v-if="userStories.length > 0 || filterActive" class="w-100 d-flex justify-content-left">
-      <input
+      <b-input
         v-model="input"
         class="search"
         type="text"
-        placeholder="Search user stories..."
+        :placeholder="$t('page.session.before.userStories.placeholder.searchUserStories')"
         @input="swapPriority"
       />
     </div>
