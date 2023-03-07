@@ -4,10 +4,15 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'backend/**'
+      - 'frontend/**'
+      - 'proxy/**'
   workflow_dispatch:
 
 jobs:
-  push-image:
+  image-backend:
+    name: Backend-Docker-Image
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -17,25 +22,101 @@ jobs:
         uses: actions/checkout@v3
       - name: Verify files changed
         uses: tj-actions/verify-changed-files@v11
-        id: verify-files-changed
+        id: files-changed-backend
         with:
-          files: proxy
+          files: backend
       - name: Log in to the Container registry
+        if: steps.files-changed-backend.outputs.files_changed == 'true'
         uses: docker/login-action@v2
-        if: steps.verify-files-changed.outputs.files_changed == 'true'
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Extract metadata (tags, labels) for Docker
+        if: steps.files-changed-backend.outputs.files_changed == 'true'
         id: meta
         uses: docker/metadata-action@v4
-        if: steps.verify-files-changed.outputs.files_changed == 'true'
+        with:
+          images: ghcr.io/${{ github.repository }}-backend
+          flavor: latest=true
+          tags: type=raw,value=latest,enable={{is_default_branch}}
+      - name: Build and push Docker image
+        if: steps.files-changed-backend.outputs.files_changed == 'true'
+        uses: docker/build-push-action@v3
+        with:
+          context: backend
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+  image-frontend:
+    name: Frontend-Docker-Image
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Verify files changed
+        uses: tj-actions/verify-changed-files@v11
+        id: files-changed-frontend
+        with:
+          files: frontend
+      - name: Log in to the Container registry
+        if: steps.files-changed-frontend.outputs.files_changed == 'true'
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Extract metadata (tags, labels) for Docker
+        if: steps.files-changed-frontend.outputs.files_changed == 'true'
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ghcr.io/${{ github.repository }}-frontend
+      - name: Build and push Docker image
+        if: steps.files-changed-frontend.outputs.files_changed == 'true'
+        uses: docker/build-push-action@v3
+        with:
+          context: frontend
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+  image-proxy:
+    name: Proxy-Docker-Image
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Verify files changed
+        uses: tj-actions/verify-changed-files@v11
+        id: files-changed-proxy
+        with:
+          files: proxy
+      - name: Log in to the Container registry
+        if: steps.files-changed-proxy.outputs.files_changed == 'true'
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Extract metadata (tags, labels) for Docker
+        if: steps.files-changed-proxy.outputs.files_changed == 'true'
+        id: meta
+        uses: docker/metadata-action@v4
         with:
           images: ghcr.io/${{ github.repository }}-proxy
+          flavor: latest=true
+          tags: type=raw,value=latest,enable={{is_default_branch}}
       - name: Build and push Docker image
+        if: steps.files-changed-proxy.outputs.files_changed == 'true'
         uses: docker/build-push-action@v3
-        if: steps.verify-files-changed.outputs.files_changed == 'true'
         with:
           context: proxy
           push: true
@@ -44,23 +125,9 @@ jobs:
 
   deploy:
     name: Deploy to server
+    needs: [image-backend, image-frontend, image-proxy]
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
     steps:
-      - name: Wait for backend workflow to succeed
-        uses: lewagon/wait-on-check-action@v1.1.2
-        with:
-          ref: ${{ github.ref }}
-          check-name: 'Backend-Image'
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          wait-interval: 10
-      - name: Wait for frontend workflow to succeed
-        uses: lewagon/wait-on-check-action@v1.1.2
-        with:
-          ref: ${{ github.ref }}
-          check-name: 'Frontend-Image'
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          wait-interval: 10
       - name: Start application
         uses: appleboy/ssh-action@v0.1.1
         with:
