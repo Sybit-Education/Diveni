@@ -47,12 +47,14 @@ public class ProjectManagementController {
 
   @Autowired JiraCloudService jiraCloudService;
 
+  private final String PROVIDER_NOT_ENABLED_MESSAGE = "The selected issue tracker is not enabled. Make sure to set all required parameters.";
+
   @GetMapping(value = "/oauth1/requestToken")
   public ResponseEntity<JiraRequestToken> getRequestToken() {
     LOGGER.debug("--> getRequestToken()");
     if (!jiraServerService.serviceEnabled()) {
       LOGGER.warn("Jira Server is not configured!");
-      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, PROVIDER_NOT_ENABLED_MESSAGE);
     }
     ResponseEntity<JiraRequestToken> response =
         new ResponseEntity<>(jiraServerService.getRequestToken(), HttpStatus.OK);
@@ -66,7 +68,7 @@ public class ProjectManagementController {
     LOGGER.debug("--> getOauth1AccessToken()");
     if (!jiraServerService.serviceEnabled()) {
       LOGGER.warn("Jira Server is not configured!");
-      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, PROVIDER_NOT_ENABLED_MESSAGE);
     }
     ResponseEntity<TokenIdentifier> response =
         new ResponseEntity<>(
@@ -83,7 +85,7 @@ public class ProjectManagementController {
     LOGGER.debug("--> getOAuth2AccessToken(), origin={}", origin);
     if (!jiraCloudService.serviceEnabled()) {
       LOGGER.warn("Jira Cloud is not configured!");
-      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, PROVIDER_NOT_ENABLED_MESSAGE);
     }
     ResponseEntity<TokenIdentifier> response =
         new ResponseEntity<>(
@@ -104,7 +106,7 @@ public class ProjectManagementController {
       response = new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
     } else if (!projectManagementProvider.serviceEnabled()) {
       LOGGER.warn("projectManagementProvider is not configured!");
-      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, PROVIDER_NOT_ENABLED_MESSAGE);
     } else {
       response =
           new ResponseEntity<>(
@@ -126,7 +128,7 @@ public class ProjectManagementController {
       response = new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
     } else if (!projectManagementProvider.serviceEnabled()) {
       LOGGER.warn("projectManagementProvider is not configured!");
-      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, PROVIDER_NOT_ENABLED_MESSAGE);
     } else {
       response =
           new ResponseEntity<>(
@@ -142,12 +144,16 @@ public class ProjectManagementController {
     LOGGER.debug("--> updateIssue(), userStoryId={}", userStory.getJiraId());
     val projectManagementProvider = getProjectManagementProvider(tokenIdentifier);
 
-    if (projectManagementProvider != null && projectManagementProvider.serviceEnabled()) {
-      projectManagementProvider.updateIssue(tokenIdentifier, userStory);
-    } else {
+    if (projectManagementProvider == null) {
       LOGGER.error("Could not update issue!");
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to update issue");
+    } else if (!projectManagementProvider.serviceEnabled()) {
+      LOGGER.warn("projectManagementProvider is not configured!");
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, PROVIDER_NOT_ENABLED_MESSAGE);
+    } else {
+      projectManagementProvider.updateIssue(tokenIdentifier, userStory);
+      LOGGER.debug("<-- updateIssue()");
     }
-    LOGGER.debug("<-- updateIssue()");
   }
 
   @PostMapping(value = "issue")
@@ -165,7 +171,7 @@ public class ProjectManagementController {
       throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to create issue");
     } else if (!projectManagementProvider.serviceEnabled()) {
       LOGGER.warn("projectManagementProvider is not configured!");
-      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, PROVIDER_NOT_ENABLED_MESSAGE);
     }
 
     ResponseEntity<String> response =
@@ -186,7 +192,7 @@ public class ProjectManagementController {
       LOGGER.error("Could not delete issue!");
     } else if (!projectManagementProvider.serviceEnabled()) {
       LOGGER.warn("projectManagementProvider is not configured!");
-      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, PROVIDER_NOT_ENABLED_MESSAGE);
     } else {
       projectManagementProvider.deleteIssue(tokenIdentifier, jiraID);
     }
