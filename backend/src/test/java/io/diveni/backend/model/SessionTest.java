@@ -43,6 +43,8 @@ public class SessionTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
+            null,
+            false,
             null);
     val sameSession =
         new Session(
@@ -57,6 +59,8 @@ public class SessionTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
+            null,
+            false,
             null);
     val otherSession =
         new Session(
@@ -71,6 +75,8 @@ public class SessionTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
+            null,
+            false,
             null);
 
     assertEquals(session, sameSession);
@@ -100,6 +106,8 @@ public class SessionTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
+            null,
+            false,
             null);
     val result = session.updateEstimation(member1.getMemberID(), vote);
 
@@ -132,6 +140,8 @@ public class SessionTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
+            null,
+            false,
             null);
 
     val result = session.resetEstimations();
@@ -157,6 +167,8 @@ public class SessionTest {
             oldSessionState,
             null,
             null,
+            null,
+            false,
             null);
     val result = session.updateSessionState(newSessionState);
 
@@ -178,6 +190,8 @@ public class SessionTest {
             null,
             null,
             null,
+            null,
+            false,
             null);
     val date = new Date();
 
@@ -204,6 +218,8 @@ public class SessionTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
+            null,
+            false,
             null);
     val memberID2 = Utils.generateRandomID();
     val member2 = new Member(memberID2, null, null, null, "5");
@@ -234,6 +250,8 @@ public class SessionTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
+            null,
+            false,
             null);
 
     val result = session.removeMember(memberID1);
@@ -261,6 +279,8 @@ public class SessionTest {
             null,
             null,
             null,
+            null,
+            false,
             null);
 
     val result = session.selectHighlightedMembers();
@@ -292,6 +312,8 @@ public class SessionTest {
             null,
             null,
             null,
+            null,
+            false,
             null);
 
     val result = session.selectHighlightedMembers();
@@ -325,6 +347,8 @@ public class SessionTest {
             null,
             null,
             null,
+            null,
+            false,
             null);
 
     val result = session.selectHighlightedMembers();
@@ -351,6 +375,8 @@ public class SessionTest {
             null,
             null,
             null,
+            null,
+            false,
             null);
 
     val result = session.resetCurrentHighlights();
@@ -373,6 +399,8 @@ public class SessionTest {
             null,
             null,
             null,
+            null,
+            false,
             null);
     val timestamp = Utils.getTimestampISO8601(new Date());
 
@@ -396,10 +424,59 @@ public class SessionTest {
             null,
             null,
             null,
-            Utils.getTimestampISO8601(new Date()));
+            Utils.getTimestampISO8601(new Date()),
+            false,
+            null);
 
     val result = session.resetTimerTimestamp();
 
     assertNull(result.getTimerTimestamp());
+  }
+
+  @Test
+  public void setHostVoting_works() {
+    val session =
+        new Session(
+            null,
+            null,
+            null,
+            null,
+            null,
+            new ArrayList<>(),
+            new HashMap<>(),
+            new ArrayList<>(),
+            null,
+            null,
+            null,
+            Utils.getTimestampISO8601(new Date()),
+            false,
+            null);
+
+    Session result = session.setHostVoting(true);
+
+    assertTrue(result.getHostVoting());
+  }
+
+  public void setHostEstimation_works() {
+    val session =
+        new Session(
+            null,
+            null,
+            null,
+            null,
+            null,
+            new ArrayList<>(),
+            new HashMap<>(),
+            new ArrayList<>(),
+            null,
+            null,
+            null,
+            Utils.getTimestampISO8601(new Date()),
+            false,
+            null);
+
+      val result = session.setHostEstimation("10");
+
+      assertEquals("10", result.getHostEstimation());
   }
 }

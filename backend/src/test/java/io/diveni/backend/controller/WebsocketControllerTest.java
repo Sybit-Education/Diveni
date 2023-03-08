@@ -6,6 +6,7 @@
 package io.diveni.backend.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -76,6 +77,10 @@ public class WebsocketControllerTest {
   private static final String UNREGISTER = "/ws/unregister";
 
   private static final String ADMIN_MEMBER_UPDATES = "/users/updates/membersUpdated";
+
+  private static final String MEMBER_LISTEN_HOSTVOTING = "/users/updates/hostVoting";
+
+  private static final String ADMIN_SENDS_HOSTVOTING = "/ws/hostVoting";
 
   private static final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -175,6 +180,8 @@ public class WebsocketControllerTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
+            null,
+            false,
             null));
     val adminPrincipal = new AdminPrincipal(sessionID, adminID);
     StompSession session = getAdminSession(sessionID, adminID);
@@ -211,6 +218,8 @@ public class WebsocketControllerTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
+            null,
+            false,
             null));
     webSocketService.setAdminUser(adminPrincipal);
     val memberPrincipal = new MemberPrincipal(sessionID, memberID);
@@ -255,6 +264,8 @@ public class WebsocketControllerTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
+            null,
+            false,
             null));
     webSocketService.setAdminUser(adminPrincipal);
     StompSession session = getMemberSession(sessionID, memberID);
@@ -312,6 +323,8 @@ public class WebsocketControllerTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
+            null,
+            false,
             null));
     val adminPrincipal = new AdminPrincipal(sessionID, adminID);
     webSocketService.setAdminUser(adminPrincipal);
@@ -344,6 +357,8 @@ public class WebsocketControllerTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
+            null,
+            false,
             null));
     val adminPrincipal = new AdminPrincipal(sessionID, adminID);
     val memberPrincipal = new MemberPrincipal(sessionID, memberID);
@@ -383,6 +398,8 @@ public class WebsocketControllerTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
+            null,
+            false,
             null));
     webSocketService.setAdminUser(adminPrincipal);
     StompSession session = getMemberSession(sessionID, memberID);
@@ -420,6 +437,8 @@ public class WebsocketControllerTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
+            null,
+            false,
             null));
     webSocketService.setAdminUser(adminPrincipal);
     StompSession session = getMemberSession(sessionID, memberID);
@@ -458,12 +477,14 @@ public class WebsocketControllerTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
+            null,
+            false,
             null);
     sessionRepo.save(oldSession);
     webSocketService.setAdminUser(adminPrincipal);
     StompSession adminSession = getAdminSession(sessionID, adminID);
 
-    adminSession.send(START_VOTING, null);
+    adminSession.send(START_VOTING, false);
     // Wait for server-side handling
     TimeUnit.MILLISECONDS.sleep(TIMEOUT);
 
@@ -493,6 +514,8 @@ public class WebsocketControllerTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
+            null,
+            false,
             null);
     sessionRepo.save(oldSession);
     webSocketService.setAdminUser(adminPrincipal);
@@ -504,5 +527,46 @@ public class WebsocketControllerTest {
 
     val newMembers = sessionRepo.findBySessionID(oldSession.getSessionID()).getMembers();
     Assertions.assertTrue(newMembers.stream().allMatch(m -> m.getCurrentEstimation() == null));
+  }
+
+  @Test
+  public void hostVotingChanged_changesHostVoting() throws Exception {
+    val dbID = new ObjectId();
+    val sessionID = Utils.generateRandomID();
+    val adminID = Utils.generateRandomID();
+    val memberID = Utils.generateRandomID();
+    val memberList =
+        List.of(
+            new Member(memberID, null, null, null, null),
+            new Member(Utils.generateRandomID(), null, null, null, null));
+    val adminPrincipal = new AdminPrincipal(sessionID, adminID);
+    sessionRepo.save(
+        new Session(
+            dbID,
+            sessionID,
+            adminID,
+            new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+            null,
+            memberList,
+            new HashMap<>(),
+            List.of("asdf", "bsdf"),
+            SessionState.WAITING_FOR_MEMBERS,
+            null,
+            null,
+            null,
+            false,
+            null));
+    webSocketService.setAdminUser(adminPrincipal);
+    StompSession session = getMemberSession(sessionID, memberID);
+    StompSession adminSession = getAdminSession(sessionID, adminID);
+
+    session.subscribe(MEMBER_LISTEN_HOSTVOTING, stompFrameHandler);
+    adminSession.send(ADMIN_SENDS_HOSTVOTING, true);
+
+    // Wait for server-side handling
+    TimeUnit.MILLISECONDS.sleep(TIMEOUT);
+
+    Session result = sessionRepo.findBySessionID(sessionID);
+    assertTrue(result.getHostVoting());
   }
 }

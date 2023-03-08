@@ -85,7 +85,13 @@
 
       <div id="demo">
         <div
-          v-if="membersEstimated.length === membersPending.length + membersEstimated.length"
+          v-if="membersEstimated.length === membersPending.length + membersEstimated.length && !hostVoting"
+          style="display: none"
+        >
+          {{ (estimateFinished = true) }}
+        </div>
+        <div
+          v-if="membersEstimated.length === membersPending.length + membersEstimated.length && (hostVoting && hostEstimation != '')"
           style="display: none"
         >
           {{ (estimateFinished = true) }}
@@ -107,10 +113,22 @@
         />
       </b-row>
       <hr />
-      <h4>
+      <h4 v-if="!hostVoting">
         {{ $t("page.session.during.estimation.message.finished") }}
         {{ membersEstimated.length }} /
         {{ membersPending.length + membersEstimated.length }}
+      </h4>
+      <h4 v-else>
+        <div v-if="hostEstimation == ''">
+          {{ $t("page.session.during.estimation.message.finished") }}
+          {{ membersEstimated.length }} /
+          {{ membersPending.length + membersEstimated.length + 1}}
+        </div>
+        <div v-else>
+          {{ $t("page.session.during.estimation.message.finished") }}
+          {{ membersEstimated.length + 1}} /
+          {{ membersPending.length + membersEstimated.length + 1}}
+        </div>
       </h4>
       <b-row
         class="my-1 d-flex justify-content-center flex-wrap overflow-auto"
@@ -127,7 +145,33 @@
               highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0,
           }"
         />
+        <session-admin-card v-if="hostEstimation != '' && hostVoting"
+          :currentEstimation="hostEstimation"
+          :estimateFinished="membersEstimated.length === membersPending.length + membersEstimated.length && (hostEstimation !== '')"
+          />
       </b-row>
+      <div v-if="hostVoting">
+        <div v-if="hostEstimation == ''">
+          <hr />
+          <h4 class="d-inline">
+            Your Estimation
+          </h4>
+        </div>
+        <div v-if="hostEstimation == ''" class="newVotes">
+          <b-button
+              v-for="item in voteSet"
+              :key="item"
+              class="m-1"
+              pill
+              style="width: 60px"
+              @click="vote(item)"
+            >
+              {{ item }}
+          </b-button>
+        </div>
+      
+      
+      </div>
     </div>
     <b-row v-if="session_userStoryMode !== 'NO_US'" class="mt-5">
       <b-col>
@@ -137,7 +181,7 @@
     <b-row v-if="session_userStoryMode !== 'NO_US'">
       <b-col cols="4">
         <div class="autoReveal-Container autoReveal-green autoReveal-leftbar autoReveal-border-green">
-          <input type="checkbox" id="hostVotingCheckBox" v-model="hostVoting" :disabled="planningStart == true && estimateFinished == false"/>
+          <input type="checkbox" id="hostVotingCheckBox"  @click="sendHostVoting()" :disabled="planningStart == true && estimateFinished == false"/>
           <label for="hostVotingCheckBox" id="hostVotingLabel">Host can vote: {{ hostVoting }}</label>
         </div>
         <user-stories
@@ -180,6 +224,7 @@ import Project from "../model/Project";
 import KickUserWrapper from "@/components/KickUserWrapper.vue";
 import SessionCloseButton from "@/components/actions/SessionCloseButton.vue";
 import SessionStartButton from "@/components/actions/SessionStartButton.vue";
+import SessionAdminCard from "@/components/SessionAdminCard.vue";
 
 export default Vue.extend({
   name: "SessionPage",
@@ -193,6 +238,7 @@ export default Vue.extend({
     CopySessionIdPopup,
     UserStoryDescriptions,
     NotifyHostComponent,
+    SessionAdminCard,
   },
   props: {
     adminID: { type: String, required: true },
@@ -227,6 +273,7 @@ export default Vue.extend({
       estimateFinished: false,
       session: {},
       hostVoting: false,
+      hostEstimation: "",
     };
   },
   computed: {
@@ -514,6 +561,16 @@ export default Vue.extend({
     onPlanningStarted() {
       this.planningStart = true;
     },
+    vote(vote: string) {
+      const endPoint = `${Constants.webSocketVoteRouteAdmin}`;
+      this.$store.commit("sendViaBackendWS", { endPoint, data: vote });
+      this.hostEstimation = vote;
+    },
+    sendHostVoting() {
+      this.hostVoting = !this.hostVoting;
+      const endPoint = `${Constants.webSocketHostVotingRoute}`;
+      this.$store.commit("sendViaBackendWS", { endPoint, data: this.hostVoting});
+    },
   },
 });
 </script>
@@ -539,6 +596,9 @@ export default Vue.extend({
 #hostVotingLabel {
   padding-left: 10px;
   margin-top: 2%;
+}
+.newVotes {
+  text-align: center;
 }
 
 </style>

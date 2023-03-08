@@ -1,0 +1,82 @@
+<template>
+    <div
+      :style="`background-color #123a;`"
+      class="session-member-card text-center card m-2"
+    >
+      <h1 class="fs-3-rem">
+        <strong v-if="!estimateFinished">?</strong>
+        <strong v-if="currentEstimation === null && estimateFinished">-</strong>
+        <strong v-if="currentEstimation !== null && estimateFinished">{{
+          currentEstimation
+        }}</strong>
+      </h1>
+      <div class="rounded-avatar rounded-circle">
+        <div :id="'avatar'" class="text-center">
+          <b-img
+            :src="require(`@/assets/lion.png`)"
+            class="rounded-avatar__image"
+          />
+          <div class="rounded-avatar__label">
+            Host
+          </div>
+        </div>
+    </div>
+      <!--<rounded-avatar :member="member" /> -->
+    </div>
+  </template>
+  
+  <script lang="ts">
+  import Vue from "vue";
+  //import RoundedAvatar from "@/components/RoundedAvatar.vue";
+  
+  export default Vue.extend({
+    name: "SessionAdminCard",
+  //  components: { RoundedAvatar },
+    props: {
+      currentEstimation: { type: String, required: true },
+      estimateFinished: { type: Boolean, required: true },
+    },
+  });
+  </script>
+  
+  <!-- Add "scoped" attribute to limit CSS to this component only -->
+  <style scoped>
+  .fs-3-rem {
+    font-size: 4rem;
+  }
+  .card {
+    position: relative;
+    width: 168px;
+    height: 222px;
+    justify-content: center; /* Centering y-axis */
+    align-items: center; /* Centering x-axis */
+    border-radius: 5%;
+    display: flex;
+    flex-direction: column;
+  }
+  h4 {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 100px;
+  }
+.rounded-avatar {
+  width: 100px;
+  height: 100px;
+  padding: 8px;
+  display: flex;
+  justify-content: center; /* Centering y-axis */
+  align-items: center; /* Centering x-axis */
+  overflow: hidden;
+}
+.rounded-avatar__image {
+  width: 50px;
+}
+
+.rounded-avatar__label {
+  font-size: 0.75rem;
+  font-weight: 400;
+  text-overflow: ellipsis;
+}
+  </style>
+  

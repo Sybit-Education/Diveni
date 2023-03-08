@@ -61,6 +61,7 @@
               :disabled="pauseSession"
               @sentVote="onSendVote"
             />
+            
           </flicking>
         </div>
         <b-row v-else class="d-flex justify-content-between flex-wrap text-center">
@@ -105,6 +106,9 @@
               highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0,
           }"
         />
+        <session-admin-card
+        :currentEstimation="hostEstimation"
+        :estimateFinished="votingFinished"/>
       </b-row>
       <b-row v-if="userStoryMode !== 'NO_US'" class="mt-5">
         <b-col md="6">
@@ -165,6 +169,7 @@ import MobileStoryList from "../components/MobileStoryList.vue";
 import MobileStoryTitle from "../components/MobileStoryTitle.vue";
 import UserStorySumComponent from "@/components/UserStorySum.vue";
 import SessionLeaveButton from "@/components/actions/SessionLeaveButton.vue";
+import SessionAdminCard from "@/components/SessionAdminCard.vue";
 
 export default Vue.extend({
   name: "MemberVotePage",
@@ -174,6 +179,7 @@ export default Vue.extend({
     MemberVoteCard,
     EstimateTimer,
     SessionMemberCard,
+    SessionAdminCard,
     NotifyMemberComponent,
     UserStories,
     UserStoryDescriptions,
@@ -233,6 +239,12 @@ export default Vue.extend({
     },
     notifications() {
       return this.$store.state.notifications;
+    },
+    hostVoting() {
+      return this.$store.state.hostVoting;
+    },
+    hostEstimation() {
+      return this.$store.state.hostEstimation;
     },
     getMember() {
       return {

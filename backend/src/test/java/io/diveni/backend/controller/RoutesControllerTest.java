@@ -105,6 +105,8 @@ public class RoutesControllerTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
+            null,
+            false,
             null));
 
     // @formatter:off
@@ -148,6 +150,8 @@ public class RoutesControllerTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
+            null,
+            false,
             null));
 
     // @formatter:off
@@ -194,6 +198,8 @@ public class RoutesControllerTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
+            null,
+            false,
             null));
     // @formatter:off
     var memberAsJson =
@@ -240,6 +246,8 @@ public class RoutesControllerTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
+            null,
+            false,
             null));
 
     // @formatter:off
@@ -284,6 +292,8 @@ public class RoutesControllerTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
+            null,
+            false,
             null));
 
     // @formatter:off
@@ -324,6 +334,8 @@ public class RoutesControllerTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
+            null,
+            false,
             null));
 
     // @formatter:off
@@ -364,6 +376,8 @@ public class RoutesControllerTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
+            null,
+            false,
             null));
 
     // @formatter:off
@@ -431,6 +445,8 @@ public class RoutesControllerTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
+            null,
+            false,
             null));
 
     // @formatter:off
@@ -480,6 +496,8 @@ public class RoutesControllerTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
+            null,
+            false,
             null));
     this.mockMvc
         .perform(get("/sessions/{sessionID}", sessionUUID))
@@ -504,6 +522,8 @@ public class RoutesControllerTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
+            null,
+            false,
             null));
 
     this.mockMvc

@@ -62,6 +62,10 @@ public class Session {
 
   private final String timerTimestamp;
 
+  private final boolean hostVoting;
+
+  private final String hostEstimation;
+
   static Comparator<String> estimationByIndex(List<String> set) {
     return Comparator.comparingInt((str) -> set.indexOf(str));
   }
@@ -89,7 +93,9 @@ public class Session {
         sessionState,
         lastModified,
         accessToken,
-        timerTimestamp);
+        timerTimestamp,
+        hostVoting,
+        hostEstimation);
   }
 
   public Session selectHighlightedMembers() {
@@ -120,7 +126,9 @@ public class Session {
           sessionState,
           lastModified,
           accessToken,
-          timerTimestamp);
+          timerTimestamp,
+          hostVoting,
+          hostEstimation);
     }
     val maxEstimationMembers =
         this.members.stream()
@@ -193,7 +201,9 @@ public class Session {
         sessionState,
         lastModified,
         accessToken,
-        timerTimestamp);
+        timerTimestamp,
+        hostVoting,
+        hostEstimation);
   }
 
   public Session resetCurrentHighlights() {
@@ -209,7 +219,9 @@ public class Session {
         sessionState,
         lastModified,
         accessToken,
-        timerTimestamp);
+        timerTimestamp,
+        hostVoting,
+        hostEstimation);
   }
 
   public Session updateUserStories(List<UserStory> userStories) {
@@ -232,7 +244,9 @@ public class Session {
         sessionState,
         lastModified,
         accessToken,
-        timerTimestamp);
+        timerTimestamp,
+        hostVoting,
+        hostEstimation);
   }
 
   public Session resetEstimations() {
@@ -250,7 +264,9 @@ public class Session {
         sessionState,
         lastModified,
         accessToken,
-        timerTimestamp);
+        timerTimestamp,
+        hostVoting,
+        hostEstimation);
   }
 
   public Session updateMembers(List<Member> updatedMembers) {
@@ -266,7 +282,9 @@ public class Session {
         sessionState,
         lastModified,
         accessToken,
-        timerTimestamp);
+        timerTimestamp,
+        hostVoting,
+        hostEstimation);
   }
 
   public Session updateSessionState(SessionState updatedSessionState) {
@@ -282,7 +300,9 @@ public class Session {
         updatedSessionState,
         lastModified,
         accessToken,
-        timerTimestamp);
+        timerTimestamp,
+        hostVoting,
+        hostEstimation);
   }
 
   public Session addMember(Member member) {
@@ -300,7 +320,9 @@ public class Session {
         sessionState,
         lastModified,
         accessToken,
-        timerTimestamp);
+        timerTimestamp,
+        hostVoting,
+        hostEstimation);
   }
 
   public Session removeMember(String memberID) {
@@ -320,7 +342,9 @@ public class Session {
         sessionState,
         lastModified,
         accessToken,
-        timerTimestamp);
+        timerTimestamp,
+        hostVoting,
+        hostEstimation);
   }
 
   public Session setTimerTimestamp(String timestamp) {
@@ -336,7 +360,9 @@ public class Session {
         sessionState,
         lastModified,
         accessToken,
-        timestamp);
+        timestamp,
+        hostVoting,
+        hostEstimation);
   }
 
   public Session resetTimerTimestamp() {
@@ -352,7 +378,9 @@ public class Session {
         sessionState,
         lastModified,
         accessToken,
-        null);
+        null,
+        hostVoting,
+        hostEstimation);
   }
 
   public Session setLastModified(Date lastModified) {
@@ -368,7 +396,9 @@ public class Session {
         sessionState,
         lastModified,
         accessToken,
-        timerTimestamp);
+        timerTimestamp,
+        hostVoting,
+        hostEstimation);
   }
 
   public Session setAccessToken(String token) {
@@ -384,6 +414,49 @@ public class Session {
         sessionState,
         lastModified,
         token,
-        timerTimestamp);
+        timerTimestamp,
+        hostVoting,
+        hostEstimation);
   }
+
+  public Session setHostVoting(boolean isHostVoting) {
+    return new Session(
+        databaseID,
+        sessionID,
+        adminID,
+        sessionConfig,
+        adminCookie,
+        members,
+        memberVoted,
+        currentHighlights,
+        sessionState,
+        lastModified,
+        accessToken,
+        timerTimestamp,
+        isHostVoting,
+        hostEstimation);
+  }
+
+  public boolean getHostVoting() {
+    return hostVoting;
+  }
+
+  public Session setHostEstimation(String vote) {
+    return new Session(
+        databaseID,
+        sessionID,
+        adminID,
+        sessionConfig,
+        adminCookie,
+        members,
+        memberVoted,
+        currentHighlights,
+        sessionState,
+        lastModified,
+        accessToken,
+        timerTimestamp,
+        hostVoting,
+        vote);
+  }
+  
 }

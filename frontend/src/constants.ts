@@ -21,6 +21,10 @@ class Constants {
 
   webSocketCloseSessionRoute = "/ws/closeSession";
 
+  webSocketHostVotingRoute = "/ws/hostVoting";
+
+  webSocketMemberListenHostVotingRoute = "/users/updates/hostVoting"; 
+
   webSocketGetMemberUpdateRoute = "/ws/memberUpdate";
 
   webSocketMembersUpdatedRoute = "/users/updates/membersUpdated";
@@ -32,6 +36,10 @@ class Constants {
   webSocketRestartPlanningRoute = "/ws/restart";
 
   webSocketVoteRoute = "/ws/vote";
+
+  webSocketVoteRouteAdmin = "/ws/vote/admin";
+
+  webSocketMembersUpdatedHostEstimation = "/users/updates/hostEstimation";
 
   webSocketAdminUpdatedUserStoriesRoute = "/ws/adminUpdatedUserStories";
 

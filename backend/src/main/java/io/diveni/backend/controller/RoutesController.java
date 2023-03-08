@@ -86,6 +86,8 @@ public class RoutesController {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             accessToken,
+            null,
+            false,
             null);
     databaseService.saveSession(session);
     val responseMap = Map.of("session", session, "adminCookie", session.getAdminCookie());
