@@ -201,10 +201,6 @@ public class WebSocketService {
     LOGGER.debug("<-- sendMembersAdminVote()");
   }
 
-
-
-
-
   public void sendSessionStateToMembers(Session session) {
     LOGGER.debug("--> sendSessionStateToMembers(), sessionID={}", session.getSessionID());
     // TODO: Send highlighted with it

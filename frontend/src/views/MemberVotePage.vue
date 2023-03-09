@@ -106,7 +106,7 @@
               highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0,
           }"
         />
-        <session-admin-card
+        <session-admin-card v-if="hostVoting"
         :currentEstimation="hostEstimation"
         :estimateFinished="votingFinished"/>
       </b-row>

@@ -49,8 +49,7 @@
       <b-row>
         <b-col class="text-center">
           <session-start-button @clicked="onPlanningStarted"
-          :members="members"
-          :hostVoting="hostVoting" />
+          :members="members" />
         </b-col>
       </b-row>
     </div>
@@ -552,6 +551,7 @@ export default Vue.extend({
     },
     sendRestartMessage() {
       this.estimateFinished = false;
+      this.hostEstimation = '';
       const endPoint = Constants.webSocketRestartPlanningRoute;
       this.$store.commit("sendViaBackendWS", { endPoint });
     },

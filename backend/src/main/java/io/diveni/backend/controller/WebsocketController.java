@@ -137,7 +137,7 @@ public class WebsocketController {
   }
 
   @MessageMapping("/startVoting")
-  public void startEstimation(AdminPrincipal principal, @Payload boolean hostVoting) {
+  public void startEstimation(AdminPrincipal principal) {
     LOGGER.debug("--> startEstimation()");
     val session =
         ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID())
@@ -184,8 +184,14 @@ public class WebsocketController {
     val session =
         ControllerUtils.getSessionOrThrowResponse(databaseService, admin.getSessionID())
             .setHostEstimation(vote);
-    databaseService.saveSession(session);    
-    LOGGER.debug("Ergebnis: " + session.getHostEstimation());
+    //webSocketService.sendMembersUpdate(session);
+    databaseService.saveSession(session);
+    if (checkIfAllMembersVoted(session.getMembers(), session)) {
+      votingFinished(
+          new AdminPrincipal(
+              admin.getSessionID(),
+              admin.getAdminID())); //databaseService.getSessionByID(admin.getSessionID()).get().getAdminID()
+    }   
     LOGGER.debug("<-- processVoteAdmin()");
   }
 

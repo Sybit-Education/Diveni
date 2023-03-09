@@ -142,11 +142,12 @@ public class SessionTest {
             null,
             null,
             false,
-            null);
+            "10");
 
     val result = session.resetEstimations();
 
     assertTrue(result.getMembers().stream().allMatch(m -> m.getCurrentEstimation() == null));
+    assertTrue(result.getHostEstimation() == null);
   }
 
   @Test

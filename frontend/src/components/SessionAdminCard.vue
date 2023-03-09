@@ -1,6 +1,6 @@
 <template>
     <div
-      :style="`background-color #123a;`"
+      :style="'background-color: #30a444;'"
       class="session-member-card text-center card m-2"
     >
       <h1 class="fs-3-rem">
@@ -10,28 +10,25 @@
           currentEstimation
         }}</strong>
       </h1>
-      <div class="rounded-avatar rounded-circle">
+      <div class="rounded-avatar rounded-circle" :style="'background-color: #30a444;' ">
         <div :id="'avatar'" class="text-center">
           <b-img
-            :src="require(`@/assets/lion.png`)"
+            :src="require(`@/assets/crown.png`)"
             class="rounded-avatar__image"
           />
           <div class="rounded-avatar__label">
-            Host
+            <b>Host</b>
           </div>
         </div>
-    </div>
-      <!--<rounded-avatar :member="member" /> -->
+      </div>
     </div>
   </template>
   
   <script lang="ts">
   import Vue from "vue";
-  //import RoundedAvatar from "@/components/RoundedAvatar.vue";
   
   export default Vue.extend({
     name: "SessionAdminCard",
-  //  components: { RoundedAvatar },
     props: {
       currentEstimation: { type: String, required: true },
       estimateFinished: { type: Boolean, required: true },
