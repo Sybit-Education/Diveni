@@ -9,7 +9,7 @@
     "licenses": {
       "frontend": "Ліцензії (інтерфейсу)",
       "backend": "Ліцензії (серверні)",
-      "translations": "Покращення перекладу"
+      "translations": "Improve translation"
     }
   },
   "page": {
@@ -27,6 +27,7 @@
           "waiting": "Чекаємо на учасників"
         },
         "button": "Почати планування",
+        "refreshStories": "Refresh Userstories",
         "userStories": {
           "button": {
             "addFirstUserStory": "Ще немає історій... натисніть, щоб додати історії",
