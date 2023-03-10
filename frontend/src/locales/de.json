@@ -27,6 +27,7 @@
           "waiting": "Warte auf den Beitritt des Teams"
         },
         "button": "Starte das Planning",
+        "refreshStories": "Aktualisiere die Userstories",
         "userStories": {
           "button": {
             "addFirstUserStory": "Noch keine Stories... Klicke um eine Story hinzuzufügen",
