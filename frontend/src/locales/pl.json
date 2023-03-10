@@ -9,7 +9,7 @@
     "licenses": {
       "frontend": "Licencje (Frontend)",
       "backend": "Licencje (Backend)",
-      "translations": "Poprawić tłumaczenie"
+      "translations": "Improve translation"
     }
   },
   "page": {
@@ -27,6 +27,7 @@
           "waiting": "Oczekiwanie na dołączenie członków"
         },
         "button": "Rozpocznij planowanie",
+        "refreshStories": "Refresh Userstories",
         "userStories": {
           "button": {
             "addFirstUserStory": "Brak historii... kliknij aby dodać opowieści",
