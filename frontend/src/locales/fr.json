@@ -27,6 +27,7 @@
           "waiting": "En attente de l'adhésion des membres"
         },
         "button": "Commencer la planification",
+        "refreshStories": "Refresh Userstories",
         "userStories": {
           "button": {
             "addFirstUserStory": "Pas encore d'histoires... cliquez pour ajouter des histoires",
