@@ -27,6 +27,7 @@
           "waiting": "Waiting for members to join"
         },
         "button": "Start Planning",
+        "refreshStories": "Refresh Userstories",
         "userStories": {
           "button": {
             "addFirstUserStory": "No stories yet... click to add stories",
