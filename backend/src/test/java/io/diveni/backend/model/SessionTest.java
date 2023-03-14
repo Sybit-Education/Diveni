@@ -147,7 +147,7 @@ public class SessionTest {
     val result = session.resetEstimations();
 
     assertTrue(result.getMembers().stream().allMatch(m -> m.getCurrentEstimation() == null));
-    assertTrue(result.getHostEstimation() == null);
+    assertTrue(result.getHostEstimation() == "");
   }
 
   @Test

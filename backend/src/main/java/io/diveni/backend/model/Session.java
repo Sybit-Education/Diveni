@@ -266,7 +266,7 @@ public class Session {
         accessToken,
         timerTimestamp,
         hostVoting,
-        null);
+        "");
   }
 
   public Session updateMembers(List<Member> updatedMembers) {

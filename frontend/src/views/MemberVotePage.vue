@@ -106,9 +106,11 @@
               highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0,
           }"
         />
-        <session-admin-card v-if="hostVoting"
-        :currentEstimation="hostEstimation"
+        <div v-if="hostVoting && safedHostEstimation !== '' || safedHostEstimation !== ''">
+          <session-admin-card
+        :currentEstimation="safedHostEstimation"
         :estimateFinished="votingFinished"/>
+      </div>
       </b-row>
       <b-row v-if="userStoryMode !== 'NO_US'" class="mt-5">
         <b-col md="6">
@@ -205,6 +207,7 @@ export default Vue.extend({
       triggerTimer: 0,
       estimateFinished: false,
       pauseSession: false,
+      safedHostEstimation: "",
     };
   },
   computed: {
@@ -219,7 +222,7 @@ export default Vue.extend({
     memberUpdates() {
       return this.$store.state.memberUpdates;
     },
-    isStartVoting(): boolean {
+    isStartVoting(): boolean {  
       return this.memberUpdates.at(-1) === Constants.memberUpdateCommandStartVoting;
     },
     votingFinished(): boolean {
@@ -259,6 +262,7 @@ export default Vue.extend({
       if (updates.at(-1) === Constants.memberUpdateCommandStartVoting) {
         this.draggedVote = null;
         this.estimateFinished = false;
+        this.safedHostEstimation = "";
         this.triggerTimer = (this.triggerTimer + 1) % 5;
       } else if (updates.at(-1) === Constants.memberUpdateCommandVotingFinished) {
         this.estimateFinished = true;
@@ -273,6 +277,9 @@ export default Vue.extend({
           startVelocity: 50,
           spread: 100,
         });
+      }
+      if (this.hostVoting) {
+        this.safedHostEstimation = this.hostEstimation;
       }
     },
     notifications(notifications) {

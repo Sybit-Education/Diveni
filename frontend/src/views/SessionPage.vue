@@ -144,7 +144,7 @@
               highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0,
           }"
         />
-        <session-admin-card v-if="hostEstimation != '' && hostVoting"
+        <session-admin-card v-if="hostEstimation != '' && hostVoting || hostEstimation != '' && estimateFinished"
           :currentEstimation="hostEstimation"
           :estimateFinished="membersEstimated.length === membersPending.length + membersEstimated.length && (hostEstimation !== '')"
           />
@@ -156,7 +156,7 @@
             Your Estimation
           </h4>
         </div>
-        <div v-if="hostEstimation == ''" class="newVotes">
+        <div v-if="hostEstimation == '' && !estimateFinished" class="newVotes">
           <b-button
               v-for="item in voteSet"
               :key="item"
@@ -172,6 +172,16 @@
       
       </div>
     </div>
+    <b-row v-if="session_userStoryMode === 'NO_US'">
+      <b-col cols="4">
+        <br>
+        <div class="autoReveal-Container autoReveal-green autoReveal-leftbar autoReveal-border-green">
+          <input type="checkbox" id="hostVotingCheckBox"  @click="sendHostVoting()" :disabled="planningStart == true && estimateFinished == false"/>
+          <label for="hostVotingCheckBox" id="hostVotingLabel">Host can vote: {{ hostVoting }}</label>
+        </div>
+        <br>
+      </b-col>
+    </b-row>
     <b-row v-if="session_userStoryMode !== 'NO_US'" class="mt-5">
       <b-col>
         <user-story-sum-component />

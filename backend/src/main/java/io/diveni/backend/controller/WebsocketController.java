@@ -218,7 +218,7 @@ public class WebsocketController {
     if (session.getHostVoting() == false) { 
       return members.stream().filter(m -> m.getCurrentEstimation() == null).count() == 0;
     }
-    return members.stream().filter(m -> m.getCurrentEstimation() == null).count() == 0 && session.getHostEstimation() != null;
+    return members.stream().filter(m -> m.getCurrentEstimation() == null).count() == 0 && !session.getHostEstimation().equals("");
   }
 
   @MessageMapping("/restart")
@@ -233,8 +233,9 @@ public class WebsocketController {
     webSocketService.sendMembersUpdate(session);
     webSocketService.sendSessionStateToMembers(session);
     webSocketService.sendTimerStartMessage(session, session.getTimerTimestamp());
+    //webSocketService.sendMembersAdminVote(session);
     LOGGER.debug("<-- restartVote()");
-  }
+  } 
 
   @MessageMapping("/adminUpdatedUserStories")
   public synchronized void adminUpdatedUserStories(
