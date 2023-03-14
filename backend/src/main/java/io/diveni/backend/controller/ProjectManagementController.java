@@ -121,7 +121,7 @@ public class ProjectManagementController {
   @PutMapping(value = "/issue")
   public void updateIssue(
       @RequestHeader("X-Token-ID") String tokenIdentifier, @RequestBody UserStory userStory) {
-    LOGGER.debug("--> updateIssue(), userStoryId={}", userStory.getJiraId());
+    LOGGER.debug("--> updateIssue(), userStoryId={}", userStory.getId());
     val projectManagementProvider = getProjectManagementProvider(tokenIdentifier);
 
     if (projectManagementProvider != null) {
@@ -138,7 +138,7 @@ public class ProjectManagementController {
       @RequestParam("projectID") String projectID,
       @RequestBody UserStory userStory) {
     LOGGER.debug(
-        "--> createIssue(), projectID={}, userStoryId={}", projectID, userStory.getJiraId());
+        "--> createIssue(), projectID={}, userStoryId={}", projectID, userStory.getId());
 
     val projectManagementProvider = getProjectManagementProvider(tokenIdentifier);
 

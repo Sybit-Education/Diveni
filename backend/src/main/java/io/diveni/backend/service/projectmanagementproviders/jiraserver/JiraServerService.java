@@ -229,7 +229,7 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
 
   @Override
   public void updateIssue(String tokenIdentifier, UserStory story) {
-    LOGGER.debug("--> updateIssue(), storyID={}", story.getJiraId());
+    LOGGER.debug("--> updateIssue(), storyID={}", story.getId());
     Map<String, Map<String, Object>> content = new HashMap<>();
     Map<String, Object> fields = new HashMap<>();
     fields.put("summary", story.getTitle());
@@ -252,7 +252,7 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
       HttpResponse response =
           getResponseFromUrl(
               parameters,
-              new GenericUrl(getJiraUrl() + "/issue/" + story.getJiraId()),
+              new GenericUrl(getJiraUrl() + "/issue/" + story.getId()),
               "PUT",
               new JsonHttpContent(GsonFactory.getDefaultInstance(), content));
 

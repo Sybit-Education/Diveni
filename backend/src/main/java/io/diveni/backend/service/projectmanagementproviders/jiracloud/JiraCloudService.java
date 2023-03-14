@@ -209,7 +209,7 @@ public class JiraCloudService implements ProjectManagementProviderOAuth2 {
 
   @Override
   public void updateIssue(String tokenIdentifier, UserStory story) {
-    LOGGER.debug("--> updateIssue(), storyID={}", story.getJiraId());
+    LOGGER.debug("--> updateIssue(), storyID={}", story.getId());
     String cloudID = getCloudID(accessTokens.get(tokenIdentifier));
     Map<String, Map<String, Object>> content = new HashMap<>();
     Map<String, Object> fields = new HashMap<>();
@@ -227,7 +227,7 @@ public class JiraCloudService implements ProjectManagementProviderOAuth2 {
     content.put("fields", fields);
     try {
       executeRequest(
-          String.format(getJiraUrl(), cloudID) + "/issue/" + story.getJiraId(),
+          String.format(getJiraUrl(), cloudID) + "/issue/" + story.getId(),
           HttpMethod.PUT,
           accessTokens.get(tokenIdentifier),
           content);
