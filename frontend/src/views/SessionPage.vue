@@ -147,6 +147,7 @@
         <session-admin-card v-if="hostEstimation != '' && hostVoting || hostEstimation != '' && estimateFinished"
           :currentEstimation="hostEstimation"
           :estimateFinished="membersEstimated.length === membersPending.length + membersEstimated.length && (hostEstimation !== '')"
+          :highlight="highlightedMembers.includes(adminID)"
           />
       </b-row>
       <div v-if="hostVoting">

@@ -2,6 +2,7 @@
     <div
       :style="'background-color: #30a444;'"
       class="session-member-card text-center card m-2"
+      :class="{ greyOut: highlight === false && estimateFinished}"
     >
       <h1 class="fs-3-rem">
         <strong v-if="!estimateFinished">?</strong>
@@ -32,6 +33,7 @@
     props: {
       currentEstimation: { type: String, required: true },
       estimateFinished: { type: Boolean, required: true },
+      highlight: { type: Boolean, required: false },
     },
   });
   </script>
@@ -74,6 +76,11 @@
   font-size: 0.75rem;
   font-weight: 400;
   text-overflow: ellipsis;
+}
+
+.greyOut {
+  opacity: 0.5;
+  transform: scale(0.8);
 }
   </style>
   

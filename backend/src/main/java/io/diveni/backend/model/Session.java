@@ -5,6 +5,7 @@
 */
 package io.diveni.backend.model;
 
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Collections;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.Map.Entry;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -108,10 +110,23 @@ public class Session {
             .filter((string) -> !string.equals("?"))
             .collect(Collectors.toList());
 
-    Optional<String> maxEstimation =
-        getFilteredEstimationStream(this.members).max(estimationByIndex(filteredSet));
-    Optional<String> minEstimation =
-        getFilteredEstimationStream(this.members).min(estimationByIndex(filteredSet));
+    Optional<String> maxEstimation;
+    Optional<String> minEstimation;
+    if (!this.hostVoting || this.hostEstimation.equals("")) {
+      maxEstimation = getFilteredEstimationStream(this.members).max(estimationByIndex(filteredSet));
+    } else {
+      Stream<String> filteredEstimationsMember = getFilteredEstimationStream(this.members);
+      Stream<String> allEstimations = Stream.concat(filteredEstimationsMember, Stream.of(this.hostEstimation));
+      maxEstimation = allEstimations.max(estimationByIndex(filteredSet));
+    }
+    if (!this.hostVoting || this.hostEstimation.equals("")) { 
+     minEstimation =
+     getFilteredEstimationStream(this.members).min(estimationByIndex(filteredSet));
+    } else {
+      Stream<String> filteredEstimationsMember = getFilteredEstimationStream(this.members);
+      Stream<String> allEstimations = Stream.concat(filteredEstimationsMember, Stream.of(this.hostEstimation));
+      minEstimation = allEstimations.min(estimationByIndex(filteredSet));
+    }
 
     if (maxEstimation.equals(minEstimation)) {
       return new Session(
@@ -136,14 +151,20 @@ public class Session {
                 (member) ->
                     member.getCurrentEstimation() != null
                         && member.getCurrentEstimation().equals(maxEstimation.get()))
-            .collect(Collectors.toList());
-    val maxOptions =
+            .collect(Collectors.toList()); 
+
+    List<Entry<String, Integer>> maxOptions =
         memberVoted.entrySet().stream()
             .filter(
                 (entry) ->
                     maxEstimationMembers.stream()
                         .anyMatch((member) -> member.getMemberID().equals(entry.getKey())))
-            .collect(Collectors.toList());
+            .collect(Collectors.toList()); 
+
+    if (maxEstimation.get().equals(this.hostEstimation)) {
+      maxOptions.add(new AbstractMap.SimpleEntry<String, Integer>(this.adminID, 0));
+    }
+
     val maxMemberID =
         Collections.max(maxOptions, Comparator.comparingInt(Map.Entry::getValue)).getKey();
 
@@ -154,13 +175,19 @@ public class Session {
                     member.getCurrentEstimation() != null
                         && member.getCurrentEstimation().equals(minEstimation.get()))
             .collect(Collectors.toList());
-    val minOptions =
+
+    List<Entry<String, Integer>> minOptions =
         memberVoted.entrySet().stream()
             .filter(
                 (entry) ->
                     minEstimationMembers.stream()
                         .anyMatch((member) -> member.getMemberID().equals(entry.getKey())))
             .collect(Collectors.toList());
+    
+    if (minEstimation.get().equals(this.hostEstimation)) {
+      minOptions.add(new AbstractMap.SimpleEntry<String, Integer>(this.adminID, 0));
+    }
+
     val minMemberID =
         Collections.max(minOptions, Comparator.comparingInt(Map.Entry::getValue)).getKey();
 

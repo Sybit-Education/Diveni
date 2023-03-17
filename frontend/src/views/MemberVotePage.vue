@@ -107,9 +107,10 @@
           }"
         />
         <div v-if="hostVoting && safedHostEstimation !== '' || safedHostEstimation !== ''">
-          <session-admin-card
+        <session-admin-card
         :currentEstimation="safedHostEstimation"
-        :estimateFinished="votingFinished"/>
+        :estimateFinished="votingFinished"
+        :highlight="isAdminHighlighted()"/>
       </div>
       </b-row>
       <b-row v-if="userStoryMode !== 'NO_US'" class="mt-5">
@@ -311,6 +312,27 @@ export default Vue.extend({
     this.sendUnregisterCommand();
   },
   methods: {
+    isAdminHighlighted() {
+      if (this.highlightedMembers.length === 0) {
+        return true;
+      }
+      let highlightedMap = new Map<string, boolean>();
+      this.highlightedMembers.forEach(highlightedMemberID => {
+        let isMemberID = false;
+        this.members.forEach(member => {
+          if (member.memberID === highlightedMemberID) {
+            isMemberID = true;
+          }
+        })
+        highlightedMap.set(highlightedMemberID, isMemberID);
+      });
+      for (let value of highlightedMap.values()) {
+        if (value === false) {
+          return true;
+        }
+      }
+      return false;
+    },
     onSelectedStory($event) {
       this.index = $event;
     },
