@@ -66,7 +66,7 @@ public class Session {
 
   private final boolean hostVoting;
 
-  private final String hostEstimation;
+  private final AdminVote hostEstimation;
 
   static Comparator<String> estimationByIndex(List<String> set) {
     return Comparator.comparingInt((str) -> set.indexOf(str));
@@ -116,7 +116,7 @@ public class Session {
       maxEstimation = getFilteredEstimationStream(this.members).max(estimationByIndex(filteredSet));
     } else {
       Stream<String> filteredEstimationsMember = getFilteredEstimationStream(this.members);
-      Stream<String> allEstimations = Stream.concat(filteredEstimationsMember, Stream.of(this.hostEstimation));
+      Stream<String> allEstimations = Stream.concat(filteredEstimationsMember, Stream.of(this.hostEstimation.getHostEstimation()));
       maxEstimation = allEstimations.max(estimationByIndex(filteredSet));
     }
     if (!this.hostVoting || this.hostEstimation.equals("")) { 
@@ -124,7 +124,7 @@ public class Session {
      getFilteredEstimationStream(this.members).min(estimationByIndex(filteredSet));
     } else {
       Stream<String> filteredEstimationsMember = getFilteredEstimationStream(this.members);
-      Stream<String> allEstimations = Stream.concat(filteredEstimationsMember, Stream.of(this.hostEstimation));
+      Stream<String> allEstimations = Stream.concat(filteredEstimationsMember, Stream.of(this.hostEstimation.getHostEstimation()));
       minEstimation = allEstimations.min(estimationByIndex(filteredSet));
     }
 
@@ -161,8 +161,10 @@ public class Session {
                         .anyMatch((member) -> member.getMemberID().equals(entry.getKey())))
             .collect(Collectors.toList()); 
 
-    if (maxEstimation.get().equals(this.hostEstimation)) {
-      maxOptions.add(new AbstractMap.SimpleEntry<String, Integer>(this.adminID, 0));
+    if (hostVoting == true) {
+      if (maxEstimation.get().equals(this.hostEstimation.getHostEstimation())) {
+        maxOptions.add(new AbstractMap.SimpleEntry<String, Integer>(this.adminID, 0));
+      }
     }
 
     val maxMemberID =
@@ -184,8 +186,10 @@ public class Session {
                         .anyMatch((member) -> member.getMemberID().equals(entry.getKey())))
             .collect(Collectors.toList());
     
-    if (minEstimation.get().equals(this.hostEstimation)) {
-      minOptions.add(new AbstractMap.SimpleEntry<String, Integer>(this.adminID, 0));
+    if (hostVoting == true) {
+      if (minEstimation.get().equals(this.hostEstimation.getHostEstimation())) {
+        minOptions.add(new AbstractMap.SimpleEntry<String, Integer>(this.adminID, 0));
+      }
     }
 
     val minMemberID =
@@ -293,7 +297,7 @@ public class Session {
         accessToken,
         timerTimestamp,
         hostVoting,
-        "");
+        new AdminVote(""));
   }
 
   public Session updateMembers(List<Member> updatedMembers) {
@@ -483,7 +487,7 @@ public class Session {
         accessToken,
         timerTimestamp,
         hostVoting,
-        vote);
+        new AdminVote(vote));
   }
-  
+
 }

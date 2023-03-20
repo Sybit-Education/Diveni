@@ -218,7 +218,7 @@ public class WebsocketController {
     if (session.getHostVoting() == false) { 
       return members.stream().filter(m -> m.getCurrentEstimation() == null).count() == 0;
     }
-    return members.stream().filter(m -> m.getCurrentEstimation() == null).count() == 0 && !session.getHostEstimation().equals("");
+    return members.stream().filter(m -> m.getCurrentEstimation() == null).count() == 0 && null != session.getHostEstimation() && !"".equals(session.getHostEstimation().getHostEstimation());
   }
 
   @MessageMapping("/restart")

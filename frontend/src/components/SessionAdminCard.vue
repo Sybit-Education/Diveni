@@ -6,7 +6,7 @@
     >
       <h1 class="fs-3-rem">
         <strong v-if="!estimateFinished">?</strong>
-        <strong v-if="currentEstimation === null && estimateFinished">-</strong>
+        <strong v-if="currentEstimation === '' && estimateFinished">-</strong>
         <strong v-if="currentEstimation !== null && estimateFinished">{{
           currentEstimation
         }}</strong>

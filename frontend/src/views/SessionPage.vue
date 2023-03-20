@@ -132,7 +132,13 @@
       <b-row
         class="my-1 d-flex justify-content-center flex-wrap overflow-auto"
         style="max-height: 500px"
+        v-if="highlightedMembers.includes(adminID)"
       >
+        <session-admin-card v-if="safedHostVoting && estimateFinished"
+          :currentEstimation="hostEstimation"
+          :estimateFinished="membersEstimated.length === membersPending.length + membersEstimated.length && (hostEstimation !== '')"
+          :highlight="highlightedMembers.includes(adminID)  || highlightedMembers.length === 0"
+        />
         <kick-user-wrapper
           v-for="member of estimateFinished ? members : membersEstimated"
           :key="member.memberID"
@@ -144,13 +150,30 @@
               highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0,
           }"
         />
-        <session-admin-card v-if="hostEstimation != '' && hostVoting || hostEstimation != '' && estimateFinished"
-          :currentEstimation="hostEstimation"
-          :estimateFinished="membersEstimated.length === membersPending.length + membersEstimated.length && (hostEstimation !== '')"
-          :highlight="highlightedMembers.includes(adminID)"
+        </b-row>
+        <b-row
+          class="my-1 d-flex justify-content-center flex-wrap overflow-auto"
+          style="max-height: 500px"
+          v-else 
+        >
+          <kick-user-wrapper
+            v-for="member of estimateFinished ? members : membersEstimated"
+            :key="member.memberID"
+            child="SessionMemberCard"
+            :member="member"
+            :props="{
+              estimateFinished: estimateFinished,
+              highlight:
+                highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0,
+            }"
+          />
+          <session-admin-card v-if="safedHostVoting && estimateFinished || hostEstimation !== ''"
+            :currentEstimation="hostEstimation"
+            :estimateFinished="membersEstimated.length === membersPending.length + membersEstimated.length && (hostEstimation !== '')"
+            :highlight="highlightedMembers.includes(adminID)  || highlightedMembers.length === 0"
           />
       </b-row>
-      <div v-if="hostVoting">
+      <div v-if="hostVoting && estimateFinished === false">
         <div v-if="hostEstimation == ''">
           <hr />
           <h4 class="d-inline">
@@ -284,6 +307,7 @@ export default Vue.extend({
       session: {},
       hostVoting: false,
       hostEstimation: "",
+      safedHostVoting: false,
     };
   },
   computed: {
@@ -563,6 +587,7 @@ export default Vue.extend({
     sendRestartMessage() {
       this.estimateFinished = false;
       this.hostEstimation = '';
+      this.safedHostVoting = this.hostVoting;
       const endPoint = Constants.webSocketRestartPlanningRoute;
       this.$store.commit("sendViaBackendWS", { endPoint });
     },
@@ -571,6 +596,7 @@ export default Vue.extend({
     },
     onPlanningStarted() {
       this.planningStart = true;
+      this.safedHostVoting = this.hostVoting;
     },
     vote(vote: string) {
       const endPoint = `${Constants.webSocketVoteRouteAdmin}`;

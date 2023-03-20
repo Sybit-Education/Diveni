@@ -92,10 +92,16 @@
         </h3>
       </b-row>
       <b-row
-        v-if="votingFinished"
+        v-if="votingFinished && isAdminHighlighted()"
         class="my-1 d-flex justify-content-center flex-wrap overflow-auto"
         style="max-height: 500px"
       >
+        <div v-if="hostVoting && safedHostEstimation !== '' || safedHostEstimation !== '' || hostVoting && safedHostEstimation === '' && estimateFinished">
+          <session-admin-card
+          :currentEstimation="safedHostEstimation"
+          :estimateFinished="votingFinished"
+          :highlight="isAdminHighlighted()"/>
+        </div>
         <session-member-card
           v-for="member of members"
           :key="member.memberID"
@@ -106,13 +112,29 @@
               highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0,
           }"
         />
-        <div v-if="hostVoting && safedHostEstimation !== '' || safedHostEstimation !== ''">
-        <session-admin-card
-        :currentEstimation="safedHostEstimation"
-        :estimateFinished="votingFinished"
-        :highlight="isAdminHighlighted()"/>
-      </div>
-      </b-row>
+        </b-row>
+        <b-row
+        v-if="votingFinished && isAdminHighlighted() === false"
+        class="my-1 d-flex justify-content-center flex-wrap overflow-auto"
+        style="max-height: 500px"
+        >
+          <session-member-card
+            v-for="member of members"
+            :key="member.memberID"
+            :member="member"
+            :props="{
+              estimateFinished: votingFinished,
+              highlight:
+                highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0,
+            }"
+          />
+          <div v-if="hostVoting && safedHostEstimation !== '' || safedHostEstimation !== '' || hostVoting && safedHostEstimation === '' && estimateFinished">
+            <session-admin-card
+            :currentEstimation="safedHostEstimation"
+            :estimateFinished="votingFinished"
+            :highlight="isAdminHighlighted()"/>
+          </div>
+        </b-row>
       <b-row v-if="userStoryMode !== 'NO_US'" class="mt-5">
         <b-col md="6">
           <user-story-sum-component class="ms-4" />
@@ -208,7 +230,7 @@ export default Vue.extend({
       triggerTimer: 0,
       estimateFinished: false,
       pauseSession: false,
-      safedHostEstimation: "",
+      safedHostEstimation: null,
     };
   },
   computed: {
@@ -263,7 +285,7 @@ export default Vue.extend({
       if (updates.at(-1) === Constants.memberUpdateCommandStartVoting) {
         this.draggedVote = null;
         this.estimateFinished = false;
-        this.safedHostEstimation = "";
+        this.safedHostEstimation = null;
         this.triggerTimer = (this.triggerTimer + 1) % 5;
       } else if (updates.at(-1) === Constants.memberUpdateCommandVotingFinished) {
         this.estimateFinished = true;
@@ -280,7 +302,7 @@ export default Vue.extend({
         });
       }
       if (this.hostVoting) {
-        this.safedHostEstimation = this.hostEstimation;
+        this.safedHostEstimation = this.hostEstimation.hostEstimation;
       }
     },
     notifications(notifications) {
