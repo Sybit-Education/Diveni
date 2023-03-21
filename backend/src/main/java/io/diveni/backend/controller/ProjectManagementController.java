@@ -36,7 +36,7 @@ import org.springframework.web.server.ResponseStatusException;
 import lombok.val;
 
 @RestController
-@RequestMapping("/jira")
+@RequestMapping("/issue-tracker")
 public class ProjectManagementController {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ProjectManagementController.class);
@@ -47,7 +47,7 @@ public class ProjectManagementController {
 
   @Autowired JiraCloudService jiraCloudService;
 
-  @GetMapping(value = "/oauth1/requestToken")
+  @GetMapping(value = "/jira/oauth1/requestToken")
   public ResponseEntity<JiraRequestToken> getRequestToken() {
     LOGGER.debug("--> getRequestToken()");
     ResponseEntity<JiraRequestToken> response =
@@ -56,7 +56,7 @@ public class ProjectManagementController {
     return response;
   }
 
-  @PostMapping(value = "/oauth1/verificationCode")
+  @PostMapping(value = "/jira/oauth1/verificationCode")
   public ResponseEntity<TokenIdentifier> getOauth1AccessToken(
       @RequestBody VerificationCode verificationCode) {
     LOGGER.debug("--> getOauth1AccessToken()");
@@ -69,7 +69,7 @@ public class ProjectManagementController {
     return response;
   }
 
-  @PostMapping(value = "/oauth2/authorizationCode")
+  @PostMapping(value = "/jira/oauth2/authorizationCode")
   public ResponseEntity<TokenIdentifier> getOAuth2AccessToken(
       @RequestHeader("Origin") String origin, @RequestBody VerificationCode authorizationCode) {
     LOGGER.debug("--> getOAuth2AccessToken(), origin={}", origin);
