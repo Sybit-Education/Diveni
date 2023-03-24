@@ -34,14 +34,15 @@ import lombok.val;
 public class WebsocketController {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(WebsocketController.class);
-  @Autowired DatabaseService databaseService;
-  @Autowired private WebSocketService webSocketService;
+  @Autowired
+  DatabaseService databaseService;
+  @Autowired
+  private WebSocketService webSocketService;
 
   @MessageMapping("/registerAdminUser")
   public void registerAdminUser(AdminPrincipal principal) {
     LOGGER.debug("--> registerAdminUser()");
-    Session session =
-        ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID());
+    Session session = ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID());
     webSocketService.setAdminUser(principal);
     if (session.getTimerTimestamp() != null) {
       session = session.setTimerTimestamp(Utils.getTimestampISO8601(new Date()));
@@ -60,14 +61,17 @@ public class WebsocketController {
   @MessageMapping("/registerMember")
   public void joinMember(MemberPrincipal principal) {
     LOGGER.debug("--> joinMember()");
-    val session =
-        ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID());
+    val session = ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID());
     webSocketService.addMemberIfNew(principal);
     webSocketService.sendMembersUpdate(session);
     webSocketService.sendSessionStateToMember(session, principal.getName());
     if (session.getTimerTimestamp() != null) {
       webSocketService.sendTimerStartMessageToUser(
           session, session.getTimerTimestamp(), principal.getMemberID());
+    }
+    webSocketService.sendUpdatedHostVotingToMember(session, principal.getMemberID());
+    if (session.getHostVoting() && session.getSessionState().equals(SessionState.VOTING_FINISHED)) {
+      webSocketService.sendMembersAdminVote(session);
     }
     webSocketService.sendNotification(
         session,
@@ -81,10 +85,9 @@ public class WebsocketController {
     LOGGER.debug("--> removeMember()");
     if (principal instanceof MemberPrincipal) {
       webSocketService.removeMember((MemberPrincipal) principal);
-      val session =
-          ControllerUtils.getSessionByMemberIDOrThrowResponse(
-                  databaseService, ((MemberPrincipal) principal).getMemberID())
-              .removeMember(((MemberPrincipal) principal).getMemberID());
+      val session = ControllerUtils.getSessionByMemberIDOrThrowResponse(
+          databaseService, ((MemberPrincipal) principal).getMemberID())
+          .removeMember(((MemberPrincipal) principal).getMemberID());
       databaseService.saveSession(session);
       webSocketService.sendMembersUpdate(session);
       webSocketService.sendNotification(
@@ -93,9 +96,8 @@ public class WebsocketController {
               NotificationType.MEMBER_LEFT,
               new MemberPayload(((MemberPrincipal) principal).getMemberID())));
     } else {
-      val session =
-          ControllerUtils.getSessionOrThrowResponse(
-              databaseService, ((AdminPrincipal) principal).getSessionID());
+      val session = ControllerUtils.getSessionOrThrowResponse(
+          databaseService, ((AdminPrincipal) principal).getSessionID());
       webSocketService.sendNotification(
           session, new Notification(NotificationType.ADMIN_LEFT, null));
       webSocketService.removeAdmin((AdminPrincipal) principal);
@@ -105,9 +107,8 @@ public class WebsocketController {
 
   @MessageMapping("/kick-member")
   public void kickMember(AdminPrincipal principal, @Payload String memberID) {
-    val session =
-        ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID())
-            .removeMember(memberID);
+    val session = ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID())
+        .removeMember(memberID);
     databaseService.saveSession(session);
     webSocketService.sendMembersUpdate(session);
     webSocketService.sendNotification(
@@ -118,8 +119,7 @@ public class WebsocketController {
   @MessageMapping("/closeSession")
   public void closeSession(AdminPrincipal principal) {
     LOGGER.debug("--> closeSession()");
-    val session =
-        ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID());
+    val session = ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID());
     webSocketService.sendSessionStateToMembers(
         session.updateSessionState(SessionState.SESSION_CLOSED));
     webSocketService.removeSession(session);
@@ -130,20 +130,19 @@ public class WebsocketController {
   @MessageMapping("/memberUpdate")
   public void getMemberUpdate(AdminPrincipal principal) {
     LOGGER.debug("--> getMemberUpdate()");
-    val session =
-        ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID());
+    val session = ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID());
     webSocketService.sendMembersUpdate(session);
     LOGGER.debug("<-- getMemberUpdate()");
   }
 
   @MessageMapping("/startVoting")
-  public void startEstimation(AdminPrincipal principal) {
+  public void startEstimation(AdminPrincipal principal, @Payload Boolean stateOfHostVoting) {
     LOGGER.debug("--> startEstimation()");
-    val session =
-        ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID())
-            .updateSessionState(SessionState.START_VOTING)
-            .resetCurrentHighlights()
-            .setTimerTimestamp(Utils.getTimestampISO8601(new Date()));
+    val session = ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID())
+        .updateSessionState(SessionState.START_VOTING)
+        .resetCurrentHighlights()
+        .setHostVoting(stateOfHostVoting)
+        .setTimerTimestamp(Utils.getTimestampISO8601(new Date()));
     databaseService.saveSession(session);
     webSocketService.sendMembersHostVoting(session);
     webSocketService.sendSessionStateToMembers(session);
@@ -154,11 +153,10 @@ public class WebsocketController {
   @MessageMapping("/votingFinished")
   public void votingFinished(AdminPrincipal principal) {
     LOGGER.debug("--> votingFinished()");
-    val session =
-        ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID())
-            .updateSessionState(SessionState.VOTING_FINISHED)
-            .selectHighlightedMembers()
-            .resetTimerTimestamp();
+    val session = ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID())
+        .updateSessionState(SessionState.VOTING_FINISHED)
+        .selectHighlightedMembers()
+        .resetTimerTimestamp();
     databaseService.saveSession(session);
     if (session.getHostVoting()) {
       webSocketService.sendMembersAdminVote(session);
@@ -168,39 +166,27 @@ public class WebsocketController {
     LOGGER.debug("<-- votingFinished()");
   }
 
-  @MessageMapping("/hostVoting")
-  public void hostVotingChanged(AdminPrincipal principal, @Payload boolean stateOfHostVoting) {
-    LOGGER.debug("--> hostVotingChanged()");
-    val session = ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID())
-                  .setHostVoting(stateOfHostVoting);
-    databaseService.saveSession(session);
-    webSocketService.sendMembersHostVoting(session);
-    LOGGER.debug("<-- hostVotingChanged()");
-  }
-
   @MessageMapping("/vote/admin")
   public synchronized void processVoteAdmin(@Payload String vote, AdminPrincipal admin) {
     LOGGER.debug("--> processVoteAdmin()");
-    val session =
-        ControllerUtils.getSessionOrThrowResponse(databaseService, admin.getSessionID())
-            .setHostEstimation(vote);
-    //webSocketService.sendMembersUpdate(session);
+    val session = ControllerUtils.getSessionOrThrowResponse(databaseService, admin.getSessionID())
+        .setHostEstimation(vote);
+    // webSocketService.sendMembersUpdate(session);
     databaseService.saveSession(session);
     if (checkIfAllMembersVoted(session.getMembers(), session)) {
       votingFinished(
           new AdminPrincipal(
               admin.getSessionID(),
-              admin.getAdminID())); //databaseService.getSessionByID(admin.getSessionID()).get().getAdminID()
-    }   
+              admin.getAdminID()));
+    }
     LOGGER.debug("<-- processVoteAdmin()");
   }
 
   @MessageMapping("/vote")
   public synchronized void processVote(@Payload String vote, MemberPrincipal member) {
     LOGGER.debug("--> processVote()");
-    val session =
-        ControllerUtils.getSessionByMemberIDOrThrowResponse(databaseService, member.getMemberID())
-            .updateEstimation(member.getMemberID(), vote);
+    val session = ControllerUtils.getSessionByMemberIDOrThrowResponse(databaseService, member.getMemberID())
+        .updateEstimation(member.getMemberID(), vote);
     webSocketService.sendMembersUpdate(session);
     databaseService.saveSession(session);
 
@@ -215,35 +201,36 @@ public class WebsocketController {
   }
 
   private boolean checkIfAllMembersVoted(List<Member> members, Session session) {
-    if (session.getHostVoting() == false) { 
+    if (session.getHostVoting() == false) {
       return members.stream().filter(m -> m.getCurrentEstimation() == null).count() == 0;
     }
-    return members.stream().filter(m -> m.getCurrentEstimation() == null).count() == 0 && null != session.getHostEstimation() && !"".equals(session.getHostEstimation().getHostEstimation());
+    return members.stream().filter(m -> m.getCurrentEstimation() == null).count() == 0
+        && null != session.getHostEstimation() && !"".equals(session.getHostEstimation().getHostEstimation());
   }
 
   @MessageMapping("/restart")
-  public synchronized void restartVote(AdminPrincipal principal) {
+  public synchronized void restartVote(AdminPrincipal principal, @Payload Boolean stateOfHostVoting) {
     LOGGER.debug("--> restartVote()");
-    val session =
-        ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID())
-            .updateSessionState(SessionState.START_VOTING)
-            .resetEstimations()
-            .setTimerTimestamp(Utils.getTimestampISO8601(new Date()));
+    val session = ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID())
+        .updateSessionState(SessionState.START_VOTING)
+        .resetEstimations()
+        .setHostVoting(stateOfHostVoting)
+        .setTimerTimestamp(Utils.getTimestampISO8601(new Date()));
     databaseService.saveSession(session);
     webSocketService.sendMembersUpdate(session);
+    webSocketService.sendMembersHostVoting(session);
     webSocketService.sendSessionStateToMembers(session);
     webSocketService.sendTimerStartMessage(session, session.getTimerTimestamp());
-    //webSocketService.sendMembersAdminVote(session);
+    webSocketService.sendMembersAdminVote(session);
     LOGGER.debug("<-- restartVote()");
-  } 
+  }
 
   @MessageMapping("/adminUpdatedUserStories")
   public synchronized void adminUpdatedUserStories(
       AdminPrincipal principal, @Payload List<UserStory> userStories) {
     LOGGER.debug("--> adminUpdatedUserStories()");
-    val session =
-        ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID())
-            .updateUserStories(userStories);
+    val session = ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID())
+        .updateUserStories(userStories);
     databaseService.saveSession(session);
     webSocketService.sendUpdatedUserStoriesToMembers(session);
     LOGGER.debug("<-- adminUpdatedUserStories()");

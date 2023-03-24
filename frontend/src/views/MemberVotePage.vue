@@ -17,70 +17,37 @@
         </b-col>
         <b-col cols="auto">
           <session-leave-button />
-          <estimate-timer
-            v-if="timerTimestamp"
-            class="mt-3"
-            :start-timestamp="timerTimestamp"
-            :pause-timer="estimateFinished || pauseSession"
-            :duration="timerCountdownNumber"
-          />
+          <estimate-timer v-if="timerTimestamp" class="mt-3" :start-timestamp="timerTimestamp"
+            :pause-timer="estimateFinished || pauseSession" :duration="timerCountdownNumber" />
         </b-col>
       </b-row>
       <b-row v-if="isMobile">
-        <mobile-story-title
-          v-if="userStoryMode !== 'NO_US'"
-          :card-set="voteSet"
-          :index="index"
-          :initial-stories="userStories"
-          :edit-description="false"
-        />
+        <mobile-story-title v-if="userStoryMode !== 'NO_US'" :card-set="voteSet" :index="index"
+          :initial-stories="userStories" :edit-description="false" />
       </b-row>
       <b-row v-if="isStartVoting" class="my-5">
         <div v-if="isMobile">
-          <flicking
-            id="flicking"
-            :options="{
-              renderOnlyVisible: false,
-              horizontal: true,
-              align: 'center',
-              bound: false,
-              defaultIndex: 0,
-              deceleration: 0.0005,
-            }"
-          >
-            <member-vote-card
-              v-for="(voteOption, idx) in voteSet"
-              :key="voteOption"
-              :ref="`memberCard${voteOption}`"
-              class="flicking-panel mx-2"
-              :vote-option="voteOption"
-              :index="idx"
-              :hex-color="hexColor"
-              :dragged="voteOption === draggedVote"
-              :is-mobile="true"
-              :disabled="pauseSession"
-              @sentVote="onSendVote"
-            />
-            
+          <flicking id="flicking" :options="{
+            renderOnlyVisible: false,
+            horizontal: true,
+            align: 'center',
+            bound: false,
+            defaultIndex: 0,
+            deceleration: 0.0005,
+          }">
+            <member-vote-card v-for="(voteOption, idx) in voteSet" :key="voteOption" :ref="`memberCard${voteOption}`"
+              class="flicking-panel mx-2" :vote-option="voteOption" :index="idx" :hex-color="hexColor"
+              :dragged="voteOption === draggedVote" :is-mobile="true" :disabled="pauseSession" @sentVote="onSendVote" />
+
           </flicking>
         </div>
         <b-row v-else class="d-flex justify-content-between flex-wrap text-center">
           <b-col>
             <div class="overflow-auto" style="max-height: 500px">
-              <member-vote-card
-                v-for="(voteOption, idx) in voteSet"
-                :key="voteOption"
-                :ref="`memberCard${voteOption}`"
-                style="display: inline-block"
-                class="flicking-panel m-2"
-                :vote-option="voteOption"
-                :index="idx"
-                :hex-color="hexColor"
-                :dragged="voteOption === draggedVote"
-                :is-mobile="false"
-                :disabled="pauseSession"
-                @sentVote="onSendVote"
-              />
+              <member-vote-card v-for="(voteOption, idx) in voteSet" :key="voteOption" :ref="`memberCard${voteOption}`"
+                style="display: inline-block" class="flicking-panel m-2" :vote-option="voteOption" :index="idx"
+                :hex-color="hexColor" :dragged="voteOption === draggedVote" :is-mobile="false" :disabled="pauseSession"
+                @sentVote="onSendVote" />
             </div>
           </b-col>
         </b-row>
@@ -91,50 +58,36 @@
           <sub><b-icon-three-dots animation="fade" font-scale="1" /></sub>
         </h3>
       </b-row>
-      <b-row
-        v-if="votingFinished && isAdminHighlighted()"
-        class="my-1 d-flex justify-content-center flex-wrap overflow-auto"
-        style="max-height: 500px"
-      >
-        <div v-if="hostVoting && safedHostEstimation !== '' || safedHostEstimation !== '' || hostVoting && safedHostEstimation === '' && estimateFinished">
-          <session-admin-card
-          :currentEstimation="safedHostEstimation"
-          :estimateFinished="votingFinished"
-          :highlight="isAdminHighlighted()"/>
-        </div>
-        <session-member-card
-          v-for="member of members"
-          :key="member.memberID"
-          :member="member"
-          :props="{
-            estimateFinished: votingFinished,
-            highlight:
-              highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0,
-          }"
-        />
-        </b-row>
-        <b-row
-        v-if="votingFinished && isAdminHighlighted() === false"
-        class="my-1 d-flex justify-content-center flex-wrap overflow-auto"
-        style="max-height: 500px"
-        >
-          <session-member-card
-            v-for="member of members"
-            :key="member.memberID"
-            :member="member"
-            :props="{
-              estimateFinished: votingFinished,
-              highlight:
-                highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0,
-            }"
-          />
-          <div v-if="hostVoting && safedHostEstimation !== '' || safedHostEstimation !== '' || hostVoting && safedHostEstimation === '' && estimateFinished">
-            <session-admin-card
-            :currentEstimation="safedHostEstimation"
-            :estimateFinished="votingFinished"
-            :highlight="isAdminHighlighted()"/>
+      <b-row v-if="votingFinished && isAdminHighlighted()"
+        class="my-1 d-flex justify-content-center flex-wrap overflow-auto" style="max-height: 500px">
+        <div v-if="hostEstimation !== undefined">
+          <div v-if="hostVoting && hostEstimation.hostEstimation !== null">
+            <session-admin-card v-if="hostEstimation.hostEstimation !== null"
+              :currentEstimation="hostEstimation.hostEstimation" :estimateFinished="votingFinished"
+              :highlight="isAdminHighlighted()" />
           </div>
-        </b-row>
+        </div>
+        <session-member-card v-for="member of members" :key="member.memberID" :member="member" :props="{
+          estimateFinished: votingFinished,
+          highlight:
+            highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0,
+        }" />
+      </b-row>
+      <b-row v-if="votingFinished && isAdminHighlighted() === false"
+        class="my-1 d-flex justify-content-center flex-wrap overflow-auto" style="max-height: 500px">
+        <session-member-card v-for="member of members" :key="member.memberID" :member="member" :props="{
+          estimateFinished: votingFinished,
+          highlight:
+            highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0,
+        }" />
+        <div v-if="hostEstimation !== undefined">
+          <div v-if="hostVoting && hostEstimation.hostEstimation !== null">
+            <session-admin-card v-if="hostEstimation.hostEstimation !== null"
+              :currentEstimation="hostEstimation.hostEstimation" :estimateFinished="votingFinished"
+              :highlight="isAdminHighlighted()" />
+          </div>
+        </div>
+      </b-row>
       <b-row v-if="userStoryMode !== 'NO_US'" class="mt-5">
         <b-col md="6">
           <user-story-sum-component class="ms-4" />
@@ -143,33 +96,19 @@
       <b-row v-if="userStoryMode !== 'NO_US' && !isMobile">
         <b-col class="mt-2">
           <div class="overflow-auto" style="height: 700px">
-            <user-stories
-              :card-set="voteSet"
-              :show-estimations="true"
-              :initial-stories="userStories"
-              :show-edit-buttons="false"
-              @selectedStory="onSelectedStory($event)"
-            />
+            <user-stories :card-set="voteSet" :show-estimations="true" :initial-stories="userStories"
+              :show-edit-buttons="false" @selectedStory="onSelectedStory($event)" />
           </div>
         </b-col>
         <b-col class="mt-2">
-          <user-story-descriptions
-            :card-set="voteSet"
-            :index="index"
-            :initial-stories="userStories"
-            :edit-description="false"
-          />
+          <user-story-descriptions :card-set="voteSet" :index="index" :initial-stories="userStories"
+            :edit-description="false" />
         </b-col>
       </b-row>
       <b-col v-if="userStoryMode !== 'NO_US' && isMobile" class="mt-2">
         <div class="overflow-auto">
-          <mobile-story-list
-            :card-set="voteSet"
-            :show-estimations="true"
-            :initial-stories="userStories"
-            :show-edit-buttons="false"
-            @selectedStory="onSelectedStory($event)"
-          />
+          <mobile-story-list :card-set="voteSet" :show-estimations="true" :initial-stories="userStories"
+            :show-edit-buttons="false" @selectedStory="onSelectedStory($event)" />
         </div>
       </b-col>
       <notify-member-component @hostLeft="reactOnHostLeave" @hostJoined="reactOnHostJoin" />
@@ -231,6 +170,7 @@ export default Vue.extend({
       estimateFinished: false,
       pauseSession: false,
       safedHostEstimation: null,
+      test: "",
     };
   },
   computed: {
@@ -245,7 +185,7 @@ export default Vue.extend({
     memberUpdates() {
       return this.$store.state.memberUpdates;
     },
-    isStartVoting(): boolean {  
+    isStartVoting(): boolean {
       return this.memberUpdates.at(-1) === Constants.memberUpdateCommandStartVoting;
     },
     votingFinished(): boolean {
@@ -266,7 +206,7 @@ export default Vue.extend({
     notifications() {
       return this.$store.state.notifications;
     },
-    hostVoting() {
+    hostVoting(): boolean {
       return this.$store.state.hostVoting;
     },
     hostEstimation() {
@@ -391,6 +331,7 @@ export default Vue.extend({
   /* overflow:visible;  Add when fix is clear how to stay responsiv*/
   width: 100%;
 }
+
 .overlayText {
   font-size: 2em;
   margin: 0.67em 0;

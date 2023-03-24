@@ -21,9 +21,7 @@ class Constants {
 
   webSocketCloseSessionRoute = "/ws/closeSession";
 
-  webSocketHostVotingRoute = "/ws/hostVoting";
-
-  webSocketMemberListenHostVotingRoute = "/users/updates/hostVoting"; 
+  webSocketMemberListenHostVotingRoute = "/users/updates/hostVoting";
 
   webSocketGetMemberUpdateRoute = "/ws/memberUpdate";
 
