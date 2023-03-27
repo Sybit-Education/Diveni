@@ -296,8 +296,8 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
   }
 
   @Override
-  public void deleteIssue(String tokenIdentifier, String jiraID) {
-    LOGGER.debug("--> deleteIssue(), jiraID={}", jiraID);
+  public void deleteIssue(String tokenIdentifier, String issueID) {
+    LOGGER.debug("--> deleteIssue(), issueID={}", issueID);
     try {
       JiraOAuthClient jiraOAuthClient = new JiraOAuthClient(JIRA_HOME);
       OAuthParameters parameters =
@@ -305,7 +305,7 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
               accessTokens.get(tokenIdentifier), CONSUMER_KEY, PRIVATE_KEY);
       HttpResponse response =
           getResponseFromUrl(
-              parameters, new GenericUrl(getJiraUrl() + "/issue/" + jiraID), "DELETE", null);
+              parameters, new GenericUrl(getJiraUrl() + "/issue/" + issueID), "DELETE", null);
 
       LOGGER.debug("<-- deleteIssue() {}", response.parseAsString());
     } catch (Exception e) {

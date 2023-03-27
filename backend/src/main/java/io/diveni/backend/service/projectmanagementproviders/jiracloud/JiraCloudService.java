@@ -240,12 +240,12 @@ public class JiraCloudService implements ProjectManagementProviderOAuth2 {
   }
 
   @Override
-  public void deleteIssue(String tokenIdentifier, String jiraID) {
-    LOGGER.debug("--> deleteIssue(), jiraID={}", jiraID);
+  public void deleteIssue(String tokenIdentifier, String issueID) {
+    LOGGER.debug("--> deleteIssue(), issueID={}", issueID);
     try {
       String cloudID = getCloudID(accessTokens.get(tokenIdentifier));
       executeRequest(
-          String.format(getJiraUrl(), cloudID) + "/issue/" + jiraID,
+          String.format(getJiraUrl(), cloudID) + "/issue/" + issueID,
           HttpMethod.DELETE,
           accessTokens.get(tokenIdentifier),
           null);
