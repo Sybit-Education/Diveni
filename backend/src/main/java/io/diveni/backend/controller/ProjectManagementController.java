@@ -14,6 +14,7 @@ import io.diveni.backend.model.UserStory;
 import io.diveni.backend.model.VerificationCode;
 import io.diveni.backend.service.DatabaseService;
 import io.diveni.backend.service.projectmanagementproviders.ProjectManagementProvider;
+import io.diveni.backend.service.projectmanagementproviders.azuredevops.AzureDevOpsService;
 import io.diveni.backend.service.projectmanagementproviders.jiracloud.JiraCloudService;
 import io.diveni.backend.service.projectmanagementproviders.jiraserver.JiraServerService;
 import org.slf4j.Logger;
@@ -47,6 +48,8 @@ public class ProjectManagementController {
 
   @Autowired JiraCloudService jiraCloudService;
 
+  @Autowired AzureDevOpsService azureDevOpsService;
+
   @GetMapping(value = "/jira/oauth1/requestToken")
   public ResponseEntity<JiraRequestToken> getRequestToken() {
     LOGGER.debug("--> getRequestToken()");
@@ -76,6 +79,16 @@ public class ProjectManagementController {
     ResponseEntity<TokenIdentifier> response =
         new ResponseEntity<>(
             jiraCloudService.getAccessToken(authorizationCode.getCode(), origin), HttpStatus.OK);
+    LOGGER.debug("<-- getOAuth2AccessToken()");
+    return response;
+  }
+
+  @PostMapping("/azure/oauth2/authorizationCode")
+  public ResponseEntity<TokenIdentifier> getAzureOAuth2AccessToken(@RequestHeader("Origin") String origin) {
+    LOGGER.debug("--> getOAuth2AccessToken(), origin={}", origin);
+    ResponseEntity<TokenIdentifier> response =
+      new ResponseEntity<>(
+        azureDevOpsService.getAccessToken("", origin), HttpStatus.OK);
     LOGGER.debug("<-- getOAuth2AccessToken()");
     return response;
   }
@@ -174,6 +187,8 @@ public class ProjectManagementController {
       return jiraServerService;
     } else if (jiraCloudService.containsToken(tokenIdentifier)) {
       return jiraCloudService;
+    } else if (azureDevOpsService.containsToken(tokenIdentifier)) {
+      return azureDevOpsService;
     }
     // If a new project management provider should be implemented, it can just be
     // added here
