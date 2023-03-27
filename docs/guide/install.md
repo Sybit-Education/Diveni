@@ -39,6 +39,15 @@ JIRA-Server.
 
 In the end make sure to enable Jira Server by setting `VUE_APP_ENABLE_JIRA_SERVER` in `frontend/.env` to `true`.
 
+### Azure DevOps Connector
+
+For setting up the Azure DevOps Connector, you have to generate a personal access token:
+<https://learn.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate?view=azure-devops&tabs=Windows#create-a-pat>
+
+Afterwards you have to enter the used organisation in `AZURE_ORGANIZATION` and the personal access token in `AZURE_CLIENTPAT` in `backend/.env`.
+
+In the end make sure to enable Azure DevOps by setting `VUE_APP_ENABLE_AZURE_DEVOPS` in `frontend/.env` to `true`.
+
 ## Docker
 
 The infrastructure is divided in several Docker containers:
