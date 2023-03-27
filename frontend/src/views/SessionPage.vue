@@ -418,9 +418,9 @@ export default Vue.extend({
           }
         }
         if (response.status === 200) {
-          this.$toast.success(this.$t("session.notification.messages.jiraSynchronizeSuccess"));
+          this.$toast.success(this.$t("session.notification.messages.issueTrackerSynchronizeSuccess"));
         } else {
-          this.$toast.error(this.$t("session.notification.messages.jiraSynchronizeFailed"));
+          this.$toast.error(this.$t("session.notification.messages.issueTrackerSynchronizeFailed"));
         }
       }
       // WS send
@@ -470,9 +470,9 @@ export default Vue.extend({
           }
         }
         if (response.status === 200) {
-          this.$toast.success(this.$t("session.notification.messages.jiraSynchronizeSuccess"));
+          this.$toast.success(this.$t("session.notification.messages.issueTrackerSynchronizeSuccess"));
         } else {
-          this.$toast.error(this.$t("session.notification.messages.jiraSynchronizeFailed"));
+          this.$toast.error(this.$t("session.notification.messages.issueTrackerSynchronizeFailed"));
         }
       }
     },

@@ -165,9 +165,9 @@
                 "toastSuccessNotification": "Історії користувача імпортовано",
                 "toastErrorNotification": "Помилка при спробі імпорту"
               },
-              "withJira": {
+              "withIssueTracker": {
                 "tab": {
-                  "label": "Планування з Jira"
+                  "label": "Планування з Issue-Tracker"
                 },
                 "subtitle": "Виберіть Jira для вашого Poker-Planning",
                 "descriptionLine1": "Увійдіть за допомогою своїх облікових даних",
@@ -191,6 +191,9 @@
                   },
                   "signInWithJiraServer": {
                     "label": "Увійдіть через Jira сервер"
+                  },
+                  "signInWithAzureDevOps": {
+                    "label": "Увійдіть через Azure DevOps"
                   },
                   "selectProject": {
                     "label": "Виберіть ваш jira проєкт"
@@ -265,10 +268,10 @@
         "memberLeft": "Учасник покинув сесію",
         "memberJoined": "Учасник приєднався до сесії",
         "memberRemoved": "Ви були видалені з сеансом хоста",
-        "jiraCredentials": "Неправильні облікові дані",
-        "jiraLoginFailed": "Помилка входу в систему",
-        "jiraSynchronizeSuccess": "Синхронізовані зміни з Jira",
-        "jiraSynchronizeFailed": "Не вдалося синхронізувати зміни з Jira",
+        "issueTrackerCredentials": "Неправильні облікові дані",
+        "issueTrackerLoginFailed": "Помилка входу в систему",
+        "issueTrackerSynchronizeSuccess": "Синхронізовані зміни з Issue-Tracker",
+        "issueTrackerSynchronizeFailed": "Не вдалося синхронізувати зміни з Issue-Tracker",
         "wrongID": "Невірний код запрошення",
         "password": "Хибний пароль"
       }

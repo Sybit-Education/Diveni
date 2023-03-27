@@ -24,9 +24,16 @@ class ApiService {
     return response.data;
   }
 
-  public async sendJiraOauth2AuthorizationCode(code: string): Promise<JiraResponseCodeDto> {
+  public async sendJiraOauth2AuthorizationCode(): Promise<JiraResponseCodeDto> {
     const response = await axios.post<JiraResponseCodeDto>(
-      `${constants.backendURL}/issue-tracker/jira/oauth2/authorizationCode`,
+      `${constants.backendURL}/issue-tracker/jira/oauth2/authorizationCode`
+    );
+    return response.data;
+  }
+
+  public async sendAzureOauth2AuthorizationCode(code: string): Promise<JiraResponseCodeDto> {
+    const response = await axios.post<JiraResponseCodeDto>(
+      `${constants.backendURL}/issue-tracker/azure/oauth2/authorizationCode`,
       {
         code,
       }

@@ -165,9 +165,9 @@
                 "toastSuccessNotification": "Zaimportowano historie użytkownika",
                 "toastErrorNotification": "Błąd podczas próby importu"
               },
-              "withJira": {
+              "withIssueTracker": {
                 "tab": {
-                  "label": "Planowanie z Jirą"
+                  "label": "Planowanie z Issue-Tracker"
                 },
                 "subtitle": "Wybierz Jira dla swojego Poker-Planowania",
                 "descriptionLine1": "Zaloguj się za pomocą swoich danych logowania",
@@ -191,6 +191,9 @@
                   },
                   "signInWithJiraServer": {
                     "label": "Zaloguj się za pomocą serwera Jira"
+                  },
+                  "signInWithAzureDevOps": {
+                    "label": "Zaloguj się za pomocą Azure DevOps"
                   },
                   "selectProject": {
                     "label": "Wybierz swój projekt jira"
@@ -265,10 +268,10 @@
         "memberLeft": "Członek opuścił sesję",
         "memberJoined": "Członek dołączył do sesji",
         "memberRemoved": "Zostałeś usunięty z sesji przez hosta",
-        "jiraCredentials": "Błędne dane logowania",
-        "jiraLoginFailed": "Logowanie nie powiodło się",
-        "jiraSynchronizeSuccess": "Zsynchronizowane zmiany z Jirą",
-        "jiraSynchronizeFailed": "Nie udało się zsynchronizować zmian z Jira",
+        "issueTrackerCredentials": "Błędne dane logowania",
+        "issueTrackerLoginFailed": "Logowanie nie powiodło się",
+        "issueTrackerSynchronizeSuccess": "Zsynchronizowane zmiany z Issue-Tracker",
+        "issueTrackerSynchronizeFailed": "Nie udało się zsynchronizować zmian z Issue-Tracker",
         "wrongID": "Nieprawidłowy kod zaproszenia",
         "password": "Błędne hasło"
       }

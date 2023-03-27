@@ -7,7 +7,7 @@
       @change="getUserStories"
     ></b-form-select>
     <div class="mt-3">
-      {{ $t("session.prepare.step.selection.mode.description.withJira.selectedProject") }}
+      {{ $t("session.prepare.step.selection.mode.description.withIssueTracker.selectedProject") }}
       <strong>{{ selected }}</strong>
     </div>
   </div>
@@ -37,14 +37,14 @@ export default Vue.extend({
         return [
           {
             value: null,
-            text: this.$t("session.prepare.step.selection.mode.description.withJira.formSelection"),
+            text: this.$t("session.prepare.step.selection.mode.description.withIssueTracker.formSelection"),
           },
         ];
       } else {
         return [
           {
             value: null,
-            text: this.$t("session.prepare.step.selection.mode.description.withJira.formSelection"),
+            text: this.$t("session.prepare.step.selection.mode.description.withIssueTracker.formSelection"),
           },
           ...projectNames,
         ];
