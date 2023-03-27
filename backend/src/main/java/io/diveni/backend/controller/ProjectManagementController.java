@@ -84,11 +84,11 @@ public class ProjectManagementController {
   }
 
   @PostMapping("/azure/oauth2/authorizationCode")
-  public ResponseEntity<TokenIdentifier> getAzureOAuth2AccessToken(@RequestHeader("Origin") String origin) {
+  public ResponseEntity<TokenIdentifier> getAzureOAuth2AccessToken(
+      @RequestHeader("Origin") String origin) {
     LOGGER.debug("--> getOAuth2AccessToken(), origin={}", origin);
     ResponseEntity<TokenIdentifier> response =
-      new ResponseEntity<>(
-        azureDevOpsService.getAccessToken("", origin), HttpStatus.OK);
+        new ResponseEntity<>(azureDevOpsService.getAccessToken("", origin), HttpStatus.OK);
     LOGGER.debug("<-- getOAuth2AccessToken()");
     return response;
   }
@@ -150,8 +150,7 @@ public class ProjectManagementController {
       @RequestHeader("X-Token-ID") String tokenIdentifier,
       @RequestParam("projectID") String projectID,
       @RequestBody UserStory userStory) {
-    LOGGER.debug(
-        "--> createIssue(), projectID={}, userStoryId={}", projectID, userStory.getId());
+    LOGGER.debug("--> createIssue(), projectID={}, userStoryId={}", projectID, userStory.getId());
 
     val projectManagementProvider = getProjectManagementProvider(tokenIdentifier);
 
