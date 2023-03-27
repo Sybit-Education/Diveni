@@ -395,12 +395,12 @@ export default Vue.extend({
       if (this.session_userStoryMode === "US_JIRA") {
         let response;
         if (doRemove) {
-          response = await apiService.deleteUserStory(us[idx].jiraId);
+          response = await apiService.deleteUserStory(us[idx].id);
           us.splice(idx, 1);
           doRemove = false;
         } else {
-          console.log(`JIRA ID: ${us[idx].jiraID}`);
-          if (us[idx].jiraId === null) {
+          console.log(`ID: ${us[idx].id}`);
+          if (us[idx].id === null) {
             response = await apiService.createUserStory(
               JSON.stringify(us[idx]),
               this.selectedProject.id
@@ -411,7 +411,7 @@ export default Vue.extend({
                   ? { ...s, jiraId: response.data }
                   : s
               );
-              console.log(`assigned id: ${us[idx].jiraId}`);
+              console.log(`assigned id: ${us[idx].id}`);
             }
           } else {
             response = await apiService.updateUserStory(JSON.stringify(us[idx]));
@@ -451,10 +451,10 @@ export default Vue.extend({
       if (this.session_userStoryMode === "US_JIRA") {
         let response;
         if (doRemove) {
-          response = await apiService.deleteUserStory(story.jiraId);
+          response = await apiService.deleteUserStory(story.id);
         } else {
-          console.log(`JIRA ID: ${story.jiraID}`);
-          if (story.jiraId === null) {
+          console.log(`ID: ${story.id}`);
+          if (story.id === null) {
             response = await apiService.createUserStory(
               JSON.stringify(story),
               this.selectedProject.id

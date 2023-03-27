@@ -115,7 +115,7 @@ export default Vue.extend({
   methods: {
     setUserStoryAsActive(index) {
       const stories = this.userStories.map((s) => ({
-        jiraId: s.jiraId,
+        id: s.id,
         title: s.title,
         description: s.description,
         estimation: s.estimation,
