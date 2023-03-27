@@ -38,8 +38,7 @@ public class AzureDevOpsService implements ProjectManagementProviderOAuth2 {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(AzureDevOpsService.class);
   private static final String AZURE_DEVOPS_API = "https://dev.azure.com/%s/_apis/";
-  @Getter
-  private final Map<String, String> accessTokens = new HashMap<>();
+  @Getter private final Map<String, String> accessTokens = new HashMap<>();
   private final Map<String, String> accessTokenToProjectId = new HashMap<>();
 
   private static final String API_FIELD_TITLE = "System.Title";
@@ -60,11 +59,13 @@ public class AzureDevOpsService implements ProjectManagementProviderOAuth2 {
     LOGGER.info("    AZURE_PERSONAL_ACCESS_TOKEN={}", CLIENT_PAT == null ? "null" : "********");
   }
 
-  static ResponseEntity<String> executeRequest(String url, HttpMethod method, String accessToken, Object body) {
+  static ResponseEntity<String> executeRequest(
+      String url, HttpMethod method, String accessToken, Object body) {
     return executeRequest(url, method, accessToken, body, MediaType.APPLICATION_JSON);
   }
 
-  static ResponseEntity<String> executeRequest(String url, HttpMethod method, String accessToken, Object body, MediaType contentType) {
+  static ResponseEntity<String> executeRequest(
+      String url, HttpMethod method, String accessToken, Object body, MediaType contentType) {
     LOGGER.debug("--> executeRequest()");
     RestTemplate restTemplate = new RestTemplate(new HttpComponentsClientHttpRequestFactory());
     HttpHeaders headers = new HttpHeaders();
@@ -83,11 +84,11 @@ public class AzureDevOpsService implements ProjectManagementProviderOAuth2 {
     try {
       List<Project> projects = new ArrayList<>();
       ResponseEntity<String> response =
-        executeRequest(
-          String.format(AZURE_DEVOPS_API, ORGANIZATION) + "projects?api-version=7.0",
-          HttpMethod.GET,
-          accessTokens.get(tokenIdentifier),
-          null);
+          executeRequest(
+              String.format(AZURE_DEVOPS_API, ORGANIZATION) + "projects?api-version=7.0",
+              HttpMethod.GET,
+              accessTokens.get(tokenIdentifier),
+              null);
       JsonNode node = new ObjectMapper().readTree(response.getBody());
 
       for (JsonNode projectNode : node.path("value")) {
@@ -98,7 +99,7 @@ public class AzureDevOpsService implements ProjectManagementProviderOAuth2 {
     } catch (Exception e) {
       LOGGER.error("Failed to get projects!", e);
       throw new ResponseStatusException(
-        HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToRetrieveProjectsErrorMessage);
+          HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToRetrieveProjectsErrorMessage);
     }
   }
 
@@ -106,14 +107,18 @@ public class AzureDevOpsService implements ProjectManagementProviderOAuth2 {
   public List<UserStory> getIssues(String tokenIdentifier, String projectName) {
     LOGGER.debug("--> getIssues(), projectName={}", projectName);
     Map<String, String> content = new HashMap<>();
-    String query = "SELECT [System.Id] FROM WorkItems WHERE [System.TeamProject] = @project AND [System.WorkItemType] = 'User Story' AND [System.State] <> 'Closed' ORDER BY [System.CreatedDate] ASC";
+    String query =
+        "SELECT [System.Id] FROM WorkItems WHERE [System.TeamProject] = @project AND"
+            + " [System.WorkItemType] = 'User Story' AND [System.State] <> 'Closed' ORDER BY"
+            + " [System.CreatedDate] ASC";
     content.put("query", query);
     ResponseEntity<String> responseList =
-      executeRequest(
-        String.format(AZURE_DEVOPS_API, ORGANIZATION + "/" + projectName) + "wit/wiql?api-version=5.1",
-        HttpMethod.POST,
-        accessTokens.get(tokenIdentifier),
-        content);
+        executeRequest(
+            String.format(AZURE_DEVOPS_API, ORGANIZATION + "/" + projectName)
+                + "wit/wiql?api-version=5.1",
+            HttpMethod.POST,
+            accessTokens.get(tokenIdentifier),
+            content);
 
     try {
       JsonNode node = new ObjectMapper().readTree(responseList.getBody());
@@ -128,28 +133,35 @@ public class AzureDevOpsService implements ProjectManagementProviderOAuth2 {
       contentDetailed.put("ids", workItemIds);
       contentDetailed.put("fields", fieldList);
       ResponseEntity<String> responseDetailedList =
-        executeRequest(
-          String.format(AZURE_DEVOPS_API, ORGANIZATION + "/" + projectName) + "wit/workitemsbatch?api-version=5.1",
-          HttpMethod.POST,
-          accessTokens.get(tokenIdentifier),
-          contentDetailed);
+          executeRequest(
+              String.format(AZURE_DEVOPS_API, ORGANIZATION + "/" + projectName)
+                  + "wit/workitemsbatch?api-version=5.1",
+              HttpMethod.POST,
+              accessTokens.get(tokenIdentifier),
+              contentDetailed);
       JsonNode detailedNode = new ObjectMapper().readTree(responseDetailedList.getBody());
       List<UserStory> userStories = new ArrayList<>();
       for (JsonNode detailedIssue : detailedNode.path("value")) {
         JsonNode fields = detailedIssue.get("fields");
 
-        String estimation = fields.hasNonNull(API_FIELD_ESTIMATION) ? String.valueOf(fields.get(API_FIELD_ESTIMATION).asDouble()) : null;
+        String estimation =
+            fields.hasNonNull(API_FIELD_ESTIMATION)
+                ? String.valueOf(fields.get(API_FIELD_ESTIMATION).asDouble())
+                : null;
         if (estimation != null && estimation.endsWith(".0")) {
           estimation = estimation.substring(0, estimation.length() - 2);
         }
-        String description = fields.hasNonNull(API_FIELD_DESCRIPTION) ? fields.get(API_FIELD_DESCRIPTION).textValue().replaceAll("\\<[^>]*>","") : "";
-        userStories.add(new UserStory(
-          detailedIssue.get("id").asText(),
-          fields.get(API_FIELD_TITLE).textValue(),
-          description,
-          estimation,
-          false
-        ));
+        String description =
+            fields.hasNonNull(API_FIELD_DESCRIPTION)
+                ? fields.get(API_FIELD_DESCRIPTION).textValue().replaceAll("\\<[^>]*>", "")
+                : "";
+        userStories.add(
+            new UserStory(
+                detailedIssue.get("id").asText(),
+                fields.get(API_FIELD_TITLE).textValue(),
+                description,
+                estimation,
+                false));
       }
       accessTokenToProjectId.put(tokenIdentifier, projectName);
       LOGGER.debug("<-- getIssues()");
@@ -157,7 +169,7 @@ public class AzureDevOpsService implements ProjectManagementProviderOAuth2 {
     } catch (Exception e) {
       LOGGER.error("Failed to get projects!", e);
       throw new ResponseStatusException(
-        HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToRetrieveProjectsErrorMessage);
+          HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToRetrieveProjectsErrorMessage);
     }
   }
 
@@ -189,15 +201,19 @@ public class AzureDevOpsService implements ProjectManagementProviderOAuth2 {
       } catch (NumberFormatException e) {
         LOGGER.error("Failed to parse estimation into double!");
         throw new ResponseStatusException(
-          HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToEditIssueErrorMessage);
+            HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToEditIssueErrorMessage);
       }
     }
     try {
-      ResponseEntity<String> response = executeRequest(
-        String.format(AZURE_DEVOPS_API, ORGANIZATION) + "wit/workItems/" + story.getId() + "?api-version=7.0",
-        HttpMethod.GET,
-        accessTokens.get(tokenIdentifier),
-        null);
+      ResponseEntity<String> response =
+          executeRequest(
+              String.format(AZURE_DEVOPS_API, ORGANIZATION)
+                  + "wit/workItems/"
+                  + story.getId()
+                  + "?api-version=7.0",
+              HttpMethod.GET,
+              accessTokens.get(tokenIdentifier),
+              null);
       JsonNode node = new ObjectMapper().readTree(response.getBody());
       Map<String, Object> testRev = new HashMap<>();
       testRev.put("op", "test");
@@ -206,16 +222,21 @@ public class AzureDevOpsService implements ProjectManagementProviderOAuth2 {
       content.add(testRev);
 
       executeRequest(
-        String.format(AZURE_DEVOPS_API, ORGANIZATION + "/" + accessTokenToProjectId.get(tokenIdentifier)) + "wit/workitems/" + story.getId() + "?api-version=7.0",
-        HttpMethod.PATCH,
-        accessTokens.get(tokenIdentifier),
-        new Gson().toJson(content),
-        MediaType.valueOf("application/json-patch+json"));
+          String.format(
+                  AZURE_DEVOPS_API,
+                  ORGANIZATION + "/" + accessTokenToProjectId.get(tokenIdentifier))
+              + "wit/workitems/"
+              + story.getId()
+              + "?api-version=7.0",
+          HttpMethod.PATCH,
+          accessTokens.get(tokenIdentifier),
+          new Gson().toJson(content),
+          MediaType.valueOf("application/json-patch+json"));
       LOGGER.debug("<-- updateIssue()");
     } catch (Exception e) {
       LOGGER.error("Failed to update issue!", e);
       throw new ResponseStatusException(
-        HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToEditIssueErrorMessage);
+          HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToEditIssueErrorMessage);
     }
   }
 
@@ -238,19 +259,21 @@ public class AzureDevOpsService implements ProjectManagementProviderOAuth2 {
     content.add(description);
 
     try {
-      ResponseEntity<String> response = executeRequest(
-        String.format(AZURE_DEVOPS_API, ORGANIZATION + "/" + projectID) + "wit/workitems/$User Story?api-version=7.0",
-        HttpMethod.POST,
-        accessTokens.get(tokenIdentifier),
-        new Gson().toJson(content),
-        MediaType.valueOf("application/json-patch+json"));
+      ResponseEntity<String> response =
+          executeRequest(
+              String.format(AZURE_DEVOPS_API, ORGANIZATION + "/" + projectID)
+                  + "wit/workitems/$User Story?api-version=7.0",
+              HttpMethod.POST,
+              accessTokens.get(tokenIdentifier),
+              new Gson().toJson(content),
+              MediaType.valueOf("application/json-patch+json"));
       JsonNode node = new ObjectMapper().readTree(response.getBody());
       LOGGER.debug("<-- createIssue()");
       return node.path("id").asText();
     } catch (Exception e) {
       LOGGER.error("Failed to create issue!", e);
       throw new ResponseStatusException(
-        HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToDeleteIssueErrorMessage);
+          HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToDeleteIssueErrorMessage);
     }
   }
 
@@ -259,15 +282,20 @@ public class AzureDevOpsService implements ProjectManagementProviderOAuth2 {
     LOGGER.debug("--> deleteIssue(), issueID={}", issueID);
     try {
       executeRequest(
-        String.format(AZURE_DEVOPS_API, ORGANIZATION + "/" + accessTokenToProjectId.get(tokenIdentifier)) + "wit/workitems/" + issueID + "?api-version=7.0",
-        HttpMethod.DELETE,
-        accessTokens.get(tokenIdentifier),
-        null);
+          String.format(
+                  AZURE_DEVOPS_API,
+                  ORGANIZATION + "/" + accessTokenToProjectId.get(tokenIdentifier))
+              + "wit/workitems/"
+              + issueID
+              + "?api-version=7.0",
+          HttpMethod.DELETE,
+          accessTokens.get(tokenIdentifier),
+          null);
       LOGGER.debug("<-- deleteIssue()");
     } catch (Exception e) {
       LOGGER.error("Failed to delete issue!", e);
       throw new ResponseStatusException(
-        HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToEditIssueErrorMessage);
+          HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToEditIssueErrorMessage);
     }
   }
 
