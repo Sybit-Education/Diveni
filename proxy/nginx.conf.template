@@ -5,6 +5,11 @@ server {
     listen 80 default_server;
     listen [::]:80 default_server;
 
+    client_max_body_size 6M;
+
+    gzip on;
+    gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript;
+
     # Frontend
     location / {
         proxy_pass http://frontend:80; # same name as network alias
