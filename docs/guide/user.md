@@ -107,6 +107,13 @@ cards once you've started the session.
 
 ## Start Session
 
+Once everybody of your team has joined your session, you can start the session. While you are waiting for your team members to join, you can change some settings for your session.
+
+  - The admin of the session can vote
+    - As the admin of the session you can choose to vote aswell or to only let your members vote on the userstories.
+      <img :src="$withBase('/img/host_Voting.png')" alt="Host Voting">
+    - While the Estimation is running, you cannot change the voting option.
+
 ## Start voting of User Story
 
 
