@@ -25,19 +25,19 @@ class Constants {
 
   webSocketMembersUpdatedRoute = "/users/updates/membersUpdated";
 
-  webSocketStartPlanningRoute = "/ws/startVoting";
+  webSocketStartPlanningRoute = "/ws/start-voting-without-automatic-reveal";
 
-  webSocketStartPlanningRouteWithAutoReveal = "/ws/startVoting/autoreveal";
+  webSocketStartPlanningRouteWithAutoReveal = "/ws/start-voting-with-automatic-reveal";
 
   webSocketVotingFinishedRoute = "/ws/votingFinished";
 
-  webSocketRestartPlanningRoute = "/ws/restart";
+  webSocketRestartPlanningRoute = "/ws/restart-without-automatic-reveal";
 
-  webSocketRestartPlanningRouteWithAutoReveal = "/ws/restart/autoreveal";
+  webSocketRestartPlanningRouteWithAutoReveal = "/ws/restart-with-automatic-reveal";
 
-  webSocketVoteRoute = "/ws/vote";
+  webSocketVoteRoute = "/ws/vote-without-automatic-reveal";
 
-  webSocketVoteRouteWithAutoReveal = "/ws/vote/autoreveal";
+  webSocketVoteRouteWithAutoReveal = "/ws/vote-with-automatic-reveal";
 
   webSocketAdminUpdatedUserStoriesRoute = "/ws/adminUpdatedUserStories";
 

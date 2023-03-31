@@ -29,7 +29,7 @@ export default new Vuex.Store<StoreState>({
       state.stompClient = webstomp.over(new SockJS(url));
       if (process.env.NODE_ENV === "production") {
         // eslint-disable-next-line @typescript-eslint/no-empty-function
-        state.stompClient.debug = () => {};
+        state.stompClient.debug = () => { };
       }
       state.stompClient.connect(
         {},
@@ -52,8 +52,6 @@ export default new Vuex.Store<StoreState>({
         const splittedFrame = frame.body.split('|');
         state.memberUpdates = state.memberUpdates.concat([splittedFrame[0]]);
         state.autoReveal = splittedFrame[1];
-        console.log("state.memberUpdates :", state.memberUpdates);
-        console.log("state.autoReveal: ", state.autoReveal);
       })
     },
     subscribeOnBackendWSStoriesUpdated(state) {

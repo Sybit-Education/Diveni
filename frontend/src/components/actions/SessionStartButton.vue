@@ -1,9 +1,5 @@
 <template>
-  <b-button
-    variant="success"
-    :disabled="!members || members.length < 1"
-    @click="sendStartEstimationMessages"
-  >
+  <b-button variant="success" :disabled="!members || members.length < 1" @click="sendStartEstimationMessages">
     {{ $t("page.session.before.button") }}
   </b-button>
 </template>
@@ -22,19 +18,19 @@ export default Vue.extend({
       default: () => [] as Array<Member>,
     },
     autoReveal: { type: Boolean, required: false },
-    withUs: {type: Boolean, required: true},
+    withUs: { type: Boolean, required: true },
   },
   methods: {
     sendStartEstimationMessages() {
       if (this.withUs == true) {
         const endPoint = Constants.webSocketStartPlanningRouteWithAutoReveal;
-        this.$store.commit("sendViaBackendWS", { 
+        this.$store.commit("sendViaBackendWS", {
           endPoint,
           data: JSON.stringify(this.autoReveal)
         });
       } else {
         const endPoint = Constants.webSocketStartPlanningRoute;
-        this.$store.commit("sendViaBackendWS", { 
+        this.$store.commit("sendViaBackendWS", {
           endPoint
         });
       }
