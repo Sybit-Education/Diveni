@@ -17,9 +17,10 @@ jobs:
       contents: read
       packages: write
     steps:
-      - name: Checkout and verify file changed
-      - uses: actions/checkout@v3
-      - uses: dorny/paths-filter@v2
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Verify files changed
+        uses: dorny/paths-filter@v2
         id: filter
         with:
           filters: |
