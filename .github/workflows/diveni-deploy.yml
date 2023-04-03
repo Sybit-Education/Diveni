@@ -2,12 +2,11 @@ name: Deploy Diveni
 
 on:
   push:
-    branches:
-      - main
     paths:
       - 'backend/**'
       - 'frontend/**'
       - 'proxy/**'
+      - '.github/workflows/diveni-deploy.yaml'
   workflow_dispatch:
 
 jobs:
@@ -21,19 +20,21 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Verify files changed
-        uses: tj-actions/verify-changed-files@v11
+        uses: dorny/paths-filter@v2
         id: files-changed-backend
         with:
-          files: backend
+          filters: |
+            backend:
+              - 'backend/**'
       - name: Log in to the Container registry
-        if: steps.files-changed-backend.outputs.files_changed == 'true'
+        if: steps.files-changed-backend.outputs.backend == 'true'
         uses: docker/login-action@v2
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Extract metadata (tags, labels) for Docker
-        if: steps.files-changed-backend.outputs.files_changed == 'true'
+        if: steps.files-changed-backend.outputs.backend == 'true'
         id: meta
         uses: docker/metadata-action@v4
         with:
@@ -41,7 +42,7 @@ jobs:
           flavor: latest=true
           tags: type=raw,value=latest,enable={{is_default_branch}}
       - name: Build and push Docker image
-        if: steps.files-changed-backend.outputs.files_changed == 'true'
+        if: steps.files-changed-backend.outputs.backend == 'true'
         uses: docker/build-push-action@v3
         with:
           context: backend
@@ -59,25 +60,27 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Verify files changed
-        uses: tj-actions/verify-changed-files@v11
+        uses: dorny/paths-filter@v2
         id: files-changed-frontend
         with:
-          files: frontend
+          filters: |
+            frontend:
+              - 'frontend/**'
       - name: Log in to the Container registry
-        if: steps.files-changed-frontend.outputs.files_changed == 'true'
+        if: steps.files-changed-frontend.outputs.frontend == 'true'
         uses: docker/login-action@v2
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Extract metadata (tags, labels) for Docker
-        if: steps.files-changed-frontend.outputs.files_changed == 'true'
+        if: steps.files-changed-frontend.outputs.frontend == 'true'
         id: meta
         uses: docker/metadata-action@v4
         with:
           images: ghcr.io/${{ github.repository }}-frontend
       - name: Build and push Docker image
-        if: steps.files-changed-frontend.outputs.files_changed == 'true'
+        if: steps.files-changed-frontend.outputs.frontend == 'true'
         uses: docker/build-push-action@v3
         with:
           context: frontend
@@ -95,19 +98,21 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Verify files changed
-        uses: tj-actions/verify-changed-files@v11
+        uses: dorny/paths-filter@v2
         id: files-changed-proxy
         with:
-          files: proxy
+          filters: |
+            proxy:
+              - 'proxy/**'
       - name: Log in to the Container registry
-        if: steps.files-changed-proxy.outputs.files_changed == 'true'
+        if: steps.files-changed-proxy.outputs.proxy == 'true'
         uses: docker/login-action@v2
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Extract metadata (tags, labels) for Docker
-        if: steps.files-changed-proxy.outputs.files_changed == 'true'
+        if: steps.files-changed-proxy.outputs.outputs.proxy == 'true'
         id: meta
         uses: docker/metadata-action@v4
         with:
@@ -115,7 +120,7 @@ jobs:
           flavor: latest=true
           tags: type=raw,value=latest,enable={{is_default_branch}}
       - name: Build and push Docker image
-        if: steps.files-changed-proxy.outputs.files_changed == 'true'
+        if: steps.files-changed-proxy.outputs.outputs.proxy == 'true'
         uses: docker/build-push-action@v3
         with:
           context: proxy
