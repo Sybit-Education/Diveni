@@ -3,7 +3,7 @@ name: backend
 on:
   pull_request:
     paths:
-      - '.github/workflows/backend.yaml'
+      - '.github/workflows/backend.yml'
       - 'backend/**'
       - '!**.md'
   workflow_dispatch:

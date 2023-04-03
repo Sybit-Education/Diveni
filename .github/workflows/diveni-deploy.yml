@@ -6,7 +6,7 @@ on:
       - 'backend/**'
       - 'frontend/**'
       - 'proxy/**'
-      - '.github/workflows/diveni-deploy.yaml'
+      - '.github/workflows/diveni-deploy.yml'
   workflow_dispatch:
 
 jobs:

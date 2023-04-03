@@ -3,7 +3,7 @@ name: frontend
 on:
   pull_request:
     paths:
-      - '.github/workflows/frontend.yaml'
+      - '.github/workflows/frontend.yml'
       - 'frontend/**'
       - '!**.md'
   workflow_dispatch:
