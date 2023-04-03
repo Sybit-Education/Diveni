@@ -155,7 +155,10 @@ public class AzureDevOpsService implements ProjectManagementProviderOAuth2 {
             fields.hasNonNull(API_FIELD_DESCRIPTION)
                 ? fields.get(API_FIELD_DESCRIPTION).textValue().replaceAll("\\<[^>]*>", "")
                 : "";
-        description = description.length() > 0 ? description.substring(0 , description.length() - 1) : description;
+        description =
+            description.length() > 0
+                ? description.substring(0, description.length() - 1)
+                : description;
         userStories.add(
             new UserStory(
                 detailedIssue.get("id").asText(),

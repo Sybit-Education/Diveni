@@ -12,7 +12,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 
@@ -21,17 +20,19 @@ import static org.mockito.ArgumentMatchers.any;
 @SpringBootTest
 class AzureDevOpsServiceTest {
 
-  @InjectMocks
-  @Spy
-  private AzureDevOpsService azureDevOpsService;
+  @InjectMocks @Spy private AzureDevOpsService azureDevOpsService;
 
   @Test
   void getProjects() {
     HttpHeaders mockedHeaders = new HttpHeaders();
     mockedHeaders.setContentType(MediaType.APPLICATION_JSON);
-    String jsonReturnValue = "{\"value\":[{\"id\":\"1\",\"name\":\"Diveni-Issue-Tracker\"},{\"id\":\"2\",\"name\":\"Diveni-Issue-Tracker-2\"},{\"id\":\"3\",\"name\":\"Diveni-Issue-Tracker-3\"}]}";
-    ResponseEntity<String> mockedReturnValue = new ResponseEntity<>(jsonReturnValue, mockedHeaders, HttpStatus.valueOf(200));
-    Mockito.doReturn(mockedReturnValue).when(azureDevOpsService).executeRequest(any(), any(), any(), any());
+    String jsonReturnValue =
+        "{\"value\":[{\"id\":\"1\",\"name\":\"Diveni-Issue-Tracker\"},{\"id\":\"2\",\"name\":\"Diveni-Issue-Tracker-2\"},{\"id\":\"3\",\"name\":\"Diveni-Issue-Tracker-3\"}]}";
+    ResponseEntity<String> mockedReturnValue =
+        new ResponseEntity<>(jsonReturnValue, mockedHeaders, HttpStatus.valueOf(200));
+    Mockito.doReturn(mockedReturnValue)
+        .when(azureDevOpsService)
+        .executeRequest(any(), any(), any(), any());
 
     List<Project> projectList = azureDevOpsService.getProjects("accessToken");
     Assertions.assertEquals(3, projectList.size());
@@ -51,13 +52,23 @@ class AzureDevOpsServiceTest {
     HttpHeaders mockedHeaders = new HttpHeaders();
     mockedHeaders.setContentType(MediaType.APPLICATION_JSON);
     String firstJsonReturnValue = "{\"workItems\":[{\"id\":1},{\"id\":2},{\"id\":3}]}";
-    ResponseEntity<String> mockedFirstReturnValue = new ResponseEntity<>(firstJsonReturnValue, mockedHeaders, HttpStatus.valueOf(200));
-    String secondJsonReturnValue = "{\"value\":[{\"id\":1,\"fields\":{\"System.Title\":\"New User Story\",\"Microsoft.VSTS.Scheduling.StoryPoints\":1,\"System.Description\":\"<div>Description <\\/div>\"}},{\"id\":2,\"fields\":{\"System.Title\":\"New User Story 2\"}},{\"id\":3,\"fields\":{\"System.Title\":\"New User Story 3\",\"System.Description\":\"<div> <\\/div>\"}}]}";
-    ResponseEntity<String> mockedSecondReturnValue = new ResponseEntity<>(secondJsonReturnValue, mockedHeaders, HttpStatus.valueOf(200));
+    ResponseEntity<String> mockedFirstReturnValue =
+        new ResponseEntity<>(firstJsonReturnValue, mockedHeaders, HttpStatus.valueOf(200));
+    String secondJsonReturnValue =
+        "{\"value\":[{\"id\":1,\"fields\":{\"System.Title\":\"New User"
+            + " Story\",\"Microsoft.VSTS.Scheduling.StoryPoints\":1,\"System.Description\":\"<div>Description"
+            + " <\\/div>\"}},{\"id\":2,\"fields\":{\"System.Title\":\"New User Story"
+            + " 2\"}},{\"id\":3,\"fields\":{\"System.Title\":\"New User Story"
+            + " 3\",\"System.Description\":\"<div> <\\/div>\"}}]}";
+    ResponseEntity<String> mockedSecondReturnValue =
+        new ResponseEntity<>(secondJsonReturnValue, mockedHeaders, HttpStatus.valueOf(200));
 
-    Mockito.doReturn(mockedFirstReturnValue, mockedSecondReturnValue).when(azureDevOpsService).executeRequest(any(), any(), any(), any());
+    Mockito.doReturn(mockedFirstReturnValue, mockedSecondReturnValue)
+        .when(azureDevOpsService)
+        .executeRequest(any(), any(), any(), any());
 
-    List<UserStory> userStories = azureDevOpsService.getIssues("accessToken", "Diveni-Issue-Tracker");
+    List<UserStory> userStories =
+        azureDevOpsService.getIssues("accessToken", "Diveni-Issue-Tracker");
     Assertions.assertEquals(3, userStories.size());
 
     Assertions.assertEquals("1", userStories.get(0).getId());
