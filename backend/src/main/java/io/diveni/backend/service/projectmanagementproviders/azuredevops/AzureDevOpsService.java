@@ -59,12 +59,12 @@ public class AzureDevOpsService implements ProjectManagementProviderOAuth2 {
     LOGGER.info("    AZURE_PERSONAL_ACCESS_TOKEN={}", CLIENT_PAT == null ? "null" : "********");
   }
 
-  static ResponseEntity<String> executeRequest(
+  public ResponseEntity<String> executeRequest(
       String url, HttpMethod method, String accessToken, Object body) {
     return executeRequest(url, method, accessToken, body, MediaType.APPLICATION_JSON);
   }
 
-  static ResponseEntity<String> executeRequest(
+  public ResponseEntity<String> executeRequest(
       String url, HttpMethod method, String accessToken, Object body, MediaType contentType) {
     LOGGER.debug("--> executeRequest()");
     RestTemplate restTemplate = new RestTemplate(new HttpComponentsClientHttpRequestFactory());
@@ -155,6 +155,7 @@ public class AzureDevOpsService implements ProjectManagementProviderOAuth2 {
             fields.hasNonNull(API_FIELD_DESCRIPTION)
                 ? fields.get(API_FIELD_DESCRIPTION).textValue().replaceAll("\\<[^>]*>", "")
                 : "";
+        description = description.length() > 0 ? description.substring(0 , description.length() - 1) : description;
         userStories.add(
             new UserStory(
                 detailedIssue.get("id").asText(),
