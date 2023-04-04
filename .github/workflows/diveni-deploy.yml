@@ -13,57 +13,50 @@ jobs:
   docker-images:
     name: Docker-Images
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        service: [backend, frontend, proxy]
     permissions:
       contents: read
       packages: write
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+
       - name: Verify files changed
         uses: dorny/paths-filter@v2
         id: filter
         with:
           filters: |
-            backend:
-              - 'backend/**'
-            frontend:
-              - 'frontend/**'
-            proxy:
-              - 'proxy/**'
+            ${{ matrix.service }}:
+              - '${{ matrix.service }}/**'
+
+      - name: Extract metadata (tags, labels) for Docker
+        if: steps.filter.outputs.${{ matrix.service }} == 'true'
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ghcr.io/${{ github.repository }}-${{ matrix.service }}
+          tags: type=raw,value=latest,enable=true
+
       - name: Log in to the Container registry
-        if: steps.files-changed-backend.outputs.backend == 'true'
-        uses: docker/login-action@v2
+          if: steps.filter.outputs.${{ matrix.service }} == 'true'
+          uses: docker/login-action@v2
+          with:
+            registry: ghcr.io
+            username: ${{ github.actor }}
+            password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push ${{ matrix.service }}-Docker-Image
+        if: steps.filter.outputs.${{ matrix.service }} == 'true'
+        uses: docker/build-push-action@v4
         with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build and push Backend-Docker-Image
-        if: steps.filter.outputs.backend == 'true'
-        uses: docker/build-push-action@v3
-        with:
-          image: ${{ github.repository }}-backend
-          registry: ghcr.io
-          context: backend
+          context: ${{ matrix.service }}
           push: true
-          tags: v1, latest
-      - name: Build and push Frontend-Docker-Image
-        if: steps.filter.outputs.frontend == 'true'
-        uses: docker/build-push-action@v3
-        with:
-          image: ${{ github.repository }}-frontend
-          registry: ghcr.io
-          context: frontend
-          push: true
-          tags: v1, latest
-      - name: Build and push Proxy-Docker-Image
-        if: steps.filter.outputs.proxy == 'true'
-        uses: docker/build-push-action@v3
-        with:
-          image: ${{ github.repository }}-proxy
-          registry: ghcr.io
-          context: proxy
-          push: true
-          tags: v1, latest
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
 
   deploy:
     name: Deploy to server
