@@ -1,7 +1,9 @@
 name: Deploy Diveni
 
 on:
-  pull_request:
+  push:
+    branches:
+      - main
     paths:
       - 'backend/**'
       - 'frontend/**'
@@ -38,7 +40,7 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: ghcr.io/${{ github.repository }}-${{ matrix.service }}
-          tags: type=raw,value=latest,enable=true
+          tags: type=raw,value=latest,enable=${{ github.ref == format('refs/heads/{0}', 'main') }}
 
       - name: Log in to the Container registry
         if: steps.filter.outputs.${{ matrix.service }} == 'true'
