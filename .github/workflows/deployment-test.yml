@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  docker-images:
+  test-job:
     name: Docker-Images
     runs-on: ubuntu-latest
     strategy:
@@ -36,10 +36,12 @@ jobs:
               - '${{ matrix.service }}/**'
 
       - name: Check if changes were made
-        run: echo steps.filter.outputs.${{ matrix.service }}
+        run: echo ${{ steps.filter.outputs.${{ matrix.service }} }}
 
       - name: Only running if changes were made
+        if: steps.filter.outputs.${{ matrix.service }} == 'true'
         run: echo "Changes were made"
 
       - name: Only running if changes were not made
+        if: steps.filter.outputs.${{ matrix.service }} != 'true'
         run: echo "Changes were not made"
