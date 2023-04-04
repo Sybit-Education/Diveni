@@ -11,7 +11,7 @@ on:
 
 jobs:
   test-job:
-    name: Docker-Images
+    name: Test Job
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -32,19 +32,17 @@ jobs:
         id: filter
         with:
           filters: |
-            ${{ matrix.service }}:
+            service:
               - '${{ matrix.service }}/**'
 
       - name: Check if changes were made
         run: |
-          echo ${{ steps.filter.outputs.backend }}
-          echo ${{ steps.filter.outputs.frontend }}
-          echo ${{ steps.filter.outputs.proxy }}
+          echo ${{ steps.filter.outputs.service }}
 
       - name: Only running if changes were made
-        if: steps.filter.outputs.${{ matrix.service }} == 'true'
+        if: steps.filter.outputs.service == 'true'
         run: echo "Changes were made"
 
       - name: Only running if changes were not made
-        if: steps.filter.outputs.${{ matrix.service }} != 'true'
+        if: steps.filter.outputs.service != 'true'
         run: echo "Changes were not made"
