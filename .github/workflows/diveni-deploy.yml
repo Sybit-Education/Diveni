@@ -41,12 +41,12 @@ jobs:
           tags: type=raw,value=latest,enable=true
 
       - name: Log in to the Container registry
-          if: steps.filter.outputs.${{ matrix.service }} == 'true'
-          uses: docker/login-action@v2
-          with:
-            registry: ghcr.io
-            username: ${{ github.actor }}
-            password: ${{ secrets.GITHUB_TOKEN }}
+        if: steps.filter.outputs.${{ matrix.service }} == 'true'
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push ${{ matrix.service }}-Docker-Image
         if: steps.filter.outputs.${{ matrix.service }} == 'true'
