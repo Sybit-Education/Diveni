@@ -29,13 +29,17 @@
         "button": "Start Planning",
         "refreshStories": "Refresh Userstories",
         "userStories": {
+          "filter" : {
+            "noStoryFound": "No stories found!"
+          },
           "button": {
             "addFirstUserStory": "No stories yet... click to add stories",
             "addUserStory": "Add"
           },
           "placeholder": {
             "userStoryTitle": "User Story Title",
-            "userStoryDescription": "Description and acceptance criteria..."
+            "userStoryDescription": "Description and acceptance criteria...",
+            "searchUserStories": "Search user stories..."
           },
           "text": "Click on a User Story Title to see the description",
           "sum": "Total:"
@@ -198,6 +202,9 @@
                   "submit": {
                     "label": "Submit"
                   }
+                },
+                "placeholder": {
+                  "searchProjects": "Search projects..."
                 }
               }
             }
