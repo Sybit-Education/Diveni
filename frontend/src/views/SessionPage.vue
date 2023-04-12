@@ -391,7 +391,7 @@ export default Vue.extend({
       console.log(`idx: ${idx}`);
       console.log(`doRemove: ${doRemove}`);
       console.log(`Syncing ${us[idx]}`);
-      // Jira sync
+      //Jira sync
       if (this.session_userStoryMode === "US_JIRA") {
         let response;
         if (doRemove) {
