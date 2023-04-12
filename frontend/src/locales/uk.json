@@ -29,13 +29,17 @@
         "button": "Почати планування",
         "refreshStories": "Refresh Userstories",
         "userStories": {
+          "filter": {
+            "noStoryFound": "No stories found!"
+          },
           "button": {
             "addFirstUserStory": "Ще немає історій... натисніть, щоб додати історії",
             "addUserStory": "Додати"
           },
           "placeholder": {
             "userStoryTitle": "Назва історії користувача",
-            "userStoryDescription": "Опис і критерії прийняття..."
+            "userStoryDescription": "Опис і критерії прийняття...",
+            "searchUserStories": "Search user stories..."
           },
           "text": "Натисніть на назву історії користувача, щоб побачити опис",
           "sum": "Загалом:"
@@ -198,6 +202,9 @@
                   "submit": {
                     "label": "Відправити"
                   }
+                },
+                "placeholder": {
+                  "searchProjects": "Search projects..."
                 }
               }
             }
