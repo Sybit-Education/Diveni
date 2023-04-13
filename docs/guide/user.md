@@ -22,7 +22,7 @@ There are two roles of users:
 
 To create a new session click on the "GO" button of the left window "New session".
 
-<img :src="$withBase('/img/diveni_home.png')" alt="Home">    
+![Home](../img/diveni_home.png) 
 
 
 After this you will be sent to *Prepare Session* page where you can customize the upcoming voting 
@@ -37,7 +37,7 @@ As first step you choose the mode for your User Stories. You can choose to estim
 
 Any mode specific information is given below the chosen mode.
 
-<img :src="$withBase('/img/prepare_your_session_selection.png')" alt="Prepare Session Screen">
+![Prepare Session Screen](../img/prepare_your_session_selection.png)
 
 
 ## 1.1 Create new Session without User Stories
@@ -50,37 +50,37 @@ User Stories once you've started the session.
   hours or integer values. You can also select individually the range of each card set, including
   an additional ```?```.
 
-  <img :src="$withBase('/img/Select_card_set.png')" alt="">
+  ![](../img/Select_card_set.png)
 
 - In the third row, you can specify a timer for the voting session. The timer will automatically be
   initialized when starting the voting session. The value of the timer can be changed by clicking on
   the buttons on the left and right. The voting will automatically be stopped and the results will be
   shown when the timer hits zero.
-  
-  <img :src="$withBase('/img/adjust_time.png')" alt="step 3_ Adjust time">
+
+  ![step3_Adjust_time](../img/adjust_time.png)
 
 - To finish the setting, you can secure your session by an optional password.
-  
-  <img :src="$withBase('/img/Choose_password.png')" alt="Step 4: Choose password">
+
+  ![step4_Choose_password](../img/Choose_password.png)
 
 - Finalize by clicking „Start Session“ on the bottom of the page.
 - You get a code that the other members who want to join need.
-  <img :src="$withBase('/img/waiting_for_members.png')" alt="Waiting for Members">
+  ![Waiting for Members](../img/waiting_for_members.png)
 - When all Members have joined the session you can start the planning
   - Host:
     - After starting the planning the counter with the selected time starts and the members can vote. 
     - Going to "Show result" finishes the estimation previously and you can see the result before the time is over.
-      <img :src="$withBase('/img/Estimation_Host.png')" alt="Estimation host">
+      ![Estimation host](../img/Estimation_Host.png)
     - When the estimation is done you can see the result as a host. If you want to start a new voting you have to click on the "New"-Button.
-      <img :src="$withBase('/img/Estimation_finished_host.png')" alt="Estimation finished host">
+      ![Estimation finished host](../img/Estimation_finished_host.png)
     - You also have the option to remove members from the session. Therefore you must move your mouse over the member then a red X-Button appears. Click on this one and the window in the picture will pop up. By selecting "Remove" the member will be removed from the session.
     
   - Member:
     - As a member you got to "Join Session" after starting the application.
     - There you have to type in a name and the code you get from the host. Optionally you can select a password.
-      <img :src="$withBase('/img/join_session.png')" alt="Join session">
-    - After joining the session you have to wait until the host starts a voting. Depending oft the choice of the card set with its values from the host you see the cards you can choose between. In this example it's the Fibonacci-card set with values from 1 to 21. By selecting the value you think is most appropriate, you give your estimation. 
-      <img :src="$withBase('/img/Estimate.png')" alt="Estimate">
+      ![Join session](../img/join_session.png)
+    - After joining the session you have to wait until the host starts a voting. Depending oft the choice of the card set with its values from the host you see the cards you can choose between. In this example it's the Fibonacci-card set with values from 1 to 21. By selecting the value you think is most appropriate, you give your estimation.
+      ![Estimate](../img/Estimate.png)
 
 ## 1.2 Create new Session with User Stories
 
@@ -112,6 +112,6 @@ cards once you've started the session.
 
 ## Screenshots
 
-<img :src="$withBase('/img/userEstimationVoted.JPG')" alt="Voters view of voted story">
+![Voters view of voted story](../img/userEstimationVoted.png)
 
-<img :src="$withBase('/img/hostEstimationFinished.JPG')" alt="Host view voted story">
+![Host view voted story](../img/hostEstimationFinished.png)

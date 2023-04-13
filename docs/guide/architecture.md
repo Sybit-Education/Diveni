@@ -199,13 +199,13 @@ backend
 ### REST API
 
 The current documentation for the REST API can be found as Swagger doc: <https://diveni.io/api/swagger-ui/index.html>.
-Or on __local development__ environment at <http://localhost:8081/swagger-ui/index.html>.
+Or on __local development__ environment at <a href="http://localhost:8081/swagger-ui/index" target="_blank" rel="noreferrer">http://localhost:8081/swagger-ui/index</a>
 
 ### Websocket
 
 This sequence diagram shows all Websocket commands and when they are used.
 
-Diagrams created using [Mermaid](https://mermaid-js.github.io/mermaid/#/).
+Diagrams created using [Mermaid](https://mermaid-js.github.io/mermaid/).
 
 #### Create Session and Vote
 

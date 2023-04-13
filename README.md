@@ -49,9 +49,9 @@ see: [Diveni Website](https://sybit-education.github.io/Diveni/)
 
 ## Some Screenshots
 
-![Voters view of voted story](docs/.vuepress/public/img/userEstimationVoted.JPG)
+![Voters view of voted story](docs/guide/img/userEstimationVoted.JPG)
 
-![Host view voted story](docs/.vuepress/public/img/hostEstimationFinished.JPG)
+![Host view voted story](docs/guide/img/hostEstimationFinished.JPG)
 
 
 ## Application Instructions and Requirements

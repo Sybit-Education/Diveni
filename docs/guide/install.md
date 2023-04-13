@@ -23,7 +23,9 @@ connection.
 
 ### JIRA Cloud Connector
 
-    TBD
+```
+TBD
+```
 
 ### JIRA Enterprise Connector
 
