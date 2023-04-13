@@ -41,9 +41,7 @@ export default withMermaid(
             { text: "Installation Guide", link: '/guide/install' },
             { text: "Contribution Guide", link: "/guide/contribution"},
             { text: "Architecture", link: "/guide/architecture"},
-            { text: "Testing", link: "/guide/testing"},
-            { text: 'Markdown Examples', link: '/markdown-examples' },
-            { text: 'Runtime API Examples', link: '/api-examples' }
+            { text: "Testing", link: "/guide/testing"}
           ]
         }
       ],
@@ -59,4 +57,3 @@ export default withMermaid(
     }
   })
 );
-// https://vitepress.dev/reference/site-config
