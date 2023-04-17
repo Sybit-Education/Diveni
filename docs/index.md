@@ -3,7 +3,7 @@ layout: home
 
 hero:
   name: "Diveni"
-  image: /diveni_banner.png
+  image: /logo-256x256.png
   tagline: The Planning-Poker App
   actions:
     - theme: brand
@@ -22,4 +22,3 @@ features:
   - title: Open Source
     details: Install Diveni in your own Docker based environment.
 ---
-
