@@ -29,13 +29,17 @@
         "button": "Empezar a planear",
         "refreshStories": "Actualizar las Historias de Usuario",
         "userStories": {
+          "filter" : {
+            "noStoryFound": "No se ha encontrado ninguna historia!"
+          },
           "button": {
             "addFirstUserStory": "Aún no hay historias... haz clic para añadir historias",
             "addUserStory": "Añadir"
           },
           "placeholder": {
             "userStoryTitle": "Título de la historia del usuario",
-            "userStoryDescription": "Criterios de descripción y aceptación..."
+            "userStoryDescription": "Criterios de descripción y aceptación...",
+            "searchUserStories": "Buscar historias de usuarios..."
           },
           "text": "Haga clic en el título de una historia de usuario para ver la descripción",
           "sum": "Total:"
@@ -201,6 +205,9 @@
                   "submit": {
                     "label": "Enviar"
                   }
+                },
+                "placeholder": {
+                  "searchProjects": "Buscar proyectos..."
                 }
               }
             }
