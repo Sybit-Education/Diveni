@@ -7,6 +7,7 @@ export default withMermaid(
     title: "Diveni",
     description: "The Planning-Poker App",
     base: '/Diveni/',
+    cleanUrls: true,
     lastUpdated: true,
     ignoreDeadLinks: "localhostLinks",
     head: [
@@ -15,7 +16,6 @@ export default withMermaid(
       ['meta', { name: 'apple-mobile-web-app-status-bar-style', content: 'black' }]
     ],
     themeConfig: {
-      // https://vitepress.dev/reference/default-theme-config
       nav: [
         {
           text: 'Guides',
@@ -53,6 +53,11 @@ export default withMermaid(
 
       footer: {
         message: 'Made by Diveni Development Team with ❤️ at Lake Constance'
+      },
+
+      editLink: {
+        pattern: 'https://github.com/Sybit-Education/Diveni/edit/main/docs/:path',
+        text: 'Help us improve this page!'
       }
     }
   })
