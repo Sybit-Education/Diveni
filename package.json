@@ -1,4 +1,17 @@
 {
+  "name": "diveni-docs",
+  "version": "1.0.0",
+  "description": "Diveni - The Planning-Poker App | Documentation Site",
+  "license": "aGPLv3",
+  "authors": {
+    "name": "Diveni Development Team",
+    "email": "info@diveni.io"
+  },
+
+  "repository": "https://github.com/Sybit-Education/Diveni",
+  "directories": {
+    "doc": "docs"
+  },
   "devDependencies": {
     "@mermaid-js/mermaid-mindmap": "^9.3.0",
     "mermaid": "9.1.7",
