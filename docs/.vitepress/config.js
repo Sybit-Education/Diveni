@@ -1,5 +1,6 @@
 import { defineConfig } from 'vitepress'
 import { withMermaid } from 'vitepress-plugin-mermaid'
+import { SearchPlugin } from "vitepress-plugin-search"
 
 export default withMermaid(
   defineConfig({
@@ -60,6 +61,11 @@ export default withMermaid(
         pattern: 'https://github.com/Sybit-Education/Diveni/edit/main/docs/:path',
         text: 'Help us improve this page!'
       }
+    },
+    vite: {
+      plugins: [
+        SearchPlugin()
+      ]
     }
   })
 );
