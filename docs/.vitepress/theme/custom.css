@@ -2,3 +2,10 @@
     --vp-c-green: #8bc34a;
 }
 
+.medium-zoom-overlay {
+    z-index: 20;
+}
+
+.medium-zoom-image {
+    z-index: 21;
+}
