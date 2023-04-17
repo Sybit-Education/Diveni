@@ -16,6 +16,7 @@ export default withMermaid(
       ['meta', { name: 'apple-mobile-web-app-status-bar-style', content: 'black' }]
     ],
     themeConfig: {
+      logo: './logo-128x128.png',
       nav: [
         {
           text: 'Guides',
