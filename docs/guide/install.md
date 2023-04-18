@@ -15,11 +15,10 @@ Preferred Docker environment:
 
 ## Preconditions
 
-To install Diveni in combination with JIRA some configuration data to connect the issue 
-tracker are required. These data have to be added to configuration file `backend/.env` (see below).
+To install Diveni in combination with an issue tracker, some configuration is required to connect to the issue
+tracker. The information needs to be added to the configuration file `backend/.env` (see below).
 
-Connection to JIRA Cloud and JIRA Enterprise is optional. Diveni could also be used without any
-connection.
+Connecting to an issue tracker is optional. Diveni can also be used without a connection.
 
 ### JIRA Cloud Connector
 
