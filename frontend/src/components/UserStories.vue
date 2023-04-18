@@ -102,7 +102,7 @@ export default Vue.extend({
       hover: null,
       input: "",
       filterActive: false,
-      safedStories: [] as Array<UserStory>,
+      savedStories: [] as Array<UserStory>,
     };
   },
   watch: {
@@ -130,9 +130,9 @@ export default Vue.extend({
     },
     swapPriority: function () {
       if (!this.filterActive) {
-        this.safedStories = this.userStories;
+        this.savedStories = this.userStories;
       }
-      this.userStories = this.safedStories;
+      this.userStories = this.savedStories;
       if (this.input !== "") {
         let filteredUserStories: UserStory[] = [];
         this.userStories.forEach((userStory) => {
@@ -151,7 +151,7 @@ export default Vue.extend({
         }
       } else {
         this.filterActive = false;
-        this.userStories = this.safedStories;
+        this.userStories = this.savedStories;
         this.publishChanges(null, false);
       }
     },
