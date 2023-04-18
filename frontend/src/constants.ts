@@ -35,6 +35,10 @@ class Constants {
 
   webSocketAdminUpdatedUserStoriesRoute = "/ws/adminUpdatedUserStories";
 
+  webSocketAdminSelectedUserStoryRoute = "/ws/adminSelectedUserStory";
+
+  webSocketSelectedUserStoryRoute = "/users/updates/userStorySelected";
+
   webSocketMemberListenUserStoriesRoute = "/users/updates/userStories";
 
   webSocketTimerStartRoute = "/users/updates/startTimer";

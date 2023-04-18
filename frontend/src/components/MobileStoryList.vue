@@ -62,12 +62,12 @@ export default Vue.extend({
     initialStories: { type: Array, required: true },
     showEstimations: { type: Boolean, required: true },
     showEditButtons: { type: Boolean, required: false, default: true },
-    selectStory: { type: Boolean, required: false, default: false },
+    initialSelectedIndex: { type: Number, required: false, default: null },
   },
   data() {
     return {
       exist: false,
-      number: null,
+      number: null as unknown,
       sideBarOpen: false,
       userStories: [] as Array<{
         title: string;
@@ -87,6 +87,9 @@ export default Vue.extend({
         isActive: boolean;
       }>;
     },
+    initialSelectedIndex() {
+      this.number = this.initialSelectedIndex;
+    },
   },
   created() {
     this.userStories = this.initialStories as Array<{
@@ -95,6 +98,9 @@ export default Vue.extend({
       estimation: string | null;
       isActive: boolean;
     }>;
+  },
+  mounted() {
+    this.number = this.initialSelectedIndex;
   },
   methods: {
     setUserStoryAsActive(index) {

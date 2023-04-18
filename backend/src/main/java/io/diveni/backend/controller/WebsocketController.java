@@ -213,4 +213,12 @@ public class WebsocketController {
     webSocketService.sendUpdatedUserStoriesToMembers(session);
     LOGGER.debug("<-- adminUpdatedUserStories()");
   }
+
+  @MessageMapping("/adminSelectedUserStory")
+  public synchronized void adminSelectedUserStory(AdminPrincipal principal, @Payload Integer index) {
+    LOGGER.debug("--> adminSelectedUserStory()");
+    val session = ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID());
+    webSocketService.sendSelectedUserStoryToMembers(session, index);
+    LOGGER.debug("<-- adminSelectedUserStory()");
+  }
 }

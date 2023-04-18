@@ -119,6 +119,7 @@
               :show-estimations="true"
               :initial-stories="userStories"
               :show-edit-buttons="false"
+              :initial-selected-index="index"
               @selectedStory="onSelectedStory($event)"
             />
           </div>
@@ -241,6 +242,9 @@ export default Vue.extend({
         name: this.name,
       };
     },
+    selectedUserStoryIndex() {
+      return this.$store.state.selectedUserStoryIndex;
+    },
   },
   watch: {
     memberUpdates(updates) {
@@ -271,6 +275,9 @@ export default Vue.extend({
         this.$toast.error(this.$t("session.notification.messages.memberRemoved"));
         this.leaveMeeting();
       }
+    },
+    selectedUserStoryIndex(index) {
+      this.index = index;
     },
   },
   created() {

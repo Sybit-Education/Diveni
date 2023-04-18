@@ -92,11 +92,11 @@ export default Vue.extend({
     initialStories: { type: Array, required: true },
     showEstimations: { type: Boolean, required: true },
     showEditButtons: { type: Boolean, required: false, default: true },
-    selectStory: { type: Boolean, required: false, default: false },
+    initialSelectedIndex: { type: Number, required: false, default: null },
   },
   data() {
     return {
-      selectedStoryIndex: null,
+      selectedStoryIndex: null as unknown,
       sideBarOpen: false,
       userStories: [] as Array<UserStory>,
       hover: null,
@@ -108,6 +108,9 @@ export default Vue.extend({
   watch: {
     initialStories() {
       this.userStories = this.initialStories as Array<UserStory>;
+    },
+    initialSelectedIndex() {
+      this.selectedStoryIndex = this.initialSelectedIndex;
     },
   },
   mounted() {
