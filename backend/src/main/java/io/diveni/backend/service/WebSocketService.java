@@ -206,9 +206,16 @@ public class WebSocketService {
   }
 
   public void sendSelectedUserStoryToMembers(Session session, Integer index) {
-    LOGGER.debug("--> sendSelectedUserStoryToMembers(), sessionID={}, index={}", session.getSessionID(), index);
-    getSessionPrincipals(session.getSessionID()).memberPrincipals().forEach(member ->
-      simpMessagingTemplate.convertAndSendToUser(member.getMemberID(), USER_STORY_SELECTED_DESTINATION, index));
+    LOGGER.debug(
+        "--> sendSelectedUserStoryToMembers(), sessionID={}, index={}",
+        session.getSessionID(),
+        index);
+    getSessionPrincipals(session.getSessionID())
+        .memberPrincipals()
+        .forEach(
+            member ->
+                simpMessagingTemplate.convertAndSendToUser(
+                    member.getMemberID(), USER_STORY_SELECTED_DESTINATION, index));
     LOGGER.debug("<-- sendSelectedUserStoryToMembers()");
   }
 

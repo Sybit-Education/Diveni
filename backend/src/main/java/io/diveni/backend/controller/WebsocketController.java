@@ -215,9 +215,11 @@ public class WebsocketController {
   }
 
   @MessageMapping("/adminSelectedUserStory")
-  public synchronized void adminSelectedUserStory(AdminPrincipal principal, @Payload Integer index) {
+  public synchronized void adminSelectedUserStory(
+      AdminPrincipal principal, @Payload Integer index) {
     LOGGER.debug("--> adminSelectedUserStory()");
-    val session = ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID());
+    val session =
+        ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID());
     webSocketService.sendSelectedUserStoryToMembers(session, index);
     LOGGER.debug("<-- adminSelectedUserStory()");
   }
