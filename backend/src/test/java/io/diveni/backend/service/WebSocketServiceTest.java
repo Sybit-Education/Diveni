@@ -284,32 +284,32 @@ public class WebSocketServiceTest {
     Integer selectedUserStoryIndex = 42;
 
     val memberPrincipal =
-      new MemberPrincipal(defaultAdminPrincipal.getSessionID(), Utils.generateRandomID());
+        new MemberPrincipal(defaultAdminPrincipal.getSessionID(), Utils.generateRandomID());
     setDefaultAdminPrincipal(Set.of(defaultMemberPrincipal, memberPrincipal));
     val session =
-      new Session(
-        new ObjectId(),
-        defaultAdminPrincipal.getSessionID(),
-        defaultAdminPrincipal.getAdminID(),
-        new SessionConfig(List.of(), List.of(), null, "US_MANUALLY", "password"),
-        null,
-        List.of(
-          new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null),
-          new Member(memberPrincipal.getMemberID(), null, null, null, null)),
-        new HashMap<>(),
-        new ArrayList<>(),
-        SessionState.WAITING_FOR_MEMBERS,
-        null,
-        null,
-        null);
+        new Session(
+            new ObjectId(),
+            defaultAdminPrincipal.getSessionID(),
+            defaultAdminPrincipal.getAdminID(),
+            new SessionConfig(List.of(), List.of(), null, "US_MANUALLY", "password"),
+            null,
+            List.of(
+                new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null),
+                new Member(memberPrincipal.getMemberID(), null, null, null, null)),
+            new HashMap<>(),
+            new ArrayList<>(),
+            SessionState.WAITING_FOR_MEMBERS,
+            null,
+            null,
+            null);
 
     webSocketService.sendSelectedUserStoryToMembers(session, selectedUserStoryIndex);
 
     verify(simpMessagingTemplateMock, times(1))
-      .convertAndSendToUser(
-        defaultMemberPrincipal.getMemberID(),
-        WebSocketService.USER_STORY_SELECTED_DESTINATION,
-        selectedUserStoryIndex);
+        .convertAndSendToUser(
+            defaultMemberPrincipal.getMemberID(),
+            WebSocketService.USER_STORY_SELECTED_DESTINATION,
+            selectedUserStoryIndex);
   }
 
   @Test
