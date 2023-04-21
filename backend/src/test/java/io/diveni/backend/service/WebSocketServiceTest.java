@@ -41,407 +41,424 @@ import lombok.val;
 
 public class WebSocketServiceTest {
 
-    @Mock
-    SimpMessagingTemplate simpMessagingTemplateMock;
+  @Mock SimpMessagingTemplate simpMessagingTemplateMock;
 
-    @InjectMocks
-    private WebSocketService webSocketService;
+  @InjectMocks private WebSocketService webSocketService;
 
-    private final AdminPrincipal defaultAdminPrincipal = new AdminPrincipal(Utils.generateRandomID(),
-            Utils.generateRandomID());
+  private final AdminPrincipal defaultAdminPrincipal =
+      new AdminPrincipal(Utils.generateRandomID(), Utils.generateRandomID());
 
-    private final MemberPrincipal defaultMemberPrincipal = new MemberPrincipal(defaultAdminPrincipal.getSessionID(),
-            Utils.generateRandomID());
+  private final MemberPrincipal defaultMemberPrincipal =
+      new MemberPrincipal(defaultAdminPrincipal.getSessionID(), Utils.generateRandomID());
 
-    @BeforeEach
-    public void initEach() {
-        MockitoAnnotations.openMocks(this);
-    }
+  @BeforeEach
+  public void initEach() {
+    MockitoAnnotations.openMocks(this);
+  }
 
-    void setDefaultAdminPrincipal(Set<MemberPrincipal> members) throws Exception {
-        val sessionPrincipalsField = WebSocketService.class.getDeclaredField("sessionPrincipalList");
-        sessionPrincipalsField.setAccessible(true);
-        val sessionPrincipals = List.of(
-                new SessionPrincipals(
-                        defaultAdminPrincipal.getSessionID(), defaultAdminPrincipal, members));
-        sessionPrincipalsField.set(webSocketService, sessionPrincipals);
-    }
+  void setDefaultAdminPrincipal(Set<MemberPrincipal> members) throws Exception {
+    val sessionPrincipalsField = WebSocketService.class.getDeclaredField("sessionPrincipalList");
+    sessionPrincipalsField.setAccessible(true);
+    val sessionPrincipals =
+        List.of(
+            new SessionPrincipals(
+                defaultAdminPrincipal.getSessionID(), defaultAdminPrincipal, members));
+    sessionPrincipalsField.set(webSocketService, sessionPrincipals);
+  }
 
-    @Test
-    public void setAdmin_isAdded() throws Exception {
-        val adminPrincipal = new AdminPrincipal(Utils.generateRandomID(), Utils.generateRandomID());
+  @Test
+  public void setAdmin_isAdded() throws Exception {
+    val adminPrincipal = new AdminPrincipal(Utils.generateRandomID(), Utils.generateRandomID());
 
-        webSocketService.setAdminUser(adminPrincipal);
+    webSocketService.setAdminUser(adminPrincipal);
 
-        assertTrue(
-                webSocketService.getSessionPrincipalList().stream()
-                        .anyMatch(p -> p.adminPrincipal() == adminPrincipal));
-    }
+    assertTrue(
+        webSocketService.getSessionPrincipalList().stream()
+            .anyMatch(p -> p.adminPrincipal() == adminPrincipal));
+  }
 
-    @Test
-    public void setExistingAdmin_isOverwritten() throws Exception {
-        setDefaultAdminPrincipal(new HashSet<>());
-        val adminPrincipal = new AdminPrincipal(
-                defaultAdminPrincipal.getSessionID(), defaultAdminPrincipal.getAdminID());
+  @Test
+  public void setExistingAdmin_isOverwritten() throws Exception {
+    setDefaultAdminPrincipal(new HashSet<>());
+    val adminPrincipal =
+        new AdminPrincipal(
+            defaultAdminPrincipal.getSessionID(), defaultAdminPrincipal.getAdminID());
 
-        webSocketService.setAdminUser(adminPrincipal);
+    webSocketService.setAdminUser(adminPrincipal);
 
-        assertTrue(
-                webSocketService.getSessionPrincipalList().stream()
-                        .anyMatch(p -> p.adminPrincipal() == adminPrincipal));
-    }
+    assertTrue(
+        webSocketService.getSessionPrincipalList().stream()
+            .anyMatch(p -> p.adminPrincipal() == adminPrincipal));
+  }
 
-    @Test
-    public void getSessionPrincipals_isCorrect() throws Exception {
-        setDefaultAdminPrincipal(new HashSet<>());
+  @Test
+  public void getSessionPrincipals_isCorrect() throws Exception {
+    setDefaultAdminPrincipal(new HashSet<>());
 
-        val sessionPrincipals = webSocketService.getSessionPrincipals(defaultAdminPrincipal.getSessionID());
+    val sessionPrincipals =
+        webSocketService.getSessionPrincipals(defaultAdminPrincipal.getSessionID());
 
-        Assertions.assertEquals(
-                new SessionPrincipals(
-                        defaultAdminPrincipal.getSessionID(), defaultAdminPrincipal, Set.of()),
-                sessionPrincipals);
-    }
+    Assertions.assertEquals(
+        new SessionPrincipals(
+            defaultAdminPrincipal.getSessionID(), defaultAdminPrincipal, Set.of()),
+        sessionPrincipals);
+  }
 
-    @Test
-    public void getMissingSessionEntry_isError() throws Exception {
-        assertThrows(
-                ResponseStatusException.class,
-                () -> webSocketService.getSessionPrincipals(defaultAdminPrincipal.getSessionID()));
-    }
+  @Test
+  public void getMissingSessionEntry_isError() throws Exception {
+    assertThrows(
+        ResponseStatusException.class,
+        () -> webSocketService.getSessionPrincipals(defaultAdminPrincipal.getSessionID()));
+  }
 
-    @Test
-    public void addMember_isAdded() throws Exception {
-        setDefaultAdminPrincipal(new HashSet<>());
-        val memberPrincipal = new MemberPrincipal(defaultAdminPrincipal.getSessionID(), Utils.generateRandomID());
+  @Test
+  public void addMember_isAdded() throws Exception {
+    setDefaultAdminPrincipal(new HashSet<>());
+    val memberPrincipal =
+        new MemberPrincipal(defaultAdminPrincipal.getSessionID(), Utils.generateRandomID());
 
-        webSocketService.addMemberIfNew(memberPrincipal);
+    webSocketService.addMemberIfNew(memberPrincipal);
 
-        Assertions.assertTrue(
-                webSocketService
-                        .getSessionPrincipals(defaultAdminPrincipal.getSessionID())
-                        .memberPrincipals()
-                        .contains(memberPrincipal));
-    }
+    Assertions.assertTrue(
+        webSocketService
+            .getSessionPrincipals(defaultAdminPrincipal.getSessionID())
+            .memberPrincipals()
+            .contains(memberPrincipal));
+  }
 
-    @Test
-    public void addExistingMember_notDuplicate() throws Exception {
-        setDefaultAdminPrincipal(Set.of(defaultMemberPrincipal));
+  @Test
+  public void addExistingMember_notDuplicate() throws Exception {
+    setDefaultAdminPrincipal(Set.of(defaultMemberPrincipal));
 
-        webSocketService.addMemberIfNew(defaultMemberPrincipal);
+    webSocketService.addMemberIfNew(defaultMemberPrincipal);
 
-        Assertions.assertEquals(
-                1,
-                webSocketService
-                        .getSessionPrincipals(defaultAdminPrincipal.getSessionID())
-                        .memberPrincipals()
-                        .size());
-    }
+    Assertions.assertEquals(
+        1,
+        webSocketService
+            .getSessionPrincipals(defaultAdminPrincipal.getSessionID())
+            .memberPrincipals()
+            .size());
+  }
 
-    @Test
-    public void removeMember_isRemoved() throws Exception {
-        setDefaultAdminPrincipal(Set.of(defaultMemberPrincipal));
+  @Test
+  public void removeMember_isRemoved() throws Exception {
+    setDefaultAdminPrincipal(Set.of(defaultMemberPrincipal));
 
-        webSocketService.removeMember(defaultMemberPrincipal);
+    webSocketService.removeMember(defaultMemberPrincipal);
 
-        Assertions.assertTrue(
-                webSocketService
-                        .getSessionPrincipals(defaultAdminPrincipal.getSessionID())
-                        .memberPrincipals()
-                        .isEmpty());
-    }
+    Assertions.assertTrue(
+        webSocketService
+            .getSessionPrincipals(defaultAdminPrincipal.getSessionID())
+            .memberPrincipals()
+            .isEmpty());
+  }
 
-    @Test
-    public void sendMembersUpdate_sendsUpdate() throws Exception {
-        setDefaultAdminPrincipal(Set.of(defaultMemberPrincipal));
-        val session = new Session(
-                new ObjectId(),
-                defaultAdminPrincipal.getSessionID(),
-                defaultAdminPrincipal.getAdminID(),
-                null,
-                null,
-                List.of(new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null)),
-                new HashMap<>(),
-                new ArrayList<>(),
-                null,
-                null,
-                null,
-                null);
+  @Test
+  public void sendMembersUpdate_sendsUpdate() throws Exception {
+    setDefaultAdminPrincipal(Set.of(defaultMemberPrincipal));
+    val session =
+        new Session(
+            new ObjectId(),
+            defaultAdminPrincipal.getSessionID(),
+            defaultAdminPrincipal.getAdminID(),
+            null,
+            null,
+            List.of(new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null)),
+            new HashMap<>(),
+            new ArrayList<>(),
+            null,
+            null,
+            null,
+            null);
 
-        webSocketService.sendMembersUpdate(session);
+    webSocketService.sendMembersUpdate(session);
 
-        verify(simpMessagingTemplateMock, times(1))
-                .convertAndSendToUser(
-                        defaultAdminPrincipal.getName(),
-                        WebSocketService.MEMBERS_UPDATED_DESTINATION,
-                        new MemberUpdate(session.getMembers(), session.getCurrentHighlights()));
-    }
+    verify(simpMessagingTemplateMock, times(1))
+        .convertAndSendToUser(
+            defaultAdminPrincipal.getName(),
+            WebSocketService.MEMBERS_UPDATED_DESTINATION,
+            new MemberUpdate(session.getMembers(), session.getCurrentHighlights()));
+  }
 
-    @Test
-    public void sendSessionState_sendsState() throws Exception {
-        setDefaultAdminPrincipal(Set.of(defaultMemberPrincipal));
-        val session = new Session(
-                new ObjectId(),
-                defaultAdminPrincipal.getSessionID(),
-                defaultAdminPrincipal.getAdminID(),
-                null,
-                null,
-                List.of(new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null)),
-                new HashMap<>(),
-                new ArrayList<>(),
-                SessionState.WAITING_FOR_MEMBERS,
-                null,
-                null,
-                null);
+  @Test
+  public void sendSessionState_sendsState() throws Exception {
+    setDefaultAdminPrincipal(Set.of(defaultMemberPrincipal));
+    val session =
+        new Session(
+            new ObjectId(),
+            defaultAdminPrincipal.getSessionID(),
+            defaultAdminPrincipal.getAdminID(),
+            null,
+            null,
+            List.of(new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null)),
+            new HashMap<>(),
+            new ArrayList<>(),
+            SessionState.WAITING_FOR_MEMBERS,
+            null,
+            null,
+            null);
 
-        webSocketService.sendSessionStateToMember(session, defaultMemberPrincipal.getMemberID());
+    webSocketService.sendSessionStateToMember(session, defaultMemberPrincipal.getMemberID());
 
-        verify(simpMessagingTemplateMock, times(1))
-                .convertAndSendToUser(
-                        defaultMemberPrincipal.getMemberID(),
-                        WebSocketService.MEMBER_UPDATES_DESTINATION,
-                        session.getSessionState().toString());
-    }
+    verify(simpMessagingTemplateMock, times(1))
+        .convertAndSendToUser(
+            defaultMemberPrincipal.getMemberID(),
+            WebSocketService.MEMBER_UPDATES_DESTINATION,
+            session.getSessionState().toString());
+  }
 
-    @Test
-    public void sendSessionStateWithAutoRevealAndTrue_sendsState() throws Exception {
-        setDefaultAdminPrincipal(Set.of(defaultMemberPrincipal));
-        val session = new Session(
-                new ObjectId(),
-                defaultAdminPrincipal.getSessionID(),
-                defaultAdminPrincipal.getAdminID(),
-                null,
-                null,
-                List.of(new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null)),
-                new HashMap<>(),
-                new ArrayList<>(),
-                SessionState.WAITING_FOR_MEMBERS,
-                null,
-                null,
-                null);
+  @Test
+  public void sendSessionStateWithAutoRevealAndTrue_sendsState() throws Exception {
+    setDefaultAdminPrincipal(Set.of(defaultMemberPrincipal));
+    val session =
+        new Session(
+            new ObjectId(),
+            defaultAdminPrincipal.getSessionID(),
+            defaultAdminPrincipal.getAdminID(),
+            null,
+            null,
+            List.of(new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null)),
+            new HashMap<>(),
+            new ArrayList<>(),
+            SessionState.WAITING_FOR_MEMBERS,
+            null,
+            null,
+            null);
 
-        webSocketService.sendSessionStateToMemberWithAutoReveal(
-                session, defaultMemberPrincipal.getMemberID(), true);
+    webSocketService.sendSessionStateToMemberWithAutoReveal(
+        session, defaultMemberPrincipal.getMemberID(), true);
 
-        verify(simpMessagingTemplateMock, times(1))
-                .convertAndSendToUser(
-                        defaultMemberPrincipal.getMemberID(),
-                        WebSocketService.MEMBER_UPDATES_DESTINATION_AUTOREVEAL,
-                        session.getSessionState().toString() + " true");
-    }
+    verify(simpMessagingTemplateMock, times(1))
+        .convertAndSendToUser(
+            defaultMemberPrincipal.getMemberID(),
+            WebSocketService.MEMBER_UPDATES_DESTINATION_AUTOREVEAL,
+            session.getSessionState().toString() + " true");
+  }
 
-    @Test
-    public void sendSessionStateWithAutoRevealAndFalse_sendsState() throws Exception {
-        setDefaultAdminPrincipal(Set.of(defaultMemberPrincipal));
-        val session = new Session(
-                new ObjectId(),
-                defaultAdminPrincipal.getSessionID(),
-                defaultAdminPrincipal.getAdminID(),
-                null,
-                null,
-                List.of(new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null)),
-                new HashMap<>(),
-                new ArrayList<>(),
-                SessionState.WAITING_FOR_MEMBERS,
-                null,
-                null,
-                null);
+  @Test
+  public void sendSessionStateWithAutoRevealAndFalse_sendsState() throws Exception {
+    setDefaultAdminPrincipal(Set.of(defaultMemberPrincipal));
+    val session =
+        new Session(
+            new ObjectId(),
+            defaultAdminPrincipal.getSessionID(),
+            defaultAdminPrincipal.getAdminID(),
+            null,
+            null,
+            List.of(new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null)),
+            new HashMap<>(),
+            new ArrayList<>(),
+            SessionState.WAITING_FOR_MEMBERS,
+            null,
+            null,
+            null);
 
-        webSocketService.sendSessionStateToMemberWithAutoReveal(
-                session, defaultMemberPrincipal.getMemberID(), false);
+    webSocketService.sendSessionStateToMemberWithAutoReveal(
+        session, defaultMemberPrincipal.getMemberID(), false);
 
-        verify(simpMessagingTemplateMock, times(1))
-                .convertAndSendToUser(
-                        defaultMemberPrincipal.getMemberID(),
-                        WebSocketService.MEMBER_UPDATES_DESTINATION_AUTOREVEAL,
-                        session.getSessionState().toString() + " false");
-    }
+    verify(simpMessagingTemplateMock, times(1))
+        .convertAndSendToUser(
+            defaultMemberPrincipal.getMemberID(),
+            WebSocketService.MEMBER_UPDATES_DESTINATION_AUTOREVEAL,
+            session.getSessionState().toString() + " false");
+  }
 
-    @Test
-    public void sendSessionStates_sendsToAll() throws Exception {
-        val memberPrincipal = new MemberPrincipal(defaultAdminPrincipal.getSessionID(), Utils.generateRandomID());
-        setDefaultAdminPrincipal(Set.of(defaultMemberPrincipal, memberPrincipal));
-        val session = new Session(
-                new ObjectId(),
-                defaultAdminPrincipal.getSessionID(),
-                defaultAdminPrincipal.getAdminID(),
-                null,
-                null,
-                List.of(
-                        new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null),
-                        new Member(memberPrincipal.getMemberID(), null, null, null, null)),
-                new HashMap<>(),
-                new ArrayList<>(),
-                SessionState.WAITING_FOR_MEMBERS,
-                null,
-                null,
-                null);
+  @Test
+  public void sendSessionStates_sendsToAll() throws Exception {
+    val memberPrincipal =
+        new MemberPrincipal(defaultAdminPrincipal.getSessionID(), Utils.generateRandomID());
+    setDefaultAdminPrincipal(Set.of(defaultMemberPrincipal, memberPrincipal));
+    val session =
+        new Session(
+            new ObjectId(),
+            defaultAdminPrincipal.getSessionID(),
+            defaultAdminPrincipal.getAdminID(),
+            null,
+            null,
+            List.of(
+                new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null),
+                new Member(memberPrincipal.getMemberID(), null, null, null, null)),
+            new HashMap<>(),
+            new ArrayList<>(),
+            SessionState.WAITING_FOR_MEMBERS,
+            null,
+            null,
+            null);
 
-        webSocketService.sendSessionStateToMembers(session);
+    webSocketService.sendSessionStateToMembers(session);
 
-        verify(simpMessagingTemplateMock, times(1))
-                .convertAndSendToUser(
-                        defaultMemberPrincipal.getMemberID(),
-                        WebSocketService.MEMBER_UPDATES_DESTINATION,
-                        session.getSessionState().toString());
-        verify(simpMessagingTemplateMock, times(1))
-                .convertAndSendToUser(
-                        memberPrincipal.getMemberID(),
-                        WebSocketService.MEMBER_UPDATES_DESTINATION,
-                        session.getSessionState().toString());
-    }
+    verify(simpMessagingTemplateMock, times(1))
+        .convertAndSendToUser(
+            defaultMemberPrincipal.getMemberID(),
+            WebSocketService.MEMBER_UPDATES_DESTINATION,
+            session.getSessionState().toString());
+    verify(simpMessagingTemplateMock, times(1))
+        .convertAndSendToUser(
+            memberPrincipal.getMemberID(),
+            WebSocketService.MEMBER_UPDATES_DESTINATION,
+            session.getSessionState().toString());
+  }
 
-    @Test
-    public void sendSessionStatesAutoRevealAndTrue_sendsToAll() throws Exception {
-        val memberPrincipal = new MemberPrincipal(defaultAdminPrincipal.getSessionID(), Utils.generateRandomID());
-        setDefaultAdminPrincipal(Set.of(defaultMemberPrincipal, memberPrincipal));
-        val session = new Session(
-                new ObjectId(),
-                defaultAdminPrincipal.getSessionID(),
-                defaultAdminPrincipal.getAdminID(),
-                null,
-                null,
-                List.of(
-                        new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null),
-                        new Member(memberPrincipal.getMemberID(), null, null, null, null)),
-                new HashMap<>(),
-                new ArrayList<>(),
-                SessionState.WAITING_FOR_MEMBERS,
-                null,
-                null,
-                null);
+  @Test
+  public void sendSessionStatesAutoRevealAndTrue_sendsToAll() throws Exception {
+    val memberPrincipal =
+        new MemberPrincipal(defaultAdminPrincipal.getSessionID(), Utils.generateRandomID());
+    setDefaultAdminPrincipal(Set.of(defaultMemberPrincipal, memberPrincipal));
+    val session =
+        new Session(
+            new ObjectId(),
+            defaultAdminPrincipal.getSessionID(),
+            defaultAdminPrincipal.getAdminID(),
+            null,
+            null,
+            List.of(
+                new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null),
+                new Member(memberPrincipal.getMemberID(), null, null, null, null)),
+            new HashMap<>(),
+            new ArrayList<>(),
+            SessionState.WAITING_FOR_MEMBERS,
+            null,
+            null,
+            null);
 
-        webSocketService.sendSessionStateToMembersWithAutoReveal(session, true);
+    webSocketService.sendSessionStateToMembersWithAutoReveal(session, true);
 
-        verify(simpMessagingTemplateMock, times(1))
-                .convertAndSendToUser(
-                        defaultMemberPrincipal.getMemberID(),
-                        WebSocketService.MEMBER_UPDATES_DESTINATION_AUTOREVEAL,
-                        session.getSessionState().toString() + " true");
-        verify(simpMessagingTemplateMock, times(1))
-                .convertAndSendToUser(
-                        memberPrincipal.getMemberID(),
-                        WebSocketService.MEMBER_UPDATES_DESTINATION_AUTOREVEAL,
-                        session.getSessionState().toString() + " true");
-    }
+    verify(simpMessagingTemplateMock, times(1))
+        .convertAndSendToUser(
+            defaultMemberPrincipal.getMemberID(),
+            WebSocketService.MEMBER_UPDATES_DESTINATION_AUTOREVEAL,
+            session.getSessionState().toString() + " true");
+    verify(simpMessagingTemplateMock, times(1))
+        .convertAndSendToUser(
+            memberPrincipal.getMemberID(),
+            WebSocketService.MEMBER_UPDATES_DESTINATION_AUTOREVEAL,
+            session.getSessionState().toString() + " true");
+  }
 
-    @Test
-    public void sendSessionStatesAutoRevealAndFalse_sendsToAll() throws Exception {
-        val memberPrincipal = new MemberPrincipal(defaultAdminPrincipal.getSessionID(), Utils.generateRandomID());
-        setDefaultAdminPrincipal(Set.of(defaultMemberPrincipal, memberPrincipal));
-        val session = new Session(
-                new ObjectId(),
-                defaultAdminPrincipal.getSessionID(),
-                defaultAdminPrincipal.getAdminID(),
-                null,
-                null,
-                List.of(
-                        new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null),
-                        new Member(memberPrincipal.getMemberID(), null, null, null, null)),
-                new HashMap<>(),
-                new ArrayList<>(),
-                SessionState.WAITING_FOR_MEMBERS,
-                null,
-                null,
-                null);
+  @Test
+  public void sendSessionStatesAutoRevealAndFalse_sendsToAll() throws Exception {
+    val memberPrincipal =
+        new MemberPrincipal(defaultAdminPrincipal.getSessionID(), Utils.generateRandomID());
+    setDefaultAdminPrincipal(Set.of(defaultMemberPrincipal, memberPrincipal));
+    val session =
+        new Session(
+            new ObjectId(),
+            defaultAdminPrincipal.getSessionID(),
+            defaultAdminPrincipal.getAdminID(),
+            null,
+            null,
+            List.of(
+                new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null),
+                new Member(memberPrincipal.getMemberID(), null, null, null, null)),
+            new HashMap<>(),
+            new ArrayList<>(),
+            SessionState.WAITING_FOR_MEMBERS,
+            null,
+            null,
+            null);
 
-        webSocketService.sendSessionStateToMembersWithAutoReveal(session, false);
+    webSocketService.sendSessionStateToMembersWithAutoReveal(session, false);
 
-        verify(simpMessagingTemplateMock, times(1))
-                .convertAndSendToUser(
-                        defaultMemberPrincipal.getMemberID(),
-                        WebSocketService.MEMBER_UPDATES_DESTINATION_AUTOREVEAL,
-                        session.getSessionState().toString() + " false");
-        verify(simpMessagingTemplateMock, times(1))
-                .convertAndSendToUser(
-                        memberPrincipal.getMemberID(),
-                        WebSocketService.MEMBER_UPDATES_DESTINATION_AUTOREVEAL,
-                        session.getSessionState().toString() + " false");
-    }
+    verify(simpMessagingTemplateMock, times(1))
+        .convertAndSendToUser(
+            defaultMemberPrincipal.getMemberID(),
+            WebSocketService.MEMBER_UPDATES_DESTINATION_AUTOREVEAL,
+            session.getSessionState().toString() + " false");
+    verify(simpMessagingTemplateMock, times(1))
+        .convertAndSendToUser(
+            memberPrincipal.getMemberID(),
+            WebSocketService.MEMBER_UPDATES_DESTINATION_AUTOREVEAL,
+            session.getSessionState().toString() + " false");
+  }
 
-    @Test
-    public void sendUpdatedUserStoriesToMembers_sendsToAll() throws Exception {
-        val memberPrincipal = new MemberPrincipal(defaultAdminPrincipal.getSessionID(), Utils.generateRandomID());
-        setDefaultAdminPrincipal(Set.of(defaultMemberPrincipal, memberPrincipal));
-        val session = new Session(
-                new ObjectId(),
-                defaultAdminPrincipal.getSessionID(),
-                defaultAdminPrincipal.getAdminID(),
-                new SessionConfig(List.of(), List.of(), null, "US_MANUALLY", "password"),
-                null,
-                List.of(
-                        new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null),
-                        new Member(memberPrincipal.getMemberID(), null, null, null, null)),
-                new HashMap<>(),
-                new ArrayList<>(),
-                SessionState.WAITING_FOR_MEMBERS,
-                null,
-                null,
-                null);
+  @Test
+  public void sendUpdatedUserStoriesToMembers_sendsToAll() throws Exception {
+    val memberPrincipal =
+        new MemberPrincipal(defaultAdminPrincipal.getSessionID(), Utils.generateRandomID());
+    setDefaultAdminPrincipal(Set.of(defaultMemberPrincipal, memberPrincipal));
+    val session =
+        new Session(
+            new ObjectId(),
+            defaultAdminPrincipal.getSessionID(),
+            defaultAdminPrincipal.getAdminID(),
+            new SessionConfig(List.of(), List.of(), null, "US_MANUALLY", "password"),
+            null,
+            List.of(
+                new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null),
+                new Member(memberPrincipal.getMemberID(), null, null, null, null)),
+            new HashMap<>(),
+            new ArrayList<>(),
+            SessionState.WAITING_FOR_MEMBERS,
+            null,
+            null,
+            null);
 
-        webSocketService.sendUpdatedUserStoriesToMembers(session);
+    webSocketService.sendUpdatedUserStoriesToMembers(session);
 
-        verify(simpMessagingTemplateMock, times(1))
-                .convertAndSendToUser(
-                        defaultMemberPrincipal.getMemberID(),
-                        WebSocketService.US_UPDATES_DESTINATION,
-                        session.getSessionConfig().getUserStories());
-        verify(simpMessagingTemplateMock, times(1))
-                .convertAndSendToUser(
-                        defaultMemberPrincipal.getMemberID(),
-                        WebSocketService.US_UPDATES_DESTINATION,
-                        session.getSessionConfig().getUserStories());
-    }
+    verify(simpMessagingTemplateMock, times(1))
+        .convertAndSendToUser(
+            defaultMemberPrincipal.getMemberID(),
+            WebSocketService.US_UPDATES_DESTINATION,
+            session.getSessionConfig().getUserStories());
+    verify(simpMessagingTemplateMock, times(1))
+        .convertAndSendToUser(
+            defaultMemberPrincipal.getMemberID(),
+            WebSocketService.US_UPDATES_DESTINATION,
+            session.getSessionConfig().getUserStories());
+  }
 
-    @Test
-    public void adminLeft_sendsNotification() throws Exception {
-        val memberPrincipal = new MemberPrincipal(defaultAdminPrincipal.getSessionID(), Utils.generateRandomID());
-        setDefaultAdminPrincipal(Set.of(defaultMemberPrincipal, memberPrincipal));
-        val session = new Session(
-                new ObjectId(),
-                defaultAdminPrincipal.getSessionID(),
-                defaultAdminPrincipal.getAdminID(),
-                new SessionConfig(List.of(), List.of(), null, "US_MANUALLY", "password"),
-                null,
-                List.of(
-                        new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null),
-                        new Member(memberPrincipal.getMemberID(), null, null, null, null)),
-                new HashMap<>(),
-                new ArrayList<>(),
-                SessionState.WAITING_FOR_MEMBERS,
-                null,
-                null,
-                null);
-        val notification = new Notification(NotificationType.ADMIN_LEFT, null);
+  @Test
+  public void adminLeft_sendsNotification() throws Exception {
+    val memberPrincipal =
+        new MemberPrincipal(defaultAdminPrincipal.getSessionID(), Utils.generateRandomID());
+    setDefaultAdminPrincipal(Set.of(defaultMemberPrincipal, memberPrincipal));
+    val session =
+        new Session(
+            new ObjectId(),
+            defaultAdminPrincipal.getSessionID(),
+            defaultAdminPrincipal.getAdminID(),
+            new SessionConfig(List.of(), List.of(), null, "US_MANUALLY", "password"),
+            null,
+            List.of(
+                new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null),
+                new Member(memberPrincipal.getMemberID(), null, null, null, null)),
+            new HashMap<>(),
+            new ArrayList<>(),
+            SessionState.WAITING_FOR_MEMBERS,
+            null,
+            null,
+            null);
+    val notification = new Notification(NotificationType.ADMIN_LEFT, null);
 
-        webSocketService.sendNotification(session, notification);
+    webSocketService.sendNotification(session, notification);
 
-        verify(simpMessagingTemplateMock, times(1))
-                .convertAndSendToUser(
-                        defaultMemberPrincipal.getMemberID(),
-                        WebSocketService.NOTIFICATIONS_DESTINATION,
-                        notification);
-    }
+    verify(simpMessagingTemplateMock, times(1))
+        .convertAndSendToUser(
+            defaultMemberPrincipal.getMemberID(),
+            WebSocketService.NOTIFICATIONS_DESTINATION,
+            notification);
+  }
 
-    @Test
-    public void removeSession_isRemoved() throws Exception {
-        setDefaultAdminPrincipal(Set.of(defaultMemberPrincipal));
-        val session = new Session(
-                new ObjectId(),
-                defaultAdminPrincipal.getSessionID(),
-                defaultAdminPrincipal.getAdminID(),
-                null,
-                null,
-                List.of(new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null)),
-                new HashMap<>(),
-                new ArrayList<>(),
-                SessionState.WAITING_FOR_MEMBERS,
-                null,
-                null,
-                null);
+  @Test
+  public void removeSession_isRemoved() throws Exception {
+    setDefaultAdminPrincipal(Set.of(defaultMemberPrincipal));
+    val session =
+        new Session(
+            new ObjectId(),
+            defaultAdminPrincipal.getSessionID(),
+            defaultAdminPrincipal.getAdminID(),
+            null,
+            null,
+            List.of(new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null)),
+            new HashMap<>(),
+            new ArrayList<>(),
+            SessionState.WAITING_FOR_MEMBERS,
+            null,
+            null,
+            null);
 
-        webSocketService.removeSession(session);
+    webSocketService.removeSession(session);
 
-        assertTrue(webSocketService.getSessionPrincipalList().isEmpty());
-    }
+    assertTrue(webSocketService.getSessionPrincipalList().isEmpty());
+  }
 }

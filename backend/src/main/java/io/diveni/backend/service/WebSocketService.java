@@ -45,20 +45,20 @@ public class WebSocketService {
 
   public static String START_TIMER_DESTINATION = "/updates/startTimer";
 
-  @Autowired
-  private SimpMessagingTemplate simpMessagingTemplate;
+  @Autowired private SimpMessagingTemplate simpMessagingTemplate;
 
-  @Getter
-  private List<SessionPrincipals> sessionPrincipalList = List.of();
+  @Getter private List<SessionPrincipals> sessionPrincipalList = List.of();
 
   public SessionPrincipals getSessionPrincipals(String sessionID) {
     LOGGER.debug("--> getSessionPrincipals(), sessionID={}", sessionID);
-    SessionPrincipals sessionPrincipals = sessionPrincipalList.stream()
-        .filter(s -> s.sessionID().equals(sessionID))
-        .findFirst()
-        .orElseThrow(
-            () -> new ResponseStatusException(
-                HttpStatus.NOT_FOUND, ErrorMessages.sessionNotFoundErrorMessage));
+    SessionPrincipals sessionPrincipals =
+        sessionPrincipalList.stream()
+            .filter(s -> s.sessionID().equals(sessionID))
+            .findFirst()
+            .orElseThrow(
+                () ->
+                    new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, ErrorMessages.sessionNotFoundErrorMessage));
     LOGGER.debug("<-- getSessionPrincipals()");
     return sessionPrincipals;
   }
@@ -66,54 +66,57 @@ public class WebSocketService {
   public synchronized void addMemberIfNew(MemberPrincipal member) {
     LOGGER.debug("--> addMemberIfNew(), member={}", member.getMemberID());
     val sessionPrincipals = getSessionPrincipals(member.getSessionID());
-    val updatedMembers = Stream.concat(
-        sessionPrincipals.memberPrincipals().stream()
-            .filter(m -> !m.getName().equals(member.getName())),
-        Stream.of(member))
-        .collect(Collectors.toSet());
-    sessionPrincipalList = sessionPrincipalList.stream()
-        .map(
-            p -> {
-              if (p == sessionPrincipals) {
-                return p.memberPrincipals(updatedMembers);
-              } else {
-                return p;
-              }
-            })
-        .collect(Collectors.toList());
+    val updatedMembers =
+        Stream.concat(
+                sessionPrincipals.memberPrincipals().stream()
+                    .filter(m -> !m.getName().equals(member.getName())),
+                Stream.of(member))
+            .collect(Collectors.toSet());
+    sessionPrincipalList =
+        sessionPrincipalList.stream()
+            .map(
+                p -> {
+                  if (p == sessionPrincipals) {
+                    return p.memberPrincipals(updatedMembers);
+                  } else {
+                    return p;
+                  }
+                })
+            .collect(Collectors.toList());
     LOGGER.debug("<-- addMemberIfNew()");
   }
 
   public synchronized void removeMember(MemberPrincipal member) {
     LOGGER.debug("--> removeMember(), member={}", member.getMemberID());
     val sessionPrincipals = getSessionPrincipals(member.getSessionID());
-    val updatedMembers = sessionPrincipals.memberPrincipals().stream()
-        .filter(m -> !m.getMemberID().equals(member.getMemberID()))
-        .collect(Collectors.toSet());
-    sessionPrincipalList = sessionPrincipalList.stream()
-        .map(
-            p -> {
-              if (p == sessionPrincipals)
-                return p.memberPrincipals(updatedMembers);
-              else
-                return p;
-            })
-        .collect(Collectors.toList());
+    val updatedMembers =
+        sessionPrincipals.memberPrincipals().stream()
+            .filter(m -> !m.getMemberID().equals(member.getMemberID()))
+            .collect(Collectors.toSet());
+    sessionPrincipalList =
+        sessionPrincipalList.stream()
+            .map(
+                p -> {
+                  if (p == sessionPrincipals) return p.memberPrincipals(updatedMembers);
+                  else return p;
+                })
+            .collect(Collectors.toList());
     LOGGER.debug("<-- removeMember()");
   }
 
   public synchronized void removeAdmin(AdminPrincipal admin) {
     LOGGER.debug("--> removeAdmin(), admin={}", admin.getAdminID());
-    sessionPrincipalList = sessionPrincipalList.stream()
-        .map(
-            p -> {
-              if (p.adminPrincipal() == admin) {
-                return p.adminPrincipal(null);
-              } else {
-                return p;
-              }
-            })
-        .collect(Collectors.toList());
+    sessionPrincipalList =
+        sessionPrincipalList.stream()
+            .map(
+                p -> {
+                  if (p.adminPrincipal() == admin) {
+                    return p.adminPrincipal(null);
+                  } else {
+                    return p;
+                  }
+                })
+            .collect(Collectors.toList());
     LOGGER.debug("<-- removeAdmin()");
   }
 
@@ -121,20 +124,21 @@ public class WebSocketService {
     LOGGER.debug("--> setAdminUser(), principal={}", principal.getAdminID());
     if (sessionPrincipalList.stream()
         .anyMatch(p -> p.sessionID().equals(principal.getSessionID()))) {
-      sessionPrincipalList = sessionPrincipalList.stream()
-          .map(
-              p -> {
-                if (p.sessionID().equals(principal.getSessionID()))
-                  return p.adminPrincipal(principal);
-                else
-                  return p;
-              })
-          .collect(Collectors.toList());
+      sessionPrincipalList =
+          sessionPrincipalList.stream()
+              .map(
+                  p -> {
+                    if (p.sessionID().equals(principal.getSessionID()))
+                      return p.adminPrincipal(principal);
+                    else return p;
+                  })
+              .collect(Collectors.toList());
     } else {
-      sessionPrincipalList = Stream.concat(
-          sessionPrincipalList.stream(),
-          Stream.of(new SessionPrincipals(principal.getSessionID(), principal, Set.of())))
-          .collect(Collectors.toList());
+      sessionPrincipalList =
+          Stream.concat(
+                  sessionPrincipalList.stream(),
+                  Stream.of(new SessionPrincipals(principal.getSessionID(), principal, Set.of())))
+              .collect(Collectors.toList());
     }
     LOGGER.debug("<-- setAdminUser()");
   }
@@ -157,10 +161,11 @@ public class WebSocketService {
     getSessionPrincipals(session.getSessionID())
         .memberPrincipals()
         .forEach(
-            member -> simpMessagingTemplate.convertAndSendToUser(
-                member.getMemberID(),
-                MEMBERS_UPDATED_DESTINATION,
-                new MemberUpdate(session.getMembers(), session.getCurrentHighlights())));
+            member ->
+                simpMessagingTemplate.convertAndSendToUser(
+                    member.getMemberID(),
+                    MEMBERS_UPDATED_DESTINATION,
+                    new MemberUpdate(session.getMembers(), session.getCurrentHighlights())));
     LOGGER.debug("<-- sendMembersUpdateToMembers()");
   }
 
@@ -173,11 +178,13 @@ public class WebSocketService {
   }
 
   public void sendSessionStateToMembersWithAutoReveal(Session session, boolean autoReveal) {
-    LOGGER.debug("--> sendSessionStateToMembersWithAutoReveal(), sessionID={}", session.getSessionID());
+    LOGGER.debug(
+        "--> sendSessionStateToMembersWithAutoReveal(), sessionID={}", session.getSessionID());
     // TODO: Send highlighted with it
     getSessionPrincipals(session.getSessionID()).memberPrincipals().stream()
         .forEach(
-            member -> sendSessionStateToMemberWithAutoReveal(session, member.getMemberID(), autoReveal));
+            member ->
+                sendSessionStateToMemberWithAutoReveal(session, member.getMemberID(), autoReveal));
     LOGGER.debug("<-- sendSessionStateToMembersWithAutoReveal()");
   }
 
@@ -263,9 +270,10 @@ public class WebSocketService {
 
   public void removeSession(Session session) {
     LOGGER.debug("--> removeSession(), sessionID={}", session.getSessionID());
-    sessionPrincipalList = sessionPrincipalList.stream()
-        .filter(p -> !p.sessionID().equals(session.getSessionID()))
-        .collect(Collectors.toList());
+    sessionPrincipalList =
+        sessionPrincipalList.stream()
+            .filter(p -> !p.sessionID().equals(session.getSessionID()))
+            .collect(Collectors.toList());
     LOGGER.debug("<-- removeSession()");
   }
 }
