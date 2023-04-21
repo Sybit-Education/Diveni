@@ -89,7 +89,9 @@
           "description": "Przygotuj nową sesję, zaproś członków zespołu i zacznij szacować",
           "buttons": {
             "start": {
-              "label": "Start ..."
+              "label": "Start ...",
+              "addHostVoting": "Enable host voting",
+              "removeHostVoting": "Disable host voting"
             }
           }
         },
@@ -234,8 +236,13 @@
           "time": {
             "title": "3. Dostosuj czas na oszacowanie"
           },
+          "hostVoting": {
+            "title": "4. Soll der Host auch abstimmen",
+            "hostVotingOn": "Yes",
+            "hostVotingOff": "No"
+          },
           "password": {
-            "title": "4. W razie potrzeby wybierz hasło.",
+            "title": "5. W razie potrzeby wybierz hasło.",
             "placeholder": "Hasło (pozostaw puste dla sesji bez zabezpieczenia)"
           }
         }

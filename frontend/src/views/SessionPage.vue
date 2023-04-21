@@ -1,7 +1,7 @@
 <template>
   <b-container id="session-page">
     <b-row class="mb-3">
-      <b-col>
+      <b-col cols="8">
         <h1>
           {{
             planningStart
@@ -9,6 +9,18 @@
             : $t("page.session.before.title")
           }}
         </h1>
+      </b-col>
+      <b-col>
+        <b-button class="mr-3 hostVotingButtons" variant="outline-dark" @click="session_hostVoting = true"
+          v-if="!session_hostVoting && !planningStart">
+          <b-icon-person-plus-fill />
+          {{ $t("page.session.during.estimation.buttons.addHostVoting") }}
+        </b-button>
+        <b-button class="mr-3 hostVotingButtons" variant="outline-dark" @click="session_hostVoting = false"
+          v-if="session_hostVoting && !planningStart">
+          <b-icon-person-dash-fill />
+          {{ $t("page.session.during.estimation.buttons.removeHostVoting") }}
+        </b-button>
       </b-col>
       <b-col cols="auto" class="mr-auto">
         <copy-session-id-popup v-if="planningStart" class="float-end" :session-id="session_sessionID" />
@@ -21,7 +33,6 @@
     <div v-if="!planningStart">
       <copy-session-id-popup :text-before-session-i-d="$t('page.session.before.text.beforeID')"
         :session-id="session_sessionID" :text-after-session-i-d="$t('page.session.before.text.afterID')" />
-
       <h4 class="text-center m-3">
         {{ $t("page.session.before.text.waiting") }}
         <sub><b-icon-three-dots animation="fade" font-scale="1" /></sub>
@@ -33,7 +44,7 @@
       </b-row>
       <b-row>
         <b-col class="text-center">
-          <session-start-button @clicked="onPlanningStarted" :members="members" :hostVoting="hostVoting" />
+          <session-start-button @clicked="onPlanningStarted" :members="members" :hostVoting="session_hostVoting" />
         </b-col>
       </b-row>
     </div>
@@ -49,6 +60,16 @@
             <b-icon-bar-chart />
             {{ $t("page.session.during.estimation.buttons.result") }}
           </b-button>
+          <b-button class="mr-3" variant="outline-dark" @click="session_hostVoting = true" v-if="!session_hostVoting"
+            :disabled="planningStart == true && estimateFinished == false">
+            <b-icon-person-plus-fill />
+            {{ $t("page.session.during.estimation.buttons.addHostVoting") }}
+          </b-button>
+          <b-button class="mr-3" variant="outline-dark" @click="session_hostVoting = false" v-if="session_hostVoting"
+            :disabled="planningStart == true && estimateFinished == false">
+            <b-icon-person-dash-fill />
+            {{ $t("page.session.during.estimation.buttons.removeHostVoting") }}
+          </b-button>
         </b-col>
         <b-col cols="auto">
           <estimate-timer :start-timestamp="timerTimestamp" :pause-timer="estimateFinished"
@@ -63,12 +84,12 @@
       </h4>
 
       <div id="demo">
-        <div v-if="membersEstimated.length === membersPending.length + membersEstimated.length && !hostVoting"
+        <div v-if="membersEstimated.length === membersPending.length + membersEstimated.length && !session_hostVoting"
           style="display: none">
           {{ (estimateFinished = true) }}
         </div>
         <div
-          v-if="membersEstimated.length === membersPending.length + membersEstimated.length && (hostVoting && hostEstimation != '')"
+          v-if="membersEstimated.length === membersPending.length + membersEstimated.length && (session_hostVoting && hostEstimation != '')"
           style="display: none">
           {{ (estimateFinished = true) }}
         </div>
@@ -84,7 +105,7 @@
           :member="member" />
       </b-row>
       <hr />
-      <h4 v-if="!hostVoting">
+      <h4 v-if="!session_hostVoting">
         {{ $t("page.session.during.estimation.message.finished") }}
         {{ membersEstimated.length }} /
         {{ members.length }}
@@ -103,54 +124,41 @@
       </h4>
       <b-row class="my-1 d-flex justify-content-center flex-wrap overflow-auto" style="max-height: 500px"
         v-if="highlightedMembers.includes(adminID)">
-        <session-admin-card v-if="safedHostVoting && estimateFinished" :currentEstimation="hostEstimation"
-          :estimateFinished="estimateFinished"
+        <session-admin-card v-if="safedHostVoting && estimateFinished || hostEstimation !== ''"
+          :currentEstimation="hostEstimation" :estimateFinished="estimateFinished"
           :highlight="highlightedMembers.includes(adminID) || highlightedMembers.length === 0" />
         <kick-user-wrapper v-for="member of estimateFinished ? members : membersEstimated" :key="member.memberID"
           child="SessionMemberCard" :member="member" :props="{
-            estimateFinished: estimateFinished,
-            highlight:
-              highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0,
-          }" />
+              estimateFinished: estimateFinished,
+              highlight:
+                highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0,
+            }" />
       </b-row>
       <b-row class="my-1 d-flex justify-content-center flex-wrap overflow-auto" style="max-height: 500px" v-else>
         <kick-user-wrapper v-for="member of estimateFinished ? members : membersEstimated" :key="member.memberID"
           child="SessionMemberCard" :member="member" :props="{
-            estimateFinished: estimateFinished,
-            highlight:
-              highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0,
-          }" />
+              estimateFinished: estimateFinished,
+              highlight:
+                highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0,
+            }" />
         <session-admin-card v-if="safedHostVoting && estimateFinished || hostEstimation !== ''"
           :currentEstimation="hostEstimation" :estimateFinished="estimateFinished"
           :highlight="highlightedMembers.includes(adminID) || highlightedMembers.length === 0" />
       </b-row>
-      <div v-if="hostVoting && estimateFinished === false">
-        <div v-if="hostEstimation == ''">
+      <div v-if="session_hostVoting && estimateFinished === false">
+        <div v-if="!estimateFinished">
           <hr />
           <h4 class="d-inline">
             Your Estimation
           </h4>
         </div>
-        <div v-if="hostEstimation == '' && !estimateFinished" class="newVotes">
+        <div v-if="!estimateFinished" class="newVotes">
           <b-button v-for="item in voteSet" :key="item" class="m-1" pill style="width: 60px" @click="vote(item)">
             {{ item }}
           </b-button>
         </div>
-
-
       </div>
     </div>
-    <b-row v-if="session_userStoryMode === 'NO_US'">
-      <b-col cols="4">
-        <br>
-        <div class="autoReveal-Container autoReveal-green autoReveal-leftbar autoReveal-border-green">
-          <input type="checkbox" id="hostVotingCheckBox" @click="hostVoting = !hostVoting"
-            :disabled="planningStart == true && estimateFinished == false" />
-          <label for="hostVotingCheckBox" id="hostVotingLabel">Host can vote: {{ hostVoting }}</label>
-        </div>
-        <br>
-      </b-col>
-    </b-row>
     <b-row v-if="session_userStoryMode !== 'NO_US'" class="mt-5">
       <b-col>
         <user-story-sum-component />
@@ -158,11 +166,6 @@
     </b-row>
     <b-row v-if="session_userStoryMode !== 'NO_US'">
       <b-col cols="4">
-        <div class="autoReveal-Container autoReveal-green autoReveal-leftbar autoReveal-border-green">
-          <input type="checkbox" id="hostVotingCheckBox" @click="hostVoting = !hostVoting"
-            :disabled="planningStart == true && estimateFinished == false" />
-          <label for="hostVotingCheckBox" id="hostVotingLabel">Host can vote: {{ hostVoting }}</label>
-        </div>
         <user-stories :card-set="voteSet" :show-estimations="planningStart" :initial-stories="userStories"
           :show-edit-buttons="true" :select-story="true" @userStoriesChanged="onUserStoriesChanged"
           @selectedStory="onSelectedStory($event)" />
@@ -214,6 +217,7 @@ export default Vue.extend({
     voteSetJson: { type: String, required: true },
     sessionState: { type: String, required: true },
     timerSecondsString: { type: String, required: true },
+    hostVoting: { type: String, required: true },
     startNewSessionOnMountedString: {
       type: String,
       required: false,
@@ -230,6 +234,7 @@ export default Vue.extend({
       session_sessionState: "",
       session_timerSecondsString: "",
       session_userStoryMode: "",
+      session_hostVoting: false,
       //data
       index: 0,
       stageLabelReady: "Ready",
@@ -240,7 +245,6 @@ export default Vue.extend({
       startTimerOnComponentCreation: true,
       estimateFinished: false,
       session: {},
-      hostVoting: false,
       hostEstimation: "",
       safedHostVoting: false,
       numberOfEstimatesInThisRound: 0,
@@ -375,6 +379,7 @@ export default Vue.extend({
       this.session_timerSecondsString = this.timerSecondsString;
       this.session_voteSetJson = this.voteSetJson;
       this.session_userStoryMode = this.userStoryMode;
+      this.session_hostVoting = (String(this.hostVoting).toLowerCase() === 'true');
     },
     assignSessionToData(session) {
       if (Object.keys(session).length !== 0) {
@@ -384,6 +389,7 @@ export default Vue.extend({
         this.session_timerSecondsString = session.sessionConfig.timerSeconds.toString();
         this.session_voteSetJson = JSON.stringify(session.sessionConfig.set);
         this.session_userStoryMode = session.sessionConfig.userStoryMode;
+        this.session_hostVoting = (String(session.hostVoting).toLowerCase() === 'true');
         this.$store.commit("setUserStories", {
           stories: session.sessionConfig.userStories,
         });
@@ -523,31 +529,31 @@ export default Vue.extend({
     sendRestartMessage() {
       this.estimateFinished = false;
       this.hostEstimation = '';
-      this.safedHostVoting = this.hostVoting;
-      if (this.hostVoting) {
+      this.safedHostVoting = this.session_hostVoting;
+      if (this.session_hostVoting) {
         this.numberOfEstimatesInThisRound = this.members.length + 1;
       } else {
         this.numberOfEstimatesInThisRound = this.members.length;
       }
       const endPoint = Constants.webSocketRestartPlanningRoute;
-      this.$store.commit("sendViaBackendWS", { endPoint, data: this.hostVoting });
+      this.$store.commit("sendViaBackendWS", { endPoint, data: this.session_hostVoting });
     },
     goToLandingPage() {
       this.$router.push({ name: "LandingPage" });
     },
     onPlanningStarted() {
       this.planningStart = true;
-      this.safedHostVoting = this.hostVoting;
-      if (this.hostVoting) {
+      this.safedHostVoting = this.session_hostVoting;
+      if (this.session_hostVoting) {
         this.numberOfEstimatesInThisRound = this.members.length + 1;
       } else {
         this.numberOfEstimatesInThisRound = this.members.length;
       }
     },
     vote(vote: string) {
+      this.hostEstimation = vote;
       const endPoint = `${Constants.webSocketVoteRouteAdmin}`;
       this.$store.commit("sendViaBackendWS", { endPoint, data: vote });
-      this.hostEstimation = vote;
     },
   },
 });
@@ -555,32 +561,13 @@ export default Vue.extend({
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.autoReveal-green {
-  color: #000 !important;
-  background-color: #acdbb4 !important;
-}
-
-.autoReveal-leftbar {
-  border-left: 6px solid #30a444 !important;
-}
-
-.autoReveal-Container {
-  padding: 0.01em 16px;
-  height: 50px;
-  display: flex;
-  align-items: center;
-}
-
-#hostVotingCheckBox {
-  transform: scale(1.5);
-}
-
-#hostVotingLabel {
-  padding-left: 10px;
-  margin-top: 2%;
-}
-
 .newVotes {
   text-align: center;
+}
+
+.hostVotingButtons {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
 }
 </style>

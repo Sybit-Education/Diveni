@@ -50,7 +50,9 @@
           "buttons": {
             "new": "Neu",
             "result": "Ergebnisse anzeigen",
-            "finish": "Beende die Session"
+            "finish": "Beende die Session",
+            "addHostVoting": "Host darf mitabstimmen",
+            "removeHostVoting": "Host darf nicht mitabstimmen"
           }
         },
         "modal": {
@@ -234,8 +236,13 @@
           "time": {
             "title": "3. Bestimme die Zeit pro Schätzrunde"
           },
+          "hostVoting": {
+            "title": "4. Soll der Host auch abstimmen",
+            "hostVotingOn": "Ja",
+            "hostVotingOff": "Nein"
+          },
           "password": {
-            "title": "4. Wähle ein Passwort, falls gewünscht",
+            "title": "5. Wähle ein Passwort, falls gewünscht",
             "placeholder": "Passwort (leer lassen für eine offene Session)"
           }
         }

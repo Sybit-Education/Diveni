@@ -50,7 +50,9 @@
           "buttons": {
             "new": "Створити",
             "result": "Показати результат",
-            "finish": "Завершити сеанс"
+            "finish": "Завершити сеанс",
+            "addHostVoting": "Enable host voting",
+            "removeHostVoting": "Disable host voting"
           }
         },
         "modal": {
@@ -234,8 +236,13 @@
           "time": {
             "title": "3. Відрегулюйте час за оцінку"
           },
+          "hostVoting": {
+            "title": "4. Soll der Host auch abstimmen",
+            "hostVotingOn": "Yes",
+            "hostVotingOff": "No"
+          },
           "password": {
-            "title": "4. Виберіть пароль, якщо необхідно",
+            "title": "5. Виберіть пароль, якщо необхідно",
             "placeholder": "Пароль (залиште порожнім для незахищеної сесії)"
           }
         }

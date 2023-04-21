@@ -50,7 +50,9 @@
           "buttons": {
             "new": "Novidades",
             "result": "Mostrar resultado",
-            "finish": "Finalizar a sessão"
+            "finish": "Finalizar a sessão",
+            "addHostVoting": "Enable host voting",
+            "removeHostVoting": "Disable host voting"
           }
         },
         "modal": {
@@ -234,8 +236,13 @@
           "time": {
             "title": "3. Ajuste o tempo por estimativa"
           },
+          "hostVoting": {
+            "title": "4. Soll der Host auch abstimmen",
+            "hostVotingOn": "Yes",
+            "hostVotingOff": "No"
+          },
           "password": {
-            "title": "4. Escolha uma senha, se necessário",
+            "title": "5. Escolha uma senha, se necessário",
             "placeholder": "Senha (deixe em branco para sessão desprotegida)"
           }
         }

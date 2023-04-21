@@ -170,7 +170,6 @@ export default Vue.extend({
       estimateFinished: false,
       pauseSession: false,
       safedHostEstimation: null,
-      test: "",
     };
   },
   computed: {

@@ -50,7 +50,9 @@
           "buttons": {
             "new": "Nuovo",
             "result": "Mostra risultato",
-            "finish": "Termina sessione"
+            "finish": "Termina sessione",
+            "addHostVoting": "Enable host voting",
+            "removeHostVoting": "Disable host voting"
           }
         },
         "modal": {
@@ -234,8 +236,13 @@
           "time": {
             "title": "3. Regolare il tempo per stima"
           },
+          "hostVoting": {
+            "title": "4. Soll der Host auch abstimmen",
+            "hostVotingOn": "Yes",
+            "hostVotingOff": "No"
+          },
           "password": {
-            "title": "4. Scegliere una password se necessario",
+            "title": "5. Scegliere una password se necessario",
             "placeholder": "Password (lasciare vuota per una sessione non protetta)"
           }
         }

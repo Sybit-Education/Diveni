@@ -50,7 +50,9 @@
           "buttons": {
             "new": "New",
             "result": "Show result",
-            "finish": "Finish session"
+            "finish": "Finish session",
+            "addHostVoting": "Enable host voting",
+            "removeHostVoting": "Disable host voting"
           }
         },
         "modal": {
@@ -234,8 +236,13 @@
           "time": {
             "title": "3. Adjust the time per estimation"
           },
+          "hostVoting": {
+            "title": "4. Should the host vote aswell",
+            "hostVotingOn": "Yes",
+            "hostVotingOff": "No"
+          },
           "password": {
-            "title": "4. Choose a password if needed",
+            "title": "5. Choose a password if needed",
             "placeholder": "Password (leave empty for unprotected session)"
           }
         }
