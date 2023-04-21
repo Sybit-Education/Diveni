@@ -28,13 +28,13 @@
       <b-row v-if="isStartVoting" class="my-5">
         <div v-if="isMobile">
           <flicking id="flicking" :options="{
-            renderOnlyVisible: false,
-            horizontal: true,
-            align: 'center',
-            bound: false,
-            defaultIndex: 0,
-            deceleration: 0.0005,
-          }">
+              renderOnlyVisible: false,
+              horizontal: true,
+              align: 'center',
+              bound: false,
+              defaultIndex: 0,
+              deceleration: 0.0005,
+            }">
             <member-vote-card v-for="(voteOption, idx) in voteSet" :key="voteOption" :ref="`memberCard${voteOption}`"
               class="flicking-panel mx-2" :vote-option="voteOption" :index="idx" :hex-color="hexColor"
               :dragged="voteOption === draggedVote" :is-mobile="true" :disabled="pauseSession" @sentVote="onSendVote" />
@@ -60,10 +60,10 @@
       <b-row v-if="votingFinished" class="my-1 d-flex justify-content-center flex-wrap overflow-auto"
         style="max-height: 500px">
         <session-member-card v-for="member of members" :key="member.memberID" :member="member" :props="{
-          estimateFinished: votingFinished,
-          highlight:
-            highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0,
-        }" />
+            estimateFinished: votingFinished,
+            highlight:
+              highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0,
+          }" />
       </b-row>
       <b-row v-if="userStoryMode !== 'NO_US'" class="mt-5">
         <b-col md="6">
@@ -192,7 +192,7 @@ export default Vue.extend({
   },
   watch: {
     memberUpdates(updates) {
-      if (updates.at(-1) === Constants.memberUpdateCommandStartVoting || (this.isAutoRevealActive === 'false' && this.userStoryMode !== 'NO_US')) {
+      if (updates.at(-1) === Constants.memberUpdateCommandStartVoting) {
         this.draggedVote = null;
         this.estimateFinished = false;
         this.triggerTimer = (this.triggerTimer + 1) % 5;
@@ -250,7 +250,7 @@ export default Vue.extend({
         this.$store.commit("sendViaBackendWS", { endPoint, data: vote });
       } else {
         const endPoint = `${Constants.webSocketVoteRouteWithAutoReveal}`;
-        this.$store.commit("sendViaBackendWS", { endPoint, data: vote + "|" + this.isAutoRevealActive });
+        this.$store.commit("sendViaBackendWS", { endPoint, data: vote + " " + this.isAutoRevealActive });
       }
     },
     sendUnregisterCommand() {

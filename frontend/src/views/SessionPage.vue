@@ -5,32 +5,34 @@
         <h1>
           {{
             planningStart
-              ? $t("page.session.during.estimation.title")
-              : $t("page.session.before.title")
+            ? $t("page.session.during.estimation.title")
+            : $t("page.session.before.title")
           }}
         </h1>
       </b-col>
+      <b-col>
+        <b-button class="mr-3 autoRevealButtons" variant="outline-dark" @click="autoReveal = true"
+          v-if="!autoReveal && !planningStart && session_userStoryMode !== 'NO_US'">
+          <b-icon-eye-fill />
+          {{ $t("page.session.during.estimation.buttons.autoRevealOff") }}
+        </b-button>
+        <b-button class="mr-3 autoRevealButtons" variant="outline-dark" @click="autoReveal = false"
+          v-if="autoReveal && !planningStart && session_userStoryMode !== 'NO_US'">
+          <b-icon-eye-slash-fill />
+          {{ $t("page.session.during.estimation.buttons.autoRevealOn") }}
+        </b-button>
+      </b-col>
       <b-col cols="auto" class="mr-auto">
-        <copy-session-id-popup
-          v-if="planningStart"
-          class="float-end"
-          :session-id="session_sessionID"
-        />
+        <copy-session-id-popup v-if="planningStart" class="float-end" :session-id="session_sessionID" />
       </b-col>
       <b-col cols="auto">
-        <session-close-button
-          :is-planning-start="planningStart"
-          :user-story-mode="session_userStoryMode"
-        />
+        <session-close-button :is-planning-start="planningStart" :user-story-mode="session_userStoryMode" />
       </b-col>
     </b-row>
 
     <div v-if="!planningStart">
-      <copy-session-id-popup
-        :text-before-session-i-d="$t('page.session.before.text.beforeID')"
-        :session-id="session_sessionID"
-        :text-after-session-i-d="$t('page.session.before.text.afterID')"
-      />
+      <copy-session-id-popup :text-before-session-i-d="$t('page.session.before.text.beforeID')"
+        :session-id="session_sessionID" :text-after-session-i-d="$t('page.session.before.text.afterID')" />
 
       <h4 class="text-center m-3">
         {{ $t("page.session.before.text.waiting") }}
@@ -38,27 +40,15 @@
       </h4>
 
       <b-row class="d-flex justify-content-center overflow-auto" style="max-height: 500px">
-        <kick-user-wrapper
-          v-for="member of members"
-          :key="member.memberID"
-          class="m-4"
-          child="RoundedAvatar"
-          :member="member"
-        />
+        <kick-user-wrapper v-for="member of members" :key="member.memberID" class="m-4" child="RoundedAvatar"
+          :member="member" />
       </b-row>
       <b-row>
         <b-col class="text-center" v-if="session_userStoryMode !== 'NO_US'">
-          <session-start-button @clicked="onPlanningStarted"
-          :members="members"
-          :autoReveal="autoReveal"
-          :withUs="true"
-          />
+          <session-start-button @clicked="onPlanningStarted" :members="members" :autoReveal="autoReveal" :withUs="true" />
         </b-col>
         <b-col class="text-center" v-else>
-          <session-start-button @clicked="onPlanningStarted"
-          :members="members"
-          :withUs="false"
-          />
+          <session-start-button @clicked="onPlanningStarted" :members="members" :withUs="false" />
         </b-col>
       </b-row>
     </div>
@@ -74,17 +64,24 @@
             <b-icon-bar-chart />
             {{ $t("page.session.during.estimation.buttons.result") }}
           </b-button>
+          <b-button class="mr-3" variant="outline-dark" @click="autoReveal = true"
+            v-if="!autoReveal && session_userStoryMode !== 'NO_US'"
+            :disabled="planningStart == true && estimateFinished == false">
+            <b-icon-eye-fill />
+            {{ $t("page.session.during.estimation.buttons.autoRevealOff") }}
+          </b-button>
+          <b-button class="mr-3" variant="outline-dark" @click="autoReveal = false"
+            v-if="autoReveal && session_userStoryMode !== 'NO_US'"
+            :disabled="planningStart == true && estimateFinished == false">
+            <b-icon-eye-slash-fill />
+            {{ $t("page.session.during.estimation.buttons.autoRevealOn") }}
+          </b-button>
         </b-col>
         <b-col cols="auto">
-          <estimate-timer
-            :start-timestamp="timerTimestamp"
-            :pause-timer="estimateFinished"
-            :duration="timerCountdownNumber"
-            @timerFinished="sendVotingFinishedMessage"
-          />
+          <estimate-timer :start-timestamp="timerTimestamp" :pause-timer="estimateFinished"
+            :duration="timerCountdownNumber" @timerFinished="sendVotingFinishedMessage" />
         </b-col>
       </b-row>
-
       <h4 v-if="membersPending.length > 0 && !estimateFinished" class="d-inline">
         {{ $t("page.session.during.estimation.message.waitingFor") }}
         {{ membersPending.length }} /
@@ -92,18 +89,16 @@
       </h4>
       <div id="demo">
         <div v-if="session_userStoryMode !== 'NO_US'">
-        
-          <div v-if="membersEstimated.length === members.length && autoReveal">
-            {{ (sendVotingFinishedMessage()) }}
+          <div
+            v-if="membersEstimated.length === membersPending.length + membersEstimated.length && autoReveal && !finishAlreadySent"
+            style="display: none">
+            {{ (estimateFinished = true) }}
           </div>
-        
+
         </div>
         <div v-if="session_userStoryMode === 'NO_US'">
 
-          <div
-          v-if="membersEstimated.length === membersPending.length + membersEstimated.length"
-          style="display: none"
-          >
+          <div v-if="membersEstimated.length === membersPending.length + membersEstimated.length" style="display: none">
             {{ (estimateFinished = true) }}
           </div>
 
@@ -111,19 +106,13 @@
         </div>
       </div>
       <div id="demo">
-        <div v-if="membersEstimated.length === 0" style="display: none">
+        <div v-if="membersEstimated.length === 0 && !estimateFinished" style="display: none">
           {{ (estimateFinished = false) }}
         </div>
       </div>
-
       <b-row v-if="!estimateFinished" class="my-1 d-flex justify-content-center flex-wrap">
-        <kick-user-wrapper
-          v-for="member of membersPending"
-          :key="member.memberID"
-          class="mx-2"
-          child="RoundedAvatar"
-          :member="member"
-        />
+        <kick-user-wrapper v-for="member of membersPending" :key="member.memberID" class="mx-2" child="RoundedAvatar"
+          :member="member" />
       </b-row>
       <hr />
       <h4>
@@ -131,21 +120,13 @@
         {{ membersEstimated.length }} /
         {{ membersPending.length + membersEstimated.length }}
       </h4>
-      <b-row
-        class="my-1 d-flex justify-content-center flex-wrap overflow-auto"
-        style="max-height: 500px"
-      >
-        <kick-user-wrapper
-          v-for="member of estimateFinished ? members : membersEstimated"
-          :key="member.memberID"
-          child="SessionMemberCard"
-          :member="member"
-          :props="{
-            estimateFinished: estimateFinished,
-            highlight:
-              highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0,
-          }"
-        />
+      <b-row class="my-1 d-flex justify-content-center flex-wrap overflow-auto" style="max-height: 500px">
+        <kick-user-wrapper v-for="member of estimateFinished ? members : membersEstimated" :key="member.memberID"
+          child="SessionMemberCard" :member="member" :props="{
+              estimateFinished: estimateFinished,
+              highlight:
+                highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0,
+            }" />
       </b-row>
     </div>
     <b-row v-if="session_userStoryMode !== 'NO_US'" class="mt-5">
@@ -155,28 +136,13 @@
     </b-row>
     <b-row v-if="session_userStoryMode !== 'NO_US'">
       <b-col cols="4">
-        <div class="autoReveal-Container autoReveal-green autoReveal-leftbar autoReveal-border-green">
-          <input type="checkbox" id="autoRevealCheckBox" v-model="autoReveal" :disabled="planningStart == true && estimateFinished == false"/>
-          <label for="autoRevealCheckBox" id="autoRevealLabel"> Autoreveal: {{ autoReveal }}</label>
-        </div>
-        <user-stories
-          :card-set="voteSet"
-          :show-estimations="planningStart"
-          :initial-stories="userStories"
-          :show-edit-buttons="true"
-          :select-story="true"
-          @userStoriesChanged="onUserStoriesChanged"
-          @selectedStory="onSelectedStory($event)"
-        />
+        <user-stories :card-set="voteSet" :show-estimations="planningStart" :initial-stories="userStories"
+          :show-edit-buttons="true" :select-story="true" @userStoriesChanged="onUserStoriesChanged"
+          @selectedStory="onSelectedStory($event)" />
       </b-col>
       <b-col cols="8">
-        <user-story-descriptions
-          :card-set="voteSet"
-          :initial-stories="userStories"
-          :edit-description="true"
-          :index="index"
-          @userStoriesChanged="onUserStoriesChanged"
-        />
+        <user-story-descriptions :card-set="voteSet" :initial-stories="userStories" :edit-description="true"
+          :index="index" @userStoriesChanged="onUserStoriesChanged" />
       </b-col>
     </b-row>
     <notify-host-component />
@@ -517,15 +483,11 @@ export default Vue.extend({
       this.$store.commit("clearStore");
     },
     sendVotingFinishedMessage() {
-      setTimeout(() => {
-        if (this.membersEstimated.length === 0) {
-          this.sendRestartMessage();
-        }
-      }, 0);
       if (!this.estimateFinished && !this.finishAlreadySent) {
+        this.estimateFinished = true;
+        this.finishAlreadySent = true;
         const endPoint = `${Constants.webSocketVotingFinishedRoute}`;
         this.$store.commit("sendViaBackendWS", { endPoint });
-        this.estimateFinished = true;
       }
     },
     sendRestartMessage() {
@@ -551,31 +513,9 @@ export default Vue.extend({
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
-.autoReveal-green{
-    color: #000!important;
-    background-color: #acdbb4!important;
+.autoRevealButtons {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
 }
-
-.autoReveal-leftbar {
-    border-left: 6px solid #30a444!important;
-}
-
-.autoReveal-Container {
-    padding: 0.01em 16px;
-    height: 50px;
-    display: flex;
-    align-items: center;
-}
-
-
-#autoRevealCheckBox {
-  transform: scale(1.5);
-}
-
-#autoRevealLabel {
-  padding-left: 10px;
-  margin-top: 2%;
-}
-
 </style>

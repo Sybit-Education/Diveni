@@ -50,7 +50,9 @@
           "buttons": {
             "new": "Neu",
             "result": "Ergebnisse anzeigen",
-            "finish": "Beende die Session"
+            "finish": "Beende die Session",
+            "autoRevealOn": "Schalte automatisches Aufdecken aus",
+            "autoRevealOff": "Schalte automatisches Aufdecken ein"
           }
         },
         "modal": {

@@ -430,7 +430,7 @@ public class WebsocketControllerTest {
             null));
     webSocketService.setAdminUser(adminPrincipal);
     StompSession session = getMemberSession(sessionID, memberID);
-    val vote = "5|true";
+    val vote = "5 true";
 
     session.send(VOTE_AUTOREVEAL, vote);
 
@@ -466,7 +466,7 @@ public class WebsocketControllerTest {
             null));
     webSocketService.setAdminUser(adminPrincipal);
     StompSession session = getMemberSession(sessionID, memberID);
-    val vote = "5|false";
+    val vote = "5 false";
 
     session.send(VOTE_AUTOREVEAL, vote);
 

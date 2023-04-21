@@ -191,12 +191,11 @@ public class WebsocketController {
   @MessageMapping("/vote-with-automatic-reveal")
   public synchronized void processVoteWithAutoReveal(@Payload String vote, MemberPrincipal member) {
     LOGGER.debug("--> processVoteWithAutoReveal()");
-    String[] data = vote.split("|");
+    String[] data = vote.split(" ");
     val session = ControllerUtils.getSessionByMemberIDOrThrowResponse(databaseService, member.getMemberID())
         .updateEstimation(member.getMemberID(), data[0]);
     webSocketService.sendMembersUpdate(session);
     databaseService.saveSession(session);
-
     if (data[1].equals("true")) {
       boolean votingCompleted = checkIfAllMembersVoted(session.getMembers());
       if (votingCompleted) {

@@ -50,7 +50,9 @@
           "buttons": {
             "new": "Nowy",
             "result": "Pokaż wynik",
-            "finish": "Zakończ sesję"
+            "finish": "Zakończ sesję",
+            "autoRevealOn": "Disable automatic reveal",
+            "autoRevealOff": "Enable automatic reveal"
           }
         },
         "modal": {
