@@ -59,6 +59,12 @@ User Stories once you've started the session.
   
   <img :src="$withBase('/img/adjust_time.png')" alt="step 3_ Adjust time">
 
+- In the fourth row, you can choose if you want to let the host vote aswell on the userstories. You can easily
+  change this value by clicking on one of these buttons. If you dont click any button the option to vote on the
+  userstories is disabled for the host. But you can also change this later on.
+
+  <img :src="$withBase('/img/host_voting_option_preparePage.png')" alt="step 4_ Choose host voting">
+
 - To finish the setting, you can secure your session by an optional password.
   
   <img :src="$withBase('/img/Choose_password.png')" alt="Step 4: Choose password">
