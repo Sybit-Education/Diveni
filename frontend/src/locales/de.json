@@ -27,14 +27,19 @@
           "waiting": "Warte auf den Beitritt des Teams"
         },
         "button": "Starte das Planning",
+        "refreshStories": "Aktualisiere die Userstories",
         "userStories": {
+          "filter" : {
+            "noStoryFound": "Keine Stories gefunden!"
+          },
           "button": {
             "addFirstUserStory": "Noch keine Stories... Klicke um eine Story hinzuzufügen",
             "addUserStory": "Hinzufügen"
           },
           "placeholder": {
             "userStoryTitle": "User Story Titel",
-            "userStoryDescription": "Beschreibung und Akzeptanzkriterien..."
+            "userStoryDescription": "Beschreibung und Akzeptanzkriterien...",
+            "searchUserStories": "User Stories durchsuchen..."
           },
           "text": "Klicke auf ein User Story Titel um die Beschreibung zu sehen",
           "sum": "Summe:"
@@ -199,6 +204,9 @@
                   "submit": {
                     "label": "Senden"
                   }
+                },
+                "placeholder": {
+                  "searchProjects": "Projekte durchsuchen..."
                 }
               }
             }

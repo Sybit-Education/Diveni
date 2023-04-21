@@ -14,4 +14,21 @@ module.exports = {
       msTileImage: "./favicon.ico",
     },
   },
+  configureWebpack: {
+    optimization: {
+      splitChunks: {
+        cacheGroups: {
+          vendor: {
+            test: /[\\/]node_modules[\\/]/,
+            name: "vendor",
+            chunks: "all",
+            enforce: true,
+            priority: 1,
+            maxInitialRequests: 3,
+            maxAsyncRequests: 5, // hier wird die Anzahl der gleichzeitigen Anfragen für nachfolgende Chunk-Dateien begrenzt
+          },
+        },
+      },
+    },
+  },
 };

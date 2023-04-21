@@ -27,14 +27,19 @@
           "waiting": "Чекаємо на учасників"
         },
         "button": "Почати планування",
+        "refreshStories": "оновити Історії користувачів",
         "userStories": {
+          "filter" : {
+            "noStoryFound": "Історій не знайдено!"
+          },
           "button": {
             "addFirstUserStory": "Ще немає історій... натисніть, щоб додати історії",
             "addUserStory": "Додати"
           },
           "placeholder": {
             "userStoryTitle": "Назва історії користувача",
-            "userStoryDescription": "Опис і критерії прийняття..."
+            "userStoryDescription": "Опис і критерії прийняття...",
+            "searchUserStories": "Пошук історій користувачів..."
           },
           "text": "Натисніть на назву історії користувача, щоб побачити опис",
           "sum": "Загалом:"
@@ -199,6 +204,9 @@
                   "submit": {
                     "label": "Відправити"
                   }
+                },
+                "placeholder": {
+                  "searchProjects": "Пошукові проекти..."
                 }
               }
             }

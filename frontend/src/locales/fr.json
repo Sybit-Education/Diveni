@@ -27,14 +27,19 @@
           "waiting": "En attente de l'adhésion des membres"
         },
         "button": "Commencer la planification",
+        "refreshStories": "Actualiser les User Stories",
         "userStories": {
+          "filter" : {
+            "noStoryFound": "Aucune histoire trouvée!"
+          },
           "button": {
             "addFirstUserStory": "Pas encore d'histoires... cliquez pour ajouter des histoires",
             "addUserStory": "Ajouter"
           },
           "placeholder": {
             "userStoryTitle": "Titre de l'histoire de l'utilisateur",
-            "userStoryDescription": "Critères de description et d'acception..."
+            "userStoryDescription": "Critères de description et d'acception...",
+            "searchUserStories": "Rechercher des témoignages d'utilisateurs..."
           },
           "text": "Cliquez sur un titre de l'histoire de l'utilisateur pour voir la description",
           "sum": "Total:"
@@ -199,6 +204,9 @@
                   "submit": {
                     "label": "Soumettre"
                   }
+                },
+                "placeholder": {
+                  "searchProjects": "Parcourir les projets..."
                 }
               }
             }
