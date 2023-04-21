@@ -106,7 +106,7 @@
         </div>
       </div>
       <div id="demo">
-        <div v-if="membersEstimated.length === 0 && !estimateFinished" style="display: none">
+        <div v-if="membersEstimated.length === 0 && !finishAlreadySent" style="display: none">
           {{ (estimateFinished = false) }}
         </div>
       </div>
