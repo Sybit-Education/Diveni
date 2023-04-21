@@ -136,9 +136,20 @@
     </b-row>
     <b-row v-if="session_userStoryMode !== 'NO_US'">
       <b-col cols="4">
-        <user-stories :card-set="voteSet" :show-estimations="planningStart" :initial-stories="userStories"
-          :show-edit-buttons="true" :select-story="true" @userStoriesChanged="onUserStoriesChanged"
-          @selectedStory="onSelectedStory($event)" />
+        <div v-if="session_userStoryMode === 'US_JIRA'" class="refreshUserstories">
+          <b-button class="w-100 mb-3" variant="info" @click="refreshUserStories">
+            {{ $t("page.session.before.refreshStories") }}
+          </b-button>
+        </div>
+        <user-stories
+          :card-set="voteSet"
+          :show-estimations="planningStart"
+          :initial-stories="userStories"
+          :show-edit-buttons="true"
+          :select-story="true"
+          @userStoriesChanged="onUserStoriesChanged"
+          @selectedStory="onSelectedStory($event)"
+        />
       </b-col>
       <b-col cols="8">
         <user-story-descriptions :card-set="voteSet" :initial-stories="userStories" :edit-description="true"
@@ -379,7 +390,7 @@ export default Vue.extend({
       console.log(`idx: ${idx}`);
       console.log(`doRemove: ${doRemove}`);
       console.log(`Syncing ${us[idx]}`);
-      // Jira sync
+      //Jira sync
       if (this.session_userStoryMode === "US_JIRA") {
         let response;
         if (doRemove) {
@@ -421,6 +432,17 @@ export default Vue.extend({
         this.$store.commit("sendViaBackendWS", {
           endPoint,
           data: JSON.stringify(us),
+        });
+      }
+    },
+    async refreshUserStories() {
+      const response = await apiService.getUserStoriesFromProject(this.selectedProject.name);
+      this.$store.commit("setUserStories", { stories: response });
+      if (this.webSocketIsConnected) {
+        const endPoint = `${Constants.webSocketAdminUpdatedUserStoriesRoute}`;
+        this.$store.commit("sendViaBackendWS", {
+          endPoint,
+          data: JSON.stringify(response),
         });
       }
     },
