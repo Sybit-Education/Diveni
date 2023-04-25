@@ -4,7 +4,7 @@ layout: home
 hero:
   name: "Diveni"
   text: The Planning-Poker App.
-  image: /logo-256x256.png
+  image: /logo.svg
   tagline: Instant free and easy remote Planning Poker
   actions:
     - theme: brand
