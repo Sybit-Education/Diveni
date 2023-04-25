@@ -119,7 +119,7 @@
               :show-estimations="true"
               :initial-stories="userStories"
               :show-edit-buttons="false"
-              :initial-selected-index="index"
+              :host-selected-story-index="hostSelectedStoryIndex"
               @selectedStory="onSelectedStory($event)"
             />
           </div>
@@ -140,6 +140,7 @@
             :show-estimations="true"
             :initial-stories="userStories"
             :show-edit-buttons="false"
+            :host-selected-story-index="hostSelectedStoryIndex"
             @selectedStory="onSelectedStory($event)"
           />
         </div>
@@ -194,6 +195,7 @@ export default Vue.extend({
   data() {
     return {
       index: 0,
+      hostSelectedStoryIndex: null,
       draggedVote: null,
       voteSet: [] as string[],
       timerCountdownNumber: 0,
@@ -277,7 +279,7 @@ export default Vue.extend({
       }
     },
     selectedUserStoryIndex(index) {
-      this.index = index;
+      this.hostSelectedStoryIndex = index;
     },
   },
   created() {

@@ -13,8 +13,9 @@
       <b-list-group-item
         v-for="(story, index) of userStories"
         :key="index"
-        :active="index === selectedStoryIndex"
+        :active="index === selectedStoryIndex || index === hostSelectedStoryIndex"
         class="w-100 p-1 d-flex justify-content-left"
+        :style="getStoryListItemBorderColor(index)"
         @mouseover="hover = index"
         @mouseleave="hover = null"
         @click="setUserStoryAsActive(index)"
@@ -92,7 +93,7 @@ export default Vue.extend({
     initialStories: { type: Array, required: true },
     showEstimations: { type: Boolean, required: true },
     showEditButtons: { type: Boolean, required: false, default: true },
-    initialSelectedIndex: { type: Number, required: false, default: null },
+    hostSelectedStoryIndex: { type: Number, required: false, default: null },
   },
   data() {
     return {
@@ -109,8 +110,9 @@ export default Vue.extend({
     initialStories() {
       this.userStories = this.initialStories as Array<UserStory>;
     },
-    initialSelectedIndex() {
-      this.selectedStoryIndex = this.initialSelectedIndex;
+    hostSelectedStoryIndex() {
+      this.selectedStoryIndex = this.hostSelectedStoryIndex;
+      this.$emit("selectedStory", this.selectedStoryIndex);
     },
   },
   mounted() {
@@ -120,6 +122,14 @@ export default Vue.extend({
     setUserStoryAsActive(index) {
       this.selectedStoryIndex = index;
       this.$emit("selectedStory", index);
+    },
+    getStoryListItemBorderColor(index) {
+      if (this.selectedStoryIndex === index) {
+        return "border-color: blue; border-width: 3px;";
+      } else if (this.hostSelectedStoryIndex === index) {
+        return "border-color: green; border-width: 3px;";
+      }
+      return "";
     },
     addUserStory() {
       const story: UserStory = {
@@ -183,7 +193,6 @@ export default Vue.extend({
 <style scoped>
 .list-group-item.active {
   background-color: transparent;
-  border-width: 3px;
 }
 
 .search {
