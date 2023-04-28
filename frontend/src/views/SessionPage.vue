@@ -11,12 +11,12 @@
         </h1>
       </b-col>
       <b-col>
-        <b-button class="mr-3 autoRevealButtons" variant="outline-dark" @click="autoReveal = true"
+        <b-button class="mr-3 autoRevealButtons" variant="outline-dark" :pressed="false" @click="autoReveal = true"
           v-if="!autoReveal && !planningStart && session_userStoryMode !== 'NO_US'">
           <b-icon-eye-fill />
           {{ $t("page.session.during.estimation.buttons.autoRevealOff") }}
         </b-button>
-        <b-button class="mr-3 autoRevealButtons" variant="outline-dark" @click="autoReveal = false"
+        <b-button class="mr-3 autoRevealButtons" variant="outline-dark" :pressed="true" @click="autoReveal = false"
           v-if="autoReveal && !planningStart && session_userStoryMode !== 'NO_US'">
           <b-icon-eye-slash-fill />
           {{ $t("page.session.during.estimation.buttons.autoRevealOn") }}
@@ -64,13 +64,13 @@
             <b-icon-bar-chart />
             {{ $t("page.session.during.estimation.buttons.result") }}
           </b-button>
-          <b-button class="mr-3" variant="outline-dark" @click="autoReveal = true"
+          <b-button class="mr-3" variant="outline-dark" :pressed="false" @click="autoReveal = true"
             v-if="!autoReveal && session_userStoryMode !== 'NO_US'"
             :disabled="planningStart == true && estimateFinished == false">
             <b-icon-eye-fill />
             {{ $t("page.session.during.estimation.buttons.autoRevealOff") }}
           </b-button>
-          <b-button class="mr-3" variant="outline-dark" @click="autoReveal = false"
+          <b-button class="mr-3" variant="outline-dark" :pressed="true" @click="autoReveal = false"
             v-if="autoReveal && session_userStoryMode !== 'NO_US'"
             :disabled="planningStart == true && estimateFinished == false">
             <b-icon-eye-slash-fill />
@@ -141,15 +141,9 @@
             {{ $t("page.session.before.refreshStories") }}
           </b-button>
         </div>
-        <user-stories
-          :card-set="voteSet"
-          :show-estimations="planningStart"
-          :initial-stories="userStories"
-          :show-edit-buttons="true"
-          :select-story="true"
-          @userStoriesChanged="onUserStoriesChanged"
-          @selectedStory="onSelectedStory($event)"
-        />
+        <user-stories :card-set="voteSet" :show-estimations="planningStart" :initial-stories="userStories"
+          :show-edit-buttons="true" :select-story="true" @userStoriesChanged="onUserStoriesChanged"
+          @selectedStory="onSelectedStory($event)" />
       </b-col>
       <b-col cols="8">
         <user-story-descriptions :card-set="voteSet" :initial-stories="userStories" :edit-description="true"
