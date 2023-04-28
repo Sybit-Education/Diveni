@@ -387,18 +387,20 @@ public class WebsocketControllerTest {
     val memberPrincipal = new MemberPrincipal(sessionID, memberID2);
     webSocketService.setAdminUser(adminPrincipal);
     StompSession session = getMemberSession(sessionID, memberID2);
-    
+
     session.send(UNREGISTER, memberPrincipal);
 
     // Wait for server-side handling
     TimeUnit.MILLISECONDS.sleep(TIMEOUT);
 
     assertEquals(1, sessionRepo.findBySessionID(sessionID).getMembers().size());
-    assertEquals(SessionState.VOTING_FINISHED, sessionRepo.findBySessionID(sessionID).getSessionState());
+    assertEquals(
+        SessionState.VOTING_FINISHED, sessionRepo.findBySessionID(sessionID).getSessionState());
   }
 
   @Test
-  public void memberLeavesWhileVotingAndIsNotTheLastMissingVoter_votingStartedState() throws Exception {
+  public void memberLeavesWhileVotingAndIsNotTheLastMissingVoter_votingStartedState()
+      throws Exception {
     val sessionID = Utils.generateRandomID();
     val adminID = Utils.generateRandomID();
     val memberID = Utils.generateRandomID();
@@ -425,14 +427,15 @@ public class WebsocketControllerTest {
     val memberPrincipal = new MemberPrincipal(sessionID, memberID2);
     webSocketService.setAdminUser(adminPrincipal);
     StompSession session = getMemberSession(sessionID, memberID2);
-    
+
     session.send(UNREGISTER, memberPrincipal);
 
     // Wait for server-side handling
     TimeUnit.MILLISECONDS.sleep(TIMEOUT);
 
     assertEquals(2, sessionRepo.findBySessionID(sessionID).getMembers().size());
-    assertEquals(SessionState.START_VOTING, sessionRepo.findBySessionID(sessionID).getSessionState());
+    assertEquals(
+        SessionState.START_VOTING, sessionRepo.findBySessionID(sessionID).getSessionState());
   }
 
   @Test

@@ -94,7 +94,10 @@ public class WebsocketController {
               new MemberPayload(((MemberPrincipal) principal).getMemberID())));
       boolean votingCompleted = checkIfAllMembersVoted(session.getMembers());
       if (votingCompleted) {
-        votingFinished(new AdminPrincipal(session.getSessionID(), databaseService.getSessionByID(session.getSessionID()).get().getAdminID()));
+        votingFinished(
+            new AdminPrincipal(
+                session.getSessionID(),
+                databaseService.getSessionByID(session.getSessionID()).get().getAdminID()));
       }
     } else {
       val session =
