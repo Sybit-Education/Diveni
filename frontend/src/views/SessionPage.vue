@@ -11,13 +11,13 @@
         </h1>
       </b-col>
       <b-col>
-        <b-button class="mr-3 hostVotingButtons" variant="outline-dark" @click="session_hostVoting = true"
-          v-if="!session_hostVoting && !planningStart">
+        <b-button class="mr-3 hostVotingButtons" variant="outline-dark" :pressed="false"
+          @click="session_hostVoting = true" v-if="!session_hostVoting && !planningStart">
           <b-icon-person-plus-fill />
           {{ $t("page.session.during.estimation.buttons.addHostVoting") }}
         </b-button>
-        <b-button class="mr-3 hostVotingButtons" variant="outline-dark" @click="session_hostVoting = false"
-          v-if="session_hostVoting && !planningStart">
+        <b-button class="mr-3 hostVotingButtons" variant="outline-dark" :pressed="true"
+          @click="session_hostVoting = false" v-if="session_hostVoting && !planningStart">
           <b-icon-person-dash-fill />
           {{ $t("page.session.during.estimation.buttons.removeHostVoting") }}
         </b-button>
@@ -60,13 +60,13 @@
             <b-icon-bar-chart />
             {{ $t("page.session.during.estimation.buttons.result") }}
           </b-button>
-          <b-button class="mr-3" variant="outline-dark" @click="session_hostVoting = true" v-if="!session_hostVoting"
-            :disabled="planningStart == true && estimateFinished == false">
+          <b-button class="mr-3" variant="outline-dark" :pressed="false" @click="session_hostVoting = true"
+            v-if="!session_hostVoting" :disabled="planningStart == true && estimateFinished == false">
             <b-icon-person-plus-fill />
             {{ $t("page.session.during.estimation.buttons.addHostVoting") }}
           </b-button>
-          <b-button class="mr-3" variant="outline-dark" @click="session_hostVoting = false" v-if="session_hostVoting"
-            :disabled="planningStart == true && estimateFinished == false">
+          <b-button class="mr-3" variant="outline-dark" :pressed="true" @click="session_hostVoting = false"
+            v-if="session_hostVoting" :disabled="planningStart == true && estimateFinished == false">
             <b-icon-person-dash-fill />
             {{ $t("page.session.during.estimation.buttons.removeHostVoting") }}
           </b-button>
