@@ -1,18 +1,8 @@
 <template>
   <div class="markdown-editor">
     <viewer v-if="disabled" :initial-value="markdown" :height="height" :options="editorOptions" />
-    <editor
-      v-else
-      ref="toastuiEditor"
-      :initial-value="markdown"
-      :height="height"
-      :options="editorOptions"
-      :placeholder="placeholder"
-      initial-edit-type="wysiwyg"
-      preview-style="vertical"
-      @blur="blur"
-      @change="change"
-    />
+    <editor v-else ref="toastuiEditor" :initial-value="markdown" :height="height" :options="editorOptions"
+      :placeholder="placeholder" initial-edit-type="wysiwyg" preview-style="vertical" @blur="blur" @change="change" />
   </div>
 </template>
 
@@ -81,7 +71,7 @@ export default Vue.extend({
   },
   mounted() {
     if (!this.disabled && this.getEditorRef()) {
-      this.getEditorRef().invoke("placeholder", this.placeholder);
+      this.getEditorRef();
     }
   },
   methods: {
