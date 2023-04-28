@@ -1,5 +1,11 @@
 <template>
-  <b-button v-b-modal.close-session-modal style="max-height: 40px" variant="danger" class="mt-4" @click="leaveSession">
+  <b-button
+    v-b-modal.close-session-modal
+    style="max-height: 40px"
+    variant="danger"
+    class="mt-4"
+    @click="leaveSession"
+  >
     <b-icon-x />
     {{ $t("page.vote.button.leave.label") }}
   </b-button>
