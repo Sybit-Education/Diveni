@@ -22,7 +22,9 @@ Connecting to an issue tracker is optional. Diveni can also be used without a co
 
 ### JIRA Cloud Connector
 
-    TBD
+```
+TBD
+```
 
 ### JIRA Enterprise Connector
 

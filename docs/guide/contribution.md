@@ -27,7 +27,7 @@ Diveni is a web based app which is separated in two main components:
 
 These components are bundled within Docker containers.
 
-For more details, see: [docs/guide/architecture.md](docs/guide/architecture.md).
+For more details, see: [docs/guide/architecture.md](./architecture).
 
 ## How Can I Contribute?
 
@@ -113,22 +113,22 @@ If you find a mistake or if your prefered language is still missing you can repo
 - Java 11+
   - We prefere SapMachine but any other Java JDK 11+ is fine.
   - Download from SapMachine <https://sap.github.io/SapMachine/>
-  
-      <img :src="$withBase('/img/Java11_Installer_Selection.png')" alt="Download_Selection_Java11">
+
+      ![Download_Selection_Java11](../img/Java11_Installer_Selection.png)
   - Select the appropriate installer for your OS
 - Gradle
   - Download from Gradle official site <https://gradle.org/install/>
 - Node.js 14+
   - Download from nodejs <https://nodejs.org/en/download/>
-  
-    <img :src="$withBase('/img/nodejs_Installer_Selection.png')" alt="Download_Selection_nodejs">
+
+    ![Download_Selection_nodejs](../img/nodejs_Installer_Selection.png)
   - Select the appropriate installer for your OS
 - MongoDB 4+
   - MongoDB is running in the background at port 27017
   - Select the appropriate installer for your OS and follow the instructions
     <https://www.mongodb.com/docs/manual/administration/install-community/>
-  
-    <img :src="$withBase('/img/MongoDB_Installer_Selection.png')" alt="Download_Selection_MongoDB">
+
+    ![Download_Selection_MongoDB](../img/MongoDB_Installer_Selection.png)
 
 
 ### Setup Project
@@ -159,7 +159,9 @@ If you find a mistake or if your prefered language is still missing you can repo
 
 ### JIRA Cloud
 
-    TODO
+```
+TODO
+```
 
 ### JIRA Enterprise
 
@@ -228,12 +230,14 @@ The [standard.js](https://standardjs.com/) style guide is a [JavaScript](https:/
 To format frontend code with standard.js, you can use the following command within
 directory `webui`:
 
-    npm run lint:fix
+```
+npm run lint:fix
+```
 
 ### Documentation Styleguide
 
 - Use [Markdown](https://daringfireball.net/projects/markdown).
-- For Use Case / UML diagrams use inline [Mermaid](https://mermaid-js.github.io/mermaid/#/) format.
+- For Use Case / UML diagrams use inline [Mermaid](https://mermaid-js.github.io/mermaid/) format.
 - Reference methods and classes in markdown with the custom `{}` notation:
   - Reference classes with `{ClassName}`
   - Reference instance methods with `{ClassName::methodName}`

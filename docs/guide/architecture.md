@@ -206,7 +206,7 @@ Or on __local development__ environment at <http://localhost:8081/swagger-ui/ind
 
 This sequence diagram shows all Websocket commands and when they are used.
 
-Diagrams created using [Mermaid](https://mermaid-js.github.io/mermaid/#/).
+Diagrams created using [Mermaid](https://mermaid-js.github.io/mermaid/).
 
 #### Create Session and Vote
 
