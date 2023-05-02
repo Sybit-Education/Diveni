@@ -164,43 +164,46 @@
                 "descriptionLine2": "Додати заголовок і опис до кожної історії користувача",
                 "descriptionLine3": "Використовуйте CSV-імпорт для інтеграції розповіді користувачів у вашому сеансі",
                 "descriptionLine4": "First line must contain the field names separated by semicolons: title;description;estimation",
-                "descriptionLine5": "Ви зможете додавати і редагувати історії користувачів після запуску сесії",
+                "descriptionLine5": "You will be able to add and edit User Stories once you've started the session",
                 "importButton": "Імпорт історій користувача",
                 "toastSuccessNotification": "Історії користувача імпортовано",
                 "toastErrorNotification": "Помилка при спробі імпорту"
               },
-              "withJira": {
+              "withIssueTracker": {
                 "tab": {
-                  "label": "Планування з Jira"
+                  "label": "Planning with Issue-Tracker"
                 },
-                "subtitle": "Виберіть Jira для вашого Poker-Planning",
-                "descriptionLine1": "Увійдіть за допомогою своїх облікових даних",
-                "descriptionLine2": "Виберіть свій проект",
-                "descriptionLine3": "Після того, як ви натиснете на стартову сесію, ви будете перенаправлені на наступну сторінку, щоб змінити свої історії користувача",
-                "descriptionLine4": "Ви зможете додавати і редагувати історії користувачів після запуску сесії",
-                "formSelection": "Будь ласка, виберіть ваш проект",
-                "selectedProject": "Вибраний проект: ",
-                "allUserStories": "Всі історії користувача",
+                "subtitle": "Select Jira for your Poker-Planning",
+                "descriptionLine1": "Sign in with your credentials",
+                "descriptionLine2": "Select your project",
+                "descriptionLine3": "After you click on start session, you will be redirected to the next page to edit your user stories",
+                "descriptionLine4": "You will be able to add and edit User Stories once you've started the session",
+                "formSelection": "Please select your Project",
+                "selectedProject": "Selected Project: ",
+                "allUserStories": "All User Stories",
                 "dialog": {
-                  "description": "Нова вкладка відкриється негайно, будь ласка, надайте доступ до цієї програми в цій вкладці та введіть код підтвердження тут."
+                  "description": "A new tab will open immediately, please grant access to this application in this tab and enter the verification code here."
                 },
                 "inputs": {
                   "verificationCode": {
-                    "placeholder": "Код підтвердження"
+                    "placeholder": "Verification code"
                   }
                 },
                 "buttons": {
                   "signInWithJiraCloud": {
-                    "label": "Увійти до Jira Cloud"
+                    "label": "Sign in with Jira Cloud"
                   },
                   "signInWithJiraServer": {
-                    "label": "Увійдіть через Jira сервер"
+                    "label": "Sign in with Jira Server"
+                  },
+                  "signInWithAzureDevOps": {
+                    "label": "Sign in with Azure DevOps"
                   },
                   "selectProject": {
-                    "label": "Виберіть ваш jira проєкт"
+                    "label": "Select your jira project"
                   },
                   "submit": {
-                    "label": "Відправити"
+                    "label": "Submit"
                   }
                 },
                 "placeholder": {
@@ -272,10 +275,10 @@
         "memberLeft": "Учасник покинув сесію",
         "memberJoined": "Учасник приєднався до сесії",
         "memberRemoved": "Ви були видалені з сеансом хоста",
-        "jiraCredentials": "Неправильні облікові дані",
-        "jiraLoginFailed": "Помилка входу в систему",
-        "jiraSynchronizeSuccess": "Синхронізовані зміни з Jira",
-        "jiraSynchronizeFailed": "Не вдалося синхронізувати зміни з Jira",
+        "issueTrackerCredentials": "Wrong credentials",
+        "issueTrackerLoginFailed": "Login failed",
+        "issueTrackerSynchronizeSuccess": "Synchronized changes with Issue-Tracker",
+        "issueTrackerSynchronizeFailed": "Failed to synchronize changes with Issue-Tracker",
         "wrongID": "Невірний код запрошення",
         "password": "Хибний пароль"
       }
