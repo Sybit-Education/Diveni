@@ -164,43 +164,46 @@
                 "descriptionLine2": "Füge jeder User Story Titel und Beschreibung hinzu",
                 "descriptionLine3": "Du kannst auch einen CSV-Import nutzen, um User Stories zu integrieren",
                 "descriptionLine4": "Die erste Zeile muss die Feldnamen enthalten, die durch Semikolons getrennt sind: title;description;estimation",
-                "descriptionLine5": "Du kannst nach Start der Session User Stories bearbeiten oder neue hinzufügen",
+                "descriptionLine5": "You will be able to add and edit User Stories once you've started the session",
                 "importButton": "User Stories importieren",
                 "toastSuccessNotification": "User Stories importiert",
                 "toastErrorNotification": "Beim importieren ist leider ein Fehler aufgetreten"
               },
-              "withJira": {
+              "withIssueTracker": {
                 "tab": {
-                  "label": "Planning mit Jira"
+                  "label": "Planning with Issue-Tracker"
                 },
-                "subtitle": "Wähle die Jira-Integration für das Planning",
-                "descriptionLine1": "Logge dich mit deinen Anmeldedaten ein",
-                "descriptionLine2": "Wähle dein Projekt",
-                "descriptionLine3": "Nach dem klicken auf start session, wirst du auf die nächste Seite gelangen um die user Stories ggf. zu bearbeiten",
-                "descriptionLine4": "Du kannst nach Start der Session User Stories bearbeiten oder neue hinzufügen",
-                "formSelection": "Bitte wähle dein Projekt aus",
-                "selectedProject": "Ausgewähltes Projekt: ",
-                "allUserStories": "Alle User Stories",
+                "subtitle": "Select Jira for your Poker-Planning",
+                "descriptionLine1": "Sign in with your credentials",
+                "descriptionLine2": "Select your project",
+                "descriptionLine3": "After you click on start session, you will be redirected to the next page to edit your user stories",
+                "descriptionLine4": "You will be able to add and edit User Stories once you've started the session",
+                "formSelection": "Please select your Project",
+                "selectedProject": "Selected Project: ",
+                "allUserStories": "All User Stories",
                 "dialog": {
-                  "description": "Es öffnet sich gleich ein neuer Tab. Bitte gewähre dieser Anwendung in diesem Tab den Zugriff und trage den Verifizierungscode hier ein."
+                  "description": "A new tab will open immediately, please grant access to this application in this tab and enter the verification code here."
                 },
                 "inputs": {
                   "verificationCode": {
-                    "placeholder": "Verifizierungscode"
+                    "placeholder": "Verification code"
                   }
                 },
                 "buttons": {
                   "signInWithJiraCloud": {
-                    "label": "Mit Jira Cloud anmelden"
+                    "label": "Sign in with Jira Cloud"
                   },
                   "signInWithJiraServer": {
-                    "label": "Mit Jira Server anmelden"
+                    "label": "Sign in with Jira Server"
+                  },
+                  "signInWithAzureDevOps": {
+                    "label": "Sign in with Azure DevOps"
                   },
                   "selectProject": {
-                    "label": "Wählen Sie ihr Jira-Projekt aus"
+                    "label": "Select your jira project"
                   },
                   "submit": {
-                    "label": "Senden"
+                    "label": "Submit"
                   }
                 },
                 "placeholder": {
@@ -272,10 +275,10 @@
         "memberLeft": "Teilnehmer hat die Sitzung verlassen",
         "memberJoined": "Teilnehmer ist der Sitzung beigetreten",
         "memberRemoved": "Du wurdest vom Host aus der Sitzung entfernt",
-        "jiraCredentials": "Falsche Login-Daten",
-        "jiraLoginFailed": "Login fehlgeschlagen",
-        "jiraSynchronizeSuccess": "Änderungen mit Jira synchronisiert",
-        "jiraSynchronizeFailed": "Fehler beim Synchronisieren mit Jira",
+        "issueTrackerCredentials": "Wrong credentials",
+        "issueTrackerLoginFailed": "Login failed",
+        "issueTrackerSynchronizeSuccess": "Synchronized changes with Issue-Tracker",
+        "issueTrackerSynchronizeFailed": "Failed to synchronize changes with Issue-Tracker",
         "wrongID": "Falscher Einladungscode",
         "password": "Falsches Passwort"
       }
