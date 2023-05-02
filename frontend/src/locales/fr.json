@@ -164,43 +164,46 @@
                 "descriptionLine2": "Ajouter un titre et une description à chaque histoire utilisateur",
                 "descriptionLine3": "Utilisez le CSV-Import pour intégrer les Histoires d'utilisateur dans votre session",
                 "descriptionLine4": "First line must contain the field names separated by semicolons: title;description;estimation",
-                "descriptionLine5": "Vous serez en mesure d'ajouter et de modifier des Histoires d'utilisateur une fois que vous aurez commencé la session",
+                "descriptionLine5": "You will be able to add and edit User Stories once you've started the session",
                 "importButton": "Importer des Histoires Utilisateur",
                 "toastSuccessNotification": "Histoires d'utilisateur importées",
                 "toastErrorNotification": "Erreur lors de la tentative d'importation"
               },
-              "withJira": {
+              "withIssueTracker": {
                 "tab": {
-                  "label": "Planification avec Jira"
+                  "label": "Planning with Issue-Tracker"
                 },
-                "subtitle": "Sélectionnez Jira pour votre Poker-Planning",
-                "descriptionLine1": "Connectez-vous avec vos identifiants",
-                "descriptionLine2": "Sélectionnez votre projet",
-                "descriptionLine3": "Après avoir cliqué sur la session de démarrage, vous serez redirigé vers la page suivante pour modifier vos histoires d'utilisateur",
-                "descriptionLine4": "Vous serez en mesure d'ajouter et de modifier des Histoires d'utilisateur une fois que vous aurez commencé la session",
-                "formSelection": "Veuillez sélectionner votre projet",
-                "selectedProject": "Projet sélectionné : ",
-                "allUserStories": "Toutes les histoires d'utilisateurs",
+                "subtitle": "Select Jira for your Poker-Planning",
+                "descriptionLine1": "Sign in with your credentials",
+                "descriptionLine2": "Select your project",
+                "descriptionLine3": "After you click on start session, you will be redirected to the next page to edit your user stories",
+                "descriptionLine4": "You will be able to add and edit User Stories once you've started the session",
+                "formSelection": "Please select your Project",
+                "selectedProject": "Selected Project: ",
+                "allUserStories": "All User Stories",
                 "dialog": {
-                  "description": "Un nouvel onglet s'ouvrira immédiatement, veuillez accorder l'accès à cette application dans cet onglet et entrer le code de vérification ici."
+                  "description": "A new tab will open immediately, please grant access to this application in this tab and enter the verification code here."
                 },
                 "inputs": {
                   "verificationCode": {
-                    "placeholder": "Code de vérification"
+                    "placeholder": "Verification code"
                   }
                 },
                 "buttons": {
                   "signInWithJiraCloud": {
-                    "label": "Connectez-vous avec Jira Cloud"
+                    "label": "Sign in with Jira Cloud"
                   },
                   "signInWithJiraServer": {
-                    "label": "Se connecter avec le serveur Jira"
+                    "label": "Sign in with Jira Server"
+                  },
+                  "signInWithAzureDevOps": {
+                    "label": "Sign in with Azure DevOps"
                   },
                   "selectProject": {
-                    "label": "Sélectionnez votre projet jira"
+                    "label": "Select your jira project"
                   },
                   "submit": {
-                    "label": "Soumettre"
+                    "label": "Submit"
                   }
                 },
                 "placeholder": {
@@ -272,10 +275,10 @@
         "memberLeft": "Le membre a quitté la session",
         "memberJoined": "Le membre a rejoint la session",
         "memberRemoved": "Vous avez été retiré de la session par l'hôte",
-        "jiraCredentials": "Mauvais identifiants",
-        "jiraLoginFailed": "Échec de la connexion",
-        "jiraSynchronizeSuccess": "Changements synchronisés avec Jira",
-        "jiraSynchronizeFailed": "Impossible de synchroniser les modifications avec Jira",
+        "issueTrackerCredentials": "Wrong credentials",
+        "issueTrackerLoginFailed": "Login failed",
+        "issueTrackerSynchronizeSuccess": "Synchronized changes with Issue-Tracker",
+        "issueTrackerSynchronizeFailed": "Failed to synchronize changes with Issue-Tracker",
         "wrongID": "Mauvais code d'invitation",
         "password": "Mauvais mot de passe"
       }
