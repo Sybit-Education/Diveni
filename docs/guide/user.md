@@ -5,7 +5,7 @@
 Diveni is a web application for Planning-Poker sessions. Sprint Planning often requires teams to
 meet to estimate and plan user stories. With Diveni more flexibility is provided, team members can
 do interactive planning from different locations. In addition, the mobile application offers JIRA
-integration.
+and Azure Devops integration.
 
 By the way: "diveni" is Esperanto for "guess": <https://en.wiktionary.org/wiki/diveni>
 
@@ -32,8 +32,8 @@ As first step you choose the mode for your User Stories. You can choose to estim
 
 * Without User Stories 
 * With User Stories created within Diveni. You are then able to create User Stories on the right side.
-* With User Stories imported from Jira. Choosing the last option you’ll have to connect to your Jira 
-  account. It will be explained how to connect and how to choose the correct project.
+* With User Stories imported from an issue tracker. Choosing the last option you’ll have to connect to
+  your JIRA or Azure account. It will be explained how to connect and how to choose the correct project.
 
 Any mode specific information is given below the chosen mode.
 
@@ -46,7 +46,7 @@ At "Planning without User Stories" you will vote with your selected cards and wi
 User Stories once you've started the session.
 
 - In the second row, you can decide which poker card set will be used for the upcoming voting
-  session. You can choose between different sets: Fibonacci, T-shirt sizes (not for Jira),
+  session. You can choose between different sets: Fibonacci, T-shirt sizes (not for issue trackers),
   hours or integer values. You can also select individually the range of each card set, including
   an additional ```?```.
 
@@ -99,7 +99,7 @@ cards once you've started the session.
     - The import is started by pressing the "Import User Stories" button
   - All following steps for the creation of a new session are the same as described under 1.1.
 
-## 1.3 Create new Session with connection to Jira
+## 1.3 Create new Session with connection to an issue tracker
 
 ## 2 Join Session
 

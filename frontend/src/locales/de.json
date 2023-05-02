@@ -29,13 +29,17 @@
         "button": "Starte das Planning",
         "refreshStories": "Aktualisiere die Userstories",
         "userStories": {
+          "filter" : {
+            "noStoryFound": "Keine Stories gefunden!"
+          },
           "button": {
             "addFirstUserStory": "Noch keine Stories... Klicke um eine Story hinzuzufügen",
             "addUserStory": "Hinzufügen"
           },
           "placeholder": {
             "userStoryTitle": "User Story Titel",
-            "userStoryDescription": "Beschreibung und Akzeptanzkriterien..."
+            "userStoryDescription": "Beschreibung und Akzeptanzkriterien...",
+            "searchUserStories": "User Stories durchsuchen..."
           },
           "text": "Klicke auf ein User Story Titel um die Beschreibung zu sehen",
           "sum": "Summe:"
@@ -165,9 +169,9 @@
                 "toastSuccessNotification": "User Stories importiert",
                 "toastErrorNotification": "Beim importieren ist leider ein Fehler aufgetreten"
               },
-              "withJira": {
+              "withIssueTracker": {
                 "tab": {
-                  "label": "Planning mit Jira"
+                  "label": "Planning mit Issue-Tracker"
                 },
                 "subtitle": "Wähle die Jira-Integration für das Planning",
                 "descriptionLine1": "Logge dich mit deinen Anmeldedaten ein",
@@ -192,12 +196,18 @@
                   "signInWithJiraServer": {
                     "label": "Mit Jira Server anmelden"
                   },
+                  "signInWithAzureDevOps": {
+                    "label": "Mit Azure DevOps anmelden"
+                  },
                   "selectProject": {
                     "label": "Wählen Sie ihr Jira-Projekt aus"
                   },
                   "submit": {
                     "label": "Senden"
                   }
+                },
+                "placeholder": {
+                  "searchProjects": "Projekte durchsuchen..."
                 }
               }
             }
@@ -265,10 +275,10 @@
         "memberLeft": "Teilnehmer hat die Sitzung verlassen",
         "memberJoined": "Teilnehmer ist der Sitzung beigetreten",
         "memberRemoved": "Du wurdest vom Host aus der Sitzung entfernt",
-        "jiraCredentials": "Falsche Login-Daten",
-        "jiraLoginFailed": "Login fehlgeschlagen",
-        "jiraSynchronizeSuccess": "Änderungen mit Jira synchronisiert",
-        "jiraSynchronizeFailed": "Fehler beim Synchronisieren mit Jira",
+        "issueTrackerCredentials": "Falsche Login-Daten",
+        "issueTrackerLoginFailed": "Login fehlgeschlagen",
+        "issueTrackerSynchronizeSuccess": "Änderungen mit Issue-Tracker synchronisiert",
+        "issueTrackerSynchronizeFailed": "Fehler beim Synchronisieren mit Issue-Tracker",
         "wrongID": "Falscher Einladungscode",
         "password": "Falsches Passwort"
       }

@@ -3,7 +3,7 @@
     <b-button variant="success" :disabled="disabled" @click="redirectToJira()">
       {{
         $t(
-          "session.prepare.step.selection.mode.description.withJira.buttons.signInWithJiraCloud.label"
+          "session.prepare.step.selection.mode.description.withIssueTracker.buttons.signInWithJiraCloud.label"
         )
       }}
     </b-button>

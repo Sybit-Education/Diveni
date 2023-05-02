@@ -18,7 +18,7 @@ export default Vue.extend({
     const params = Object.fromEntries(urlSearchParams.entries());
     const jiraStateId = localStorage.getItem("jiraStateId");
     if (!params.code || !params.state || !jiraStateId || jiraStateId !== params.state) {
-      this.$toast.error(this.$t("session.notification.messages.jiraLoginFailed"));
+      this.$toast.error(this.$t("session.notification.messages.issueTrackerLoginFailed"));
       this.$router.push({ name: "PrepareSessionPage" });
       return;
     }
@@ -37,9 +37,9 @@ export default Vue.extend({
     },
     showToast(error) {
       if (error.message == "failed to retrieve access token") {
-        this.$toast.error(this.$t("session.notification.messages.jiraCredentials"));
+        this.$toast.error(this.$t("session.notification.messages.issueTrackerCredentials"));
       } else {
-        this.$toast.error(this.$t("session.notification.messages.jiraLoginFailed"));
+        this.$toast.error(this.$t("session.notification.messages.issueTrackerLoginFailed"));
       }
       console.error(error);
     },

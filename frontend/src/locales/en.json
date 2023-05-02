@@ -29,13 +29,17 @@
         "button": "Start Planning",
         "refreshStories": "Refresh Userstories",
         "userStories": {
+          "filter" : {
+            "noStoryFound": "No stories found!"
+          },
           "button": {
             "addFirstUserStory": "No stories yet... click to add stories",
             "addUserStory": "Add"
           },
           "placeholder": {
             "userStoryTitle": "User Story Title",
-            "userStoryDescription": "Description and acceptance criteria..."
+            "userStoryDescription": "Description and acceptance criteria...",
+            "searchUserStories": "Search user stories..."
           },
           "text": "Click on a User Story Title to see the description",
           "sum": "Total:"
@@ -165,9 +169,9 @@
                 "toastSuccessNotification": "User Stories imported",
                 "toastErrorNotification": "Error when trying to import"
               },
-              "withJira": {
+              "withIssueTracker": {
                 "tab": {
-                  "label": "Planning with Jira"
+                  "label": "Planning with Issue-Tracker"
                 },
                 "subtitle": "Select Jira for your Poker-Planning",
                 "descriptionLine1": "Sign in with your credentials",
@@ -192,12 +196,18 @@
                   "signInWithJiraServer": {
                     "label": "Sign in with Jira Server"
                   },
+                  "signInWithAzureDevOps": {
+                    "label": "Sign in with Azure DevOps"
+                  },
                   "selectProject": {
                     "label": "Select your jira project"
                   },
                   "submit": {
                     "label": "Submit"
                   }
+                },
+                "placeholder": {
+                  "searchProjects": "Search projects..."
                 }
               }
             }
@@ -265,10 +275,10 @@
         "memberLeft": "Member left the session",
         "memberJoined": "Member joined the session",
         "memberRemoved": "You have been removed from the session by the host",
-        "jiraCredentials": "Wrong credentials",
-        "jiraLoginFailed": "Login failed",
-        "jiraSynchronizeSuccess": "Synchronized changes with Jira",
-        "jiraSynchronizeFailed": "Failed to synchronize changes with Jira",
+        "issueTrackerCredentials": "Wrong credentials",
+        "issueTrackerLoginFailed": "Login failed",
+        "issueTrackerSynchronizeSuccess": "Synchronized changes with Issue-Tracker",
+        "issueTrackerSynchronizeFailed": "Failed to synchronize changes with Issue-Tracker",
         "wrongID": "Wrong invitation code",
         "password": "Wrong password"
       }

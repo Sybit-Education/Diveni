@@ -10,7 +10,7 @@
     >
       {{
         $t(
-          "session.prepare.step.selection.mode.description.withJira.buttons.signInWithJiraServer.label"
+          "session.prepare.step.selection.mode.description.withIssueTracker.buttons.signInWithJiraServer.label"
         )
       }}
     </b-button>
@@ -22,7 +22,7 @@
       @hidden="resetModal"
       @ok="handleOk"
     >
-      <p>{{ $t("session.prepare.step.selection.mode.description.withJira.dialog.description") }}</p>
+      <p>{{ $t("session.prepare.step.selection.mode.description.withIssueTracker.dialog.description") }}</p>
       <form ref="form" @submit.stop.prevent="handleSubmit">
         <b-form-group
           label="Verification code"
@@ -36,7 +36,7 @@
             required
             :placeholder="
               $t(
-                'session.prepare.step.selection.mode.description.withJira.inputs.verificationCode.placeholder'
+                'session.prepare.step.selection.mode.description.withIssueTracker.inputs.verificationCode.placeholder'
               )
             "
             :state="verificationCodeState"
@@ -113,9 +113,9 @@ export default Vue.extend({
     },
     showToast(error) {
       if (error.message == "failed to retrieve access token") {
-        this.$toast.error(this.$t("session.notification.messages.jiraCredentials"));
+        this.$toast.error(this.$t("session.notification.messages.issueTrackerCredentials"));
       } else {
-        this.$toast.error(this.$t("session.notification.messages.jiraLoginFailed"));
+        this.$toast.error(this.$t("session.notification.messages.issueTrackerLoginFailed"));
       }
       console.error(error);
     },
