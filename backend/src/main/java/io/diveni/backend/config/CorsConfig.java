@@ -23,6 +23,8 @@ public class CorsConfig {
   @Value("${SERVER_URL:#{null}}")
   private String SERVER_URL;
 
+  private final String[] ALLOWED_METHODS = {"GET", "POST", "PUT", "DELETE"};
+
   @PostConstruct
   public void logConfig() {
     LOGGER.info("CorsConfig:");
@@ -34,7 +36,7 @@ public class CorsConfig {
     return new WebMvcConfigurer() {
       @Override
       public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**").allowedOrigins(SERVER_URL);
+        registry.addMapping("/**").allowedOrigins(SERVER_URL).allowedMethods(ALLOWED_METHODS);
       }
     };
   }

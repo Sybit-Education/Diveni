@@ -169,9 +169,9 @@
                 "toastSuccessNotification": "Histórias de usuários importadas",
                 "toastErrorNotification": "Erro ao tentar importar"
               },
-              "withJira": {
+              "withIssueTracker": {
                 "tab": {
-                  "label": "Planejando com Jira"
+                  "label": "Planejando com Issue-Tracker"
                 },
                 "subtitle": "Selecione Jira para seu Pokémon planejamento",
                 "descriptionLine1": "Entrar com suas credenciais",
@@ -195,6 +195,9 @@
                   },
                   "signInWithJiraServer": {
                     "label": "Entrar com o servidor do Jira"
+                  },
+                  "signInWithAzureDevOps": {
+                    "label": "Entrar com o Azure DevOps"
                   },
                   "selectProject": {
                     "label": "Selecione seu projeto jira"
@@ -272,10 +275,10 @@
         "memberLeft": "Membro abandonou a sessão",
         "memberJoined": "Membro entrou na sessão",
         "memberRemoved": "Você foi removido da sessão pelo host",
-        "jiraCredentials": "Credenciais erradas",
-        "jiraLoginFailed": "Falha no login",
-        "jiraSynchronizeSuccess": "Alterações sincronizadas com Jira",
-        "jiraSynchronizeFailed": "Falha ao sincronizar as mudanças com o Jira",
+        "issueTrackerCredentials": "Credenciais erradas",
+        "issueTrackerLoginFailed": "Falha no login",
+        "issueTrackerSynchronizeSuccess": "Alterações sincronizadas com Issue-Tracker",
+        "issueTrackerSynchronizeFailed": "Falha ao sincronizar as mudanças com o Issue-Tracker",
         "wrongID": "Código de convite incorreto",
         "password": "Senha errada"
       }

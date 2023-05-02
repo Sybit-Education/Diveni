@@ -38,6 +38,7 @@ Supported issue trackers:
 
 - Atlassian JIRA on premise
 - Atlassian JIRA Cloud
+- Microsoft Azure DevOps
 - More connectors are planned
 
 ## Read more
