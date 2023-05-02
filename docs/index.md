@@ -18,8 +18,8 @@ hero:
 features:
   - title: Vote Remote
     details: Do an interactive planning poker with your distributed teams.
-  - title: Connect to JIRA
-    details: Import User Stories from Jira Server or JIRA Cloud to update their Story Points.
+  - title: Connect to Issue Trackers
+    details: Import User Stories from various Issue Trackers such as Jira Server & Cloud and Azure DevOps to update their Story Points.
   - title: Open Source
-    details: Install Diveni in your own Docker based environment.
+    details: Install Diveni in your own Docker-based environment.
 ---
