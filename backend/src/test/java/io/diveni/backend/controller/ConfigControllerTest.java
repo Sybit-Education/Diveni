@@ -1,8 +1,10 @@
 package io.diveni.backend.controller;
 
+import io.diveni.backend.service.projectmanagementproviders.azuredevops.AzureDevOpsService;
 import io.diveni.backend.service.projectmanagementproviders.jiracloud.JiraCloudService;
 import io.diveni.backend.service.projectmanagementproviders.jiraserver.JiraServerService;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,6 +24,8 @@ public class ConfigControllerTest {
   @Autowired private JiraServerService jiraServerService;
 
   @Autowired private JiraCloudService jiraCloudService;
+
+  @Autowired private AzureDevOpsService azureDevOpsService;
 
   @Test
   public void getLocale_returnsDE() throws Exception {
@@ -44,6 +48,9 @@ public class ConfigControllerTest {
                 .value(Boolean.valueOf(jiraCloudService.serviceEnabled()).toString()))
         .andExpect(
             MockMvcResultMatchers.jsonPath("$.jiraCloudAuthorizeUrl")
-                .value(jiraCloudService.getJiraCloudAuthorizeUrl()));
+                .value(jiraCloudService.getJiraCloudAuthorizeUrl()))
+        .andExpect(
+            (MockMvcResultMatchers.jsonPath("$.isAzureDevOpsEnabled")
+                .value(Boolean.valueOf(azureDevOpsService.serviceEnabled()).toString())));
   }
 }
