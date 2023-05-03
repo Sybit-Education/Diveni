@@ -33,7 +33,8 @@ public class ConfigController {
     issueTrackerConfig.put(
         "isJiraCloudEnabled", Boolean.toString(jiraCloudService.serviceEnabled()));
     issueTrackerConfig.put("jiraCloudAuthorizeUrl", jiraCloudService.getJiraCloudAuthorizeUrl());
-    issueTrackerConfig.put("isAzureDevOpsEnabled", Boolean.toString(azureDevOpsService.serviceEnabled()));
+    issueTrackerConfig.put(
+        "isAzureDevOpsEnabled", Boolean.toString(azureDevOpsService.serviceEnabled()));
     return issueTrackerConfig;
   }
 

@@ -51,7 +51,7 @@ public class ProjectManagementController {
   @Autowired AzureDevOpsService azureDevOpsService;
 
   private final String PROVIDER_NOT_ENABLED_MESSAGE =
-    "The selected issue tracker is not enabled. Make sure to set all required parameters.";
+      "The selected issue tracker is not enabled. Make sure to set all required parameters.";
 
   @GetMapping(value = "/jira/oauth1/requestToken")
   public ResponseEntity<JiraRequestToken> getRequestToken() {
@@ -108,7 +108,7 @@ public class ProjectManagementController {
     if (!azureDevOpsService.serviceEnabled()) {
       LOGGER.warn("Azure DevOps is not configured!");
       throw new ResponseStatusException(
-        HttpStatus.INTERNAL_SERVER_ERROR, PROVIDER_NOT_ENABLED_MESSAGE);
+          HttpStatus.INTERNAL_SERVER_ERROR, PROVIDER_NOT_ENABLED_MESSAGE);
     }
     ResponseEntity<TokenIdentifier> response =
         new ResponseEntity<>(azureDevOpsService.getAccessToken("", origin), HttpStatus.OK);
