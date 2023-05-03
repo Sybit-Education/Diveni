@@ -42,7 +42,7 @@ JIRA-Server.
 ### Azure DevOps Connector
 
 For setting up the Azure DevOps Connector, you have to generate a personal access token:
-<https://learn.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate?view=azure-devops&tabs=Windows#create-a-pat>
+<https://learn.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate#create-a-pat>
 
 Afterwards you have to enter the used organisation in `AZURE_ORGANIZATION` and the personal access token in `AZURE_CLIENTPAT` in `backend/.env`.
 
@@ -118,7 +118,7 @@ services:
 ### Configuration
 #### Available configuration
 | Parameter | Function | default value |
-|---|---|---|
+|---|---|:---:|
 | SERVER_URL | URL the server is running on, used for CORS-settings | null |
 | LOCALE | The locale the frontend should be set to, available locales=en,de,es,fr,it,pl,pt,uk | en |
 | JIRA_CLOUD_CLIENTID | ClientId is shown in the Atlassion Developer app settings | null |
@@ -130,16 +130,18 @@ services:
 | JIRA_SERVER_PRIVATEKEY | Private key from jira_privatekey.pcks8 | null |
 | JIRA_SERVER_ESTIMATIONFIELD | The estimation field is a customfield which is different for every Jira instance and must therefore be set manually | customfield_10111 |
 | JIRA_SERVER_RANKNAME | Used for ordering of the issues. Depends on the Jira language and is either RANK or RANG | RANK |
+| AZURE_ORGANIZATION | The name of the organization in Azure | null
+| AZURE_CLIENTPAT | Azure Personal Access Token | null
 
-**Important:**
+::: warning Important:
 * In order to use Jira Cloud all parameters with prefix `JIRA_CLOUD_` are required to be set.
 * To use Jira Server all parameters with prefix `JIRA_SERVER_` have to be set.
+* To use Azure DevOps all parameters with prefix `AZURE_` have to be set.
+:::
 
 
 #### Add configuration to the Diveni instance
-<details>
-<summary>Diveni with configuration via docker compose</summary>
-
+::: details Diveni with configuration via docker compose
 Update Docker Compose to environment variables
 ```yaml
 [...]
@@ -162,14 +164,13 @@ Update Docker Compose to environment variables
       - "JIRA_SERVER_PRIVATEKEY=[xxx]"
       - "JIRA_SERVER_ESTIMATIONFIELD=customfield_10152"
       - "JIRA_SERVER_RANKNAME=RANG"
+      - "AZURE_ORGANIZATION=organization"
+      - "AZURE_CLIENTPAT=[xxx]"
 [...]
 ```
+:::
 
-</details>
-
-<details>
-<summary>Diveni with configuration via .env</summary>
-
+::: details Diveni with configuration via .env
 To configure your local environment, you have to add your configuration to `/backend/.env`
 
 See below for example:
@@ -204,6 +205,12 @@ JIRA_SERVER_ESTIMATIONFIELD=customfield_10152
 
 #Used for correct sortation of the issues. Depends on the Jira language e.g. RANK or RANG
 JIRA_SERVER_RANKNAME=RANG
+
+#The name of the organization in Azure
+AZURE_ORGANIZATION=organization
+
+#Azure Personal Access Token
+AZURE_CLIENTPAT=xxx
 ```
 Copy the configured file to `/backend/.env`
 
@@ -223,8 +230,7 @@ Update Docker Compose to use .env
       - ./backend/.env
 [...]
 ```
-
-</details>
+:::
 
 
 ### Starting App 
