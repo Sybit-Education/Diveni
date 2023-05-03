@@ -105,6 +105,11 @@ public class ProjectManagementController {
   public ResponseEntity<TokenIdentifier> getAzureOAuth2AccessToken(
       @RequestHeader("Origin") String origin) {
     LOGGER.debug("--> getOAuth2AccessToken(), origin={}", origin);
+    if (!azureDevOpsService.serviceEnabled()) {
+      LOGGER.warn("Azure DevOps is not configured!");
+      throw new ResponseStatusException(
+        HttpStatus.INTERNAL_SERVER_ERROR, PROVIDER_NOT_ENABLED_MESSAGE);
+    }
     ResponseEntity<TokenIdentifier> response =
         new ResponseEntity<>(azureDevOpsService.getAccessToken("", origin), HttpStatus.OK);
     LOGGER.debug("<-- getOAuth2AccessToken()");

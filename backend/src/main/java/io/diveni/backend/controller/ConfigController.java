@@ -1,5 +1,6 @@
 package io.diveni.backend.controller;
 
+import io.diveni.backend.service.projectmanagementproviders.azuredevops.AzureDevOpsService;
 import io.diveni.backend.service.projectmanagementproviders.jiracloud.JiraCloudService;
 import io.diveni.backend.service.projectmanagementproviders.jiraserver.JiraServerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,8 @@ public class ConfigController {
 
   @Autowired private JiraCloudService jiraCloudService;
 
+  @Autowired private AzureDevOpsService azureDevOpsService;
+
   @Value("${LOCALE:en}")
   private String LOCALE;
 
@@ -30,6 +33,7 @@ public class ConfigController {
     issueTrackerConfig.put(
         "isJiraCloudEnabled", Boolean.toString(jiraCloudService.serviceEnabled()));
     issueTrackerConfig.put("jiraCloudAuthorizeUrl", jiraCloudService.getJiraCloudAuthorizeUrl());
+    issueTrackerConfig.put("isAzureDevOpsEnabled", Boolean.toString(azureDevOpsService.serviceEnabled()));
     return issueTrackerConfig;
   }
 

@@ -116,7 +116,7 @@ export default Vue.extend({
       timer: 30,
       warningWhenUnderZero: "",
       tabIndex: 0,
-      isIssueTrackerEnabled: constants.isIssueTrackerEnabled,
+      isIssueTrackerEnabled: false,
     };
   },
   computed: {
@@ -148,7 +148,10 @@ export default Vue.extend({
   },
   mounted() {
     apiService.getIssueTrackerConfig().then((result) => {
-      this.isJiraEnabled = result.isJiraCloudEnabled === "true" || result.isJiraServerEnabled === "true" || result.isAzureDevOpsEnabled === "true";
+      this.isIssueTrackerEnabled =
+        result.isJiraCloudEnabled === "true" ||
+        result.isJiraServerEnabled === "true" ||
+        result.isAzureDevOpsEnabled === "true";
     });
     this.$store.commit("setUserStories", { stories: [] });
   },
