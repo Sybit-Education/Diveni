@@ -1,5 +1,5 @@
 interface UserStory {
-  jiraId: number | null;
+  id: number | null;
   title: string;
   description: string;
   estimation: string | null;

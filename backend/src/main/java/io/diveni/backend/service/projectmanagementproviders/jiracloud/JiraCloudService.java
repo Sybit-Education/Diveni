@@ -230,7 +230,7 @@ public class JiraCloudService implements ProjectManagementProviderOAuth2 {
 
   @Override
   public void updateIssue(String tokenIdentifier, UserStory story) {
-    LOGGER.debug("--> updateIssue(), storyID={}", story.getJiraId());
+    LOGGER.debug("--> updateIssue(), storyID={}", story.getId());
     String cloudID = getCloudID(accessTokens.get(tokenIdentifier));
     Map<String, Map<String, Object>> content = new HashMap<>();
     Map<String, Object> fields = new HashMap<>();
@@ -248,7 +248,7 @@ public class JiraCloudService implements ProjectManagementProviderOAuth2 {
     content.put("fields", fields);
     try {
       executeRequest(
-          String.format(getJiraUrl(), cloudID) + "/issue/" + story.getJiraId(),
+          String.format(getJiraUrl(), cloudID) + "/issue/" + story.getId(),
           HttpMethod.PUT,
           accessTokens.get(tokenIdentifier),
           content);
@@ -261,12 +261,12 @@ public class JiraCloudService implements ProjectManagementProviderOAuth2 {
   }
 
   @Override
-  public void deleteIssue(String tokenIdentifier, String jiraID) {
-    LOGGER.debug("--> deleteIssue(), jiraID={}", jiraID);
+  public void deleteIssue(String tokenIdentifier, String issueID) {
+    LOGGER.debug("--> deleteIssue(), issueID={}", issueID);
     try {
       String cloudID = getCloudID(accessTokens.get(tokenIdentifier));
       executeRequest(
-          String.format(getJiraUrl(), cloudID) + "/issue/" + jiraID,
+          String.format(getJiraUrl(), cloudID) + "/issue/" + issueID,
           HttpMethod.DELETE,
           accessTokens.get(tokenIdentifier),
           null);

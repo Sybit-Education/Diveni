@@ -21,7 +21,7 @@ public interface ProjectManagementProvider {
 
   String createIssue(String tokenIdentifier, String projectID, UserStory story);
 
-  void deleteIssue(String tokenIdentifier, String jiraID);
+  void deleteIssue(String tokenIdentifier, String issueID);
 
   boolean containsToken(String token);
 

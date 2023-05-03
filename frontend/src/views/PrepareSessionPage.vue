@@ -31,8 +31,8 @@
         </b-button>
       </b-tab>
       <b-tab
-        v-if="isJiraEnabled"
-        :title="$t('session.prepare.step.selection.mode.description.withJira.tab.label')"
+        v-if="isIssueTrackerEnabled"
+        :title="$t('session.prepare.step.selection.mode.description.withIssueTracker.tab.label')"
         :title-link-class="linkClass(2)"
       >
         <jira-component class="mg_top_2_per" />
@@ -116,7 +116,7 @@ export default Vue.extend({
       timer: 30,
       warningWhenUnderZero: "",
       tabIndex: 0,
-      isJiraEnabled: false,
+      isIssueTrackerEnabled: constants.isIssueTrackerEnabled,
     };
   },
   computed: {
@@ -148,7 +148,7 @@ export default Vue.extend({
   },
   mounted() {
     apiService.getIssueTrackerConfig().then((result) => {
-      this.isJiraEnabled = result.isJiraCloudEnabled === "true" || result.isJiraServerEnabled === "true";
+      this.isJiraEnabled = result.isJiraCloudEnabled === "true" || result.isJiraServerEnabled === "true" || result.isAzureDevOpsEnabled === "true";
     });
     this.$store.commit("setUserStories", { stories: [] });
   },
@@ -257,7 +257,7 @@ export default Vue.extend({
             let estimation = story.estimation ? story.estimation : story.Estimation;
 
             stories.push({
-              jiraId: null,
+              id: null,
               title: title,
               description: description,
               estimation: estimation,

@@ -1,5 +1,14 @@
 <template>
   <div class="user-stories">
+    <div v-if="userStories.length > 0 || filterActive" class="w-100 d-flex justify-content-left">
+      <b-input
+        v-model="input"
+        class="search"
+        type="text"
+        :placeholder="$t('page.session.before.userStories.placeholder.searchUserStories')"
+        @input="swapPriority"
+      />
+    </div>
     <b-card-group class="my-3 overflow-auto" style="max-height: 70vh">
       <b-list-group-item
         v-for="(story, index) of userStories"
@@ -44,7 +53,7 @@
     </b-card-group>
 
     <b-button
-      v-if="userStories.length < 1 && showEditButtons"
+      v-if="userStories.length < 1 && showEditButtons && !filterActive"
       class="w-100 mb-3"
       variant="success"
       @click="addUserStory()"
@@ -53,8 +62,16 @@
       {{ $t("page.session.before.userStories.button.addFirstUserStory") }}
     </b-button>
 
+    <b-alert
+      v-if="userStories.length < 1 && showEditButtons && filterActive"
+      show
+      variant="warning"
+    >
+      {{ $t("page.session.before.userStories.filter.noStoryFound") }}
+    </b-alert>
+
     <b-button
-      v-if="userStories.length > 0 && showEditButtons"
+      v-if="userStories.length > 0 && showEditButtons && !filterActive"
       class="w-100 mb-3"
       variant="success"
       @click="addUserStory()"
@@ -68,7 +85,6 @@
 <script lang="ts">
 import Vue from "vue";
 import UserStory from "../model/UserStory";
-
 export default Vue.extend({
   name: "UserStories",
   props: {
@@ -84,6 +100,9 @@ export default Vue.extend({
       sideBarOpen: false,
       userStories: [] as Array<UserStory>,
       hover: null,
+      input: "",
+      filterActive: false,
+      safedStories: [] as Array<UserStory>,
     };
   },
   watch: {
@@ -101,13 +120,40 @@ export default Vue.extend({
     },
     addUserStory() {
       const story: UserStory = {
-        jiraId: null,
+        id: null,
         title: "",
         description: "",
         estimation: null,
         isActive: false,
       };
       this.userStories.push(story);
+    },
+    swapPriority: function () {
+      if (!this.filterActive) {
+        this.safedStories = this.userStories;
+      }
+      this.userStories = this.safedStories;
+      if (this.input !== "") {
+        let filteredUserStories: UserStory[] = [];
+        this.userStories.forEach((userStory) => {
+          if (userStory.title.toLowerCase().includes(this.input.toLowerCase())) {
+            filteredUserStories.push(userStory);
+          }
+        });
+        if (filteredUserStories.length > 0) {
+          this.filterActive = true;
+          this.userStories = filteredUserStories;
+          this.publishChanges(null, false);
+        } else {
+          this.filterActive = true;
+          this.userStories = [];
+          this.publishChanges(null, false);
+        }
+      } else {
+        this.filterActive = false;
+        this.userStories = this.safedStories;
+        this.publishChanges(null, false);
+      }
     },
     deleteStory(index) {
       this.publishChanges(index, true);
@@ -117,7 +163,7 @@ export default Vue.extend({
     },
     markUserStory(index) {
       const stories = this.userStories.map((s) => ({
-        jiraId: s.jiraId,
+        id: s.id,
         title: s.title,
         description: s.description,
         estimation: s.estimation,
@@ -135,5 +181,15 @@ export default Vue.extend({
 .list-group-item.active {
   background-color: transparent;
   border-width: 3px;
+}
+
+.search {
+  background-image: url("@/assets/magnifying glass.png");
+  background-position: 3px;
+  background-repeat: no-repeat;
+  background-size: 22px 25px;
+  padding-left: 30px;
+  border-color: black;
+  overflow: auto;
 }
 </style>

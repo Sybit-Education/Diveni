@@ -16,15 +16,16 @@ Preferred Docker environment:
 
 ## Preconditions
 
-To install Diveni in combination with JIRA some configuration data to connect the issue 
-tracker are required. These data have to be added to configuration (see below).
+To install Diveni in combination with an issue tracker, some configuration is required to
+connect to the issue tracker. See below for details.
 
-Connection to JIRA Cloud and JIRA Enterprise is optional. Diveni could also be used without any
-connection.
+Connecting to an issue tracker is optional. Diveni can also be used without a connection.
 
 ### JIRA Cloud Connector
 
-    TBD
+```
+TBD
+```
 
 ### JIRA Enterprise Connector
 
@@ -37,6 +38,13 @@ one-way (incoming) link from the client to Jira.
 
 Afterwards, you will see the `client secret` and `ID`, which needs to be provided for Diveni on
 JIRA-Server.
+
+### Azure DevOps Connector
+
+For setting up the Azure DevOps Connector, you have to generate a personal access token:
+<https://learn.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate?view=azure-devops&tabs=Windows#create-a-pat>
+
+Afterwards you have to enter the used organisation in `AZURE_ORGANIZATION` and the personal access token in `AZURE_CLIENTPAT` in `backend/.env`.
 
 ## Docker
 
