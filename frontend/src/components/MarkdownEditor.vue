@@ -2,7 +2,7 @@
   <div class="markdown-editor">
     <viewer v-if="disabled" :initial-value="markdown" :height="height" :options="editorOptions" />
     <editor v-else ref="toastuiEditor" :initial-value="markdown" :height="height" :options="editorOptions"
-      :placeholder="placeholder" initial-edit-type="wysiwyg" preview-style="vertical" @blur="blur" @change="change" />
+      :placeholder="placeholder" initial-edit-type="wysiwyg" preview-style="vertical" />
   </div>
 </template>
 
@@ -68,25 +68,6 @@ export default Vue.extend({
         plugins: [codeSyntaxHighlight],
       },
     };
-  },
-  mounted() {
-    if (!this.disabled && this.getEditorRef()) {
-      this.getEditorRef();
-    }
-  },
-  methods: {
-    change() {
-      this.$emit("change", this.getMarkdown());
-    },
-    blur() {
-      this.$emit("blur", this.getMarkdown());
-    },
-    getMarkdown() {
-      return this.getEditorRef().invoke("getMarkdown");
-    },
-    getEditorRef() {
-      return this.$refs.toastuiEditor;
-    },
   },
 });
 </script>
