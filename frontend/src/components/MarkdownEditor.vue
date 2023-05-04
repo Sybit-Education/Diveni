@@ -3,12 +3,12 @@
     <viewer v-if="disabled" :initial-value="markdown" :height="height" :options="editorOptions" />
     <editor
       v-else
-      ref="toastuiEditor" 
-      :initial-value="markdown" 
-      :height="height" 
+      ref="toastuiEditor"
+      :initial-value="markdown"
+      :height="height"
       :options="editorOptions"
-      :placeholder="placeholder" 
-      initial-edit-type="wysiwyg" 
+      :placeholder="placeholder"
+      initial-edit-type="wysiwyg"
       preview-style="vertical"
     />
   </div>
