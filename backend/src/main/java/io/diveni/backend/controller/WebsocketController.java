@@ -136,23 +136,9 @@ public class WebsocketController {
     LOGGER.debug("<-- getMemberUpdate()");
   }
 
-  @MessageMapping("/start-voting-without-automatic-reveal")
-  public void startEstimation(AdminPrincipal principal) {
+  @MessageMapping("/start-voting")
+  public void startEstimation(AdminPrincipal principal, @Payload boolean autoReveal) {
     LOGGER.debug("--> startEstimation()");
-    val session =
-        ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID())
-            .updateSessionState(SessionState.START_VOTING)
-            .resetCurrentHighlights()
-            .setTimerTimestamp(Utils.getTimestampISO8601(new Date()));
-    databaseService.saveSession(session);
-    webSocketService.sendSessionStateToMembers(session);
-    webSocketService.sendTimerStartMessage(session, session.getTimerTimestamp());
-    LOGGER.debug("<-- startEstimation()");
-  }
-
-  @MessageMapping("/start-voting-with-automatic-reveal")
-  public void startEstimationWithAutoReveal(AdminPrincipal principal, @Payload boolean autoReveal) {
-    LOGGER.debug("--> startEstimationWithAutoReveal()");
     val session =
         ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID())
             .updateSessionState(SessionState.START_VOTING)
@@ -161,7 +147,7 @@ public class WebsocketController {
     databaseService.saveSession(session);
     webSocketService.sendSessionStateToMembersWithAutoReveal(session, autoReveal);
     webSocketService.sendTimerStartMessage(session, session.getTimerTimestamp());
-    LOGGER.debug("<-- startEstimationWithAutoReveal()");
+    LOGGER.debug("<-- startEstimation()");
   }
 
   @MessageMapping("/votingFinished")
@@ -178,28 +164,9 @@ public class WebsocketController {
     LOGGER.debug("<-- votingFinished()");
   }
 
-  @MessageMapping("/vote-without-automatic-reveal")
+  @MessageMapping("/vote")
   public synchronized void processVote(@Payload String vote, MemberPrincipal member) {
     LOGGER.debug("--> processVote()");
-    val session =
-        ControllerUtils.getSessionByMemberIDOrThrowResponse(databaseService, member.getMemberID())
-            .updateEstimation(member.getMemberID(), vote);
-    webSocketService.sendMembersUpdate(session);
-    databaseService.saveSession(session);
-
-    boolean votingCompleted = checkIfAllMembersVoted(session.getMembers());
-    if (votingCompleted) {
-      votingFinished(
-          new AdminPrincipal(
-              member.getSessionID(),
-              databaseService.getSessionByID(member.getSessionID()).get().getAdminID()));
-    }
-    LOGGER.debug("<-- processVote()");
-  }
-
-  @MessageMapping("/vote-with-automatic-reveal")
-  public synchronized void processVoteWithAutoReveal(@Payload String vote, MemberPrincipal member) {
-    LOGGER.debug("--> processVoteWithAutoReveal()");
     String[] data = vote.split(" ");
     val session =
         ControllerUtils.getSessionByMemberIDOrThrowResponse(databaseService, member.getMemberID())
@@ -215,32 +182,16 @@ public class WebsocketController {
                 databaseService.getSessionByID(member.getSessionID()).get().getAdminID()));
       }
     }
-    LOGGER.debug("<-- processVoteWithAutoReveal()");
+    LOGGER.debug("<-- processVote()");
   }
 
   private boolean checkIfAllMembersVoted(List<Member> members) {
     return members.stream().filter(m -> m.getCurrentEstimation() == null).count() == 0;
   }
 
-  @MessageMapping("/restart-without-automatic-reveal")
-  public synchronized void restartVote(AdminPrincipal principal) {
-    LOGGER.debug("--> restartVote()");
-    val session =
-        ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID())
-            .updateSessionState(SessionState.START_VOTING)
-            .resetEstimations()
-            .setTimerTimestamp(Utils.getTimestampISO8601(new Date()));
-    databaseService.saveSession(session);
-    webSocketService.sendMembersUpdate(session);
-    webSocketService.sendSessionStateToMembers(session);
-    webSocketService.sendTimerStartMessage(session, session.getTimerTimestamp());
-    LOGGER.debug("<-- restartVote()");
-  }
-
-  @MessageMapping("/restart-with-automatic-reveal")
-  public synchronized void restartVoteWithAutoReveal(
-      AdminPrincipal principal, @Payload boolean autoReveal) {
-    LOGGER.debug("--> restartVoteWithAutoReveal()");
+  @MessageMapping("/restart")
+  public synchronized void restartVote(AdminPrincipal principal, @Payload boolean autoReveal) {
+    LOGGER.debug("--> restartVote");
     val session =
         ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID())
             .updateSessionState(SessionState.START_VOTING)
@@ -250,7 +201,7 @@ public class WebsocketController {
     webSocketService.sendMembersUpdate(session);
     webSocketService.sendSessionStateToMembersWithAutoReveal(session, autoReveal);
     webSocketService.sendTimerStartMessage(session, session.getTimerTimestamp());
-    LOGGER.debug("<-- restartVoteWithAutoReveal()");
+    LOGGER.debug("<-- restartVote");
   }
 
   @MessageMapping("/adminUpdatedUserStories")

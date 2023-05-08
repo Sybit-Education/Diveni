@@ -12,12 +12,12 @@
       </b-col>
       <b-col>
         <b-button class="mr-3 autoRevealButtons" variant="outline-dark" :pressed="false" @click="autoReveal = true"
-          v-if="!autoReveal && !planningStart && session_userStoryMode !== 'NO_US'">
+          v-if="!autoReveal && !planningStart">
           <b-icon-eye-fill />
           {{ $t("page.session.during.estimation.buttons.autoRevealOff") }}
         </b-button>
         <b-button class="mr-3 autoRevealButtons" variant="outline-dark" :pressed="true" @click="autoReveal = false"
-          v-if="autoReveal && !planningStart && session_userStoryMode !== 'NO_US'">
+          v-if="autoReveal && !planningStart">
           <b-icon-eye-slash-fill />
           {{ $t("page.session.during.estimation.buttons.autoRevealOn") }}
         </b-button>
@@ -44,11 +44,8 @@
           :member="member" />
       </b-row>
       <b-row>
-        <b-col class="text-center" v-if="session_userStoryMode !== 'NO_US'">
+        <b-col class="text-center">
           <session-start-button @clicked="onPlanningStarted" :members="members" :autoReveal="autoReveal" :withUs="true" />
-        </b-col>
-        <b-col class="text-center" v-else>
-          <session-start-button @clicked="onPlanningStarted" :members="members" :withUs="false" />
         </b-col>
       </b-row>
     </div>
@@ -65,13 +62,13 @@
             {{ $t("page.session.during.estimation.buttons.result") }}
           </b-button>
           <b-button class="mr-3" variant="outline-dark" :pressed="false" @click="autoReveal = true"
-            v-if="!autoReveal && session_userStoryMode !== 'NO_US'"
+            v-if="!autoReveal"
             :disabled="planningStart == true && estimateFinished == false">
             <b-icon-eye-fill />
             {{ $t("page.session.during.estimation.buttons.autoRevealOff") }}
           </b-button>
           <b-button class="mr-3" variant="outline-dark" :pressed="true" @click="autoReveal = false"
-            v-if="autoReveal && session_userStoryMode !== 'NO_US'"
+            v-if="autoReveal"
             :disabled="planningStart == true && estimateFinished == false">
             <b-icon-eye-slash-fill />
             {{ $t("page.session.during.estimation.buttons.autoRevealOn") }}
@@ -88,22 +85,11 @@
         {{ membersPending.length + membersEstimated.length }}
       </h4>
       <div id="demo">
-        <div v-if="session_userStoryMode !== 'NO_US'">
           <div
             v-if="membersEstimated.length === membersPending.length + membersEstimated.length && autoReveal && !finishAlreadySent"
             style="display: none">
             {{ (estimateFinished = true) }}
           </div>
-
-        </div>
-        <div v-if="session_userStoryMode === 'NO_US'">
-
-          <div v-if="membersEstimated.length === membersPending.length + membersEstimated.length" style="display: none">
-            {{ (estimateFinished = true) }}
-          </div>
-
-
-        </div>
       </div>
       <div id="demo">
         <div v-if="membersEstimated.length === 0 && !finishAlreadySent" style="display: none">
@@ -509,13 +495,8 @@ export default Vue.extend({
     sendRestartMessage() {
       this.estimateFinished = false;
       this.finishAlreadySent = false;
-      if (this.session_userStoryMode === 'NO_US') {
-        const endPoint = Constants.webSocketRestartPlanningRoute;
-        this.$store.commit("sendViaBackendWS", { endPoint });
-      } else {
-        const endPoint = Constants.webSocketRestartPlanningRouteWithAutoReveal;
-        this.$store.commit("sendViaBackendWS", { endPoint, data: JSON.stringify(this.autoReveal) });
-      }
+      const endPoint = Constants.webSocketRestartPlanningRoute;
+      this.$store.commit("sendViaBackendWS", { endPoint, data: JSON.stringify(this.autoReveal) });
     },
     goToLandingPage() {
       this.$router.push({ name: "LandingPage" });

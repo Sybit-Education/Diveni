@@ -22,18 +22,11 @@ export default Vue.extend({
   },
   methods: {
     sendStartEstimationMessages() {
-      if (this.withUs == true) {
-        const endPoint = Constants.webSocketStartPlanningRouteWithAutoReveal;
-        this.$store.commit("sendViaBackendWS", {
-          endPoint,
-          data: JSON.stringify(this.autoReveal)
-        });
-      } else {
-        const endPoint = Constants.webSocketStartPlanningRoute;
-        this.$store.commit("sendViaBackendWS", {
-          endPoint
-        });
-      }
+      const endPoint = Constants.webSocketStartPlanningRoute;
+      this.$store.commit("sendViaBackendWS", {
+        endPoint,
+        data: JSON.stringify(this.autoReveal)
+      });
       this.$emit("clicked");
     },
   },

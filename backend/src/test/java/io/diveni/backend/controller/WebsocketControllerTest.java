@@ -67,17 +67,11 @@ public class WebsocketControllerTest {
 
   private static final String REGISTER_MEMBER = "/ws/registerMember";
 
-  private static final String START_VOTING = "/ws/start-voting-without-automatic-reveal";
+  private static final String START_VOTING = "/ws/start-voting";
 
-  private static final String START_VOTING_AUTOREVEAL = "/ws/start-voting-with-automatic-reveal";
+  private static final String RESTART = "/ws/restart";
 
-  private static final String RESTART = "/ws/restart-without-automatic-reveal";
-
-  private static final String RESTART_AUTOREVEAL = "/ws/restart-with-automatic-reveal";
-
-  private static final String VOTE = "/ws/vote-without-automatic-reveal";
-
-  private static final String VOTE_AUTOREVEAL = "/ws/vote-with-automatic-reveal";
+  private static final String VOTE = "/ws/vote";
 
   private static final String UNREGISTER = "/ws/unregister";
 
@@ -430,7 +424,7 @@ public class WebsocketControllerTest {
     StompSession session = getMemberSession(sessionID, memberID);
     val vote = "5 true";
 
-    session.send(VOTE_AUTOREVEAL, vote);
+    session.send(VOTE, vote);
 
     // Wait for server-side handling
     TimeUnit.MILLISECONDS.sleep(TIMEOUT);
@@ -440,7 +434,7 @@ public class WebsocketControllerTest {
   }
 
   @Test
-  public void voteWithAutoRevealAndFalse_setsVote() throws Exception {
+  public void voteWithAutoRevealAndFalse_setsVote() throws Exception { // hier
     val dbID = new ObjectId();
     val sessionID = Utils.generateRandomID();
     val adminID = Utils.generateRandomID();
@@ -466,7 +460,7 @@ public class WebsocketControllerTest {
     StompSession session = getMemberSession(sessionID, memberID);
     val vote = "5 false";
 
-    session.send(VOTE_AUTOREVEAL, vote);
+    session.send(VOTE, vote);
 
     // Wait for server-side handling
     TimeUnit.MILLISECONDS.sleep(TIMEOUT);
@@ -541,7 +535,7 @@ public class WebsocketControllerTest {
     webSocketService.setAdminUser(adminPrincipal);
     StompSession adminSession = getAdminSession(sessionID, adminID);
 
-    adminSession.send(START_VOTING, null);
+    adminSession.send(START_VOTING, false);
     // Wait for server-side handling
     TimeUnit.MILLISECONDS.sleep(TIMEOUT);
 
@@ -550,7 +544,7 @@ public class WebsocketControllerTest {
   }
 
   @Test
-  public void startVotingWithAutoRevealAndTrue_updatesState() throws Exception {
+  public void startVotingWithAutoRevealAndTrue_updatesState() throws Exception { // hier
     val dbID = new ObjectId();
     val sessionID = Utils.generateRandomID();
     val adminID = Utils.generateRandomID();
@@ -576,7 +570,7 @@ public class WebsocketControllerTest {
     webSocketService.setAdminUser(adminPrincipal);
     StompSession adminSession = getAdminSession(sessionID, adminID);
 
-    adminSession.send(START_VOTING_AUTOREVEAL, true);
+    adminSession.send(START_VOTING, true);
     // Wait for server-side handling
     TimeUnit.MILLISECONDS.sleep(TIMEOUT);
 
@@ -585,7 +579,7 @@ public class WebsocketControllerTest {
   }
 
   @Test
-  public void startVotingWithAutoRevealAndFalse_updatesState() throws Exception {
+  public void startVotingWithAutoRevealAndFalse_updatesState() throws Exception { // hier
     val dbID = new ObjectId();
     val sessionID = Utils.generateRandomID();
     val adminID = Utils.generateRandomID();
@@ -611,7 +605,7 @@ public class WebsocketControllerTest {
     webSocketService.setAdminUser(adminPrincipal);
     StompSession adminSession = getAdminSession(sessionID, adminID);
 
-    adminSession.send(START_VOTING_AUTOREVEAL, false);
+    adminSession.send(START_VOTING, false);
     // Wait for server-side handling
     TimeUnit.MILLISECONDS.sleep(TIMEOUT);
 
@@ -646,7 +640,7 @@ public class WebsocketControllerTest {
     webSocketService.setAdminUser(adminPrincipal);
     StompSession adminSession = getAdminSession(sessionID, adminID);
 
-    adminSession.send(RESTART, null);
+    adminSession.send(RESTART, false);
     // Wait for server-side handling
     TimeUnit.MILLISECONDS.sleep(TIMEOUT);
 
@@ -655,7 +649,7 @@ public class WebsocketControllerTest {
   }
 
   @Test
-  public void restartVotingWithAutoRevealAndTrue_resetsEstimations() throws Exception {
+  public void restartVotingWithAutoRevealAndTrue_resetsEstimations() throws Exception { // hier
     val dbID = new ObjectId();
     val sessionID = Utils.generateRandomID();
     val adminID = Utils.generateRandomID();
@@ -681,7 +675,7 @@ public class WebsocketControllerTest {
     webSocketService.setAdminUser(adminPrincipal);
     StompSession adminSession = getAdminSession(sessionID, adminID);
 
-    adminSession.send(RESTART_AUTOREVEAL, true);
+    adminSession.send(RESTART, true);
     // Wait for server-side handling
     TimeUnit.MILLISECONDS.sleep(TIMEOUT);
 
@@ -690,7 +684,7 @@ public class WebsocketControllerTest {
   }
 
   @Test
-  public void restartVotingWithAutoRevealAndFalse_resetsEstimations() throws Exception {
+  public void restartVotingWithAutoRevealAndFalse_resetsEstimations() throws Exception { // hier
     val dbID = new ObjectId();
     val sessionID = Utils.generateRandomID();
     val adminID = Utils.generateRandomID();
@@ -716,7 +710,7 @@ public class WebsocketControllerTest {
     webSocketService.setAdminUser(adminPrincipal);
     StompSession adminSession = getAdminSession(sessionID, adminID);
 
-    adminSession.send(RESTART_AUTOREVEAL, false);
+    adminSession.send(RESTART, false);
     // Wait for server-side handling
     TimeUnit.MILLISECONDS.sleep(TIMEOUT);
 

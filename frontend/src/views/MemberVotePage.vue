@@ -245,13 +245,8 @@ export default Vue.extend({
     },
     onSendVote({ vote }) {
       this.draggedVote = vote;
-      if (this.userStoryMode === 'NO_US') {
-        const endPoint = `${Constants.webSocketVoteRoute}`;
-        this.$store.commit("sendViaBackendWS", { endPoint, data: vote });
-      } else {
-        const endPoint = `${Constants.webSocketVoteRouteWithAutoReveal}`;
-        this.$store.commit("sendViaBackendWS", { endPoint, data: vote + " " + this.isAutoRevealActive });
-      }
+      const endPoint = `${Constants.webSocketVoteRoute}`;
+      this.$store.commit("sendViaBackendWS", { endPoint, data: vote + " " + this.isAutoRevealActive  });
     },
     sendUnregisterCommand() {
       const endPoint = `${Constants.webSocketUnregisterRoute}`;
