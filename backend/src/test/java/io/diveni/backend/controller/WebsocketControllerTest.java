@@ -434,7 +434,7 @@ public class WebsocketControllerTest {
   }
 
   @Test
-  public void voteWithAutoRevealAndFalse_setsVote() throws Exception { // hier
+  public void voteWithAutoRevealAndFalse_setsVote() throws Exception {
     val dbID = new ObjectId();
     val sessionID = Utils.generateRandomID();
     val adminID = Utils.generateRandomID();
@@ -544,7 +544,7 @@ public class WebsocketControllerTest {
   }
 
   @Test
-  public void startVotingWithAutoRevealAndTrue_updatesState() throws Exception { // hier
+  public void startVotingWithAutoRevealAndTrue_updatesState() throws Exception {
     val dbID = new ObjectId();
     val sessionID = Utils.generateRandomID();
     val adminID = Utils.generateRandomID();
@@ -579,7 +579,7 @@ public class WebsocketControllerTest {
   }
 
   @Test
-  public void startVotingWithAutoRevealAndFalse_updatesState() throws Exception { // hier
+  public void startVotingWithAutoRevealAndFalse_updatesState() throws Exception {
     val dbID = new ObjectId();
     val sessionID = Utils.generateRandomID();
     val adminID = Utils.generateRandomID();
@@ -649,7 +649,7 @@ public class WebsocketControllerTest {
   }
 
   @Test
-  public void restartVotingWithAutoRevealAndTrue_resetsEstimations() throws Exception { // hier
+  public void restartVotingWithAutoRevealAndTrue_resetsEstimations() throws Exception {
     val dbID = new ObjectId();
     val sessionID = Utils.generateRandomID();
     val adminID = Utils.generateRandomID();
@@ -684,7 +684,7 @@ public class WebsocketControllerTest {
   }
 
   @Test
-  public void restartVotingWithAutoRevealAndFalse_resetsEstimations() throws Exception { // hier
+  public void restartVotingWithAutoRevealAndFalse_resetsEstimations() throws Exception {
     val dbID = new ObjectId();
     val sessionID = Utils.generateRandomID();
     val adminID = Utils.generateRandomID();
