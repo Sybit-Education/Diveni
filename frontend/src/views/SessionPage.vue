@@ -23,28 +23,47 @@
         </b-button>
       </b-col>
       <b-col cols="auto" class="mr-auto">
-        <copy-session-id-popup v-if="planningStart" class="float-end" :session-id="session_sessionID" />
+        <copy-session-id-popup 
+          v-if="planningStart" 
+          class="float-end" 
+          :session-id="session_sessionID" 
+        />
       </b-col>
       <b-col cols="auto">
-        <session-close-button :is-planning-start="planningStart" :user-story-mode="session_userStoryMode" />
+        <session-close-button 
+          :is-planning-start="planningStart" 
+          :user-story-mode="session_userStoryMode" 
+        />
       </b-col>
     </b-row>
 
     <div v-if="!planningStart">
-      <copy-session-id-popup :text-before-session-i-d="$t('page.session.before.text.beforeID')"
-        :session-id="session_sessionID" :text-after-session-i-d="$t('page.session.before.text.afterID')" />
+      <copy-session-id-popup 
+        :text-before-session-i-d="$t('page.session.before.text.beforeID')"
+        :session-id="session_sessionID" 
+        :text-after-session-i-d="$t('page.session.before.text.afterID')" 
+      />
       <h4 class="text-center m-3">
         {{ $t("page.session.before.text.waiting") }}
         <sub><b-icon-three-dots animation="fade" font-scale="1" /></sub>
       </h4>
 
       <b-row class="d-flex justify-content-center overflow-auto" style="max-height: 500px">
-        <kick-user-wrapper v-for="member of members" :key="member.memberID" class="m-4" child="RoundedAvatar"
-          :member="member" />
+        <kick-user-wrapper 
+          v-for="member of members" 
+          :key="member.memberID" 
+          class="m-4" 
+          child="RoundedAvatar"
+          :member="member" 
+        />
       </b-row>
       <b-row>
         <b-col class="text-center">
-          <session-start-button @clicked="onPlanningStarted" :members="members" :hostVoting="session_hostVoting" />
+          <session-start-button 
+            @clicked="onPlanningStarted" 
+            :members="members" 
+            :hostVoting="session_hostVoting" 
+          />
         </b-col>
       </b-row>
     </div>
@@ -72,8 +91,12 @@
           </b-button>
         </b-col>
         <b-col cols="auto">
-          <estimate-timer :start-timestamp="timerTimestamp" :pause-timer="estimateFinished"
-            :duration="timerCountdownNumber" @timerFinished="sendVotingFinishedMessage" />
+          <estimate-timer 
+            :start-timestamp="timerTimestamp" 
+            :pause-timer="estimateFinished"
+            :duration="timerCountdownNumber" 
+            @timerFinished="sendVotingFinishedMessage" 
+          />
         </b-col>
       </b-row>
 
@@ -94,15 +117,15 @@
           {{ (estimateFinished = true) }}
         </div>
       </div>
-      <div id="demo">
-        <div v-if="membersEstimated.length === 0" style="display: none">
-          {{ (estimateFinished = false) }}
-        </div>
-      </div>
 
       <b-row v-if="!estimateFinished" class="my-1 d-flex justify-content-center flex-wrap">
-        <kick-user-wrapper v-for="member of membersPending" :key="member.memberID" class="mx-2" child="RoundedAvatar"
-          :member="member" />
+        <kick-user-wrapper
+         v-for="member of membersPending" 
+          :key="member.memberID" 
+          class="mx-2" 
+          child="RoundedAvatar"
+          :member="member" 
+        />
       </b-row>
       <hr />
       <h4 v-if="!session_hostVoting">
@@ -124,26 +147,38 @@
       </h4>
       <b-row class="my-1 d-flex justify-content-center flex-wrap overflow-auto" style="max-height: 500px"
         v-if="highlightedMembers.includes(adminID)">
-        <session-admin-card v-if="safedHostVoting && estimateFinished || hostEstimation !== ''"
-          :currentEstimation="hostEstimation" :estimateFinished="estimateFinished"
-          :highlight="highlightedMembers.includes(adminID) || highlightedMembers.length === 0" />
-        <kick-user-wrapper v-for="member of estimateFinished ? members : membersEstimated" :key="member.memberID"
+        <session-admin-card 
+          v-if="safedHostVoting && estimateFinished || hostEstimation !== ''"
+          :currentEstimation="hostEstimation" 
+          :estimateFinished="estimateFinished"
+          :highlight="highlightedMembers.includes(adminID) || highlightedMembers.length === 0" 
+        />
+        <kick-user-wrapper
+          v-for="member of estimateFinished ? members : membersEstimated" 
+          :key="member.memberID"
           child="SessionMemberCard" :member="member" :props="{
               estimateFinished: estimateFinished,
               highlight:
                 highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0,
-            }" />
+          }" 
+        />
       </b-row>
       <b-row class="my-1 d-flex justify-content-center flex-wrap overflow-auto" style="max-height: 500px" v-else>
-        <kick-user-wrapper v-for="member of estimateFinished ? members : membersEstimated" :key="member.memberID"
+        <kick-user-wrapper 
+          v-for="member of estimateFinished ? members : membersEstimated" 
+          :key="member.memberID"
           child="SessionMemberCard" :member="member" :props="{
               estimateFinished: estimateFinished,
               highlight:
                 highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0,
-            }" />
-        <session-admin-card v-if="safedHostVoting && estimateFinished || hostEstimation !== ''"
-          :currentEstimation="hostEstimation" :estimateFinished="estimateFinished"
-          :highlight="highlightedMembers.includes(adminID) || highlightedMembers.length === 0" />
+            }" 
+        />
+        <session-admin-card
+          v-if="safedHostVoting && estimateFinished || hostEstimation !== ''"
+          :currentEstimation="hostEstimation"
+          :estimateFinished="estimateFinished"
+          :highlight="highlightedMembers.includes(adminID) || highlightedMembers.length === 0"
+        />
       </b-row>
       <div v-if="session_hostVoting && estimateFinished === false">
         <div v-if="!estimateFinished">
@@ -166,13 +201,24 @@
     </b-row>
     <b-row v-if="session_userStoryMode !== 'NO_US'">
       <b-col cols="4">
-        <user-stories :card-set="voteSet" :show-estimations="planningStart" :initial-stories="userStories"
-          :show-edit-buttons="true" :select-story="true" @userStoriesChanged="onUserStoriesChanged"
-          @selectedStory="onSelectedStory($event)" />
+        <user-stories 
+          :card-set="voteSet" 
+          :show-estimations="planningStart" 
+          :initial-stories="userStories"
+          :show-edit-buttons="true" 
+          :select-story="true" 
+          @userStoriesChanged="onUserStoriesChanged"
+          @selectedStory="onSelectedStory($event)" 
+        />
       </b-col>
       <b-col cols="8">
-        <user-story-descriptions :card-set="voteSet" :initial-stories="userStories" :edit-description="true"
-          :index="index" @userStoriesChanged="onUserStoriesChanged" />
+        <user-story-descriptions 
+          :card-set="voteSet" 
+          :initial-stories="userStories" 
+          :edit-description="true"
+          :index="index" 
+          @userStoriesChanged="onUserStoriesChanged" 
+        />
       </b-col>
     </b-row>
     <notify-host-component />
@@ -521,9 +567,9 @@ export default Vue.extend({
     },
     sendVotingFinishedMessage() {
       if (!this.estimateFinished) {
+        this.estimateFinished = true;
         const endPoint = Constants.webSocketVotingFinishedRoute;
         this.$store.commit("sendViaBackendWS", { endPoint });
-        this.estimateFinished = true;
       }
     },
     sendRestartMessage() {
