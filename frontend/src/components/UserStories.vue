@@ -13,9 +13,8 @@
       <b-list-group-item
         v-for="(story, index) of userStories"
         :key="index"
-        :active="index === selectedStoryIndex || index === hostSelectedStoryIndex"
+        :active="index === selectedStoryIndex"
         class="w-100 p-1 d-flex justify-content-left"
-        :style="getStoryListItemBorderColor(index)"
         @mouseover="hover = index"
         @mouseleave="hover = null"
         @click="setUserStoryAsActive(index)"
@@ -27,6 +26,10 @@
           @click="markUserStory(index)"
         >
           <b-icon-check2 />
+        </b-button>
+
+        <b-button v-else-if="hostSelectedStoryIndex === index && !showEditButtons" size="sm" variant="primary" disabled>
+          <b-icon-arrow-right />
         </b-button>
 
         <b-form-input
@@ -123,14 +126,6 @@ export default Vue.extend({
       this.selectedStoryIndex = index;
       this.$emit("selectedStory", index);
     },
-    getStoryListItemBorderColor(index) {
-      if (this.selectedStoryIndex === index) {
-        return "border-color: blue; border-width: 3px;";
-      } else if (this.hostSelectedStoryIndex === index) {
-        return "border-color: green; border-width: 3px;";
-      }
-      return "";
-    },
     addUserStory() {
       const story: UserStory = {
         jiraId: null,
@@ -193,6 +188,7 @@ export default Vue.extend({
 <style scoped>
 .list-group-item.active {
   background-color: transparent;
+  border-width: 3px;
 }
 
 .search {
