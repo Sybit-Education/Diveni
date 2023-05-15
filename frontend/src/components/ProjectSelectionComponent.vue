@@ -4,13 +4,13 @@
       v-model="selected"
       :items="getProjectNames"
       :placeholder="
-        $t('session.prepare.step.selection.mode.description.withJira.placeholder.searchProjects')
+        $t('session.prepare.step.selection.mode.description.withIssueTracker.placeholder.searchProjects')
       "
       @input="getUserStories"
     />
 
     <div class="mt-3">
-      {{ $t("session.prepare.step.selection.mode.description.withJira.selectedProject") }}
+      {{ $t("session.prepare.step.selection.mode.description.withIssueTracker.selectedProject") }}
       <strong>{{ aCorrectProject ? selected : "-" }}</strong>
     </div>
   </div>

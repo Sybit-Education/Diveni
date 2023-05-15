@@ -8,7 +8,7 @@
       "
     >
       {{
-        $t("session.prepare.step.selection.mode.description.withJira.buttons.signInWithJira.label")
+        $t("session.prepare.step.selection.mode.description.withIssueTracker.buttons.signInWithJira.label")
       }}
     </b-button>
     <b-modal
@@ -19,7 +19,7 @@
       @hidden="resetModal"
       @ok="handleOk"
     >
-      <p>{{ $t("session.prepare.step.selection.mode.description.withJira.dialog.description") }}</p>
+      <p>{{ $t("session.prepare.step.selection.mode.description.withIssueTracker.dialog.description") }}</p>
       <form ref="form" @submit.stop.prevent="handleSubmit">
         <b-form-group
           label="Verification code"
@@ -33,7 +33,7 @@
             required
             :placeholder="
               $t(
-                'session.prepare.step.selection.mode.description.withJira.inputs.verificationCode.placeholder'
+                'session.prepare.step.selection.mode.description.withIssueTracker.inputs.verificationCode.placeholder'
               )
             "
             :state="verificationCodeState"

@@ -92,6 +92,13 @@ public class WebsocketController {
           new Notification(
               NotificationType.MEMBER_LEFT,
               new MemberPayload(((MemberPrincipal) principal).getMemberID())));
+      boolean votingCompleted = checkIfAllMembersVoted(session.getMembers());
+      if (votingCompleted) {
+        votingFinished(
+            new AdminPrincipal(
+                session.getSessionID(),
+                databaseService.getSessionByID(session.getSessionID()).get().getAdminID()));
+      }
     } else {
       val session =
           ControllerUtils.getSessionOrThrowResponse(

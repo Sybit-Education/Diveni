@@ -169,9 +169,9 @@
                 "toastSuccessNotification": "Histoires d'utilisateur importées",
                 "toastErrorNotification": "Erreur lors de la tentative d'importation"
               },
-              "withJira": {
+              "withIssueTracker": {
                 "tab": {
-                  "label": "Planification avec Jira"
+                  "label": "Planification avec Issue-Tracker"
                 },
                 "subtitle": "Sélectionnez Jira pour votre Poker-Planning",
                 "descriptionLine1": "Connectez-vous avec vos identifiants",
@@ -195,6 +195,9 @@
                   },
                   "signInWithJiraServer": {
                     "label": "Se connecter avec le serveur Jira"
+                  },
+                  "signInWithAzureDevOps": {
+                    "label": "Se connecter avec Azure DevOps"
                   },
                   "selectProject": {
                     "label": "Sélectionnez votre projet jira"
@@ -272,10 +275,10 @@
         "memberLeft": "Le membre a quitté la session",
         "memberJoined": "Le membre a rejoint la session",
         "memberRemoved": "Vous avez été retiré de la session par l'hôte",
-        "jiraCredentials": "Mauvais identifiants",
-        "jiraLoginFailed": "Échec de la connexion",
-        "jiraSynchronizeSuccess": "Changements synchronisés avec Jira",
-        "jiraSynchronizeFailed": "Impossible de synchroniser les modifications avec Jira",
+        "issueTrackerCredentials": "Mauvais identifiants",
+        "issueTrackerLoginFailed": "Échec de la connexion",
+        "issueTrackerSynchronizeSuccess": "Changements synchronisés avec Issue-Tracker",
+        "issueTrackerSynchronizeFailed": "Impossible de synchroniser les modifications avec Issue-Tracker",
         "wrongID": "Mauvais code d'invitation",
         "password": "Mauvais mot de passe"
       }

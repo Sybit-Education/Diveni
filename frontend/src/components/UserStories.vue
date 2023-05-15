@@ -134,7 +134,7 @@ export default Vue.extend({
     },
     addUserStory() {
       const story: UserStory = {
-        jiraId: null,
+        id: null,
         title: "",
         description: "",
         estimation: null,
@@ -177,7 +177,7 @@ export default Vue.extend({
     },
     markUserStory(index) {
       const stories = this.userStories.map((s) => ({
-        jiraId: s.jiraId,
+        id: s.id,
         title: s.title,
         description: s.description,
         estimation: s.estimation,

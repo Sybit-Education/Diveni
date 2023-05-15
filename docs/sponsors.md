@@ -2,7 +2,8 @@
 
 ## HTWG Hochschule Konstanz 
 
-<img :src="$withBase('/img/HTWG_IN_en_Markenzeichen_desktop_pos.svg')" alt="HTWG Konstanz Logo">
+
+![HTWG Konstanz Logo](./img/HTWG_IN_en_Markenzeichen_desktop_pos.svg)
 
 ### Department of Computer Science
 
@@ -21,7 +22,7 @@ foreign universities.
 
 ## Sybit GmbH
 
-<img :src="$withBase('/img/Sybit-NTT-Logo-RGB.svg')" alt="Sybit Logo">
+![Sybit Logo](./img/Sybit-NTT-Logo-RGB.svg)
 
 [Sybit GmbH](https://www.sybit.de) places particular emphasis on a sophisticated and coherent digital strategy. 
 We do not believe in a specific and always the same strategy as a panacea. We rely on individual, holistic and 
