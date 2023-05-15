@@ -15,6 +15,7 @@
         :key="index"
         :active="index === selectedStoryIndex"
         class="w-100 p-1 d-flex justify-content-left"
+        :style="index === selectedStoryIndex ? 'border-width: 3px;' : ''"
         @mouseover="hover = index"
         @mouseleave="hover = null"
         @click="setUserStoryAsActive(index)"
@@ -28,7 +29,12 @@
           <b-icon-check2 />
         </b-button>
 
-        <b-button v-else-if="hostSelectedStoryIndex === index && !showEditButtons" size="sm" variant="primary" disabled>
+        <b-button
+          v-else-if="hostSelectedStoryIndex === index && !showEditButtons"
+          size="sm"
+          variant="primary"
+          disabled
+        >
           <b-icon-arrow-right />
         </b-button>
 
@@ -188,7 +194,6 @@ export default Vue.extend({
 <style scoped>
 .list-group-item.active {
   background-color: transparent;
-  border-width: 3px;
 }
 
 .search {
