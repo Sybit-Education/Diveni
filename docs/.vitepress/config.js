@@ -49,7 +49,7 @@ export default withMermaid(
       ],
 
       socialLinks: [
-        { icon: 'github', link: 'https://github.com/vuejs/vitepress' },
+        { icon: 'github', link: 'https://github.com/Sybit-Education/Diveni' },
         { icon: 'discord', link: 'https://discord.com/channels/935641426216222730/' }
       ],
 
