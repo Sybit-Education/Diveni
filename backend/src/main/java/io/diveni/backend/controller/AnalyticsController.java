@@ -21,17 +21,19 @@ public class AnalyticsController {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(RoutesController.class);
 
-  @Autowired
-  DatabaseService databaseService;
+  @Autowired DatabaseService databaseService;
 
   @GetMapping(value = "/analytics/All")
   public ResponseEntity<AnalyticsData> getAllData() {
     LOGGER.debug("--> getAllData()");
-    int amountOfAllSessions = databaseService.getSessions().size() + databaseService.getDeletedSessions().size();
-    int amountOfAllAttendees = databaseService.getSessions().stream()
-        .collect(Collectors.summingInt(s -> s.getMembers().size())); // existing Sessions
-    amountOfAllAttendees += databaseService.getDeletedSessions().stream()
-        .collect(Collectors.summingInt(deletedSess -> deletedSess.getMembers().size()));
+    int amountOfAllSessions =
+        databaseService.getSessions().size() + databaseService.getDeletedSessions().size();
+    int amountOfAllAttendees =
+        databaseService.getSessions().stream()
+            .collect(Collectors.summingInt(s -> s.getMembers().size())); // existing Sessions
+    amountOfAllAttendees +=
+        databaseService.getDeletedSessions().stream()
+            .collect(Collectors.summingInt(deletedSess -> deletedSess.getMembers().size()));
 
     amountOfAllAttendees += databaseService.getDeletedSessions()
     .stream()
@@ -49,24 +51,30 @@ public class AnalyticsController {
       year = LocalDate.now().getYear();
     }
     int finalLastMonth = lastMonth + counter;
-    List<Session> sessionFromLastMonth = databaseService.getSessions().stream()
-        .filter(
-            s -> s.getCreationTime().getMonthValue() == finalLastMonth
-                && s.getCreationTime().getYear() == year)
-        .collect(Collectors.toList());
+    List<Session> sessionFromLastMonth =
+        databaseService.getSessions().stream()
+            .filter(
+                s ->
+                    s.getCreationTime().getMonthValue() == finalLastMonth
+                        && s.getCreationTime().getYear() == year)
+            .collect(Collectors.toList());
 
-    List<Session> deletedsessionFromLastMonth = databaseService.getDeletedSessions().stream()
-        .filter(
-            s -> s.getCreationTime().getMonthValue() == finalLastMonth
-                && s.getCreationTime().getYear() == year)
-        .collect(Collectors.toList());
+    List<Session> deletedsessionFromLastMonth =
+        databaseService.getDeletedSessions().stream()
+            .filter(
+                s ->
+                    s.getCreationTime().getMonthValue() == finalLastMonth
+                        && s.getCreationTime().getYear() == year)
+            .collect(Collectors.toList());
 
-    int amountOfSessionsLastMonth = sessionFromLastMonth.size() + deletedsessionFromLastMonth.size();
-    int amountOfAttendeesLastMonth = sessionFromLastMonth.stream()
-        .collect(Collectors.summingInt(s -> s.getMembers().size()));
+    int amountOfSessionsLastMonth =
+        sessionFromLastMonth.size() + deletedsessionFromLastMonth.size();
+    int amountOfAttendeesLastMonth =
+        sessionFromLastMonth.stream().collect(Collectors.summingInt(s -> s.getMembers().size()));
 
-    amountOfAttendeesLastMonth += deletedsessionFromLastMonth.stream()
-        .collect(Collectors.summingInt(s -> s.getMembers().size()));
+    amountOfAttendeesLastMonth +=
+        deletedsessionFromLastMonth.stream()
+            .collect(Collectors.summingInt(s -> s.getMembers().size()));
 
     amountOfAttendeesLastMonth += deletedsessionFromLastMonth
         .stream()
@@ -74,8 +82,9 @@ public class AnalyticsController {
         .count();
 
     int currentAmountOfSessions = databaseService.getSessions().size();
-    int currentAmountOfAttendees = databaseService.getSessions().stream()
-        .collect(Collectors.summingInt(s -> s.getMembers().size())); // existing Sessions
+    int currentAmountOfAttendees =
+        databaseService.getSessions().stream()
+            .collect(Collectors.summingInt(s -> s.getMembers().size())); // existing Sessions
     LOGGER.debug("<-- getAllData()");
     return new ResponseEntity<AnalyticsData>(
         new AnalyticsData(
