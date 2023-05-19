@@ -11,6 +11,5 @@ import lombok.Setter;
 @AllArgsConstructor
 public class AdminVote {
 
-    private String hostEstimation;
-    
+  private String hostEstimation;
 }

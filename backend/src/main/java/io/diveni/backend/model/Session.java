@@ -35,8 +35,7 @@ import org.bson.types.ObjectId;
 @Document("sessions")
 public class Session {
 
-  @Id
-  private final ObjectId databaseID;
+  @Id private final ObjectId databaseID;
 
   private final String sessionID;
 
@@ -80,9 +79,10 @@ public class Session {
   }
 
   public Session updateEstimation(String memberID, String vote) {
-    val updatedMembers = members.stream()
-        .map(m -> m.getMemberID().equals(memberID) ? m.updateEstimation(vote) : m)
-        .collect(Collectors.toList());
+    val updatedMembers =
+        members.stream()
+            .map(m -> m.getMemberID().equals(memberID) ? m.updateEstimation(vote) : m)
+            .collect(Collectors.toList());
     return new Session(
         databaseID,
         sessionID,
@@ -105,9 +105,10 @@ public class Session {
       memberVoted.putIfAbsent(member.getMemberID(), 0);
     }
 
-    val filteredSet = sessionConfig.getSet().stream()
-        .filter((string) -> !string.equals("?"))
-        .collect(Collectors.toList());
+    val filteredSet =
+        sessionConfig.getSet().stream()
+            .filter((string) -> !string.equals("?"))
+            .collect(Collectors.toList());
 
     Optional<String> maxEstimation;
     Optional<String> minEstimation;
@@ -115,16 +116,18 @@ public class Session {
       maxEstimation = getFilteredEstimationStream(this.members).max(estimationByIndex(filteredSet));
     } else {
       Stream<String> filteredEstimationsMember = getFilteredEstimationStream(this.members);
-      Stream<String> allEstimations = Stream.concat(filteredEstimationsMember,
-          Stream.of(this.hostEstimation.getHostEstimation()));
+      Stream<String> allEstimations =
+          Stream.concat(
+              filteredEstimationsMember, Stream.of(this.hostEstimation.getHostEstimation()));
       maxEstimation = allEstimations.max(estimationByIndex(filteredSet));
     }
     if (!this.hostVoting || this.hostEstimation.getHostEstimation().equals("")) {
       minEstimation = getFilteredEstimationStream(this.members).min(estimationByIndex(filteredSet));
     } else {
       Stream<String> filteredEstimationsMember = getFilteredEstimationStream(this.members);
-      Stream<String> allEstimations = Stream.concat(filteredEstimationsMember,
-          Stream.of(this.hostEstimation.getHostEstimation()));
+      Stream<String> allEstimations =
+          Stream.concat(
+              filteredEstimationsMember, Stream.of(this.hostEstimation.getHostEstimation()));
       minEstimation = allEstimations.min(estimationByIndex(filteredSet));
     }
 
@@ -145,17 +148,21 @@ public class Session {
           hostVoting,
           hostEstimation);
     }
-    val maxEstimationMembers = this.members.stream()
-        .filter(
-            (member) -> member.getCurrentEstimation() != null
-                && member.getCurrentEstimation().equals(maxEstimation.get()))
-        .collect(Collectors.toList());
+    val maxEstimationMembers =
+        this.members.stream()
+            .filter(
+                (member) ->
+                    member.getCurrentEstimation() != null
+                        && member.getCurrentEstimation().equals(maxEstimation.get()))
+            .collect(Collectors.toList());
 
-    List<Entry<String, Integer>> maxOptions = memberVoted.entrySet().stream()
-        .filter(
-            (entry) -> maxEstimationMembers.stream()
-                .anyMatch((member) -> member.getMemberID().equals(entry.getKey())))
-        .collect(Collectors.toList());
+    List<Entry<String, Integer>> maxOptions =
+        memberVoted.entrySet().stream()
+            .filter(
+                (entry) ->
+                    maxEstimationMembers.stream()
+                        .anyMatch((member) -> member.getMemberID().equals(entry.getKey())))
+            .collect(Collectors.toList());
 
     if (hostVoting == true) {
       if (maxEstimation.get().equals(this.hostEstimation.getHostEstimation())) {
@@ -163,19 +170,24 @@ public class Session {
       }
     }
 
-    val maxMemberID = Collections.max(maxOptions, Comparator.comparingInt(Map.Entry::getValue)).getKey();
+    val maxMemberID =
+        Collections.max(maxOptions, Comparator.comparingInt(Map.Entry::getValue)).getKey();
 
-    val minEstimationMembers = this.members.stream()
-        .filter(
-            (member) -> member.getCurrentEstimation() != null
-                && member.getCurrentEstimation().equals(minEstimation.get()))
-        .collect(Collectors.toList());
+    val minEstimationMembers =
+        this.members.stream()
+            .filter(
+                (member) ->
+                    member.getCurrentEstimation() != null
+                        && member.getCurrentEstimation().equals(minEstimation.get()))
+            .collect(Collectors.toList());
 
-    List<Entry<String, Integer>> minOptions = memberVoted.entrySet().stream()
-        .filter(
-            (entry) -> minEstimationMembers.stream()
-                .anyMatch((member) -> member.getMemberID().equals(entry.getKey())))
-        .collect(Collectors.toList());
+    List<Entry<String, Integer>> minOptions =
+        memberVoted.entrySet().stream()
+            .filter(
+                (entry) ->
+                    minEstimationMembers.stream()
+                        .anyMatch((member) -> member.getMemberID().equals(entry.getKey())))
+            .collect(Collectors.toList());
 
     if (hostVoting == true) {
       if (minEstimation.get().equals(this.hostEstimation.getHostEstimation())) {
@@ -183,31 +195,34 @@ public class Session {
       }
     }
 
-    val minMemberID = Collections.max(minOptions, Comparator.comparingInt(Map.Entry::getValue)).getKey();
+    val minMemberID =
+        Collections.max(minOptions, Comparator.comparingInt(Map.Entry::getValue)).getKey();
 
-    val newVoted = memberVoted.entrySet().stream()
-        .map(
-            (entry) -> {
-              if (entry.getKey().equals(maxMemberID) || entry.getKey().equals(minMemberID)) {
-                return Map.entry(entry.getKey(), 0);
-              } else {
-                return Map.entry(entry.getKey(), entry.getValue() + 1);
-              }
-            })
-        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    val newVoted =
+        memberVoted.entrySet().stream()
+            .map(
+                (entry) -> {
+                  if (entry.getKey().equals(maxMemberID) || entry.getKey().equals(minMemberID)) {
+                    return Map.entry(entry.getKey(), 0);
+                  } else {
+                    return Map.entry(entry.getKey(), entry.getValue() + 1);
+                  }
+                })
+            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     val newHighlighted = List.of(minMemberID, maxMemberID);
 
-    val sortedMembers = members.stream()
-        .sorted(
-            (Member m1, Member m2) -> {
-              boolean b1 = newHighlighted.contains(m1.getMemberID());
-              boolean b2 = newHighlighted.contains(m2.getMemberID());
-              if (b1 == b2) {
-                return 0;
-              }
-              return b1 ? -1 : 1;
-            })
-        .collect(Collectors.toList());
+    val sortedMembers =
+        members.stream()
+            .sorted(
+                (Member m1, Member m2) -> {
+                  boolean b1 = newHighlighted.contains(m1.getMemberID());
+                  boolean b2 = newHighlighted.contains(m2.getMemberID());
+                  if (b1 == b2) {
+                    return 0;
+                  }
+                  return b1 ? -1 : 1;
+                })
+            .collect(Collectors.toList());
     return new Session(
         databaseID,
         sessionID,
@@ -244,12 +259,13 @@ public class Session {
   }
 
   public Session updateUserStories(List<UserStory> userStories) {
-    val updatedSessionConfig = new SessionConfig(
-        sessionConfig.getSet(),
-        userStories,
-        sessionConfig.getTimerSeconds().orElse(null),
-        sessionConfig.getUserStoryMode(),
-        sessionConfig.getPassword());
+    val updatedSessionConfig =
+        new SessionConfig(
+            sessionConfig.getSet(),
+            userStories,
+            sessionConfig.getTimerSeconds().orElse(null),
+            sessionConfig.getUserStoryMode(),
+            sessionConfig.getPassword());
     return new Session(
         databaseID,
         sessionID,
@@ -268,7 +284,8 @@ public class Session {
   }
 
   public Session resetEstimations() {
-    val updatedMembers = members.stream().map(m -> m.resetEstimation()).collect(Collectors.toList());
+    val updatedMembers =
+        members.stream().map(m -> m.resetEstimation()).collect(Collectors.toList());
     return new Session(
         databaseID,
         sessionID,
@@ -343,9 +360,10 @@ public class Session {
   }
 
   public Session removeMember(String memberID) {
-    val updatedMembers = members.stream()
-        .filter(m -> !m.getMemberID().equals(memberID))
-        .collect(Collectors.toList());
+    val updatedMembers =
+        members.stream()
+            .filter(m -> !m.getMemberID().equals(memberID))
+            .collect(Collectors.toList());
     return new Session(
         databaseID,
         sessionID,
@@ -474,5 +492,4 @@ public class Session {
         hostVoting,
         new AdminVote(vote));
   }
-
 }

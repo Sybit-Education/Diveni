@@ -148,15 +148,18 @@ public class WebSocketService {
   public void sendMembersHostVoting(Session session) {
     LOGGER.debug("--> sendMembersHostVoting(), sessionID={}", session.getSessionID());
     getSessionPrincipals(session.getSessionID())
-      .memberPrincipals()
-      .forEach(member -> sendUpdatedHostVotingToMember(session, member.getMemberID()));
+        .memberPrincipals()
+        .forEach(member -> sendUpdatedHostVotingToMember(session, member.getMemberID()));
     LOGGER.debug("<-- sendMembersHostVoting()");
   }
 
-  public void sendUpdatedHostVotingToMember(Session session, String memberID)  {
-    LOGGER.debug("--> sendUpdatedHostVotingToMember(), sessionID={}, memberID={}", session.getSessionID(), memberID);
-    simpMessagingTemplate
-    .convertAndSendToUser(memberID, MEMBER_UPDATES_HOSTVOTING, session.getHostVoting());
+  public void sendUpdatedHostVotingToMember(Session session, String memberID) {
+    LOGGER.debug(
+        "--> sendUpdatedHostVotingToMember(), sessionID={}, memberID={}",
+        session.getSessionID(),
+        memberID);
+    simpMessagingTemplate.convertAndSendToUser(
+        memberID, MEMBER_UPDATES_HOSTVOTING, session.getHostVoting());
     LOGGER.debug("<-- sendUpdatedHostVotingToMember()");
   }
 
@@ -191,13 +194,9 @@ public class WebSocketService {
     getSessionPrincipals(session.getSessionID())
         .memberPrincipals()
         .forEach(
-          member -> 
-            simpMessagingTemplate.convertAndSendToUser(
-                member.getMemberID(),
-                ADMIN_UPDATED_ESTIMATION,
-                session.getHostEstimation()
-            )
-        );
+            member ->
+                simpMessagingTemplate.convertAndSendToUser(
+                    member.getMemberID(), ADMIN_UPDATED_ESTIMATION, session.getHostEstimation()));
     LOGGER.debug("<-- sendMembersAdminVote()");
   }
 

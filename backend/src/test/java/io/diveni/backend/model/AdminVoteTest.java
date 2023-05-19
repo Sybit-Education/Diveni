@@ -8,12 +8,11 @@ import lombok.val;
 
 public class AdminVoteTest {
 
-    @Test
-    public void setHostEstimation_works() {
-        val adminVote = new AdminVote("");
-        adminVote.setHostEstimation("XL");
+  @Test
+  public void setHostEstimation_works() {
+    val adminVote = new AdminVote("");
+    adminVote.setHostEstimation("XL");
 
-        assertEquals(adminVote.getHostEstimation(), "XL");
-    }
-
+    assertEquals(adminVote.getHostEstimation(), "XL");
+  }
 }
