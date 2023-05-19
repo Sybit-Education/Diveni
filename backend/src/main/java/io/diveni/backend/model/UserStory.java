@@ -14,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public class UserStory {
 
-  final String jiraId;
+  final String id;
 
   final String title;
 

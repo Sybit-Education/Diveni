@@ -27,14 +27,19 @@
           "waiting": "In attesa che i membri si uniscano"
         },
         "button": "Avvia La Pianificazione",
+        "refreshStories": "Aggiornare le User Story",
         "userStories": {
+          "filter" : {
+            "noStoryFound": "Nessuna storia trovata!"
+          },
           "button": {
             "addFirstUserStory": "Ancora nessuna storia... clicca per aggiungere storie",
             "addUserStory": "Aggiungi"
           },
           "placeholder": {
             "userStoryTitle": "Titolo Della Storia Utente",
-            "userStoryDescription": "Descrizione e criteri di accettazione..."
+            "userStoryDescription": "Descrizione e criteri di accettazione...",
+            "searchUserStories": "Ricerca di storie utente..."
           },
           "text": "Fare clic su un titolo della storia utente per vedere la descrizione",
           "sum": "Totale:"
@@ -166,9 +171,9 @@
                 "toastSuccessNotification": "Storie utente importate",
                 "toastErrorNotification": "Errore durante l'importazione"
               },
-              "withJira": {
+              "withIssueTracker": {
                 "tab": {
-                  "label": "Pianificazione con Jira"
+                  "label": "Pianificazione con Issue-Tracker"
                 },
                 "subtitle": "Seleziona Jira per il tuo Poker-Planning",
                 "descriptionLine1": "Accedi con le tue credenziali",
@@ -193,12 +198,18 @@
                   "signInWithJiraServer": {
                     "label": "Accedi con il server Jira"
                   },
+                  "signInWithAzureDevOps": {
+                    "label": "Accedi con Azure DevOps"
+                  },
                   "selectProject": {
                     "label": "Seleziona il tuo progetto jira"
                   },
                   "submit": {
                     "label": "Invia"
                   }
+                },
+                "placeholder": {
+                  "searchProjects": "Sfoglia i progetti..."
                 }
               }
             }
@@ -271,10 +282,10 @@
         "memberLeft": "Membro ha lasciato la sessione",
         "memberJoined": "Il membro è entrato nella sessione",
         "memberRemoved": "Sei stato rimosso dalla sessione dall'host",
-        "jiraCredentials": "Credenziali errate",
-        "jiraLoginFailed": "Accesso fallito",
-        "jiraSynchronizeSuccess": "Modifiche sincronizzate con Jira",
-        "jiraSynchronizeFailed": "Impossibile sincronizzare le modifiche con Jira",
+        "issueTrackerCredentials": "Credenziali errate",
+        "issueTrackerLoginFailed": "Accesso fallito",
+        "issueTrackerSynchronizeSuccess": "Modifiche sincronizzate con Issue-Tracker",
+        "issueTrackerSynchronizeFailed": "Impossibile sincronizzare le modifiche con Issue-Tracker",
         "wrongID": "Codice di invito errato",
         "password": "Password errata"
       }

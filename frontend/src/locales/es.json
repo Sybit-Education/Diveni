@@ -27,14 +27,19 @@
           "waiting": "Esperando a que los miembros se unan"
         },
         "button": "Empezar a planear",
+        "refreshStories": "Actualizar las Historias de Usuario",
         "userStories": {
+          "filter" : {
+            "noStoryFound": "No se ha encontrado ninguna historia!"
+          },
           "button": {
             "addFirstUserStory": "Aún no hay historias... haz clic para añadir historias",
             "addUserStory": "Añadir"
           },
           "placeholder": {
             "userStoryTitle": "Título de la historia del usuario",
-            "userStoryDescription": "Criterios de descripción y aceptación..."
+            "userStoryDescription": "Criterios de descripción y aceptación...",
+            "searchUserStories": "Buscar historias de usuarios..."
           },
           "text": "Haga clic en el título de una historia de usuario para ver la descripción",
           "sum": "Total:"
@@ -166,9 +171,9 @@
                 "toastSuccessNotification": "Historias de usuario importadas",
                 "toastErrorNotification": "Error al importar"
               },
-              "withJira": {
+              "withIssueTracker": {
                 "tab": {
-                  "label": "Planeando con Jira"
+                  "label": "Planeando con Issue-Tracker"
                 },
                 "subtitle": "Selecciona Jira para tu Planificación de Poker-Planning",
                 "descriptionLine1": "Inicia sesión con tus credenciales",
@@ -193,12 +198,18 @@
                   "signInWithJiraServer": {
                     "label": "Iniciar sesión con Jira Server"
                   },
+                  "signInWithAzureDevOps": {
+                    "label": "Iniciar sesión con Azure DevOps"
+                  },
                   "selectProject": {
                     "label": "Seleccione su proyecto jira"
                   },
                   "submit": {
                     "label": "Enviar"
                   }
+                },
+                "placeholder": {
+                  "searchProjects": "Buscar proyectos..."
                 }
               }
             }
@@ -271,10 +282,10 @@
         "memberLeft": "El miembro abandonó la sesión",
         "memberJoined": "Miembro se unió a la sesión",
         "memberRemoved": "Ha sido eliminado de la sesión por el host",
-        "jiraCredentials": "Credenciales incorrectas",
-        "jiraLoginFailed": "Error al iniciar sesión",
-        "jiraSynchronizeSuccess": "Cambios sincronizados con Jira",
-        "jiraSynchronizeFailed": "Error al sincronizar los cambios con Jira",
+        "issueTrackerCredentials": "Credenciales incorrectas",
+        "issueTrackerLoginFailed": "Error al iniciar sesión",
+        "issueTrackerSynchronizeSuccess": "Cambios sincronizados con Issue-Tracker",
+        "issueTrackerSynchronizeFailed": "Error al sincronizar los cambios con Issue-Tracker",
         "wrongID": "Código de invitación incorrecto",
         "password": "Contraseña incorrecta"
       }

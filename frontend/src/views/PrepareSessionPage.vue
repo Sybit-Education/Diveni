@@ -32,8 +32,8 @@
         </b-button>
       </b-tab>
       <b-tab
-        v-if="isJiraEnabled"
-        :title="$t('session.prepare.step.selection.mode.description.withJira.tab.label')"
+        v-if="isIssueTrackerEnabled"
+        :title="$t('session.prepare.step.selection.mode.description.withIssueTracker.tab.label')"
         :title-link-class="linkClass(2)"
       >
         <jira-component class="mg_top_2_per"/>
@@ -140,8 +140,8 @@ export default Vue.extend({
       timer: 30,
       warningWhenUnderZero: "",
       tabIndex: 0,
-      isJiraEnabled: constants.isJiraEnabled,
       hostVoting: false,
+      isIssueTrackerEnabled: constants.isIssueTrackerEnabled,
     };
   },
   computed: {
@@ -281,7 +281,7 @@ export default Vue.extend({
             let estimation = story.estimation ? story.estimation : story.Estimation;
 
             stories.push({
-              jiraId: null,
+              id: null,
               title: title,
               description: description,
               estimation: estimation,
