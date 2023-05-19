@@ -2,46 +2,122 @@
   <b-container>
     <h1>{{ headerText }}</h1>
     <b-card-group deck>
-      <b-card v-bind:title="$t('page.landing.meeting.analytics.allCreatedSessionsTitle')">
+      <b-card class="statsCards">
+        <b-card-title style="text-align: center">
+         {{$t('page.landing.meeting.analytics.allCreatedSessionsTitle')}}
+        </b-card-title>
         <b-card-text>
-          {{ allSessions }} {{ overAllSessions }} <br />
-          {{ allAttendees }} {{ overAllAttendees }}
+          <h2 class="numbers">{{ tweenedOverAllSessions.toFixed(0) }}</h2>
+          <div style="text-align: center;">
+              {{allSessions}}
+          </div>
+          <br/>
+          <h2 class="numbers">{{ tweenedOverAllAttendees.toFixed(0) }}</h2>
+          <div style="text-align: center;">
+            {{allAttendees}}
+          </div>
         </b-card-text>
-
       </b-card>
-      <b-card v-bind:title="$t('page.landing.meeting.analytics.lastMonthTitle')">
+      <b-card class="statsCards">
+        <b-card-title style="text-align: center">
+          {{$t('page.landing.meeting.analytics.lastMonthTitle')}}
+        </b-card-title>
         <b-card-text>
-          {{ lastMonthSessions }} {{ overAllSessionsFromLastMonth }} <br />
-          {{ lastMonthAttendees }} {{ overAllAttendeesFromLastMonth }}
+          <h2 class="numbers">
+            {{ tweenedOverAllSessionsFromLastMonth.toFixed(0) }}
+          </h2>
+          <div style="text-align: center;">
+            {{allSessions}}
+          </div>
+          <br>
+          <h2 class="numbers">
+            {{ tweenedOverAllAttendeesFromLastMonth.toFixed(0) }}
+          </h2>
+          <div style="text-align: center;">
+            {{allAttendees}}
+          </div>
         </b-card-text>
       </b-card>
-      <b-card v-bind:title="$t('page.landing.meeting.analytics.activeTitle')">
+      <b-card class="statsCards">
+        <b-card-title style="text-align: center">
+          {{$t('page.landing.meeting.analytics.activeTitle')}}
+        </b-card-title>
         <b-card-text>
-          {{ currentSessionsText }} {{ currentSessions }} <br />
-          {{ currentAttendeesText }} {{ currentAttendees }}
+          <h2 class="numbers">
+            {{ tweenedCurrentSessions.toFixed(0) }}
+          </h2>
+          <div style="text-align: center;">
+            {{allSessions}}
+          </div>
+          <br/>
+          <h2 class="numbers">
+            {{ tweendCurrentAttendees.toFixed(0) }}
+          </h2>
+          <div style="text-align: center;">
+            {{allAttendees}}
+          </div>
         </b-card-text>
       </b-card>
     </b-card-group>
+    <br/>
+    <BarChart v-if="loaded"
+     :overAll="overAllSessions"
+     :lastMonth="overAllSessionsFromLastMonth"
+     :currently="currentSessions"
+     :overAllAttendees="overAllAttendees"
+     :lastMonthAttendees="overAllAttendeesFromLastMonth"
+     :currentlyAttendees="currentAttendees"
+    />
   </b-container>
+
 
 </template>
 <script lang="ts">
 import Vue from "vue";
-import Constants from "../constants";
+import gsap from 'gsap'
+import BarChart from "@/components/BarChart.vue";
 import apiService from "@/services/api.service";
 export default Vue.extend({
   name: "AnalyticsDataComponent",
   components: {
+    BarChart
   },
   data() {
     return {
+      loaded: false,
       overAllSessions: 0,
       overAllAttendees: 0,
       overAllSessionsFromLastMonth: 0,
       overAllAttendeesFromLastMonth: 0,
       currentSessions: 0,
       currentAttendees: 0,
+      tweenedOverAllSessions: 0,
+      tweenedOverAllAttendees: 0,
+      tweenedOverAllSessionsFromLastMonth: 0,
+      tweenedOverAllAttendeesFromLastMonth: 0,
+      tweenedCurrentSessions: 0,
+      tweendCurrentAttendees: 0
     };
+  },
+  watch: {
+    overAllSessions(n) {
+      gsap.to(this, { duration: 1.25, tweenedOverAllSessions: Number(n) || 0 })
+    },
+    overAllAttendees(n) {
+      gsap.to(this, { duration: 1.25, tweenedOverAllAttendees: Number(n) || 0 })
+    },
+    overAllSessionsFromLastMonth(n) {
+      gsap.to(this, { duration: 1.25, tweenedOverAllSessionsFromLastMonth: Number(n) || 0 })
+    },
+    overAllAttendeesFromLastMonth(n) {
+      gsap.to(this, { duration: 1.25, tweetweenedOverAllAttendeesFromLastMonthned: Number(n) || 0 })
+    },
+    currentSessions(n) {
+      gsap.to(this, { duration: 1.25, tweenedCurrentSessions: Number(n) || 0 })
+    },
+    currentAttendees(n) {
+      gsap.to(this, { duration: 1.25, tweendCurrentAttendees: Number(n) || 0 })
+    }
   },
   created() {
     this.getAllDiveniData();
@@ -51,26 +127,27 @@ export default Vue.extend({
       return this.$t('page.landing.meeting.analytics.title');
     },
     allSessions() {
-      return this.$t('page.landing.meeting.analytics.allCreatedSessionsNumber');
+      return this.$t('page.landing.meeting.analytics.sessionText');
     },
     allAttendees() {
-      return this.$t('page.landing.meeting.analytics.allCreatedSessionsNumberAttendees');
+      return this.$t('page.landing.meeting.analytics.attendeesText');
     },
     lastMonthSessions() {
-      return this.$t('page.landing.meeting.analytics.lastMonthSessions');
+      return this.$t('page.landing.meeting.analytics.sessionText');
     },
     lastMonthAttendees() {
-      return this.$t('page.landing.meeting.analytics.lastMonthAttendees');
+      return this.$t('page.landing.meeting.analytics.attendeesText');
     },
     currentSessionsText() {
-      return this.$t('page.landing.meeting.analytics.activeSessions');
+      return this.$t('page.landing.meeting.analytics.sessionText');
     },
     currentAttendeesText() {
-      return this.$t('page.landing.meeting.analytics.activeAttendees');
+      return this.$t('page.landing.meeting.analytics.attendeesText');
     }
   },
   methods: {
     async getAllDiveniData() {
+      this.loaded = false;
       let response = apiService.getAllDiveniData();
       let allData  = await response.then(function(result) {
         let returnArray: Array<number> = [];
@@ -82,18 +159,30 @@ export default Vue.extend({
         returnArray.push(result.amountOfAttendeesCurrently);
         return returnArray;
       });
-
       this.overAllSessions = allData[0];
       this.overAllAttendees = allData[1];
       this.overAllSessionsFromLastMonth = allData[2];
       this.overAllAttendeesFromLastMonth = allData[3];
       this.currentSessions = allData[4];
       this.currentAttendees = allData[5];
+      this.loaded = true;
     },
   },
 });
 
 </script>
-<style>
+<style scoped>
 
+.statsCards {
+  border-radius: 0.5rem;
+  background-color: rgba(200, 200, 200, 0.5);
+}
+.numbers {
+  text-align: center;
+  font-weight: bold;
+}
+
+.borderTop {
+  border-top: 1px dotted black;
+}
 </style>

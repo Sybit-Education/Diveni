@@ -113,15 +113,11 @@
         },
         "analytics": {
           "title": "Statystyki Diveni",
-          "allCreatedSessionsTitle": "Łącznie utworzone sesje",
-          "allCreatedSessionsNumber": "Łącznie utworzone sesje:",
-          "allCreatedSessionsNumberAttendees": "Ogólna liczba uczestników:",
-          "lastMonthTitle": "Sesje utworzone w ciągu ostatniego miesiąca",
-          "lastMonthSessions": "Sesje utworzone w ciągu ostatniego miesiąca:",
-          "lastMonthAttendees": "Uczestnicy w ciągu ostatniego miesiąca:",
-          "activeTitle": "Aktualnie aktywne sesje",
-          "activeSessions": "Aktualnie aktywne sesje:",
-          "activeAttendees": "Bieżąca liczba uczestników:"
+          "allCreatedSessionsTitle": "Overall",
+          "sessionText": "Sessions",
+          "attendeesText": "Attendees",
+          "lastMonthTitle": "Last Month",
+          "activeTitle": "Currently"
         }
       }
     },

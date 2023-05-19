@@ -113,15 +113,11 @@
         },
         "analytics": {
           "title": "Статистика Дивені",
-          "allCreatedSessionsTitle": "Загальна кількість створених сесій",
-          "allCreatedSessionsNumber": "Загальна кількість створених сесій:",
-          "allCreatedSessionsNumberAttendees": "Загальна кількість учасників:",
-          "lastMonthTitle": "Створені сеанси за останній місяць",
-          "lastMonthSessions": "Створені сеанси за останній місяць:",
-          "lastMonthAttendees": "Учасники за останній місяць:",
-          "activeTitle": "Поточні активні сесії",
-          "activeSessions": "Поточні активні сесії:",
-          "activeAttendees": "Поточна кількість учасників:"
+          "allCreatedSessionsTitle": "Overall",
+          "sessionText": "Sessions",
+          "attendeesText": "Attendees",
+          "lastMonthTitle": "Last Month",
+          "activeTitle": "Currently"
         }
       }
     },

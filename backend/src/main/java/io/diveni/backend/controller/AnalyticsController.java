@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import io.diveni.backend.model.AnalyticsData;
 import io.diveni.backend.model.Session;
-import io.diveni.backend.principals.MemberPrincipal;
 import io.diveni.backend.service.DatabaseService;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,32 +33,31 @@ public class AnalyticsController {
     amountOfAllAttendees += databaseService.getDeletedSessions().stream()
         .collect(Collectors.summingInt(deletedSess -> deletedSess.getMembers().size()));
 
-    for (MemberPrincipal member : databaseService.getRemovedMember()) {
-      for (Session session : databaseService.getDeletedSessions()) {
-        if (member.getSessionID().equals(session.getSessionID())) {
-          amountOfAllAttendees += 1;
-        }
-      }
-    }
+    amountOfAllAttendees += databaseService.getDeletedSessions()
+    .stream()
+    .filter(ds -> databaseService.getRemovedMember().stream().anyMatch(rm -> rm.getSessionID().equals(ds.getSessionID())))
+    .count();
 
     int lastMonth = LocalDate.now().getMonthValue();
-    int counter = 0;
+    int counter;
+    int year;
     if (lastMonth == 1) {
       counter = 11;
+      year = LocalDate.now().getYear() - 1;
     } else {
       counter = -1;
+      year = LocalDate.now().getYear();
     }
-    int lastMonth2 = lastMonth + counter;
-    int year = LocalDate.now().getYear();
+    int finalLastMonth = lastMonth + counter;
     List<Session> sessionFromLastMonth = databaseService.getSessions().stream()
         .filter(
-            s -> s.getCreationTime().getMonthValue() == lastMonth2
+            s -> s.getCreationTime().getMonthValue() == finalLastMonth
                 && s.getCreationTime().getYear() == year)
         .collect(Collectors.toList());
 
     List<Session> deletedsessionFromLastMonth = databaseService.getDeletedSessions().stream()
         .filter(
-            s -> s.getCreationTime().getMonthValue() == lastMonth2
+            s -> s.getCreationTime().getMonthValue() == finalLastMonth
                 && s.getCreationTime().getYear() == year)
         .collect(Collectors.toList());
 
@@ -70,13 +68,10 @@ public class AnalyticsController {
     amountOfAttendeesLastMonth += deletedsessionFromLastMonth.stream()
         .collect(Collectors.summingInt(s -> s.getMembers().size()));
 
-    for (MemberPrincipal member : databaseService.getRemovedMember()) {
-      for (Session session : deletedsessionFromLastMonth) {
-        if (member.getSessionID() == session.getSessionID()) {
-          amountOfAttendeesLastMonth += 1;
-        }
-      }
-    }
+    amountOfAttendeesLastMonth += deletedsessionFromLastMonth
+        .stream()
+        .filter(ds -> databaseService.getRemovedMember().stream().anyMatch(rm -> rm.getSessionID().equals(ds.getSessionID())))
+        .count();
 
     int currentAmountOfSessions = databaseService.getSessions().size();
     int currentAmountOfAttendees = databaseService.getSessions().stream()

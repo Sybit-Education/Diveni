@@ -96,12 +96,6 @@ export default Vue.extend({
     return {
       sessionWrapper: {} as { session: Session },
       startNewSessionOnMounted: false,
-      overAllSessions: 0,
-      overAllAttendees: 0,
-      overAllSessionsFromLastMonth: 0,
-      overAllAttendeesFromLastMonth: 0,
-      currentSessions: 0,
-      currentAttendees: 0,
     };
   },
   created() {
