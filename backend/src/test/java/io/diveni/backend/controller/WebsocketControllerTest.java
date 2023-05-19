@@ -362,6 +362,83 @@ public class WebsocketControllerTest {
   }
 
   @Test
+  public void memberLeavesWhileVoting_votingIsFinshed() throws Exception {
+    val sessionID = Utils.generateRandomID();
+    val adminID = Utils.generateRandomID();
+    val memberID = Utils.generateRandomID();
+    val memberID2 = Utils.generateRandomID();
+    val member = new Member(memberID, "TestName", null, null, "5");
+    val member2 = new Member(memberID2, null, null, null, null);
+    sessionRepo.save(
+        new Session(
+            new ObjectId(),
+            sessionID,
+            adminID,
+            new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+            null,
+            List.of(member, member2),
+            new HashMap<>(),
+            new ArrayList<>(),
+            SessionState.START_VOTING,
+            null,
+            null,
+            null));
+    val adminPrincipal = new AdminPrincipal(sessionID, adminID);
+    val memberPrincipal = new MemberPrincipal(sessionID, memberID2);
+    webSocketService.setAdminUser(adminPrincipal);
+    StompSession session = getMemberSession(sessionID, memberID2);
+
+    session.send(UNREGISTER, memberPrincipal);
+
+    // Wait for server-side handling
+    TimeUnit.MILLISECONDS.sleep(TIMEOUT);
+
+    assertEquals(1, sessionRepo.findBySessionID(sessionID).getMembers().size());
+    assertEquals(
+        SessionState.VOTING_FINISHED, sessionRepo.findBySessionID(sessionID).getSessionState());
+  }
+
+  @Test
+  public void memberLeavesWhileVotingAndIsNotTheLastMissingVoter_votingStartedState()
+      throws Exception {
+    val sessionID = Utils.generateRandomID();
+    val adminID = Utils.generateRandomID();
+    val memberID = Utils.generateRandomID();
+    val memberID2 = Utils.generateRandomID();
+    val memberID3 = Utils.generateRandomID();
+    val member = new Member(memberID, "TestName", null, null, "5");
+    val member2 = new Member(memberID2, null, null, null, null);
+    val member3 = new Member(memberID3, null, null, null, null);
+    sessionRepo.save(
+        new Session(
+            new ObjectId(),
+            sessionID,
+            adminID,
+            new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+            null,
+            List.of(member, member2, member3),
+            new HashMap<>(),
+            new ArrayList<>(),
+            SessionState.START_VOTING,
+            null,
+            null,
+            null));
+    val adminPrincipal = new AdminPrincipal(sessionID, adminID);
+    val memberPrincipal = new MemberPrincipal(sessionID, memberID2);
+    webSocketService.setAdminUser(adminPrincipal);
+    StompSession session = getMemberSession(sessionID, memberID2);
+
+    session.send(UNREGISTER, memberPrincipal);
+
+    // Wait for server-side handling
+    TimeUnit.MILLISECONDS.sleep(TIMEOUT);
+
+    assertEquals(2, sessionRepo.findBySessionID(sessionID).getMembers().size());
+    assertEquals(
+        SessionState.START_VOTING, sessionRepo.findBySessionID(sessionID).getSessionState());
+  }
+
+  @Test
   public void vote_setsVote() throws Exception {
     val dbID = new ObjectId();
     val sessionID = Utils.generateRandomID();

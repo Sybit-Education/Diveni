@@ -38,6 +38,7 @@ Supported issue trackers:
 
 - Atlassian JIRA on premise
 - Atlassian JIRA Cloud
+- Microsoft Azure DevOps
 - More connectors are planned
 
 ## Read more
@@ -49,9 +50,9 @@ see: [Diveni Website](https://sybit-education.github.io/Diveni/)
 
 ## Some Screenshots
 
-![Voters view of voted story](docs/.vuepress/public/img/userEstimationVoted.JPG)
+![Voters view of voted story](docs/img/userEstimationVoted.png)
 
-![Host view voted story](docs/.vuepress/public/img/hostEstimationFinished.JPG)
+![Host view voted story](docs/img/hostEstimationFinished.png)
 
 
 ## Application Instructions and Requirements
