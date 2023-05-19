@@ -1,0 +1,77 @@
+name: Deploy Diveni
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'backend/**'
+      - 'frontend/**'
+      - 'proxy/**'
+      - '.github/workflows/diveni-deploy.yaml'
+  workflow_dispatch:
+
+jobs:
+  docker-images:
+    name: Docker-Images
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        service: [backend, frontend, proxy]
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Verify files changed
+        uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          filters: |
+            service:
+              - '${{ matrix.service }}/**'
+
+      - name: Extract metadata (tags, labels) for Docker
+        if: steps.filter.outputs.service == 'true'
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ghcr.io/${{ github.repository }}-${{ matrix.service }}
+          tags: type=raw,value=latest,enable=${{ github.ref == format('refs/heads/{0}', 'main') }}
+
+      - name: Log in to the Container registry
+        if: steps.filter.outputs.service == 'true'
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push ${{ matrix.service }}-Docker-Image
+        if: steps.filter.outputs.service == 'true'
+        uses: docker/build-push-action@v4
+        with:
+          context: ${{ matrix.service }}
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+
+  deploy:
+    name: Deploy to server
+    needs: docker-images
+    runs-on: ubuntu-latest
+    steps:
+      - name: Start application
+        uses: appleboy/ssh-action@v0.1.9
+        with:
+          host: ${{ secrets.DEPLOY_SSH_HOST }}
+          username: ${{ secrets.DEPLOY_SSH_USERNAME }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          port: ${{ secrets.DEPLOY_SSH_PORT }}
+          script_stop: true
+          script: |
+            bash startDiveni.sh
