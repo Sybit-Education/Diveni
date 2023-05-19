@@ -7,27 +7,46 @@
       {{ $t("session.prepare.step.selection.mode.title") }}
     </h4>
     <b-tabs v-model="tabIndex" content-class="mt-3" fill>
-      <b-tab class="mg_top_2_per" :title="$t('session.prepare.step.selection.mode.description.withoutUS.tab.label')"
-        :title-link-class="linkClass(0)">
-        <stroy-points-component />
+      <b-tab
+        class="mg_top_2_per"
+        :title="$t('session.prepare.step.selection.mode.description.withoutUS.tab.label')"
+        :title-link-class="linkClass(0)"
+      >
+        <stroy-points-component/>
       </b-tab>
       <b-tab :title="$t('session.prepare.step.selection.mode.description.withUS.tab.label')"
-        :title-link-class="linkClass(1)">
-        <user-story-component class="mg_top_2_per" />
-        <input id="fileUpload" type="file" hidden accept="text/csv" @change="importStory($event.target.files)" />
-        <b-button block color="primary" elevation="2" @click="openFileUploader()">
+             :title-link-class="linkClass(1)">
+        <user-story-component class="mg_top_2_per"/>
+        <input
+          id="fileUpload"
+          type="file"
+          hidden accept="text/csv"
+          @change="importStory($event.target.files)"
+        />
+        <b-button
+          block color="primary"
+          elevation="2"
+          @click="openFileUploader()"
+        >
           {{ $t("session.prepare.step.selection.mode.description.withUS.importButton") }}
         </b-button>
       </b-tab>
-      <b-tab v-if="isJiraEnabled" :title="$t('session.prepare.step.selection.mode.description.withJira.tab.label')"
-        :title-link-class="linkClass(2)">
-        <jira-component class="mg_top_2_per" />
+      <b-tab
+        v-if="isJiraEnabled"
+        :title="$t('session.prepare.step.selection.mode.description.withJira.tab.label')"
+        :title-link-class="linkClass(2)"
+      >
+        <jira-component class="mg_top_2_per"/>
       </b-tab>
     </b-tabs>
     <h4 class="mt-4">
       {{ $t("session.prepare.step.selection.cardSet.title") }}
     </h4>
-    <card-set-component class="mt-3" :user-story-mode="userStoryMode" @selectedCardSetOptions="setCardSetOptions" />
+    <card-set-component
+      class="mt-3"
+      :user-story-mode="userStoryMode"
+      @selectedCardSetOptions="setCardSetOptions"
+    />
     <h4 class="mt-3">
       {{ $t("session.prepare.step.selection.time.title") }}
     </h4>
@@ -49,12 +68,22 @@
     </h4>
     <b-row class="mt-3 text-center">
       <b-col>
-        <b-button variant="outline-secondary" @click="hostVoting = true" :class="{ active: hostVoting }">
-          {{ $t("session.prepare.step.selection.hostVoting.hostVotingOn") }}</b-button>
+        <b-button
+          variant="outline-secondary"
+          @click="hostVoting = true"
+          :class="{ active: hostVoting }"
+        >
+          {{ $t("session.prepare.step.selection.hostVoting.hostVotingOn") }}
+        </b-button>
       </b-col>
       <b-col>
-        <b-button variant="outline-secondary" @click="hostVoting = false" :class="{ active: !hostVoting }">
-          {{ $t("session.prepare.step.selection.hostVoting.hostVotingOff") }} </b-button>
+        <b-button
+          variant="outline-secondary"
+          @click="hostVoting = false"
+          :class="{ active: !hostVoting }"
+        >
+          {{ $t("session.prepare.step.selection.hostVoting.hostVotingOff") }}
+        </b-button>
       </b-col>
     </b-row>
     <h4 class="mt-3">
@@ -64,13 +93,21 @@
       <b-col>
         <b-form>
           <b-form-group label-for="input-password">
-            <b-form-input id="input-password" v-model="password"
-              :placeholder="$t('session.prepare.step.selection.password.placeholder')" />
+            <b-form-input
+              id="input-password"
+              v-model="password"
+              :placeholder="$t('session.prepare.step.selection.password.placeholder')"
+            />
           </b-form-group>
         </b-form>
       </b-col>
     </b-row>
-    <b-button class="my-5" variant="success" :disabled="buttonDisabled()" @click="sendCreateSessionRequest">
+    <b-button
+      class="my-5"
+      variant="success"
+      :disabled="buttonDisabled()"
+      @click="sendCreateSessionRequest"
+    >
       {{ $t("session.prepare.button.start") }}
     </b-button>
   </b-container>

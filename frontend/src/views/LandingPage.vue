@@ -7,15 +7,25 @@
     </b-container>
     <b-container class="my-5">
       <b-card-group deck class="justify-content-center">
-        <landing-page-card :title="$t('page.landing.meeting.new.title')"
+        <landing-page-card
+          :title="$t('page.landing.meeting.new.title')"
           :description="$t('page.landing.meeting.new.description')"
-          :button-text="$t('page.landing.meeting.new.buttons.start.label')" :on-click="goToPrepareSessionPage" />
-        <landing-page-card :title="$t('page.landing.meeting.join.title')"
+          :button-text="$t('page.landing.meeting.new.buttons.start.label')"
+          :on-click="goToPrepareSessionPage"
+        />
+        <landing-page-card
+          :title="$t('page.landing.meeting.join.title')"
           :description="$t('page.landing.meeting.join.description')"
-          :button-text="$t('page.landing.meeting.join.buttons.start.label')" :on-click="goToJoinPage" />
-        <landing-page-card v-if="sessionWrapper.session" :title="$t('page.landing.meeting.reconnect.title')"
+          :button-text="$t('page.landing.meeting.join.buttons.start.label')"
+          :on-click="goToJoinPage"
+        />
+        <landing-page-card
+          v-if="sessionWrapper.session"
+          :title="$t('page.landing.meeting.reconnect.title')"
           :description="$t('page.landing.meeting.reconnect.description')"
-          :button-text="$t('page.landing.meeting.reconnect.buttons.start.label')" :on-click="goToSessionPage" />
+          :button-text="$t('page.landing.meeting.reconnect.buttons.start.label')"
+          :on-click="goToSessionPage"
+        />
       </b-card-group>
     </b-container>
     <b-container class="py-5">
