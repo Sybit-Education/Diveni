@@ -11,41 +11,72 @@
         </h1>
       </b-col>
       <b-col>
-        <b-button class="mr-3 autoRevealButtons" variant="outline-dark" :pressed="false" @click="autoReveal = true"
-          v-if="!autoReveal && !planningStart">
-          <b-icon-eye-fill />
+        <b-button
+          class="mr-3 autoRevealButtons"
+          variant="outline-dark"
+          :pressed="false"
+          @click="autoReveal = true"
+          v-if="!autoReveal && !planningStart"
+        >
+          <b-icon-eye-fill/>
           {{ $t("page.session.during.estimation.buttons.autoRevealOff") }}
         </b-button>
-        <b-button class="mr-3 autoRevealButtons" variant="outline-dark" :pressed="true" @click="autoReveal = false"
-          v-if="autoReveal && !planningStart">
-          <b-icon-eye-slash-fill />
+        <b-button
+          class="mr-3 autoRevealButtons"
+          variant="outline-dark"
+          :pressed="true"
+          @click="autoReveal = false"
+          v-if="autoReveal && !planningStart"
+        >
+          <b-icon-eye-slash-fill/>
           {{ $t("page.session.during.estimation.buttons.autoRevealOn") }}
         </b-button>
       </b-col>
       <b-col cols="auto" class="mr-auto">
-        <copy-session-id-popup v-if="planningStart" class="float-end" :session-id="session_sessionID" />
+        <copy-session-id-popup
+          v-if="planningStart"
+          class="float-end"
+          :session-id="session_sessionID"
+        />
       </b-col>
       <b-col cols="auto">
-        <session-close-button :is-planning-start="planningStart" :user-story-mode="session_userStoryMode" />
+        <session-close-button
+          :is-planning-start="planningStart"
+          :user-story-mode="session_userStoryMode"
+        />
       </b-col>
     </b-row>
 
     <div v-if="!planningStart">
-      <copy-session-id-popup :text-before-session-i-d="$t('page.session.before.text.beforeID')"
-        :session-id="session_sessionID" :text-after-session-i-d="$t('page.session.before.text.afterID')" />
+      <copy-session-id-popup
+        :text-before-session-i-d="$t('page.session.before.text.beforeID')"
+        :session-id="session_sessionID"
+        :text-after-session-i-d="$t('page.session.before.text.afterID')"
+      />
 
       <h4 class="text-center m-3">
         {{ $t("page.session.before.text.waiting") }}
-        <sub><b-icon-three-dots animation="fade" font-scale="1" /></sub>
+        <sub>
+          <b-icon-three-dots animation="fade" font-scale="1"/>
+        </sub>
       </h4>
 
       <b-row class="d-flex justify-content-center overflow-auto" style="max-height: 500px">
-        <kick-user-wrapper v-for="member of members" :key="member.memberID" class="m-4" child="RoundedAvatar"
-          :member="member" />
+        <kick-user-wrapper
+          v-for="member of members"
+          :key="member.memberID"
+          class="m-4"
+          child="RoundedAvatar"
+          :member="member"
+        />
       </b-row>
       <b-row>
         <b-col class="text-center">
-          <session-start-button @clicked="onPlanningStarted" :members="members" :autoReveal="autoReveal" :withUs="true" />
+          <session-start-button
+            @clicked="onPlanningStarted"
+            :members="members"
+            :autoReveal="autoReveal"
+            :withUs="true"/>
         </b-col>
       </b-row>
     </div>
@@ -53,30 +84,52 @@
     <div v-else>
       <b-row class="d-flex justify-content-start pb-3">
         <b-col cols="auto" class="mr-auto">
-          <b-button class="mr-3" variant="outline-dark" @click="sendRestartMessage">
-            <b-icon-arrow-clockwise />
+          <b-button
+            class="mr-3"
+            variant="outline-dark"
+            @click="sendRestartMessage"
+          >
+            <b-icon-arrow-clockwise/>
             {{ $t("page.session.during.estimation.buttons.new") }}
           </b-button>
-          <b-button class="mr-3" variant="outline-dark" @click="sendVotingFinishedMessage">
-            <b-icon-bar-chart />
+          <b-button
+            class="mr-3"
+            variant="outline-dark"
+            @click="sendVotingFinishedMessage"
+          >
+            <b-icon-bar-chart/>
             {{ $t("page.session.during.estimation.buttons.result") }}
           </b-button>
-          <b-button class="mr-3" variant="outline-dark" :pressed="false" @click="autoReveal = true"
+          <b-button
+            class="mr-3"
+            variant="outline-dark"
+            :pressed="false"
+            @click="autoReveal = true"
             v-if="!autoReveal"
-            :disabled="planningStart == true && estimateFinished == false">
-            <b-icon-eye-fill />
+            :disabled="planningStart == true && estimateFinished == false"
+          >
+            <b-icon-eye-fill/>
             {{ $t("page.session.during.estimation.buttons.autoRevealOff") }}
           </b-button>
-          <b-button class="mr-3" variant="outline-dark" :pressed="true" @click="autoReveal = false"
+          <b-button
+            class="mr-3"
+            variant="outline-dark"
+            :pressed="true"
+            @click="autoReveal = false"
             v-if="autoReveal"
-            :disabled="planningStart == true && estimateFinished == false">
-            <b-icon-eye-slash-fill />
+            :disabled="planningStart == true && estimateFinished == false"
+          >
+            <b-icon-eye-slash-fill/>
             {{ $t("page.session.during.estimation.buttons.autoRevealOn") }}
           </b-button>
         </b-col>
         <b-col cols="auto">
-          <estimate-timer :start-timestamp="timerTimestamp" :pause-timer="estimateFinished"
-            :duration="timerCountdownNumber" @timerFinished="sendVotingFinishedMessage" />
+          <estimate-timer
+            :start-timestamp="timerTimestamp"
+            :pause-timer="estimateFinished"
+            :duration="timerCountdownNumber"
+            @timerFinished="sendVotingFinishedMessage"
+          />
         </b-col>
       </b-row>
       <h4 v-if="membersPending.length > 0 && !estimateFinished" class="d-inline">
@@ -97,8 +150,13 @@
         </div>
       </div>
       <b-row v-if="!estimateFinished" class="my-1 d-flex justify-content-center flex-wrap">
-        <kick-user-wrapper v-for="member of membersPending" :key="member.memberID" class="mx-2" child="RoundedAvatar"
-          :member="member" />
+        <kick-user-wrapper
+          v-for="member of membersPending"
+          :key="member.memberID"
+          class="mx-2"
+          child="RoundedAvatar"
+          :member="member"
+        />
       </b-row>
       <hr />
       <h4>
@@ -106,13 +164,19 @@
         {{ membersEstimated.length }} /
         {{ membersPending.length + membersEstimated.length }}
       </h4>
-      <b-row class="my-1 d-flex justify-content-center flex-wrap overflow-auto" style="max-height: 500px">
-        <kick-user-wrapper v-for="member of estimateFinished ? members : membersEstimated" :key="member.memberID"
-          child="SessionMemberCard" :member="member" :props="{
+      <b-row class="my-1 d-flex justify-content-center flex-wrap overflow-auto"
+             style="max-height: 500px">
+        <kick-user-wrapper
+          v-for="member of estimateFinished ? members : membersEstimated"
+          :key="member.memberID"
+          child="SessionMemberCard"
+          :member="member"
+          :props="{
               estimateFinished: estimateFinished,
               highlight:
                 highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0,
-            }" />
+            }"
+        />
       </b-row>
     </div>
     <b-row v-if="session_userStoryMode !== 'NO_US'" class="mt-5">
@@ -123,17 +187,32 @@
     <b-row v-if="session_userStoryMode !== 'NO_US'">
       <b-col cols="4">
         <div v-if="session_userStoryMode === 'US_JIRA'" class="refreshUserstories">
-          <b-button class="w-100 mb-3" variant="info" @click="refreshUserStories">
+          <b-button
+            class="w-100 mb-3"
+            variant="info"
+            @click="refreshUserStories"
+          >
             {{ $t("page.session.before.refreshStories") }}
           </b-button>
         </div>
-        <user-stories :card-set="voteSet" :show-estimations="planningStart" :initial-stories="userStories"
-          :show-edit-buttons="true" :select-story="true" @userStoriesChanged="onUserStoriesChanged"
-          @selectedStory="onSelectedStory($event)" />
+        <user-stories
+          :card-set="voteSet"
+          :show-estimations="planningStart"
+          :initial-stories="userStories"
+          :show-edit-buttons="true"
+          :select-story="true"
+          @userStoriesChanged="onUserStoriesChanged"
+          @selectedStory="onSelectedStory($event)"
+        />
       </b-col>
       <b-col cols="8">
-        <user-story-descriptions :card-set="voteSet" :initial-stories="userStories" :edit-description="true"
-          :index="index" @userStoriesChanged="onUserStoriesChanged" />
+        <user-story-descriptions
+          :card-set="voteSet"
+          :initial-stories="userStories"
+          :edit-description="true"
+          :index="index"
+          @userStoriesChanged="onUserStoriesChanged"
+        />
       </b-col>
     </b-row>
     <notify-host-component />

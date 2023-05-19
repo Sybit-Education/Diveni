@@ -16,14 +16,24 @@
           <rounded-avatar :member="getMember" />
         </b-col>
         <b-col cols="auto">
-          <session-leave-button />
-          <estimate-timer v-if="timerTimestamp" class="mt-3" :start-timestamp="timerTimestamp"
-            :pause-timer="estimateFinished || pauseSession" :duration="timerCountdownNumber" />
+          <session-leave-button/>
+          <estimate-timer
+            v-if="timerTimestamp"
+            class="mt-3"
+            :start-timestamp="timerTimestamp"
+            :pause-timer="estimateFinished || pauseSession"
+            :duration="timerCountdownNumber"
+          />
         </b-col>
       </b-row>
       <b-row v-if="isMobile">
-        <mobile-story-title v-if="userStoryMode !== 'NO_US'" :card-set="voteSet" :index="index"
-          :initial-stories="userStories" :edit-description="false" />
+        <mobile-story-title
+          v-if="userStoryMode !== 'NO_US'"
+          :card-set="voteSet"
+          :index="index"
+          :initial-stories="userStories"
+          :edit-description="false"
+        />
       </b-row>
       <b-row v-if="isStartVoting" class="my-5">
         <div v-if="isMobile">
@@ -35,18 +45,38 @@
               defaultIndex: 0,
               deceleration: 0.0005,
             }">
-            <member-vote-card v-for="(voteOption, idx) in voteSet" :key="voteOption" :ref="`memberCard${voteOption}`"
-              class="flicking-panel mx-2" :vote-option="voteOption" :index="idx" :hex-color="hexColor"
-              :dragged="voteOption === draggedVote" :is-mobile="true" :disabled="pauseSession" @sentVote="onSendVote" />
+            <member-vote-card
+              v-for="(voteOption, idx) in voteSet"
+              :key="voteOption"
+              :ref="`memberCard${voteOption}`"
+              class="flicking-panel mx-2"
+              :vote-option="voteOption"
+              :index="idx"
+              :hex-color="hexColor"
+              :dragged="voteOption === draggedVote"
+              :is-mobile="true"
+              :disabled="pauseSession"
+              @sentVote="onSendVote"
+            />
           </flicking>
         </div>
         <b-row v-else class="d-flex justify-content-between flex-wrap text-center">
           <b-col>
             <div class="overflow-auto" style="max-height: 500px">
-              <member-vote-card v-for="(voteOption, idx) in voteSet" :key="voteOption" :ref="`memberCard${voteOption}`"
-                style="display: inline-block" class="flicking-panel m-2" :vote-option="voteOption" :index="idx"
-                :hex-color="hexColor" :dragged="voteOption === draggedVote" :is-mobile="false" :disabled="pauseSession"
-                @sentVote="onSendVote" />
+              <member-vote-card
+                v-for="(voteOption, idx) in voteSet"
+                :key="voteOption"
+                :ref="`memberCard${voteOption}`"
+                style="display: inline-block"
+                class="flicking-panel m-2"
+                :vote-option="voteOption"
+                :index="idx"
+                :hex-color="hexColor"
+                :dragged="voteOption === draggedVote"
+                :is-mobile="false"
+                :disabled="pauseSession"
+                @sentVote="onSendVote"
+              />
             </div>
           </b-col>
         </b-row>
@@ -57,13 +87,18 @@
           <sub><b-icon-three-dots animation="fade" font-scale="1" /></sub>
         </h3>
       </b-row>
-      <b-row v-if="votingFinished" class="my-1 d-flex justify-content-center flex-wrap overflow-auto"
-        style="max-height: 500px">
-        <session-member-card v-for="member of members" :key="member.memberID" :member="member" :props="{
+      <b-row v-if="votingFinished"
+             class="my-1 d-flex justify-content-center flex-wrap overflow-auto"
+             style="max-height: 500px">
+        <session-member-card
+          v-for="member of members"
+          :key="member.memberID"
+          :member="member"
+          :props="{
             estimateFinished: votingFinished,
-            highlight:
-              highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0,
-          }" />
+            highlight: highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0,
+          }"
+        />
       </b-row>
       <b-row v-if="userStoryMode !== 'NO_US'" class="mt-5">
         <b-col md="6">
@@ -73,19 +108,33 @@
       <b-row v-if="userStoryMode !== 'NO_US' && !isMobile">
         <b-col class="mt-2">
           <div class="overflow-auto" style="height: 700px">
-            <user-stories :card-set="voteSet" :show-estimations="true" :initial-stories="userStories"
-              :show-edit-buttons="false" @selectedStory="onSelectedStory($event)" />
+            <user-stories
+              :card-set="voteSet"
+              :show-estimations="true"
+              :initial-stories="userStories"
+              :show-edit-buttons="false"
+              @selectedStory="onSelectedStory($event)"
+            />
           </div>
         </b-col>
         <b-col class="mt-2">
-          <user-story-descriptions :card-set="voteSet" :index="index" :initial-stories="userStories"
-            :edit-description="false" />
+          <user-story-descriptions
+            :card-set="voteSet"
+            :index="index"
+            :initial-stories="userStories"
+            :edit-description="false"
+          />
         </b-col>
       </b-row>
       <b-col v-if="userStoryMode !== 'NO_US' && isMobile" class="mt-2">
         <div class="overflow-auto">
-          <mobile-story-list :card-set="voteSet" :show-estimations="true" :initial-stories="userStories"
-            :show-edit-buttons="false" @selectedStory="onSelectedStory($event)" />
+          <mobile-story-list
+            :card-set="voteSet"
+            :show-estimations="true"
+            :initial-stories="userStories"
+            :show-edit-buttons="false"
+            @selectedStory="onSelectedStory($event)"
+          />
         </div>
       </b-col>
       <notify-member-component @hostLeft="reactOnHostLeave" @hostJoined="reactOnHostJoin" />
