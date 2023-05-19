@@ -14,6 +14,7 @@ import io.diveni.backend.model.UserStory;
 import io.diveni.backend.model.VerificationCode;
 import io.diveni.backend.service.DatabaseService;
 import io.diveni.backend.service.projectmanagementproviders.ProjectManagementProvider;
+import io.diveni.backend.service.projectmanagementproviders.azuredevops.AzureDevOpsService;
 import io.diveni.backend.service.projectmanagementproviders.jiracloud.JiraCloudService;
 import io.diveni.backend.service.projectmanagementproviders.jiraserver.JiraServerService;
 import org.slf4j.Logger;
@@ -36,7 +37,7 @@ import org.springframework.web.server.ResponseStatusException;
 import lombok.val;
 
 @RestController
-@RequestMapping("/jira")
+@RequestMapping("/issue-tracker")
 public class ProjectManagementController {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ProjectManagementController.class);
@@ -47,7 +48,9 @@ public class ProjectManagementController {
 
   @Autowired JiraCloudService jiraCloudService;
 
-  @GetMapping(value = "/oauth1/requestToken")
+  @Autowired AzureDevOpsService azureDevOpsService;
+
+  @GetMapping(value = "/jira/oauth1/requestToken")
   public ResponseEntity<JiraRequestToken> getRequestToken() {
     LOGGER.debug("--> getRequestToken()");
     ResponseEntity<JiraRequestToken> response =
@@ -56,7 +59,7 @@ public class ProjectManagementController {
     return response;
   }
 
-  @PostMapping(value = "/oauth1/verificationCode")
+  @PostMapping(value = "/jira/oauth1/verificationCode")
   public ResponseEntity<TokenIdentifier> getOauth1AccessToken(
       @RequestBody VerificationCode verificationCode) {
     LOGGER.debug("--> getOauth1AccessToken()");
@@ -69,13 +72,23 @@ public class ProjectManagementController {
     return response;
   }
 
-  @PostMapping(value = "/oauth2/authorizationCode")
+  @PostMapping(value = "/jira/oauth2/authorizationCode")
   public ResponseEntity<TokenIdentifier> getOAuth2AccessToken(
       @RequestHeader("Origin") String origin, @RequestBody VerificationCode authorizationCode) {
     LOGGER.debug("--> getOAuth2AccessToken(), origin={}", origin);
     ResponseEntity<TokenIdentifier> response =
         new ResponseEntity<>(
             jiraCloudService.getAccessToken(authorizationCode.getCode(), origin), HttpStatus.OK);
+    LOGGER.debug("<-- getOAuth2AccessToken()");
+    return response;
+  }
+
+  @PostMapping("/azure/oauth2/authorizationCode")
+  public ResponseEntity<TokenIdentifier> getAzureOAuth2AccessToken(
+      @RequestHeader("Origin") String origin) {
+    LOGGER.debug("--> getOAuth2AccessToken(), origin={}", origin);
+    ResponseEntity<TokenIdentifier> response =
+        new ResponseEntity<>(azureDevOpsService.getAccessToken("", origin), HttpStatus.OK);
     LOGGER.debug("<-- getOAuth2AccessToken()");
     return response;
   }
@@ -121,7 +134,7 @@ public class ProjectManagementController {
   @PutMapping(value = "/issue")
   public void updateIssue(
       @RequestHeader("X-Token-ID") String tokenIdentifier, @RequestBody UserStory userStory) {
-    LOGGER.debug("--> updateIssue(), userStoryId={}", userStory.getJiraId());
+    LOGGER.debug("--> updateIssue(), userStoryId={}", userStory.getId());
     val projectManagementProvider = getProjectManagementProvider(tokenIdentifier);
 
     if (projectManagementProvider != null) {
@@ -137,8 +150,7 @@ public class ProjectManagementController {
       @RequestHeader("X-Token-ID") String tokenIdentifier,
       @RequestParam("projectID") String projectID,
       @RequestBody UserStory userStory) {
-    LOGGER.debug(
-        "--> createIssue(), projectID={}, userStoryId={}", projectID, userStory.getJiraId());
+    LOGGER.debug("--> createIssue(), projectID={}, userStoryId={}", projectID, userStory.getId());
 
     val projectManagementProvider = getProjectManagementProvider(tokenIdentifier);
 
@@ -174,6 +186,8 @@ public class ProjectManagementController {
       return jiraServerService;
     } else if (jiraCloudService.containsToken(tokenIdentifier)) {
       return jiraCloudService;
+    } else if (azureDevOpsService.containsToken(tokenIdentifier)) {
+      return azureDevOpsService;
     }
     // If a new project management provider should be implemented, it can just be
     // added here

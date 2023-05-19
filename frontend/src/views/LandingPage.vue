@@ -39,10 +39,10 @@
             You could import your user stories or connect JIRA to syncronize story points.
           </b-card-text>
 
-          <b-card-sub-title> Connecting Atlassian Jira </b-card-sub-title>
+          <b-card-sub-title> Connecting to Issue-Tracker </b-card-sub-title>
           <b-card-text>
-            DIVENI could connect to JIRA Server and Cloud to show user stories and update the voted
-            results of your planning poker.
+            DIVENI could connect to issue trackers like Azure DevOps, JIRA Server and Cloud to show
+            user stories and update the voted results of your planning poker.
           </b-card-text>
         </b-card>
         <b-card title="Invite your Team">
