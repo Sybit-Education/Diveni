@@ -37,7 +37,7 @@
             "addUserStory": "Hinzufügen"
           },
           "placeholder": {
-            "userStoryTitle": "User Story Titel",
+            "userStoryTitle": "Titel der User Story",
             "userStoryDescription": "Beschreibung und Akzeptanzkriterien...",
             "searchUserStories": "Search user stories..."
           },
@@ -55,7 +55,7 @@
           "buttons": {
             "new": "Neu",
             "result": "Ergebnisse anzeigen",
-            "finish": "Beende die Session"
+            "finish": "Sitzung beenden"
           }
         },
         "modal": {
@@ -80,9 +80,9 @@
     },
     "results": {
       "title": "Ergebnisse",
-      "noUserStories": "Keine User Stories sind definiert...",
+      "noUserStories": "Es sind keine User Stories definiert ...",
       "button": {
-        "download": "Download als CSV-Datei",
+        "download": "Als CSV-Datei herunterladen",
         "home": "Zur Startseite"
       }
     },
