@@ -133,7 +133,7 @@
       "waiting": "Warte, bis der Organisator die Schätzrunde startet",
       "button": {
         "leave": {
-          "label": "Session verlassen"
+          "label": "Sitzung verlassen"
         }
       },
       "hostLeft": "Warte, bis der Organisator die Sitzung wieder betritt..."
