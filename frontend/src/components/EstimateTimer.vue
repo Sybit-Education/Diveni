@@ -75,14 +75,12 @@ export default Vue.extend({
       }
       this.intervalHandler = setInterval(() => {
         if (this.timerCount > 0) {
-          const startTime = new Date(this.startTimestamp).getTime();
-          const currentTime = new Date().getTime();
-          this.timerCount = Math.ceil(this.duration - (currentTime - startTime) / 1000);
+         this.timerCount--;
         } else {
           this.$emit("timerFinished");
           clearInterval(this.intervalHandler);
         }
-      }, 100);
+      }, 1000);
     },
   },
 });
