@@ -36,8 +36,7 @@ public class CorsConfig {
     return new WebMvcConfigurer() {
       @Override
       public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**").allowedOrigins(SERVER_URL).allowedMethods(ALLOWED_METHODS);
-        registry.addMapping("/jira-app/*").allowedOrigins("*");
+        registry.addMapping("/**").allowedOrigins("*").allowedMethods(ALLOWED_METHODS);
       }
     };
   }
