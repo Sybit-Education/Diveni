@@ -1,22 +1,16 @@
 package io.diveni.backend.controller;
 
-import io.opencensus.contrib.http.util.HttpPropagationUtil;
-import org.apache.http.HttpEntity;
-import org.apache.http.client.utils.HttpClientUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpUtils;
 
 @RestController
 @RequestMapping("/jira-app")
-@CrossOrigin("*")
 public class JiraAppController {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(JiraAppController.class);
