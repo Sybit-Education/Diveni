@@ -96,7 +96,7 @@ public class WebsocketController {
           new Notification(
               NotificationType.MEMBER_LEFT,
               new MemberPayload(((MemberPrincipal) principal).getMemberID())));
-      boolean votingCompleted = checkIfAllMembersVoted(session.getMembers());
+      boolean votingCompleted = checkIfAllMembersVoted(session.getMembers(), session);
       if (votingCompleted) {
         votingFinished(
             new AdminPrincipal(

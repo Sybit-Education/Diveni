@@ -395,6 +395,8 @@ public class WebsocketControllerTest {
             SessionState.START_VOTING,
             null,
             null,
+            null,
+            false,
             null));
     val adminPrincipal = new AdminPrincipal(sessionID, adminID);
     val memberPrincipal = new MemberPrincipal(sessionID, memberID2);
@@ -435,7 +437,7 @@ public class WebsocketControllerTest {
             SessionState.START_VOTING,
             null,
             null,
-            null));
+            null, false, null));
     val adminPrincipal = new AdminPrincipal(sessionID, adminID);
     val memberPrincipal = new MemberPrincipal(sessionID, memberID2);
     webSocketService.setAdminUser(adminPrincipal);
