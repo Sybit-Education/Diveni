@@ -4,7 +4,7 @@
       <b-list-group-item
         v-for="(story, idx) of userStories"
         v-show="idx === index"
-        :key="story.name"
+        :key="story"
         class="border-0"
         variant="outline-secondary"
       >
@@ -35,7 +35,7 @@
                 publishChanges(idx);
               "
             >
-              {{ num }}
+              {{ num }} 
             </b-dropdown-item>
           </b-dropdown>
         </div>
@@ -46,7 +46,7 @@
             class="mt-1"
             :disabled="!editDescription"
             :placeholder="$t('page.session.before.userStories.placeholder.userStoryDescription')"
-            @blur="publishChanges(idx)"
+            @textValueChanged="(event) => valueChanged(idx, event)"
           />
         </div>
       </b-list-group-item>
@@ -79,7 +79,7 @@ export default Vue.extend({
     return {
       sideBarOpen: false,
       userStories: [] as Array<{
-        jiraId: string | null;
+        id: string | null;
         title: string;
         description: string;
         estimation: string | null;
@@ -95,7 +95,7 @@ export default Vue.extend({
   watch: {
     initialStories() {
       this.userStories = this.initialStories as Array<{
-        jiraId: string | null;
+        id: string | null;
         title: string;
         description: string;
         estimation: string | null;
@@ -105,7 +105,7 @@ export default Vue.extend({
   },
   created() {
     this.userStories = this.initialStories as Array<{
-      jiraId: string | null;
+      id: string | null;
       title: string;
       description: string;
       estimation: string | null;
@@ -113,6 +113,9 @@ export default Vue.extend({
     }>;
   },
   methods: {
+    valueChanged(idx, {markdown}) {
+      this.userStories[idx].description = markdown;
+    },
     setUserStoryAsActive(index) {
       const stories = this.userStories.map((s) => ({
         id: s.id,
@@ -127,7 +130,7 @@ export default Vue.extend({
     },
     addUserStory() {
       this.userStories.push({
-        jiraId: null,
+        id: null,
         title: "",
         description: "",
         estimation: null,
