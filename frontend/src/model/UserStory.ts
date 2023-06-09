@@ -4,6 +4,7 @@ interface UserStory {
   description: string;
   estimation: string | null;
   isActive: boolean;
+  position: number;
 }
 
 export default UserStory;

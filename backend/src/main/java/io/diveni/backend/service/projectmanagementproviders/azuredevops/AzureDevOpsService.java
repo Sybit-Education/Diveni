@@ -141,6 +141,7 @@ public class AzureDevOpsService implements ProjectManagementProviderOAuth2 {
               contentDetailed);
       JsonNode detailedNode = new ObjectMapper().readTree(responseDetailedList.getBody());
       List<UserStory> userStories = new ArrayList<>();
+      int position = -1;
       for (JsonNode detailedIssue : detailedNode.path("value")) {
         JsonNode fields = detailedIssue.get("fields");
 
@@ -165,7 +166,8 @@ public class AzureDevOpsService implements ProjectManagementProviderOAuth2 {
                 fields.get(API_FIELD_TITLE).textValue(),
                 description,
                 estimation,
-                false));
+                false,
+                position++));
       }
       accessTokenToProjectId.put(tokenIdentifier, projectName);
       LOGGER.debug("<-- getIssues()");

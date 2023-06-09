@@ -125,6 +125,7 @@ export default Vue.extend({
         description: "",
         estimation: null,
         isActive: false,
+        position: this.userStories.length,
       };
       this.userStories.push(story);
     },
@@ -168,6 +169,7 @@ export default Vue.extend({
         description: s.description,
         estimation: s.estimation,
         isActive: false,
+        position: s.position
       }));
       stories[index].isActive = true;
       this.userStories = stories;

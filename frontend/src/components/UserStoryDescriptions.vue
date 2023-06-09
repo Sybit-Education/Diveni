@@ -4,7 +4,7 @@
       <b-list-group-item
         v-for="(story, idx) of userStories"
         v-show="idx === index"
-        :key="story"
+        :key="story.position"
         class="border-0"
         variant="outline-secondary"
       >
@@ -49,6 +49,9 @@
             @textValueChanged="(event) => valueChanged(idx, event)"
           />
         </div>
+        <div v-if="!editDescription">
+          {{ userStories[idx].description }}
+        </div>
       </b-list-group-item>
       <div
         v-if="userStories.length <= index && userStories.length"
@@ -84,6 +87,7 @@ export default Vue.extend({
         description: string;
         estimation: string | null;
         isActive: boolean;
+        position: number;
       }>,
     };
   },
@@ -100,6 +104,7 @@ export default Vue.extend({
         description: string;
         estimation: string | null;
         isActive: boolean;
+        position: number;
       }>;
     },
   },
@@ -110,6 +115,7 @@ export default Vue.extend({
       description: string;
       estimation: string | null;
       isActive: boolean;
+      position: number;
     }>;
   },
   methods: {
@@ -123,6 +129,7 @@ export default Vue.extend({
         description: s.description,
         estimation: s.estimation,
         isActive: false,
+        position: s.position,
       }));
       stories[index].isActive = true;
       this.userStories = stories;
@@ -135,6 +142,7 @@ export default Vue.extend({
         description: "",
         estimation: null,
         isActive: false,
+        position: this.userStories.length,
       });
     },
     publishChanges(idx) {
