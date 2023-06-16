@@ -60,14 +60,6 @@
       </b-card>
     </b-card-group>
     <br/>
-    <BarChart v-if="loaded"
-     :overAll="overAllSessions"
-     :lastMonth="overAllSessionsFromLastMonth"
-     :currently="currentSessions"
-     :overAllAttendees="overAllAttendees"
-     :lastMonthAttendees="overAllAttendeesFromLastMonth"
-     :currentlyAttendees="currentAttendees"
-    />
   </b-container>
 
 
@@ -75,13 +67,9 @@
 <script lang="ts">
 import Vue from "vue";
 import gsap from 'gsap'
-import BarChart from "@/components/BarChart.vue";
 import apiService from "@/services/api.service";
 export default Vue.extend({
   name: "AnalyticsDataComponent",
-  components: {
-    BarChart
-  },
   data() {
     return {
       loaded: false,
@@ -132,18 +120,6 @@ export default Vue.extend({
     allAttendees() {
       return this.$t('page.landing.meeting.analytics.attendeesText');
     },
-    lastMonthSessions() {
-      return this.$t('page.landing.meeting.analytics.sessionText');
-    },
-    lastMonthAttendees() {
-      return this.$t('page.landing.meeting.analytics.attendeesText');
-    },
-    currentSessionsText() {
-      return this.$t('page.landing.meeting.analytics.sessionText');
-    },
-    currentAttendeesText() {
-      return this.$t('page.landing.meeting.analytics.attendeesText');
-    }
   },
   methods: {
     async getAllDiveniData() {
@@ -182,7 +158,4 @@ export default Vue.extend({
   font-weight: bold;
 }
 
-.borderTop {
-  border-top: 1px dotted black;
-}
 </style>
