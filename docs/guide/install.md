@@ -117,7 +117,7 @@ services:
 
 ### Configuration
 #### Available configuration
-| Parameter | Function | default value |
+| Parameter | Description | Default value |
 |---|---|:---:|
 | SERVER_URL | URL the server is running on, used for CORS-settings | null |
 | LOCALE | The locale the frontend should be set to, available locales=en,de,es,fr,it,pl,pt,uk | en |
