@@ -40,6 +40,7 @@ public class AzureDevOpsService implements ProjectManagementProviderOAuth2 {
   private static final String AZURE_DEVOPS_API = "https://dev.azure.com/%s/_apis/";
   @Getter private final Map<String, String> accessTokens = new HashMap<>();
   private final Map<String, String> accessTokenToProjectId = new HashMap<>();
+  private boolean serviceEnabled = false;
 
   private static final String API_FIELD_TITLE = "System.Title";
   private static final String API_FIELD_DESCRIPTION = "System.Description";
@@ -53,10 +54,19 @@ public class AzureDevOpsService implements ProjectManagementProviderOAuth2 {
 
   @PostConstruct
   public void logConfig() {
-    LOGGER.info("Azure-DevOps Service:");
+    if (ORGANIZATION != null && CLIENT_PAT != null) {
+      serviceEnabled = true;
+    }
 
-    LOGGER.info("    AZURE_ORGANIZATION={}", ORGANIZATION == null ? "null" : "********");
+    LOGGER.info("Azure-DevOps Service: (enabled:" + serviceEnabled + ")");
+
+    LOGGER.info("    AZURE_ORGANIZATION={}", ORGANIZATION);
     LOGGER.info("    AZURE_PERSONAL_ACCESS_TOKEN={}", CLIENT_PAT == null ? "null" : "********");
+  }
+
+  @Override
+  public boolean serviceEnabled() {
+    return serviceEnabled;
   }
 
   public ResponseEntity<String> executeRequest(

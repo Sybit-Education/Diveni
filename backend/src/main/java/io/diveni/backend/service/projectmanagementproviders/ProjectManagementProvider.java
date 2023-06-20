@@ -11,6 +11,8 @@ import io.diveni.backend.model.Project;
 import io.diveni.backend.model.UserStory;
 
 public interface ProjectManagementProvider {
+  boolean serviceEnabled();
+
   List<Project> getProjects(String tokenIdentifier);
 
   List<UserStory> getIssues(String tokenIdentifier, String projectName);

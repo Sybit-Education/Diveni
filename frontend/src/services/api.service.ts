@@ -3,6 +3,20 @@ import { JiraRequestTokenDto, JiraResponseCodeDto } from "@/types";
 import axios, { AxiosResponse } from "axios";
 
 class ApiService {
+  public async getIssueTrackerConfig(): Promise<Record<string, string>> {
+    const response = await axios.get<Record<string, string>>(
+      `${constants.backendURL}/config/issueTracker`
+    );
+    return response.data;
+  }
+
+  public async getLocaleConfig(): Promise<Record<string, string>> {
+    const response = await axios.get<Record<string, string>>(
+      `${constants.backendURL}/config/locale`
+    );
+    return response.data;
+  }
+
   public async getJiraOauth1RequestToken(): Promise<JiraRequestTokenDto> {
     const response = await axios.get<JiraRequestTokenDto>(
       `${constants.backendURL}/issue-tracker/jira/oauth1/requestToken`
