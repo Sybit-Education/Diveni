@@ -1,5 +1,5 @@
 :root {
-    --vp-c-green: #8bc34a;
+    --vp-c-green: #30a444;
 }
 
 .medium-zoom-overlay {
@@ -11,5 +11,5 @@
 }
 
 .go-to-top .icon-top{
-    color: #8bc34a;
+    color: #30a444;
 }
