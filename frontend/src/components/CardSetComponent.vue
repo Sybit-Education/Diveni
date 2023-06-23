@@ -6,10 +6,8 @@
           <div
             v-for="item of userStoryMode === jiraTag ? allCardSetsWithJiraMode : allCardSets"
             :key="item.name"
-            class="swipe-card"
-            :style="`background-color: ${
-              selectedCardSet.name === item.name ? '#198754' : 'lightgrey'
-            }`"
+
+            :class="['swipe-card', selectedCardSet.name === item.name ? 'bg-success' : 'not-selected']"
             @click="onCardSetSelected(item)"
           >
             <div id="text" style="padding-top: 16px">
@@ -211,5 +209,9 @@ export default Vue.extend({
 #text {
   font-size: 20px;
   font-weight: 500;
+}
+
+.not-selected {
+ background-color: lightgrey;
 }
 </style>
