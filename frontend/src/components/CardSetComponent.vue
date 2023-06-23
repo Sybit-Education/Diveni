@@ -6,7 +6,6 @@
           <div
             v-for="item of userStoryMode === jiraTag ? allCardSetsWithJiraMode : allCardSets"
             :key="item.name"
-
             :class="['swipe-card', selectedCardSet.name === item.name ? 'bg-success' : 'not-selected']"
             @click="onCardSetSelected(item)"
           >
