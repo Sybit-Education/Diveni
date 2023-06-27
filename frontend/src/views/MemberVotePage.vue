@@ -283,7 +283,6 @@ export default Vue.extend({
     },
   },
   created() {
-    // window.addEventListener("beforeunload", this.sendUnregisterCommand);
     this.timerCountdownNumber = JSON.parse(this.timerSecondsString);
   },
   mounted() {
@@ -297,9 +296,6 @@ export default Vue.extend({
     }
     this.voteSet = JSON.parse(this.voteSetJson);
   },
-  beforeDestroy() {
-    this.sendUnregisterCommand();
-  },
   methods: {
     onSelectedStory($event) {
       this.index = $event;
@@ -308,11 +304,6 @@ export default Vue.extend({
       this.draggedVote = vote;
       const endPoint = `${Constants.webSocketVoteRoute}`;
       this.$store.commit("sendViaBackendWS", { endPoint, data: vote });
-    },
-    sendUnregisterCommand() {
-      const endPoint = `${Constants.webSocketUnregisterRoute}`;
-      this.$store.commit("sendViaBackendWS", { endPoint, data: null });
-      this.$store.commit("clearStore");
     },
     goToJoinPage() {
       this.$router.push({ name: "JoinPage" });
@@ -337,6 +328,7 @@ export default Vue.extend({
   /* overflow:visible;  Add when fix is clear how to stay responsiv*/
   width: 100%;
 }
+
 .overlayText {
   font-size: 2em;
   margin: 0.67em 0;
