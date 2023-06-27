@@ -32,7 +32,7 @@
         <b-button
           v-else-if="hostSelectedStoryIndex === index && !showEditButtons"
           size="sm"
-          variant="primary"
+          variant="success"
           disabled
         >
           <b-icon-arrow-right />
@@ -47,7 +47,7 @@
           @blur="publishChanges"
         />
 
-        <b-badge variant="info" class="p-2">
+        <b-badge variant="success" class="p-2">
           {{ story.estimation == null ? "?" : story.estimation }}
         </b-badge>
         <b-button
