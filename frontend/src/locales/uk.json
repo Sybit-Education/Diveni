@@ -9,7 +9,7 @@
     "licenses": {
       "frontend": "Ліцензії (інтерфейсу)",
       "backend": "Ліцензії (серверні)",
-      "translations": "Improve translation"
+      "translations": "Покращення перекладу"
     }
   },
   "page": {
@@ -27,10 +27,10 @@
           "waiting": "Чекаємо на учасників"
         },
         "button": "Почати планування",
-        "refreshStories": "Refresh Userstories",
+        "refreshStories": "оновити Історії користувачів",
         "userStories": {
-          "filter": {
-            "noStoryFound": "No stories found!"
+          "filter" : {
+            "noStoryFound": "Історій не знайдено!"
           },
           "button": {
             "addFirstUserStory": "Ще немає історій... натисніть, щоб додати історії",
@@ -39,7 +39,7 @@
           "placeholder": {
             "userStoryTitle": "Назва історії користувача",
             "userStoryDescription": "Опис і критерії прийняття...",
-            "searchUserStories": "Search user stories..."
+            "searchUserStories": "Пошук історій користувачів..."
           },
           "text": "Натисніть на назву історії користувача, щоб побачити опис",
           "sum": "Загалом:"
@@ -164,50 +164,50 @@
                 "descriptionLine2": "Додати заголовок і опис до кожної історії користувача",
                 "descriptionLine3": "Використовуйте CSV-імпорт для інтеграції розповіді користувачів у вашому сеансі",
                 "descriptionLine4": "First line must contain the field names separated by semicolons: title;description;estimation",
-                "descriptionLine5": "You will be able to add and edit User Stories once you've started the session",
+                "descriptionLine5": "Ви зможете додавати і редагувати історії користувачів після запуску сесії",
                 "importButton": "Імпорт історій користувача",
                 "toastSuccessNotification": "Історії користувача імпортовано",
                 "toastErrorNotification": "Помилка при спробі імпорту"
               },
               "withIssueTracker": {
                 "tab": {
-                  "label": "Planning with Issue-Tracker"
+                  "label": "Планування з Issue-Tracker"
                 },
-                "subtitle": "Select Jira for your Poker-Planning",
-                "descriptionLine1": "Sign in with your credentials",
-                "descriptionLine2": "Select your project",
-                "descriptionLine3": "After you click on start session, you will be redirected to the next page to edit your user stories",
-                "descriptionLine4": "You will be able to add and edit User Stories once you've started the session",
-                "formSelection": "Please select your Project",
-                "selectedProject": "Selected Project: ",
-                "allUserStories": "All User Stories",
+                "subtitle": "Виберіть Jira для вашого Poker-Planning",
+                "descriptionLine1": "Увійдіть за допомогою своїх облікових даних",
+                "descriptionLine2": "Виберіть свій проект",
+                "descriptionLine3": "Після того, як ви натиснете на стартову сесію, ви будете перенаправлені на наступну сторінку, щоб змінити свої історії користувача",
+                "descriptionLine4": "Ви зможете додавати і редагувати історії користувачів після запуску сесії",
+                "formSelection": "Будь ласка, виберіть ваш проект",
+                "selectedProject": "Вибраний проект: ",
+                "allUserStories": "Всі історії користувача",
                 "dialog": {
-                  "description": "A new tab will open immediately, please grant access to this application in this tab and enter the verification code here."
+                  "description": "Нова вкладка відкриється негайно, будь ласка, надайте доступ до цієї програми в цій вкладці та введіть код підтвердження тут."
                 },
                 "inputs": {
                   "verificationCode": {
-                    "placeholder": "Verification code"
+                    "placeholder": "Код підтвердження"
                   }
                 },
                 "buttons": {
                   "signInWithJiraCloud": {
-                    "label": "Sign in with Jira Cloud"
+                    "label": "Увійти до Jira Cloud"
                   },
                   "signInWithJiraServer": {
-                    "label": "Sign in with Jira Server"
+                    "label": "Увійдіть через Jira сервер"
                   },
                   "signInWithAzureDevOps": {
-                    "label": "Sign in with Azure DevOps"
+                    "label": "Увійдіть через Azure DevOps"
                   },
                   "selectProject": {
-                    "label": "Select your jira project"
+                    "label": "Виберіть ваш jira проєкт"
                   },
                   "submit": {
-                    "label": "Submit"
+                    "label": "Відправити"
                   }
                 },
                 "placeholder": {
-                  "searchProjects": "Search projects..."
+                  "searchProjects": "Пошукові проекти..."
                 }
               }
             }
@@ -275,10 +275,10 @@
         "memberLeft": "Учасник покинув сесію",
         "memberJoined": "Учасник приєднався до сесії",
         "memberRemoved": "Ви були видалені з сеансом хоста",
-        "issueTrackerCredentials": "Wrong credentials",
-        "issueTrackerLoginFailed": "Login failed",
-        "issueTrackerSynchronizeSuccess": "Synchronized changes with Issue-Tracker",
-        "issueTrackerSynchronizeFailed": "Failed to synchronize changes with Issue-Tracker",
+        "issueTrackerCredentials": "Неправильні облікові дані",
+        "issueTrackerLoginFailed": "Помилка входу в систему",
+        "issueTrackerSynchronizeSuccess": "Синхронізовані зміни з Issue-Tracker",
+        "issueTrackerSynchronizeFailed": "Не вдалося синхронізувати зміни з Issue-Tracker",
         "wrongID": "Невірний код запрошення",
         "password": "Хибний пароль"
       }

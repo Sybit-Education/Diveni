@@ -1,17 +1,19 @@
 # Diveni - The Planning-Poker App
 
 ![GitHub Repo stars](https://img.shields.io/github/stars/Sybit-Education/Diveni?style=social)
-
 [![License](https://img.shields.io/badge/license-GNU%20AGPL%20v3-blue.svg)](LICENSE)
 [![Crowdin](https://badges.crowdin.net/diveni/localized.svg)](https://crowdin.com/project/diveni)
 [![Discord](https://img.shields.io/discord/935641426216222730?color=%237289DA&label=Discord&logo=Discord&logoColor=%237289DA)](https://discord.gg/7JmRyn5dc6)
-
-![Code Coverage Lnies](.github/badges/jacoco.svg)
+<a href="https://www.producthunt.com/posts/diveni?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-diveni" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=361171&theme=light" alt="Diveni - The&#0032;Planning&#0045;Poker&#0032;App | Product Hunt" style="width: 125px; height: 27px;" width="125" height="27" /></a>
+![Code Coverage Lines](.github/badges/jacoco.svg)
 ![Code Coverage Branches](.github/badges/branches.svg)
 
 ---
 
 ## Hacktoberfest 2022
+
+**Update 2022-11-02: Many thanks all contributors supporting us during Hacktoberfest 2022!** We are happy to announce that we had **15 PRs** where **11 PRs** have been merged successful during Hacktoberfest 🚀 
+
 
 Diveni participates on Hacktoberfest 2022! We are looking forward to your support to improve this awesome app!
 
@@ -36,21 +38,21 @@ Supported issue trackers:
 
 - Atlassian JIRA on premise
 - Atlassian JIRA Cloud
+- Microsoft Azure DevOps
 - More connectors are planned
 
 ## Read more
 
 see: [Diveni Website](https://sybit-education.github.io/Diveni/)
 
-<a href="https://www.producthunt.com/posts/diveni?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-diveni" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=361171&theme=light" alt="Diveni - The&#0032;Planning&#0045;Poker&#0032;App | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" /></a>
 
 ---
 
 ## Some Screenshots
 
-![Voters view of voted story](docs/.vuepress/public/img/userEstimationVoted.JPG)
+![Voters view of voted story](docs/img/userEstimationVoted.png)
 
-![Host view voted story](docs/.vuepress/public/img/hostEstimationFinished.JPG)
+![Host view voted story](docs/img/hostEstimationFinished.png)
 
 
 ## Application Instructions and Requirements

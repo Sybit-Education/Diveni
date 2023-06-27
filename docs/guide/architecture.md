@@ -100,6 +100,7 @@ frontend
 | SessionMemberCircle                 | The circle representing the members with name and emoji. Used in pages: "SessionPage"/"MemberVotePage"                                                                                                                                                         |
 | SignInWithJiraCloudButtonComponent  | Button which redirects to jira (cloud) authentication                                                                                                                                                                                                          |
 | SignInWithJiraServerButtonComponent | Button including the login logic for jira server                                                                                                                                                                                                               |
+| SignInWithAzureDevOpsButtonComponent| Button including the login logic for Azure DevOps                                                                                                                                                                                                              |
 | StoryPointsComponent                | Includes text for "Planning without user stories"-Tab in page "PrepareSession"                                                                                                                                                                                 |
 | UserStories                         | List of all user stories including the logic to select the current user story and the logic for submitting a value                                                                                                                                             |
 | UserStoryComponent                  | Includes text for "Planning with user stories"-Tab in page "PrepareSession"                                                                                                                                                                                    |
@@ -142,8 +143,9 @@ backend
 |---------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | WebSocketConfig                 | Configurations (e.g. prefixes, CORS) for Websockets                                                                                                                        |
 | -----------                     |                                                                                                                                                                            |
+| ConfigController                | REST Controller for project configuration                                                                                                                                      |
 | ControllerUtils                 | Helper functions for all controllers                                                                                                                                       |
-| ErrrorMessages                  | All error messages which can be thrown in exceptions                                                                                                                       |
+| ErrorMessages                   | All error messages which can be thrown in exceptions                                                                                                                       |
 | ProjectManagementController     | REST Controller for project management software (e.g. Jira)                                                                                                                |
 | RoutesController                | REST Controller                                                                                                                                                            |
 | WebsocketController             | WebSocket Controller                                                                                                                                                       |
@@ -205,7 +207,7 @@ Or on __local development__ environment at <http://localhost:8081/swagger-ui/ind
 
 This sequence diagram shows all Websocket commands and when they are used.
 
-Diagrams created using [Mermaid](https://mermaid-js.github.io/mermaid/#/).
+Diagrams created using [Mermaid](https://mermaid-js.github.io/mermaid/).
 
 #### Create Session and Vote
 

@@ -92,6 +92,13 @@ public class WebsocketController {
           new Notification(
               NotificationType.MEMBER_LEFT,
               new MemberPayload(((MemberPrincipal) principal).getMemberID())));
+      boolean votingCompleted = checkIfAllMembersVoted(session.getMembers());
+      if (votingCompleted) {
+        votingFinished(
+            new AdminPrincipal(
+                session.getSessionID(),
+                databaseService.getSessionByID(session.getSessionID()).get().getAdminID()));
+      }
     } else {
       val session =
           ControllerUtils.getSessionOrThrowResponse(
@@ -122,6 +129,8 @@ public class WebsocketController {
         ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID());
     webSocketService.sendSessionStateToMembers(
         session.updateSessionState(SessionState.SESSION_CLOSED));
+    webSocketService.getSessionPrincipals(session.getSessionID()).memberPrincipals().stream()
+        .forEach(memberP -> removeMember(memberP));
     webSocketService.removeSession(session);
     databaseService.deleteSession(session);
     LOGGER.debug("<-- closeSession()");

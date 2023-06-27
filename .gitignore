@@ -21,10 +21,14 @@ target
 *.tar.gz
 *.rar
 
-
+# Frontend
 .DS_Store
 frontend/dist
 frontend/node_modules
+
+# Vitepress Docs
+docs/.vitepress/cache
+docs/.vitepress/dist
 
 
 # local env files
@@ -50,4 +54,3 @@ pnpm-debug.log*
 # id_rsa
 id_rsa
 node_modules
-docs/.vuepress/.temp

@@ -9,7 +9,7 @@
     "licenses": {
       "frontend": "Licencje (Frontend)",
       "backend": "Licencje (Backend)",
-      "translations": "Improve translation"
+      "translations": "Poprawić tłumaczenie"
     }
   },
   "page": {
@@ -27,10 +27,10 @@
           "waiting": "Oczekiwanie na dołączenie członków"
         },
         "button": "Rozpocznij planowanie",
-        "refreshStories": "Refresh Userstories",
+        "refreshStories": "Odśwież Historie użytkowników",
         "userStories": {
-          "filter": {
-            "noStoryFound": "No stories found!"
+          "filter" : {
+            "noStoryFound": "Nie znaleziono żadnych opowiadań!"
           },
           "button": {
             "addFirstUserStory": "Brak historii... kliknij aby dodać opowieści",
@@ -39,7 +39,7 @@
           "placeholder": {
             "userStoryTitle": "Tytuł Historii użytkownika",
             "userStoryDescription": "Opis i kryteria akceptacji...",
-            "searchUserStories": "Search user stories..."
+            "searchUserStories": "Wyszukiwanie historii użytkowników..."
           },
           "text": "Kliknij na Tytuł Historii Użytkownika, aby zobaczyć opis",
           "sum": "Łącznie:"
@@ -164,50 +164,50 @@
                 "descriptionLine2": "Dodaj tytuł i opis do każdej historii użytkownika",
                 "descriptionLine3": "Użyj CSV-Import do integracji Opowieści Użytkowników w twojej sesji",
                 "descriptionLine4": "First line must contain the field names separated by semicolons: title;description;estimation",
-                "descriptionLine5": "You will be able to add and edit User Stories once you've started the session",
+                "descriptionLine5": "Po rozpoczęciu sesji będziesz mógł dodać i edytować Opowieści Użytkownika",
                 "importButton": "Importuj Historie Użytkownika",
                 "toastSuccessNotification": "Zaimportowano historie użytkownika",
                 "toastErrorNotification": "Błąd podczas próby importu"
               },
               "withIssueTracker": {
                 "tab": {
-                  "label": "Planning with Issue-Tracker"
+                  "label": "Planowanie z Issue-Tracker"
                 },
-                "subtitle": "Select Jira for your Poker-Planning",
-                "descriptionLine1": "Sign in with your credentials",
-                "descriptionLine2": "Select your project",
-                "descriptionLine3": "After you click on start session, you will be redirected to the next page to edit your user stories",
-                "descriptionLine4": "You will be able to add and edit User Stories once you've started the session",
-                "formSelection": "Please select your Project",
-                "selectedProject": "Selected Project: ",
-                "allUserStories": "All User Stories",
+                "subtitle": "Wybierz Jira dla swojego Poker-Planowania",
+                "descriptionLine1": "Zaloguj się za pomocą swoich danych logowania",
+                "descriptionLine2": "Wybierz swój projekt",
+                "descriptionLine3": "Po kliknięciu na sesję początkową zostaniesz przekierowany na następną stronę, aby edytować historie użytkowników",
+                "descriptionLine4": "Po rozpoczęciu sesji będziesz mógł dodać i edytować Opowieści Użytkownika",
+                "formSelection": "Wybierz swój projekt",
+                "selectedProject": "Wybrany projekt: ",
+                "allUserStories": "Wszystkie Opowieści Użytkownika",
                 "dialog": {
-                  "description": "A new tab will open immediately, please grant access to this application in this tab and enter the verification code here."
+                  "description": "Nowa karta zostanie otwarta natychmiast, udziel dostępu do tej aplikacji w tej karcie i wprowadź kod weryfikacyjny tutaj."
                 },
                 "inputs": {
                   "verificationCode": {
-                    "placeholder": "Verification code"
+                    "placeholder": "Kod weryfikacyjny"
                   }
                 },
                 "buttons": {
                   "signInWithJiraCloud": {
-                    "label": "Sign in with Jira Cloud"
+                    "label": "Zaloguj się przez Jira Cloud"
                   },
                   "signInWithJiraServer": {
-                    "label": "Sign in with Jira Server"
+                    "label": "Zaloguj się za pomocą serwera Jira"
                   },
                   "signInWithAzureDevOps": {
-                    "label": "Sign in with Azure DevOps"
+                    "label": "Zaloguj się za pomocą Azure DevOps"
                   },
                   "selectProject": {
-                    "label": "Select your jira project"
+                    "label": "Wybierz swój projekt jira"
                   },
                   "submit": {
-                    "label": "Submit"
+                    "label": "Prześlij"
                   }
                 },
                 "placeholder": {
-                  "searchProjects": "Search projects..."
+                  "searchProjects": "Wyszukaj projekty..."
                 }
               }
             }
@@ -275,10 +275,10 @@
         "memberLeft": "Członek opuścił sesję",
         "memberJoined": "Członek dołączył do sesji",
         "memberRemoved": "Zostałeś usunięty z sesji przez hosta",
-        "issueTrackerCredentials": "Wrong credentials",
-        "issueTrackerLoginFailed": "Login failed",
-        "issueTrackerSynchronizeSuccess": "Synchronized changes with Issue-Tracker",
-        "issueTrackerSynchronizeFailed": "Failed to synchronize changes with Issue-Tracker",
+        "issueTrackerCredentials": "Błędne dane logowania",
+        "issueTrackerLoginFailed": "Logowanie nie powiodło się",
+        "issueTrackerSynchronizeSuccess": "Zsynchronizowane zmiany z Issue-Tracker",
+        "issueTrackerSynchronizeFailed": "Nie udało się zsynchronizować zmian z Issue-Tracker",
         "wrongID": "Nieprawidłowy kod zaproszenia",
         "password": "Błędne hasło"
       }

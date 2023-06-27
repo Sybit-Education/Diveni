@@ -27,10 +27,10 @@
           "waiting": "En attente de l'adhésion des membres"
         },
         "button": "Commencer la planification",
-        "refreshStories": "Refresh Userstories",
+        "refreshStories": "Actualiser les User Stories",
         "userStories": {
-          "filter": {
-            "noStoryFound": "No stories found!"
+          "filter" : {
+            "noStoryFound": "Aucune histoire trouvée!"
           },
           "button": {
             "addFirstUserStory": "Pas encore d'histoires... cliquez pour ajouter des histoires",
@@ -39,7 +39,7 @@
           "placeholder": {
             "userStoryTitle": "Titre de l'histoire de l'utilisateur",
             "userStoryDescription": "Critères de description et d'acception...",
-            "searchUserStories": "Search user stories..."
+            "searchUserStories": "Rechercher des témoignages d'utilisateurs..."
           },
           "text": "Cliquez sur un titre de l'histoire de l'utilisateur pour voir la description",
           "sum": "Total:"
@@ -164,50 +164,50 @@
                 "descriptionLine2": "Ajouter un titre et une description à chaque histoire utilisateur",
                 "descriptionLine3": "Utilisez le CSV-Import pour intégrer les Histoires d'utilisateur dans votre session",
                 "descriptionLine4": "First line must contain the field names separated by semicolons: title;description;estimation",
-                "descriptionLine5": "You will be able to add and edit User Stories once you've started the session",
+                "descriptionLine5": "Vous serez en mesure d'ajouter et de modifier des Histoires d'utilisateur une fois que vous aurez commencé la session",
                 "importButton": "Importer des Histoires Utilisateur",
                 "toastSuccessNotification": "Histoires d'utilisateur importées",
                 "toastErrorNotification": "Erreur lors de la tentative d'importation"
               },
               "withIssueTracker": {
                 "tab": {
-                  "label": "Planning with Issue-Tracker"
+                  "label": "Planification avec Issue-Tracker"
                 },
-                "subtitle": "Select Jira for your Poker-Planning",
-                "descriptionLine1": "Sign in with your credentials",
-                "descriptionLine2": "Select your project",
-                "descriptionLine3": "After you click on start session, you will be redirected to the next page to edit your user stories",
-                "descriptionLine4": "You will be able to add and edit User Stories once you've started the session",
-                "formSelection": "Please select your Project",
-                "selectedProject": "Selected Project: ",
-                "allUserStories": "All User Stories",
+                "subtitle": "Sélectionnez Jira pour votre Poker-Planning",
+                "descriptionLine1": "Connectez-vous avec vos identifiants",
+                "descriptionLine2": "Sélectionnez votre projet",
+                "descriptionLine3": "Après avoir cliqué sur la session de démarrage, vous serez redirigé vers la page suivante pour modifier vos histoires d'utilisateur",
+                "descriptionLine4": "Vous serez en mesure d'ajouter et de modifier des Histoires d'utilisateur une fois que vous aurez commencé la session",
+                "formSelection": "Veuillez sélectionner votre projet",
+                "selectedProject": "Projet sélectionné : ",
+                "allUserStories": "Toutes les histoires d'utilisateurs",
                 "dialog": {
-                  "description": "A new tab will open immediately, please grant access to this application in this tab and enter the verification code here."
+                  "description": "Un nouvel onglet s'ouvrira immédiatement, veuillez accorder l'accès à cette application dans cet onglet et entrer le code de vérification ici."
                 },
                 "inputs": {
                   "verificationCode": {
-                    "placeholder": "Verification code"
+                    "placeholder": "Code de vérification"
                   }
                 },
                 "buttons": {
                   "signInWithJiraCloud": {
-                    "label": "Sign in with Jira Cloud"
+                    "label": "Connectez-vous avec Jira Cloud"
                   },
                   "signInWithJiraServer": {
-                    "label": "Sign in with Jira Server"
+                    "label": "Se connecter avec le serveur Jira"
                   },
                   "signInWithAzureDevOps": {
-                    "label": "Sign in with Azure DevOps"
+                    "label": "Se connecter avec Azure DevOps"
                   },
                   "selectProject": {
-                    "label": "Select your jira project"
+                    "label": "Sélectionnez votre projet jira"
                   },
                   "submit": {
-                    "label": "Submit"
+                    "label": "Soumettre"
                   }
                 },
                 "placeholder": {
-                  "searchProjects": "Search projects..."
+                  "searchProjects": "Parcourir les projets..."
                 }
               }
             }
@@ -275,10 +275,10 @@
         "memberLeft": "Le membre a quitté la session",
         "memberJoined": "Le membre a rejoint la session",
         "memberRemoved": "Vous avez été retiré de la session par l'hôte",
-        "issueTrackerCredentials": "Wrong credentials",
-        "issueTrackerLoginFailed": "Login failed",
-        "issueTrackerSynchronizeSuccess": "Synchronized changes with Issue-Tracker",
-        "issueTrackerSynchronizeFailed": "Failed to synchronize changes with Issue-Tracker",
+        "issueTrackerCredentials": "Mauvais identifiants",
+        "issueTrackerLoginFailed": "Échec de la connexion",
+        "issueTrackerSynchronizeSuccess": "Changements synchronisés avec Issue-Tracker",
+        "issueTrackerSynchronizeFailed": "Impossible de synchroniser les modifications avec Issue-Tracker",
         "wrongID": "Mauvais code d'invitation",
         "password": "Mauvais mot de passe"
       }

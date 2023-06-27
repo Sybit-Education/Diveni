@@ -1,12 +1,9 @@
 name: backend
 
 on:
-  push:
-    branches:
-      - main
   pull_request:
     paths:
-      - '.github/workflows/**'
+      - '.github/workflows/backend.yaml'
       - 'backend/**'
       - '!**.md'
   workflow_dispatch:
@@ -74,56 +71,13 @@ jobs:
         uses: scacap/action-surefire-report@v1
         with:
           report_paths: '**/build/test-results/test/TEST-*.xml'
-      - name: Generate JaCoCo Badge
-        id: jacoco
-        uses: cicirello/jacoco-badge-generator@v2
-        with:
-          generate-branches-badge: true
-          jacoco-csv-file: >
-            backend/build/reports/jacoco/test/jacocoTestReport.csv
       - name: Log coverage percentage
         run: |
           echo "coverage = ${{ steps.jacoco.outputs.coverage }}"
           echo "branch coverage = ${{ steps.jacoco.outputs.branches }}"
-      - name: Commit and push the badge (if it changed)
-        if: ${{ !github.event.pull_request.head.repo.fork }}
-        uses: EndBug/add-and-commit@v7
-        with:
-          default_author: github_actions
-          message: 'commit badge'
-          add: '*.svg'
       - name: Upload JaCoCo coverage report
         if: ${{ !github.event.pull_request.head.repo.fork }}
         uses: actions/upload-artifact@v2
         with:
           name: jacoco-report
           path: backend/build/jacoco-report/
-
-  push-image:
-    name: Backend-Image
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-    if: github.ref == 'refs/heads/main'
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Log in to the Container registry
-        uses: docker/login-action@v2
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@v4
-        with:
-          images: ghcr.io/${{ github.repository }}-backend
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v3
-        with:
-          context: backend
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
