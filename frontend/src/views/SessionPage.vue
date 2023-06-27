@@ -284,7 +284,6 @@ export default Vue.extend({
   },
   async created() {
     this.copyPropsToData();
-    this.$store.commit("clearStore");
     if (!this.session_sessionID || !this.session_adminID) {
       //check for cookie
       await this.checkAdminCookie();
