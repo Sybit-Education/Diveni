@@ -39,7 +39,7 @@
     "webstomp-client": "^1.2.6"
   },
   "devDependencies": {
-    "@crowdin/cli": "^3.7.6",
+    "@crowdin/cli": "^3.13.0",
     "@types/uuid": "^8.3.1",
     "@typescript-eslint/eslint-plugin": "^4.18.0",
     "@typescript-eslint/parser": "^4.18.0",
