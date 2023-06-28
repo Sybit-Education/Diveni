@@ -18,7 +18,7 @@
     "@types/sockjs-client": "^1.5.1",
     "axios": "^0.23.0",
     "bootstrap": "^4.6.1",
-    "bootstrap-vue": "^2.22.0",
+    "bootstrap-vue": "^2.23.1",
     "canvas-confetti": "^1.4.0",
     "core-js": "^3.6.5",
     "papaparse": "^5.3.1",
