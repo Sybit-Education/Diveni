@@ -26,7 +26,7 @@ dependencies {
     implementation 'com.google.oauth-client:google-oauth-client:1.33.3'
     implementation 'com.google.api-client:google-api-client-gson:1.33.0'
     implementation 'com.google.code.gson:gson:2.8.9'
-    implementation 'org.springdoc:springdoc-openapi-ui:1.6.11'
+    implementation 'org.springdoc:springdoc-openapi-ui:1.7.0'
     implementation 'org.apache.httpcomponents:httpclient:4.5.14'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
