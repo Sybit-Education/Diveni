@@ -117,7 +117,7 @@ export default Vue.extend({
               set: Array<string>;
               timerSeconds: number;
               userStories: Array<{
-                jiraId: number | null;
+                id: number | null;
                 title: string;
                 description: string;
                 estimation: string | null;
