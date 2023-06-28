@@ -4,7 +4,7 @@ plugins {
     id 'io.spring.dependency-management' version '1.0.14.RELEASE'
     id 'java'
     id 'jacoco'
-    id "io.freefair.lombok" version "6.5.1"
+    id "io.freefair.lombok" version "6.6.3"
 }
 
 configurations {
