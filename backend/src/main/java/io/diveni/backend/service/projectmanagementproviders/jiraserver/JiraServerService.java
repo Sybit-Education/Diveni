@@ -195,7 +195,9 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
       // The reply from the Jira API is no correct JSON, therefore [ and ] have to be
       // added
       val json = "[" + response.parseAsString() + "]";
+      
       ObjectNode[] node = new ObjectMapper().readValue(json, ObjectNode[].class);
+      
       for (ObjectNode objectNode : node) {
         for (JsonNode jsonNode : objectNode.get("issues")) {
           val fields = jsonNode.get("fields");
