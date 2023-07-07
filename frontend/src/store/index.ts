@@ -80,6 +80,13 @@ export default new Vuex.Store<StoreState>({
       state.webSocketConnected = false;
       state.stompClient = undefined;
     },
+    clearStoreWithoutUserStories(state) {
+      state.members = [];
+      state.memberUpdates = [];
+      state.notifications = [];
+      state.webSocketConnected = false;
+      state.stompClient = undefined;
+    },
     setSelectedProject(state, project) {
       state.selectedProject = project;
     },
