@@ -4,7 +4,7 @@
       <b-list-group-item
         v-for="(story, idx) of userStories"
         v-show="story.isActive"
-        :key="story.position"
+        :key="story.id"
         class="border-0"
         variant="outline-secondary"
       >
@@ -43,11 +43,11 @@ export default Vue.extend({
       sideBarOpen: false,
       editEnabled: false,
       userStories: [] as Array<{
+        id: string | null;
         title: string;
         description: string;
         estimation: string | null;
         isActive: boolean;
-        position: number;
       }>,
     };
   },
@@ -57,11 +57,11 @@ export default Vue.extend({
     },
     initialStories() {
       this.userStories = this.initialStories as Array<{
+        id: string | null;
         title: string;
         description: string;
         estimation: string | null;
         isActive: boolean;
-        position: number;
       }>;
     },
     editEnabled() {
@@ -70,32 +70,32 @@ export default Vue.extend({
   },
   created() {
     this.userStories = this.initialStories as Array<{
+      id: string | null;
       title: string;
       description: string;
       estimation: string | null;
       isActive: boolean;
-        position: number;
     }>;
   },
   methods: {
     setUserStoryAsActive(index) {
       const stories = this.userStories.map((s) => ({
+        id: s.id,
         title: s.title,
         description: s.description,
         estimation: s.estimation,
         isActive: false,
-        position: s.position,
       }));
       stories[index].isActive = true;
       this.userStories = stories;
     },
     addUserStory() {
       this.userStories.push({
+        id: "",
         title: "",
         description: "",
         estimation: null,
         isActive: false,
-        position: this.userStories.length,
       });
     },
     deleteStory(index) {

@@ -2,7 +2,7 @@
   <div>
     <b-list-group-item
       v-for="(story, index) of userStories"
-      :key="story.position"
+      :key="story.id"
       class="rounded"
       variant="outline-secondary"
       :style="{
@@ -70,11 +70,11 @@ export default Vue.extend({
       number: null,
       sideBarOpen: false,
       userStories: [] as Array<{
+        id: string | null;
         title: string;
         description: string;
         estimation: string | null;
         isActive: boolean;
-        position: number;
       }>,
       hover: null,
     };
@@ -82,21 +82,21 @@ export default Vue.extend({
   watch: {
     initialStories() {
       this.userStories = this.initialStories as Array<{
+        id: string | null;
         title: string;
         description: string;
         estimation: string | null;
         isActive: boolean;
-        position: number;
       }>;
     },
   },
   created() {
     this.userStories = this.initialStories as Array<{
+      id: string | null;
       title: string;
       description: string;
       estimation: string | null;
       isActive: boolean;
-        position: number;
     }>;
   },
   methods: {

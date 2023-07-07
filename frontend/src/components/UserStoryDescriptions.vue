@@ -4,7 +4,7 @@
       <b-list-group-item
         v-for="(story, idx) of userStories"
         v-show="idx === index"
-        :key="story.position"
+        :key="story.id"
         class="border-0"
         variant="outline-secondary"
       >
@@ -87,7 +87,6 @@ export default Vue.extend({
         description: string;
         estimation: string | null;
         isActive: boolean;
-        position: number;
       }>,
     };
   },
@@ -104,7 +103,6 @@ export default Vue.extend({
         description: string;
         estimation: string | null;
         isActive: boolean;
-        position: number;
       }>;
     },
   },
@@ -115,12 +113,12 @@ export default Vue.extend({
       description: string;
       estimation: string | null;
       isActive: boolean;
-      position: number;
     }>;
   },
   methods: {
     valueChanged(idx, {markdown}) {
       this.userStories[idx].description = markdown;
+      this.publishChanges(idx);
     },
     setUserStoryAsActive(index) {
       const stories = this.userStories.map((s) => ({
@@ -129,7 +127,6 @@ export default Vue.extend({
         description: s.description,
         estimation: s.estimation,
         isActive: false,
-        position: s.position,
       }));
       stories[index].isActive = true;
       this.userStories = stories;
@@ -142,7 +139,6 @@ export default Vue.extend({
         description: "",
         estimation: null,
         isActive: false,
-        position: this.userStories.length,
       });
     },
     publishChanges(idx) {

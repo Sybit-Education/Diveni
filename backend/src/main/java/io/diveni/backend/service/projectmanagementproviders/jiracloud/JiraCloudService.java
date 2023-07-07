@@ -181,7 +181,6 @@ public class JiraCloudService implements ProjectManagementProviderOAuth2 {
     try {
       List<UserStory> userStories = new ArrayList<>();
       JsonNode node = new ObjectMapper().readTree(response.getBody());
-      int position = -1;
       for (JsonNode issue : node.path("issues")) {
         val fields = issue.get("fields");
         String estimation =
@@ -197,8 +196,7 @@ public class JiraCloudService implements ProjectManagementProviderOAuth2 {
                 fields.get("summary").textValue(),
                 fields.get("description").textValue(),
                 estimation,
-                false,
-                position++));
+                false));
       }
       LOGGER.debug("<-- getIssues()");
       return userStories;

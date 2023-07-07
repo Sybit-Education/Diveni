@@ -197,7 +197,6 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
       val json = "[" + response.parseAsString() + "]";
 
       ObjectNode[] node = new ObjectMapper().readValue(json, ObjectNode[].class);
-      int position = -1;
       for (ObjectNode objectNode : node) {
         for (JsonNode jsonNode : objectNode.get("issues")) {
           val fields = jsonNode.get("fields");
@@ -214,8 +213,7 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
                   fields.get("summary").textValue(),
                   fields.get("description").textValue(),
                   estimation,
-                  false,
-                  position++));
+                  false));
         }
       }
 
