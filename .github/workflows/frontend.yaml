@@ -45,6 +45,8 @@ jobs:
       - name: Build
         working-directory: frontend
         run: npm run build
+        env:
+          CI: false
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
         with:
