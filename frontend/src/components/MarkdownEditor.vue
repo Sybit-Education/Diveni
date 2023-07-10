@@ -10,8 +10,6 @@
       :placeholder="placeholder"
       initial-edit-type="wysiwyg"
       preview-style="vertical"
-      @blur="blur"
-      @change="change"
     />
   </div>
 </template>
@@ -78,25 +76,6 @@ export default Vue.extend({
         plugins: [codeSyntaxHighlight],
       },
     };
-  },
-  mounted() {
-    if (!this.disabled && this.getEditorRef()) {
-      this.getEditorRef().invoke("placeholder", this.placeholder);
-    }
-  },
-  methods: {
-    change() {
-      this.$emit("change", this.getMarkdown());
-    },
-    blur() {
-      this.$emit("blur", this.getMarkdown());
-    },
-    getMarkdown() {
-      return this.getEditorRef().invoke("getMarkdown");
-    },
-    getEditorRef() {
-      return this.$refs.toastuiEditor;
-    },
   },
 });
 </script>

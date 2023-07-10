@@ -97,9 +97,9 @@ import CardSetComponent from "../components/CardSetComponent.vue";
 import UserStoryComponent from "../components/UserStoryComponent.vue";
 import JiraComponent from "../components/JiraComponent.vue";
 import StroyPointsComponent from "@/components/StroyPointsComponent.vue";
-import constants from "../constants";
 import UserStory from "@/model/UserStory";
 import papaparse from "papaparse";
+import apiService from "@/services/api.service";
 
 export default Vue.extend({
   name: "PrepareSessionPage",
@@ -116,7 +116,7 @@ export default Vue.extend({
       timer: 30,
       warningWhenUnderZero: "",
       tabIndex: 0,
-      isIssueTrackerEnabled: constants.isIssueTrackerEnabled,
+      isIssueTrackerEnabled: false,
     };
   },
   computed: {
@@ -147,6 +147,12 @@ export default Vue.extend({
     this.tabIndex = isNaN(parsedTabIndex) ? 0 : parsedTabIndex;
   },
   mounted() {
+    apiService.getIssueTrackerConfig().then((result) => {
+      this.isIssueTrackerEnabled =
+        result.isJiraCloudEnabled === "true" ||
+        result.isJiraServerEnabled === "true" ||
+        result.isAzureDevOpsEnabled === "true";
+    });
     this.$store.commit("setUserStories", { stories: [] });
   },
   methods: {

@@ -3,6 +3,20 @@ import { JiraRequestTokenDto, JiraResponseCodeDto } from "@/types";
 import axios, { AxiosResponse } from "axios";
 
 class ApiService {
+  public async getIssueTrackerConfig(): Promise<Record<string, string>> {
+    const response = await axios.get<Record<string, string>>(
+      `${constants.backendURL}/config/issueTracker`
+    );
+    return response.data;
+  }
+
+  public async getLocaleConfig(): Promise<Record<string, string>> {
+    const response = await axios.get<Record<string, string>>(
+      `${constants.backendURL}/config/locale`
+    );
+    return response.data;
+  }
+
   public async getJiraOauth1RequestToken(): Promise<JiraRequestTokenDto> {
     const response = await axios.get<JiraRequestTokenDto>(
       `${constants.backendURL}/issue-tracker/jira/oauth1/requestToken`
@@ -24,19 +38,19 @@ class ApiService {
     return response.data;
   }
 
-  public async sendJiraOauth2AuthorizationCode(): Promise<JiraResponseCodeDto> {
+  public async sendJiraOauth2AuthorizationCode(code: string): Promise<JiraResponseCodeDto> {
     const response = await axios.post<JiraResponseCodeDto>(
-      `${constants.backendURL}/issue-tracker/jira/oauth2/authorizationCode`
+      `${constants.backendURL}/issue-tracker/jira/oauth2/authorizationCode`,
+      {
+        code,
+      }
     );
     return response.data;
   }
 
-  public async sendAzureOauth2AuthorizationCode(code: string): Promise<JiraResponseCodeDto> {
+  public async sendAzureOauth2AuthorizationCode(): Promise<JiraResponseCodeDto> {
     const response = await axios.post<JiraResponseCodeDto>(
-      `${constants.backendURL}/issue-tracker/azure/oauth2/authorizationCode`,
-      {
-        code,
-      }
+      `${constants.backendURL}/issue-tracker/azure/oauth2/authorizationCode`
     );
     return response.data;
   }

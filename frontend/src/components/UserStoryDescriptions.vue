@@ -79,7 +79,7 @@ export default Vue.extend({
     return {
       sideBarOpen: false,
       userStories: [] as Array<{
-        jiraId: string | null;
+        id: string | null;
         title: string;
         description: string;
         estimation: string | null;
@@ -95,7 +95,7 @@ export default Vue.extend({
   watch: {
     initialStories() {
       this.userStories = this.initialStories as Array<{
-        jiraId: string | null;
+        id: string | null;
         title: string;
         description: string;
         estimation: string | null;
@@ -105,7 +105,7 @@ export default Vue.extend({
   },
   created() {
     this.userStories = this.initialStories as Array<{
-      jiraId: string | null;
+      id: string | null;
       title: string;
       description: string;
       estimation: string | null;
@@ -127,7 +127,7 @@ export default Vue.extend({
     },
     addUserStory() {
       this.userStories.push({
-        jiraId: null,
+        id: null,
         title: "",
         description: "",
         estimation: null,
