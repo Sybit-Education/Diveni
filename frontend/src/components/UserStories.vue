@@ -192,4 +192,8 @@ export default Vue.extend({
   border-color: black;
   overflow: auto;
 }
+
+.user-stories {
+  padding-top: 12px;
+}
 </style>
