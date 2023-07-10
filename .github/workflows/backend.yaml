@@ -53,6 +53,9 @@ jobs:
   test:
     name: Test
     runs-on: ubuntu-latest
+    permissions:
+      checks: write
+      contents: read
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -67,7 +70,6 @@ jobs:
           arguments: test
           build-root-directory: backend
       - name: Publish Test Report
-        if: ${{ !github.event.pull_request.head.repo.fork }}
         uses: scacap/action-surefire-report@v1
         with:
           report_paths: '**/build/test-results/test/TEST-*.xml'
@@ -76,7 +78,6 @@ jobs:
           echo "coverage = ${{ steps.jacoco.outputs.coverage }}"
           echo "branch coverage = ${{ steps.jacoco.outputs.branches }}"
       - name: Upload JaCoCo coverage report
-        if: ${{ !github.event.pull_request.head.repo.fork }}
         uses: actions/upload-artifact@v2
         with:
           name: jacoco-report

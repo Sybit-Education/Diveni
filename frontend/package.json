@@ -18,7 +18,7 @@
     "@types/sockjs-client": "^1.5.1",
     "axios": "^0.23.0",
     "bootstrap": "^4.6.1",
-    "bootstrap-vue": "^2.22.0",
+    "bootstrap-vue": "^2.23.1",
     "canvas-confetti": "^1.4.0",
     "core-js": "^3.6.5",
     "papaparse": "^5.3.1",
@@ -28,7 +28,7 @@
     "register-service-worker": "^1.7.1",
     "sockjs-client": "^1.5.2",
     "uuid": "^8.3.2",
-    "vue": "^2.7.10",
+    "vue": "^2.7.14",
     "vue-axios": "^3.3.7",
     "vue-i18n": "^8.26.8",
     "vue-router": "^3.2.0",
@@ -39,7 +39,7 @@
     "webstomp-client": "^1.2.6"
   },
   "devDependencies": {
-    "@crowdin/cli": "^3.7.6",
+    "@crowdin/cli": "^3.13.0",
     "@types/uuid": "^8.3.1",
     "@typescript-eslint/eslint-plugin": "^4.18.0",
     "@typescript-eslint/parser": "^4.18.0",
@@ -62,8 +62,8 @@
     "prettier": "^2.4.1",
     "sass": "~1.32.0",
     "sass-loader": "^10.0.0",
-    "typescript": "~4.1.5",
-    "vue-template-compiler": "^2.6.11"
+    "typescript": "~4.9.5",
+    "vue-template-compiler": "^2.7.14"
   },
   "lint-staged": {
     "*.ts": "npm run fmt",

@@ -35,7 +35,6 @@
 </template>
 
 <script lang="ts">
-import constants from "@/constants";
 import Vue from "vue";
 import SignInWithJiraCloudButtonComponent from "./SignInWithJiraCloudButtonComponent.vue";
 import SignInWithJiraServerButtonComponent from "./SignInWithJiraServerButtonComponent.vue";
@@ -54,9 +53,9 @@ export default Vue.extend({
 
   data() {
     return {
-      isJiraCloudEnabled: constants.isJiraCloudEnabled,
-      isJiraServerEnabled: constants.isJiraServerEnabled,
-      isAzureDevOpsEnabled: constants.isAzureDevOpsEnabled,
+      isJiraCloudEnabled: false,
+      isJiraServerEnabled: false,
+      isAzureDevOpsEnabled: false,
     };
   },
   computed: {
@@ -79,6 +78,13 @@ export default Vue.extend({
       },
       immediate: true,
     },
+  },
+  mounted() {
+    apiService.getIssueTrackerConfig().then((result) => {
+      this.isJiraCloudEnabled = result.isJiraCloudEnabled === "true";
+      this.isJiraServerEnabled = result.isJiraServerEnabled === "true";
+      this.isAzureDevOpsEnabled = result.isAzureDevOpsEnabled === "true";
+    });
   },
 });
 </script>

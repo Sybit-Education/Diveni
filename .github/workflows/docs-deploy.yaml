@@ -7,6 +7,8 @@ on:
     paths:
       - '.github/workflows/docs-deploy.yaml'
       - 'docs/**'
+      - 'package.json'
+      - 'package-lock.json'
   workflow_dispatch:
 
 jobs:

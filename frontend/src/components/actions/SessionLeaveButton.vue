@@ -13,11 +13,15 @@
 
 <script lang="ts">
 import Vue from "vue";
+import Constants from "../../constants";
 
 export default Vue.extend({
   name: "SessionLeaveButton",
   methods: {
     leaveSession() {
+      const endPoint = `${Constants.webSocketUnregisterRoute}`;
+      this.$store.commit("sendViaBackendWS", { endPoint, data: null });
+      this.$store.commit("clearStore");
       window.localStorage.removeItem("memberCookie");
       this.$router.push({ name: "LandingPage" });
     },

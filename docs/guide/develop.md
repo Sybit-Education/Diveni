@@ -36,7 +36,7 @@ See also:
 2. Start backend
    * Open  first terminal and enter these commands:
    * cd /backend
-   * mvn spring-boot:run
+   * gradle bootRun
    * The backend should now be running and accessible at http://localhost:8081
 3. Start frontend
    * Open the second terminal and enter these commands:
