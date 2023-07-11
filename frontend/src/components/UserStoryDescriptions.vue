@@ -49,6 +49,16 @@
             @blur="publishChanges(idx)"
           />
         </div>
+        <div v-if="!editDescription">
+          <br>
+          <b-form-textarea
+          id="textarea-auto-height-plaintext"
+          plaintext
+          :value=userStories[idx].description
+          rows="15"
+          size="m"
+          />
+        </div>
       </b-list-group-item>
       <div
         v-if="userStories.length <= index && userStories.length"
