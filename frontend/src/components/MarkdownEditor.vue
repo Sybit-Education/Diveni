@@ -1,8 +1,7 @@
 <template>
   <div class="markdown-editor">
-    <viewer v-if="disabled" :initial-value="markdown" :height="height" :options="editorOptions" />
     <editor
-      v-else
+      v-if="!disabled"
       ref="toastuiEditor"
       :initial-value="markdown"
       :height="height"
@@ -23,14 +22,13 @@ import "@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin
 import "@toast-ui/editor/dist/i18n/de-de";
 
 import Vue from "vue";
-import { Editor, Viewer } from "@toast-ui/vue-editor";
+import { Editor } from "@toast-ui/vue-editor";
 import codeSyntaxHighlight from "@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin-code-syntax-highlight-all";
 
 export default Vue.extend({
   name: "MarkdownEditor",
   components: {
-    editor: Editor,
-    viewer: Viewer,
+    editor: Editor
   },
   model: {
     prop: "markdown",
