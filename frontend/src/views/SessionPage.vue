@@ -151,6 +151,7 @@
       </b-col>
       <b-col cols="8">
         <user-story-descriptions
+          :key="reloadedStories"
           :card-set="voteSet"
           :initial-stories="userStories"
           :edit-description="true"
@@ -225,6 +226,7 @@ export default Vue.extend({
       startTimerOnComponentCreation: true,
       estimateFinished: false,
       session: {},
+      reloadedStories: 0,
     };
   },
   computed: {
@@ -440,6 +442,7 @@ export default Vue.extend({
     async refreshUserStories() {
       const response = await apiService.getUserStoriesFromProject(this.selectedProject.name);
       this.$store.commit("setUserStories", { stories: response });
+      this.reloadedStories++;
       if (this.webSocketIsConnected) {
         const endPoint = `${Constants.webSocketAdminUpdatedUserStoriesRoute}`;
         this.$store.commit("sendViaBackendWS", {
