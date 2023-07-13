@@ -83,7 +83,7 @@ export default Vue.extend({
         const sessionConfig = result.data as {
           set: Array<string>;
           timerSeconds: number;
-          userStories: Array<{ title: string; description: string; estimation: string | null }>;
+          userStories: Array<{ title: string; description: string; estimation: string | null;}>;
           userStoryMode: string;
         };
         this.voteSet = JSON.stringify(sessionConfig.set);
