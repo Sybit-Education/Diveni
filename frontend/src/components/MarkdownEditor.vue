@@ -28,7 +28,7 @@ import codeSyntaxHighlight from "@toast-ui/editor-plugin-code-syntax-highlight/d
 export default Vue.extend({
   name: "MarkdownEditor",
   components: {
-    editor: Editor
+    editor: Editor,
   },
   model: {
     prop: "markdown",
@@ -54,6 +54,7 @@ export default Vue.extend({
   },
   data() {
     return {
+      text: "",
       editorOptions: {
         autofocus: false,
         height: "auto",
@@ -79,7 +80,8 @@ export default Vue.extend({
   methods: {
     getTextValueFromEditor() {
       if (this.$refs.toastuiEditor) {
-        const editorText = this.$refs.toastuiEditor.invoke("getMarkdown");
+        const editor = this.$refs.toastuiEditor as Editor;
+        const editorText = editor.invoke('getMarkdown');
         this.$emit("textValueChanged", { markdown: editorText});
       }
     }
