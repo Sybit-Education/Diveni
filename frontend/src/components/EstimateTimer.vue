@@ -15,6 +15,7 @@ export default Vue.extend({
     startTimestamp: { type: String, required: true },
     duration: { type: Number, required: true },
     pauseTimer: { type: Boolean, required: true },
+    votingStarted: { type: Boolean, required: true },
   },
   data() {
     return {
@@ -49,8 +50,10 @@ export default Vue.extend({
   },
   created() {
     this.timerCount = this.duration;
-    if (this.startTimestamp) {
-      this.startInterval();
+    if (this.votingStarted) {
+      if (this.startTimestamp) {
+        this.startInterval();
+      }
     }
   },
   beforeDestroy() {
