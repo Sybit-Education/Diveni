@@ -50,9 +50,10 @@
           />
         </div>
         <div v-if="!editDescription">
-          <br>
+          
           <b-form-textarea
           id="textarea-auto-height-plaintext"
+          class="py-2"
           plaintext
           :value=userStories[idx].description
           rows="15"
