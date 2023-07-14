@@ -49,6 +49,7 @@ export default Vue.extend({
         this.registerMemberPrincipalOnBackend();
         this.subscribeWSMemberUpdates();
         this.subscribeWSadminUpdatedUserStories();
+        this.subscribeWSStorySelected();
         this.subscribeWSMemberUpdated();
         this.subscribeOnTimerStart();
         this.subscribeWSNotification();
@@ -117,6 +118,9 @@ export default Vue.extend({
     },
     subscribeWSadminUpdatedUserStories() {
       this.$store.commit("subscribeOnBackendWSStoriesUpdated");
+    },
+    subscribeWSStorySelected() {
+      this.$store.commit("subscribeOnBackendWSStorySelected");
     },
     subscribeWSMemberUpdated() {
       this.$store.commit("subscribeOnBackendWSAdminUpdate");

@@ -21,7 +21,6 @@
             'background-color': index === number ? 'RGB(202, 202, 202)' : 'white',
           }"
           :placeholder="$t('page.session.before.userStories.placeholder.userStoryTitle')"
-          @blur="publishChanges"
         />
         <div>
           <div
@@ -62,12 +61,12 @@ export default Vue.extend({
     initialStories: { type: Array, required: true },
     showEstimations: { type: Boolean, required: true },
     showEditButtons: { type: Boolean, required: false, default: true },
-    selectStory: { type: Boolean, required: false, default: false },
+    hostSelectedStoryIndex: { type: Number, required: false, default: null },
   },
   data() {
     return {
       exist: false,
-      number: null,
+      number: null as unknown,
       sideBarOpen: false,
       userStories: [] as Array<{
         id: string | null;
@@ -89,6 +88,9 @@ export default Vue.extend({
         isActive: boolean;
       }>;
     },
+    initialSelectedIndex() {
+      this.number = this.hostSelectedStoryIndex;
+    },
   },
   created() {
     this.userStories = this.initialStories as Array<{
@@ -98,6 +100,9 @@ export default Vue.extend({
       estimation: string | null;
       isActive: boolean;
     }>;
+  },
+  mounted() {
+    this.number = this.hostSelectedStoryIndex;
   },
   methods: {
     setUserStoryAsActive(index) {

@@ -478,6 +478,10 @@ export default Vue.extend({
       }
     },
     onSelectedStory($event) {
+      if (this.planningStart) {
+        const endPoint = Constants.webSocketAdminSelectedUserStoryRoute;
+        this.$store.commit("sendViaBackendWS", { endPoint, data: $event });
+      }
       this.index = $event;
     },
     connectToWebSocket() {
