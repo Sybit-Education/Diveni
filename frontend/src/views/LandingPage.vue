@@ -98,7 +98,7 @@ export default Vue.extend({
     this.checkAdminCookie();
   },
   methods: {
-   async checkAdminCookie() {
+    async checkAdminCookie() {
       const cookie = window.localStorage.getItem("adminCookie");
       if (cookie !== null) {
         console.log(`Found admin cookie: '${cookie}'`);
