@@ -61,7 +61,7 @@
             Every member of team could use your defined set to vote the selected user story.
           </b-card-text>
           <b-card-text>
-            If erverybody has voted, DIVENI shows results and randomly selects two voters having
+            If everybody has voted, DIVENI shows results and randomly selects two voters having
             voted minimum / maximum to discuss their estimation.
           </b-card-text>
           <b-card-text> After discussion you could repeat estimation. </b-card-text>
@@ -101,36 +101,36 @@ export default Vue.extend({
     async checkAdminCookie() {
       const cookie = window.localStorage.getItem("adminCookie");
       if (cookie !== null) {
-        console.log(`Found admin cookie: '${cookie}'`);
-        const url = Constants.backendURL + Constants.createSessionRoute;
-        try {
-          const session = (
-            await this.axios.get(url, {
-              params: {
+          console.log(`Found admin cookie: '${cookie}'`);
+          const url = Constants.backendURL + Constants.createSessionRoute;
+          try {
+            const session = (
+              await this.axios.get(url, {
+                params: {
                 adminCookie: cookie,
-              },
-            })
-          ).data as {
-            sessionID: string;
-            adminID: string;
-            sessionConfig: {
-              set: Array<string>;
-              timerSeconds: number;
-              userStories: Array<{
-                id: number | null;
-                title: string;
-                description: string;
-                estimation: string | null;
-                isActive: false;
-              }>;
-              userStoryMode: string;
+                },
+              })
+            ).data as {
+              sessionID: string;
+              adminID: string;
+              sessionConfig: {
+                set: Array<string>;
+                timerSeconds: number;
+                userStories: Array<{
+                  id: number | null;
+                  title: string;
+                  description: string;
+                  estimation: string | null;
+                  isActive: false;
+                }>;
+                userStoryMode: string;
+              };
+              sessionState: string;
             };
-            sessionState: string;
-          };
-          this.sessionWrapper = { session };
-        } catch (e) {
-          console.error(`got error: ${e}`);
-          window.localStorage.removeItem("adminCookie");
+            this.sessionWrapper = { session };
+          } catch (e) {
+            console.error(`got error: ${e}`);
+            window.localStorage.removeItem("adminCookie");
         }
       }
     },
