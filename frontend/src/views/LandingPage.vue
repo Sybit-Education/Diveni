@@ -98,39 +98,39 @@ export default Vue.extend({
     this.checkAdminCookie();
   },
   methods: {
-    async checkAdminCookie() {
+   async checkAdminCookie() {
       const cookie = window.localStorage.getItem("adminCookie");
       if (cookie !== null) {
-          console.log(`Found admin cookie: '${cookie}'`);
-          const url = Constants.backendURL + Constants.createSessionRoute;
-          try {
-            const session = (
-              await this.axios.get(url, {
-                params: {
+        console.log(`Found admin cookie: '${cookie}'`);
+        const url = Constants.backendURL + Constants.createSessionRoute;
+        try {
+          const session = (
+            await this.axios.get(url, {
+              params: {
                 adminCookie: cookie,
-                },
-              })
-            ).data as {
-              sessionID: string;
-              adminID: string;
-              sessionConfig: {
-                set: Array<string>;
-                timerSeconds: number;
-                userStories: Array<{
-                  id: number | null;
-                  title: string;
-                  description: string;
-                  estimation: string | null;
-                  isActive: false;
-                }>;
-                userStoryMode: string;
-              };
-              sessionState: string;
+              },
+            })
+          ).data as {
+            sessionID: string;
+            adminID: string;
+            sessionConfig: {
+              set: Array<string>;
+              timerSeconds: number;
+              userStories: Array<{
+                id: number | null;
+                title: string;
+                description: string;
+                estimation: string | null;
+                isActive: false;
+              }>;
+              userStoryMode: string;
             };
-            this.sessionWrapper = { session };
-          } catch (e) {
-            console.error(`got error: ${e}`);
-            window.localStorage.removeItem("adminCookie");
+            sessionState: string;
+          };
+          this.sessionWrapper = { session };
+        } catch (e) {
+          console.error(`got error: ${e}`);
+          window.localStorage.removeItem("adminCookie");
         }
       }
     },
