@@ -37,6 +37,7 @@ export default Vue.extend({
 <style scoped>
 .fs-3-rem {
   font-size: 4rem;
+  color: black;
 }
 .card {
   position: relative;

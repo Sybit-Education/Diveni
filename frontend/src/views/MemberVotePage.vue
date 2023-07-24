@@ -8,7 +8,7 @@
         </span>
       </template>
 
-      <b-row class="mt-5">
+      <b-row class="headers">
         <b-col>
           <h1>{{ $t("page.vote.title") }}</h1>
         </b-col>
@@ -333,5 +333,11 @@ export default Vue.extend({
   font-size: 2em;
   margin: 0.67em 0;
   font-weight: bold;
+}
+
+.headers {
+  display: flex;
+  align-items: center;
+  min-height: 15vh;
 }
 </style>

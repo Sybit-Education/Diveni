@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-button
-      variant="success"
+      id="button"
       :disabled="disabled"
       @click="
         openSignInWithJiraTab();
@@ -122,3 +122,12 @@ export default Vue.extend({
   },
 });
 </script>
+
+<style scoped>
+
+#button {
+  background-color: var(--preparePageMainColor) !important;
+  color: var(--text-primary-color);
+}
+
+</style>

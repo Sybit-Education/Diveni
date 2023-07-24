@@ -193,7 +193,7 @@ export default Vue.extend({
 
 <style scoped>
 .list-group-item.active {
-  background-color: transparent;
+  background-color: white;
 }
 
 .search {

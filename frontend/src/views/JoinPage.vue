@@ -1,6 +1,6 @@
-<template>
-  <b-container id="join-page">
-    <h1 class="my-5 mt-2">
+<template class="main">
+  <b-container>
+    <h1 id="heading">
       {{ $t("page.join.title") }}
     </h1>
     <join-page-card
@@ -154,3 +154,12 @@ export default Vue.extend({
   },
 });
 </script>
+<style scoped>
+#heading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  min-height: 15vh;
+}
+</style>  

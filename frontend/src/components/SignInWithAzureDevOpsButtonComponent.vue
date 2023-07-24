@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-button variant="success" :disabled="disabled" @click="signIn()">
+    <b-button id="button" :disabled="disabled" @click="signIn()">
       {{
         $t(
           "session.prepare.step.selection.mode.description.withIssueTracker.buttons.signInWithAzureDevOps.label"
@@ -44,3 +44,9 @@ export default Vue.extend({
   },
 });
 </script>
+<style scoped>
+#button {
+  background-color: var(--preparePageMainColor) !important;
+  color: var(--text-primary-color);
+}
+</style>

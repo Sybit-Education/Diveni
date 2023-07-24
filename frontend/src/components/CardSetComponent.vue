@@ -8,14 +8,14 @@
             :key="item.name"
             class="swipe-card"
             :style="`background-color: ${
-              selectedCardSet.name === item.name ? '#198754' : 'lightgrey'
+              selectedCardSet.name === item.name ? 'var(--preparePageMainColor)' : 'var(--preparePageInActiveTab)'
             }`"
             @click="onCardSetSelected(item)"
           >
-            <div id="text" style="padding-top: 16px">
+            <div id="text" style="padding-top: 16px; color: var(--text-primary-color)">
               {{ item.name }}
             </div>
-            <div style="padding: 16px; text-align: center">
+            <div style="padding: 16px; text-align: center; color: var(--text-primary-color)">
               {{ item.description }}
               <div v-if="item.values.length === 0">
                 <span id="createSetHint">
@@ -23,7 +23,7 @@
                     $t("session.prepare.step.selection.cardSet.sets.ownSet.hint.label")
                   }}</span
                 >
-                <b-popover target="createSetHint" triggers="hover" placement="top">
+                <b-popover target="createSetHint" triggers="hover" placement="top" id="popUp">
                   <template #title>
                     {{ $t("session.prepare.step.selection.cardSet.sets.ownSet.hint.label") }}
                   </template>
@@ -41,20 +41,19 @@
       </b-col>
     </b-row>
     <b-row v-if="selectedCardSet.name !== ''">
-      <div v-if="selectedCardSet.values.length !== 0" class="text-center mt-3">
+      <div v-if="selectedCardSet.values.length !== 0" class="text-center mt-3 pillPosition">
         <b-button
           v-for="item in selectedCardSet.values"
           :key="item"
-          class="m-1"
+          :class="isActiveCardSetNumber(item)"
           pill
-          :variant="isActiveCardSetNumber(item)"
           style="width: 60px"
           @click="onCardSetNumberSelected(item)"
         >
           {{ item }}
         </b-button>
       </div>
-      <b-row v-else class="mt-3 d-flex px-5">
+      <b-row v-else class="mt-3 d-flex px-5 pillPosition">
         <b-col sm="6">
           <b-form-input
             v-model="createSetInput"
@@ -65,9 +64,8 @@
           <b-button
             v-for="item in selectedCardSet.activeValues"
             :key="item"
-            class="m-1"
+            :class="isActiveCardSetNumber(item)"
             pill
-            variant="success"
             style="min-width: 60px"
           >
             {{ item }}
@@ -166,7 +164,7 @@ export default Vue.extend({
   },
   methods: {
     isActiveCardSetNumber(num) {
-      return this.selectedCardSet.activeValues.includes(num) ? "success" : "outline-secondary";
+      return this.selectedCardSet.activeValues.includes(num) ? "activePills m-1" : "outline-secondary m-1";
     },
     onCardSetSelected(set) {
       this.selectedCardSet = set;
@@ -211,5 +209,18 @@ export default Vue.extend({
 #text {
   font-size: 20px;
   font-weight: 500;
+}
+#popUp {
+  background-color: var(--landingPageCardsBackground);
+}
+
+.activePills {
+  background-color: var(--preparePageMainColor) !important;
+  color: var(--text-primary-color);
+}
+
+.pillPosition {
+  margin-left: auto;
+  margin-right: auto;
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
-  <b-container id="prepare-session-page">
-    <h1 class="my-5">
+  <b-container class="main">
+    <h1>
       {{ $t("session.prepare.title") }}
     </h1>
     <h4 class="mt-3">
@@ -12,7 +12,7 @@
         :title="$t('session.prepare.step.selection.mode.description.withoutUS.tab.label')"
         :title-link-class="linkClass(0)"
       >
-        <stroy-points-component />
+        <story-points-component />
       </b-tab>
       <b-tab
         :title="$t('session.prepare.step.selection.mode.description.withUS.tab.label')"
@@ -26,7 +26,7 @@
           accept="text/csv"
           @change="importStory($event.target.files)"
         />
-        <b-button block color="primary" elevation="2" @click="openFileUploader()">
+        <b-button block elevation="2" id="importUserStoryButton" @click="openFileUploader()">
           {{ $t("session.prepare.step.selection.mode.description.withUS.importButton") }}
         </b-button>
       </b-tab>
@@ -51,7 +51,7 @@
     </h4>
     <b-row class="mt-3 text-center">
       <b-col>
-        <b-button variant="outline-secondary" @click="setTimerDown()"> -</b-button>
+        <b-button class="optionButtons" @click="setTimerDown()"> -</b-button>
       </b-col>
       <b-col class="text-center">
         <h4>
@@ -59,7 +59,7 @@
         </h4>
       </b-col>
       <b-col>
-        <b-button variant="outline-secondary" @click="setTimerUp()"> +</b-button>
+        <b-button class="optionButtons" @click="setTimerUp()"> +</b-button>
       </b-col>
     </b-row>
     <h4 class="mt-3">
@@ -80,7 +80,7 @@
     </b-row>
     <b-button
       class="my-5"
-      variant="success"
+      style="background-color: var(--preparePageMainColor); color: var(--text-primary-color)"
       :disabled="buttonDisabled()"
       @click="sendCreateSessionRequest"
     >
@@ -96,7 +96,7 @@ import Constants from "../constants";
 import CardSetComponent from "../components/CardSetComponent.vue";
 import UserStoryComponent from "../components/UserStoryComponent.vue";
 import JiraComponent from "../components/JiraComponent.vue";
-import StroyPointsComponent from "@/components/StroyPointsComponent.vue";
+import StoryPointsComponent from "@/components/StoryPointsComponent.vue";
 import UserStory from "@/model/UserStory";
 import papaparse from "papaparse";
 import apiService from "@/services/api.service";
@@ -107,7 +107,7 @@ export default Vue.extend({
     CardSetComponent,
     UserStoryComponent,
     JiraComponent,
-    StroyPointsComponent,
+    StoryPointsComponent,
   },
   data() {
     return {
@@ -158,9 +158,9 @@ export default Vue.extend({
   methods: {
     linkClass(idx) {
       if (this.tabIndex === idx) {
-        return ["bg-success", "text-light"];
+        return ["selectedTab", "selectedTextColor"];
       } else {
-        return ["bg-light", "text-dark"];
+        return ["notSelectedTab", "notSelectedTextColor"];
       }
     },
     async sendCreateSessionRequest() {
@@ -290,5 +290,31 @@ export default Vue.extend({
 <style scoped>
 .mg_top_2_per {
   margin-top: 2%;
+}
+
+#prepare-session-page {
+  background: linear-gradient(var(--background-color-primary), var(--background-color-secondary))
+}
+
+#importUserStoryButton {
+  background-color: var(--preparePageMainColor);
+  color: var(--text-primary-color);
+}
+
+.optionButtons {
+  color:var(--text-primary-color);
+  border-color: var(--text-primary-color);
+  background-color: transparent;
+}
+
+.optionButtons:hover {
+  color:var(--text-primary-color);
+  border-color: var(--text-primary-color);
+  background-color: var(--preparePageMainColor);
+}
+.optionButtons:focus {
+  color:var(--text-primary-color);
+  border-color: var(--text-primary-color);
+  background-color: var(--preparePageMainColor);
 }
 </style>

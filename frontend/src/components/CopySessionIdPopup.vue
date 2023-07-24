@@ -104,6 +104,7 @@ export default Vue.extend({
 <style scoped>
 .copy-session {
   font-size: 1.75rem;
+  color: var(--text-primary-color);
 }
 #popover {
   max-width: 500px;

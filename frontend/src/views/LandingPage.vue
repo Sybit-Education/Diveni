@@ -1,6 +1,6 @@
 <template>
   <div id="landing-page">
-    <b-container fluid class="teaser my-5">
+    <b-container fluid class="teaser">
       <b-container>
         <b-jumbotron header="DIVENI" lead="Instant free and easy remote Planning Poker" />
       </b-container>
@@ -12,12 +12,14 @@
           :description="$t('page.landing.meeting.new.description')"
           :button-text="$t('page.landing.meeting.new.buttons.start.label')"
           :on-click="goToPrepareSessionPage"
+          class="newSessionCard"
         />
         <landing-page-card
           :title="$t('page.landing.meeting.join.title')"
           :description="$t('page.landing.meeting.join.description')"
           :button-text="$t('page.landing.meeting.join.buttons.start.label')"
           :on-click="goToJoinPage"
+          class="joinSessionCard"
         />
         <landing-page-card
           v-if="sessionWrapper.session"
@@ -25,13 +27,14 @@
           :description="$t('page.landing.meeting.reconnect.description')"
           :button-text="$t('page.landing.meeting.reconnect.buttons.start.label')"
           :on-click="goToSessionPage"
+          class="reconnectSessionCard"
         />
       </b-card-group>
     </b-container>
     <b-container class="py-5">
       <h1>Remote Planning Poker using DIVENI</h1>
       <b-card-group deck>
-        <b-card title="Set up Session">
+        <b-card class="aboutDiveni" title="Set up Session">
           <b-card-text>
             Create a planning session and select your prefered voting set.
           </b-card-text>
@@ -45,7 +48,7 @@
             user stories and update the voted results of your planning poker.
           </b-card-text>
         </b-card>
-        <b-card title="Invite your Team">
+        <b-card class="aboutDiveni" title="Invite your Team">
           <b-card-text> Invite your team using QR-Code, invite link or code. </b-card-text>
           <b-card-text>
             Every user will be randomly assinged to a animal and is ready to estimate.
@@ -56,7 +59,7 @@
           </b-card-text>
         </b-card>
 
-        <b-card title="Estimate User Stories">
+        <b-card class="aboutDiveni" title="Estimate User Stories">
           <b-card-text>
             Every member of team could use your defined set to vote the selected user story.
           </b-card-text>
@@ -71,7 +74,7 @@
       <p>DIVENI was initially developed by students of HTWG Constance and is open source now.</p>
       <p>
         More information could be found in the
-        <a href="https://docs.diveni.io/">documentation</a>.
+        <a href="https://docs.diveni.io/" style="color:#1aecc9;">documentation</a>.
       </p>
     </b-container>
   </div>
@@ -162,13 +165,31 @@ export default Vue.extend({
 </script>
 
 <style scoped>
+
+.jumbotron {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
 .teaser {
-  background: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)),
+  background: linear-gradient(var(--background-color-primary), var(--pictureGradientEnd)),
     url("~@/assets/img/diveni-background.png");
   background-size: cover;
   background-repeat: no-repeat;
 }
-.jumbotron {
-  background-color: rgba(255, 255, 255, 0.5);
+
+.aboutDiveni {
+  border-radius: 2rem;
+  background-color: var(--landingPageCardsBackground);
+}
+
+.card-sub-title {
+  color: red;
+}
+.card-title{
+  color:var(--text-primary-color)
+}
+
+#landing-page {
+  background: linear-gradient(var(--background-color-primary), var(--background-color-secondary))
 }
 </style>

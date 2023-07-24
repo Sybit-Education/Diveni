@@ -4,6 +4,20 @@
       <b-img src="/img/icons/logo.svg" class="top-navigation__nav-logo"/>
       {{ $t("page.landing.productTitle") }}
     </b-navbar-brand>
+      <input
+        @change="toggleTheme"
+        id="checkbox"
+        type="checkbox"
+        class="switch-checkbox"
+    />
+    <label for="checkbox" class="switch-label">
+      <span>🌙</span>
+      <span>☀️</span>
+      <div
+        class="switch-toggle"
+        :class="{ 'switch-toggle-checked': userTheme === 'dark-theme' }"
+      ></div>
+    </label>
     <b-navbar-nav class="ml-auto">
       <b-form>
         <b-button :to="{ name: 'JoinPage' }" variant="success" class="px-2 mr-2">
@@ -31,10 +45,33 @@ import LocaleDropdown from "@/components/navigation/LocaleDropdown.vue";
 export default Vue.extend({
   name: "TopNavigationBar",
   components: { LocaleDropdown },
+  data() {
+    return {
+      userTheme: "light-Theme"
+    }
+  },
+  methods: {
+    toggleTheme() {
+      const activeTheme = localStorage.getItem("user-theme");
+      if (activeTheme === "light-theme") {
+        this.setTheme("dark-theme");
+      } else {
+        this.setTheme("light-theme");
+      }
+    },
+    setTheme(theme) {
+      localStorage.setItem("user-theme", theme);
+      this.userTheme = theme;
+      document.documentElement.className = theme;
+  }
+  }
 });
 </script>
 
-<style scoped>
+<style>
+
+/* TOP Navigation Bar */
+
 .top-navigation {
   background-color: rgba(200, 200, 200, 0.75);
 }
@@ -44,5 +81,94 @@ export default Vue.extend({
 .top-navigation__title {
   font-size: 2.5rem;
   font-weight: 700;
+}
+
+/* Dark Mode Switch */
+.switch-checkbox {
+  display: none;
+}
+.switch-toggle-checked {
+  transform: translateX(calc(var(--element-size) * 0.625)) !important;
+}
+.switch-toggle {
+  position: absolute;
+  background-color: var(--background-color-primary);
+  border-radius: 50%;
+  top: 0.05rem;
+  left: 0rem;
+  height: calc(var(--element-size) * 0.3);
+  width: calc(var(--element-size) * 0.3);
+  transform: translateX(0);
+  transition: transform 0.3s ease, background-color 0.5s ease;
+}
+.switch-label {
+  /* for width, use the standard element-size */
+  width: 5.75rem; 
+  user-select: none;
+
+  /* for other dimensions, calculate values based on it */
+  border-radius: var(--element-size);
+  border: calc(var(--element-size) * 0.025) solid var(--accent-color);
+  font-size: calc(var(--element-size) * 0.2);
+  height: calc(var(--element-size) * 0.35);
+  padding-left: 5px;
+
+  align-items: center;
+  background: var(--text-primary-color);
+  cursor: pointer;
+  display: flex;
+  position: relative;
+  transition: background 0.5s ease;
+  justify-content: space-between;
+  z-index: 1;
+} 
+
+/* Landing Page */
+.newSessionCard .landingPageCardButton{
+  background-color: var(--startButton);
+  border-radius: 2rem;
+  color: var(--text-primary-color);
+}
+.newSessionCard .landingPageCardButton:hover{
+  background-color: var(--startButtonHovered);
+  border-radius: 2rem;
+  color: var(--text-primary-color);
+}
+.joinSessionCard .landingPageCardButton{
+  background-color: var(--joinButton);
+  border-radius: 2rem;
+  color: var(--text-primary-color);
+}
+.joinSessionCard .landingPageCardButton:hover{
+  background-color: var(--joinButtonHovered);
+  border-radius: 2rem;
+  color: var(--text-primary-color);
+}
+.reconnectSessionCard .landingPageCardButton {
+  background-color: var(--reconnectButton);
+  border-radius: 2rem;
+  color: var(--text-primary-color);
+}
+.reconnectSessionCard .landingPageCardButton:hover {
+  background-color: var(--reconnectButtonHovered);
+  border-radius: 2rem;
+  color: var(--text-primary-color);
+}
+
+.selectedTab  {
+  background-color: var(--preparePageMainColor) !important;
+}
+
+.selectedTextColor {
+  color: var(--text-primary-color) !important;
+}
+
+.notSelectedTab {
+  background-color: var(--preparePageInActiveTab) !important;
+  border-color: var(--preparePageBorderTab) !important;
+}
+
+.notSelectedTextColor {
+  color: var(--text-primary-color) !important;
 }
 </style>

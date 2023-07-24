@@ -1,6 +1,6 @@
 <template>
   <b-container id="session-page">
-    <b-row class="mb-3">
+    <b-row class="mb-3 headers">
       <b-col>
         <h1>
           {{
@@ -56,11 +56,20 @@
     <div v-else>
       <b-row class="d-flex justify-content-start pb-3">
         <b-col cols="auto" class="mr-auto">
-          <b-button class="mr-3" variant="outline-dark" @click="sendRestartMessage">
+          <b-button
+            class="mr-3"
+            variant="outline-dark"
+            style="background-color: var(--preparePageMainColor); color: var(--text-primary-color); border-color: black;"
+            @click="sendRestartMessage"
+          >
             <b-icon-arrow-clockwise />
             {{ $t("page.session.during.estimation.buttons.new") }}
           </b-button>
-          <b-button class="mr-3" variant="outline-dark" @click="sendVotingFinishedMessage">
+          <b-button class="mr-3"
+            variant="outline-dark"
+            style="background-color: var(--preparePageMainColor); color: var(--text-primary-color); border-color: black;"
+            @click="sendVotingFinishedMessage"
+          >
             <b-icon-bar-chart />
             {{ $t("page.session.during.estimation.buttons.result") }}
           </b-button>
@@ -95,7 +104,7 @@
         </div>
       </div>
 
-      <b-row v-if="!estimateFinished" class="my-1 d-flex justify-content-center flex-wrap">
+      <b-row v-if="!estimateFinished" class="my-2 d-flex justify-content-center flex-wrap">
         <kick-user-wrapper
           v-for="member of membersPending"
           :key="member.memberID"
@@ -104,7 +113,7 @@
           :member="member"
         />
       </b-row>
-      <hr />
+      <hr class="my-5" style="border-color: var(--text-primary-color);"/>
       <h4>
         {{ $t("page.session.during.estimation.message.finished") }}
         {{ membersEstimated.length }} /
@@ -127,7 +136,7 @@
         />
       </b-row>
     </div>
-    <b-row v-if="session_userStoryMode !== 'NO_US'" class="mt-5">
+    <b-row v-if="session_userStoryMode !== 'NO_US'" class="mt-4">
       <b-col>
         <user-story-sum-component />
       </b-col>
@@ -532,5 +541,12 @@ export default Vue.extend({
 });
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped></style>
+<style scoped>
+
+.headers {
+  display: flex;
+  align-items: center;
+  min-height: 15vh;
+}
+
+</style>

@@ -6,6 +6,7 @@
         v-show="idx === index"
         :key="story.id"
         class="border-0"
+        style="background: transparent;"
         variant="outline-secondary"
       >
         <div class="list-group list-group-horizontal">
@@ -49,7 +50,7 @@
             @textValueChanged="(event) => valueChanged(idx, event)"
           />
         </div>
-        <div v-if="!editDescription">
+        <div v-if="!editDescription" style="color: var(--text-primary-color)">
           {{ userStories[idx].description }}
         </div>
       </b-list-group-item>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-button variant="success" :disabled="disabled" @click="redirectToJira()">
+    <b-button id="button" :disabled="disabled" @click="redirectToJira()">
       {{
         $t(
           "session.prepare.step.selection.mode.description.withIssueTracker.buttons.signInWithJiraCloud.label"
@@ -35,3 +35,12 @@ export default Vue.extend({
   },
 });
 </script>
+
+<style scoped>
+
+#button {
+  background-color: var(--preparePageMainColor) !important;
+  color: var(--text-primary-color);
+}
+
+</style>

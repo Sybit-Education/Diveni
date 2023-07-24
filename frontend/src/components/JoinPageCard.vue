@@ -103,6 +103,7 @@ export default Vue.extend({
 <style scoped>
 #join-card {
   border-radius: 20px;
+  vertical-align: middle;
 }
 
 h6 {
