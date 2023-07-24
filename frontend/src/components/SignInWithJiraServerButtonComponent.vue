@@ -22,7 +22,7 @@
       @hidden="resetModal"
       @ok="handleOk"
     >
-      <p>{{ $t("session.prepare.step.selection.mode.description.withIssueTracker.dialog.description") }}</p>
+      <p style="color:black">{{ $t("session.prepare.step.selection.mode.description.withIssueTracker.dialog.description") }}</p>
       <form ref="form" @submit.stop.prevent="handleSubmit">
         <b-form-group
           label="Verification code"

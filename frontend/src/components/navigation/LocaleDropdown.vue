@@ -1,5 +1,10 @@
 <template>
-  <b-nav-item-dropdown :text="locales[$i18n.locale]" right>
+  <b-nav-item-dropdown 
+    :text="locales[$i18n.locale]"
+    right 
+    toggle-class="dropDownLink"
+    menu-class="containerClass"
+  >
     <b-dropdown-item
       v-for="(locale, key) in locales"
       :key="key"

@@ -1,6 +1,6 @@
 <template>
   <b-navbar toggleable="md" class="top-navigation" fixed="top" sticky>
-    <b-navbar-brand class="top-navigation__title" to="/">
+    <b-navbar-brand class="top-navigation__title" style="color: var(--text-primary-color)" to="/">
       <b-img src="/img/icons/logo.svg" class="top-navigation__nav-logo"/>
       {{ $t("page.landing.productTitle") }}
     </b-navbar-brand>
@@ -20,20 +20,19 @@
     </label>
     <b-navbar-nav class="ml-auto">
       <b-form>
-        <b-button :to="{ name: 'JoinPage' }" variant="success" class="px-2 mr-2">
+        <b-button :to="{ name: 'PrepareSessionPage' }" class="startButton px-2 mr-2">New Session</b-button>
+      </b-form>
+      <b-form>
+        <b-button :to="{ name: 'JoinPage' }" class="joinButton px-2 mr-2">
           {{ $t("page.landing.meeting.join.buttons.start.label") }}</b-button
           >
       </b-form>
-      <b-form>
-        <b-button :to="{ name: 'PrepareSessionPage' }" class="px-2 mr-2">New Session</b-button>
-      </b-form>
       <b-form class="px-2 mr-2">
-
         <a href="https://github.com/Sybit-Education/Diveni" target="_blank">
           <img :src="require('./images/GitHub-Mark-32px.png')" height="40px" width="40px"/>
         </a>
       </b-form>
-      <locale-dropdown />
+      <locale-dropdown  />
     </b-navbar-nav>
   </b-navbar>
 </template>
@@ -50,6 +49,11 @@ export default Vue.extend({
       userTheme: "light-Theme"
     }
   },
+  created() {
+    if (localStorage.getItem("user-theme")) {
+      this.setTheme(localStorage.getItem("user-theme"));
+    }
+  },
   methods: {
     toggleTheme() {
       const activeTheme = localStorage.getItem("user-theme");
@@ -63,7 +67,7 @@ export default Vue.extend({
       localStorage.setItem("user-theme", theme);
       this.userTheme = theme;
       document.documentElement.className = theme;
-  }
+    },
   }
 });
 </script>
@@ -73,7 +77,7 @@ export default Vue.extend({
 /* TOP Navigation Bar */
 
 .top-navigation {
-  background-color: rgba(200, 200, 200, 0.75);
+  background-color: var(--topNavigationBarColor); /*rgba(200, 200, 200, 0.75); */
 }
 .top-navigation__nav-logo {
   height: 3rem;
@@ -122,53 +126,4 @@ export default Vue.extend({
   justify-content: space-between;
   z-index: 1;
 } 
-
-/* Landing Page */
-.newSessionCard .landingPageCardButton{
-  background-color: var(--startButton);
-  border-radius: 2rem;
-  color: var(--text-primary-color);
-}
-.newSessionCard .landingPageCardButton:hover{
-  background-color: var(--startButtonHovered);
-  border-radius: 2rem;
-  color: var(--text-primary-color);
-}
-.joinSessionCard .landingPageCardButton{
-  background-color: var(--joinButton);
-  border-radius: 2rem;
-  color: var(--text-primary-color);
-}
-.joinSessionCard .landingPageCardButton:hover{
-  background-color: var(--joinButtonHovered);
-  border-radius: 2rem;
-  color: var(--text-primary-color);
-}
-.reconnectSessionCard .landingPageCardButton {
-  background-color: var(--reconnectButton);
-  border-radius: 2rem;
-  color: var(--text-primary-color);
-}
-.reconnectSessionCard .landingPageCardButton:hover {
-  background-color: var(--reconnectButtonHovered);
-  border-radius: 2rem;
-  color: var(--text-primary-color);
-}
-
-.selectedTab  {
-  background-color: var(--preparePageMainColor) !important;
-}
-
-.selectedTextColor {
-  color: var(--text-primary-color) !important;
-}
-
-.notSelectedTab {
-  background-color: var(--preparePageInActiveTab) !important;
-  border-color: var(--preparePageBorderTab) !important;
-}
-
-.notSelectedTextColor {
-  color: var(--text-primary-color) !important;
-}
 </style>

@@ -144,7 +144,11 @@
     <b-row v-if="session_userStoryMode !== 'NO_US'">
       <b-col cols="4">
         <div v-if="session_userStoryMode === 'US_JIRA'" class="refreshUserstories">
-          <b-button class="w-100 mb-3" variant="info" @click="refreshUserStories">
+          <b-button
+            class="w-100 mb-3" 
+            @click="refreshUserStories"
+            style="border-radius: var(--element-size); color: var(--text-primary-color); background-color: var(--joinButton);"
+          >
             {{ $t("page.session.before.refreshStories") }}
           </b-button>
         </div>

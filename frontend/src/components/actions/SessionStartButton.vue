@@ -1,6 +1,6 @@
 <template>
   <b-button
-    variant="success"
+    class="startButton"
     :disabled="!members || members.length < 1"
     @click="sendStartEstimationMessages"
   >

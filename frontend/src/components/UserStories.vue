@@ -4,6 +4,7 @@
       <b-input
         v-model="input"
         class="search"
+        style="border-radius: var(--element-size);"
         type="text"
         :placeholder="$t('page.session.before.userStories.placeholder.searchUserStories')"
         @input="swapPriority"
@@ -47,7 +48,10 @@
           @blur="publishChanges"
         />
 
-        <b-badge variant="success" class="p-2">
+        <b-badge
+          style="background-color: var(--preparePageMainColor); color: var(--text-primary-color)"
+          class="p-2"
+        >
           {{ story.estimation == null ? "?" : story.estimation }}
         </b-badge>
         <b-button
@@ -65,7 +69,7 @@
     <b-button
       v-if="userStories.length < 1 && showEditButtons && !filterActive"
       class="w-100 mb-3"
-      variant="success"
+      style="background-color: var(--preparePageMainColor); color: var(--text-primary-color); border-radius: var(--element-size);"
       @click="addUserStory()"
     >
       <b-icon-plus />
@@ -83,7 +87,7 @@
     <b-button
       v-if="userStories.length > 0 && showEditButtons && !filterActive"
       class="w-100 mb-3"
-      variant="success"
+      style="background-color: var(--preparePageMainColor); color: var(--text-primary-color); border-radius: var(--element-size);"
       @click="addUserStory()"
     >
       <b-icon-plus />

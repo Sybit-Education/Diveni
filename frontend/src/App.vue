@@ -51,6 +51,8 @@ main {
   --preparePageInActiveTab: #ffffff;
   --preparePageBorderTab: grey;
   --preparePageImportUserStoriesButton: #30a858;
+  --linkColor: #4de2d6;
+  --topNavigationBarColor: rgba(200, 200, 200, 0.75);
 }
 
 /* Define styles for the root window with dark - mode preference */
@@ -58,7 +60,7 @@ main {
   --background-color-primary: #002E2C; /* #230903 #564787  #2C1320 #002E2C*/
   --background-color-secondary: #0884c4; /**#9D6381 35605A 820B8A #b81484*/
   --pictureGradientEnd: rgba(44, 19, 32, 0.5);
-  --accent-color: #4b0e57;
+  --accent-color: #0884c4;
   --text-primary-color: #ffffff;
   --startButton: #081b72;
   --startButtonHovered: #011158;
@@ -71,6 +73,8 @@ main {
   --preparePageInActiveTab: #666565;
   --preparePageBorderTab: white;
   --preparePageImportUserStoriesButton: #7e5a0c;
+  --linkColor: #00ffdd;
+  --topNavigationBarColor: rgb(79, 69, 69, 0.88);/*rgba(45, 41, 41, 0.75) */
 }
 
 p {
@@ -83,5 +87,134 @@ h1 {
 
 h4 {
   color: var(--text-primary-color);
+}
+
+.newSessionCard .landingPageCardButton{
+  background-color: var(--startButton);
+  border-radius: 2rem;
+  color: var(--text-primary-color);
+}
+.newSessionCard .landingPageCardButton:hover{
+  background-color: var(--startButtonHovered);
+  border-radius: 2rem;
+  color: var(--text-primary-color);
+}
+.joinSessionCard .landingPageCardButton{
+  background-color: var(--joinButton);
+  border-radius: 2rem;
+  color: var(--text-primary-color);
+}
+.joinSessionCard .landingPageCardButton:hover{
+  background-color: var(--joinButtonHovered);
+  border-radius: 2rem;
+  color: var(--text-primary-color);
+}
+.reconnectSessionCard .landingPageCardButton {
+  background-color: var(--reconnectButton);
+  border-radius: 2rem;
+  color: var(--text-primary-color);
+}
+.reconnectSessionCard .landingPageCardButton:hover {
+  background-color: var(--reconnectButtonHovered);
+  border-radius: 2rem;
+  color: var(--text-primary-color);
+}
+
+.selectedTab  {
+  background-color: var(--preparePageMainColor) !important;
+}
+
+.selectedTextColor {
+  color: var(--text-primary-color) !important;
+}
+
+.notSelectedTab {
+  background-color: var(--preparePageInActiveTab) !important;
+  border-color: var(--preparePageBorderTab) !important;
+}
+
+.notSelectedTextColor {
+  color: var(--text-primary-color) !important;
+}
+
+.dropDownLink {
+  color: var(--text-primary-color) !important;
+}
+.containerClass {
+  background-color: var(--landingPageCardsBackground) !important;
+  color: var(--text-primary-color) !important;
+}
+
+.dropdown-item {
+  color: var(--text-primary-color) !important;
+}
+
+.dropdown-item:hover {
+  color: black !important;
+}
+
+.dropdown-item.active {
+  background-color: green !important;
+}
+
+a.btn.joinButton {
+  background-color: var(--joinButton);
+  border-radius: 2rem;
+  color: var(--text-primary-color);
+}
+
+a.btn.joinButton:hover {
+  background-color: var(--joinButtonHovered);
+  border-radius: 2rem;
+  color: var(--text-primary-color);
+}
+
+a.btn.startButton {
+  background-color: var(--startButton);
+  border-radius: 2rem;
+  color: var(--text-primary-color);
+}
+
+a.btn.startButton:hover {
+  background-color: var(--startButtonHovered);
+  border-radius: 2rem;
+  color: var(--text-primary-color);
+}
+
+.btn.startButton {
+  background-color: var(--startButton);
+  border-radius: 2rem;
+  color: var(--text-primary-color);
+}
+
+.btn.startButton:hover {
+  background-color: var(--startButtonHovered);
+  border-radius: 2rem;
+  color: var(--text-primary-color);
+}
+
+.btn.startButton:disabled {
+  background-color: var(--preparePageInActiveTab);
+  border-radius: 2rem;
+  color: var(--text-primary-color);
+}
+
+.btn.dropdown-toggle {
+  color: var(--text-primary-color);
+  background-color: var(--startButton);
+}
+
+.btn.dropdown-toggle:hover {
+  color: var(--text-primary-color);
+  background-color: var(--startButtonHovered);
+}
+
+.btn-secondary:not(:disabled):not(.disabled):active, .btn-secondary:not(:disabled):not(.disabled).active, .show > .btn-secondary.dropdown-toggle {
+  color: var(--text-primary-color) !important ;
+  background-color: var(--preparePageMainColor) !important;
+}
+.btn-secondary:focus {
+  color: var(--text-primary-color) !important ;
+  background-color: var(--preparePageMainColor) !important;
 }
 </style>

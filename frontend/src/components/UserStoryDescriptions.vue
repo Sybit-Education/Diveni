@@ -22,9 +22,8 @@
           />
           <b-dropdown
             v-show="editDescription"
-            class="mx-1"
+            class="mx-1 estimationDescription"
             :text="(userStories[idx].estimation ? userStories[idx].estimation : '?') + '    '"
-            variant="success"
           >
             <b-dropdown-item
               v-for="num in filteredCardSet"

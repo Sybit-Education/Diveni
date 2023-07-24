@@ -2,7 +2,7 @@
   <div class="copy-session">
     {{ textBeforeSessionID }}
     <strong>
-      <b-link id="popover-link" href="#" @click="copyLinkToClipboard()">
+      <b-link id="popover-link" style="color: var(--linkColor)" href="#" @click="copyLinkToClipboard()">
         {{ sessionId }}
       </b-link>
     </strong>
