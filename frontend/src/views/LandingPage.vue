@@ -74,7 +74,7 @@
       <p>DIVENI was initially developed by students of HTWG Constance and is open source now.</p>
       <p>
         More information could be found in the
-        <a href="https://docs.diveni.io/" style="color:#1aecc9;">documentation</a>.
+        <a href="https://docs.diveni.io/" style="color: var(--linkColor);">documentation</a>.
       </p>
     </b-container>
   </div>
