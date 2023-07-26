@@ -26,7 +26,7 @@
           accept="text/csv"
           @change="importStory($event.target.files)"
         />
-        <b-button block elevation="2" id="importUserStoryButton" @click="openFileUploader()">
+        <b-button block elevation="2" id="importUserStoryButton" @click="openFileUploader(); $event.target.blur();">
           {{ $t("session.prepare.step.selection.mode.description.withUS.importButton") }}
         </b-button>
       </b-tab>
@@ -51,7 +51,7 @@
     </h4>
     <b-row class="mt-3 text-center">
       <b-col>
-        <b-button class="optionButtons" @click="setTimerDown()"> -</b-button>
+        <b-button class="optionButtons" @click="setTimerDown(); $event.target.blur();"> -</b-button>
       </b-col>
       <b-col class="text-center">
         <h4>
@@ -59,7 +59,7 @@
         </h4>
       </b-col>
       <b-col>
-        <b-button class="optionButtons" @click="setTimerUp()"> +</b-button>
+        <b-button class="optionButtons" @click="setTimerUp(); $event.target.blur();"> +</b-button>
       </b-col>
     </b-row>
     <h4 class="mt-3">
@@ -79,8 +79,7 @@
       </b-col>
     </b-row>
     <b-button
-      class="my-5"
-      style="background-color: var(--preparePageMainColor); color: var(--text-primary-color)"
+      class="my-5 startingButton"
       :disabled="buttonDisabled()"
       @click="sendCreateSessionRequest"
     >
@@ -301,6 +300,11 @@ export default Vue.extend({
   color: var(--text-primary-color);
 }
 
+#importUserStoryButton:hover {
+  background-color: var(--joinButtonHovered);
+  color: var(--text-primary-color);
+}
+
 .optionButtons {
   color:var(--text-primary-color);
   border-color: var(--text-primary-color);
@@ -308,13 +312,27 @@ export default Vue.extend({
 }
 
 .optionButtons:hover {
-  color:var(--text-primary-color);
+  color:var(--text-primary-color) !important;
   border-color: var(--text-primary-color);
   background-color: var(--preparePageMainColor);
 }
 .optionButtons:focus {
   color:var(--text-primary-color);
   border-color: var(--text-primary-color);
-  background-color: var(--preparePageMainColor);
+  background-color: transparent !important;
+  outline: none;
+  box-shadow: none;
+}
+
+.startingButton {
+  background-color: var(--startButton);
+  color: var(--text-primary-color);
+  border-radius: 2rem;
+}
+
+.startingButton:hover {
+  background-color: var(--startButtonHovered);
+  color: var(--text-primary-color);
+  border-radius: 2rem;
 }
 </style>

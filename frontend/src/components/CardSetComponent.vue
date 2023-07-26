@@ -7,9 +7,7 @@
             v-for="item of userStoryMode === jiraTag ? allCardSetsWithJiraMode : allCardSets"
             :key="item.name"
             class="swipe-card"
-            :style="`background-color: ${
-              selectedCardSet.name === item.name ? 'var(--preparePageMainColor)' : 'var(--preparePageInActiveTab)'
-            }`"
+            :class="selectedCardSet.name === item.name ? 'selectedCard' : 'inActiveCard'"
             @click="onCardSetSelected(item)"
           >
             <div id="text" style="padding-top: 16px; color: var(--text-primary-color)">
@@ -48,7 +46,7 @@
           :class="isActiveCardSetNumber(item)"
           pill
           style="width: 60px"
-          @click="onCardSetNumberSelected(item)"
+          @click="onCardSetNumberSelected(item); $event.target.blur();"
         >
           {{ item }}
         </b-button>
@@ -206,6 +204,22 @@ export default Vue.extend({
   flex-direction: column;
   cursor: pointer;
 }
+
+.selectedCard {
+  background-color: var(--preparePageMainColor);
+}
+
+.selectedCard:hover {
+  background-color: var(--joinButtonHovered);
+}
+
+.inActiveCard {
+  background-color: var(--preparePageInActiveTab);
+}
+
+.inActiveCard:hover {
+  background-color: var(--preparePageInActiveTabHover);
+}
 #text {
   font-size: 20px;
   font-weight: 500;
@@ -216,6 +230,11 @@ export default Vue.extend({
 
 .activePills {
   background-color: var(--preparePageMainColor) !important;
+  color: var(--text-primary-color);
+}
+
+.activePills:hover {
+  background-color: var(--joinButtonHovered) !important;
   color: var(--text-primary-color);
 }
 

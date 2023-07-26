@@ -24,7 +24,7 @@
         :style="swipeableCardBackgroundColor"
         @click="onCardClicked()"
       >
-        <div class="text">
+        <div class="text" style="color:black">
           {{ dragged ? "💪" : voteOption }}
         </div>
       </div>

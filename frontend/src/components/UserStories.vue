@@ -10,7 +10,12 @@
         @input="swapPriority"
       />
     </div>
-    <b-card-group class="my-3 overflow-auto" style="max-height: 70vh">
+    <b-card-group
+      class="my-3"
+      :class="showEditButtons ? 'overflow-auto' : ''"
+      style="max-height: 70vh;
+      border-radius: 1rem;"
+    >
       <b-list-group-item
         v-for="(story, index) of userStories"
         :key="index"
@@ -23,9 +28,9 @@
       >
         <b-button
           v-if="showEditButtons"
-          :variant="story.isActive ? 'success' : 'outline-success'"
+          :class="story.isActive ? 'selectedStory' : 'outlineColorStory'"
           size="sm"
-          @click="markUserStory(index)"
+          @click="markUserStory(index);"
         >
           <b-icon-check2 />
         </b-button>
@@ -68,9 +73,8 @@
 
     <b-button
       v-if="userStories.length < 1 && showEditButtons && !filterActive"
-      class="w-100 mb-3"
-      style="background-color: var(--preparePageMainColor); color: var(--text-primary-color); border-radius: var(--element-size);"
-      @click="addUserStory()"
+      class="w-100 mb-3 addButton"
+      @click="addUserStory(); $event.target.blur();"
     >
       <b-icon-plus />
       {{ $t("page.session.before.userStories.button.addFirstUserStory") }}
@@ -86,9 +90,8 @@
 
     <b-button
       v-if="userStories.length > 0 && showEditButtons && !filterActive"
-      class="w-100 mb-3"
-      style="background-color: var(--preparePageMainColor); color: var(--text-primary-color); border-radius: var(--element-size);"
-      @click="addUserStory()"
+      class="w-100 mb-3 addButton"
+      @click="addUserStory(); $event.target.blur();"
     >
       <b-icon-plus />
       {{ $t("page.session.before.userStories.button.addUserStory") }}
@@ -208,5 +211,37 @@ export default Vue.extend({
   padding-left: 30px;
   border-color: black;
   overflow: auto;
+}
+
+.addButton {
+  background-color: var(--preparePageMainColor);
+  color: var(--text-primary-color);
+  border-radius: var(--element-size);
+}
+
+.addButton:hover {
+  background-color: var(--joinButtonHovered);
+  color: var(--text-primary-color);
+  border-radius: var(--element-size);
+}
+
+.selectedStory {
+  background-color: var(--preparePageMainColor);
+  color: var(--text-primary-color);
+}
+
+.selectedStory:hover {
+  background-color: var(--joinButtonHovered);
+  color: var(--text-primary-color);
+}
+
+.outlineColorStory {
+  background-color: transparent;
+  color: rgb(187, 121, 0);
+}
+
+.outlineColorStory:hover {
+  background-color: var(--joinButtonHovered);
+  color: black;
 }
 </style>

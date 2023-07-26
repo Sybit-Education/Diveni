@@ -1,6 +1,6 @@
 <template>
   <div v-if="isPlanningStart">
-    <b-button v-b-modal.close-session-modal variant="danger">
+    <b-button v-b-modal.close-session-modal variant="danger" style="border-radius: 2rem;">
       <b-icon-x />
       {{ $t("page.session.during.estimation.buttons.finish") }}
     </b-button>
@@ -11,10 +11,10 @@
       :ok-title="$t('page.session.close.button.ok')"
       @ok="closeSession"
     >
-      <p class="my-4">
+      <p class="my-4" style="color:black;">
         {{ $t("page.session.close.description1") }}
       </p>
-      <p v-if="userStoryMode !== 'NO_US'">
+      <p v-if="userStoryMode !== 'NO_US'" style="color:black;">
         {{ $t("page.session.close.description2") }}
       </p>
     </b-modal>

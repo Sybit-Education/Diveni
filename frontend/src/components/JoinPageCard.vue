@@ -17,25 +17,24 @@
         />
       </b-row>
       <b-row class="mt-2">
-        <b-col>
+        <b-col style="color:black">
           <h6>{{ $t("page.join.input.name") }}</h6>
           <b-form-input ref="name" v-model="name" class="mt-3" type="text" />
         </b-col>
       </b-row>
       <b-row class="mt-4">
-        <b-col cols="12" :md="'6'">
+        <b-col cols="12" :md="'6'" style="color:black">
           <h6>{{ $t("page.join.input.code") }}</h6>
           <b-form-input v-model="sessionID" class="mt-3" type="text" />
         </b-col>
-        <b-col class="mt-2 mt-md-0" cols="12" md="6">
+        <b-col class="mt-2 mt-md-0" cols="12" md="6" style="color:black">
           <h6>{{ $t("page.join.input.password") }}</h6>
           <b-form-input v-model="password" class="mt-3" type="password" placeholder="(optional)" />
         </b-col>
       </b-row>
       <b-row>
         <b-button
-          class="mt-5"
-          variant="success"
+          class="mt-5 startingButton"
           type="submit"
           :disabled="name.length < 1 || sessionID.length < 1"
           @click="onClickButton"
@@ -108,5 +107,17 @@ export default Vue.extend({
 
 h6 {
   font-weight: 700;
+}
+
+.startingButton {
+  background-color: var(--startButton);
+  color: var(--text-primary-color);
+  border-radius: 2rem;
+}
+
+.startingButton:hover {
+  background-color: var(--startButtonHovered);
+  color: var(--text-primary-color);
+  border-radius: 2rem;
 }
 </style>

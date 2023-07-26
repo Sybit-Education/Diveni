@@ -98,7 +98,7 @@ export default Vue.extend({
   position: absolute;
   background-color: var(--background-color-primary);
   border-radius: 50%;
-  top: 0.05rem;
+  top: 0.025rem;
   left: 0rem;
   height: calc(var(--element-size) * 0.3);
   width: calc(var(--element-size) * 0.3);

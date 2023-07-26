@@ -57,17 +57,15 @@
       <b-row class="d-flex justify-content-start pb-3">
         <b-col cols="auto" class="mr-auto">
           <b-button
-            class="mr-3"
+            class="mr-3 optionButton"
             variant="outline-dark"
-            style="background-color: var(--preparePageMainColor); color: var(--text-primary-color); border-color: black;"
             @click="sendRestartMessage"
           >
             <b-icon-arrow-clockwise />
             {{ $t("page.session.during.estimation.buttons.new") }}
           </b-button>
           <b-button class="mr-3"
-            variant="outline-dark"
-            style="background-color: var(--preparePageMainColor); color: var(--text-primary-color); border-color: black;"
+            variant="outline-dark optionButton"
             @click="sendVotingFinishedMessage"
           >
             <b-icon-bar-chart />
@@ -145,9 +143,8 @@
       <b-col cols="4">
         <div v-if="session_userStoryMode === 'US_JIRA'" class="refreshUserstories">
           <b-button
-            class="w-100 mb-3" 
-            @click="refreshUserStories"
-            style="border-radius: var(--element-size); color: var(--text-primary-color); background-color: var(--joinButton);"
+            class="w-100 mb-3 refreshButton" 
+            @click="refreshUserStories(); $event.target.blur();"
           >
             {{ $t("page.session.before.refreshStories") }}
           </b-button>
@@ -551,6 +548,32 @@ export default Vue.extend({
   display: flex;
   align-items: center;
   min-height: 15vh;
+}
+
+.optionButton{
+  background-color: var(--preparePageMainColor);
+  color: var(--text-primary-color);
+  border-color: black;
+  border-radius: 2rem;
+}
+
+.optionButton:hover{
+  background-color: var(--joinButtonHovered);
+  color: var(--text-primary-color);
+  border-color: black;
+  border-radius: 2rem;
+}
+
+.refreshButton {
+  border-radius: var(--element-size);
+  color: var(--text-primary-color);
+  background-color: var(--joinButton);
+}
+
+.refreshButton:hover {
+  border-radius: var(--element-size);
+  color: var(--text-primary-color);
+  background-color: var(--joinButtonHovered);
 }
 
 </style>

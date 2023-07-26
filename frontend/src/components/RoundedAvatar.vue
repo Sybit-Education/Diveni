@@ -5,7 +5,7 @@
         :src="require(`@/assets/${member.avatarAnimal.toLowerCase()}.png`)"
         class="rounded-avatar__image"
       />
-      <div v-if="showName" class="rounded-avatar__label">
+      <div v-if="showName" class="rounded-avatar__label" style="color: black;">
         {{ member.name }}
       </div>
     </div>

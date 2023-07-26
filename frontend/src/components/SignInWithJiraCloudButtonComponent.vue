@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-button id="button" :disabled="disabled" @click="redirectToJira()">
+    <b-button id="button" :disabled="disabled" @click="redirectToJira(); $event.target.blur();">
       {{
         $t(
           "session.prepare.step.selection.mode.description.withIssueTracker.buttons.signInWithJiraCloud.label"
@@ -40,6 +40,11 @@ export default Vue.extend({
 
 #button {
   background-color: var(--preparePageMainColor) !important;
+  color: var(--text-primary-color);
+}
+
+#button:hover {
+  background-color: var(--joinButtonHovered) !important;
   color: var(--text-primary-color);
 }
 

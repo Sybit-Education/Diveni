@@ -8,13 +8,13 @@
     </strong>
     {{ textAfterSessionID }}
     <b-popover id="popover" target="popover-link" triggers="hover" placement="top">
-      <b-button class="mx-1" variant="success" @click="copyIdToClipboard()">
+      <b-button class="mx-1" id="sessionCode" @click="copyIdToClipboard(); $event.target.blur();">
         {{ $t("page.session.before.copy.id") }}
       </b-button>
-      <b-button class="mx-1" variant="success" @click="copyLinkToClipboard()">
+      <b-button class="mx-1" id="link" @click="copyLinkToClipboard(); $event.target.blur();">
         {{ $t("page.session.before.copy.link") }}
       </b-button>
-      <b-button class="mx-1" variant="success" @click="$bvModal.show('qr-modal')">
+      <b-button class="mx-1" id="qrCode" @click="$bvModal.show('qr-modal'); $event.target.blur();">
         {{ $t("page.session.before.copy.qr") }}
       </b-button>
     </b-popover>
@@ -108,9 +108,48 @@ export default Vue.extend({
 }
 #popover {
   max-width: 500px;
+  background-color: var(--popUpMenu);
 }
 .qr-code {
   display: table;
   margin: 0 auto;
 }
+
+#sessionCode {
+  border-radius: 2rem;
+  background-color: var(--startButton);
+  color: var(--text-primary-color);
+}
+
+#sessionCode:hover {
+  border-radius: 2rem;
+  background-color: var(--startButtonHovered);
+  color: var(--text-primary-color);
+}
+
+#link {
+  border-radius: 2rem;
+  background-color: var(--joinButton);
+  color: var(--text-primary-color);
+}
+
+#link:hover {
+  border-radius: 2rem;
+  background-color: var(--joinButtonHovered);
+  color: var(--text-primary-color);
+}
+
+#qrCode {
+  border-radius: 2rem;
+  background-color: var(--reconnectButton);
+  color: var(--text-primary-color);
+}
+
+#qrCode:hover {
+  border-radius: 2rem;
+  background-color: var(--reconnectButtonHovered);
+  color: var(--text-primary-color);
+}
+
+
 </style>

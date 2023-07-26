@@ -85,7 +85,7 @@
         </b-row>
       </b-row>
       <b-row v-if="!isStartVoting && !votingFinished" class="my-5">
-        <h3>
+        <h3 style="color: var(--text-primary-color);">
           {{ $t("page.vote.waiting") }}
           <sub><b-icon-three-dots animation="fade" font-scale="1" /></sub>
         </h3>

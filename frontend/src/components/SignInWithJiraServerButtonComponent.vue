@@ -6,6 +6,7 @@
       @click="
         openSignInWithJiraTab();
         openModal();
+        $event.target.blur();
       "
     >
       {{
@@ -127,6 +128,11 @@ export default Vue.extend({
 
 #button {
   background-color: var(--preparePageMainColor) !important;
+  color: var(--text-primary-color);
+}
+
+#button:hover {
+  background-color: var(--joinButtonHovered) !important;
   color: var(--text-primary-color);
 }
 
