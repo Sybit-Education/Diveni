@@ -12,7 +12,7 @@
         :title="$t('session.prepare.step.selection.mode.description.withoutUS.tab.label')"
         :title-link-class="linkClass(0)"
       >
-        <stroy-points-component />
+        <story-points-component />
       </b-tab>
       <b-tab
         :title="$t('session.prepare.step.selection.mode.description.withUS.tab.label')"
@@ -35,7 +35,7 @@
         :title="$t('session.prepare.step.selection.mode.description.withIssueTracker.tab.label')"
         :title-link-class="linkClass(2)"
       >
-        <jira-component class="mg_top_2_per" />
+        <issue-tracker-component class="mg_top_2_per" />
       </b-tab>
     </b-tabs>
     <h4 class="mt-4">
@@ -95,8 +95,8 @@ import Session from "../model/Session";
 import Constants from "../constants";
 import CardSetComponent from "../components/CardSetComponent.vue";
 import UserStoryComponent from "../components/UserStoryComponent.vue";
-import JiraComponent from "../components/JiraComponent.vue";
-import StroyPointsComponent from "@/components/StroyPointsComponent.vue";
+import IssueTrackerComponent from "../components/IssueTrackerComponent.vue";
+import StoryPointsComponent from "@/components/StoryPointsComponent.vue";
 import UserStory from "@/model/UserStory";
 import papaparse from "papaparse";
 import apiService from "@/services/api.service";
@@ -106,8 +106,8 @@ export default Vue.extend({
   components: {
     CardSetComponent,
     UserStoryComponent,
-    JiraComponent,
-    StroyPointsComponent,
+    IssueTrackerComponent,
+    StoryPointsComponent,
   },
   data() {
     return {

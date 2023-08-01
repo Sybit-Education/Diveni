@@ -43,7 +43,7 @@ import ProjectSelectionComponent from "./ProjectSelectionComponent.vue";
 import apiService from "@/services/api.service";
 
 export default Vue.extend({
-  name: "JiraComponent",
+  name: "IssueTrackerComponent",
   components: {
     SignInWithJiraCloudButtonComponent,
     SignInWithJiraServerButtonComponent,
