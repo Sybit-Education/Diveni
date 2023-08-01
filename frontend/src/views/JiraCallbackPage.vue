@@ -27,7 +27,7 @@ export default Vue.extend({
   methods: {
     async verifyCode(code: string) {
       try {
-        const response = await apiService.sendJiraOauth2AuthorizationCode(code);
+        const response = await apiService.getJiraCloudRequestToken(code);
         localStorage.setItem("tokenId", response.tokenId);
         this.$store.commit("setTokenId", response.tokenId);
       } catch (e) {

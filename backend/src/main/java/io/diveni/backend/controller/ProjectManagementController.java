@@ -53,9 +53,9 @@ public class ProjectManagementController {
   private final String PROVIDER_NOT_ENABLED_MESSAGE =
       "The selected issue tracker is not enabled. Make sure to set all required parameters.";
 
-  @GetMapping(value = "/jira/server/requestToken")
-  public ResponseEntity<JiraRequestToken> getRequestToken() {
-    LOGGER.debug("--> getRequestToken()");
+  @GetMapping(value = "/jira/server/request-token")
+  public ResponseEntity<JiraRequestToken> getJiraServerRequestToken() {
+    LOGGER.debug("--> getJiraServerRequestToken()");
     if (!jiraServerService.serviceEnabled()) {
       LOGGER.warn("Jira Server is not configured!");
       throw new ResponseStatusException(
@@ -67,10 +67,10 @@ public class ProjectManagementController {
     return response;
   }
 
-  @PostMapping(value = "/jira/server/verificationCode")
-  public ResponseEntity<TokenIdentifier> getOauth1AccessToken(
+  @PostMapping(value = "/jira/server/verification-code")
+  public ResponseEntity<TokenIdentifier> getJiraServerAccessToken(
       @RequestBody VerificationCode verificationCode) {
-    LOGGER.debug("--> getOauth1AccessToken()");
+    LOGGER.debug("--> getJiraServerAccessToken()");
     if (!jiraServerService.serviceEnabled()) {
       LOGGER.warn("Jira Server is not configured!");
       throw new ResponseStatusException(
@@ -85,23 +85,40 @@ public class ProjectManagementController {
     return response;
   }
 
-  @PostMapping(value = "/jira/cloud/authorizationCode")
-  public ResponseEntity<TokenIdentifier> getOAuth2AccessToken(
-    @RequestParam("jiraURL") String jiraBaseUrl, @RequestHeader("Origin") String origin, @RequestBody VerificationCode authorizationCode) {
-    LOGGER.debug("--> getOAuth2AccessToken(), origin={}", origin);
+  @PostMapping(value = "/jira/cloud/request-token")
+  public ResponseEntity<JiraRequestToken> getJiraCloudAccessToken(
+    @RequestParam("jira-url") String jiraBaseUrl, @RequestHeader("Origin") String origin, @RequestBody VerificationCode authorizationCode) {
+    LOGGER.debug("--> getJiraCloudAccessToken(), origin={}", origin);
     if (!jiraCloudService.serviceEnabled()) {
       LOGGER.warn("Jira Cloud is not configured!");
       throw new ResponseStatusException(
           HttpStatus.INTERNAL_SERVER_ERROR, PROVIDER_NOT_ENABLED_MESSAGE);
     }
-    ResponseEntity<TokenIdentifier> response =
-        new ResponseEntity<>(
-            jiraCloudService.getAccessToken(authorizationCode.getCode(), origin, jiraBaseUrl), HttpStatus.OK);
+    ResponseEntity<JiraRequestToken> response =
+      new ResponseEntity<>(jiraCloudService.getRequestToken(jiraBaseUrl), HttpStatus.OK);
     LOGGER.debug("<-- getOAuth2AccessToken()");
     return response;
   }
 
-  @PostMapping("/azure/cloud/authorizationCode")
+  @PostMapping(value = "/jira/cloud/verification-code")
+  public ResponseEntity<TokenIdentifier> getJiraCloudAccessToken(
+    @RequestParam("jira-url") String jiraBaseUrl, @RequestBody VerificationCode verificationCode) {
+    LOGGER.debug("--> getJiraCloudAccessToken()");
+    if (!jiraCloudService.serviceEnabled()) {
+      LOGGER.warn("Jira Cloud is not configured!");
+      throw new ResponseStatusException(
+        HttpStatus.INTERNAL_SERVER_ERROR, PROVIDER_NOT_ENABLED_MESSAGE);
+    }
+    ResponseEntity<TokenIdentifier> response =
+      new ResponseEntity<>(
+        jiraCloudService.getAccessToken(
+          verificationCode.getCode(), verificationCode.getToken(), jiraBaseUrl),
+        HttpStatus.OK);
+    LOGGER.debug("<-- getOauth1AccessToken()");
+    return response;
+  }
+
+  @PostMapping("/azure/cloud/authorization-code")
   public ResponseEntity<TokenIdentifier> getAzureOAuth2AccessToken(
       @RequestHeader("Origin") String origin) {
     LOGGER.debug("--> getOAuth2AccessToken(), origin={}", origin);

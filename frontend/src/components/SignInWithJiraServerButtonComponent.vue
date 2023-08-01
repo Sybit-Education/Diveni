@@ -75,7 +75,7 @@ export default Vue.extend({
       return valid;
     },
     async openSignInWithJiraTab() {
-      const tokenDto = await apiService.getJiraOauth1RequestToken();
+      const tokenDto = await apiService.getJiraServerRequestToken();
       this.token = tokenDto.token;
       window.open(tokenDto.url, "_blank")?.focus();
     },
@@ -98,7 +98,7 @@ export default Vue.extend({
         return;
       }
       try {
-        const response = await apiService.sendJiraOauth1VerificationCode(
+        const response = await apiService.sendJiraServerVerificationCode(
           this.verificationCode,
           this.token
         );

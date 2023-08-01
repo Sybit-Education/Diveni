@@ -17,19 +17,19 @@ class ApiService {
     return response.data;
   }
 
-  public async getJiraOauth1RequestToken(): Promise<JiraRequestTokenDto> {
+  public async getJiraServerRequestToken(): Promise<JiraRequestTokenDto> {
     const response = await axios.get<JiraRequestTokenDto>(
-      `${constants.backendURL}/issue-tracker/jira/server/requestToken`
+      `${constants.backendURL}/issue-tracker/jira/server/request-token`
     );
     return response.data;
   }
 
-  public async sendJiraOauth1VerificationCode(
+  public async sendJiraServerVerificationCode(
     code: string,
     token: string
   ): Promise<JiraResponseCodeDto> {
     const response = await axios.post<JiraResponseCodeDto>(
-      `${constants.backendURL}/issue-tracker/jira/server/verificationCode`,
+      `${constants.backendURL}/issue-tracker/jira/server/verification-code`,
       {
         code,
         token,
@@ -38,9 +38,9 @@ class ApiService {
     return response.data;
   }
 
-  public async sendJiraOauth2AuthorizationCode(code: string): Promise<JiraResponseCodeDto> {
+  public async getJiraCloudRequestToken(code: string, jiraBaseUrl: string): Promise<JiraResponseCodeDto> {
     const response = await axios.post<JiraResponseCodeDto>(
-      `${constants.backendURL}/issue-tracker/jira/cloud/authorizationCode`,
+      `${constants.backendURL}/issue-tracker/jira/cloud/request-token?jira-url=${jiraBaseUrl}`,
       {
         code,
       }
@@ -48,9 +48,24 @@ class ApiService {
     return response.data;
   }
 
+  public async sendJiraCloudVerificationCode(
+    code: string,
+    token: string,
+    jiraBaseUrl: string
+  ): Promise<JiraResponseCodeDto> {
+    const response = await axios.post<JiraResponseCodeDto>(
+      `${constants.backendURL}/issue-tracker/jira/server/verification-code?jira-url=${jiraBaseUrl}`,
+      {
+        code,
+        token,
+      }
+    );
+    return response.data;
+  }
+
   public async sendAzureOauth2AuthorizationCode(): Promise<JiraResponseCodeDto> {
     const response = await axios.post<JiraResponseCodeDto>(
-      `${constants.backendURL}/issue-tracker/azure/cloud/authorizationCode`
+      `${constants.backendURL}/issue-tracker/azure/cloud/authorization-code`
     );
     return response.data;
   }
