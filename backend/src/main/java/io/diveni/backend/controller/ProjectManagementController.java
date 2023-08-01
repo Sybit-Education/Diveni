@@ -53,7 +53,7 @@ public class ProjectManagementController {
   private final String PROVIDER_NOT_ENABLED_MESSAGE =
       "The selected issue tracker is not enabled. Make sure to set all required parameters.";
 
-  @GetMapping(value = "/jira/oauth1/requestToken")
+  @GetMapping(value = "/jira/server/requestToken")
   public ResponseEntity<JiraRequestToken> getRequestToken() {
     LOGGER.debug("--> getRequestToken()");
     if (!jiraServerService.serviceEnabled()) {
@@ -67,7 +67,7 @@ public class ProjectManagementController {
     return response;
   }
 
-  @PostMapping(value = "/jira/oauth1/verificationCode")
+  @PostMapping(value = "/jira/server/verificationCode")
   public ResponseEntity<TokenIdentifier> getOauth1AccessToken(
       @RequestBody VerificationCode verificationCode) {
     LOGGER.debug("--> getOauth1AccessToken()");
@@ -85,7 +85,7 @@ public class ProjectManagementController {
     return response;
   }
 
-  @PostMapping(value = "/jira/oauth2/authorizationCode")
+  @PostMapping(value = "/jira/cloud/authorizationCode")
   public ResponseEntity<TokenIdentifier> getOAuth2AccessToken(
     @RequestParam("jiraURL") String jiraBaseUrl, @RequestHeader("Origin") String origin, @RequestBody VerificationCode authorizationCode) {
     LOGGER.debug("--> getOAuth2AccessToken(), origin={}", origin);
@@ -101,7 +101,7 @@ public class ProjectManagementController {
     return response;
   }
 
-  @PostMapping("/azure/oauth2/authorizationCode")
+  @PostMapping("/azure/cloud/authorizationCode")
   public ResponseEntity<TokenIdentifier> getAzureOAuth2AccessToken(
       @RequestHeader("Origin") String origin) {
     LOGGER.debug("--> getOAuth2AccessToken(), origin={}", origin);

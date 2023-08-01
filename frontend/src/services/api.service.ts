@@ -19,7 +19,7 @@ class ApiService {
 
   public async getJiraOauth1RequestToken(): Promise<JiraRequestTokenDto> {
     const response = await axios.get<JiraRequestTokenDto>(
-      `${constants.backendURL}/issue-tracker/jira/oauth1/requestToken`
+      `${constants.backendURL}/issue-tracker/jira/server/requestToken`
     );
     return response.data;
   }
@@ -29,7 +29,7 @@ class ApiService {
     token: string
   ): Promise<JiraResponseCodeDto> {
     const response = await axios.post<JiraResponseCodeDto>(
-      `${constants.backendURL}/issue-tracker/jira/oauth1/verificationCode`,
+      `${constants.backendURL}/issue-tracker/jira/server/verificationCode`,
       {
         code,
         token,
@@ -40,7 +40,7 @@ class ApiService {
 
   public async sendJiraOauth2AuthorizationCode(code: string): Promise<JiraResponseCodeDto> {
     const response = await axios.post<JiraResponseCodeDto>(
-      `${constants.backendURL}/issue-tracker/jira/oauth2/authorizationCode`,
+      `${constants.backendURL}/issue-tracker/jira/cloud/authorizationCode`,
       {
         code,
       }
@@ -50,7 +50,7 @@ class ApiService {
 
   public async sendAzureOauth2AuthorizationCode(): Promise<JiraResponseCodeDto> {
     const response = await axios.post<JiraResponseCodeDto>(
-      `${constants.backendURL}/issue-tracker/azure/oauth2/authorizationCode`
+      `${constants.backendURL}/issue-tracker/azure/cloud/authorizationCode`
     );
     return response.data;
   }
