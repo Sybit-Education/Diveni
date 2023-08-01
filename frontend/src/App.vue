@@ -53,6 +53,9 @@ main {
   --preparePageInActiveTabHover: #3daeb6;
   --preparePageBorderTab: grey;
   --preparePageImportUserStoriesButton: #30a858;
+  --preparePageActiveCardSet: black;
+  --preparePageInActiveCardSet: #e27712;
+  --preparePageP1: "@/assets/P1.png";
   --linkColor: #254bb3;
   --topNavigationBarColor: rgba(200, 200, 200, 0.75);
   --blurBackGroundColor: rgba(80, 80, 80, 0.219);
@@ -78,6 +81,9 @@ main {
   --preparePageInActiveTabHover: #328c92;
   --preparePageBorderTab: white;
   --preparePageImportUserStoriesButton: #7e5a0c;
+  --preparePageActiveCardSet: #08a134;
+  --preparePageInActiveCardSet: #e27712;
+  --preparePageP1: "@/assets/P1.png";
   --linkColor: #00ffdd;
   --topNavigationBarColor: rgba(34, 34, 34, 0.863);/*rgba(45, 41, 41, 0.75) rgb(79, 69, 69, 0.88)*/
   --blurBackGroundColor: #50505069;

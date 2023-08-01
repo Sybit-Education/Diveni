@@ -3,8 +3,10 @@
     <h1>
       {{ $t("session.prepare.title") }}
     </h1>
-    <h4 class="mt-3">
-      {{ $t("session.prepare.step.selection.mode.title") }}
+      
+      <h4 class="mt-3">
+        <b-img :src="--preparePageP1" style="height: 45px; width: 45px;"/>
+        {{ $t("session.prepare.step.selection.mode.title") }}
     </h4>
     <b-tabs v-model="tabIndex" content-class="mt-3" fill>
       <b-tab
@@ -51,10 +53,10 @@
     </h4>
     <b-row class="mt-3 text-center">
       <b-col>
-        <b-button class="optionButtons" @click="setTimerDown(); $event.target.blur();"> -</b-button>
+        <b-button class="optionButtons" @click="setTimerDown(); $event.target.blur();"> - </b-button>
       </b-col>
-      <b-col class="text-center">
-        <h4>
+      <b-col class="text-center" style="margin-top: auto; margin-bottom: auto;" cols="1">
+        <h4 style="background-color: var(--preparePageMainColor);">
           {{ timer == 0 ? "∞" : formatTimer }}
         </h4>
       </b-col>
@@ -309,6 +311,8 @@ export default Vue.extend({
   color:var(--text-primary-color);
   border-color: var(--text-primary-color);
   background-color: transparent;
+  font-size: xx-large;
+  width: 47.5px;
 }
 
 .optionButtons:hover {

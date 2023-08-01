@@ -7,13 +7,15 @@
             v-for="item of userStoryMode === jiraTag ? allCardSetsWithJiraMode : allCardSets"
             :key="item.name"
             class="swipe-card"
-            :class="selectedCardSet.name === item.name ? 'selectedCard' : 'inActiveCard'"
+            :class="[selectedCardSet.name === item.name ? 'selectedCard' : 'inActiveCard', item.position === 1 ? 'fibo' : '',
+                    item.position === 2 ? 'shirt' : '', item.position === 3 ? 'hourEstimation' : '',
+                    item.position === 4 ? 'numbers' : '', item.position === 5 ? 'ownSet': '']"
             @click="onCardSetSelected(item)"
           >
-            <div id="text" style="padding-top: 16px; color: var(--text-primary-color)">
+            <div id="text" style="padding-top: 16px; color: black">
               {{ item.name }}
             </div>
-            <div style="padding: 16px; text-align: center; color: var(--text-primary-color)">
+            <div style="padding: 16px; text-align: center; color: black">
               {{ item.description }}
               <div v-if="item.values.length === 0">
                 <span id="createSetHint">
@@ -97,6 +99,7 @@ export default Vue.extend({
           description: this.$t("session.prepare.step.selection.cardSet.sets.fibonacci.description"),
           values: ["1", "2", "3", "5", "8", "13", "21", "34", "55", "?"],
           activeValues: ["1", "2", "3", "5", "8", "13", "21"],
+          position: 1,
         },
         {
           name: this.$t("session.prepare.step.selection.cardSet.sets.tShirtSizes.label"),
@@ -105,24 +108,28 @@ export default Vue.extend({
           ),
           values: ["XXS", "XS", "S", "M", "L", "XL", "XXL", "XXXL", "?"],
           activeValues: ["XS", "S", "M", "L", "XL"],
+          position: 2,
         },
         {
           name: this.$t("session.prepare.step.selection.cardSet.sets.hours.label"),
           description: this.$t("session.prepare.step.selection.cardSet.sets.hours.description"),
           values: ["1", "2", "3", "4", "5", "6", "8", "10", "12", "16", "?"],
           activeValues: ["1", "2", "3", "4", "5", "6", "8", "10", "12", "16"],
+          position: 3,
         },
         {
           name: this.$t("session.prepare.step.selection.cardSet.sets.numbers.label"),
           description: this.$t("session.prepare.step.selection.cardSet.sets.numbers.description"),
           values: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "?"],
           activeValues: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
+          position: 4,
         },
         {
           name: this.$t("session.prepare.step.selection.cardSet.sets.ownSet.label"),
           description: this.$t("session.prepare.step.selection.cardSet.sets.ownSet.description"),
           values: [],
           activeValues: [],
+          position: 5,
         },
       ],
       allCardSetsWithJiraMode: [
@@ -131,18 +138,21 @@ export default Vue.extend({
           description: this.$t("session.prepare.step.selection.cardSet.sets.fibonacci.description"),
           values: ["1", "2", "3", "5", "8", "13", "21", "34", "55", "?"],
           activeValues: ["1", "2", "3", "5", "8", "13", "21"],
+          position: 1,
         },
         {
           name: this.$t("session.prepare.step.selection.cardSet.sets.hours.label"),
           description: this.$t("session.prepare.step.selection.cardSet.sets.hours.description"),
           values: ["1", "2", "3", "4", "5", "6", "8", "10", "12", "16", "?"],
           activeValues: ["1", "2", "3", "4", "5", "6", "8", "10", "12", "16"],
+          position: 2,
         },
         {
           name: this.$t("session.prepare.step.selection.cardSet.sets.numbers.label"),
           description: this.$t("session.prepare.step.selection.cardSet.sets.numbers.description"),
           values: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "?"],
           activeValues: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
+          position: 3,
         },
       ],
     };
@@ -190,15 +200,12 @@ export default Vue.extend({
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.card {
-  border-radius: 25px;
-  cursor: pointer;
-}
+
 .swipe-card {
-  width: 168px;
-  height: 202px;
-  justify-content: flex-start; /* Centering y-axis */
-  align-items: center; /* Centering x-axis */
+  width: 175px;
+  height: 230px;
+  justify-content: flex-start; /* Centering y-axis 202 */
+  align-items: center; /* Centering x-axis 168 */
   border-radius: 5%;
   display: flex;
   flex-direction: column;
@@ -206,20 +213,44 @@ export default Vue.extend({
 }
 
 .selectedCard {
-  background-color: var(--preparePageMainColor);
-}
-
-.selectedCard:hover {
-  background-color: var(--joinButtonHovered);
-}
-
-.inActiveCard {
-  background-color: var(--preparePageInActiveTab);
+  border-width: 0.25em;
+  border-color: var(--preparePageActiveCardSet) !important;
+  border-style: solid;
 }
 
 .inActiveCard:hover {
-  background-color: var(--preparePageInActiveTabHover);
+  border-width: large;
+  border-color: var(--preparePageInActiveCardSet);
+  border-style: solid;
+  width: 200px;
+  height:245px;
 }
+
+.fibo {
+  background-image: url("@/assets/Fibonacci.png");
+  background-size: cover;
+}
+
+.shirt{
+  background-image: url("@/assets/TShirtSize.png");
+  background-size: cover;
+}
+
+.hourEstimation {
+  background-image: url("@/assets/HourEstimation.png");
+  background-size: cover;
+}
+
+.numbers {
+  background-image: url("@/assets/numberEstimation.png");
+  background-size: cover;
+}
+
+.ownSet {
+  background-image: url("@/assets/ownSetEstimation.png");
+  background-size: cover;
+}
+
 #text {
   font-size: 20px;
   font-weight: 500;

@@ -145,7 +145,7 @@
       "step": {
         "selection": {
           "mode": {
-            "title": "1. Wähle den Modus für die User Stories",
+            "title": "Wähle den Modus für die User Stories",
             "description": {
               "withoutUS": {
                 "tab": {
