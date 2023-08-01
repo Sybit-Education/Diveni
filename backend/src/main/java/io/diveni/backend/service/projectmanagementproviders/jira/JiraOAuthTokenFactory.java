@@ -3,7 +3,7 @@
   Diveni - The Planing-Poker App
   Copyright (C) 2022 Diveni Team, AUME-Team 21/22, HTWG Konstanz
 */
-package io.diveni.backend.service.projectmanagementproviders.jiraserver;
+package io.diveni.backend.service.projectmanagementproviders.jira;
 
 import com.google.api.client.auth.oauth.OAuthRsaSigner;
 import com.google.api.client.http.apache.ApacheHttpTransport;

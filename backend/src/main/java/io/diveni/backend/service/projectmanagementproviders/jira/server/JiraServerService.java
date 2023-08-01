@@ -3,7 +3,7 @@
   Diveni - The Planing-Poker App
   Copyright (C) 2022 Diveni Team, AUME-Team 21/22, HTWG Konstanz
 */
-package io.diveni.backend.service.projectmanagementproviders.jiraserver;
+package io.diveni.backend.service.projectmanagementproviders.jira.server;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -30,6 +30,9 @@ import io.diveni.backend.model.JiraRequestToken;
 import io.diveni.backend.model.Project;
 import io.diveni.backend.model.TokenIdentifier;
 import io.diveni.backend.model.UserStory;
+import io.diveni.backend.service.projectmanagementproviders.jira.JiraOAuthClient;
+import io.diveni.backend.service.projectmanagementproviders.jira.JiraOAuthGetTemporaryToken;
+import io.diveni.backend.service.projectmanagementproviders.jira.JiraOAuthTokenFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
