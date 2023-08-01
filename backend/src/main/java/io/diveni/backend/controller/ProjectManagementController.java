@@ -15,7 +15,7 @@ import io.diveni.backend.model.VerificationCode;
 import io.diveni.backend.service.DatabaseService;
 import io.diveni.backend.service.projectmanagementproviders.ProjectManagementProvider;
 import io.diveni.backend.service.projectmanagementproviders.azuredevops.AzureDevOpsService;
-import io.diveni.backend.service.projectmanagementproviders.jiracloud.JiraCloudService;
+import io.diveni.backend.service.projectmanagementproviders.jira.cloud.JiraCloudService;
 import io.diveni.backend.service.projectmanagementproviders.jira.server.JiraServerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -87,7 +87,7 @@ public class ProjectManagementController {
 
   @PostMapping(value = "/jira/oauth2/authorizationCode")
   public ResponseEntity<TokenIdentifier> getOAuth2AccessToken(
-      @RequestHeader("Origin") String origin, @RequestBody VerificationCode authorizationCode) {
+    @RequestParam("jiraURL") String jiraBaseUrl, @RequestHeader("Origin") String origin, @RequestBody VerificationCode authorizationCode) {
     LOGGER.debug("--> getOAuth2AccessToken(), origin={}", origin);
     if (!jiraCloudService.serviceEnabled()) {
       LOGGER.warn("Jira Cloud is not configured!");
@@ -96,7 +96,7 @@ public class ProjectManagementController {
     }
     ResponseEntity<TokenIdentifier> response =
         new ResponseEntity<>(
-            jiraCloudService.getAccessToken(authorizationCode.getCode(), origin), HttpStatus.OK);
+            jiraCloudService.getAccessToken(authorizationCode.getCode(), origin, jiraBaseUrl), HttpStatus.OK);
     LOGGER.debug("<-- getOAuth2AccessToken()");
     return response;
   }

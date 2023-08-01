@@ -1,8 +1,8 @@
 package io.diveni.backend.controller;
 
 import io.diveni.backend.service.projectmanagementproviders.azuredevops.AzureDevOpsService;
-import io.diveni.backend.service.projectmanagementproviders.jiracloud.JiraCloudService;
-import io.diveni.backend.service.projectmanagementproviders.jiraserver.JiraServerService;
+import io.diveni.backend.service.projectmanagementproviders.jira.cloud.JiraCloudService;
+import io.diveni.backend.service.projectmanagementproviders.jira.server.JiraServerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,7 +32,6 @@ public class ConfigController {
         "isJiraServerEnabled", Boolean.toString(jiraServerService.serviceEnabled()));
     issueTrackerConfig.put(
         "isJiraCloudEnabled", Boolean.toString(jiraCloudService.serviceEnabled()));
-    issueTrackerConfig.put("jiraCloudAuthorizeUrl", jiraCloudService.getJiraCloudAuthorizeUrl());
     issueTrackerConfig.put(
         "isAzureDevOpsEnabled", Boolean.toString(azureDevOpsService.serviceEnabled()));
     return issueTrackerConfig;
