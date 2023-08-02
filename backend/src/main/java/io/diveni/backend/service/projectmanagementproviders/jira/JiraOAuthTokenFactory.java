@@ -8,6 +8,7 @@ package io.diveni.backend.service.projectmanagementproviders.jira;
 import com.google.api.client.auth.oauth.OAuthRsaSigner;
 import com.google.api.client.http.apache.ApacheHttpTransport;
 import com.google.api.client.util.Base64;
+import com.google.common.io.BaseEncoding;
 
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
@@ -114,7 +115,7 @@ public class JiraOAuthTokenFactory {
    */
   private PrivateKey getPrivateKey(String privateKey)
       throws NoSuchAlgorithmException, InvalidKeySpecException {
-    byte[] privateBytes = Base64.decodeBase64(privateKey);
+    byte[] privateBytes = BaseEncoding.base64().decode(privateKey);
     PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(privateBytes);
     KeyFactory kf = KeyFactory.getInstance("RSA");
     return kf.generatePrivate(keySpec);
