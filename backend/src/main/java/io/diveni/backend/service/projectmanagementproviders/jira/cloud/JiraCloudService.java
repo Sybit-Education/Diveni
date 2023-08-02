@@ -86,7 +86,8 @@ public class JiraCloudService implements ProjectManagementProvider {
     throws IOException {
     HttpRequestFactory requestFactory = new NetHttpTransport().createRequestFactory(parameters);
     HttpRequest request = requestFactory.buildRequest(requestMethod, jiraUrl, content);
-    request.getHeaders().set("Content-Type", "application/json;charset=UTF-8");
+    if (content == null)
+      request.getHeaders().set("Content-Type", "application/json;charset=UTF-8");
     return request.execute();
   }
 
