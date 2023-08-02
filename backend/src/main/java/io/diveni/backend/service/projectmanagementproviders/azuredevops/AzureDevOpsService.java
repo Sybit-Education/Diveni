@@ -39,7 +39,7 @@ public class AzureDevOpsService implements ProjectManagementProviderOAuth2 {
   private static final Logger LOGGER = LoggerFactory.getLogger(AzureDevOpsService.class);
   private static final String AZURE_DEVOPS_API = "https://dev.azure.com/%s/_apis/";
   @Getter private final Map<String, String> accessTokens = new HashMap<>();
-  private final Map<String, String> accessTokenToProjectId = new HashMap<>();
+  @Getter private final Map<String, String> accessTokenToProjectId = new HashMap<>();
   private boolean serviceEnabled = false;
 
   private static final String API_FIELD_TITLE = "System.Title";
