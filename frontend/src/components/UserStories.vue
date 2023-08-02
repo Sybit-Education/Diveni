@@ -15,6 +15,7 @@
         :key="index"
         :active="index === selectedStoryIndex"
         class="w-100 p-1 d-flex justify-content-left"
+        :style="index === selectedStoryIndex ? 'border-width: 3px;' : ''"
         @mouseover="hover = index"
         @mouseleave="hover = null"
         @click="setUserStoryAsActive(index)"
@@ -28,6 +29,15 @@
           <b-icon-check2 />
         </b-button>
 
+        <b-button
+          v-else-if="hostSelectedStoryIndex === index && !showEditButtons"
+          size="sm"
+          variant="success"
+          disabled
+        >
+          <b-icon-arrow-right />
+        </b-button>
+
         <b-form-input
           v-model="story.title"
           :disabled="true"
@@ -37,7 +47,7 @@
           @blur="publishChanges"
         />
 
-        <b-badge variant="info" class="p-2">
+        <b-badge variant="success" class="p-2">
           {{ story.estimation == null ? "?" : story.estimation }}
         </b-badge>
         <b-button
@@ -92,22 +102,26 @@ export default Vue.extend({
     initialStories: { type: Array, required: true },
     showEstimations: { type: Boolean, required: true },
     showEditButtons: { type: Boolean, required: false, default: true },
-    selectStory: { type: Boolean, required: false, default: false },
+    hostSelectedStoryIndex: { type: Number, required: false, default: null },
   },
   data() {
     return {
-      selectedStoryIndex: null,
+      selectedStoryIndex: null as unknown,
       sideBarOpen: false,
       userStories: [] as Array<UserStory>,
       hover: null,
       input: "",
       filterActive: false,
-      safedStories: [] as Array<UserStory>,
+      savedStories: [] as Array<UserStory>,
     };
   },
   watch: {
     initialStories() {
       this.userStories = this.initialStories as Array<UserStory>;
+    },
+    hostSelectedStoryIndex() {
+      this.selectedStoryIndex = this.hostSelectedStoryIndex;
+      this.$emit("selectedStory", this.selectedStoryIndex);
     },
   },
   mounted() {
@@ -130,9 +144,9 @@ export default Vue.extend({
     },
     swapPriority: function () {
       if (!this.filterActive) {
-        this.safedStories = this.userStories;
+        this.savedStories = this.userStories;
       }
-      this.userStories = this.safedStories;
+      this.userStories = this.savedStories;
       if (this.input !== "") {
         let filteredUserStories: UserStory[] = [];
         this.userStories.forEach((userStory) => {
@@ -151,7 +165,7 @@ export default Vue.extend({
         }
       } else {
         this.filterActive = false;
-        this.userStories = this.safedStories;
+        this.userStories = this.savedStories;
         this.publishChanges(null, false);
       }
     },
@@ -180,7 +194,6 @@ export default Vue.extend({
 <style scoped>
 .list-group-item.active {
   background-color: transparent;
-  border-width: 3px;
 }
 
 .search {
