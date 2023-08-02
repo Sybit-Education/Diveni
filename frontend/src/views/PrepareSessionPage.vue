@@ -5,8 +5,17 @@
     </h1>
       
       <h4 class="mt-3">
-        <b-img :src="--preparePageP1" style="height: 45px; width: 45px;"/>
-        {{ $t("session.prepare.step.selection.mode.title") }}
+       <b-img
+        v-if="theme === 'light-theme'"
+        :src="require('@/assets/preparePage/P1.png')"
+        class="numberPictures"
+       />
+       <b-img
+        v-else
+        :src="require('@/assets/preparePage/P1D.png')"
+        class="numberPictures"
+       />
+       {{ $t("session.prepare.step.selection.mode.title") }}
     </h4>
     <b-tabs v-model="tabIndex" content-class="mt-3" fill>
       <b-tab
@@ -41,6 +50,16 @@
       </b-tab>
     </b-tabs>
     <h4 class="mt-4">
+      <b-img
+        v-if="theme === 'light-theme'"
+        :src="require('@/assets/preparePage/P2.png')"
+        class="numberPictures"
+       />
+       <b-img
+        v-else
+        :src="require('@/assets/preparePage/P2D.png')"
+        class="numberPictures"
+       />
       {{ $t("session.prepare.step.selection.cardSet.title") }}
     </h4>
     <card-set-component
@@ -49,6 +68,16 @@
       @selectedCardSetOptions="setCardSetOptions"
     />
     <h4 class="mt-3">
+      <b-img
+        v-if="theme === 'light-theme'"
+        :src="require('@/assets/preparePage/P3.png')"
+        class="numberPictures"
+       />
+       <b-img
+        v-else
+        :src="require('@/assets/preparePage/P3D.png')"
+        class="numberPictures"
+       />
       {{ $t("session.prepare.step.selection.time.title") }}
     </h4>
     <b-row class="mt-3 text-center">
@@ -56,7 +85,7 @@
         <b-button class="optionButtons" @click="setTimerDown(); $event.target.blur();"> - </b-button>
       </b-col>
       <b-col class="text-center" style="margin-top: auto; margin-bottom: auto;" cols="1">
-        <h4 style="background-color: var(--preparePageMainColor);">
+        <h4 style="background-color: var(--preparePageTimerBackground);">
           {{ timer == 0 ? "∞" : formatTimer }}
         </h4>
       </b-col>
@@ -65,6 +94,16 @@
       </b-col>
     </b-row>
     <h4 class="mt-3">
+      <b-img
+        v-if="theme === 'light-theme'"
+        :src="require('@/assets/preparePage/P4.png')"
+        class="numberPictures"
+       />
+       <b-img
+        v-else
+        :src="require('@/assets/preparePage/P4D.png')"
+        class="numberPictures"
+       />
       {{ $t("session.prepare.step.selection.password.title") }}
     </h4>
     <b-row class="mt-3">
@@ -118,6 +157,7 @@ export default Vue.extend({
       warningWhenUnderZero: "",
       tabIndex: 0,
       isIssueTrackerEnabled: false,
+      theme: localStorage.getItem('user-theme'),
     };
   },
   computed: {
@@ -148,6 +188,10 @@ export default Vue.extend({
     this.tabIndex = isNaN(parsedTabIndex) ? 0 : parsedTabIndex;
   },
   mounted() {
+    window.addEventListener('user-theme-localstorage-changed', (event) => {
+        const customEvent = event as CustomEvent;
+        this.theme = customEvent.detail.storage;
+    });
     apiService.getIssueTrackerConfig().then((result) => {
       this.isIssueTrackerEnabled =
         result.isJiraCloudEnabled === "true" ||
@@ -303,7 +347,7 @@ export default Vue.extend({
 }
 
 #importUserStoryButton:hover {
-  background-color: var(--joinButtonHovered);
+  background-color: var(--startButtonHovered);
   color: var(--text-primary-color);
 }
 
@@ -338,5 +382,10 @@ export default Vue.extend({
   background-color: var(--startButtonHovered);
   color: var(--text-primary-color);
   border-radius: 2rem;
+}
+
+.numberPictures{
+  height: 45px;
+  width: 45px;
 }
 </style>

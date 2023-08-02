@@ -67,6 +67,11 @@ export default Vue.extend({
       localStorage.setItem("user-theme", theme);
       this.userTheme = theme;
       document.documentElement.className = theme;
+      window.dispatchEvent(new CustomEvent('user-theme-localstorage-changed', {
+        detail: {
+          storage: localStorage.getItem('user-theme')
+        }
+      }));
     },
   }
 });

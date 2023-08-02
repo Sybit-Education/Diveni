@@ -28,66 +28,12 @@ export default Vue.extend({
 });
 </script>
 <style>
+@import './assets/variables.css';
 main {
   min-height: calc(100vh - 10rem);
   background: linear-gradient(var(--background-color-primary), var(--background-color-secondary)); /**#BFDBF7 #2A3C24*/
+  backdrop-filter: hue-rotate(120deg);
   color: var(--text-primary-color) !important;
-}
-
-:root {
-  --background-color-primary: #e2e2e2;/*#2D93AD */
-  --background-color-secondary: #999999;/*#d6771e */
-  --pictureGradientEnd: rgba(19, 44, 20, 0.5);
-  --accent-color: #cacaca;
-  --text-primary-color: #222;
-  --element-size: 6rem;
-  --startButton: #4db971;
-  --startButtonHovered: #67e68f;
-  --joinButton: #e27712;
-  --joinButtonHovered: #f1a054;
-  --reconnectButton: #0ec5c5;
-  --reconnectButtonHovered: #40ecec;
-  --landingPageCardsBackground: #e4e4e4;
-  --preparePageMainColor:#b9934d;
-  --preparePageInActiveTab: #ffffff;
-  --preparePageInActiveTabHover: #3daeb6;
-  --preparePageBorderTab: grey;
-  --preparePageImportUserStoriesButton: #30a858;
-  --preparePageActiveCardSet: black;
-  --preparePageInActiveCardSet: #e27712;
-  --preparePageP1: "@/assets/P1.png";
-  --linkColor: #254bb3;
-  --topNavigationBarColor: rgba(200, 200, 200, 0.75);
-  --blurBackGroundColor: rgba(80, 80, 80, 0.219);
-  --popUpMenu: rgb(143, 143, 143);
-}
-
-/* Define styles for the root window with dark - mode preference */
-:root.dark-theme {
-  --background-color-primary: #0e041a; /* #230903 #564787  #2C1320 #002E2C*/
-  --background-color-secondary: #160e20; /**#9D6381 35605A 820B8A #b81484*/
-  --pictureGradientEnd: rgba(44, 19, 32, 0.5);
-  --accent-color: rgba(34, 34, 34, 0.863);
-  --text-primary-color: #ffffff;
-  --startButton: #056921;
-  --startButtonHovered: #08a134;
-  --joinButton: #866700;
-  --joinButtonHovered: #aa8200;
-  --reconnectButton: #067979;
-  --reconnectButtonHovered: #07a0a0;
-  --landingPageCardsBackground: #525252;
-  --preparePageMainColor:#997e26; /*#6c1a6e;*/
-  --preparePageInActiveTab: #666565;
-  --preparePageInActiveTabHover: #328c92;
-  --preparePageBorderTab: white;
-  --preparePageImportUserStoriesButton: #7e5a0c;
-  --preparePageActiveCardSet: #08a134;
-  --preparePageInActiveCardSet: #e27712;
-  --preparePageP1: "@/assets/P1.png";
-  --linkColor: #00ffdd;
-  --topNavigationBarColor: rgba(34, 34, 34, 0.863);/*rgba(45, 41, 41, 0.75) rgb(79, 69, 69, 0.88)*/
-  --blurBackGroundColor: #50505069;
-  --popUpMenu: rgb(201, 201, 201);
 }
 
 p {

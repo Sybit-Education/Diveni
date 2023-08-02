@@ -145,7 +145,7 @@
       "step": {
         "selection": {
           "mode": {
-            "title": "1. Selecione o modo para as suas histórias de usuários",
+            "title": "Selecione o modo para as suas histórias de usuários",
             "description": {
               "withoutUS": {
                 "tab": {
@@ -213,7 +213,7 @@
             }
           },
           "cardSet": {
-            "title": "2. Selecione um conjunto de cartões e seus valores",
+            "title": "Selecione um conjunto de cartões e seus valores",
             "sets": {
               "fibonacci": {
                 "label": "Fibonacci",
@@ -243,10 +243,10 @@
             }
           },
           "time": {
-            "title": "3. Ajuste o tempo por estimativa"
+            "title": "Ajuste o tempo por estimativa"
           },
           "password": {
-            "title": "4. Escolha uma senha, se necessário",
+            "title": "Escolha uma senha, se necessário",
             "placeholder": "Senha (deixe em branco para sessão desprotegida)"
           }
         }

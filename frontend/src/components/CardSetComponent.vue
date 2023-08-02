@@ -1,21 +1,36 @@
 <template>
   <div>
-    <b-row>
-      <b-col>
-        <div class="d-flex justify-content-around">
-          <div
+    <b-row class="d-flex justify-content-around">
+          <b-col
+            cols="4"
+            md="auto"
             v-for="item of userStoryMode === jiraTag ? allCardSetsWithJiraMode : allCardSets"
-            :key="item.name"
-            class="swipe-card"
-            :class="[selectedCardSet.name === item.name ? 'selectedCard' : 'inActiveCard', item.position === 1 ? 'fibo' : '',
-                    item.position === 2 ? 'shirt' : '', item.position === 3 ? 'hourEstimation' : '',
-                    item.position === 4 ? 'numbers' : '', item.position === 5 ? 'ownSet': '']"
+            :key="item.position"
+            class="swipe-card my-5 mx-5"
+            :class="[selectedCardSet.name === item.name ? 'selectedCard' : 'inActiveCard',
+                    item.position === 1 && theme ==='light-theme' && userStoryMode !== jiraTag ? 'fibo' : '',
+                    item.position === 2 && theme ==='light-theme' && userStoryMode !== jiraTag ? 'shirt' : '',
+                    item.position === 3 && theme ==='light-theme' && userStoryMode !== jiraTag ? 'hourEstimation' : '',
+                    item.position === 4 && theme ==='light-theme' && userStoryMode !== jiraTag ? 'numbers' : '',
+                    item.position === 5 && theme ==='light-theme' && userStoryMode !== jiraTag ? 'ownSet': '',
+                    item.position === 1 && theme ==='dark-theme' && userStoryMode !== jiraTag ? 'fibo-DarkMode' : '',
+                    item.position === 2 && theme ==='dark-theme' && userStoryMode !== jiraTag ? 'shirt-DarkMode' : '',
+                    item.position === 3 && theme ==='dark-theme' && userStoryMode !== jiraTag ? 'hourEstimation-DarkMode' : '',
+                    item.position === 4 && theme ==='dark-theme' && userStoryMode !== jiraTag ? 'numbers-DarkMode' : '',
+                    item.position === 5 && theme ==='dark-theme' && userStoryMode !== jiraTag ? 'ownSet-DarkMode': '',
+                    item.position === 1 && theme ==='light-theme' && userStoryMode === jiraTag ? 'fibo' : '',
+                    item.position === 2 && theme ==='light-theme' && userStoryMode === jiraTag ? 'hourEstimation' : '',
+                    item.position === 3 && theme ==='light-theme' && userStoryMode === jiraTag ? 'numbers' : '',
+                    item.position === 1 && theme ==='dark-theme' && userStoryMode === jiraTag ? 'fibo-DarkMode' : '',
+                    item.position === 2 && theme ==='dark-theme' && userStoryMode === jiraTag ? 'hourEstimation-DarkMode' : '',
+                    item.position === 3 && theme ==='dark-theme' && userStoryMode === jiraTag ? 'numbers-DarkMode' : '',
+                    ]"
             @click="onCardSetSelected(item)"
           >
-            <div id="text" style="padding-top: 16px; color: black">
-              {{ item.name }}
+            <div id="text" style="padding-top: 16px;">
+              {{ item.name }} 
             </div>
-            <div style="padding: 16px; text-align: center; color: black">
+            <div style="padding: 16px; text-align: center;">
               {{ item.description }}
               <div v-if="item.values.length === 0">
                 <span id="createSetHint">
@@ -36,9 +51,7 @@
                 </b-popover>
               </div>
             </div>
-          </div>
-        </div>
-      </b-col>
+          </b-col>
     </b-row>
     <b-row v-if="selectedCardSet.name !== ''">
       <div v-if="selectedCardSet.values.length !== 0" class="text-center mt-3 pillPosition">
@@ -86,6 +99,7 @@ export default Vue.extend({
   },
   data() {
     return {
+      theme: localStorage.getItem('user-theme'),
       jiraTag: "US_JIRA",
       selectedCardSet: {
         name: "",
@@ -170,6 +184,12 @@ export default Vue.extend({
       }
     },
   },
+  mounted() {
+    window.addEventListener('user-theme-localstorage-changed', (event) => {
+        const customEvent = event as CustomEvent;
+        this.theme = customEvent.detail.storage;
+    });
+  },
   methods: {
     isActiveCardSetNumber(num) {
       return this.selectedCardSet.activeValues.includes(num) ? "activePills m-1" : "outline-secondary m-1";
@@ -202,11 +222,10 @@ export default Vue.extend({
 <style scoped>
 
 .swipe-card {
-  width: 175px;
-  height: 230px;
+  width: 226px;
+  height: 303px;
   justify-content: flex-start; /* Centering y-axis 202 */
   align-items: center; /* Centering x-axis 168 */
-  border-radius: 5%;
   display: flex;
   flex-direction: column;
   cursor: pointer;
@@ -222,33 +241,131 @@ export default Vue.extend({
   border-width: large;
   border-color: var(--preparePageInActiveCardSet);
   border-style: solid;
-  width: 200px;
-  height:245px;
 }
 
 .fibo {
-  background-image: url("@/assets/Fibonacci.png");
+  background-image: url("@/assets/preparePage/Fibonacci-LightMode.png");
   background-size: cover;
 }
 
 .shirt{
-  background-image: url("@/assets/TShirtSize.png");
+  background-image: url("@/assets/preparePage/TShirt-LightMode.png");
   background-size: cover;
 }
 
 .hourEstimation {
-  background-image: url("@/assets/HourEstimation.png");
+  background-image: url("@/assets/preparePage/Hour-LightMode.png");
   background-size: cover;
 }
 
 .numbers {
-  background-image: url("@/assets/numberEstimation.png");
+  background-image: url("@/assets/preparePage/Numbers-LightMode.png");
   background-size: cover;
 }
 
 .ownSet {
-  background-image: url("@/assets/ownSetEstimation.png");
+  background-image: url("@/assets/preparePage/OwnSet-LightMode.png");
   background-size: cover;
+}
+
+.fibo-DarkMode {
+  width: 226px;
+  height: 303px;
+  display: block;
+  position: relative;
+}
+
+.fibo-DarkMode::after {
+  background-image: url("@/assets/preparePage/Fibonacci-DarkMode.png");
+  background-size: cover;
+  content: "";
+  opacity: 0.45;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  z-index: -1;
+}
+
+.shirt-DarkMode {
+  width: 226px;
+  height: 303px;
+  display: block;
+  position: relative;
+}
+
+.shirt-DarkMode::after{
+  background-image: url("@/assets/preparePage/TShirt-DarkMode.png");
+  background-size: cover;
+  content: "";
+  opacity: 0.45;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  z-index: -1;
+}
+
+.hourEstimation-DarkMode {
+  width: 226px;
+  height: 303px;
+  display: block;
+  position: relative;
+}
+
+.hourEstimation-DarkMode::after {
+  background-image: url("@/assets/preparePage/Hour-DarkMode.png");
+  background-size: cover;
+  content: "";
+  opacity: 0.45;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  z-index: -1;
+}
+
+.numbers-DarkMode {
+  width: 226px;
+  height: 303px;
+  display: block;
+  position: relative;
+}
+
+.numbers-DarkMode::after {
+  background-image: url("@/assets/preparePage/Numbers-DarkMode.png");
+  background-size: cover;
+  content: "";
+  opacity: 0.45;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  z-index: -1;
+}
+
+.ownSet-DarkMode {
+  width: 226px;
+  height: 303px;
+  display: block;
+  position: relative;
+}
+
+.ownSet-DarkMode::after {
+  background-image: url("@/assets/preparePage/OwnSet-DarkMode.png");
+  background-size: cover;
+  content: "";
+  opacity: 0.45;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  z-index: -1;
 }
 
 #text {

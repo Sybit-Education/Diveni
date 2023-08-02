@@ -213,7 +213,7 @@
             }
           },
           "cardSet": {
-            "title": "2. Wähle ein Kartenset mit den entsprechenden Werten",
+            "title": "Wähle ein Kartenset mit den entsprechenden Werten",
             "sets": {
               "fibonacci": {
                 "label": "Fibonacci-Folge",
@@ -243,10 +243,10 @@
             }
           },
           "time": {
-            "title": "3. Bestimme die Zeit pro Schätzrunde"
+            "title": "Bestimme die Zeit pro Schätzrunde"
           },
           "password": {
-            "title": "4. Wähle ein Passwort, falls gewünscht",
+            "title": "Wähle ein Passwort, falls gewünscht",
             "placeholder": "Passwort (leer lassen für eine offene Session)"
           }
         }
