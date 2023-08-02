@@ -222,10 +222,6 @@ export default Vue.extend({
   color:var(--text-primary-color)
 }
 
-#landing-page {
-  background: linear-gradient(var(--background-color-primary), var(--background-color-secondary))
-}
-
 .parent {
   position: relative;
   height: 110%;

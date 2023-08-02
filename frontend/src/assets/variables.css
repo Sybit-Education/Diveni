@@ -1,38 +1,63 @@
 :root {
-  --background-color-primary: #e2e2e2;/*#2D93AD */
-  --background-color-secondary: #999999;/*#d6771e */
-  --pictureGradientEnd: rgba(19, 44, 20, 0.5);
+  --background-color-primary: #e2e2e2;
+  --blurredColour1: #94623400;
+  --blurredColour2: rgba(0, 0, 0, 0.219);
+  --blurredColour3: rgba(216, 125, 6, 0);
+  --blurredColour4: rgba(17, 9, 0, 0);
+  
+  /* Bottom */
+  --blurredColour5: rgba(6, 1, 8, 0.24);
+  --blurredColour6: rgba(80, 80, 80, 0.219);
+  
+  /*other basic stuff*/
   --accent-color: #cacaca;
   --text-primary-color: #222;
   --element-size: 6rem;
+  --linkColor: #254bb3;
+  
+  /*Landing Page*/
   --startButton: #946234;
   --startButtonHovered: #9c5b1d;
   --joinButton: #658462;
   --joinButtonHovered: #4d8a47;
   --reconnectButton: #822E1C;
   --reconnectButtonHovered: #9e2e15;
+  --pictureGradientEnd: rgba(19, 44, 20, 0.5);
   --landingPageCardsBackground: #e4e4e4;
-  --preparePageMainColor:#946234; /*b9934d*/
+  --blurBackGroundColor: rgba(80, 80, 80, 0.219);
+  /*Prepare page*/
+  --preparePageMainColor:#946234;
   --preparePageInActiveTab: #ffffff;
-  --preparePageInActiveTabHover: #658462; /*3daeb6*/
+  --preparePageInActiveTabHover: #658462;
   --preparePageBorderTab: grey;
   --preparePageImportUserStoriesButton: #30a858;
   --preparePageActiveCardSet: black;
   --preparePageInActiveCardSet: #e27712;
   --preparePageTimerBackground: #946234;
-  --linkColor: #254bb3;
+  /*other Stuff*/
   --topNavigationBarColor: rgba(200, 200, 200, 0.75);
-  --blurBackGroundColor: rgba(80, 80, 80, 0.219);
   --popUpMenu: rgb(143, 143, 143);
 }
 
 /* Define styles for the root window with dark - mode preference */
 :root.dark-theme {
-  --background-color-primary: #010617; /* #230903 #564787  #2C1320 #002E2C 0e041a*/
-  --background-color-secondary: #0f050f; /**#9D6381 35605A 820B8A #b81484 160e20*/
-  --pictureGradientEnd: rgba(44, 19, 32, 0.5);
+  /*Background Colors*/
+  --background-color-primary: #010617;
+  --blurredColour1: rgba(76, 134, 185, 0.219);
+  --blurredColour2: rgba(167, 236, 219, 0.534);
+  --blurredColour3: rgba(151, 199, 241, 0.37);
+  --blurredColour4: rgba(255, 255, 255, 0.329);
+
+  /* Bottom */
+  --blurredColour5: rgba(211, 167, 236, 0.322);
+  --blurredColour6: rgba(170, 128, 180, 0.301);
+
+  /*other basic stuff*/
   --accent-color: rgba(34, 34, 34, 0.863);
   --text-primary-color: #ffffff;
+  --linkColor: #00ffdd;
+
+  /*Landing Page*/
   --startButton: #13276D;
   --startButtonHovered: #13266dc9;
   --joinButton: #42104B;
@@ -40,16 +65,21 @@
   --reconnectButton: #033347;
   --reconnectButtonHovered: #033347bd;
   --landingPageCardsBackground: #525252;
-  --preparePageMainColor:#13276D; /* 997e26*/
+  --blurBackGroundColor: #50505069;
+  --pictureGradientEnd: rgba(44, 19, 32, 0.5);
+
+  /*Prepare Page*/
+
+  --preparePageMainColor:#13276D;
   --preparePageInActiveTab: #666565;
-  --preparePageInActiveTabHover: #42104B; /*328c92*/
+  --preparePageInActiveTabHover: #42104B;
   --preparePageBorderTab: white;
   --preparePageImportUserStoriesButton: #7e5a0c;
   --preparePageActiveCardSet: white;
   --preparePageInActiveCardSet: #e27712;
   --preparePageTimerBackground: #7EBCC98A; 
-  --linkColor: #00ffdd;
-  --topNavigationBarColor: rgba(34, 34, 34, 0.863);/*rgba(45, 41, 41, 0.75) rgb(79, 69, 69, 0.88)*/
-  --blurBackGroundColor: #50505069;
+
+  /*other Stuff*/
+  --topNavigationBarColor: rgba(34, 34, 34, 0.863);
   --popUpMenu: rgb(201, 201, 201);
 }

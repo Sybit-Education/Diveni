@@ -337,10 +337,6 @@ export default Vue.extend({
   margin-top: 2%;
 }
 
-#prepare-session-page {
-  background: linear-gradient(var(--background-color-primary), var(--background-color-secondary))
-}
-
 #importUserStoryButton {
   background-color: var(--preparePageMainColor);
   color: var(--text-primary-color);
