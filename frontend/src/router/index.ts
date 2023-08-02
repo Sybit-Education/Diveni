@@ -44,11 +44,6 @@ const routes: Array<RouteConfig> = [
     component: PrepareSessionPage,
   },
   {
-    path: "/jiraCallback",
-    name: "JiraCallbackPage",
-    component: () => import(/* webpackChunkName: "jira" */ "../views/JiraCallbackPage.vue"),
-  },
-  {
     path: "/about",
     name: "AboutPage",
     component: () => import(/* webpackChunkName: "about" */ "../views/AboutPage.vue"),
