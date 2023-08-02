@@ -54,7 +54,7 @@ class ApiService {
     jiraBaseUrl: string
   ): Promise<JiraResponseCodeDto> {
     const response = await axios.post<JiraResponseCodeDto>(
-      `${constants.backendURL}/issue-tracker/jira/server/verification-code?jira-url=${jiraBaseUrl}`,
+      `${constants.backendURL}/issue-tracker/jira/cloud/verification-code?jira-url=${jiraBaseUrl}`,
       {
         code,
         token,
