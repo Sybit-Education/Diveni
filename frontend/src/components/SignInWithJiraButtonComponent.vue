@@ -1,19 +1,56 @@
 <template>
   <div>
-    <b-button
-      variant="success"
-      :disabled="disabled"
-      @click="
-        openSignInWithJiraTab();
-        openModal();
+    <div>
+      <b-button v-b-toggle.collapse-cloud variant="success" :disabled="!enableJiraCloud" class="my-1">
+        {{
+          $t(
+            "session.prepare.step.selection.mode.description.withIssueTracker.buttons.signInWithJiraCloud.label"
+          )
+        }}
+      </b-button>
+      <b-collapse id="collapse-cloud">
+        <form ref="form" @submit.stop.prevent="handleSubmit">
+          <b-form-group
+            label="JIRA URL"
+            label-for="input-jira-url"
+            invalid-feedback="JIRA Url is required"
+            :state="jiraUrlState"
+          >
+            <b-input-group>
+              <b-form-input
+                id="input-jira-url"
+                v-model="jiraUrl"
+                required
+                :placeholder="
+              $t(
+                'session.prepare.step.selection.mode.description.withIssueTracker.inputs.verificationCode.placeholder'
+              )
+            "
+                :state="jiraUrlState"
+              />
+              <b-input-group-append>
+                <b-button variant="success" @click="openSignInWithJira('cloud')">Connect</b-button>
+              </b-input-group-append>
+            </b-input-group>
+          </b-form-group>
+        </form>
+      </b-collapse>
+    </div>
+    <div>
+      <b-button
+        variant="success"
+        :disabled="!enableJiraServer"
+        @click="
+        openSignInWithJira('server');
       "
-    >
-      {{
-        $t(
-          "session.prepare.step.selection.mode.description.withIssueTracker.buttons.signInWithJiraServer.label"
-        )
-      }}
-    </b-button>
+      >
+        {{
+          $t(
+            "session.prepare.step.selection.mode.description.withIssueTracker.buttons.signInWithJiraServer.label"
+          )
+        }}
+      </b-button>
+    </div>
     <b-modal
       id="modal-verification-code"
       ref="modal"
@@ -53,8 +90,18 @@ import Vue from "vue";
 import apiService from "@/services/api.service";
 
 export default Vue.extend({
-  name: "SignInWithJiraServerButtonComponent",
+  name: "SignInWithJiraButtonComponent",
   props: {
+    enableJiraCloud: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    enableJiraServer: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
     disabled: {
       type: Boolean,
       required: false,
@@ -63,6 +110,10 @@ export default Vue.extend({
   },
   data() {
     return {
+      selectedIssueTracker: "cloud",
+      enableJiraUrlInputField: false,
+      jiraUrl: "",
+      jiraUrlState: false,
       token: "",
       verificationCode: "",
       verificationCodeState: false,
@@ -74,10 +125,16 @@ export default Vue.extend({
       this.verificationCodeState = valid;
       return valid;
     },
-    async openSignInWithJiraTab() {
-      const tokenDto = await apiService.getJiraServerRequestToken();
+    async openSignInWithJira(type) {
+      this.enableJiraUrlInputField = false;
+      this.selectedIssueTracker = type;
+      const tokenDto =
+        this.selectedIssueTracker === "cloud"
+          ? await apiService.getJiraCloudRequestToken('', this.jiraUrl)
+          : await apiService.getJiraServerRequestToken();
       this.token = tokenDto.token;
       window.open(tokenDto.url, "_blank")?.focus();
+      this.openModal();
     },
     openModal() {
       this.$nextTick(() => {
@@ -98,10 +155,14 @@ export default Vue.extend({
         return;
       }
       try {
-        const response = await apiService.sendJiraServerVerificationCode(
-          this.verificationCode,
-          this.token
-        );
+        const response =
+          this.selectedIssueTracker === "cloud"
+            ? await apiService.sendJiraCloudVerificationCode(
+                this.verificationCode,
+                this.token,
+                this.jiraUrl
+              )
+            : await apiService.sendJiraServerVerificationCode(this.verificationCode, this.token);
         localStorage.setItem("tokenId", response.tokenId);
         this.$store.commit("setTokenId", response.tokenId);
       } catch (e) {

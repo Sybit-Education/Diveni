@@ -7,11 +7,10 @@
     <ul>
       <li>
         {{ $t("session.prepare.step.selection.mode.description.withIssueTracker.descriptionLine1") }}
-        <sign-in-with-jira-cloud-button-component
-          v-if="isJiraCloudEnabled"
-          class="my-1" />
-        <sign-in-with-jira-server-button-component
-          v-if="isJiraServerEnabled"
+        <sign-in-with-jira-button-component
+          v-if="isJiraCloudEnabled || isJiraServerEnabled"
+          :enable-jira-cloud="isJiraCloudEnabled"
+          :enable-jira-server="isJiraServerEnabled"
           class="my-1" />
         <sign-in-with-azure-cloud-button-component
           v-if="isAzureDevOpsEnabled"
@@ -36,8 +35,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import SignInWithJiraCloudButtonComponent from "./SignInWithJiraCloudButtonComponent.vue";
-import SignInWithJiraServerButtonComponent from "./SignInWithJiraServerButtonComponent.vue";
+import SignInWithJiraButtonComponent from "./SignInWithJiraButtonComponent.vue";
 import SignInWithAzureCloudButtonComponent from "./SignInWithAzureDevOpsButtonComponent.vue";
 import ProjectSelectionComponent from "./ProjectSelectionComponent.vue";
 import apiService from "@/services/api.service";
@@ -45,8 +43,7 @@ import apiService from "@/services/api.service";
 export default Vue.extend({
   name: "IssueTrackerComponent",
   components: {
-    SignInWithJiraCloudButtonComponent,
-    SignInWithJiraServerButtonComponent,
+    SignInWithJiraButtonComponent,
     SignInWithAzureCloudButtonComponent,
     ProjectSelectionComponent,
   },
