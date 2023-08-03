@@ -2,6 +2,7 @@
   <b-container>
     <h1 id="heading">
       {{ $t("page.join.title") }}
+      <b-img :src="require('@/assets/ControllerJoinPage.png')" id="controller"/>
     </h1>
     <join-page-card
       :color="hexColor"
@@ -162,4 +163,12 @@ export default Vue.extend({
   text-align: center;
   min-height: 15vh;
 }
+
+#controller {
+  height: 49;
+  width: 78px;
+  transform: rotate(315deg);
+  margin-left: 1%
+}
+
 </style>  
