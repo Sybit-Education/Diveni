@@ -338,6 +338,6 @@ export default Vue.extend({
 .headers {
   display: flex;
   align-items: center;
-  min-height: 15vh;
+  min-height: 10vh;
 }
 </style>

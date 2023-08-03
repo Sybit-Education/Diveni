@@ -3,8 +3,7 @@
     <div v-if="userStories.length > 0 || filterActive" class="w-100 d-flex justify-content-left">
       <b-input
         v-model="input"
-        class="search"
-        style="border-radius: var(--element-size);"
+        id="search"
         type="text"
         :placeholder="$t('page.session.before.userStories.placeholder.searchUserStories')"
         @input="swapPriority"
@@ -21,6 +20,7 @@
         :key="index"
         :active="index === selectedStoryIndex"
         class="w-100 p-1 d-flex justify-content-left"
+        id="userStoryBlock"
         :style="index === selectedStoryIndex ? 'border-width: 3px;' : ''"
         @mouseover="hover = index"
         @mouseleave="hover = null"
@@ -30,9 +30,9 @@
           v-if="showEditButtons"
           :class="story.isActive ? 'selectedStory' : 'outlineColorStory'"
           size="sm"
-          @click="markUserStory(index);"
+          @click="markUserStory(index); $event.target.blur();"
         >
-          <b-icon-check2 />
+          <b-img :src="require('@/assets/ActiveUserStory.png')" id="userStoryPicture"/>
         </b-button>
 
         <b-button
@@ -48,13 +48,14 @@
           v-model="story.title"
           :disabled="true"
           class="mx-1 w-100"
+          id="userStoryTitles"
           size="sm"
           :placeholder="$t('page.session.before.userStories.placeholder.userStoryTitle')"
           @blur="publishChanges"
         />
 
         <b-badge
-          style="background-color: var(--preparePageMainColor); color: var(--text-primary-color)"
+          id="badge"
           class="p-2"
         >
           {{ story.estimation == null ? "?" : story.estimation }}
@@ -199,22 +200,21 @@ export default Vue.extend({
 </script>
 
 <style scoped>
-.list-group-item.active {
-  background-color: white;
-}
 
-.search {
+
+#search {
   background-image: url("@/assets/magnifying glass.png");
-  background-position: 3px;
+  background-position: 10px;
   background-repeat: no-repeat;
-  background-size: 22px 25px;
-  padding-left: 30px;
+  background-size: 30px 30px;
+  padding-left: 50px;
+  border-radius: var(--element-size);
   border-color: black;
   overflow: auto;
 }
 
 .addButton {
-  background-color: var(--preparePageMainColor);
+  background-color: var(--joinButton);
   color: var(--text-primary-color);
   border-radius: var(--element-size);
 }
@@ -225,23 +225,71 @@ export default Vue.extend({
   border-radius: var(--element-size);
 }
 
-.selectedStory {
-  background-color: var(--preparePageMainColor);
+.addButton:focus {
+  background-color: var(--joinButtonHovered);
   color: var(--text-primary-color);
+  border-radius: var(--element-size);
+}
+
+.selectedStory {
+  background-color: transparent;
+  border: none;
 }
 
 .selectedStory:hover {
-  background-color: var(--joinButtonHovered);
-  color: var(--text-primary-color);
+  background-color: transparent;
+  border: none;
+}
+
+.selectedStory:focus {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  box-shadow: none;
 }
 
 .outlineColorStory {
   background-color: transparent;
-  color: rgb(187, 121, 0);
+  border: none;
 }
 
 .outlineColorStory:hover {
-  background-color: var(--joinButtonHovered);
-  color: black;
+  background-color: transparent;
+  border: none;
+}
+
+.form-control {
+  background-color: var(--textAreaColour);
+  color: var(--text-primary-color);
+}
+
+.form-control::placeholder {
+  color: var(--text-primary-color);
+}
+
+.form-control:focus {
+  background-color: var(--textAreaColour);
+  color: var(--text-primary-color);
+}
+#userStoryBlock{
+  background-color: var(--textAreaColour);
+  color: var(--text-primary-color);
+}
+
+#userStoryTitles {
+  background-color: transparent;
+  color: var(--text-primary-color);
+  font-size: large;
+  border: none
+}
+#userStoryPicture {
+  height: 30px;
+  width: 30px;
+}
+
+#badge{
+  background-color: var(--joinButton);
+  color: var(--text-primary-color);
+  font-size: large;
 }
 </style>

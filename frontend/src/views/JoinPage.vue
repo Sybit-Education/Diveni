@@ -161,7 +161,7 @@ export default Vue.extend({
   justify-content: center;
   align-items: center;
   text-align: center;
-  min-height: 15vh;
+  min-height: 10vh;
 }
 
 #controller {

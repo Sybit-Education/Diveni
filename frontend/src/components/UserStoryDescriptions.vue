@@ -15,14 +15,13 @@
             rows="1"
             max-rows="3"
             :disabled="!editDescription"
-            class="border"
             size="lg"
             :placeholder="$t('page.session.before.userStories.placeholder.userStoryTitle')"
             @blur="publishChanges(idx)"
           />
           <b-dropdown
             v-show="editDescription"
-            class="mx-1 estimationDescription"
+            class="mx-3 estimationDescription"
             :text="(userStories[idx].estimation ? userStories[idx].estimation : '?') + '    '"
           >
             <b-dropdown-item
@@ -33,6 +32,7 @@
               @click="
                 userStories[idx].estimation = num;
                 publishChanges(idx);
+                $event.target.blur();
               "
             >
               {{ num }} 
@@ -43,7 +43,7 @@
           <markdown-editor
             id="textarea-auto-height"
             v-model="userStories[idx].description"
-            class="mt-1"
+            class="mt-1 my-5"
             :disabled="!editDescription"
             :placeholder="$t('page.session.before.userStories.placeholder.userStoryDescription')"
             @textValueChanged="(event) => valueChanged(idx, event)"
@@ -153,6 +153,22 @@ export default Vue.extend({
 
 <style scoped>
 /* The side navigation menu */
+
+.form-control {
+  background-color: var(--textAreaColour);
+  color: var(--text-primary-color);
+  border:none;
+}
+
+.form-control:focus {
+  background-color: var(--textAreaColour);
+  color: var(--text-primary-color);
+}
+
+.form-control::placeholder {
+  color: var(--text-primary-color);
+}
+
 .sidenav {
   float: right;
   height: 100%; /* 100% Full-height */

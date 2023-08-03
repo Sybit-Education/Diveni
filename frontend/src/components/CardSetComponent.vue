@@ -63,7 +63,7 @@
           style="width: 60px"
           @click="onCardSetNumberSelected(item); $event.target.blur();"
         >
-          {{ item }}
+          {{ item }}  
         </b-button>
       </div>
       <b-row v-else class="mt-3 d-flex px-5 pillPosition">
@@ -382,7 +382,7 @@ export default Vue.extend({
 }
 
 .activePills:hover {
-  background-color: var(--joinButtonHovered) !important;
+  background-color: var(--preparePageInActiveTabHover) !important;
   color: var(--text-primary-color);
 }
 

@@ -67,13 +67,13 @@ h4 {
 /* Landing Page */
 .newSessionCard .landingPageCardButton{
   background-color: var(--startButton);
-  border-radius: 2rem;
+  border-radius: var(--buttonShape);
   color: var(--text-primary-color);
 }
 
 .newSessionCard .landingPageCardButton:hover{
   background-color: var(--startButtonHovered);
-  border-radius: 2rem;
+  border-radius: var(--buttonShape);
   color: var(--text-primary-color);
 }
 
@@ -83,13 +83,13 @@ h4 {
 
 .joinSessionCard .landingPageCardButton{
   background-color: var(--joinButton);
-  border-radius: 2rem;
+  border-radius: var(--buttonShape);
   color: var(--text-primary-color);
 }
 
 .joinSessionCard .landingPageCardButton:hover{
   background-color: var(--joinButtonHovered);
-  border-radius: 2rem;
+  border-radius: var(--buttonShape);
   color: var(--text-primary-color);
 }
 
@@ -99,13 +99,13 @@ h4 {
 
 .reconnectSessionCard .landingPageCardButton {
   background-color: var(--reconnectButton);
-  border-radius: 2rem;
+  border-radius: var(--buttonShape);
   color: var(--text-primary-color);
 }
 
 .reconnectSessionCard .landingPageCardButton:hover {
   background-color: var(--reconnectButtonHovered);
-  border-radius: 2rem;
+  border-radius: var(--buttonShape);
   color: var(--text-primary-color);
 }
 
@@ -157,49 +157,46 @@ h4 {
 
 a.btn.joinButton {
   background-color: var(--joinButton);
-  border-radius: 2rem;
+  border-radius: var(--buttonShape);
   color: var(--text-primary-color);
 }
 
 a.btn.joinButton:hover {
   background-color: var(--joinButtonHovered);
-  border-radius: 2rem;
+  border-radius: var(--buttonShape);
   color: var(--text-primary-color);
 }
 
 a.btn.startButton {
   background-color: var(--startButton);
-  border-radius: 2rem;
+  border-radius: var(--buttonShape);
   color: var(--text-primary-color);
 }
 
 a.btn.startButton:hover {
   background-color: var(--startButtonHovered);
-  border-radius: 2rem;
+  border-radius: var(--buttonShape);
   color: var(--text-primary-color);
 }
-
-.btn.startButton {
-  background-color: var(--startButton);
-  border-radius: 2rem;
-  color: var(--text-primary-color);
+.btn-secondary:not(:disabled):not(.disabled):active{
+  border:none;
+  background-color: transparent;
+  outline: none;
+  box-shadow: none;
 }
 
-.btn.startButton:hover {
-  background-color: var(--startButtonHovered);
-  border-radius: 2rem;
-  color: var(--text-primary-color);
-}
-
-.btn.startButton:disabled {
-  background-color: var(--preparePageInActiveTab);
-  border-radius: 2rem;
-  color: var(--text-primary-color);
+.btn-secondary:focus {
+  color: var(--text-primary-color) !important;
 }
 
 .btn.dropdown-toggle {
   color: var(--text-primary-color);
-  background-color: var(--preparePageMainColor);
+  background-color: var(--joinButton);
+}
+
+.btn.dropdown-toggle:active {
+  color: var(--text-primary-color);
+  background-color: var(--joinButtonHovered) !important;
 }
 
 .btn.dropdown-toggle:hover {
@@ -207,13 +204,13 @@ a.btn.startButton:hover {
   background-color: var(--joinButtonHovered);
 }
 
-.btn-secondary:not(:disabled):not(.disabled):active, .btn-secondary:not(:disabled):not(.disabled).active, .show > .btn-secondary.dropdown-toggle {
+.btn-secondary:not(:disabled):not(.disabled).active, .show > .btn-secondary.dropdown-toggle {
   color: var(--text-primary-color) !important ;
-  background-color: var(--preparePageMainColor) !important;
+  background-color: var(--joinButton) !important;
 }
-.btn-secondary:focus {
-  color: var(--text-primary-color) !important ;
-  background-color: var(--preparePageMainColor) !important;
+
+.btn-secondary:focus{
+  background-color: var(--joinButtonHovered) !important;
 }
 
 .a.dropdown-item {
@@ -224,11 +221,20 @@ a.btn.startButton:hover {
   color: black !important;
 }
 
-.a.dropdown-item.active {
-  background-color: green !important;
-}
+
 .dropdown-menu {
   background-color: var(--topNavigationBarColor) !important;
   border-color: var(--text-primary-color) !important;
 }
+
+/* Session Page */
+.p {
+  color: var(--text-primary-color);
+}
+
+
+.list-group-item {
+  padding: 0%
+}
+
 </style>

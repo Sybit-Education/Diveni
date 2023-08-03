@@ -37,7 +37,7 @@
           accept="text/csv"
           @change="importStory($event.target.files)"
         />
-        <b-button block elevation="2" id="importUserStoryButton" @click="openFileUploader(); $event.target.blur();">
+        <b-button block elevation="2" class="importUserStoryButton" @click="openFileUploader(); $event.target.blur();">
           {{ $t("session.prepare.step.selection.mode.description.withUS.importButton") }}
         </b-button>
       </b-tab>
@@ -337,14 +337,22 @@ export default Vue.extend({
   margin-top: 2%;
 }
 
-#importUserStoryButton {
+.importUserStoryButton {
   background-color: var(--preparePageMainColor);
   color: var(--text-primary-color);
 }
 
-#importUserStoryButton:hover {
+.importUserStoryButton:hover {
   background-color: var(--startButtonHovered);
   color: var(--text-primary-color);
+}
+
+.importUserStoryButton:focus{
+  background-color: var(--startButtonHovered);
+  color: var(--text-primary-color);
+}
+.importUserStoryButton:active{
+  background-color: var(--startButtonHovered) !important;
 }
 
 .optionButtons {
@@ -358,7 +366,7 @@ export default Vue.extend({
 .optionButtons:hover {
   color:var(--text-primary-color) !important;
   border-color: var(--text-primary-color);
-  background-color: var(--preparePageMainColor);
+  background-color: var(--preparePageInActiveTabHover);
 }
 .optionButtons:focus {
   color:var(--text-primary-color);
@@ -371,13 +379,13 @@ export default Vue.extend({
 .startingButton {
   background-color: var(--startButton);
   color: var(--text-primary-color);
-  border-radius: 2rem;
+  border-radius: var(--buttonShape);
 }
 
 .startingButton:hover {
   background-color: var(--startButtonHovered);
   color: var(--text-primary-color);
-  border-radius: 2rem;
+  border-radius: var(--buttonShape);
 }
 
 .numberPictures{

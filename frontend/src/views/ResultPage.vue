@@ -9,7 +9,7 @@
     <b-list-group v-else style="border-radius: var(--element-size);">
       <b-list-group-item v-for="(story, index) of userStories" :key="index" class="text-center" style="color:black;">
         {{ story.title ? story.title : "No title ..." }}
-        <b-button class="mx-2" pill style="background-color: var(--preparePageMainColor); color: var(--text-primary-color);">
+        <b-button class="mx-2 estimationButtons" pill >
           {{ story.estimation ? story.estimation : "?" }}
         </b-button>
       </b-list-group-item>
@@ -78,30 +78,48 @@ export default Vue.extend({
   justify-content: center;
   align-items: center;
   text-align: center;
-  min-height: 15vh;
+  min-height: 10vh;
+}
+
+.estimationButtons  {
+  background-color: var(--startButton);
+  color: var(--text-primary-color);
+}
+
+.estimationButtons:hover {
+  background-color: var(--startButtonHovered);
+  color: var(--text-primary-color);
+}
+
+.estimationButtons:focus{
+  background-color: var(--startButtonHovered) !important;
+  color: var(--text-primary-color);
+}
+.estimationButtons:active{
+  background-color: var(--startButtonHovered) !important;
 }
 
 #downloadButton {
   background-color: var(--startButton);
-  border-radius: 2rem;
+  border-radius: var(--buttonShape);
   color: var(--text-primary-color);
 }
 
 #downloadButton:hover {
   background-color: var(--startButtonHovered);
-  border-radius: 2rem;
+  border-radius: var(--buttonShape);
   color: var(--text-primary-color);
 }
 
 #goBackHomeButton {
   background-color: var(--joinButton);
-  border-radius: 2rem;
+  border-radius: var(--buttonShape);
   color: var(--text-primary-color);
 }
 
 #goBackHomeButton:hover {
   background-color: var(--joinButtonHovered);
-  border-radius: 2rem;
+  border-radius: var(--buttonShape);
   color: var(--text-primary-color);
 }
 </style>

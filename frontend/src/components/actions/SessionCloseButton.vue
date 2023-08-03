@@ -1,6 +1,14 @@
 <template>
-  <div v-if="isPlanningStart">
-    <b-button v-b-modal.close-session-modal variant="danger" style="border-radius: 2rem;">
+  <div v-if="isPlanningStart" class="img-holderClose">
+    <div id="picture-holderClose">
+      <b-img :src="require('@/assets/LeaveButton.png')" id="pandaPictureClose"/>
+    </div>
+    <b-button
+     v-b-modal.close-session-modal
+      variant="danger"
+      style="border-radius:var(--buttonShape); max-height: 40px;"
+      class="button"
+    >
       <b-icon-x />
       {{ $t("page.session.during.estimation.buttons.finish") }}
     </b-button>
@@ -55,3 +63,51 @@ export default Vue.extend({
   },
 });
 </script>
+<style>
+#picture-holderClose {
+  width: auto;
+  height: 90px;
+}
+
+#pandaPictureClose {
+  position: absolute;
+  left: 65%;
+  height: 15%;
+  height: 30px;
+  user-select: none;
+}
+
+.img-holderClose {
+  position: relative;
+  width: auto;
+}
+
+.img-holderClose .button {
+    position: absolute !important;
+    text-align: left;
+    left: 13.5%;
+    bottom: 28%;
+}
+
+#picture-holderLeave {
+  width: 147px;
+  height: 65px;
+}
+
+#pandaPictureLeave {
+  position: absolute;
+  left: 60%;
+  height: 30px;
+  user-select: none;
+}
+
+.img-holderLeave {
+  position: relative;
+}
+
+.img-holderLeave .button {
+    position: absolute !important;
+    text-align: left;
+    bottom: 0px;
+}
+</style>

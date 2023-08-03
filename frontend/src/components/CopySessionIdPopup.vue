@@ -116,40 +116,56 @@ export default Vue.extend({
 }
 
 #sessionCode {
-  border-radius: 2rem;
+  border-radius: var(--buttonShape);
   background-color: var(--startButton);
   color: var(--text-primary-color);
 }
 
 #sessionCode:hover {
-  border-radius: 2rem;
+  border-radius: var(--buttonShape);
   background-color: var(--startButtonHovered);
   color: var(--text-primary-color);
 }
 
+#sessionCode:focus {
+  border-radius: var(--buttonShape);
+  background-color: var(--startButtonHovered) !important;
+  color: var(--text-primary-color);
+}
+
 #link {
-  border-radius: 2rem;
+  border-radius: var(--buttonShape);
   background-color: var(--joinButton);
   color: var(--text-primary-color);
 }
 
 #link:hover {
-  border-radius: 2rem;
+  border-radius: var(--buttonShape);
   background-color: var(--joinButtonHovered);
   color: var(--text-primary-color);
 }
 
+#link:focus {
+  border-radius: var(--buttonShape);
+  background-color: var(--joinButtonHovered) !important;
+  color: var(--text-primary-color);
+}
+
 #qrCode {
-  border-radius: 2rem;
+  border-radius: var(--buttonShape);
   background-color: var(--reconnectButton);
   color: var(--text-primary-color);
 }
 
 #qrCode:hover {
-  border-radius: 2rem;
+  border-radius: var(--buttonShape);
   background-color: var(--reconnectButtonHovered);
   color: var(--text-primary-color);
 }
 
-
+#qrCode:focus {
+  border-radius: var(--buttonShape);
+  background-color: var(--reconnectButtonHovered) !important;
+  color: var(--text-primary-color);
+}
 </style>

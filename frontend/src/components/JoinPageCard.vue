@@ -114,7 +114,7 @@ h6 {
 .startingButton {
   background-color: var(--startButton);
   color: var(--text-primary-color);
-  border-radius: 2rem;
+  border-radius: var(--buttonShape);
   height: 75px;
   width: 75px;
   margin-top: 16%;
@@ -124,13 +124,11 @@ h6 {
 .startingButton:hover {
   background-color: var(--startButtonHovered);
   color: var(--text-primary-color);
-  border-radius: 2rem;
 }
 
 .startingButton:hover:disabled {
   background-color: grey;
   color: var(--text-primary-color);
-  border-radius: 2rem;
 }
 
 .inputText {
@@ -138,7 +136,7 @@ h6 {
 }
 
 .inputFields {
-  border-radius: 2rem;
+  border-radius: var(--buttonShape);
 }
 
 #startButtonCol{

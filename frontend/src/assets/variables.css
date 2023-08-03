@@ -13,12 +13,13 @@
   --accent-color: #cacaca;
   --text-primary-color: #222;
   --element-size: 6rem;
+  --buttonShape: 1rem;
   --linkColor: #254bb3;
   
   /*Landing Page*/
-  --startButton: #946234;
+  --startButton: #946234e0;
   --startButtonHovered: #9c5b1d;
-  --joinButton: #658462;
+  --joinButton: #658462; 
   --joinButtonHovered: #4d8a47;
   --reconnectButton: #822E1C;
   --reconnectButtonHovered: #9e2e15;
@@ -28,12 +29,17 @@
   /*Prepare page*/
   --preparePageMainColor:#946234;
   --preparePageInActiveTab: #ffffff;
-  --preparePageInActiveTabHover: #658462;
+  --preparePageInActiveTabHover: #718A6F91;
   --preparePageBorderTab: grey;
   --preparePageImportUserStoriesButton: #30a858;
   --preparePageActiveCardSet: black;
   --preparePageInActiveCardSet: #e27712;
-  --preparePageTimerBackground: #946234;
+  --preparePageTimerBackground: #974F0D3D;
+
+  /*Session Page*/
+  --textAreaColour: #c3c7bd;
+
+
   /*other Stuff*/
   --topNavigationBarColor: rgba(200, 200, 200, 0.75);
   --popUpMenu: rgb(143, 143, 143);
@@ -78,6 +84,8 @@
   --preparePageActiveCardSet: white;
   --preparePageInActiveCardSet: #e27712;
   --preparePageTimerBackground: #7EBCC98A; 
+  /*Session Page*/
+  --textAreaColour: #A8E8F65C;
 
   /*other Stuff*/
   --topNavigationBarColor: rgba(34, 34, 34, 0.863);
