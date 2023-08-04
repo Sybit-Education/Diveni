@@ -84,7 +84,7 @@
       <b-col>
         <b-button class="optionButtons" @click="setTimerDown(); $event.target.blur();"> - </b-button>
       </b-col>
-      <b-col class="text-center" style="margin-top: auto; margin-bottom: auto;" cols="1">
+      <b-col class="text-center" style="margin-top: auto; margin-bottom: auto;" cols="auto">
         <h4 style="background-color: var(--preparePageTimerBackground);">
           {{ timer == 0 ? "∞" : formatTimer }}
         </h4>
