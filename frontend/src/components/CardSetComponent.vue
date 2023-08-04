@@ -8,19 +8,23 @@
             :key="item.position"
             class="swipe-card my-5 mx-5"
             :class="[selectedCardSet.name === item.name ? 'selectedCard' : 'inActiveCard',
+                    /*No_US || With_US Mode */
                     item.position === 1 && theme ==='light-theme' && userStoryMode !== jiraTag ? 'fibo' : '',
                     item.position === 2 && theme ==='light-theme' && userStoryMode !== jiraTag ? 'shirt' : '',
                     item.position === 3 && theme ==='light-theme' && userStoryMode !== jiraTag ? 'hourEstimation' : '',
                     item.position === 4 && theme ==='light-theme' && userStoryMode !== jiraTag ? 'numbers' : '',
                     item.position === 5 && theme ==='light-theme' && userStoryMode !== jiraTag ? 'ownSet': '',
+
                     item.position === 1 && theme ==='dark-theme' && userStoryMode !== jiraTag ? 'fibo-DarkMode' : '',
                     item.position === 2 && theme ==='dark-theme' && userStoryMode !== jiraTag ? 'shirt-DarkMode' : '',
                     item.position === 3 && theme ==='dark-theme' && userStoryMode !== jiraTag ? 'hourEstimation-DarkMode' : '',
                     item.position === 4 && theme ==='dark-theme' && userStoryMode !== jiraTag ? 'numbers-DarkMode' : '',
                     item.position === 5 && theme ==='dark-theme' && userStoryMode !== jiraTag ? 'ownSet-DarkMode': '',
+                    /*Jira Mode */
                     item.position === 1 && theme ==='light-theme' && userStoryMode === jiraTag ? 'fibo' : '',
                     item.position === 2 && theme ==='light-theme' && userStoryMode === jiraTag ? 'hourEstimation' : '',
                     item.position === 3 && theme ==='light-theme' && userStoryMode === jiraTag ? 'numbers' : '',
+
                     item.position === 1 && theme ==='dark-theme' && userStoryMode === jiraTag ? 'fibo-DarkMode' : '',
                     item.position === 2 && theme ==='dark-theme' && userStoryMode === jiraTag ? 'hourEstimation-DarkMode' : '',
                     item.position === 3 && theme ==='dark-theme' && userStoryMode === jiraTag ? 'numbers-DarkMode' : '',
@@ -232,40 +236,51 @@ export default Vue.extend({
 }
 
 .selectedCard {
-  border-width: 0.25em;
   border-color: var(--preparePageActiveCardSet) !important;
   border-style: solid;
+  border-radius: var(--buttonShape);
 }
 
 .inActiveCard:hover {
   border-width: large;
   border-color: var(--preparePageInActiveCardSet);
   border-style: solid;
+  border-radius: var(--buttonShape);
 }
 
 .fibo {
   background-image: url("@/assets/preparePage/Fibonacci-LightMode.png");
   background-size: cover;
+  border-radius: var(--buttonShape);
+  box-shadow: 10px 10px 5px #ccc;
 }
 
 .shirt{
   background-image: url("@/assets/preparePage/TShirt-LightMode.png");
   background-size: cover;
+  border-radius: var(--buttonShape);
+  box-shadow: 10px 10px 5px #ccc;
 }
 
 .hourEstimation {
   background-image: url("@/assets/preparePage/Hour-LightMode.png");
   background-size: cover;
+  border-radius: var(--buttonShape);
+  box-shadow: 10px 10px 5px #ccc;
 }
 
 .numbers {
   background-image: url("@/assets/preparePage/Numbers-LightMode.png");
   background-size: cover;
+  border-radius: var(--buttonShape);
+  box-shadow: 10px 10px 5px #ccc;
 }
 
 .ownSet {
   background-image: url("@/assets/preparePage/OwnSet-LightMode.png");
   background-size: cover;
+  border-radius: var(--buttonShape);
+  box-shadow: 10px 10px 5px #ccc;
 }
 
 .fibo-DarkMode {
@@ -286,6 +301,7 @@ export default Vue.extend({
   right: 0;
   position: absolute;
   z-index: -1;
+  border-radius: var(--buttonShape);
 }
 
 .shirt-DarkMode {
@@ -306,6 +322,7 @@ export default Vue.extend({
   right: 0;
   position: absolute;
   z-index: -1;
+  border-radius: var(--buttonShape);
 }
 
 .hourEstimation-DarkMode {
@@ -326,6 +343,7 @@ export default Vue.extend({
   right: 0;
   position: absolute;
   z-index: -1;
+  border-radius: var(--buttonShape);
 }
 
 .numbers-DarkMode {
@@ -346,6 +364,7 @@ export default Vue.extend({
   right: 0;
   position: absolute;
   z-index: -1;
+  border-radius: var(--buttonShape);
 }
 
 .ownSet-DarkMode {
@@ -366,6 +385,7 @@ export default Vue.extend({
   right: 0;
   position: absolute;
   z-index: -1;
+  border-radius: var(--buttonShape);
 }
 
 #text {
