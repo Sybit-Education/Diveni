@@ -12,9 +12,7 @@
         <b-col>
           <h1>{{ $t("page.vote.title") }}</h1>
         </b-col>
-        <b-col cols="auto" class="mr-auto">
-          <rounded-avatar :member="getMember" />
-        </b-col>
+       
         <b-col cols="auto">
           <session-leave-button />
           <estimate-timer
@@ -24,6 +22,11 @@
             :pause-timer="estimateFinished || pauseSession"
             :duration="timerCountdownNumber"
           />
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col cols="auto" class="memberIcon">
+          <rounded-avatar :member="getMember"/>
         </b-col>
       </b-row>
       <b-row v-if="isMobile">
@@ -339,5 +342,11 @@ export default Vue.extend({
   display: flex;
   align-items: center;
   min-height: 10vh;
+}
+
+.memberIcon {
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 5%;
 }
 </style>

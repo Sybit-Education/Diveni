@@ -32,7 +32,7 @@ export default Vue.extend({
         return "#D4AC0D";
       }
       if (this.timerCount === 0) {
-        return "black";
+        return "grey";
       }
       return "#CB4335";
     },
@@ -94,8 +94,6 @@ export default Vue.extend({
   font-size: 1.5rem;
   font-weight: 700;
   border-radius: 0.5rem;
-
-
 }
 .card-body {
   padding: 0.5rem;
@@ -111,5 +109,6 @@ export default Vue.extend({
   height: 117px;
   background-image: url('@/assets/Timer.png');
   background-size: contain;
+  user-select: none;
 }
 </style>

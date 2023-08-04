@@ -27,8 +27,8 @@ export default Vue.extend({
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .rounded-avatar {
-  width: 100px;
-  height: 100px;
+  width: 150px;
+  height: 150px;
   padding: 8px;
   display: flex;
   justify-content: center; /* Centering y-axis */
@@ -40,8 +40,8 @@ export default Vue.extend({
 }
 
 .rounded-avatar__label {
-  font-size: 0.75rem;
-  font-weight: 400;
+  font-size: large;
+  font-weight: bold;
   text-overflow: ellipsis;
 }
 </style>

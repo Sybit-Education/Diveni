@@ -38,6 +38,7 @@
 
   /*Session Page*/
   --textAreaColour: #c3c7bd;
+  --textAreaColourHovered: #c3c7bdb6;
 
 
   /*other Stuff*/
@@ -86,6 +87,7 @@
   --preparePageTimerBackground: #7EBCC98A; 
   /*Session Page*/
   --textAreaColour: #A8E8F65C;
+  --textAreaColourHovered: #a8e8f6b9;
 
   /*other Stuff*/
   --topNavigationBarColor: rgba(34, 34, 34, 0.863);

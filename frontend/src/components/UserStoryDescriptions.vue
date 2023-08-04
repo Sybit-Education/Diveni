@@ -160,6 +160,12 @@ export default Vue.extend({
   border:none;
 }
 
+.form-control:disabled {
+  background-color: var(--textAreaColour);
+  color: var(--text-primary-color);
+  border:none;
+}
+
 .form-control:focus {
   background-color: var(--textAreaColour);
   color: var(--text-primary-color);

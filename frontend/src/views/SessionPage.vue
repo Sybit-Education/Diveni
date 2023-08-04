@@ -558,21 +558,21 @@ export default Vue.extend({
 }
 
 .optionButton{
-  background-color: var(--joinButton);
+  background-color: var(--textAreaColour);
   color: var(--text-primary-color);
   border-color: black;
   border-radius: var(--buttonShape);
 }
 
 .optionButton:hover{
-  background-color: var(--joinButtonHovered);
+  background-color: var(--textAreaColourHovered);
   color: var(--text-primary-color);
   border-color: black;
   border-radius: var(--buttonShape);
 }
 
 .optionButton:focus{
-  background-color: var(--joinButtonHovered) !important;
+  background-color: var(--textAreaColourHovered) !important;
   color: var(--text-primary-color)  !important;
   border-color: black;
   border-radius: var(--buttonShape);
