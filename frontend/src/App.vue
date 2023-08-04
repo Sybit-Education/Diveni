@@ -227,14 +227,4 @@ a.btn.startButton:hover {
   border-color: var(--text-primary-color) !important;
 }
 
-/* Session Page */
-.p {
-  color: var(--text-primary-color);
-}
-
-
-.list-group-item {
-  padding: 0%
-}
-
 </style>

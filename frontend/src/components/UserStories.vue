@@ -11,16 +11,14 @@
     </div>
     <b-card-group
       class="my-3"
-      :class="showEditButtons ? 'overflow-auto' : ''"
-      style="max-height: 70vh;
-      border-radius: 1rem;"
+      id="userStoryBlock"
     >
       <b-list-group-item
         v-for="(story, index) of userStories"
         :key="index"
         :active="index === selectedStoryIndex"
         class="w-100 p-1 d-flex justify-content-left"
-        id="userStoryBlock"
+        id="userStoryRow"
         :style="index === selectedStoryIndex ? 'border-width: 3px;' : ''"
         @mouseover="hover = index"
         @mouseleave="hover = null"
@@ -271,9 +269,17 @@ export default Vue.extend({
   background-color: var(--textAreaColour);
   color: var(--text-primary-color);
 }
-#userStoryBlock{
+
+#userStoryRow{
   background-color: var(--textAreaColour);
   color: var(--text-primary-color);
+}
+
+#userStoryBlock {
+  max-height: 200px; /*exactly 4 User Stories tall*/
+  border-radius: 1rem;
+  overflow: scroll;
+  -webkit-overflow-scrolling: touch;
 }
 
 #userStoryTitles {

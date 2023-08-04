@@ -157,17 +157,21 @@ export default Vue.extend({
   }
 
   /* Track */
-  ::-webkit-scrollbar-track {
+::-webkit-scrollbar-track {
     background: var(--lightestgrey); 
-  }
+}
   
   /* Handle */
-  ::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb {
     background: #888; 
     border-radius: 5px;
-  }
+}
   /* Handle on hover */
-  ::-webkit-scrollbar-thumb:hover {
+::-webkit-scrollbar-thumb:hover {
     background: #555; 
-  }
+}
+
+::-webkit-scrollbar-corner {
+  background: rgba(0,0,0,0);
+}
 </style>

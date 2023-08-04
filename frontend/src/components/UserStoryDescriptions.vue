@@ -6,7 +6,7 @@
         v-show="idx === index"
         :key="story.id"
         class="border-0"
-        style="background: transparent;"
+        style="background: transparent; padding: 0%"
         variant="outline-secondary"
       >
         <div class="list-group list-group-horizontal">

@@ -1,7 +1,7 @@
 <template>
   <b-container id="session-page">
-    <b-row class="mb-3 headers">
-      <b-col>
+    <b-row class="headers">
+      <b-col cols="auto" sm="8">
         <h1>
           {{
             planningStart
@@ -10,14 +10,14 @@
           }}
         </h1>
       </b-col>
-      <b-col cols="auto" class="mr-auto">
+      <b-col cols="auto" >
         <copy-session-id-popup
           v-if="planningStart"
           class="float-end"
           :session-id="session_sessionID"
         />
       </b-col>
-      <b-col cols="auto">
+      <b-col cols="auto" style="min-width: 200px;">
         <session-close-button
           :is-planning-start="planningStart"
           :user-story-mode="session_userStoryMode"
@@ -26,16 +26,16 @@
     </b-row>
 
     <div v-if="!planningStart">
+      <div style="text-align: center;">
+        <b-img :src="require('@/assets/LoadingCat.gif')" class="catGif"/>
+      </div>
       <copy-session-id-popup
         :text-before-session-i-d="$t('page.session.before.text.beforeID')"
         :session-id="session_sessionID"
         :text-after-session-i-d="$t('page.session.before.text.afterID')"
+        style="text-align: center;"
       />
 
-      <h4 class="text-center m-3">
-        {{ $t("page.session.before.text.waiting") }}
-        <sub><b-icon-three-dots animation="fade" font-scale="1" /></sub>
-      </h4>
 
       <b-row class="d-flex justify-content-center overflow-auto" style="max-height: 500px">
         <kick-user-wrapper
@@ -55,20 +55,20 @@
 
     <div v-else>
       <b-row class="d-flex justify-content-start pb-3">
-        <b-col cols="auto" class="mr-auto">
+        <b-col cols="auto" class="mr-auto" style="margin-top: auto; margin-bottom: auto;">
           <b-button
             class="mr-3 optionButton"
             variant="outline-dark"
-            @click="sendRestartMessage"
+            @click="sendRestartMessage(); $event.target.blur();"
           >
-            <b-icon-arrow-clockwise />
+          <b-img :src="require('@/assets/RestartSession.png')" class="buttonPictures"/>
             {{ $t("page.session.during.estimation.buttons.new") }}
           </b-button>
-          <b-button class="mr-3"
-            variant="outline-dark optionButton"
-            @click="sendVotingFinishedMessage"
+          <b-button class="mr-3 optionButton"
+            variant="outline-dark"
+            @click="sendVotingFinishedMessage(); $event.target.blur();"
           >
-            <b-icon-bar-chart />
+          <b-img :src="require('@/assets/ShowResults.png')" class="buttonPictures"/>
             {{ $t("page.session.during.estimation.buttons.result") }}
           </b-button>
         </b-col>
@@ -136,11 +136,11 @@
     </div>
     <b-row v-if="session_userStoryMode !== 'NO_US'" class="mt-4">
       <b-col>
-        <user-story-sum-component />
+        <user-story-sum-component class=""/>
       </b-col>
     </b-row>
     <b-row v-if="session_userStoryMode !== 'NO_US'">
-      <b-col cols="4">
+      <b-col cols="7" class="">
         <div v-if="session_userStoryMode === 'US_JIRA'" class="refreshUserstories">
           <b-button
             class="w-100 mb-3 refreshButton" 
@@ -159,7 +159,9 @@
           @selectedStory="onSelectedStory($event)"
         />
       </b-col>
-      <b-col cols="8">
+    </b-row>
+    <b-row>
+      <b-col cols="10">
         <user-story-descriptions
           :card-set="voteSet"
           :initial-stories="userStories"
@@ -547,21 +549,33 @@ export default Vue.extend({
 .headers {
   display: flex;
   align-items: center;
-  min-height: 15vh;
+  min-height: 20vh;
+}
+
+.buttonPictures {
+  width: 40px;
+  height: 40px;
 }
 
 .optionButton{
-  background-color: var(--preparePageMainColor);
+  background-color: var(--joinButton);
   color: var(--text-primary-color);
   border-color: black;
-  border-radius: 2rem;
+  border-radius: var(--buttonShape);
 }
 
 .optionButton:hover{
   background-color: var(--joinButtonHovered);
   color: var(--text-primary-color);
   border-color: black;
-  border-radius: 2rem;
+  border-radius: var(--buttonShape);
+}
+
+.optionButton:focus{
+  background-color: var(--joinButtonHovered) !important;
+  color: var(--text-primary-color)  !important;
+  border-color: black;
+  border-radius: var(--buttonShape);
 }
 
 .refreshButton {
@@ -574,6 +588,16 @@ export default Vue.extend({
   border-radius: var(--element-size);
   color: var(--text-primary-color);
   background-color: var(--joinButtonHovered);
+}
+
+.catGif {
+  width: 240px; 
+  height: 180px;
+}
+
+.btn-secondary:not(:disabled):not(.disabled):active, .btn-secondary:not(:disabled):not(.disabled).active, .show > .btn-secondary.dropdown-toggle {
+  color: var(--text-primary-color) !important ;
+  background-color: var(--preparePageMainColor) !important;
 }
 
 </style>
