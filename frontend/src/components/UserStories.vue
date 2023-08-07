@@ -235,12 +235,12 @@ export default Vue.extend({
 }
 
 .selectedStory:hover {
-  background-color: transparent;
+  background-color: transparent !important;
   border: none;
 }
 
 .selectedStory:focus {
-  background-color: transparent;
+  background-color: transparent !important;
   border: none;
   outline: none;
   box-shadow: none;
@@ -253,6 +253,11 @@ export default Vue.extend({
 
 .outlineColorStory:hover {
   background-color: transparent;
+  border: none;
+}
+
+.outlineColorStory:focus {
+  background-color: transparent !important;
   border: none;
 }
 

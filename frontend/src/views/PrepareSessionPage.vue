@@ -388,6 +388,12 @@ export default Vue.extend({
   border-radius: var(--buttonShape);
 }
 
+.startingButton:focus {
+  background-color: var(--startButtonHovered) !important;
+  color: var(--text-primary-color);
+  border-radius: var(--buttonShape);
+}
+
 .numberPictures{
   height: 45px;
   width: 45px;
