@@ -26,7 +26,7 @@
       </b-row>
       <b-row>
         <b-col cols="auto" class="memberIcon">
-          <rounded-avatar :member="getMember"/>
+          <rounded-avatar :member="getMember" :admin="false" />
         </b-col>
       </b-row>
       <b-row v-if="isMobile">
@@ -38,7 +38,7 @@
           :edit-description="false"
         />
       </b-row>
-      <b-row v-if="isStartVoting" class="my-5">
+      <b-row v-if="isStartVoting">
         <div v-if="isMobile">
           <flicking
             id="flicking"
@@ -66,7 +66,7 @@
             />
           </flicking>
         </div>
-        <b-row v-else class="d-flex justify-content-between flex-wrap text-center">
+        <b-row v-else class="centerCards d-flex justify-content-between flex-wrap text-center">
           <b-col>
             <div class="overflow-auto" style="max-height: 500px">
               <member-vote-card
@@ -95,7 +95,7 @@
       </b-row>
       <b-row
         v-if="votingFinished"
-        class="my-1 d-flex justify-content-center flex-wrap overflow-auto"
+        class="d-flex justify-content-center flex-wrap overflow-auto"
         style="max-height: 500px"
       >
         <session-member-card
@@ -348,5 +348,10 @@ export default Vue.extend({
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 5%;
+}
+
+.centerCards {
+  margin-left: auto;
+  margin-right: auto;
 }
 </style>

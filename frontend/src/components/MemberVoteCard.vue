@@ -92,6 +92,7 @@ export default Vue.extend({
   display: flex;
   flex-direction: column;
   cursor: pointer;
+  margin-bottom: 5%;
 }
 .text {
   font-size: 5rem;

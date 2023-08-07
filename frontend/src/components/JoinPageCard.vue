@@ -105,6 +105,7 @@ export default Vue.extend({
 #join-card {
   border-radius: 20px;
   vertical-align: middle;
+  margin-bottom: 3%;
 }
 
 h6 {
@@ -119,10 +120,16 @@ h6 {
   width: 75px;
   margin-top: 16%;
   font-size: xx-large;
+  white-space: nowrap;
 }
 
 .startingButton:hover {
   background-color: var(--startButtonHovered);
+  color: var(--text-primary-color);
+}
+
+.startingButton:focus {
+  background-color: var(--startButtonHovered) !important;
   color: var(--text-primary-color);
 }
 

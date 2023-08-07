@@ -77,6 +77,12 @@ h4 {
   color: var(--text-primary-color);
 }
 
+.newSessionCard .landingPageCardButton:focus{
+  background-color: var(--startButtonHovered) !important;
+  border-radius: var(--buttonShape);
+  color: var(--text-primary-color);
+}
+
 .newSessionCard .card-footer {
   background-color: #52173100; /* So the Footer does not overflow */
 }
@@ -109,6 +115,12 @@ h4 {
   color: var(--text-primary-color);
 }
 
+.reconnectSessionCard .landingPageCardButton:focus {
+  background-color: var(--reconnectButtonHovered) !important;
+  border-radius: var(--buttonShape);
+  color: var(--text-primary-color);
+}
+
 .reconnectSessionCard .card-footer {
   background-color: #52173100; /* So the Footer does not overflow */
 }
@@ -134,6 +146,8 @@ h4 {
 .notSelectedTextColor {
   color: var(--text-primary-color) !important;
 }
+
+/*End of prepare Page */
 
 .dropDownLink {
   color: var(--text-primary-color) !important;
@@ -175,6 +189,12 @@ a.btn.startButton {
 
 a.btn.startButton:hover {
   background-color: var(--startButtonHovered);
+  border-radius: var(--buttonShape);
+  color: var(--text-primary-color);
+}
+
+a.btn.startButton:focus {
+  background-color: var(--startButtonHovered) !important;
   border-radius: var(--buttonShape);
   color: var(--text-primary-color);
 }

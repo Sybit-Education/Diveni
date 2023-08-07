@@ -87,6 +87,7 @@ export default Vue.extend({
     text-align: left;
     left: 13.5%;
     bottom: 28%;
+    white-space: nowrap;
 }
 
 #picture-holderLeave {
@@ -109,5 +110,6 @@ export default Vue.extend({
     position: absolute !important;
     text-align: left;
     bottom: 0px;
+    white-space: nowrap;
 }
 </style>
