@@ -185,6 +185,9 @@
                   "description": "Uma nova aba será aberta imediatamente, por favor, conceda acesso a este aplicativo nesta aba e insira o código de verificação aqui."
                 },
                 "inputs": {
+                  "jiraUrl": {
+                    "placeholder": "JIRA URL"
+                  },
                   "verificationCode": {
                     "placeholder": "Código de verificação"
                   }

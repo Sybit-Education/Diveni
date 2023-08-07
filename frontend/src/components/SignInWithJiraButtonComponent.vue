@@ -23,7 +23,7 @@
                 required
                 :placeholder="
               $t(
-                'session.prepare.step.selection.mode.description.withIssueTracker.inputs.verificationCode.placeholder'
+                'session.prepare.step.selection.mode.description.withIssueTracker.inputs.jiraUrl.placeholder'
               )
             "
                 :state="jiraUrlState"

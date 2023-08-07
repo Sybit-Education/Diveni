@@ -185,6 +185,9 @@
                   "description": "Una nuova scheda si aprirà immediatamente, si prega di concedere l'accesso a questa applicazione in questa scheda e inserire il codice di verifica qui."
                 },
                 "inputs": {
+                  "jiraUrl": {
+                    "placeholder": "JIRA URL"
+                  },
                   "verificationCode": {
                     "placeholder": "Codice di verifica"
                   }

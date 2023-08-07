@@ -185,6 +185,9 @@
                   "description": "Es öffnet sich gleich ein neuer Tab. Bitte gewähre dieser Anwendung in diesem Tab den Zugriff und trage den Verifizierungscode hier ein."
                 },
                 "inputs": {
+                  "jiraUrl": {
+                    "placeholder": "JIRA URL"
+                  },
                   "verificationCode": {
                     "placeholder": "Verifizierungscode"
                   }

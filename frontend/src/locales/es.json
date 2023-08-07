@@ -185,6 +185,9 @@
                   "description": "Una nueva pestaña se abrirá inmediatamente, por favor concede acceso a esta aplicación en esta pestaña e introduce el código de verificación aquí."
                 },
                 "inputs": {
+                  "jiraUrl": {
+                    "placeholder": "JIRA URL"
+                  },
                   "verificationCode": {
                     "placeholder": "Código de verificación"
                   }

@@ -185,6 +185,9 @@
                   "description": "Nowa karta zostanie otwarta natychmiast, udziel dostępu do tej aplikacji w tej karcie i wprowadź kod weryfikacyjny tutaj."
                 },
                 "inputs": {
+                  "jiraUrl": {
+                    "placeholder": "JIRA URL"
+                  },
                   "verificationCode": {
                     "placeholder": "Kod weryfikacyjny"
                   }

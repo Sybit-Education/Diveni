@@ -185,6 +185,9 @@
                   "description": "Un nouvel onglet s'ouvrira immédiatement, veuillez accorder l'accès à cette application dans cet onglet et entrer le code de vérification ici."
                 },
                 "inputs": {
+                  "jiraUrl": {
+                    "placeholder": "JIRA URL"
+                  },
                   "verificationCode": {
                     "placeholder": "Code de vérification"
                   }
