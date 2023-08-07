@@ -87,7 +87,7 @@ public class ProjectManagementController {
 
   @PostMapping(value = "/jira/cloud/request-token")
   public ResponseEntity<JiraRequestToken> getJiraCloudAccessToken(
-    @RequestParam("jira-url") String jiraUrl, @RequestHeader("Origin") String origin, @RequestBody VerificationCode authorizationCode) {
+    @RequestParam("jira-url") String jiraUrl, @RequestHeader("Origin") String origin) {
     LOGGER.debug("--> getJiraCloudAccessToken(), origin={}", origin);
     if (!jiraCloudService.serviceEnabled()) {
       LOGGER.warn("Jira Cloud is not configured!");

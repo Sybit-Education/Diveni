@@ -139,7 +139,7 @@ export default Vue.extend({
       this.selectedIssueTracker = type;
       const tokenDto =
         this.selectedIssueTracker === "cloud"
-          ? await apiService.getJiraCloudRequestToken("", this.jiraUrl)
+          ? await apiService.getJiraCloudRequestToken(this.jiraUrl)
           : await apiService.getJiraServerRequestToken();
       this.token = tokenDto.token;
       window.open(tokenDto.url, "_blank")?.focus();

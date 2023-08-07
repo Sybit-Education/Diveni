@@ -38,12 +38,9 @@ class ApiService {
     return response.data;
   }
 
-  public async getJiraCloudRequestToken(code: string, jiraBaseUrl: string): Promise<JiraRequestTokenDto> {
+  public async getJiraCloudRequestToken(jiraBaseUrl: string): Promise<JiraRequestTokenDto> {
     const response = await axios.post<JiraRequestTokenDto>(
-      `${constants.backendURL}/issue-tracker/jira/cloud/request-token?jira-url=${jiraBaseUrl}`,
-      {
-        code,
-      }
+      `${constants.backendURL}/issue-tracker/jira/cloud/request-token?jira-url=${jiraBaseUrl}`
     );
     return response.data;
   }
