@@ -1,17 +1,17 @@
 <template>
   <div>
     <div v-if="enableJiraCloud">
-      <b-button v-b-toggle.collapse-cloud variant="success" class="my-1">
+      <b-button variant="success" class="my-1" @click="showJiraCloudCollapse = !showJiraCloudCollapse">
         {{
           $t(
             "session.prepare.step.selection.mode.description.withIssueTracker.buttons.signInWithJiraCloud.label"
           )
         }}
       </b-button>
-      <b-collapse id="collapse-cloud">
-        <form ref="form" @submit.stop.prevent="handleSubmit">
+      <b-collapse id="collapse-cloud" v-model="showJiraCloudCollapse">
+        <form ref="jiraUrlForm" @submit.stop.prevent="handleJiraUrlSubmit">
           <b-form-group
-            label="JIRA URL"
+            label="Your JIRA URL (ex: example.atlassian.net)"
             label-for="input-jira-url"
             invalid-feedback="JIRA Url is required"
             :state="jiraUrlState"
@@ -19,17 +19,17 @@
             <b-input-group>
               <b-form-input
                 id="input-jira-url"
-                v-model="jiraUrl"
+                v-model="jiraUrlInput"
                 required
                 :placeholder="
-              $t(
-                'session.prepare.step.selection.mode.description.withIssueTracker.inputs.jiraUrl.placeholder'
-              )
-            "
+                  $t(
+                    'session.prepare.step.selection.mode.description.withIssueTracker.inputs.jiraUrl.placeholder'
+                  )
+                "
                 :state="jiraUrlState"
               />
               <b-input-group-append>
-                <b-button variant="success" @click="openSignInWithJira('cloud')">Connect</b-button>
+                <b-button variant="success" @click="handleJiraUrlSubmit">Connect</b-button>
               </b-input-group-append>
             </b-input-group>
           </b-form-group>
@@ -37,12 +37,7 @@
       </b-collapse>
     </div>
     <div v-if="enableJiraServer">
-      <b-button
-        variant="success"
-        @click="
-        openSignInWithJira('server');
-      "
-      >
+      <b-button variant="success" @click="openSignInWithJira('server')">
         {{
           $t(
             "session.prepare.step.selection.mode.description.withIssueTracker.buttons.signInWithJiraServer.label"
@@ -58,7 +53,11 @@
       @hidden="resetModal"
       @ok="handleOk"
     >
-      <p>{{ $t("session.prepare.step.selection.mode.description.withIssueTracker.dialog.description") }}</p>
+      <p>
+        {{
+          $t("session.prepare.step.selection.mode.description.withIssueTracker.dialog.description")
+        }}
+      </p>
       <form ref="form" @submit.stop.prevent="handleSubmit">
         <b-form-group
           label="Verification code"
@@ -109,8 +108,9 @@ export default Vue.extend({
   },
   data() {
     return {
+      showJiraCloudCollapse: false,
       selectedIssueTracker: "cloud",
-      enableJiraUrlInputField: false,
+      jiraUrlInput: "",
       jiraUrl: "",
       jiraUrlState: false,
       token: "",
@@ -124,12 +124,22 @@ export default Vue.extend({
       this.verificationCodeState = valid;
       return valid;
     },
+    handleJiraUrlSubmit() {
+      const valid = (
+        this.$refs.jiraUrlForm as Vue & { checkValidity: () => boolean }
+      ).checkValidity();
+      this.jiraUrlState = valid;
+      if (valid) {
+        this.jiraUrl = this.jiraUrlInput;
+        this.openSignInWithJira("cloud");
+        this.showJiraCloudCollapse = false;
+      }
+    },
     async openSignInWithJira(type) {
-      this.enableJiraUrlInputField = false;
       this.selectedIssueTracker = type;
       const tokenDto =
         this.selectedIssueTracker === "cloud"
-          ? await apiService.getJiraCloudRequestToken('', this.jiraUrl)
+          ? await apiService.getJiraCloudRequestToken("", this.jiraUrl)
           : await apiService.getJiraServerRequestToken();
       this.token = tokenDto.token;
       window.open(tokenDto.url, "_blank")?.focus();
