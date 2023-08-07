@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div>
-      <b-button v-b-toggle.collapse-cloud variant="success" :disabled="!enableJiraCloud" class="my-1">
+    <div v-if="enableJiraCloud">
+      <b-button v-b-toggle.collapse-cloud variant="success" class="my-1">
         {{
           $t(
             "session.prepare.step.selection.mode.description.withIssueTracker.buttons.signInWithJiraCloud.label"
@@ -36,10 +36,9 @@
         </form>
       </b-collapse>
     </div>
-    <div>
+    <div v-if="enableJiraServer">
       <b-button
         variant="success"
-        :disabled="!enableJiraServer"
         @click="
         openSignInWithJira('server');
       "
