@@ -28,7 +28,7 @@ export default Vue.extend({
 });
 </script>
 <style>
-@import './assets/variables.css';
+@import "./assets/variables.css";
 main {
   min-height: calc(100vh - 10rem);
   background-image:
