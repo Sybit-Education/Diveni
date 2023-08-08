@@ -16,16 +16,16 @@ import java.util.Map;
 @RequestMapping("/config")
 public class ConfigController {
 
-  @Autowired private JiraServerService jiraServerService;
+  private JiraServerService jiraServerService;
 
-  @Autowired private JiraCloudService jiraCloudService;
+  private JiraCloudService jiraCloudService;
 
-  @Autowired private AzureDevOpsService azureDevOpsService;
+  private AzureDevOpsService azureDevOpsService;
 
   @Value("${LOCALE:en}")
   private String LOCALE;
 
-  @GetMapping("/issueTracker")
+  @GetMapping("/issue-tracker")
   public Map<String, String> getIssueTrackerConfig() {
     Map<String, String> issueTrackerConfig = new HashMap<>();
     issueTrackerConfig.put(
@@ -42,5 +42,20 @@ public class ConfigController {
     Map<String, String> localeConfig = new HashMap<>();
     localeConfig.put("locale", LOCALE);
     return localeConfig;
+  }
+
+  @Autowired
+  public void setJiraServerService(JiraServerService jiraServerService) {
+    this.jiraServerService = jiraServerService;
+  }
+
+  @Autowired
+  public void setJiraCloudService(JiraCloudService jiraCloudService) {
+    this.jiraCloudService = jiraCloudService;
+  }
+
+  @Autowired
+  public void setAzureDevOpsService(AzureDevOpsService azureDevOpsService) {
+    this.azureDevOpsService = azureDevOpsService;
   }
 }

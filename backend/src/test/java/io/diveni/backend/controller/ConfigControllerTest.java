@@ -35,7 +35,7 @@ public class ConfigControllerTest {
   @Test
   public void getIssueTrackerConfig_returnsConfig() throws Exception {
     this.mockMvc
-        .perform(get("/config/issueTracker"))
+        .perform(get("/config/issue-tracker"))
         .andExpect(MockMvcResultMatchers.status().isOk())
         .andExpect(
             MockMvcResultMatchers.jsonPath("$.isJiraServerEnabled")

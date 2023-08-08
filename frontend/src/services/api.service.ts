@@ -5,7 +5,7 @@ import axios, { AxiosResponse } from "axios";
 class ApiService {
   public async getIssueTrackerConfig(): Promise<Record<string, string>> {
     const response = await axios.get<Record<string, string>>(
-      `${constants.backendURL}/config/issueTracker`
+      `${constants.backendURL}/config/issue-tracker`
     );
     return response.data;
   }
