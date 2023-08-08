@@ -1,5 +1,5 @@
 <template>
-  <div class="textDescription">
+  <div id="textDescription">
     <h5>
       <i>{{ $t("session.prepare.step.selection.mode.description.withoutUS.subtitle") }}</i>
     </h5>
@@ -24,8 +24,8 @@ export default Vue.extend({
 
 <style scoped>
 
-.textDescription {
-  color: var(--text-primary-color) !important;
+#textDescription {
+  color: var(--text-primary-color);
 }
 
 </style>

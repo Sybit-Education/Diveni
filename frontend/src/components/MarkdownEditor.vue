@@ -127,7 +127,7 @@ export default Vue.extend({
 }
 
 .lightMode .toastui-editor-defaultUI .ProseMirror{
-  background-color: var(--textAreaColour); /*d0cccc */
+  background-color: var(--textAreaColour);
 }
 
 .lightMode .toastui-editor-md-container .toastui-editor-md-preview {

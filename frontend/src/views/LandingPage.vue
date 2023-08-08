@@ -33,73 +33,73 @@
     </b-container>
     <b-container class="py-5">
         <div class="parent py-5 px-5">
-        <div class="background py-5"></div>
-        <div class="text">
-          <h1>Remote Planning Poker using DIVENI</h1>
-          <b-card-group deck class="py-5">
-            <b-card class="pictureCard">
-              <b-card-text>
-                <b-img
-              :src="require(`@/assets/SetUpSession.png`)"
-              class="landingPagePictures"
-                />
-              </b-card-text>
-            </b-card>
-            <b-card class="pictureCard">
-              <b-card-text>
-                <b-img
-              :src="require(`@/assets/InviteYourTeam.png`)"
-              class="landingPagePictures"
-                />
-              </b-card-text>
-            </b-card>
-            <b-card class="pictureCard">
-              <b-card-text>
-                <b-img
-              :src="require(`@/assets/EstimateUserStories.png`)"
-              class="landingPagePictures"
-                />
-              </b-card-text>
-            </b-card>
-          </b-card-group>
-          <b-card-group deck>
-            <b-card class="aboutDiveni" title="Set up Session">
-              <b-card-text>
-                Create a planning session and select your prefered voting set.
-              </b-card-text>
-              <b-card-text>
-                You could import your user stories or connect JIRA to syncronize story points.
-              </b-card-text>
+          <div class="background py-5"></div>
+          <div class="text">
+            <h1>Remote Planning Poker using DIVENI</h1>
+            <b-card-group deck class="py-5">
+              <b-card class="pictureCard">
+                <b-card-text>
+                  <b-img
+                :src="require(`@/assets/SetUpSession.png`)"
+                class="landingPagePictures"
+                  />
+                </b-card-text>
+              </b-card>
+              <b-card class="pictureCard">
+                <b-card-text>
+                  <b-img
+                :src="require(`@/assets/InviteYourTeam.png`)"
+                class="landingPagePictures"
+                  />
+                </b-card-text>
+              </b-card>
+              <b-card class="pictureCard">
+                <b-card-text>
+                  <b-img
+                :src="require(`@/assets/EstimateUserStories.png`)"
+                class="landingPagePictures"
+                  />
+                </b-card-text>
+              </b-card>
+            </b-card-group>
+            <b-card-group deck>
+              <b-card class="aboutDiveni" title="Set up Session">
+                <b-card-text>
+                  Create a planning session and select your prefered voting set.
+                </b-card-text>
+                <b-card-text>
+                  You could import your user stories or connect JIRA to syncronize story points.
+                </b-card-text>
 
-              <b-card-sub-title> Connecting to Issue-Tracker </b-card-sub-title>
-              <b-card-text>
-                DIVENI could connect to issue trackers like Azure DevOps, JIRA Server and Cloud to show
-                user stories and update the voted results of your planning poker.
-              </b-card-text>
-            </b-card>
-            <b-card class="aboutDiveni" title="Invite your Team">
-              <b-card-text> Invite your team using QR-Code, invite link or code. </b-card-text>
-              <b-card-text>
-                Every user will be randomly assinged to a animal and is ready to estimate.
-              </b-card-text>
-              <b-card-text>
-                If everybody is in the session, you could start estimation. Having defined a time limit
-                this will be used as limit for voting time.
-              </b-card-text>
-            </b-card>
-            <b-card class="aboutDiveni" title="Estimate User Stories">
-              <b-card-text>
-                Every member of team could use your defined set to vote the selected user story.
-              </b-card-text>
-              <b-card-text>
-                If everybody has voted, DIVENI shows results and randomly selects two voters having
-                voted minimum / maximum to discuss their estimation.
-              </b-card-text>
-              <b-card-text> After discussion you could repeat estimation. </b-card-text>
-            </b-card>
-          </b-card-group>
+                <b-card-sub-title> Connecting to Issue-Tracker </b-card-sub-title>
+                <b-card-text>
+                  DIVENI could connect to issue trackers like Azure DevOps, JIRA Server and Cloud to show
+                  user stories and update the voted results of your planning poker.
+                </b-card-text>
+              </b-card>
+              <b-card class="aboutDiveni" title="Invite your Team">
+                <b-card-text> Invite your team using QR-Code, invite link or code. </b-card-text>
+                <b-card-text>
+                  Every user will be randomly assinged to a animal and is ready to estimate.
+                </b-card-text>
+                <b-card-text>
+                  If everybody is in the session, you could start estimation. Having defined a time limit
+                  this will be used as limit for voting time.
+                </b-card-text>
+              </b-card>
+              <b-card class="aboutDiveni" title="Estimate User Stories">
+                <b-card-text>
+                  Every member of team could use your defined set to vote the selected user story.
+                </b-card-text>
+                <b-card-text>
+                  If everybody has voted, DIVENI shows results and randomly selects two voters having
+                  voted minimum / maximum to discuss their estimation.
+                </b-card-text>
+                <b-card-text> After discussion you could repeat estimation. </b-card-text>
+              </b-card>
+            </b-card-group>
+          </div>
         </div>
-      </div>
       <h1 class="mt-5">About DIVENI</h1>
       <p>DIVENI was initially developed by students of HTWG Constance and is open source now.</p>
       <p>
@@ -234,7 +234,7 @@ export default Vue.extend({
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: var(--blurBackGroundColor);/*rgba(145, 145, 145, 0.527); rgba(207, 207, 207, 0.527) rgba(80, 80, 80, 0.219) rgba(37, 37, 37, 0.219)*/
+  background-color: var(--blurBackGroundColor);
   filter: blur(10px);
   z-index: 0;
   border-radius: 1rem;

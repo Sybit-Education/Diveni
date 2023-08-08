@@ -2,7 +2,8 @@
   <b-container>
     <h1 id="heading">
       {{ $t("page.join.title") }}
-      <b-img :src="require('@/assets/ControllerJoinPage.png')" id="controller"/>
+      <!-- <b-img :src="require('@/assets/ControllerJoinPage.png')" id="controller"/> -->
+      <BIconController id="controller"/>
     </h1>
     <join-page-card
       :color="hexColor"
@@ -20,12 +21,14 @@ import { v4 as uuidv4 } from "uuid";
 import JoinPageCard from "../components/JoinPageCard.vue";
 import JoinCommand from "../model/JoinCommand";
 import Constants from "../constants";
+import { BIconController } from "bootstrap-vue";
 
 export default Vue.extend({
   name: "JoinPage",
   components: {
     JoinPageCard,
-  },
+    BIconController
+},
   data() {
     return {
       hexColor: Constants.getRandomPastelColor(),
@@ -165,7 +168,7 @@ export default Vue.extend({
 }
 
 #controller {
-  height: 49;
+  height: 49px;
   width: 78px;
   transform: rotate(315deg);
   margin-left: 1%

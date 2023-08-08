@@ -23,8 +23,7 @@
         "title": "En attente de membres...",
         "text": {
           "beforeID": "Partager le code",
-          "afterID": "avec vos coéquipiers",
-          "waiting": "En attente de l'adhésion des membres"
+          "afterID": "avec vos coéquipiers"
         },
         "button": "Commencer la planification",
         "refreshStories": "Actualiser les User Stories",

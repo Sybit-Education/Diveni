@@ -1,6 +1,6 @@
 <template>
   <b-navbar toggleable="md" class="top-navigation" fixed="top" sticky>
-    <b-navbar-brand class="top-navigation__title" style="color: var(--text-primary-color)" to="/">
+    <b-navbar-brand class="top-navigation__title" style="color: var(--text-primary-color);" to="/">
       <b-img src="/img/icons/logo.svg" class="top-navigation__nav-logo"/>
       {{ $t("page.landing.productTitle") }}
     </b-navbar-brand>
@@ -82,7 +82,7 @@ export default Vue.extend({
 /* TOP Navigation Bar */
 
 .top-navigation {
-  background-color: var(--topNavigationBarColor); /*rgba(200, 200, 200, 0.75); */
+  background-color: var(--topNavigationBarColor);
 }
 .top-navigation__nav-logo {
   height: 3rem;
@@ -103,11 +103,10 @@ export default Vue.extend({
   position: absolute;
   background-color: var(--background-color-primary);
   border-radius: 50%;
-  top: 0.025rem;
   left: 0rem;
   height: calc(var(--element-size) * 0.3);
   width: calc(var(--element-size) * 0.3);
-  transform: translateX(0);
+  transform: translateX(0); 
   transition: transform 0.3s ease, background-color 0.5s ease;
 }
 .switch-label {

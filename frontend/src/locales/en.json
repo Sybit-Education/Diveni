@@ -23,8 +23,7 @@
         "title": "Waiting for members ...",
         "text": {
           "beforeID": "Share the code",
-          "afterID": "with your team mates",
-          "waiting": "Waiting for members to join"
+          "afterID": "with your team mates"
         },
         "button": "Start Planning",
         "refreshStories": "Refresh Userstories",

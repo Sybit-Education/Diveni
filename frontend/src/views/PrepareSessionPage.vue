@@ -348,11 +348,8 @@ export default Vue.extend({
 }
 
 .importUserStoryButton:focus{
-  background-color: var(--startButtonHovered);
-  color: var(--text-primary-color);
-}
-.importUserStoryButton:active{
   background-color: var(--startButtonHovered) !important;
+  color: var(--text-primary-color) !important;
 }
 
 .optionButtons {
@@ -385,13 +382,20 @@ export default Vue.extend({
 .startingButton:hover {
   background-color: var(--startButtonHovered);
   color: var(--text-primary-color);
-  border-radius: var(--buttonShape);
+}
+
+.startingButton:disabled {
+  color: var(--text-primary-color);
+}
+
+.startingButton:disabled:hover {
+  background-color: grey;
+  color: var(--text-primary-color);
 }
 
 .startingButton:focus {
   background-color: var(--startButtonHovered) !important;
   color: var(--text-primary-color);
-  border-radius: var(--buttonShape);
 }
 
 .numberPictures{

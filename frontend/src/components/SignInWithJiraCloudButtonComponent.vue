@@ -39,12 +39,12 @@ export default Vue.extend({
 <style scoped>
 
 #button {
-  background-color: var(--preparePageMainColor) !important;
+  background-color: var(--preparePageMainColor);
   color: var(--text-primary-color);
 }
 
 #button:hover {
-  background-color: var(--startButtonHovered) !important;
+  background-color: var(--startButtonHovered);
   color: var(--text-primary-color);
 }
 

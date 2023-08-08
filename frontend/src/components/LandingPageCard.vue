@@ -32,7 +32,7 @@ export default Vue.extend({
 }
 
 .card-title{
-  color:var(--text-primary-color)
+  color:var(--text-primary-color);
 }
 
 </style>

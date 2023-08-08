@@ -5,7 +5,6 @@
     </div>
     <b-button
       v-b-modal.close-session-modal
-      style="max-height: 40px; border-radius: 2rem;"
       variant="danger"
       class="mt-4 button"
       @click="leaveSession"

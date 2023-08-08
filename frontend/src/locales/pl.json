@@ -23,8 +23,7 @@
         "title": "Oczekiwanie na członków...",
         "text": {
           "beforeID": "Udostępnij kod",
-          "afterID": "z kolegami z drużyny",
-          "waiting": "Oczekiwanie na dołączenie członków"
+          "afterID": "z kolegami z drużyny"
         },
         "button": "Rozpocznij planowanie",
         "refreshStories": "Odśwież Historie użytkowników",

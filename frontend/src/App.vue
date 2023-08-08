@@ -49,9 +49,24 @@ main {
   radial-gradient( farthest-corner at 84% 82%, var(--blurredColour4) 0.1%, rgba(255, 255, 255, 0) 13%),
   radial-gradient(circle farthest-corner at 84% 82%, var(--blurredColour6) 0.1%, rgba(255, 255, 255, 0) 13%);
   background-color: var(--background-color-primary);
+  /*animation: bg-animation 10s infinite;
+  background-size: 150%; */
   backdrop-filter: blur(5px);
   color: var(--text-primary-color) !important;
 }   
+/* Testing for the animated Background
+@keyframes bg-animation {
+  0% {
+    background-position: 90%;
+  }
+  50% {
+    background-position: 100%
+  }
+  100% {
+    background-position: 90%;
+  }
+}
+*/
 
 p {
   color: var(--text-primary-color);
@@ -73,14 +88,11 @@ h4 {
 
 .newSessionCard .landingPageCardButton:hover{
   background-color: var(--startButtonHovered);
-  border-radius: var(--buttonShape);
   color: var(--text-primary-color);
 }
 
 .newSessionCard .landingPageCardButton:focus{
   background-color: var(--startButtonHovered) !important;
-  border-radius: var(--buttonShape);
-  color: var(--text-primary-color);
 }
 
 .newSessionCard .card-footer {
@@ -95,7 +107,6 @@ h4 {
 
 .joinSessionCard .landingPageCardButton:hover{
   background-color: var(--joinButtonHovered);
-  border-radius: var(--buttonShape);
   color: var(--text-primary-color);
 }
 
@@ -111,14 +122,11 @@ h4 {
 
 .reconnectSessionCard .landingPageCardButton:hover {
   background-color: var(--reconnectButtonHovered);
-  border-radius: var(--buttonShape);
   color: var(--text-primary-color);
 }
 
 .reconnectSessionCard .landingPageCardButton:focus {
   background-color: var(--reconnectButtonHovered) !important;
-  border-radius: var(--buttonShape);
-  color: var(--text-primary-color);
 }
 
 .reconnectSessionCard .card-footer {
@@ -140,7 +148,6 @@ h4 {
 
 .notSelectedTab:hover {
   background-color: var(--preparePageInActiveTabHover) !important;
-  border-color: var(--preparePageBorderTab) !important;
 }
 
 .notSelectedTextColor {
@@ -177,8 +184,6 @@ a.btn.joinButton {
 
 a.btn.joinButton:hover {
   background-color: var(--joinButtonHovered);
-  border-radius: var(--buttonShape);
-  color: var(--text-primary-color);
 }
 
 a.btn.startButton {
@@ -189,48 +194,35 @@ a.btn.startButton {
 
 a.btn.startButton:hover {
   background-color: var(--startButtonHovered);
-  border-radius: var(--buttonShape);
-  color: var(--text-primary-color);
 }
 
 a.btn.startButton:focus {
   background-color: var(--startButtonHovered) !important;
-  border-radius: var(--buttonShape);
-  color: var(--text-primary-color);
-}
-.btn-secondary:not(:disabled):not(.disabled):active{
-  border:none;
-  background-color: transparent;
-  outline: none;
-  box-shadow: none;
 }
 
-.btn-secondary:focus {
-  color: var(--text-primary-color) !important;
-}
-
-.btn.dropdown-toggle {
+.btn.dropdown-toggle { /* User Estimation Button */
   color: var(--text-primary-color);
   background-color: var(--joinButton);
 }
 
-.btn.dropdown-toggle:active {
-  color: var(--text-primary-color);
+.btn.dropdown-toggle:active { /* User Estimation Button hold */
   background-color: var(--joinButtonHovered) !important;
+  color: var(--text-primary-color) !important;
 }
 
-.btn.dropdown-toggle:hover {
-  color: var(--text-primary-color);
+.btn.dropdown-toggle:hover { /* User Estimation Button Hover */
   background-color: var(--joinButtonHovered);
+  color: var(--text-primary-color);
 }
 
-.btn-secondary:not(:disabled):not(.disabled).active, .show > .btn-secondary.dropdown-toggle {
-  color: var(--text-primary-color) !important ;
+.btn-secondary:not(:disabled):not(.disabled).active, .show > .btn-secondary.dropdown-toggle { /* User Estimation Button clicked */
   background-color: var(--joinButton) !important;
+  color: var(--text-primary-color) !important;
 }
 
-.btn-secondary:focus{
+.btn-secondary:focus{ /* User Estimation Button after click & add User Story Button on click hold*/
   background-color: var(--joinButtonHovered) !important;
+  color: var(--text-primary-color) !important;
 }
 
 .a.dropdown-item {
@@ -240,7 +232,6 @@ a.btn.startButton:focus {
 .a.dropdown-item:hover {
   color: black !important;
 }
-
 
 .dropdown-menu {
   background-color: var(--topNavigationBarColor) !important;

@@ -136,11 +136,11 @@
     </div>
     <b-row v-if="session_userStoryMode !== 'NO_US'" class="mt-4">
       <b-col>
-        <user-story-sum-component class=""/>
+        <user-story-sum-component/>
       </b-col>
     </b-row>
     <b-row v-if="session_userStoryMode !== 'NO_US'">
-      <b-col cols="7" class="">
+      <b-col cols="7">
         <div v-if="session_userStoryMode === 'US_JIRA'" class="refreshUserstories">
           <b-button
             class="w-100 mb-3 refreshButton" 
@@ -567,15 +567,11 @@ export default Vue.extend({
 .optionButton:hover{
   background-color: var(--textAreaColourHovered);
   color: var(--text-primary-color);
-  border-color: black;
-  border-radius: var(--buttonShape);
 }
 
 .optionButton:focus{
   background-color: var(--textAreaColourHovered) !important;
   color: var(--text-primary-color)  !important;
-  border-color: black;
-  border-radius: var(--buttonShape);
 }
 
 .refreshButton {
@@ -585,19 +581,17 @@ export default Vue.extend({
 }
 
 .refreshButton:hover {
-  border-radius: var(--element-size);
   color: var(--text-primary-color);
   background-color: var(--joinButtonHovered);
+}
+
+.refreshButton:focus {
+  background-color: var(--joinButtonHovered) !important;
+  color: var(--text-primary-color) !important;
 }
 
 .catGif {
   width: 240px; 
   height: 180px;
 }
-
-.btn-secondary:not(:disabled):not(.disabled):active, .btn-secondary:not(:disabled):not(.disabled).active, .show > .btn-secondary.dropdown-toggle {
-  color: var(--text-primary-color) !important ;
-  background-color: var(--preparePageMainColor) !important;
-}
-
 </style>

@@ -196,7 +196,7 @@ export default Vue.extend({
   },
   methods: {
     isActiveCardSetNumber(num) {
-      return this.selectedCardSet.activeValues.includes(num) ? "activePills m-1" : "outline-secondary m-1";
+      return this.selectedCardSet.activeValues.includes(num) ? "activePills m-1" : "outline-secondary inActivePills m-1";
     },
     onCardSetSelected(set) {
       this.selectedCardSet = set;
@@ -397,12 +397,22 @@ export default Vue.extend({
 }
 
 .activePills {
-  background-color: var(--preparePageMainColor) !important;
+  background-color: var(--preparePageMainColor);
   color: var(--text-primary-color);
 }
 
 .activePills:hover {
+  background-color: var(--preparePageInActiveTabHover);
+  color: var(--text-primary-color);
+}
+
+.activePills:focus {
   background-color: var(--preparePageInActiveTabHover) !important;
+  color: var(--text-primary-color);
+}
+
+.inActivePills:focus {
+  background-color: grey !important;
   color: var(--text-primary-color);
 }
 

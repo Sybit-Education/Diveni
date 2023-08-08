@@ -220,13 +220,11 @@ export default Vue.extend({
 .addButton:hover {
   background-color: var(--joinButtonHovered);
   color: var(--text-primary-color);
-  border-radius: var(--element-size);
 }
 
 .addButton:focus {
   background-color: var(--joinButtonHovered);
   color: var(--text-primary-color);
-  border-radius: var(--element-size);
 }
 
 .selectedStory {
@@ -267,11 +265,6 @@ export default Vue.extend({
 }
 
 .form-control::placeholder {
-  color: var(--text-primary-color);
-}
-
-.form-control:focus {
-  background-color: var(--textAreaColour);
   color: var(--text-primary-color);
 }
 

@@ -6,7 +6,6 @@
     <b-button
      v-b-modal.close-session-modal
       variant="danger"
-      style="border-radius:var(--buttonShape); max-height: 40px;"
       class="button"
     >
       <b-icon-x />
@@ -88,6 +87,8 @@ export default Vue.extend({
     left: 13.5%;
     bottom: 28%;
     white-space: nowrap;
+    border-radius:var(--buttonShape);
+    max-height: 40px;
 }
 
 #picture-holderLeave {
@@ -109,6 +110,8 @@ export default Vue.extend({
 .img-holderLeave .button {
     position: absolute !important;
     text-align: left;
+    max-height: 40px;
+    border-radius:  var(--buttonShape);
     bottom: 0px;
     white-space: nowrap;
 }

@@ -73,6 +73,7 @@ export default Vue.extend({
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+
 .centerItems {
   display: flex;
   justify-content: center;
@@ -119,7 +120,6 @@ export default Vue.extend({
 
 #goBackHomeButton:hover {
   background-color: var(--joinButtonHovered);
-  border-radius: var(--buttonShape);
   color: var(--text-primary-color);
 }
 </style>

@@ -23,8 +23,7 @@
         "title": "Esperando os membros ...",
         "text": {
           "beforeID": "Compartilhar o código",
-          "afterID": "com companheiros de equipe",
-          "waiting": "Aguardando os membros entrarem"
+          "afterID": "com companheiros de equipe"
         },
         "button": "Iniciar Planejamento",
         "refreshStories": "Atualizar as Histórias de Usuário",

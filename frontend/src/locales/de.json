@@ -23,8 +23,7 @@
         "title": "Warte auf die Teammitglieder...",
         "text": {
           "beforeID": "Teile den Code",
-          "afterID": "mit deinen Teammitgliedern",
-          "waiting": "Warte auf den Beitritt des Teams"
+          "afterID": "mit deinen Teammitgliedern"
         },
         "button": "Starte das Planning",
         "refreshStories": "Aktualisiere die Userstories",
