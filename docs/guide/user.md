@@ -100,6 +100,60 @@ cards once you've started the session.
   - All following steps for the creation of a new session are the same as described under 1.1.
 
 ## 1.3 Create new Session with connection to an issue tracker
+### JIRA Cloud
+To use JIRA Cloud with Diveni you can choose to either use our official server [Diveni.io](https://diveni.io) or use a self-hosted instance
+of Diveni. Either way, the connection process is the same for both, but for your local instance you will need to provide different credentials.
+::: info
+You must be an administrator of your JIRA Cloud instance to create an application link for Diveni.
+:::
+
+::: details Set-Up Guide for Application Links
+#### 1. Step
+Go to your JIRA Cloud instance and click on the Settings icon in the top right corner. Then select `Products`.
+![JIRA Cloud Step 1](../img/jira_cloud_step1.png)
+
+#### 2. Step
+On the configuration page click on `Application links` under `INTEGRATIONS` on the left side.
+![JIRA Cloud Step 2](../img/jira_cloud_step2.png)
+
+#### 3. Step
+Under Application Links, click the `Create link` button to create an application link.
+![JIRA Cloud Step 3](../img/jira_cloud_step3.png)
+
+#### 4. Step
+A modal should appear to create a link. Make sure to select `Direct application link` and enter either `https://diveni.io` or the URL of
+your self-hosted instance if you do not want to use our official server. After that click on continue.
+![JIRA Cloud Step 4](../img/jira_cloud_step4.png)
+
+If you get a warning that there was no response from the URL you entered, ignore it. Just click continue again.
+![JIRA Cloud Step 4 Warning](../img/jira_cloud_step4_warning.png)
+
+#### 5. Step
+Now a review link modal will pop up. All you have to do is enter `Diveni` as Application name and select `Generic Application` in the
+Application Type dropdown. Finally, make sure you check the `Create incoming link` checkbox and click on continue.
+![JIRA Cloud Step 5](../img/jira_cloud_step5.png)
+
+#### 6. Step
+The last on your JIRA Cloud instance is to create an incoming link. 
+1. Set `Diveni_OauthKey` as Consumer Key (or your own consumer key for self-hosted instances)
+2. Set `Diveni` as Consumer Name
+3. Enter the following key (or your own public key for self-hosted instances) as Public Key
+4. Click on continue and wait for the application link to be set up
+![JIRA Cloud Step 6](../img/jira_cloud_step6.png)
+::: tip Public Key
+   MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC1dCI+Ks75SQKHIpxeefj+K8HE
+   hihwn9L/8NAc+A8LDCUSOClL3CDO0H8oVQOvvQwJm8RQDO3TFL+dZfaC4oW6zTkj
+   ch2oV9sBGaZuK4gVhhzZSErzWEpZ9BnGvk3/ZuTF8niRUc35y/wo6o6lFiICRfc5
+   iBE48mAsbEu7kiiKvQIDAQAB
+:::
+   
+::: details Guide for using JIRA Cloud on Diveni
+
+:::
+### JIRA Server
+To use JIRA Server with your local Diveni instance make sure the administrator set up Diveni correctly by following this [guide](./install#jira-enterprise-connector).
+### Azure DevOps
+To use Azure DevOps with your local Diveni instance make sure the administrator set up Diveni correctly by following this [guide](./install#azure-devops-connector).
 
 ## 2 Join Session
 

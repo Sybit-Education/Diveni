@@ -21,11 +21,15 @@ connect to the issue tracker. See below for details.
 
 Connecting to an issue tracker is optional. Diveni can also be used without a connection.
 
+## Issue-Tracker
+
 ### JIRA Cloud Connector
 
-```
-TBD
-```
+1. To set up Diveni to connect to JIRA Cloud instances, refer to this guide to generate an RSA public/private key pair:
+<https://developer.atlassian.com/cloud/jira/platform/jira-rest-api-oauth-authentication/#step-2--configure-the-client-application-as-an-oauth-consumer>
+
+2. After that you need to define a `consumer key`. The `consumer key` can be anything as long as it matches the application link.
+The `private key` (generated in step 1) and the `consumer key` have to be entered as `JIRA_CLOUD_PRIVATEKEY` and `JIRA_CLOUD_CONSUMERKEY` in `backend/.env`.
 
 ### JIRA Enterprise Connector
 
