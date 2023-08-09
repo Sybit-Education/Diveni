@@ -76,7 +76,7 @@ public class JiraCloudService implements ProjectManagementProviderOAuth1 {
       if (e instanceof HttpResponseException) {
         HttpResponseException ex = (HttpResponseException) e;
         if (ex.getStatusCode() == 401) {
-          LOGGER.warn("Application Link is not set up correctly!");
+          LOGGER.warn("Application link is not set up correctly!");
           throw new ResponseStatusException(HttpStatus.PRECONDITION_REQUIRED, ErrorMessages.failedToAuthorizeToJiraCloud);
         }
       }
