@@ -49,7 +49,7 @@ public class SessionsScheduledTasks {
                 s.getLastModified() != null
                     && s.getLastModified().getTime() < c.getTime().getTime())
         .forEach(session -> {
-          removeSessionToken(session.getAccessToken());
+          removeSessionToken(session.getTokenID());
           databaseService.deleteSession(session);
         });
     LOGGER.info("<-- deleteOldSessions()");

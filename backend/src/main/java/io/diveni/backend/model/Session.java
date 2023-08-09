@@ -58,7 +58,7 @@ public class Session {
   private final Date lastModified;
 
   @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-  private final String accessToken;
+  private final String tokenID;
 
   private final String timerTimestamp;
 
@@ -88,7 +88,7 @@ public class Session {
         currentHighlights,
         sessionState,
         lastModified,
-        accessToken,
+        tokenID,
         timerTimestamp);
   }
 
@@ -119,7 +119,7 @@ public class Session {
           new ArrayList<>(),
           sessionState,
           lastModified,
-          accessToken,
+          tokenID,
           timerTimestamp);
     }
     val maxEstimationMembers =
@@ -192,7 +192,7 @@ public class Session {
         newHighlighted,
         sessionState,
         lastModified,
-        accessToken,
+        tokenID,
         timerTimestamp);
   }
 
@@ -208,7 +208,7 @@ public class Session {
         new ArrayList<>(),
         sessionState,
         lastModified,
-        accessToken,
+        tokenID,
         timerTimestamp);
   }
 
@@ -231,7 +231,7 @@ public class Session {
         currentHighlights,
         sessionState,
         lastModified,
-        accessToken,
+        tokenID,
         timerTimestamp);
   }
 
@@ -249,7 +249,7 @@ public class Session {
         currentHighlights,
         sessionState,
         lastModified,
-        accessToken,
+        tokenID,
         timerTimestamp);
   }
 
@@ -265,7 +265,7 @@ public class Session {
         currentHighlights,
         sessionState,
         lastModified,
-        accessToken,
+        tokenID,
         timerTimestamp);
   }
 
@@ -281,7 +281,7 @@ public class Session {
         currentHighlights,
         updatedSessionState,
         lastModified,
-        accessToken,
+        tokenID,
         timerTimestamp);
   }
 
@@ -299,7 +299,7 @@ public class Session {
         currentHighlights,
         sessionState,
         lastModified,
-        accessToken,
+        tokenID,
         timerTimestamp);
   }
 
@@ -319,7 +319,7 @@ public class Session {
         currentHighlights,
         sessionState,
         lastModified,
-        accessToken,
+        tokenID,
         timerTimestamp);
   }
 
@@ -335,7 +335,7 @@ public class Session {
         currentHighlights,
         sessionState,
         lastModified,
-        accessToken,
+        tokenID,
         timestamp);
   }
 
@@ -351,7 +351,7 @@ public class Session {
         currentHighlights,
         sessionState,
         lastModified,
-        accessToken,
+        tokenID,
         null);
   }
 
@@ -367,23 +367,7 @@ public class Session {
         currentHighlights,
         sessionState,
         lastModified,
-        accessToken,
-        timerTimestamp);
-  }
-
-  public Session setAccessToken(String token) {
-    return new Session(
-        databaseID,
-        sessionID,
-        adminID,
-        sessionConfig,
-        adminCookie,
-        members,
-        memberVoted,
-        currentHighlights,
-        sessionState,
-        lastModified,
-        token,
+        tokenID,
         timerTimestamp);
   }
 }

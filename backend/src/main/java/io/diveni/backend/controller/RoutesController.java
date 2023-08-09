@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -52,7 +53,7 @@ public class RoutesController {
 
   @PostMapping(value = "/sessions")
   public ResponseEntity<Map<String, Object>> createSession(
-      @RequestParam("tokenIdentifier") Optional<String> tokenIdentifier,
+      @RequestHeader("X-Token-ID") Optional<String> tokenIdentifier,
       @RequestBody SessionConfig sessionConfig) {
     LOGGER.debug("--> createSession(), tokenIdentifier={}", tokenIdentifier);
 
@@ -71,10 +72,6 @@ public class RoutesController {
             .filter(s -> !usedSessionIDs.contains(s))
             .limit(2)
             .collect(Collectors.toList());
-    val jiraConfig =
-        tokenIdentifier
-            .map(token -> jiraServerService.getJiraConfigs().remove(token))
-            .orElse(null);
     val session =
         new Session(
             databaseID,
@@ -87,7 +84,7 @@ public class RoutesController {
             new ArrayList<>(),
             SessionState.WAITING_FOR_MEMBERS,
             null,
-            jiraConfig != null ? jiraConfig.getAccessToken() : null,
+            tokenIdentifier.orElse(null),
             null);
     databaseService.saveSession(session);
     val responseMap = Map.of("session", session, "adminCookie", session.getAdminCookie());
