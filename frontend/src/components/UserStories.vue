@@ -264,6 +264,11 @@ export default Vue.extend({
   color: var(--text-primary-color);
 }
 
+.form-control:focus {
+  background-color: var(--textAreaColour);
+  color: var(--text-primary-color);
+}
+
 .form-control::placeholder {
   color: var(--text-primary-color);
 }
