@@ -100,11 +100,6 @@ export default Vue.extend({
       required: false,
       default: false,
     },
-    disabled: {
-      type: Boolean,
-      required: false,
-      default: false,
-    },
   },
   data() {
     return {
