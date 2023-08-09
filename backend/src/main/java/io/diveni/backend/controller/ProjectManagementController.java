@@ -6,6 +6,7 @@
 package io.diveni.backend.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import io.diveni.backend.model.JiraRequestToken;
 import io.diveni.backend.model.Project;
@@ -62,7 +63,7 @@ public class ProjectManagementController {
           HttpStatus.INTERNAL_SERVER_ERROR, PROVIDER_NOT_ENABLED_MESSAGE);
     }
     ResponseEntity<JiraRequestToken> response =
-        new ResponseEntity<>(jiraServerService.getRequestToken(), HttpStatus.OK);
+        new ResponseEntity<>(jiraServerService.getRequestToken(Optional.empty()), HttpStatus.OK);
     LOGGER.debug("<-- getRequestToken()");
     return response;
   }
@@ -96,25 +97,24 @@ public class ProjectManagementController {
     }
     jiraUrl = checkJiraUrl(jiraUrl);
     ResponseEntity<JiraRequestToken> response =
-      new ResponseEntity<>(jiraCloudService.getRequestToken(jiraUrl), HttpStatus.OK);
+      new ResponseEntity<>(jiraCloudService.getRequestToken(Optional.of(jiraUrl)), HttpStatus.OK);
     LOGGER.debug("<-- getOAuth2AccessToken()");
     return response;
   }
 
   @PostMapping(value = "/jira/cloud/verification-code")
   public ResponseEntity<TokenIdentifier> getJiraCloudAccessToken(
-    @RequestParam("jira-url") String jiraUrl, @RequestBody VerificationCode verificationCode) {
+    @RequestBody VerificationCode verificationCode) {
     LOGGER.debug("--> getJiraCloudAccessToken()");
     if (!jiraCloudService.serviceEnabled()) {
       LOGGER.warn("Jira Cloud is not configured!");
       throw new ResponseStatusException(
         HttpStatus.INTERNAL_SERVER_ERROR, PROVIDER_NOT_ENABLED_MESSAGE);
     }
-    jiraUrl = checkJiraUrl(jiraUrl);
     ResponseEntity<TokenIdentifier> response =
       new ResponseEntity<>(
         jiraCloudService.getAccessToken(
-          verificationCode.getCode(), verificationCode.getToken(), jiraUrl),
+          verificationCode.getCode(), verificationCode.getToken()),
         HttpStatus.OK);
     LOGGER.debug("<-- getOauth1AccessToken()");
     return response;
@@ -259,13 +259,14 @@ public class ProjectManagementController {
   }
 
   private String checkJiraUrl(String jiraUrl) {
-    if (!jiraUrl.contains(".atlassian.net")) {
+    String atlassianSuffix = ".atlassian.net";
+    if (!jiraUrl.contains(atlassianSuffix) || jiraUrl.startsWith(atlassianSuffix)) {
       LOGGER.warn("{} is not a valid Atlassian URL!", jiraUrl);
       throw new ResponseStatusException(
         HttpStatus.BAD_REQUEST, jiraUrl + " is not a valid Atlassian URL!"
       );
     }
-    if (jiraUrl.substring(0, 7).toLowerCase().equals("http://"))
+    if (jiraUrl.substring(0, 7).equalsIgnoreCase("http://"))
       jiraUrl = jiraUrl.substring(7);
     if (jiraUrl.endsWith("/"))
       jiraUrl = jiraUrl.substring(0, jiraUrl.length() - 1);

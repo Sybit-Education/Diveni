@@ -19,7 +19,7 @@
             <b-input-group>
               <b-form-input
                 id="input-jira-url"
-                v-model="jiraUrlInput"
+                v-model="jiraUrl"
                 required
                 :placeholder="
                   $t(
@@ -110,7 +110,6 @@ export default Vue.extend({
     return {
       showJiraCloudCollapse: false,
       selectedIssueTracker: "cloud",
-      jiraUrlInput: "",
       jiraUrl: "",
       jiraUrlState: false,
       token: "",
@@ -130,7 +129,6 @@ export default Vue.extend({
       ).checkValidity();
       this.jiraUrlState = valid;
       if (valid) {
-        this.jiraUrl = this.jiraUrlInput;
         this.openSignInWithJira("cloud");
         this.showJiraCloudCollapse = false;
       }
@@ -166,11 +164,7 @@ export default Vue.extend({
       try {
         const response =
           this.selectedIssueTracker === "cloud"
-            ? await apiService.sendJiraCloudVerificationCode(
-                this.verificationCode,
-                this.token,
-                this.jiraUrl
-              )
+            ? await apiService.sendJiraCloudVerificationCode(this.verificationCode, this.token)
             : await apiService.sendJiraServerVerificationCode(this.verificationCode, this.token);
         localStorage.setItem("tokenId", response.tokenId);
         this.$store.commit("setTokenId", response.tokenId);

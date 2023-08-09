@@ -47,11 +47,10 @@ class ApiService {
 
   public async sendJiraCloudVerificationCode(
     code: string,
-    token: string,
-    jiraBaseUrl: string
+    token: string
   ): Promise<JiraResponseCodeDto> {
     const response = await axios.post<JiraResponseCodeDto>(
-      `${constants.backendURL}/issue-tracker/jira/cloud/verification-code?jira-url=${jiraBaseUrl}`,
+      `${constants.backendURL}/issue-tracker/jira/cloud/verification-code`,
       {
         code,
         token,

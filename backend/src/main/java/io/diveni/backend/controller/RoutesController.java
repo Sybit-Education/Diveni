@@ -21,6 +21,8 @@ import io.diveni.backend.model.Session;
 import io.diveni.backend.model.SessionConfig;
 import io.diveni.backend.model.SessionState;
 import io.diveni.backend.service.DatabaseService;
+import io.diveni.backend.service.projectmanagementproviders.azuredevops.AzureDevOpsService;
+import io.diveni.backend.service.projectmanagementproviders.jira.cloud.JiraCloudService;
 import io.diveni.backend.service.projectmanagementproviders.jira.server.JiraServerService;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
@@ -69,9 +71,9 @@ public class RoutesController {
             .filter(s -> !usedSessionIDs.contains(s))
             .limit(2)
             .collect(Collectors.toList());
-    val accessToken =
+    val jiraConfig =
         tokenIdentifier
-            .map(token -> jiraServerService.getAccessTokens().remove(token))
+            .map(token -> jiraServerService.getJiraConfigs().remove(token))
             .orElse(null);
     val session =
         new Session(
@@ -85,7 +87,7 @@ public class RoutesController {
             new ArrayList<>(),
             SessionState.WAITING_FOR_MEMBERS,
             null,
-            accessToken,
+            jiraConfig != null ? jiraConfig.getAccessToken() : null,
             null);
     databaseService.saveSession(session);
     val responseMap = Map.of("session", session, "adminCookie", session.getAdminCookie());

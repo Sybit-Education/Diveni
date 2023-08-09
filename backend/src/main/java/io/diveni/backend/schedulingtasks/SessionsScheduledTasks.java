@@ -57,10 +57,9 @@ public class SessionsScheduledTasks {
 
   private void removeSessionToken(String token) {
     if (jiraCloudService.containsToken(token)) {
-      jiraCloudService.getAccessTokens().remove(token);
-      jiraCloudService.getJiraUrls().remove(token);
+      jiraCloudService.getJiraConfigs().remove(token);
     } else if (jiraServerService.containsToken(token)) {
-      jiraServerService.getAccessTokens().remove(token);
+      jiraServerService.getJiraConfigs().remove(token);
     } else if (azureDevOpsService.containsToken(token)) {
       azureDevOpsService.getAccessTokens().remove(token);
       azureDevOpsService.getAccessTokenToProjectId().remove(token);
