@@ -31,7 +31,7 @@ export default Vue.extend({
 @import "./assets/variables.css";
 main {
   min-height: calc(100vh - 10rem);
-  background-image:
+  background:
   /* Top */
   radial-gradient(farthest-corner at 500px 500px, var(--blurredColour1) 0.1%, rgba(255, 255, 255, 0) 26%),
   radial-gradient(farthest-corner at 500px 500px, var(--blurredColour1) 0.1%, rgba(255, 255, 255, 0) 26%),
@@ -49,24 +49,9 @@ main {
   radial-gradient( farthest-corner at 84% 82%, var(--blurredColour4) 0.1%, rgba(255, 255, 255, 0) 13%),
   radial-gradient(circle farthest-corner at 84% 82%, var(--blurredColour6) 0.1%, rgba(255, 255, 255, 0) 13%);
   background-color: var(--background-color-primary);
-  /*animation: bg-animation 10s infinite;
-  background-size: 150%; */
   backdrop-filter: blur(5px);
   color: var(--text-primary-color) !important;
 }   
-/* Testing for the animated Background
-@keyframes bg-animation {
-  0% {
-    background-position: 90%;
-  }
-  50% {
-    background-position: 100%
-  }
-  100% {
-    background-position: 90%;
-  }
-}
-*/
 
 p {
   color: var(--text-primary-color);
