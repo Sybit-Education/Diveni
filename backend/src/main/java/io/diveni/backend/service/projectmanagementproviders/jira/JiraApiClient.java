@@ -72,10 +72,7 @@ public class JiraApiClient {
 
   public static String getAccessToken(String verificationCode, String requestToken, String jiraBaseUrl, String consumerKey, String privateKey) throws Exception {
     JiraOAuthClient jiraOAuthClient = new JiraOAuthClient(jiraBaseUrl);
-    String accessToken =
-      jiraOAuthClient.getAccessToken(requestToken, verificationCode, consumerKey, privateKey);
-    String id = Utils.generateRandomID();
-    return accessToken;
+    return jiraOAuthClient.getAccessToken(requestToken, verificationCode, consumerKey, privateKey);
   }
 
   public static List<Project> getProjects(JiraConfig config) throws Exception {
