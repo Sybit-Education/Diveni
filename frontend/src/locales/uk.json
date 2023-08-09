@@ -280,6 +280,7 @@
         "memberRemoved": "Ви були видалені з сеансом хоста",
         "issueTrackerCredentials": "Неправильні облікові дані",
         "issueTrackerLoginFailed": "Помилка входу в систему",
+        "jiraCloudRequestTokenFailed": "Failed to authorize to JIRA Cloud! Make sure the application link is set up correctly!",
         "issueTrackerSynchronizeSuccess": "Синхронізовані зміни з Issue-Tracker",
         "issueTrackerSynchronizeFailed": "Не вдалося синхронізувати зміни з Issue-Tracker",
         "wrongID": "Невірний код запрошення",

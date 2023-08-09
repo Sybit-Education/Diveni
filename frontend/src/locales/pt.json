@@ -280,6 +280,7 @@
         "memberRemoved": "Você foi removido da sessão pelo host",
         "issueTrackerCredentials": "Credenciais erradas",
         "issueTrackerLoginFailed": "Falha no login",
+        "jiraCloudRequestTokenFailed": "Failed to authorize to JIRA Cloud! Make sure the application link is set up correctly!",
         "issueTrackerSynchronizeSuccess": "Alterações sincronizadas com Issue-Tracker",
         "issueTrackerSynchronizeFailed": "Falha ao sincronizar as mudanças com o Issue-Tracker",
         "wrongID": "Código de convite incorreto",

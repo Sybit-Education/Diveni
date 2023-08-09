@@ -280,6 +280,7 @@
         "memberRemoved": "Du wurdest vom Host aus der Sitzung entfernt",
         "issueTrackerCredentials": "Falsche Login-Daten",
         "issueTrackerLoginFailed": "Login fehlgeschlagen",
+        "jiraCloudRequestTokenFailed": "Autorisierung zu JIRA Cloud fehlgeschlagen! Stelle sicher, dass der Application Link korrekt eingerichtet ist!",
         "issueTrackerSynchronizeSuccess": "Änderungen mit Issue-Tracker synchronisiert",
         "issueTrackerSynchronizeFailed": "Fehler beim Synchronisieren mit Issue-Tracker",
         "wrongID": "Falscher Einladungscode",

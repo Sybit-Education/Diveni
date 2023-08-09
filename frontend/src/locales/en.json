@@ -280,6 +280,7 @@
         "memberRemoved": "You have been removed from the session by the host",
         "issueTrackerCredentials": "Wrong credentials",
         "issueTrackerLoginFailed": "Login failed",
+        "jiraCloudRequestTokenFailed": "Failed to authorize to JIRA Cloud! Make sure the application link is set up correctly!",
         "issueTrackerSynchronizeSuccess": "Synchronized changes with Issue-Tracker",
         "issueTrackerSynchronizeFailed": "Failed to synchronize changes with Issue-Tracker",
         "wrongID": "Wrong invitation code",

@@ -130,13 +130,17 @@ export default Vue.extend({
     },
     async openSignInWithJira(type) {
       this.selectedIssueTracker = type;
-      const tokenDto =
-        this.selectedIssueTracker === "cloud"
-          ? await apiService.getJiraCloudRequestToken(this.jiraUrl)
-          : await apiService.getJiraServerRequestToken();
-      this.token = tokenDto.token;
-      window.open(tokenDto.url, "_blank")?.focus();
-      this.openModal();
+      try {
+        const tokenDto =
+          this.selectedIssueTracker === "cloud"
+            ? await apiService.getJiraCloudRequestToken(this.jiraUrl)
+            : await apiService.getJiraServerRequestToken();
+        this.token = tokenDto.token;
+        window.open(tokenDto.url, "_blank")?.focus();
+        this.openModal();
+      } catch (e) {
+        this.showToast(e);
+      }
     },
     openModal() {
       this.$nextTick(() => {
@@ -171,7 +175,9 @@ export default Vue.extend({
       });
     },
     showToast(error) {
-      if (error.message == "failed to retrieve access token") {
+      if (error.response.status === 428) {
+        this.$toast.error(this.$t("session.notification.messages.jiraCloudRequestTokenFailed"));
+      } else if (error.response.data.message === "failed to retrieve access token") {
         this.$toast.error(this.$t("session.notification.messages.issueTrackerCredentials"));
       } else {
         this.$toast.error(this.$t("session.notification.messages.issueTrackerLoginFailed"));
