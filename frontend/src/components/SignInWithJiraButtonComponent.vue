@@ -12,6 +12,14 @@
           )
         }}
       </b-button>
+      <b-button id="jira-cloud-help" variant="outline-success" class="my-1 ml-2">
+        <b-icon-question-circle />
+      </b-button>
+      <b-popover target="jira-cloud-help" title="How to use JIRA Cloud" triggers="focus">
+        {{ $t("session.prepare.step.selection.mode.description.withIssueTracker.popover.first") }}
+        <a href="https://docs.diveni.io" target="_blank" rel="noopener noreferrer">Docs</a>
+        {{ $t("session.prepare.step.selection.mode.description.withIssueTracker.popover.second") }}
+      </b-popover>
       <b-collapse id="collapse-cloud" v-model="showJiraCloudCollapse">
         <form ref="jiraUrlForm" @submit.stop.prevent="handleJiraUrlSubmit">
           <b-form-group

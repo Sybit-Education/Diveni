@@ -211,6 +211,10 @@
                 },
                 "placeholder": {
                   "searchProjects": "Projekte durchsuchen..."
+                },
+                "popover": {
+                  "first": "Um JIRA Cloud zu nutzen musst du vorher einen Application Link erstellen. Eine Anleitung dazu findest du bei ",
+                  "second": " unter der User Guide"
                 }
               }
             }

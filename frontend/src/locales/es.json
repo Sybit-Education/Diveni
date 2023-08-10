@@ -211,6 +211,10 @@
                 },
                 "placeholder": {
                   "searchProjects": "Buscar proyectos..."
+                },
+                "popover": {
+                  "first": "To use JIRA Cloud make sure to set up an application link before. See our user guide at ",
+                  "second": " for instructions on how to do this."
                 }
               }
             }
