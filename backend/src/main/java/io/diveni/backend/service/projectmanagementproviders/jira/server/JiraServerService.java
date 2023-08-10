@@ -128,7 +128,8 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
   public List<UserStory> getIssues(String tokenIdentifier, String projectName) {
     LOGGER.debug("--> getIssues(), projectName={}", projectName);
     try {
-      List<UserStory> userStories = jiraApiClient.getIssues(getJiraConfigs().get(tokenIdentifier), projectName, ESTIMATION_FIELD, RANK_NAME);
+      String[] forbiddenTypes = {"Sub-Task", "Sub-Bug"};
+      List<UserStory> userStories = jiraApiClient.getIssues(getJiraConfigs().get(tokenIdentifier), projectName, ESTIMATION_FIELD, RANK_NAME, forbiddenTypes);
       LOGGER.debug("<-- getIssues()");
       return userStories;
     } catch (Exception e) {

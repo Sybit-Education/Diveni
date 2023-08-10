@@ -90,11 +90,16 @@ public class JiraApiClient {
     return projects;
   }
 
-  public List<UserStory> getIssues(JiraConfig config, String projectName, String estimationField, String rank) throws Exception {
+  public List<UserStory> getIssues(JiraConfig config, String projectName, String estimationField, String rank, String... forbiddenTypes) throws Exception {
     List<UserStory> userStories = new ArrayList<>();
     JiraOAuthClient jiraOAuthClient = new JiraOAuthClient(config.getJiraUrl());
     OAuthParameters parameters =
       jiraOAuthClient.getParameters(config.getAccessToken(), config.getConsumerKey(), config.getPrivateKey());
+    StringBuilder forbiddenTypesQuery = new StringBuilder();
+    for (String type : forbiddenTypes) {
+      forbiddenTypesQuery.append(" AND type != ");
+      forbiddenTypesQuery.append(type);
+    }
     HttpResponse response =
       getResponseFromUrl(
         parameters,
@@ -103,6 +108,7 @@ public class JiraApiClient {
             + "/search?jql=project='"
             + projectName
             + "' AND resolution = Unresolved "
+            + forbiddenTypesQuery
             + "ORDER BY " + rank + " ASC, updated DESC"
             + "&fields=summary,description,"
             + estimationField
@@ -183,7 +189,7 @@ public class JiraApiClient {
       jiraOAuthClient.getParameters(
         config.getAccessToken(), config.getConsumerKey(), config.getPrivateKey());
     return getResponseFromUrl(
-      parameters, new GenericUrl(getJiraUrl(config.getJiraUrl()) + "/issue/" + issueID), "DELETE", null);
+      parameters, new GenericUrl(getJiraUrl(config.getJiraUrl()) + "/issue/" + issueID + "?deleteSubtasks=true"), "DELETE", null);
   }
 
   public String getCurrentUsername(JiraConfig config) throws Exception {
@@ -193,10 +199,10 @@ public class JiraApiClient {
         config.getAccessToken(), config.getConsumerKey(), config.getPrivateKey());
     HttpResponse response =
       getResponseFromUrl(
-        parameters, new GenericUrl(getJiraUrl(config.getJiraUrl()) + "/myself"), "GET", null);
+        parameters, new GenericUrl(config.getJiraUrl() + "/rest/auth/latest/session"), "GET", null);
     String res = response.parseAsString();
     JsonNode node = new ObjectMapper().readTree(res);
-    return node.path("accountId").asText();
+    return node.path("name").asText();
   }
 
   private String getJiraUrl(String jiraUrl) {
