@@ -1,7 +1,11 @@
 <template>
   <div>
     <div v-if="enableJiraCloud">
-      <b-button variant="success" class="my-1" @click="showJiraCloudCollapse = !showJiraCloudCollapse">
+      <b-button
+        variant="success"
+        class="my-1"
+        @click="showJiraCloudCollapse = !showJiraCloudCollapse"
+      >
         {{
           $t(
             "session.prepare.step.selection.mode.description.withIssueTracker.buttons.signInWithJiraCloud.label"
@@ -16,22 +20,26 @@
             invalid-feedback="JIRA Url is required"
             :state="jiraUrlState"
           >
-            <b-input-group>
-              <b-form-input
-                id="input-jira-url"
-                v-model="jiraUrl"
-                required
-                :placeholder="
-                  $t(
-                    'session.prepare.step.selection.mode.description.withIssueTracker.inputs.jiraUrl.placeholder'
-                  )
-                "
-                :state="jiraUrlState"
-              />
-              <b-input-group-append>
-                <b-button variant="success" @click="handleJiraUrlSubmit">Connect</b-button>
-              </b-input-group-append>
-            </b-input-group>
+            <b-row>
+              <b-col md="6">
+                <b-input-group>
+                  <b-form-input
+                    id="input-jira-url"
+                    v-model="jiraUrl"
+                    required
+                    :placeholder="
+                      $t(
+                        'session.prepare.step.selection.mode.description.withIssueTracker.inputs.jiraUrl.placeholder'
+                      )
+                    "
+                    :state="jiraUrlState"
+                  />
+                  <b-input-group-append>
+                    <b-button variant="success" @click="handleJiraUrlSubmit">Connect</b-button>
+                  </b-input-group-append>
+                </b-input-group>
+              </b-col>
+            </b-row>
           </b-form-group>
         </form>
       </b-collapse>
