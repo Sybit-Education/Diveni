@@ -21,6 +21,7 @@ import io.diveni.backend.model.UserStory;
 import io.diveni.backend.service.projectmanagementproviders.jira.JiraApiClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -53,6 +54,8 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
   @Value("${JIRA_SERVER_RANKNAME:RANK}")
   private String RANK_NAME;
 
+  private JiraApiClient jiraApiClient;
+
   @PostConstruct
   public void setupAndLogConfig() {
     if (JIRA_HOME != null
@@ -81,7 +84,7 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
   public JiraRequestToken getRequestToken(Optional<String> url) {
     LOGGER.debug("--> getRequestToken()");
     try {
-      JiraRequestToken jiraRequestToken = JiraApiClient.getRequestToken(JIRA_HOME, CONSUMER_KEY, PRIVATE_KEY);
+      JiraRequestToken jiraRequestToken = jiraApiClient.getRequestToken(JIRA_HOME, CONSUMER_KEY, PRIVATE_KEY);
       LOGGER.debug("<-- getRequestToken()");
       return jiraRequestToken;
     } catch (Exception e) {
@@ -95,7 +98,7 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
   public TokenIdentifier getAccessToken(String verificationCode, String requestToken) {
     LOGGER.debug("--> getAccessToken()");
     try {
-      String accessToken = JiraApiClient.getAccessToken(verificationCode, requestToken, JIRA_HOME, CONSUMER_KEY, PRIVATE_KEY);
+      String accessToken = jiraApiClient.getAccessToken(verificationCode, requestToken, JIRA_HOME, CONSUMER_KEY, PRIVATE_KEY);
       String id = Utils.generateRandomID();
       getJiraConfigs().put(id, new JiraConfig(JIRA_HOME, accessToken, CONSUMER_KEY, PRIVATE_KEY));
       LOGGER.debug("<-- getAccessToken()");
@@ -111,7 +114,7 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
   public List<Project> getProjects(String tokenIdentifier) {
     LOGGER.debug("--> getProjects()");
     try {
-      List<Project> projects = JiraApiClient.getProjects(getJiraConfigs().get(tokenIdentifier));
+      List<Project> projects = jiraApiClient.getProjects(getJiraConfigs().get(tokenIdentifier));
       LOGGER.debug("<-- getProjects()");
       return projects;
     } catch (Exception e) {
@@ -125,7 +128,7 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
   public List<UserStory> getIssues(String tokenIdentifier, String projectName) {
     LOGGER.debug("--> getIssues(), projectName={}", projectName);
     try {
-      List<UserStory> userStories = JiraApiClient.getIssues(getJiraConfigs().get(tokenIdentifier), projectName, ESTIMATION_FIELD, RANK_NAME);
+      List<UserStory> userStories = jiraApiClient.getIssues(getJiraConfigs().get(tokenIdentifier), projectName, ESTIMATION_FIELD, RANK_NAME);
       LOGGER.debug("<-- getIssues()");
       return userStories;
     } catch (Exception e) {
@@ -139,7 +142,7 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
   public String createIssue(String tokenIdentifier, String projectID, UserStory story) {
     LOGGER.debug("--> createIssue(), projectID={}", projectID);
     try {
-      String id = JiraApiClient.createIssue(getJiraConfigs().get(tokenIdentifier), projectID, story);
+      String id = jiraApiClient.createIssue(getJiraConfigs().get(tokenIdentifier), projectID, story);
       LOGGER.debug("<-- createIssue()");
       return id;
     } catch (Exception e) {
@@ -153,7 +156,7 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
   public void updateIssue(String tokenIdentifier, UserStory story) {
     LOGGER.debug("--> updateIssue(), storyID={}", story.getId());
     try {
-      HttpResponse response = JiraApiClient.updateIssue(getJiraConfigs().get(tokenIdentifier), ESTIMATION_FIELD, story);
+      HttpResponse response = jiraApiClient.updateIssue(getJiraConfigs().get(tokenIdentifier), ESTIMATION_FIELD, story);
       LOGGER.debug("<-- updateIssue() {}", response.parseAsString());
     } catch (NumberFormatException e) {
       LOGGER.error("Failed to parse estimation into double!");
@@ -170,7 +173,7 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
   public void deleteIssue(String tokenIdentifier, String issueID) {
     LOGGER.debug("--> deleteIssue(), issueID={}", issueID);
     try {
-      HttpResponse response = JiraApiClient.deleteIssue(getJiraConfigs().get(tokenIdentifier), issueID);
+      HttpResponse response = jiraApiClient.deleteIssue(getJiraConfigs().get(tokenIdentifier), issueID);
       LOGGER.debug("<-- deleteIssue() {}", response.parseAsString());
     } catch (Exception e) {
       LOGGER.error("Deletion failed", e);
@@ -183,7 +186,7 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
   public String getCurrentUsername(String tokenIdentifier) {
     LOGGER.debug("--> getCurrentUsername(), tokenIdentifier={}", tokenIdentifier);
     try {
-      String accountId = JiraApiClient.getCurrentUsername(getJiraConfigs().get(tokenIdentifier));
+      String accountId = jiraApiClient.getCurrentUsername(getJiraConfigs().get(tokenIdentifier));
       LOGGER.debug("<-- getCurrentUsername()");
       return accountId;
     } catch (Exception e) {
@@ -196,5 +199,10 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
   @Override
   public boolean containsToken(String token) {
     return jiraConfigs.containsKey(token);
+  }
+
+  @Autowired
+  public void setJiraApiClient(JiraApiClient jiraApiClient) {
+    this.jiraApiClient = jiraApiClient;
   }
 }

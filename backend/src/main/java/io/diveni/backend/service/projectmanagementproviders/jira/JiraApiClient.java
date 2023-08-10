@@ -13,7 +13,6 @@ import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.http.json.JsonHttpContent;
 import com.google.api.client.json.gson.GsonFactory;
-import io.diveni.backend.Utils;
 import io.diveni.backend.model.JiraConfig;
 import io.diveni.backend.model.JiraRequestToken;
 import io.diveni.backend.model.Project;
@@ -41,7 +40,7 @@ public class JiraApiClient {
    * @return
    * @throws IOException
    */
-  private static HttpResponse getResponseFromUrl(
+  private HttpResponse getResponseFromUrl(
     OAuthParameters parameters, GenericUrl jiraUrl, String requestMethod, HttpContent content)
     throws IOException {
     HttpRequestFactory requestFactory = new NetHttpTransport().createRequestFactory(parameters);
@@ -51,7 +50,7 @@ public class JiraApiClient {
     return request.execute();
   }
 
-  public static JiraRequestToken getRequestToken(String jiraBaseUrl, String consumerKey, String privateKey) throws Exception {
+  public JiraRequestToken getRequestToken(String jiraBaseUrl, String consumerKey, String privateKey) throws Exception {
     JiraRequestToken jiraRequestToken = new JiraRequestToken();
 
     JiraOAuthTokenFactory oAuthGetAccessTokenFactory = new JiraOAuthTokenFactory(jiraBaseUrl);
@@ -70,12 +69,12 @@ public class JiraApiClient {
     return jiraRequestToken;
   }
 
-  public static String getAccessToken(String verificationCode, String requestToken, String jiraBaseUrl, String consumerKey, String privateKey) throws Exception {
+  public String getAccessToken(String verificationCode, String requestToken, String jiraBaseUrl, String consumerKey, String privateKey) throws Exception {
     JiraOAuthClient jiraOAuthClient = new JiraOAuthClient(jiraBaseUrl);
     return jiraOAuthClient.getAccessToken(requestToken, verificationCode, consumerKey, privateKey);
   }
 
-  public static List<Project> getProjects(JiraConfig config) throws Exception {
+  public List<Project> getProjects(JiraConfig config) throws Exception {
     List<Project> projects = new ArrayList<>();
     JiraOAuthClient jiraOAuthClient = new JiraOAuthClient(config.getJiraUrl());
     OAuthParameters parameters =
@@ -91,7 +90,7 @@ public class JiraApiClient {
     return projects;
   }
 
-  public static List<UserStory> getIssues(JiraConfig config, String projectName, String estimationField, String rank) throws Exception {
+  public List<UserStory> getIssues(JiraConfig config, String projectName, String estimationField, String rank) throws Exception {
     List<UserStory> userStories = new ArrayList<>();
     JiraOAuthClient jiraOAuthClient = new JiraOAuthClient(config.getJiraUrl());
     OAuthParameters parameters =
@@ -134,7 +133,7 @@ public class JiraApiClient {
     return userStories;
   }
 
-  public static String createIssue(JiraConfig config, String projectID, UserStory story) throws Exception {
+  public String createIssue(JiraConfig config, String projectID, UserStory story) throws Exception {
     Map<String, Map<String, Object>> content = new HashMap<>();
     Map<String, Object> fields = new HashMap<>();
     fields.put("reporter", Map.of("accountId", getCurrentUsername(config)));
@@ -158,7 +157,7 @@ public class JiraApiClient {
     return node.path("id").asText();
   }
 
-  public static HttpResponse updateIssue(JiraConfig config, String estimationField, UserStory story) throws Exception {
+  public HttpResponse updateIssue(JiraConfig config, String estimationField, UserStory story) throws Exception {
     Map<String, Map<String, Object>> content = new HashMap<>();
     Map<String, Object> fields = new HashMap<>();
     fields.put("summary", story.getTitle());
@@ -178,7 +177,7 @@ public class JiraApiClient {
       new JsonHttpContent(GsonFactory.getDefaultInstance(), content));
   }
 
-  public static HttpResponse deleteIssue(JiraConfig config, String issueID) throws Exception {
+  public HttpResponse deleteIssue(JiraConfig config, String issueID) throws Exception {
     JiraOAuthClient jiraOAuthClient = new JiraOAuthClient(config.getJiraUrl());
     OAuthParameters parameters =
       jiraOAuthClient.getParameters(
@@ -187,7 +186,7 @@ public class JiraApiClient {
       parameters, new GenericUrl(getJiraUrl(config.getJiraUrl()) + "/issue/" + issueID), "DELETE", null);
   }
 
-  public static String getCurrentUsername(JiraConfig config) throws Exception {
+  public String getCurrentUsername(JiraConfig config) throws Exception {
     JiraOAuthClient jiraOAuthClient = new JiraOAuthClient(config.getJiraUrl());
     OAuthParameters parameters =
       jiraOAuthClient.getParameters(
@@ -200,7 +199,7 @@ public class JiraApiClient {
     return node.path("accountId").asText();
   }
 
-  private static String getJiraUrl(String jiraUrl) {
+  private String getJiraUrl(String jiraUrl) {
     return String.format(JIRA_API_URL, jiraUrl, JIRA_API_VERSION);
   }
 }
