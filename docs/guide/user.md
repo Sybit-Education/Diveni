@@ -151,20 +151,20 @@ The last on your JIRA Cloud instance is to create an incoming link.
 #### 7. Step
 When using Diveni, you click on `Planning with Issue-Tracker`. Then click on the `Sign in with Jira Cloud` button and a input field will appear.
 Enter the URL of your Atlassian instance. At the end click `Connect`.
-![JIRA Cloud Step 7](docs/img/jira/jira_cloud_step7.png)
+![JIRA Cloud Step 7](../img/jira/jira_cloud_step7.png)
 
 #### 8. Step
 A new browser tab will open asking you to allow access to your Atlassian instance. Simply click on `Allow`.
-![JIRA Cloud Step 8](docs/img/jira/jira_cloud_step8.png)
+![JIRA Cloud Step 8](../img/jira/jira_cloud_step8.png)
 
 #### 9. Step
 You will be redirected to a page that says `Access Approved`. From there you have to copy the verification code (marked red in the screenshot).
 Then you can close this browser tab and return to Diveni.
-![JIRA Cloud Step 8](docs/img/jira/jira_cloud_step9.png)
+![JIRA Cloud Step 8](../img/jira/jira_cloud_step9.png)
 
 #### 10. Step
 Back at Diveni a modal will appear. There you have to enter the copied verification code into the input field and click `OK`.
-![JIRA Cloud Step 8](docs/img/jira/jira_cloud_step10.png)
+![JIRA Cloud Step 8](../img/jira/jira_cloud_step10.png)
 
 :::
 ### JIRA Server
