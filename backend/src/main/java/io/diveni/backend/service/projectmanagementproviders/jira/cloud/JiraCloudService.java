@@ -31,9 +31,7 @@ public class JiraCloudService implements ProjectManagementProviderOAuth1 {
   private static final Logger LOGGER = LoggerFactory.getLogger(JiraCloudService.class);
   private boolean serviceEnabled = false;
   private final Map<String, String> jiraUrls = new HashMap<>();
-  @Getter
-  private final Map<String, JiraConfig> jiraConfigs = new HashMap<>();
-
+  @Getter private final Map<String, JiraConfig> jiraConfigs = new HashMap<>();
 
   @Value("${JIRA_CLOUD_CONSUMERKEY:OauthKey}")
   private String CONSUMER_KEY;
@@ -47,9 +45,7 @@ public class JiraCloudService implements ProjectManagementProviderOAuth1 {
 
   @PostConstruct
   public void setupAndLogConfig() {
-    if (CONSUMER_KEY != null
-      && PRIVATE_KEY != null
-    ) {
+    if (CONSUMER_KEY != null && PRIVATE_KEY != null) {
       serviceEnabled = true;
     }
 
@@ -68,10 +64,12 @@ public class JiraCloudService implements ProjectManagementProviderOAuth1 {
   public JiraRequestToken getRequestToken(Optional<String> url) {
     LOGGER.debug("--> getRequestToken()");
     if (url.isEmpty()) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessages.failedToRetrieveAccessTokenErrorMessage);
+      throw new ResponseStatusException(
+          HttpStatus.BAD_REQUEST, ErrorMessages.failedToRetrieveAccessTokenErrorMessage);
     }
     try {
-      JiraRequestToken jiraRequestToken = jiraApiClient.getRequestToken(url.get(), CONSUMER_KEY, PRIVATE_KEY);
+      JiraRequestToken jiraRequestToken =
+          jiraApiClient.getRequestToken(url.get(), CONSUMER_KEY, PRIVATE_KEY);
       jiraUrls.put(jiraRequestToken.getToken(), url.get());
       LOGGER.debug("<-- getRequestToken()");
       return jiraRequestToken;
@@ -80,21 +78,27 @@ public class JiraCloudService implements ProjectManagementProviderOAuth1 {
         HttpResponseException ex = (HttpResponseException) e;
         if (ex.getStatusCode() == 401) {
           LOGGER.warn("Application link is not set up correctly!");
-          throw new ResponseStatusException(HttpStatus.PRECONDITION_REQUIRED, ErrorMessages.failedToAuthorizeToJiraCloud);
+          throw new ResponseStatusException(
+              HttpStatus.PRECONDITION_REQUIRED, ErrorMessages.failedToAuthorizeToJiraCloud);
         }
       }
       LOGGER.error("Failed to get request token!", e);
       throw new ResponseStatusException(
-        HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToRetrieveRequestTokenErrorMessage);
+          HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToRetrieveRequestTokenErrorMessage);
     }
   }
 
   @Override
   public TokenIdentifier getAccessToken(String verificationCode, String requestToken) {
-    LOGGER.debug("--> getAccessToken(), verificationCode={}, requestToken={}", verificationCode, requestToken);
+    LOGGER.debug(
+        "--> getAccessToken(), verificationCode={}, requestToken={}",
+        verificationCode,
+        requestToken);
     try {
       String jiraUrl = jiraUrls.remove(requestToken);
-      String accessToken = jiraApiClient.getAccessToken(verificationCode, requestToken, jiraUrl, CONSUMER_KEY, PRIVATE_KEY);
+      String accessToken =
+          jiraApiClient.getAccessToken(
+              verificationCode, requestToken, jiraUrl, CONSUMER_KEY, PRIVATE_KEY);
       String id = Utils.generateRandomID();
       getJiraConfigs().put(id, new JiraConfig(jiraUrl, accessToken, CONSUMER_KEY, PRIVATE_KEY));
       LOGGER.debug("<-- getAccessToken()");
@@ -102,7 +106,7 @@ public class JiraCloudService implements ProjectManagementProviderOAuth1 {
     } catch (Exception e) {
       LOGGER.error("Failed to get access token!", e);
       throw new ResponseStatusException(
-        HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToRetrieveAccessTokenErrorMessage);
+          HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToRetrieveAccessTokenErrorMessage);
     }
   }
 
@@ -116,7 +120,7 @@ public class JiraCloudService implements ProjectManagementProviderOAuth1 {
     } catch (Exception e) {
       LOGGER.error("Failed to get projects!", e);
       throw new ResponseStatusException(
-        HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToRetrieveProjectsErrorMessage);
+          HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToRetrieveProjectsErrorMessage);
     }
   }
 
@@ -125,13 +129,19 @@ public class JiraCloudService implements ProjectManagementProviderOAuth1 {
     LOGGER.debug("--> getIssues(), projectName={}", projectName);
     try {
       String[] forbiddenTypes = {"Subtask"};
-      List<UserStory> userStories = jiraApiClient.getIssues(getJiraConfigs().get(tokenIdentifier), projectName, ESTIMATION_FIELD, "RANK", forbiddenTypes);
+      List<UserStory> userStories =
+          jiraApiClient.getIssues(
+              getJiraConfigs().get(tokenIdentifier),
+              projectName,
+              ESTIMATION_FIELD,
+              "RANK",
+              forbiddenTypes);
       LOGGER.debug("<-- getIssues()");
       return userStories;
     } catch (Exception e) {
       LOGGER.error("Failed to get issues!", e);
       throw new ResponseStatusException(
-        HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToRetrieveProjectsErrorMessage);
+          HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToRetrieveProjectsErrorMessage);
     }
   }
 
@@ -139,13 +149,14 @@ public class JiraCloudService implements ProjectManagementProviderOAuth1 {
   public String createIssue(String tokenIdentifier, String projectID, UserStory story) {
     LOGGER.debug("--> createIssue(), projectID={}", projectID);
     try {
-      String id = jiraApiClient.createIssue(getJiraConfigs().get(tokenIdentifier), projectID, story);
+      String id =
+          jiraApiClient.createIssue(getJiraConfigs().get(tokenIdentifier), projectID, story);
       LOGGER.debug("<-- createIssue()");
       return id;
     } catch (Exception e) {
       LOGGER.error("Failed to create issue!", e);
       throw new ResponseStatusException(
-        HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToDeleteIssueErrorMessage);
+          HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToDeleteIssueErrorMessage);
     }
   }
 
@@ -153,16 +164,17 @@ public class JiraCloudService implements ProjectManagementProviderOAuth1 {
   public void updateIssue(String tokenIdentifier, UserStory story) {
     LOGGER.debug("--> updateIssue(), storyID={}", story.getId());
     try {
-      HttpResponse response = jiraApiClient.updateIssue(getJiraConfigs().get(tokenIdentifier), ESTIMATION_FIELD, story);
+      HttpResponse response =
+          jiraApiClient.updateIssue(getJiraConfigs().get(tokenIdentifier), ESTIMATION_FIELD, story);
       LOGGER.debug("<-- updateIssue() {}", response.parseAsString());
     } catch (NumberFormatException e) {
       LOGGER.error("Failed to parse estimation into double!");
       throw new ResponseStatusException(
-        HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToEditIssueErrorMessage);
+          HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToEditIssueErrorMessage);
     } catch (Exception e) {
       LOGGER.error("Failed to update issue!", e);
       throw new ResponseStatusException(
-        HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToEditIssueErrorMessage);
+          HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToEditIssueErrorMessage);
     }
   }
 
@@ -170,12 +182,13 @@ public class JiraCloudService implements ProjectManagementProviderOAuth1 {
   public void deleteIssue(String tokenIdentifier, String issueID) {
     LOGGER.debug("--> deleteIssue(), issueID={}", issueID);
     try {
-      HttpResponse response = jiraApiClient.deleteIssue(getJiraConfigs().get(tokenIdentifier), issueID);
+      HttpResponse response =
+          jiraApiClient.deleteIssue(getJiraConfigs().get(tokenIdentifier), issueID);
       LOGGER.debug("<-- deleteIssue() {}", response.parseAsString());
     } catch (Exception e) {
       LOGGER.error("Deletion failed", e);
       throw new ResponseStatusException(
-        HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToDeleteIssueErrorMessage);
+          HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToDeleteIssueErrorMessage);
     }
   }
 
@@ -194,7 +207,7 @@ public class JiraCloudService implements ProjectManagementProviderOAuth1 {
     } catch (Exception e) {
       LOGGER.error("Failed to get current username!", e);
       throw new ResponseStatusException(
-        HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToRetrieveUsernameErrorMessage);
+          HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToRetrieveUsernameErrorMessage);
     }
   }
 

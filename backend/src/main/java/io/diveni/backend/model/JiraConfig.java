@@ -9,15 +9,11 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 public class JiraConfig {
 
-  @NotNull
-  String jiraUrl;
+  @NotNull String jiraUrl;
 
-  @NotNull
-  String accessToken;
+  @NotNull String accessToken;
 
-  @NotNull
-  String consumerKey;
+  @NotNull String consumerKey;
 
-  @NotNull
-  String privateKey;
+  @NotNull String privateKey;
 }

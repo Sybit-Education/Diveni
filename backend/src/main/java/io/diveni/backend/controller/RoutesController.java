@@ -21,8 +21,6 @@ import io.diveni.backend.model.Session;
 import io.diveni.backend.model.SessionConfig;
 import io.diveni.backend.model.SessionState;
 import io.diveni.backend.service.DatabaseService;
-import io.diveni.backend.service.projectmanagementproviders.azuredevops.AzureDevOpsService;
-import io.diveni.backend.service.projectmanagementproviders.jira.cloud.JiraCloudService;
 import io.diveni.backend.service.projectmanagementproviders.jira.server.JiraServerService;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;

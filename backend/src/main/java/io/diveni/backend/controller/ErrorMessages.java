@@ -17,7 +17,8 @@ public class ErrorMessages {
 
   public static String wrongPasswordMessage = "no or wrong password given";
 
-  public static String failedToAuthorizeToJiraCloud = "failed to authorize to JIRA Cloud! Make sure the application link is set up correctly!";
+  public static String failedToAuthorizeToJiraCloud =
+      "failed to authorize to JIRA Cloud! Make sure the application link is set up correctly!";
 
   public static String failedToRetrieveRequestTokenErrorMessage =
       "failed to retrieve request token";

@@ -84,13 +84,14 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
   public JiraRequestToken getRequestToken(Optional<String> url) {
     LOGGER.debug("--> getRequestToken()");
     try {
-      JiraRequestToken jiraRequestToken = jiraApiClient.getRequestToken(JIRA_HOME, CONSUMER_KEY, PRIVATE_KEY);
+      JiraRequestToken jiraRequestToken =
+          jiraApiClient.getRequestToken(JIRA_HOME, CONSUMER_KEY, PRIVATE_KEY);
       LOGGER.debug("<-- getRequestToken()");
       return jiraRequestToken;
     } catch (Exception e) {
       LOGGER.error("Failed to get request token!", e);
       throw new ResponseStatusException(
-        HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToRetrieveRequestTokenErrorMessage);
+          HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToRetrieveRequestTokenErrorMessage);
     }
   }
 
@@ -98,7 +99,9 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
   public TokenIdentifier getAccessToken(String verificationCode, String requestToken) {
     LOGGER.debug("--> getAccessToken()");
     try {
-      String accessToken = jiraApiClient.getAccessToken(verificationCode, requestToken, JIRA_HOME, CONSUMER_KEY, PRIVATE_KEY);
+      String accessToken =
+          jiraApiClient.getAccessToken(
+              verificationCode, requestToken, JIRA_HOME, CONSUMER_KEY, PRIVATE_KEY);
       String id = Utils.generateRandomID();
       getJiraConfigs().put(id, new JiraConfig(JIRA_HOME, accessToken, CONSUMER_KEY, PRIVATE_KEY));
       LOGGER.debug("<-- getAccessToken()");
@@ -120,7 +123,7 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
     } catch (Exception e) {
       LOGGER.error("Failed to get projects!", e);
       throw new ResponseStatusException(
-        HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToRetrieveProjectsErrorMessage);
+          HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToRetrieveProjectsErrorMessage);
     }
   }
 
@@ -129,13 +132,19 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
     LOGGER.debug("--> getIssues(), projectName={}", projectName);
     try {
       String[] forbiddenTypes = {"Sub-Task", "Sub-Bug"};
-      List<UserStory> userStories = jiraApiClient.getIssues(getJiraConfigs().get(tokenIdentifier), projectName, ESTIMATION_FIELD, RANK_NAME, forbiddenTypes);
+      List<UserStory> userStories =
+          jiraApiClient.getIssues(
+              getJiraConfigs().get(tokenIdentifier),
+              projectName,
+              ESTIMATION_FIELD,
+              RANK_NAME,
+              forbiddenTypes);
       LOGGER.debug("<-- getIssues()");
       return userStories;
     } catch (Exception e) {
       LOGGER.error("Failed to get issues!", e);
       throw new ResponseStatusException(
-        HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToRetrieveProjectsErrorMessage);
+          HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToRetrieveProjectsErrorMessage);
     }
   }
 
@@ -143,13 +152,14 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
   public String createIssue(String tokenIdentifier, String projectID, UserStory story) {
     LOGGER.debug("--> createIssue(), projectID={}", projectID);
     try {
-      String id = jiraApiClient.createIssue(getJiraConfigs().get(tokenIdentifier), projectID, story);
+      String id =
+          jiraApiClient.createIssue(getJiraConfigs().get(tokenIdentifier), projectID, story);
       LOGGER.debug("<-- createIssue()");
       return id;
     } catch (Exception e) {
       LOGGER.error("Failed to create issue!", e);
       throw new ResponseStatusException(
-        HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToDeleteIssueErrorMessage);
+          HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToDeleteIssueErrorMessage);
     }
   }
 
@@ -157,16 +167,17 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
   public void updateIssue(String tokenIdentifier, UserStory story) {
     LOGGER.debug("--> updateIssue(), storyID={}", story.getId());
     try {
-      HttpResponse response = jiraApiClient.updateIssue(getJiraConfigs().get(tokenIdentifier), ESTIMATION_FIELD, story);
+      HttpResponse response =
+          jiraApiClient.updateIssue(getJiraConfigs().get(tokenIdentifier), ESTIMATION_FIELD, story);
       LOGGER.debug("<-- updateIssue() {}", response.parseAsString());
     } catch (NumberFormatException e) {
       LOGGER.error("Failed to parse estimation into double!");
       throw new ResponseStatusException(
-        HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToEditIssueErrorMessage);
+          HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToEditIssueErrorMessage);
     } catch (Exception e) {
       LOGGER.error("Failed to update issue!", e);
       throw new ResponseStatusException(
-        HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToEditIssueErrorMessage);
+          HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToEditIssueErrorMessage);
     }
   }
 
@@ -174,12 +185,13 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
   public void deleteIssue(String tokenIdentifier, String issueID) {
     LOGGER.debug("--> deleteIssue(), issueID={}", issueID);
     try {
-      HttpResponse response = jiraApiClient.deleteIssue(getJiraConfigs().get(tokenIdentifier), issueID);
+      HttpResponse response =
+          jiraApiClient.deleteIssue(getJiraConfigs().get(tokenIdentifier), issueID);
       LOGGER.debug("<-- deleteIssue() {}", response.parseAsString());
     } catch (Exception e) {
       LOGGER.error("Deletion failed", e);
       throw new ResponseStatusException(
-        HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToDeleteIssueErrorMessage);
+          HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToDeleteIssueErrorMessage);
     }
   }
 
@@ -193,7 +205,7 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
     } catch (Exception e) {
       LOGGER.error("Failed to get current username!", e);
       throw new ResponseStatusException(
-        HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToRetrieveUsernameErrorMessage);
+          HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToRetrieveUsernameErrorMessage);
     }
   }
 
