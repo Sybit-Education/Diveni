@@ -7,7 +7,6 @@ package io.diveni.backend.service.projectmanagementproviders.jira;
 
 import com.google.api.client.auth.oauth.OAuthRsaSigner;
 import com.google.api.client.http.apache.ApacheHttpTransport;
-import com.google.api.client.util.Base64;
 import com.google.common.io.BaseEncoding;
 
 import java.security.KeyFactory;

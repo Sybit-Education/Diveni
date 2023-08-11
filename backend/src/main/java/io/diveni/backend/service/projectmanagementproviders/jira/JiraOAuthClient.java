@@ -5,7 +5,6 @@
 */
 package io.diveni.backend.service.projectmanagementproviders.jira;
 
-import com.google.api.client.auth.oauth.OAuthAuthorizeTemporaryTokenUrl;
 import com.google.api.client.auth.oauth.OAuthCredentialsResponse;
 import com.google.api.client.auth.oauth.OAuthParameters;
 
