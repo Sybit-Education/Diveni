@@ -35,9 +35,9 @@ public class JiraApiClient {
   /**
    * Authenticates to JIRA with given OAuthParameters and makes request to url
    *
-   * @param parameters
-   * @param jiraUrl
-   * @return
+   * @param parameters for OAuth
+   * @param jiraUrl URL of the JIRA instance
+   * @return response of the HTTP request
    * @throws IOException
    */
   private HttpResponse getResponseFromUrl(
@@ -50,6 +50,15 @@ public class JiraApiClient {
     return request.execute();
   }
 
+  /**
+   * Creates a temporary token
+   *
+   * @param jiraBaseUrl URL of the JIRA instance
+   * @param consumerKey for the application link
+   * @param privateKey for the application link
+   * @return JiraRequestToken
+   * @throws Exception
+   */
   public JiraRequestToken getRequestToken(String jiraBaseUrl, String consumerKey, String privateKey) throws Exception {
     JiraRequestToken jiraRequestToken = new JiraRequestToken();
 
@@ -69,11 +78,29 @@ public class JiraApiClient {
     return jiraRequestToken;
   }
 
+  /**
+   * Gets an accessToken from a JIRA instance
+   *
+   * @param verificationCode verification code provided by JIRA
+   * @param requestToken temporary request token
+   * @param jiraBaseUrl URL of the JIRA instance
+   * @param consumerKey for the application link
+   * @param privateKey for the application link
+   * @return accessToken
+   * @throws Exception
+   */
   public String getAccessToken(String verificationCode, String requestToken, String jiraBaseUrl, String consumerKey, String privateKey) throws Exception {
     JiraOAuthClient jiraOAuthClient = new JiraOAuthClient(jiraBaseUrl);
     return jiraOAuthClient.getAccessToken(requestToken, verificationCode, consumerKey, privateKey);
   }
 
+  /**
+   * Lists all projects to which the current user has access
+   *
+   * @param config required to authenticate with JIRA
+   * @return List of projects
+   * @throws Exception
+   */
   public List<Project> getProjects(JiraConfig config) throws Exception {
     List<Project> projects = new ArrayList<>();
     JiraOAuthClient jiraOAuthClient = new JiraOAuthClient(config.getJiraUrl());
@@ -90,6 +117,17 @@ public class JiraApiClient {
     return projects;
   }
 
+  /**
+   * Lists all issues from a project
+   *
+   * @param config required to authenticate with JIRA
+   * @param projectName of the project to load the issues from
+   * @param estimationField name of the story points field
+   * @param rank to be ordered by
+   * @param forbiddenTypes array of types not to list
+   * @return list of issues
+   * @throws Exception
+   */
   public List<UserStory> getIssues(JiraConfig config, String projectName, String estimationField, String rank, String... forbiddenTypes) throws Exception {
     List<UserStory> userStories = new ArrayList<>();
     JiraOAuthClient jiraOAuthClient = new JiraOAuthClient(config.getJiraUrl());
@@ -139,6 +177,15 @@ public class JiraApiClient {
     return userStories;
   }
 
+  /**
+   * Creates an issue
+   *
+   * @param config required to authenticate with JIRA
+   * @param projectID of the project
+   * @param story user story to be updated
+   * @return the id of the created issue
+   * @throws Exception
+   */
   public String createIssue(JiraConfig config, String projectID, UserStory story) throws Exception {
     Map<String, Map<String, Object>> content = new HashMap<>();
     Map<String, Object> fields = new HashMap<>();
@@ -163,6 +210,15 @@ public class JiraApiClient {
     return node.path("id").asText();
   }
 
+  /**
+   * Updates an issue
+   *
+   * @param config required to authenticate with JIRA
+   * @param estimationField name of the field
+   * @param story user story to be updated
+   * @return response of the HTTP request
+   * @throws Exception
+   */
   public HttpResponse updateIssue(JiraConfig config, String estimationField, UserStory story) throws Exception {
     Map<String, Map<String, Object>> content = new HashMap<>();
     Map<String, Object> fields = new HashMap<>();
@@ -183,6 +239,14 @@ public class JiraApiClient {
       new JsonHttpContent(GsonFactory.getDefaultInstance(), content));
   }
 
+  /**
+   * Deletes an issue
+   *
+   * @param config required to authenticate with JIRA
+   * @param issueID of the issue
+   * @return response of the HTTP request
+   * @throws Exception
+   */
   public HttpResponse deleteIssue(JiraConfig config, String issueID) throws Exception {
     JiraOAuthClient jiraOAuthClient = new JiraOAuthClient(config.getJiraUrl());
     OAuthParameters parameters =
@@ -192,6 +256,13 @@ public class JiraApiClient {
       parameters, new GenericUrl(getJiraUrl(config.getJiraUrl()) + "/issue/" + issueID + "?deleteSubtasks=true"), "DELETE", null);
   }
 
+  /**
+   * Loads the username / accountID of the current user
+   *
+   * @param config required to authenticate with JIRA
+   * @return the username / accountID of the current user
+   * @throws Exception
+   */
   public String getCurrentUsername(JiraConfig config) throws Exception {
     JiraOAuthClient jiraOAuthClient = new JiraOAuthClient(config.getJiraUrl());
     OAuthParameters parameters =
