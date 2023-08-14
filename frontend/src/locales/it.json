@@ -7,8 +7,8 @@
       "docs": "Documentazione"
     },
     "licenses": {
-      "frontend": "Licenze (frontend)",
-      "backend": "Licenze (backend)",
+      "frontend": "Licenze (Frontend)",
+      "backend": "Licenze (Backend)",
       "translations": "Migliorare la traduzione"
     }
   },
