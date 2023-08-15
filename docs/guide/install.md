@@ -125,10 +125,8 @@ services:
 |---|---|:---:|
 | SERVER_URL | URL the server is running on, used for CORS-settings | null |
 | LOCALE | The locale the frontend should be set to, available locales=en,de,es,fr,it,pl,pt,uk | en |
-| JIRA_CLOUD_CLIENTID | ClientId is shown in the Atlassion Developer app settings | null |
-| JIRA_CLOUD_CLIENTSECRET | ClientSecret is shown in the Atlassion Developer app settings | null |
-| JIRA_CLOUD_ESTIMATIONFIELD | The estimation field is a customfield which is different for every Jira instance and must therefore be set manually | customfield_10016 |
-| JIRA_CLOUD_AUTHORIZE_URL | URL for the authorization server from Jira Cloud | null |
+| JIRA_CLOUD_CONSUMERKEY | Consumer key | OauthKey |
+| JIRA_CLOUD_PRIVATEKEY | Private key | null |
 | JIRA_SERVER_JIRAHOME | URL to the Jira Server instance | null |
 | JIRA_SERVER_CONSUMERKEY | Consumer key can be set in the Jira application link | OauthKey |
 | JIRA_SERVER_PRIVATEKEY | Private key from jira_privatekey.pcks8 | null |
@@ -159,10 +157,8 @@ Update Docker Compose to environment variables
       - "SPRING_PROFILES_ACTIVE=prod" # required
       - "SERVER_URL=http://localhost:8080"
       - "LOCALE=en"
-      - "JIRA_CLOUD_CLIENTID=[xxx]"
-      - "JIRA_CLOUD_CLIENTSECRET=[xxx]"
-      - "JIRA_CLOUD_ESTIMATIONFIELD=customfield_10016"
-      - "JIRA_CLOUD_AUTHORIZE_URL=https://auth.atlassian.com"
+      - "JIRA_CLOUD_CONSUMERKEY=OauthKey"
+      - "JIRA_CLOUD_PRIVATEKEY=[xxx]"
       - "JIRA_SERVER_JIRAHOME=https://jira.company.com"
       - "JIRA_SERVER_CONSUMERKEY=OauthKey"
       - "JIRA_SERVER_PRIVATEKEY=[xxx]"
@@ -185,15 +181,11 @@ SERVER_URL=http://localhost:8080
 #The locale the frontend should be set to
 LOCALE=en
 
-#ClientId and ClientSecret are shown in the Atlassian Developer app settings
-JIRA_CLOUD_CLIENTID=[xxx]
-JIRA_CLOUD_CLIENTSECRET=[xxx]
+#Consumer key
+JIRA_CLOUD_CONSUMERKEY=OauthKey
 
-#URL for the authorization server
-JIRA_CLOUD_AUTHORIZE_URL=https://auth.atlassian.com/authorize?...
-
-#The estimation field is a customfield which is different for every Jira instance and must therefore be set manually
-JIRA_CLOUD_ESTIMATIONFIELD=customfield_10016
+#Private key
+JIRA_CLOUD_PRIVATEKEY=[key]
 
 #URL to the Jira Server instance
 JIRA_SERVER_JIRAHOME=https://jira.company.com
