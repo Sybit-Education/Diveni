@@ -161,7 +161,7 @@ public class JiraApiClient {
                     + projectName
                     + "' AND resolution = Unresolved "
                     + forbiddenTypesQuery
-                    + "ORDER BY "
+                    + " ORDER BY "
                     + rank
                     + " ASC, updated DESC"
                     + "&fields=summary,description,"
