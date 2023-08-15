@@ -42,6 +42,7 @@ export default withMermaid(
             { text: "Users Guide", link: '/guide/user' },
             { text: "Installation Guide", link: '/guide/install' },
             { text: "Contribution Guide", link: "/guide/contribution"},
+            { text: "Developer Guide", link: "/guide/develop"},
             { text: "Architecture", link: "/guide/architecture"},
             { text: "Testing", link: "/guide/testing"}
           ]
