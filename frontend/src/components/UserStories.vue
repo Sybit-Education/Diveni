@@ -1,15 +1,21 @@
 <template>
   <div class="user-stories">
     <div v-if="userStories.length > 0 || filterActive" class="w-100 d-flex justify-content-left">
-      <b-input
-        v-model="input"
-        id="search"
-        type="text"
-        :placeholder="$t('page.session.before.userStories.placeholder.searchUserStories')"
-        @input="swapPriority"
-      />
+      <b-input-group>
+        <b-input-group-prepend>
+          <BIconSearch id="searchIcon"></BIconSearch>
+        </b-input-group-prepend>
+        <b-input
+          v-model="input"
+          id="search"
+          type="text"
+          :placeholder="$t('page.session.before.userStories.placeholder.searchUserStories')"
+          @input="swapPriority"
+          
+        />
+      </b-input-group>  
     </div>
-    <b-card-group
+    <b-card-group 
       class="my-3"
       id="userStoryBlock"
     >
@@ -101,6 +107,7 @@
 <script lang="ts">
 import Vue from "vue";
 import UserStory from "../model/UserStory";
+import { BIconSearch } from "bootstrap-vue";
 export default Vue.extend({
   name: "UserStories",
   props: {
@@ -201,14 +208,20 @@ export default Vue.extend({
 
 
 #search {
-  background-image: url("@/assets/magnifying glass.png");
-  background-position: 10px;
-  background-repeat: no-repeat;
-  background-size: 30px 30px;
-  padding-left: 50px;
   border-radius: var(--element-size);
+  padding-left: 45px;
   border-color: black;
   overflow: auto;
+  z-index: 1;
+}
+
+#searchIcon {
+  position: absolute;
+  z-index: 2;
+  font-size: 25px;
+  top: 20%;
+  left: 1.5%;
+  rotate: 90deg;
 }
 
 .addButton {

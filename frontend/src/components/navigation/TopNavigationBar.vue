@@ -28,8 +28,8 @@
           >
       </b-form>
       <b-form class="px-2 mr-2">
-        <a href="https://github.com/Sybit-Education/Diveni" target="_blank">
-          <img :src="require('./images/GitHub-Mark-32px.png')" height="40px" width="40px"/>
+        <a href="https://github.com/Sybit-Education/Diveni" target="_blank" style="color: var(--text-primary-color)">
+          <BIconGithub style="width: 40px; height: 40px;"></BIconGithub>
         </a>
       </b-form>
       <locale-dropdown  />
@@ -40,10 +40,11 @@
 <script lang="ts">
 import Vue from "vue";
 import LocaleDropdown from "@/components/navigation/LocaleDropdown.vue";
+import { BIconGithub } from "bootstrap-vue";
 
 export default Vue.extend({
   name: "TopNavigationBar",
-  components: { LocaleDropdown },
+  components: { LocaleDropdown, BIconGithub },
   data() {
     return {
       userTheme: "light-Theme"

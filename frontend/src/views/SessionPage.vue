@@ -61,14 +61,14 @@
             variant="outline-dark"
             @click="sendRestartMessage(); $event.target.blur();"
           >
-          <b-img :src="require('@/assets/RestartSession.png')" class="buttonPictures"/>
+            <BIconArrowClockwise class="bIcons"></BIconArrowClockwise>
             {{ $t("page.session.during.estimation.buttons.new") }}
           </b-button>
           <b-button class="mr-3 optionButton"
             variant="outline-dark"
             @click="sendVotingFinishedMessage(); $event.target.blur();"
           >
-          <b-img :src="require('@/assets/ShowResults.png')" class="buttonPictures"/>
+            <BIconBarChartFill class="bIcons"></BIconBarChartFill>
             {{ $t("page.session.during.estimation.buttons.result") }}
           </b-button>
         </b-col>
@@ -140,7 +140,26 @@
       </b-col>
     </b-row>
     <b-row v-if="session_userStoryMode !== 'NO_US'">
-      <b-col cols="7">
+      <b-col v-if="!isMobile" cols="7">
+        <div v-if="session_userStoryMode === 'US_JIRA'" class="refreshUserstories">
+          <b-button
+            class="w-100 mb-3 refreshButton" 
+            @click="refreshUserStories(); $event.target.blur();"
+          >
+            {{ $t("page.session.before.refreshStories") }}
+          </b-button>
+        </div>
+        <user-stories
+          :card-set="voteSet"
+          :show-estimations="planningStart"
+          :initial-stories="userStories"
+          :show-edit-buttons="true"
+          :select-story="true"
+          @userStoriesChanged="onUserStoriesChanged"
+          @selectedStory="onSelectedStory($event)"
+        />
+      </b-col>
+      <b-col v-else cols="12">
         <div v-if="session_userStoryMode === 'US_JIRA'" class="refreshUserstories">
           <b-button
             class="w-100 mb-3 refreshButton" 
@@ -161,7 +180,16 @@
       </b-col>
     </b-row>
     <b-row>
-      <b-col cols="10">
+      <b-col v-if="!isMobile" cols="10">
+        <user-story-descriptions
+          :card-set="voteSet"
+          :initial-stories="userStories"
+          :edit-description="true"
+          :index="index"
+          @userStoriesChanged="onUserStoriesChanged"
+        />
+      </b-col>
+      <b-col v-else cols="12">
         <user-story-descriptions
           :card-set="voteSet"
           :initial-stories="userStories"
@@ -191,6 +219,7 @@ import Project from "../model/Project";
 import KickUserWrapper from "@/components/KickUserWrapper.vue";
 import SessionCloseButton from "@/components/actions/SessionCloseButton.vue";
 import SessionStartButton from "@/components/actions/SessionStartButton.vue";
+import { BIconArrowClockwise, BIconBarChartFill } from "bootstrap-vue";
 
 export default Vue.extend({
   name: "SessionPage",
@@ -204,7 +233,9 @@ export default Vue.extend({
     CopySessionIdPopup,
     UserStoryDescriptions,
     NotifyHostComponent,
-  },
+    BIconArrowClockwise,
+    BIconBarChartFill
+},
   props: {
     adminID: { type: String, required: true },
     sessionID: { type: String, required: true },
@@ -263,6 +294,11 @@ export default Vue.extend({
     },
     timerTimestamp() {
       return this.$store.state.timerTimestamp ? this.$store.state.timerTimestamp : "";
+    },
+    isMobile() {
+      return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent
+      );
     },
   },
   watch: {
@@ -552,9 +588,9 @@ export default Vue.extend({
   min-height: 20vh;
 }
 
-.buttonPictures {
-  width: 40px;
+.bIcons {
   height: 40px;
+  width: 40px;
 }
 
 .optionButton{
@@ -562,6 +598,8 @@ export default Vue.extend({
   color: var(--text-primary-color);
   border-color: black;
   border-radius: var(--buttonShape);
+  display: inline-flex;
+  align-items: center;
 }
 
 .optionButton:hover{
