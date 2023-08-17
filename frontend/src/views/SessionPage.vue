@@ -70,7 +70,9 @@
             :start-timestamp="timerTimestamp"
             :pause-timer="estimateFinished"
             :duration="timerCountdownNumber"
+            :votingStarted="planningStart"
             @timerFinished="sendVotingFinishedMessage"
+            @timerRunning="updateTimeStamp"
           />
         </b-col>
       </b-row>
@@ -132,7 +134,7 @@
         <user-story-sum-component />
       </b-col>
     </b-row>
-    <b-row v-if="session_userStoryMode !== 'NO_US'">
+    <b-row v-if="session_userStoryMode !== 'NO_US' && reloadFinished">
       <b-col cols="4">
         <div v-if="session_userStoryMode === 'US_JIRA'" class="refreshUserstories">
           <b-button class="w-100 mb-3" variant="info" @click="refreshUserStories">
@@ -179,6 +181,7 @@ import Project from "../model/Project";
 import KickUserWrapper from "@/components/KickUserWrapper.vue";
 import SessionCloseButton from "@/components/actions/SessionCloseButton.vue";
 import SessionStartButton from "@/components/actions/SessionStartButton.vue";
+import Session from "@/model/Session";
 
 export default Vue.extend({
   name: "SessionPage",
@@ -224,7 +227,9 @@ export default Vue.extend({
       timerCountdownNumber: 0,
       startTimerOnComponentCreation: true,
       estimateFinished: false,
-      session: {},
+      session: {} as Session,
+      currentTimeStamp: 0,
+      reloadFinished: false,
     };
   },
   computed: {
@@ -282,37 +287,39 @@ export default Vue.extend({
       }
     },
   },
-  async created() {
+  created() {
+    this.connectToWebSocket();
     this.copyPropsToData();
     this.$store.commit("clearStoreWithoutUserStories");
-    if (!this.session_sessionID || !this.session_adminID) {
-      //check for cookie
-      await this.checkAdminCookie();
-      this.assignSessionToData(this.session);
-      if (this.session_sessionID.length === 0) {
-        this.goToLandingPage();
-      } else {
-        this.handleReload();
-      }
-    }
-    this.timerCountdownNumber = parseInt(this.session_timerSecondsString, 10);
-    window.addEventListener("beforeunload", this.sendUnregisterCommand);
-  },
-  mounted() {
-    this.voteSet = JSON.parse(this.session_voteSetJson);
-    this.connectToWebSocket();
     if (this.session_sessionState === Constants.memberUpdateCommandStartVoting) {
       this.planningStart = true;
-      this.sendRestartMessage();
     } else if (this.session_sessionState === Constants.memberUpdateCommandVotingFinished) {
       this.planningStart = true;
       this.estimateFinished = true;
     }
+    this.timerCountdownNumber = parseInt(this.session_timerSecondsString, 10);
+    window.addEventListener("beforeunload", this.sendUnregisterCommand);
+  },
+  async mounted() {
+    this.voteSet = JSON.parse(this.session_voteSetJson);
+    
+    if (this.session_sessionState === Constants.memberUpdateCommandStartVoting) {
+      this.planningStart = true;
+    } else if (this.session_sessionState === Constants.memberUpdateCommandVotingFinished) {
+      this.planningStart = true;
+      this.estimateFinished = true;
+    }
+    await this.checkAdminCookie();
+    this.assignSessionToData(this.session);
+    this.reloadFinished = true;
   },
   destroyed() {
     window.removeEventListener("beforeunload", this.sendUnregisterCommand);
   },
   methods: {
+    updateTimeStamp({timeStamp}) {
+      this.currentTimeStamp = timeStamp;
+    },
     async checkAdminCookie() {
       console.log("checking admin cookie");
       const cookie = window.localStorage.getItem("adminCookie");
@@ -333,6 +340,7 @@ export default Vue.extend({
               set: Array<string>;
               timerSeconds: number;
               userStories: Array<{
+                id: number | null;
                 title: string;
                 description: string;
                 estimation: string | null;
@@ -343,6 +351,9 @@ export default Vue.extend({
             sessionState: string;
           };
           this.session = session;
+          this.$store.commit("setUserStories", {
+            stories: session.sessionConfig.userStories,
+          });
         } catch (e) {
           console.clear();
           console.log(`got error: ${e}`);

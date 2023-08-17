@@ -6,8 +6,11 @@
 package io.diveni.backend.controller;
 
 import java.security.Principal;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import io.diveni.backend.Utils;
 import io.diveni.backend.model.Member;
@@ -43,12 +46,14 @@ public class WebsocketController {
     Session session =
         ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID());
     webSocketService.setAdminUser(principal);
+    TimeZone tz = TimeZone.getTimeZone("UTC");
+    DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'"); // Quoted "Z" to indicate UTC, no timezone offset
+    df.setTimeZone(tz);
+    String nowAsISO = df.format(new Date());
     if (session.getTimerTimestamp() != null) {
-      session = session.setTimerTimestamp(Utils.getTimestampISO8601(new Date()));
+      session = session.setTimerTimestamp(nowAsISO);
       databaseService.saveSession(session);
-      if (!SessionState.VOTING_FINISHED.equals(session.getSessionState())) {
-        webSocketService.sendTimerStartMessage(session, session.getTimerTimestamp());
-      }
+
     }
     if (session.getMembers().size() > 0) {
       webSocketService.sendNotification(
@@ -199,11 +204,15 @@ public class WebsocketController {
   @MessageMapping("/restart")
   public synchronized void restartVote(AdminPrincipal principal) {
     LOGGER.debug("--> restartVote()");
+    TimeZone tz = TimeZone.getTimeZone("UTC");
+    DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'"); // Quoted "Z" to indicate UTC, no timezone offset
+    df.setTimeZone(tz);
+    String nowAsISO = df.format(new Date());
     val session =
         ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID())
             .updateSessionState(SessionState.START_VOTING)
             .resetEstimations()
-            .setTimerTimestamp(Utils.getTimestampISO8601(new Date()));
+            .setTimerTimestamp(nowAsISO);
     databaseService.saveSession(session);
     webSocketService.sendMembersUpdate(session);
     webSocketService.sendSessionStateToMembers(session);

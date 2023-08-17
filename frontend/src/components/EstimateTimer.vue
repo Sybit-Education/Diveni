@@ -15,6 +15,7 @@ export default Vue.extend({
     startTimestamp: { type: String, required: true },
     duration: { type: Number, required: true },
     pauseTimer: { type: Boolean, required: true },
+    votingStarted: { type: Boolean, required: true },
   },
   data() {
     return {
@@ -49,8 +50,11 @@ export default Vue.extend({
   },
   created() {
     this.timerCount = this.duration;
-    if (this.startTimestamp) {
-      this.startInterval();
+    if (this.votingStarted === true) {
+      if (this.startTimestamp) {
+        // ask the admin the current time
+        this.startInterval();
+      }
     }
   },
   beforeDestroy() {
@@ -60,6 +64,9 @@ export default Vue.extend({
     formatTimer() {
       if (this.startTimestamp === "" || this.duration === 0) {
         return "";
+      }
+      if (this.timerCount < 0) {
+        return "00:00";
       }
       const minutes = Math.floor(this.timerCount / 60);
       const seconds = (this.timerCount % 60).toString().padStart(2, "0");
