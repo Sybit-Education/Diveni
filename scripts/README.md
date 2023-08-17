@@ -1,7 +1,7 @@
 # Deployment scripts
 The scripts located in this folder are used to deploy Diveni on our server.
 There are two scripts:
-1. startDiveni.sh -
+1. startDiveni.sh \
    This script is used to deploy Diveni on our production instance. It is available at [Diveni.io](https://diveni.io) \
    It uses the prebuilt docker images provided by GitHub. There is a docker-compose.yml inside the Diveni folder.
 2. startDevDiveni.sh \
