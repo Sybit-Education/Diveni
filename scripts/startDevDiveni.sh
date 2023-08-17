@@ -35,7 +35,7 @@ if [ -z "${branch}" ] || [ -z "${dir}" ]; then
 fi
 
 echo Change directory to "${dir}"
-cd ... || exit
+cd "${dir}" || exit
 
 echo Reverting uncommitted changes ...
 git reset --hard
