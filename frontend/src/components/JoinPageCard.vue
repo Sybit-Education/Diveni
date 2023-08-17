@@ -116,8 +116,8 @@ h6 {
   background-color: var(--startButton);
   color: var(--text-primary-color);
   border-radius: var(--buttonShape);
-  height: 75px;
-  width: 75px;
+  min-height: 75px;
+  min-width: 75px;
   margin-top: 16%;
   font-size: xx-large;
   white-space: nowrap;
