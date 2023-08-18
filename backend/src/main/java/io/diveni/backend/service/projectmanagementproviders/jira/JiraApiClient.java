@@ -22,8 +22,10 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Service
 public class JiraApiClient {
@@ -131,7 +133,6 @@ public class JiraApiClient {
    * @param projectName of the project to load the issues from
    * @param estimationField name of the story points field
    * @param rank to be ordered by
-   * @param forbiddenTypes array of types not to list
    * @return list of issues
    * @throws Exception
    */
@@ -139,19 +140,31 @@ public class JiraApiClient {
       JiraConfig config,
       String projectName,
       String estimationField,
-      String rank,
-      String... forbiddenTypes)
+      String rank)
       throws Exception {
     List<UserStory> userStories = new ArrayList<>();
     JiraOAuthClient jiraOAuthClient = new JiraOAuthClient(config.getJiraUrl());
     OAuthParameters parameters =
         jiraOAuthClient.getParameters(
             config.getAccessToken(), config.getConsumerKey(), config.getPrivateKey());
+
     StringBuilder forbiddenTypesQuery = new StringBuilder();
-    for (String type : forbiddenTypes) {
-      forbiddenTypesQuery.append(" AND type != ");
-      forbiddenTypesQuery.append(type);
+    {
+      Set<String> forbiddenIssueTypes = new HashSet<>();
+      HttpResponse response = getResponseFromUrl(parameters, new GenericUrl(getJiraUrl(config.getJiraUrl()) + "/issuetype"), "GET", null);
+      JsonNode node = new ObjectMapper().readTree(response.parseAsString());
+      for (JsonNode issueType : node) {
+        if (issueType.get("subtask").asBoolean() && issueType.get("name").asText().toLowerCase().contains("sub")) {
+          forbiddenIssueTypes.add(issueType.get("name").asText());
+        }
+      }
+      for (String type : forbiddenIssueTypes) {
+        forbiddenTypesQuery.append(" AND type != '");
+        forbiddenTypesQuery.append(type);
+        forbiddenTypesQuery.append("'");
+      }
     }
+
     HttpResponse response =
         getResponseFromUrl(
             parameters,
