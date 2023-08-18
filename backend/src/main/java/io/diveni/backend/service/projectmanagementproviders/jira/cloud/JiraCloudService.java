@@ -130,10 +130,7 @@ public class JiraCloudService implements ProjectManagementProviderOAuth1 {
     try {
       List<UserStory> userStories =
           jiraApiClient.getIssues(
-              getJiraConfigs().get(tokenIdentifier),
-              projectName,
-              ESTIMATION_FIELD,
-              "RANK");
+              getJiraConfigs().get(tokenIdentifier), projectName, ESTIMATION_FIELD, "RANK");
       LOGGER.debug("<-- getIssues()");
       return userStories;
     } catch (Exception e) {

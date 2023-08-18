@@ -137,11 +137,7 @@ public class JiraApiClient {
    * @throws Exception
    */
   public List<UserStory> getIssues(
-      JiraConfig config,
-      String projectName,
-      String estimationField,
-      String rank)
-      throws Exception {
+      JiraConfig config, String projectName, String estimationField, String rank) throws Exception {
     List<UserStory> userStories = new ArrayList<>();
     JiraOAuthClient jiraOAuthClient = new JiraOAuthClient(config.getJiraUrl());
     OAuthParameters parameters =
@@ -151,10 +147,16 @@ public class JiraApiClient {
     StringBuilder forbiddenTypesQuery = new StringBuilder();
     {
       Set<String> forbiddenIssueTypes = new HashSet<>();
-      HttpResponse response = getResponseFromUrl(parameters, new GenericUrl(getJiraUrl(config.getJiraUrl()) + "/issuetype"), "GET", null);
+      HttpResponse response =
+          getResponseFromUrl(
+              parameters,
+              new GenericUrl(getJiraUrl(config.getJiraUrl()) + "/issuetype"),
+              "GET",
+              null);
       JsonNode node = new ObjectMapper().readTree(response.parseAsString());
       for (JsonNode issueType : node) {
-        if (issueType.get("subtask").asBoolean() && issueType.get("name").asText().toLowerCase().contains("sub")) {
+        if (issueType.get("subtask").asBoolean()
+            && issueType.get("name").asText().toLowerCase().contains("sub")) {
           forbiddenIssueTypes.add(issueType.get("name").asText());
         }
       }
