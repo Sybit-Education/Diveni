@@ -65,7 +65,7 @@ export default Vue.extend({
       if (this.startTimestamp === "" || this.duration === 0) {
         return "";
       }
-      if (this.timerCount < 0) {
+      if (this.timerCount <= 0) {
         return "00:00";
       }
       const minutes = Math.floor(this.timerCount / 60);
