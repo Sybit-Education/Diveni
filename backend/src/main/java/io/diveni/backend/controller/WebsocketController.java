@@ -54,7 +54,6 @@ public class WebsocketController {
       webSocketService.sendNotification(
           session, new Notification(NotificationType.ADMIN_JOINED, null));
     }
-
     LOGGER.debug("<-- registerAdminUser()");
   }
 
