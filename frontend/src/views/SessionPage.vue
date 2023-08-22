@@ -70,7 +70,6 @@
             :start-timestamp="timerTimestamp"
             :pause-timer="estimateFinished"
             :duration="timerCountdownNumber"
-            :votingStarted="planningStart"
             @timerFinished="sendVotingFinishedMessage"
           />
         </b-col>
