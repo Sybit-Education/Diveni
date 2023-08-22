@@ -11,11 +11,11 @@ See also:
 
 ### Software Requirements
 
-- Java 11+
-  - We prefer SapMachine but any other Java JDK 11+ is fine.
+- Java 17+
+  - We prefer SapMachine but any other Java JDK 17+ is fine.
   - Download from SapMachine <https://sap.github.io/SapMachine/>
 
-    ![Download_Selection_Java11](../img/Java11_Installer_Selection.png)
+    ![Download_Selection_Java17](../img/Java17_Installer_Selection.png)
   - Select the appropriate installer for your OS
 - Gradle
   - Download from Gradle official site <https://gradle.org/install/>
