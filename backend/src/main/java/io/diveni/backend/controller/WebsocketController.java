@@ -47,13 +47,14 @@ public class WebsocketController {
         ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID());
     webSocketService.setAdminUser(principal);
     TimeZone tz = TimeZone.getTimeZone("UTC");
-    DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'"); // Quoted "Z" to indicate UTC, no timezone offset
+    DateFormat df =
+        new SimpleDateFormat(
+            "yyyy-MM-dd'T'HH:mm:ss'Z'"); // Quoted "Z" to indicate UTC, no timezone offset
     df.setTimeZone(tz);
     String nowAsISO = df.format(new Date());
     if (session.getTimerTimestamp() != null) {
       session = session.setTimerTimestamp(nowAsISO);
       databaseService.saveSession(session);
-
     }
     if (session.getMembers().size() > 0) {
       webSocketService.sendNotification(
@@ -205,7 +206,9 @@ public class WebsocketController {
   public synchronized void restartVote(AdminPrincipal principal) {
     LOGGER.debug("--> restartVote()");
     TimeZone tz = TimeZone.getTimeZone("UTC");
-    DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'"); // Quoted "Z" to indicate UTC, no timezone offset
+    DateFormat df =
+        new SimpleDateFormat(
+            "yyyy-MM-dd'T'HH:mm:ss'Z'"); // Quoted "Z" to indicate UTC, no timezone offset
     df.setTimeZone(tz);
     String nowAsISO = df.format(new Date());
     val session =
