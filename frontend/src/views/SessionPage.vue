@@ -269,7 +269,7 @@ export default Vue.extend({
       }
     },
     membersEstimated() {
-      if(this.membersPending.length  === 0 && this.membersEstimated.length > 0) {
+      if (this.membersPending.length  === 0 && this.membersEstimated.length > 0) {
         this.estimateFinished = true;
       }
     },
