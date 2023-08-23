@@ -80,21 +80,6 @@
         {{ membersPending.length }} /
         {{ membersPending.length + membersEstimated.length }}
       </h4>
-
-      <div id="demo">
-        <div
-          v-if="membersEstimated.length === membersPending.length + membersEstimated.length"
-          style="display: none"
-        >
-          {{ (estimateFinished = true) }}
-        </div>
-      </div>
-      <div id="demo">
-        <div v-if="membersEstimated.length === 0" style="display: none">
-          {{ (estimateFinished = false) }}
-        </div>
-      </div>
-
       <b-row v-if="!estimateFinished" class="my-1 d-flex justify-content-center flex-wrap">
         <kick-user-wrapper
           v-for="member of membersPending"
@@ -194,17 +179,17 @@ export default Vue.extend({
     NotifyHostComponent,
   },
   props: {
-    adminID: { type: String, required: true },
-    sessionID: { type: String, required: true },
-    voteSetJson: { type: String, required: true },
-    sessionState: { type: String, required: true },
-    timerSecondsString: { type: String, required: true },
+    adminID: { type: String, required: false },
+    sessionID: { type: String, required: false },
+    voteSetJson: { type: String, required: false },
+    sessionState: { type: String, required: false },
+    timerSecondsString: { type: String, required: false },
     startNewSessionOnMountedString: {
       type: String,
       required: false,
       default: "false",
     },
-    userStoryMode: { type: String, required: true },
+    userStoryMode: { type: String, required: false },
   },
   data() {
     return {
@@ -257,14 +242,16 @@ export default Vue.extend({
     webSocketIsConnected(isConnected) {
       if (isConnected) {
         console.debug("SessionPage: member connected to websocket");
-        this.registerAdminPrincipalOnBackend();
-        this.subscribeWSMemberUpdated();
-        this.requestMemberUpdate();
-        this.subscribeOnTimerStart();
-        this.subscribeWSNotification();
-        if (this.startNewSessionOnMountedString === "true") {
-          this.sendRestartMessage();
-        }
+        setTimeout(() => {
+          this.registerAdminPrincipalOnBackend();
+          this.subscribeWSMemberUpdated();
+          this.requestMemberUpdate();
+          this.subscribeOnTimerStart();
+          this.subscribeWSNotification();
+          if (this.startNewSessionOnMountedString === "true") {
+            this.sendRestartMessage();
+          }
+        }, 50);
         setTimeout(() => {
           if (this.members.length === 0) {
             this.requestMemberUpdate();
@@ -279,6 +266,11 @@ export default Vue.extend({
           startVelocity: 50,
           spread: 100,
         });
+      }
+    },
+    membersEstimated() {
+      if (this.membersPending.length  === 0 && this.membersEstimated.length > 0) {
+        this.estimateFinished = true;
       }
     },
   },
@@ -299,11 +291,12 @@ export default Vue.extend({
     window.addEventListener("beforeunload", this.sendUnregisterCommand);
   },
   mounted() {
-    this.voteSet = JSON.parse(this.session_voteSetJson);
+    if (this.session_voteSetJson) {
+      this.voteSet = JSON.parse(this.session_voteSetJson);
+    }
     this.connectToWebSocket();
     if (this.session_sessionState === Constants.memberUpdateCommandStartVoting) {
       this.planningStart = true;
-      this.sendRestartMessage();
     } else if (this.session_sessionState === Constants.memberUpdateCommandVotingFinished) {
       this.planningStart = true;
       this.estimateFinished = true;
@@ -351,12 +344,14 @@ export default Vue.extend({
       }
     },
     copyPropsToData() {
-      this.session_adminID = this.adminID;
-      this.session_sessionID = this.sessionID;
-      this.session_sessionState = this.sessionState;
-      this.session_timerSecondsString = this.timerSecondsString;
-      this.session_voteSetJson = this.voteSetJson;
-      this.session_userStoryMode = this.userStoryMode;
+      if (this.adminID) {
+        this.session_adminID = this.adminID;
+        this.session_sessionID = this.sessionID;
+        this.session_sessionState = this.sessionState;
+        this.session_timerSecondsString = this.timerSecondsString;
+        this.session_voteSetJson = this.voteSetJson;
+        this.session_userStoryMode = this.userStoryMode;
+      }
     },
     assignSessionToData(session) {
       if (Object.keys(session).length !== 0) {
@@ -385,7 +380,6 @@ export default Vue.extend({
       this.timerCountdownNumber = parseInt(this.session_timerSecondsString, 10);
       //reconnect and reload member
       this.connectToWebSocket();
-      this.requestMemberUpdate();
     },
     async onUserStoriesChanged({ us, idx, doRemove }) {
       console.log(`stories: ${us}`);
