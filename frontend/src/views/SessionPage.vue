@@ -190,6 +190,7 @@ export default Vue.extend({
       default: "false",
     },
     userStoryMode: { type: String, required: false },
+    rejoined: { type: String, required: false, default: "true" },
   },
   data() {
     return {
@@ -247,11 +248,13 @@ export default Vue.extend({
           this.subscribeWSMemberUpdated();
           this.requestMemberUpdate();
           this.subscribeOnTimerStart();
-          this.subscribeWSNotification();
+          if (this.rejoined === "false") {
+            this.subscribeWSNotification();
+          }
           if (this.startNewSessionOnMountedString === "true") {
             this.sendRestartMessage();
           }
-        }, 50);
+        }, 300);
         setTimeout(() => {
           if (this.members.length === 0) {
             this.requestMemberUpdate();
@@ -380,6 +383,9 @@ export default Vue.extend({
       this.timerCountdownNumber = parseInt(this.session_timerSecondsString, 10);
       //reconnect and reload member
       this.connectToWebSocket();
+      setTimeout(() => {
+        this.subscribeWSNotification();
+      }, 300);
     },
     async onUserStoriesChanged({ us, idx, doRemove }) {
       console.log(`stories: ${us}`);
