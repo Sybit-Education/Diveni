@@ -50,9 +50,9 @@
 
         <b-form-input
           v-model="story.title"
-          :disabled="true"
-          class="mx-1 w-100"
+          class="mx-1 w-100 shadow-none"
           id="userStoryTitles"
+          readonly
           size="sm"
           :placeholder="$t('page.session.before.userStories.placeholder.userStoryTitle')"
           @blur="publishChanges"
