@@ -24,7 +24,11 @@ How to contribute:
 
 Happy coding 🚀
 
-**Update 2022-11-02: Many thanks all contributors supporting us during Hacktoberfest 2022!** We are happy to announce that we had **15 PRs** where **11 PRs** have been merged successful during Hacktoberfest 🚀 
+### Hacktoberfest 2022
+
+Many thanks all contributors supporting us during Hacktoberfest 2022!
+We are happy to announce that we had **15 PRs** where **11 PRs** have been merged successful during Hacktoberfest 🚀 
+
 ---
 
 ![DIVENI Logo](docs/assets/diveni_banner.png)
