@@ -12,7 +12,7 @@
 
 ## Hacktoberfest
 
-Diveni participates on Hacktoberfest! We are looking forward to your support to improve this awesome app!
+Diveni participates on [Hacktoberfest](https://hacktoberfest.com/)! We are looking forward to your support to improve this awesome app!
 
 How to contribute:
 1) ⭐ the repository
