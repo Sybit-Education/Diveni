@@ -1,6 +1,6 @@
 {
   "general": {
-    "pleaseWait": "Por favor espere...",
+    "pleaseWait": "Espera...",
     "about": {
       "label": "Acerca de",
       "repository": "GitHub",
@@ -8,7 +8,7 @@
     },
     "licenses": {
       "frontend": "Licencias (Frontend)",
-      "backend": "Licencias (backend)",
+      "backend": "Licencias (Backend)",
       "translations": "Mejorar la traducción"
     }
   },
@@ -18,28 +18,28 @@
         "copy": {
           "id": "Copiar código",
           "link": "Copiar enlace",
-          "qr": "Show QR code"
+          "qr": "Mostrar código QR"
         },
-        "title": "Esperando a los miembros...",
+        "title": "Esperando a los miembros ...",
         "text": {
           "beforeID": "Compartir el código",
           "afterID": "con tus compañeros de equipo",
           "waiting": "Esperando a que los miembros se unan"
         },
-        "button": "Empezar a planear",
-        "refreshStories": "Actualizar las Historias de Usuario",
+        "button": "Comience a planificar",
+        "refreshStories": "Actualizar historias de usuario",
         "userStories": {
-          "filter" : {
-            "noStoryFound": "No se ha encontrado ninguna historia!"
+          "filter": {
+            "noStoryFound": "¡No se han encontrado historias!"
           },
           "button": {
-            "addFirstUserStory": "Aún no hay historias... haz clic para añadir historias",
-            "addUserStory": "Añadir"
+            "addFirstUserStory": "Todavía no hay historias... Haga clic para agregar historias",
+            "addUserStory": "Agregar"
           },
           "placeholder": {
-            "userStoryTitle": "Título de la historia del usuario",
-            "userStoryDescription": "Criterios de descripción y aceptación...",
-            "searchUserStories": "Buscar historias de usuarios..."
+            "userStoryTitle": "Título de la historia de usuario",
+            "userStoryDescription": "Descripción y criterios de aceptación...",
+            "searchUserStories": "Buscar historias de usuario..."
           },
           "text": "Haga clic en el título de una historia de usuario para ver la descripción",
           "sum": "Total:"
@@ -49,19 +49,19 @@
         "estimation": {
           "title": "Estimación",
           "message": {
-            "waitingFor": "Esperando por",
+            "waitingFor": "Esperando",
             "finished": "Estimación finalizada"
           },
           "buttons": {
             "new": "Nuevo",
             "result": "Mostrar resultado",
-            "finish": "Terminar sesión"
+            "finish": "Finalizar sesión"
           }
         },
         "modal": {
-          "title": "Eliminar miembro",
-          "bodyPart1": "¿Está seguro que desea eliminar ",
-          "bodyPart2": " de tu sesión actual?",
+          "title": "Quitar miembro",
+          "bodyPart1": "¿Está seguro de que desea eliminar ",
+          "bodyPart2": " de su sesión actual?",
           "buttons": {
             "cancel": "Cancelar",
             "ok": "Eliminar"
@@ -70,20 +70,20 @@
       },
       "close": {
         "popup": "¿Estás seguro?",
-        "description1": "Cerrar esta sesión elimina a usted y a todos los miembros.",
-        "description2": "Puede descargar las historias de los usuarios a partir de entonces.",
+        "description1": "Al cerrar esta sesión, usted y todos los miembros se eliminan.",
+        "description2": "Puede descargar las historias de usuario a partir de entonces.",
         "button": {
           "cancel": "Cancelar",
-          "ok": "Ok"
+          "ok": "De acuerdo"
         }
       }
     },
     "results": {
       "title": "Resultados",
-      "noUserStories": "No hay historias de usuario definidas...",
+      "noUserStories": "No hay historias de usuario definidas ...",
       "button": {
         "download": "Descargar como CSV",
-        "home": "Ir a casa"
+        "home": "Vete a casa"
       }
     },
     "landing": {
@@ -91,35 +91,35 @@
       "meeting": {
         "new": {
           "title": "Nueva sesión",
-          "description": "Prepara una nueva sesión, invita a los miembros del equipo y comienza a estimar",
+          "description": "Prepare una nueva sesión, invite a los miembros del equipo y comience a estimar",
           "buttons": {
             "start": {
-              "label": "Start ..."
+              "label": "Empezar..."
             }
           }
         },
         "join": {
-          "title": "Unirse a sesión",
+          "title": "Unirse a la sesión",
           "description": "Únete a una sesión existente y ayuda a tu equipo a estimar",
           "buttons": {
             "start": {
-              "label": "Join ..."
+              "label": "Juntar..."
             }
           }
         },
         "reconnect": {
-          "title": "Volver a conectar a la sesión",
-          "description": "Volver a conectar a la sesión existente como host",
+          "title": "Volver a conectarse a la sesión",
+          "description": "Volver a conectarse a la sesión existente como host",
           "buttons": {
             "start": {
-              "label": "Rejoin"
+              "label": "Reunirse"
             }
           }
         }
       }
     },
     "join": {
-      "title": "Unirse a la sesión",
+      "title": "Únete a la sesión",
       "input": {
         "code": "Código de invitación",
         "password": "Contraseña",
@@ -130,13 +130,13 @@
     },
     "vote": {
       "title": "¡Estimar!",
-      "waiting": "Esperando que tu anfitrión comience",
+      "waiting": "Esperando a que comience el host",
       "button": {
         "leave": {
           "label": "Abandonar sesión"
         }
       },
-      "hostLeft": "Esperando que el anfitrión regrese..."
+      "hostLeft": "Esperando que el anfitrión regrese ..."
     }
   },
   "session": {
@@ -145,44 +145,44 @@
       "step": {
         "selection": {
           "mode": {
-            "title": "1. Selecciona el modo para tus historias de usuario",
+            "title": "1. Seleccione el modo para sus historias de usuario",
             "description": {
               "withoutUS": {
                 "tab": {
                   "label": "Planificación sin historias de usuario"
                 },
                 "subtitle": "Planificación sin historias de usuario",
-                "descriptionLine1": "Vas a votar con tus tarjetas seleccionadas",
-                "descriptionLine2": "No podrá añadir historias de usuario una vez que haya iniciado la sesión"
+                "descriptionLine1": "Votarás con las tarjetas seleccionadas",
+                "descriptionLine2": "No podrá agregar historias de usuario una vez que haya iniciado la sesión"
               },
               "withUS": {
                 "tab": {
                   "label": "Planificación con historias de usuario"
                 },
-                "subtitle": "Integra historias de usuario en tu plan de póquer",
-                "descriptionLine1": "Crea tus historias de usuario en la siguiente página",
-                "descriptionLine2": "Añadir título y descripción a cada historia de usuario",
-                "descriptionLine3": "Utilice el CSV-Import para integrar historias de usuario en su sesión",
-                "descriptionLine4": "First line must contain the field names separated by semicolons: title;description;estimation",
-                "descriptionLine5": "Podrás añadir y editar historias de usuario una vez que hayas iniciado la sesión",
+                "subtitle": "Integre historias de usuario en su planificación de póquer",
+                "descriptionLine1": "Crea tus historias de usuario en la página siguiente",
+                "descriptionLine2": "Agregar título y descripción a cada historia de usuario",
+                "descriptionLine3": "Utilice CSV-Import para integrar historias de usuario en su sesión",
+                "descriptionLine4": "La primera línea debe contener los nombres de campo separados por punto y coma: título;descripción;estimación",
+                "descriptionLine5": "Podrá agregar y editar historias de usuario una vez que haya iniciado la sesión",
                 "importButton": "Importar historias de usuario",
                 "toastSuccessNotification": "Historias de usuario importadas",
-                "toastErrorNotification": "Error al importar"
+                "toastErrorNotification": "Error al intentar importar"
               },
               "withIssueTracker": {
                 "tab": {
-                  "label": "Planeando con Issue-Tracker"
+                  "label": "Planificación con Issue-Tracker"
                 },
-                "subtitle": "Selecciona Jira para tu Planificación de Poker-Planning",
+                "subtitle": "Selecciona Jira para tu planificación de poker",
                 "descriptionLine1": "Inicia sesión con tus credenciales",
                 "descriptionLine2": "Seleccione su proyecto",
-                "descriptionLine3": "Después de hacer clic en la sesión de inicio, serás redirigido a la siguiente página para editar tus historias de usuario",
-                "descriptionLine4": "Podrás añadir y editar historias de usuario una vez que hayas iniciado la sesión",
-                "formSelection": "Por favor, selecciona tu proyecto",
+                "descriptionLine3": "Después de hacer clic en iniciar sesión, será redirigido a la página siguiente para editar sus historias de usuario.",
+                "descriptionLine4": "Podrá agregar y editar historias de usuario una vez que haya iniciado la sesión",
+                "formSelection": "Por favor, seleccione su proyecto",
                 "selectedProject": "Proyecto seleccionado: ",
                 "allUserStories": "Todas las historias de usuario",
                 "dialog": {
-                  "description": "Una nueva pestaña se abrirá inmediatamente, por favor concede acceso a esta aplicación en esta pestaña e introduce el código de verificación aquí."
+                  "description": "Se abrirá una nueva pestaña inmediatamente, otorgue acceso a esta aplicación en esta pestaña e ingrese el código de verificación aquí."
                 },
                 "inputs": {
                   "verificationCode": {
@@ -197,10 +197,10 @@
                     "label": "Iniciar sesión con Jira Server"
                   },
                   "signInWithAzureDevOps": {
-                    "label": "Iniciar sesión con Azure DevOps"
+                    "label": "Inicio de sesión con Azure DevOps"
                   },
                   "selectProject": {
-                    "label": "Seleccione su proyecto jira"
+                    "label": "Selecciona tu proyecto de jira"
                   },
                   "submit": {
                     "label": "Enviar"
@@ -220,34 +220,34 @@
                 "description": "Cada número es la suma de los dos anteriores"
               },
               "tShirtSizes": {
-                "label": "Tamaños de camisa",
-                "description": "Tamaños básicos de la camiseta. Simple y eficaz"
+                "label": "Tallas de camisetas",
+                "description": "Tallas básicas de camiseta. Simple y eficaz"
               },
               "hours": {
                 "label": "Horas",
-                "description": "Sencillamente horas. Excelente para subtareas."
+                "description": "Simplemente horas. Ideal para subtareas."
               },
               "numbers": {
                 "label": "Números",
-                "description": "Número entero. ¿Qué más quieres?"
+                "description": "Números enteros. ¿Qué más quieres?"
               },
               "ownSet": {
-                "label": "Juego de tarjetas propias",
+                "label": "Juego de cartas propio",
                 "description": "Aquí puedes configurar tu propia tarjeta",
                 "hint": {
-                  "label": "Pista",
-                  "description": "En el campo de texto de abajo puede configurar su propio conjunto de tarjetas. Cada entrada está separada por punto y coma (;). Se omiten entradas duplicadas.",
-                  "example": "Ej.: 1;2;3;4;5;6;7;"
+                  "label": "Indirecta",
+                  "description": "En el campo de texto a continuación puede configurar su propio conjunto de tarjetas. Cada entrada está separada por un punto y coma (;). Se omiten las entradas duplicadas.",
+                  "example": "Por ejemplo: 1;2;3;4;5;6;7;"
                 }
               }
             }
           },
           "time": {
-            "title": "3. Ajuste el tiempo por estimación"
+            "title": "3. Ajustar el tiempo por estimación"
           },
           "password": {
             "title": "4. Elija una contraseña si es necesario",
-            "placeholder": "Contraseña (dejar vacío para la sesión sin protección)"
+            "placeholder": "Contraseña (dejar vacía para la sesión no protegida)"
           }
         }
       },
@@ -258,25 +258,25 @@
     "userStory": {
       "button": {
         "title": "Historias",
-        "add": "Añadir",
+        "add": "Agregar",
         "edit": "Editar",
-        "save": "Guardar",
-        "noUserStories": "Aún no hay historias... Añade una historia para empezar a estimar.",
+        "save": "Salvar",
+        "noUserStories": "Todavía no hay historias... Agregue una historia para comenzar a estimar.",
         "placeholder": {
-          "title": "Título de historia",
-          "description": "Criterios de descripción y aceptación..."
+          "title": "Título de la historia",
+          "description": "Descripción y criterios de aceptación..."
         }
       }
     },
     "notification": {
       "messages": {
-        "hostLeft": "El host dejó la sesión",
-        "hostJoined": "Host se unió a la sesión",
-        "memberLeft": "El miembro abandonó la sesión",
-        "memberJoined": "Miembro se unió a la sesión",
-        "memberRemoved": "Ha sido eliminado de la sesión por el host",
+        "hostLeft": "El anfitrión abandonó la sesión",
+        "hostJoined": "El anfitrión se unió a la sesión",
+        "memberLeft": "El miembro abandona el período de sesiones",
+        "memberJoined": "El miembro se unió a la sesión",
+        "memberRemoved": "El anfitrión le ha quitado de la sesión",
         "issueTrackerCredentials": "Credenciales incorrectas",
-        "issueTrackerLoginFailed": "Error al iniciar sesión",
+        "issueTrackerLoginFailed": "Error de inicio de sesión",
         "issueTrackerSynchronizeSuccess": "Cambios sincronizados con Issue-Tracker",
         "issueTrackerSynchronizeFailed": "Error al sincronizar los cambios con Issue-Tracker",
         "wrongID": "Código de invitación incorrecto",

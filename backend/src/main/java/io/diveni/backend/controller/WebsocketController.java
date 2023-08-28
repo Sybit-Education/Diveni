@@ -231,8 +231,7 @@ public class WebsocketController {
         ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID());
     webSocketService.sendSelectedUserStoryToMembers(session, index);
     LOGGER.debug("<-- adminSelectedUserStory()");
-  }
-  
+  } 
     @GetMapping("/get-timer-value")
     public synchronized ResponseEntity<Long> getTimeValue(String memberID) throws ParseException {
       LOGGER.debug("--> get-timer-value");
