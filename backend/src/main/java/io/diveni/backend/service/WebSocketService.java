@@ -43,6 +43,8 @@ public class WebSocketService {
 
   public static String START_TIMER_DESTINATION = "/updates/startTimer";
 
+  public static String USER_STORY_SELECTED_DESTINATION = "/updates/userStorySelected";
+
   @Autowired private SimpMessagingTemplate simpMessagingTemplate;
 
   @Getter private List<SessionPrincipals> sessionPrincipalList = List.of();
@@ -201,6 +203,20 @@ public class WebSocketService {
     simpMessagingTemplate.convertAndSendToUser(
         memberID, US_UPDATES_DESTINATION, session.getSessionConfig().getUserStories());
     LOGGER.debug("<-- sendUpdatedUserStoriesToMember()");
+  }
+
+  public void sendSelectedUserStoryToMembers(Session session, Integer index) {
+    LOGGER.debug(
+        "--> sendSelectedUserStoryToMembers(), sessionID={}, index={}",
+        session.getSessionID(),
+        index);
+    getSessionPrincipals(session.getSessionID())
+        .memberPrincipals()
+        .forEach(
+            member ->
+                simpMessagingTemplate.convertAndSendToUser(
+                    member.getMemberID(), USER_STORY_SELECTED_DESTINATION, index));
+    LOGGER.debug("<-- sendSelectedUserStoryToMembers()");
   }
 
   public void sendTimerStartMessage(Session session, String timestamp) {

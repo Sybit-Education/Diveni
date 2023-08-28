@@ -6,6 +6,7 @@
 package io.diveni.backend.controller;
 
 import java.security.Principal;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
@@ -22,9 +23,12 @@ import io.diveni.backend.service.WebSocketService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import io.diveni.backend.principals.AdminPrincipal;
 import io.diveni.backend.principals.MemberPrincipal;
@@ -129,6 +133,8 @@ public class WebsocketController {
         ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID());
     webSocketService.sendSessionStateToMembers(
         session.updateSessionState(SessionState.SESSION_CLOSED));
+    webSocketService.getSessionPrincipals(session.getSessionID()).memberPrincipals().stream()
+        .forEach(memberP -> removeMember(memberP));
     webSocketService.removeSession(session);
     databaseService.deleteSession(session);
     LOGGER.debug("<-- closeSession()");
@@ -219,5 +225,15 @@ public class WebsocketController {
     databaseService.saveSession(session);
     webSocketService.sendUpdatedUserStoriesToMembers(session);
     LOGGER.debug("<-- adminUpdatedUserStories()");
+  }
+
+  @MessageMapping("/adminSelectedUserStory")
+  public synchronized void adminSelectedUserStory(
+      AdminPrincipal principal, @Payload Integer index) {
+    LOGGER.debug("--> adminSelectedUserStory()");
+    val session =
+        ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID());
+    webSocketService.sendSelectedUserStoryToMembers(session, index);
+    LOGGER.debug("<-- adminSelectedUserStory()");
   }
 }
