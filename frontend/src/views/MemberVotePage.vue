@@ -23,6 +23,7 @@
             :start-timestamp="timerTimestamp"
             :pause-timer="estimateFinished || pauseSession"
             :duration="timerCountdownNumber"
+            :member="memberID"
           />
         </b-col>
       </b-row>

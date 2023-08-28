@@ -7,6 +7,7 @@
 </template>
 
 <script lang="ts">
+import constants from "@/constants";
 import Vue from "vue";
 
 export default Vue.extend({
@@ -15,6 +16,7 @@ export default Vue.extend({
     startTimestamp: { type: String, required: true },
     duration: { type: Number, required: true },
     pauseTimer: { type: Boolean, required: true },
+    member: { type: String, required: false, default: "" },
   },
   data() {
     return {
@@ -75,13 +77,37 @@ export default Vue.extend({
       }
       this.intervalHandler = setInterval(() => {
         if (this.timerCount > 0) {
-         this.timerCount--;
+          const startTime = new Date(this.startTimestamp).getTime();
+          const currentTime = new Date().getTime();
+          this.timerCount = Math.ceil(this.duration - (currentTime - startTime) / 1000);
+          if (this.timerCount > this.duration || this.timerCount < 0) {
+            clearInterval(this.intervalHandler);
+            this.localClockTimer();
+          }
         } else {
           this.$emit("timerFinished");
           clearInterval(this.intervalHandler);
         }
-      }, 1000);
+      }, 100);
     },
+    async localClockTimer() {
+      if (this.member !== '') {
+        const response = (await this.axios.get(constants.backendURL + "/get-timer-value",{
+              params: {
+                memberID: this.member,
+              },
+        })).data;
+        this.timerCount = Math.ceil(this.duration - (response / 1000));
+        this.intervalHandler = setInterval(() => {
+          if (this.timerCount > 0) {
+            this.timerCount = this.timerCount - 1;
+          } else {
+            this.$emit("timerFinished");
+            clearInterval(this.intervalHandler);
+          }
+        }, 1000);
+      }
+    }
   },
 });
 </script>
