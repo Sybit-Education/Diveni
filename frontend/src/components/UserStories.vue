@@ -140,8 +140,8 @@ export default Vue.extend({
         estimation: null,
         isActive: false,
       };
-      this.setUserStoryAsActive(this.userStories.length)
       this.userStories.push(story);
+      this.setUserStoryAsActive(this.userStories.length - 1);
     },
     swapPriority: function () {
       if (!this.filterActive) {
