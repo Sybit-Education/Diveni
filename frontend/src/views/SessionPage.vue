@@ -425,7 +425,7 @@ export default Vue.extend({
         if (response.status === 200) {
           this.$toast.success(this.$t("session.notification.messages.issueTrackerSynchronizeSuccess"));
         } else if (response === 204) {
-          this.$toast.info(this.$t("session.notification.messages.issueTrackerSynchronizeNothingChanged"));
+          this.$toast.info(this.$t("session.notification.messages.issueTrackerNothingChanged"));
         } else {
           this.$toast.error(this.$t("session.notification.messages.issueTrackerSynchronizeFailed"));
         }

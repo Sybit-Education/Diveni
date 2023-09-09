@@ -278,7 +278,7 @@
         "issueTrackerCredentials": "Credenciales incorrectas",
         "issueTrackerLoginFailed": "Error de inicio de sesión",
         "issueTrackerSynchronizeSuccess": "Cambios sincronizados con Issue-Tracker",
-        "issueTrackerSynchronizeNothingChanged": "No se realizaron cambios",
+        "issueTrackerNothingChanged": "No se realizaron cambios",
         "issueTrackerSynchronizeFailed": "Error al sincronizar los cambios con Issue-Tracker",
         "wrongID": "Código de invitación incorrecto",
         "password": "Contraseña incorrecta"

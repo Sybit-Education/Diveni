@@ -278,7 +278,7 @@
         "issueTrackerCredentials": "Mauvais identifiants",
         "issueTrackerLoginFailed": "Échec de la connexion",
         "issueTrackerSynchronizeSuccess": "Changements synchronisés avec Issue-Tracker",
-        "issueTrackerSynchronizeNothingChanged": "Aucune modification n'a été apportée",
+        "issueTrackerNothingChanged": "Aucune modification n'a été apportée",
         "issueTrackerSynchronizeFailed": "Impossible de synchroniser les modifications avec Issue-Tracker",
         "wrongID": "Mauvais code d'invitation",
         "password": "Mauvais mot de passe"
