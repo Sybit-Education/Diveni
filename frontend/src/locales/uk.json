@@ -278,6 +278,7 @@
         "issueTrackerCredentials": "Неправильні облікові дані",
         "issueTrackerLoginFailed": "Помилка входу в систему",
         "issueTrackerSynchronizeSuccess": "Синхронізовані зміни з Issue-Tracker",
+        "issueTrackerSynchronizeNothingChanged": "Змін не внесено",
         "issueTrackerSynchronizeFailed": "Не вдалося синхронізувати зміни з Issue-Tracker",
         "wrongID": "Невірний код запрошення",
         "password": "Хибний пароль"
