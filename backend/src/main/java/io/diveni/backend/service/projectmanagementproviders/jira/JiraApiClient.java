@@ -212,19 +212,12 @@ public class JiraApiClient {
    * Creates an issue
    *
    * @param config required to authenticate with JIRA
-   * @param projectID of the project
-   * @param story user story to be updated
+   * @param fields user story as a map
    * @return the id of the created issue
    * @throws Exception
    */
-  public String createIssue(JiraConfig config, String projectID, UserStory story) throws Exception {
+  public String createIssue(JiraConfig config, Map<String, Object> fields) throws Exception {
     Map<String, Map<String, Object>> content = new HashMap<>();
-    Map<String, Object> fields = new HashMap<>();
-    fields.put("reporter", Map.of("accountId", getCurrentUsername(config)));
-    fields.put("issuetype", Map.of("name", "Story"));
-    fields.put("project", Map.of("id", projectID));
-    fields.put("summary", story.getTitle());
-    fields.put("description", story.getDescription());
     content.put("fields", fields);
     JiraOAuthClient jiraOAuthClient = new JiraOAuthClient(config.getJiraUrl());
     OAuthParameters parameters =
