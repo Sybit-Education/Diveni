@@ -153,8 +153,7 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
       fields.put("project", Map.of("id", projectID));
       fields.put("summary", story.getTitle());
       fields.put("description", story.getDescription());
-      String id =
-          jiraApiClient.createIssue(getJiraConfigs().get(tokenIdentifier), fields);
+      String id = jiraApiClient.createIssue(getJiraConfigs().get(tokenIdentifier), fields);
       LOGGER.debug("<-- createIssue()");
       return id;
     } catch (Exception e) {
