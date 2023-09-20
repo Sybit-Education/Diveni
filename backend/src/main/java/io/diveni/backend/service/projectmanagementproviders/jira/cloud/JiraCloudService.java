@@ -145,7 +145,7 @@ public class JiraCloudService implements ProjectManagementProviderOAuth1 {
     LOGGER.debug("--> createIssue(), projectID={}", projectID);
     try {
       Map<String, Object> fields = new HashMap<>();
-      fields.put("reporter", Map.of("accountId", jiraApiClient.getCurrentUsername(getJiraConfigs().get(tokenIdentifier))));
+      fields.put("reporter", Map.of("accountId", getCurrentUsername(tokenIdentifier)));
       fields.put("issuetype", Map.of("name", "Story"));
       fields.put("project", Map.of("id", projectID));
       fields.put("summary", story.getTitle());
