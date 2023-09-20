@@ -409,7 +409,7 @@ export default Vue.extend({
             if (response.status === 200) {
               us = this.userStories.map((s) =>
                 s.title === us[idx].title && s.description === us[idx].description
-                  ? { ...s, jiraId: response.data }
+                  ? { ...s, id: response.data }
                   : s
               );
               console.log(`assigned id: ${us[idx].id}`);
