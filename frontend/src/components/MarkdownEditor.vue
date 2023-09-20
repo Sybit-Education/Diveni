@@ -126,6 +126,10 @@ export default Vue.extend({
   background-color: #405c6c;
 }
 
+.toastui-editor-contents p {
+  color: var(--text-primary-color) !important;
+}
+
 .lightMode .toastui-editor-defaultUI .ProseMirror{
   background-color: var(--textAreaColour);
 }
@@ -146,9 +150,9 @@ export default Vue.extend({
 }
 
 .ProseMirror {
-  height: 100%
+  height: 100%;
+  color: var(--text-primary-color) !important;
 }
-
 
 /* Scroll bar stylings */
 ::-webkit-scrollbar {
