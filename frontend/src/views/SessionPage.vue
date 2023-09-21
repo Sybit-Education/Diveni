@@ -70,6 +70,7 @@
             :start-timestamp="timerTimestamp"
             :pause-timer="estimateFinished"
             :duration="timerCountdownNumber"
+            :votingStarted="planningStart"
             @timerFinished="sendVotingFinishedMessage"
           />
         </b-col>
@@ -190,6 +191,7 @@ export default Vue.extend({
       default: "false",
     },
     userStoryMode: { type: String, required: false },
+    rejoined: { type: String, required: false, default: "true" },
   },
   data() {
     return {
@@ -247,11 +249,13 @@ export default Vue.extend({
           this.subscribeWSMemberUpdated();
           this.requestMemberUpdate();
           this.subscribeOnTimerStart();
-          this.subscribeWSNotification();
+          if (this.rejoined === "false") {
+            this.subscribeWSNotification();
+          }
           if (this.startNewSessionOnMountedString === "true") {
             this.sendRestartMessage();
           }
-        }, 50);
+        }, 300);
         setTimeout(() => {
           if (this.members.length === 0) {
             this.requestMemberUpdate();
@@ -380,6 +384,9 @@ export default Vue.extend({
       this.timerCountdownNumber = parseInt(this.session_timerSecondsString, 10);
       //reconnect and reload member
       this.connectToWebSocket();
+      setTimeout(() => {
+        this.subscribeWSNotification();
+      }, 300);
     },
     async onUserStoriesChanged({ us, idx, doRemove }) {
       console.log(`stories: ${us}`);
@@ -403,7 +410,7 @@ export default Vue.extend({
             if (response.status === 200) {
               us = this.userStories.map((s) =>
                 s.title === us[idx].title && s.description === us[idx].description
-                  ? { ...s, jiraId: response.data }
+                  ? { ...s, id: response.data }
                   : s
               );
               console.log(`assigned id: ${us[idx].id}`);
