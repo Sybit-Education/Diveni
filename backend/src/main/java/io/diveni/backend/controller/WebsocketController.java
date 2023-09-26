@@ -196,6 +196,22 @@ public class WebsocketController {
     return members.stream().filter(m -> m.getCurrentEstimation() == null).count() == 0;
   }
 
+  @MessageMapping("/chat-admin")
+  public synchronized void processChatMessageAdmin(@Payload String message, AdminPrincipal principal) {
+    LOGGER.debug("--> processChatMessageAdmin()");
+    val session = ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID());
+    webSocketService.sendMessage(session, message);
+    LOGGER.debug("<-- processChatMessageAdmin()");
+  }
+
+  @MessageMapping("/chat-member")
+  public synchronized void processChatMessageMember(@Payload String message, MemberPrincipal principal) {
+    LOGGER.debug("--> processChatMessageMember()");
+    val session = ControllerUtils.getSessionByMemberIDOrThrowResponse(databaseService, principal.getSessionID());
+    webSocketService.sendMessage(session, message);
+    LOGGER.debug("<-- processChatMessageMember()");
+  }
+
   @MessageMapping("/restart")
   public synchronized void restartVote(AdminPrincipal principal) {
     LOGGER.debug("--> restartVote()");

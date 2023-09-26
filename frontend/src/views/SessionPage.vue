@@ -194,8 +194,8 @@
       <div v-else class="chatContent">
         <div id="chatRoom"></div>
         <div id="chatting">
-            <textarea id="chatTextArea" placeholder="Type in your Message..."></textarea>
-            <div id="sendButtonDiv"><b-button id="sendButton"><BIconCursor/></b-button></div>
+            <input v-model="message" id="chatTextArea" placeholder="Type in your Message..." />
+            <div id="sendButtonDiv"><b-button id="sendButton" @click="sendMessage"><BIconCursor/></b-button></div>
         </div>
         <b-button class="chatButton" @click="chat = false">
           <BIconArrowDownShort></BIconArrowDownShort>
@@ -273,6 +273,7 @@ export default Vue.extend({
       estimateFinished: false,
       session: {},
       chat: false,
+      message: ""
     };
   },
   computed: {
@@ -560,6 +561,9 @@ export default Vue.extend({
     subscribeOnTimerStart() {
       this.$store.commit("subscribeOnBackendWSTimerStart");
     },
+    subscribeOnChatMessage() {
+      this.$store.commit("subscribeOnBackendWSChatMessage");
+    },
     requestMemberUpdate() {
       const endPoint = Constants.webSocketGetMemberUpdateRoute;
       this.$store.commit("sendViaBackendWS", { endPoint });
@@ -590,6 +594,11 @@ export default Vue.extend({
     onPlanningStarted() {
       this.planningStart = true;
     },
+    sendMessage() {
+      const endPoint = Constants.webSocketAdminSendMessageRoute;
+      this.$store.commit("sendViaBackendWS", { endPoint, data: this.message });
+      this.message = "";
+    }
   },
 });
 </script>
@@ -721,6 +730,7 @@ export default Vue.extend({
   background-color: var(--textAreaColour);
   color: var(--text-primary-color);
   width: 100%;
+  overflow:scroll;
 }
 
 #chatTextArea::placeholder {

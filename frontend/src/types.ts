@@ -14,6 +14,7 @@ export interface StoreState {
   projects: Record<string, unknown>[];
   selectedProject: Project | undefined;
   selectedUserStoryIndex: number | undefined;
+  chatMessage: string[];
 }
 
 export interface JiraRequestTokenDto {

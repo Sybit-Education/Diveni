@@ -43,6 +43,8 @@ public class WebSocketService {
 
   public static String START_TIMER_DESTINATION = "/updates/startTimer";
 
+  public static String CHAT_MESSAGE_DESTINATION = "/updates/chatMessage";
+
   public static String USER_STORY_SELECTED_DESTINATION = "/updates/userStorySelected";
 
   @Autowired private SimpMessagingTemplate simpMessagingTemplate;
@@ -238,6 +240,25 @@ public class WebSocketService {
         userID);
     simpMessagingTemplate.convertAndSendToUser(userID, START_TIMER_DESTINATION, timestamp);
     LOGGER.debug("<-- sendTimerStartMessageToUser()");
+  }
+
+  public void sendMessage(Session session, String message) {
+    LOGGER.debug("--> sendMessage(), sessionID={}", session.getSessionID());
+    val sessionPrincipals = getSessionPrincipals(session.getSessionID());
+    if (sessionPrincipals.adminPrincipal() != null) {
+      sendChatMessageToUser(session, message, sessionPrincipals.adminPrincipal().getName());
+    } // else the admin left the session
+
+    sessionPrincipals
+    .memberPrincipals()
+    .forEach(member -> sendChatMessageToUser(session, message, member.getMemberID()));
+    LOGGER.debug("<-- sendMessage()");
+  }
+
+  public void sendChatMessageToUser(Session session, String message, String userID) {
+    LOGGER.debug("--> sendChatMessageToUser(), sessionID={}, userID={}", session.getSessionID(), userID);
+    simpMessagingTemplate.convertAndSendToUser(userID, CHAT_MESSAGE_DESTINATION, message);
+    LOGGER.debug("<-- sendChatMessageToUser()");
   }
 
   public void sendNotification(Session session, Notification notification) {

@@ -32,6 +32,10 @@ class Constants {
 
   webSocketAdminSelectedUserStoryRoute = "/ws/adminSelectedUserStory";
 
+  webSocketAdminSendMessageRoute = "/ws/chat-admin";
+
+  webSocketMemberSendMessageRoute ="/ws/chat-member";
+
   webSocketSelectedUserStoryRoute = "/users/updates/userStorySelected";
 
   webSocketMemberListenUserStoriesRoute = "/users/updates/userStories";
@@ -41,6 +45,8 @@ class Constants {
   webSocketMemberListenRoute = "/users/updates/member";
 
   websocketNotification = "/users/updates/notifications";
+
+  webSocketMessageReceiver = "/users/updates/chatMessage";
 
   memberUpdateCommandStartVoting = "START_VOTING";
 
