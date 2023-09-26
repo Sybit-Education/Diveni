@@ -78,7 +78,7 @@ export default new Vuex.Store<StoreState>({
     },
     subscribeOnBackendWSChatMessage(state) {
       state.stompClient?.subscribe(Constants.webSocketMessageReceiver, (frame) => {
-        state.chatMessage = state.chatMessage.concat([JSON.parse(frame.body)]);
+        state.chatMessage = state.chatMessage.concat([frame.body]);
       });
     },
     sendViaBackendWS(state, { endPoint, data }) {
@@ -98,6 +98,7 @@ export default new Vuex.Store<StoreState>({
       state.notifications = [];
       state.webSocketConnected = false;
       state.stompClient = undefined;
+      state.chatMessage = [];
     },
     setSelectedProject(state, project) {
       state.selectedProject = project;

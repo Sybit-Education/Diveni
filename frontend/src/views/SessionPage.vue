@@ -192,10 +192,27 @@
         </b-button>
       </div>
       <div v-else class="chatContent">
-        <div id="chatRoom"></div>
+        <div id="chatRoom">
+          <div 
+            v-for="message of chatMessager"
+            :key="message"
+            style="white-space: pre-line"
+            class="chatMessage"
+          >
+          {{ message }}
+        </div>
+        </div>
         <div id="chatting">
             <input v-model="message" id="chatTextArea" placeholder="Type in your Message..." />
-            <div id="sendButtonDiv"><b-button id="sendButton" @click="sendMessage"><BIconCursor/></b-button></div>
+            <div id="sendButtonDiv">
+              <b-button
+                id="sendButton"
+                @click="sendMessage" 
+                :disabled="message.length === 0"
+              >
+                <BIconCursor/>
+              </b-button>
+            </div>
         </div>
         <b-button class="chatButton" @click="chat = false">
           <BIconArrowDownShort></BIconArrowDownShort>
@@ -273,7 +290,7 @@ export default Vue.extend({
       estimateFinished: false,
       session: {},
       chat: false,
-      message: ""
+      message: "",
     };
   },
   computed: {
@@ -301,6 +318,9 @@ export default Vue.extend({
     timerTimestamp() {
       return this.$store.state.timerTimestamp ? this.$store.state.timerTimestamp : "";
     },
+    chatMessager() {
+      return this.$store.state.chatMessage;
+    },
     isMobile() {
       return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
         navigator.userAgent
@@ -317,6 +337,7 @@ export default Vue.extend({
           this.requestMemberUpdate();
           this.subscribeOnTimerStart();
           this.subscribeWSNotification();
+          this.subscribeOnChatMessage();
           if (this.startNewSessionOnMountedString === "true") {
             this.sendRestartMessage();
           }
@@ -588,17 +609,17 @@ export default Vue.extend({
       const endPoint = Constants.webSocketRestartPlanningRoute;
       this.$store.commit("sendViaBackendWS", { endPoint });
     },
+    sendMessage() {
+      const endPoint = Constants.webSocketAdminSendMessageRoute;
+      this.$store.commit("sendViaBackendWS", { endPoint, data: this.message });
+      this.message = "";
+    },
     goToLandingPage() {
       this.$router.push({ name: "LandingPage" });
     },
     onPlanningStarted() {
       this.planningStart = true;
     },
-    sendMessage() {
-      const endPoint = Constants.webSocketAdminSendMessageRoute;
-      this.$store.commit("sendViaBackendWS", { endPoint, data: this.message });
-      this.message = "";
-    }
   },
 });
 </script>

@@ -6,6 +6,7 @@
 package io.diveni.backend.controller;
 
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -25,6 +26,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Controller;
+
+import com.google.api.client.util.DateTime;
 
 import io.diveni.backend.principals.AdminPrincipal;
 import io.diveni.backend.principals.MemberPrincipal;
@@ -199,6 +202,7 @@ public class WebsocketController {
   @MessageMapping("/chat-admin")
   public synchronized void processChatMessageAdmin(@Payload String message, AdminPrincipal principal) {
     LOGGER.debug("--> processChatMessageAdmin()");
+    message = message + "\n  - Host " + LocalDateTime.now().getHour() + ":" + LocalDateTime.now().getMinute() + ":" + LocalDateTime.now().getSecond();
     val session = ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID());
     webSocketService.sendMessage(session, message);
     LOGGER.debug("<-- processChatMessageAdmin()");
@@ -207,7 +211,8 @@ public class WebsocketController {
   @MessageMapping("/chat-member")
   public synchronized void processChatMessageMember(@Payload String message, MemberPrincipal principal) {
     LOGGER.debug("--> processChatMessageMember()");
-    val session = ControllerUtils.getSessionByMemberIDOrThrowResponse(databaseService, principal.getSessionID());
+    message = message + " " + LocalDateTime.now().getHour() + ":" + LocalDateTime.now().getMinute() + ":" + LocalDateTime.now().getSecond();
+    val session = ControllerUtils.getSessionByMemberIDOrThrowResponse(databaseService, principal.getMemberID());
     webSocketService.sendMessage(session, message);
     LOGGER.debug("<-- processChatMessageMember()");
   }
