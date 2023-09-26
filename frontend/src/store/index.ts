@@ -100,6 +100,9 @@ export default new Vuex.Store<StoreState>({
       state.stompClient = undefined;
       state.chatMessage = [];
     },
+    clearChatMessages(state) {
+      state.chatMessage = [];
+    },
     setSelectedProject(state, project) {
       state.selectedProject = project;
     },

@@ -321,6 +321,7 @@ export default Vue.extend({
     },
   },
   created() {
+    this.$store.commit("clearChatMessages");
     this.timerCountdownNumber = JSON.parse(this.timerSecondsString);
   },
   mounted() {
@@ -344,9 +345,11 @@ export default Vue.extend({
       this.$store.commit("sendViaBackendWS", { endPoint, data: vote });
     },
     goToJoinPage() {
+      this.$store.commit("clearStore");
       this.$router.push({ name: "JoinPage" });
     },
     leaveMeeting() {
+      this.$store.commit("clearStore");
       window.localStorage.removeItem("memberCookie");
       this.$router.push({ name: "LandingPage" });
     },

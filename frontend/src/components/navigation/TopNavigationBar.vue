@@ -1,6 +1,6 @@
 <template>
   <b-navbar toggleable="md" class="top-navigation" fixed="top" sticky>
-    <b-navbar-brand class="top-navigation__title" style="color: var(--text-primary-color);" to="/">
+    <b-navbar-brand class="top-navigation__title" style="color: var(--text-primary-color);" @click="leaveSession()">
       <b-img src="/img/icons/logo.svg" class="top-navigation__nav-logo"/>
       {{ $t("page.landing.productTitle") }}
     </b-navbar-brand>
@@ -41,6 +41,7 @@
 import Vue from "vue";
 import LocaleDropdown from "@/components/navigation/LocaleDropdown.vue";
 import { BIconGithub } from "bootstrap-vue";
+import Constants from "../../constants";
 
 export default Vue.extend({
   name: "TopNavigationBar",
@@ -56,6 +57,17 @@ export default Vue.extend({
     }
   },
   methods: {
+    leaveSession() {
+      if(!window.localStorage.getItem("adminCookie")) {
+        const endPoint = `${Constants.webSocketUnregisterRoute}`;
+        this.$store.commit("sendViaBackendWS", { endPoint, data: null });
+        this.$store.commit("clearStore");
+        window.localStorage.removeItem("memberCookie");
+        this.$router.push({ name: "LandingPage" });
+      } else {
+        this.$router.push({ name: "LandingPage" });
+      }
+    },
     toggleTheme() {
       const activeTheme = localStorage.getItem("user-theme");
       if (activeTheme === "light-theme") {
