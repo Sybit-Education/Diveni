@@ -6,66 +6,77 @@
       </b-container>
     </b-container>
 
-    <b-container>
+    <b-container class="pb-5">
+      <div>
+        <b-pagination align="center"
+                      v-model="currentPage"
+                      :total-rows="rows"
+                      :per-page="perPage"
+                      aria-controls="my-table"
+        ></b-pagination>
+      </div>
+      <div>
+        <b-card-group deck>
+          <b-card
+            border-variant="secondary"
+            header="Date"
+            header-border-variant="secondary"
+            align="center">
+            <b-card-text>Title...</b-card-text>
+            <b-button variant="primary">LINK</b-button>
+          </b-card>
 
-        <div>
-          <b-card-group deck>
-            <b-card
-              border-variant="secondary"
-              header="Secondary"
-              header-border-variant="secondary"
-              align="center">
-              <b-card-text>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</b-card-text>
-            </b-card>
+          <b-card
+            border-variant="secondary"
+            header="Date"
+            header-border-variant="secondary"
+            align="center">
+            <b-card-text>Title...</b-card-text>
+            <b-button variant="primary">LINK</b-button>
+          </b-card>
 
-            <b-card
-              border-variant="secondary"
-              header="Secondary"
-              header-border-variant="secondary"
-              align="center">
-              <b-card-text>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</b-card-text>
-            </b-card>
-
-            <b-card
-              border-variant="secondary"
-              header="Secondary"
-              header-border-variant="secondary"
-              align="center">
-              <b-card-text>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</b-card-text>
-            </b-card>
-
-
-          </b-card-group>
-        </div>
-        <div class="mt-3">
-          <b-card-group deck>
-
-            <b-card
-              border-variant="secondary"
-              header="Secondary"
-              header-border-variant="secondary"
-              align="center">
-              <b-card-text>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</b-card-text>
-            </b-card>
-            <b-card
-              border-variant="secondary"
-              header="Secondary"
-              header-border-variant="secondary"
-              align="center">
-              <b-card-text>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</b-card-text>
-            </b-card>
-            <b-card
-              border-variant="secondary"
-              header="Secondary"
-              header-border-variant="secondary"
-              align="center">
-              <b-card-text>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</b-card-text>
-            </b-card>
-
-          </b-card-group>
-        </div>
+          <b-card
+            border-variant="secondary"
+            header="Date"
+            header-border-variant="secondary"
+            align="center">
+            <b-card-text>Title...</b-card-text>
+            <b-button variant="primary">LINK</b-button>
+          </b-card>
 
 
+        </b-card-group>
+      </div>
+      <div class="mt-3">
+        <b-card-group deck>
+
+          <b-card
+            border-variant="secondary"
+            header="Date"
+            header-border-variant="secondary"
+            align="center">
+            <b-card-text>Title...</b-card-text>
+            <b-button variant="primary">LINK</b-button>
+          </b-card>
+          <b-card
+            border-variant="secondary"
+            header="Date"
+            header-border-variant="secondary"
+            align="center">
+            <b-card-text>Title...</b-card-text>
+            <b-button variant="primary">LINK</b-button>
+          </b-card>
+          <b-card
+            border-variant="secondary"
+            header="Date"
+            header-border-variant="secondary"
+            align="center">
+            <b-card-text>Title...</b-card-text>
+            <b-button variant="primary">LINK</b-button>
+          </b-card>
+
+        </b-card-group>
+      </div>
     </b-container>
   </div>
 </template>
