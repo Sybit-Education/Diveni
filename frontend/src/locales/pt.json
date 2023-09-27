@@ -116,6 +116,13 @@
             }
           }
         }
+      },
+      "news": {
+        "buttons": {
+          "info": {
+            "label": "O que há de novo"
+          }
+        }
       }
     },
     "join": {

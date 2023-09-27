@@ -115,6 +115,13 @@
               "label": "Reunirse"
             }
           }
+        },
+        "news": {
+          "buttons": {
+            "info": {
+              "label": "Qué hay de nuevo"
+            }
+          }
         }
       }
     },

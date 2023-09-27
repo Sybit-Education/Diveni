@@ -13,8 +13,13 @@
       <b-form>
         <b-button :to="{ name: 'PrepareSessionPage' }" class="px-2 mr-2">New Session</b-button>
       </b-form>
+      <b-form>
+        <b-button :to="{name: WhatsNewPage}"
+          variant="outline-info">
+          {{ $t("page.landing.news.buttons.info.label") }}
+        </b-button>
+      </b-form>
       <b-form class="px-2 mr-2">
-
         <a href="https://github.com/Sybit-Education/Diveni" target="_blank">
           <img :src="require('./images/GitHub-Mark-32px.png')" height="40px" width="40px"/>
         </a>
@@ -27,9 +32,15 @@
 <script lang="ts">
 import Vue from "vue";
 import LocaleDropdown from "@/components/navigation/LocaleDropdown.vue";
+import WhatsNewPage from "@/views/WhatsNewPage.vue";
 
 export default Vue.extend({
   name: "TopNavigationBar",
+  computed: {
+    WhatsNewPage() {
+      return WhatsNewPage
+    }
+  },
   components: { LocaleDropdown },
 });
 </script>

@@ -2,7 +2,11 @@
   <div id="whats-new-page">
     <b-container fluid class="teaser my-5">
       <b-container>
-        <b-jumbotron header="DIVENI" lead="What's new"/>
+        <b-jumbotron header="DIVENI">
+          <template #lead>
+            {{ $t("page.landing.news.buttons.info.label") }}
+          </template>
+        </b-jumbotron>
       </b-container>
     </b-container>
 

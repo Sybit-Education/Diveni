@@ -116,6 +116,13 @@
             }
           }
         }
+      },
+      "news": {
+        "buttons": {
+          "info": {
+            "label": "Quoi de neuf"
+          }
+        }
       }
     },
     "join": {
