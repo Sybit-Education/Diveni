@@ -185,40 +185,10 @@
       </b-col>
     </b-row>
     <notify-host-component />
-    <div class="chatContainer" v-if="!isMobile">
-      <div v-if="!chat" class="chatContent">
-        <b-button class="chatButton" @click="chat = true">
-          <BIconMessenger></BIconMessenger>
-        </b-button>
-      </div>
-      <div v-else class="chatContent">
-        <div id="chatRoom">
-          <div 
-            v-for="message of chatMessager"
-            :key="message"
-            style="white-space: pre-line"
-            class="chatMessage"
-          >
-          {{ message }}
-        </div>
-        </div>
-        <div id="chatting">
-            <input v-model="message" id="chatTextArea" placeholder="Type in your Message..." />
-            <div id="sendButtonDiv">
-              <b-button
-                id="sendButton"
-                @click="sendMessage" 
-                :disabled="message.length === 0"
-              >
-                <BIconCursor/>
-              </b-button>
-            </div>
-        </div>
-        <b-button class="chatButton" @click="chat = false">
-          <BIconArrowDownShort></BIconArrowDownShort>
-        </b-button>
-      </div>
-    </div>
+    <ChatMessageComponent
+      :chatMessager="chat"
+      :id="adminID"
+    />
   </b-container>
 </template>
 
@@ -238,7 +208,8 @@ import Project from "../model/Project";
 import KickUserWrapper from "@/components/KickUserWrapper.vue";
 import SessionCloseButton from "@/components/actions/SessionCloseButton.vue";
 import SessionStartButton from "@/components/actions/SessionStartButton.vue";
-import { BIconArrowClockwise, BIconArrowUpShort, BIconBarChartFill, BIconCursor, BIconMessenger } from "bootstrap-vue";
+import ChatMessageComponent from "@/components/ChatMessageComponent.vue";
+import { BIconArrowClockwise, BIconBarChartFill } from "bootstrap-vue";
 
 export default Vue.extend({
   name: "SessionPage",
@@ -254,8 +225,7 @@ export default Vue.extend({
     NotifyHostComponent,
     BIconArrowClockwise,
     BIconBarChartFill,
-    BIconMessenger,
-    BIconCursor
+    ChatMessageComponent
 },
   props: {
     adminID: { type: String, required: false },
@@ -289,8 +259,6 @@ export default Vue.extend({
       startTimerOnComponentCreation: true,
       estimateFinished: false,
       session: {},
-      chat: false,
-      message: "",
     };
   },
   computed: {
@@ -318,8 +286,8 @@ export default Vue.extend({
     timerTimestamp() {
       return this.$store.state.timerTimestamp ? this.$store.state.timerTimestamp : "";
     },
-    chatMessager() {
-      return this.$store.state.chatMessage;
+    chat() {
+      return this.$store.state.chat;
     },
     isMobile() {
       return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
@@ -609,11 +577,6 @@ export default Vue.extend({
       const endPoint = Constants.webSocketRestartPlanningRoute;
       this.$store.commit("sendViaBackendWS", { endPoint });
     },
-    sendMessage() {
-      const endPoint = Constants.webSocketAdminSendMessageRoute;
-      this.$store.commit("sendViaBackendWS", { endPoint, data: this.message });
-      this.message = "";
-    },
     goToLandingPage() {
       this.$router.push({ name: "LandingPage" });
     },
@@ -675,101 +638,5 @@ export default Vue.extend({
 .catGif {
   width: 240px; 
   height: 180px;
-}
-
-.chatButton {
-  background-color: var(--textAreaColour);
-  color: var(--text-primary-color);
-  border-color: black;
-  border-radius: var(--buttonShape);
-  bottom: 5%;
-  right: 1%;
-  position: absolute;
-}
-
-.chatButton:hover{
-  background-color: var(--textAreaColourHovered);
-  color: var(--text-primary-color);
-}
-
-.chatButton:focus{
-  background-color: var(--textAreaColourHovered) !important;
-  color: var(--text-primary-color)  !important;
-}
-
-.chatContainer {
-  position: fixed;
-  bottom: 0%;
-  right: 0%;
-
-  height: 25%;
-  width: 20%;
-}
-
-.chatContainerMobile {
-  position: relative;
-  bottom: 0%;
-  right: 1%;
-  margin-top: 4%;
-  overflow: hidden;
-}
-
-#chatting {
-  position: absolute;
-  right: 2.5%;
-  bottom: 20%;
-  width: 94.5%;
-  margin-bottom: 2%;
-  align-items: center;
-  justify-content: center;
-  display: flex;
-}
-
-#sendButtonDiv {
-  display:inline-block;
-  margin-left: 5%;
-}
-
-#sendButton {
-  background:none;
-  border:none;
-  color: var(--text-primary-color);
-  padding: 0;
-  height: 110%;
-  width: 110%;
-}
-
-#sendButton:focus {
-  background-color: transparent !important;
-  border-color: inherit;
-  -webkit-box-shadow: none;
-  box-shadow: none;
-}
-
-#chatTextArea {
-  resize: none;
-  background-color: var(--textAreaColour);
-  color: var(--text-primary-color);
-  width: 100%;
-  overflow:scroll;
-}
-
-#chatTextArea::placeholder {
-  color: var(--text-primary-color);
-}
-
-#chatRoom {
-  position: absolute;
-  width: 95%;
-  height: 60%;
-  bottom: 37%;
-  left: 2.5%;
-  margin-bottom: 15%;
-
-  background-color: var(--textAreaColour);
-  border-color: black;
-  border-style: solid;
-
-  overflow: scroll;
 }
 </style>

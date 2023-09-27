@@ -150,36 +150,11 @@
       </b-col>
       <notify-member-component @hostLeft="reactOnHostLeave" @hostJoined="reactOnHostJoin" />
     </b-overlay>
-    <div class="chatContainer" v-if="!isMobile">
-      <div v-if="!chat" class="chatContent">
-        <b-button class="chatButton" @click="chat = true">
-          <BIconMessenger></BIconMessenger>
-        </b-button>
-      </div>
-      <div v-else class="chatContent">
-        <div id="chatRoom">
-          <div 
-            v-for="message of chatMessager"
-            :key="message"
-            style="white-space: pre-line"
-            class="chatMessage"
-          >
-          {{ message }}
-        </div>
-        </div>
-        <div id="chatting">
-            <input v-model="message" id="chatTextArea" placeholder="Type in your Message..." />
-            <div id="sendButtonDiv">
-              <b-button id="sendButton" @click="sendMessage" :disabled="message.length === 0">
-                <BIconCursor/>
-              </b-button>
-            </div>
-        </div>
-        <b-button class="chatButton" @click="chat = false">
-          <BIconArrowDownShort></BIconArrowDownShort>
-        </b-button>
-      </div>
-    </div>
+    <ChatMessageComponent
+      :chatMessager="getChat"
+      :name="name"
+      :id="memberID"
+    />
   </b-container>
 </template>
 
@@ -200,6 +175,7 @@ import MobileStoryList from "../components/MobileStoryList.vue";
 import MobileStoryTitle from "../components/MobileStoryTitle.vue";
 import UserStorySumComponent from "@/components/UserStorySum.vue";
 import SessionLeaveButton from "@/components/actions/SessionLeaveButton.vue";
+import ChatMessageComponent from "@/components/ChatMessageComponent.vue";
 
 export default Vue.extend({
   name: "MemberVotePage",
@@ -215,6 +191,7 @@ export default Vue.extend({
     MobileStoryList,
     MobileStoryTitle,
     UserStorySumComponent,
+    ChatMessageComponent,
   },
   props: {
     memberID: { type: String, default: undefined },
@@ -272,8 +249,8 @@ export default Vue.extend({
     notifications() {
       return this.$store.state.notifications;
     },
-    chatMessager() {
-      return this.$store.state.chatMessage;
+    getChat() {
+      return this.$store.state.chat;
     },
     getMember() {
       return {
@@ -358,12 +335,6 @@ export default Vue.extend({
     },
     reactOnHostJoin() {
       this.pauseSession = false;
-    },
-    sendMessage() {
-      const endPoint = Constants.webSocketMemberSendMessageRoute;
-      this.message = this.message + "\n - " + this.name;
-      this.$store.commit("sendViaBackendWS", { endPoint, data: this.message });
-      this.message = "";
     },
   },
 });

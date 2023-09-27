@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import io.diveni.backend.model.ChatMessage;
 import io.diveni.backend.model.MemberUpdate;
 import io.diveni.backend.model.Session;
 import io.diveni.backend.model.notification.Notification;
@@ -242,20 +243,20 @@ public class WebSocketService {
     LOGGER.debug("<-- sendTimerStartMessageToUser()");
   }
 
-  public void sendMessage(Session session, String message) {
+  public void sendMessage(Session session, String message, String userID) {
     LOGGER.debug("--> sendMessage(), sessionID={}", session.getSessionID());
     val sessionPrincipals = getSessionPrincipals(session.getSessionID());
     if (sessionPrincipals.adminPrincipal() != null) {
-      sendChatMessageToUser(session, message, sessionPrincipals.adminPrincipal().getName());
+      sendChatMessageToUser(session, new ChatMessage(message, userID), sessionPrincipals.adminPrincipal().getName());
     } // else the admin left the session
 
     sessionPrincipals
     .memberPrincipals()
-    .forEach(member -> sendChatMessageToUser(session, message, member.getMemberID()));
+    .forEach(member -> sendChatMessageToUser(session, new ChatMessage(message, userID), member.getMemberID()));
     LOGGER.debug("<-- sendMessage()");
   }
 
-  public void sendChatMessageToUser(Session session, String message, String userID) {
+  public void sendChatMessageToUser(Session session, ChatMessage message, String userID) {
     LOGGER.debug("--> sendChatMessageToUser(), sessionID={}, userID={}", session.getSessionID(), userID);
     simpMessagingTemplate.convertAndSendToUser(userID, CHAT_MESSAGE_DESTINATION, message);
     LOGGER.debug("<-- sendChatMessageToUser()");

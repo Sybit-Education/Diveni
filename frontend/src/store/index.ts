@@ -20,7 +20,7 @@ export default new Vuex.Store<StoreState>({
     projects: [],
     selectedProject: undefined,
     selectedUserStoryIndex: undefined,
-    chatMessage: [],
+    chat: [],
   },
   mutations: {
     setMembers(state, members) {
@@ -78,7 +78,7 @@ export default new Vuex.Store<StoreState>({
     },
     subscribeOnBackendWSChatMessage(state) {
       state.stompClient?.subscribe(Constants.webSocketMessageReceiver, (frame) => {
-        state.chatMessage = state.chatMessage.concat([frame.body]);
+        state.chat = state.chat.concat([JSON.parse(frame.body)]);
       });
     },
     sendViaBackendWS(state, { endPoint, data }) {
@@ -98,10 +98,10 @@ export default new Vuex.Store<StoreState>({
       state.notifications = [];
       state.webSocketConnected = false;
       state.stompClient = undefined;
-      state.chatMessage = [];
+      state.chat = [];
     },
     clearChatMessages(state) {
-      state.chatMessage = [];
+      state.chat = [];
     },
     setSelectedProject(state, project) {
       state.selectedProject = project;

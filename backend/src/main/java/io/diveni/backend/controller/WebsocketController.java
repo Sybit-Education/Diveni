@@ -27,8 +27,6 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Controller;
 
-import com.google.api.client.util.DateTime;
-
 import io.diveni.backend.principals.AdminPrincipal;
 import io.diveni.backend.principals.MemberPrincipal;
 import lombok.val;
@@ -204,7 +202,7 @@ public class WebsocketController {
     LOGGER.debug("--> processChatMessageAdmin()");
     message = message + "\n  - Host " + LocalDateTime.now().getHour() + ":" + LocalDateTime.now().getMinute() + ":" + LocalDateTime.now().getSecond();
     val session = ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID());
-    webSocketService.sendMessage(session, message);
+    webSocketService.sendMessage(session, message, principal.getAdminID());
     LOGGER.debug("<-- processChatMessageAdmin()");
   }
 
@@ -213,7 +211,7 @@ public class WebsocketController {
     LOGGER.debug("--> processChatMessageMember()");
     message = message + " " + LocalDateTime.now().getHour() + ":" + LocalDateTime.now().getMinute() + ":" + LocalDateTime.now().getSecond();
     val session = ControllerUtils.getSessionByMemberIDOrThrowResponse(databaseService, principal.getMemberID());
-    webSocketService.sendMessage(session, message);
+    webSocketService.sendMessage(session, message, principal.getMemberID());
     LOGGER.debug("<-- processChatMessageMember()");
   }
 
