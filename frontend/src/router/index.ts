@@ -54,6 +54,11 @@ const routes: Array<RouteConfig> = [
     component: () => import(/* webpackChunkName: "about" */ "../views/AboutPage.vue"),
   },
   {
+    path: "/whats-new",
+    name: "WhatsNewPage",
+    component: () => import("../views/WhatsNewPage.vue")
+  },
+  {
     path: "*",
     component: LandingPage,
   },
