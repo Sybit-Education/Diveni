@@ -13,8 +13,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ChatMessage {
 
-    private String message;
+  private String message;
 
-    private String author;
-    
+  private String author;
 }

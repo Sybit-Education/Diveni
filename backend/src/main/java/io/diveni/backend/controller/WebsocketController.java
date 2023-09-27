@@ -198,19 +198,38 @@ public class WebsocketController {
   }
 
   @MessageMapping("/chat-admin")
-  public synchronized void processChatMessageAdmin(@Payload String message, AdminPrincipal principal) {
+  public synchronized void processChatMessageAdmin(
+      @Payload String message, AdminPrincipal principal) {
     LOGGER.debug("--> processChatMessageAdmin()");
-    message = message + "\n  - Host " + LocalDateTime.now().getHour() + ":" + LocalDateTime.now().getMinute() + ":" + LocalDateTime.now().getSecond();
-    val session = ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID());
+    message =
+        message
+            + "\n  - Host "
+            + LocalDateTime.now().getHour()
+            + ":"
+            + LocalDateTime.now().getMinute()
+            + ":"
+            + LocalDateTime.now().getSecond();
+    val session =
+        ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID());
     webSocketService.sendMessage(session, message, principal.getAdminID());
     LOGGER.debug("<-- processChatMessageAdmin()");
   }
 
   @MessageMapping("/chat-member")
-  public synchronized void processChatMessageMember(@Payload String message, MemberPrincipal principal) {
+  public synchronized void processChatMessageMember(
+      @Payload String message, MemberPrincipal principal) {
     LOGGER.debug("--> processChatMessageMember()");
-    message = message + " " + LocalDateTime.now().getHour() + ":" + LocalDateTime.now().getMinute() + ":" + LocalDateTime.now().getSecond();
-    val session = ControllerUtils.getSessionByMemberIDOrThrowResponse(databaseService, principal.getMemberID());
+    message =
+        message
+            + " "
+            + LocalDateTime.now().getHour()
+            + ":"
+            + LocalDateTime.now().getMinute()
+            + ":"
+            + LocalDateTime.now().getSecond();
+    val session =
+        ControllerUtils.getSessionByMemberIDOrThrowResponse(
+            databaseService, principal.getMemberID());
     webSocketService.sendMessage(session, message, principal.getMemberID());
     LOGGER.debug("<-- processChatMessageMember()");
   }

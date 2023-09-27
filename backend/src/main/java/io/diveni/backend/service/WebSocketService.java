@@ -247,17 +247,22 @@ public class WebSocketService {
     LOGGER.debug("--> sendMessage(), sessionID={}", session.getSessionID());
     val sessionPrincipals = getSessionPrincipals(session.getSessionID());
     if (sessionPrincipals.adminPrincipal() != null) {
-      sendChatMessageToUser(session, new ChatMessage(message, userID), sessionPrincipals.adminPrincipal().getName());
+      sendChatMessageToUser(
+          session, new ChatMessage(message, userID), sessionPrincipals.adminPrincipal().getName());
     } // else the admin left the session
 
     sessionPrincipals
-    .memberPrincipals()
-    .forEach(member -> sendChatMessageToUser(session, new ChatMessage(message, userID), member.getMemberID()));
+        .memberPrincipals()
+        .forEach(
+            member ->
+                sendChatMessageToUser(
+                    session, new ChatMessage(message, userID), member.getMemberID()));
     LOGGER.debug("<-- sendMessage()");
   }
 
   public void sendChatMessageToUser(Session session, ChatMessage message, String userID) {
-    LOGGER.debug("--> sendChatMessageToUser(), sessionID={}, userID={}", session.getSessionID(), userID);
+    LOGGER.debug(
+        "--> sendChatMessageToUser(), sessionID={}, userID={}", session.getSessionID(), userID);
     simpMessagingTemplate.convertAndSendToUser(userID, CHAT_MESSAGE_DESTINATION, message);
     LOGGER.debug("<-- sendChatMessageToUser()");
   }
