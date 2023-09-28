@@ -18,10 +18,10 @@
       :ok-title="$t('page.session.close.button.ok')"
       @ok="closeSession"
     >
-      <p class="my-4" style="color:black;">
+      <p class="my-4 description">
         {{ $t("page.session.close.description1") }}
       </p>
-      <p v-if="userStoryMode !== 'NO_US'" style="color:black;">
+      <p v-if="userStoryMode !== 'NO_US'" class="description">
         {{ $t("page.session.close.description2") }}
       </p>
     </b-modal>
@@ -63,6 +63,11 @@ export default Vue.extend({
 });
 </script>
 <style>
+
+.description {
+  color: black;
+}
+
 #picture-holderClose {
   width: auto;
   height: 90px;

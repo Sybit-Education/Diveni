@@ -31,10 +31,10 @@
                     ]"
             @click="onCardSetSelected(item)"
           >
-            <div id="text" style="padding-top: 16px;">
-              {{ item.name }} 
+            <div id="text">
+              {{ item.name }}
             </div>
-            <div style="padding: 16px; text-align: center;">
+            <div id="cardDescription">
               {{ item.description }}
               <div v-if="item.values.length === 0">
                 <span id="createSetHint">
@@ -64,10 +64,10 @@
           :key="item"
           :class="isActiveCardSetNumber(item)"
           pill
-          style="width: 60px"
+          class="pills"
           @click="onCardSetNumberSelected(item); $event.target.blur();"
         >
-          {{ item }}  
+          {{ item }}
         </b-button>
       </div>
       <b-row v-else class="mt-3 d-flex px-5 pillPosition">
@@ -82,8 +82,8 @@
             v-for="item in selectedCardSet.activeValues"
             :key="item"
             :class="isActiveCardSetNumber(item)"
+            class="pills"
             pill
-            style="min-width: 60px"
           >
             {{ item }}
           </b-button>
@@ -391,9 +391,20 @@ export default Vue.extend({
 #text {
   font-size: 20px;
   font-weight: 500;
+  padding-top: 16px;
 }
+
+#cardDescription{
+  padding: 16px;
+  text-align: center;
+}
+
 #popUp {
   background-color: var(--landingPageCardsBackground);
+}
+
+.pills {
+  width: 60px;
 }
 
 .activePills {

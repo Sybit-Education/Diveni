@@ -11,11 +11,10 @@
           type="text"
           :placeholder="$t('page.session.before.userStories.placeholder.searchUserStories')"
           @input="swapPriority"
-          
         />
-      </b-input-group>  
+      </b-input-group>
     </div>
-    <b-card-group 
+    <b-card-group
       class="my-3"
       id="userStoryBlock"
     >
@@ -107,7 +106,6 @@
 <script lang="ts">
 import Vue from "vue";
 import UserStory from "../model/UserStory";
-import { BIconSearch } from "bootstrap-vue";
 export default Vue.extend({
   name: "UserStories",
   props: {

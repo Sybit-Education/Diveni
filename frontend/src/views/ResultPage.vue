@@ -6,8 +6,8 @@
     <div v-if="userStories.length === 0" class="text-center">
       {{ $t("page.results.noUserStories") }}
     </div>
-    <b-list-group v-else style="border-radius: var(--element-size);">
-      <b-list-group-item v-for="(story, index) of userStories" :key="index" class="text-center" style="color:black;">
+    <b-list-group v-else id="results">
+      <b-list-group-item v-for="(story, index) of userStories" :key="index" class="text-center stories">
         {{ story.title ? story.title : "No title ..." }}
         <b-button class="mx-2 estimationButtons" pill >
           {{ story.estimation ? story.estimation : "?" }}
@@ -121,5 +121,13 @@ export default Vue.extend({
 #goBackHomeButton:hover {
   background-color: var(--joinButtonHovered);
   color: var(--text-primary-color);
+}
+
+#results {
+  border-radius: var(--element-size);
+}
+
+.stories {
+  color: black;
 }
 </style>

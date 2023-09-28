@@ -1,6 +1,6 @@
 <template>
   <b-navbar toggleable="md" class="top-navigation" fixed="top" sticky>
-    <b-navbar-brand class="top-navigation__title" style="color: var(--text-primary-color);" to="/">
+    <b-navbar-brand class="top-navigation__title" to="/">
       <b-img src="/img/icons/logo.svg" class="top-navigation__nav-logo"/>
       {{ $t("page.landing.productTitle") }}
     </b-navbar-brand>
@@ -28,8 +28,8 @@
           >
       </b-form>
       <b-form class="px-2 mr-2">
-        <a href="https://github.com/Sybit-Education/Diveni" target="_blank" style="color: var(--text-primary-color)">
-          <BIconGithub style="width: 40px; height: 40px;"></BIconGithub>
+        <a href="https://github.com/Sybit-Education/Diveni" id="gitHubLink" target="_blank">
+          <BIconGithub id="gitHubLogo"></BIconGithub>
         </a>
       </b-form>
       <locale-dropdown  />
@@ -91,6 +91,7 @@ export default Vue.extend({
 .top-navigation__title {
   font-size: 2.5rem;
   font-weight: 700;
+  color: var(--text-primary-color) !important;
 }
 
 /* Dark Mode Switch */
@@ -107,12 +108,12 @@ export default Vue.extend({
   left: 0rem;
   height: calc(var(--element-size) * 0.3);
   width: calc(var(--element-size) * 0.3);
-  transform: translateX(0); 
+  transform: translateX(0);
   transition: transform 0.3s ease, background-color 0.5s ease;
 }
 .switch-label {
   /* for width, use the standard element-size */
-  width: 5.75rem; 
+  width: 5.75rem;
   user-select: none;
 
   /* for other dimensions, calculate values based on it */
@@ -130,5 +131,14 @@ export default Vue.extend({
   transition: background 0.5s ease;
   justify-content: space-between;
   z-index: 1;
-} 
+}
+
+#gitHubLogo {
+  width: 40px;
+  height: 40px;
+}
+
+#gitHubLink {
+  color: var(--text-primary-color);
+}
 </style>

@@ -17,7 +17,7 @@
           :session-id="session_sessionID"
         />
       </b-col>
-      <b-col cols="auto" style="min-width: 200px;">
+      <b-col cols="auto" id="sessionCloseCol">
         <session-close-button
           :is-planning-start="planningStart"
           :user-story-mode="session_userStoryMode"
@@ -26,18 +26,18 @@
     </b-row>
 
     <div v-if="!planningStart">
-      <div style="text-align: center;">
+      <div id="catGifDiv">
         <b-img :src="require('@/assets/LoadingCat.gif')" class="catGif"/>
       </div>
       <copy-session-id-popup
         :text-before-session-i-d="$t('page.session.before.text.beforeID')"
         :session-id="session_sessionID"
         :text-after-session-i-d="$t('page.session.before.text.afterID')"
-        style="text-align: center;"
+        class="copy-popup"
       />
 
 
-      <b-row class="d-flex justify-content-center overflow-auto" style="max-height: 500px">
+      <b-row class="d-flex justify-content-center overflow-auto kick-user">
         <kick-user-wrapper
           v-for="member of members"
           :key="member.memberID"
@@ -55,7 +55,7 @@
 
     <div v-else>
       <b-row class="d-flex justify-content-start pb-3">
-        <b-col cols="auto" class="mr-auto" style="margin-top: auto; margin-bottom: auto;">
+        <b-col cols="auto" class="mr-auto optionButtonCol">
           <b-button
             class="mr-3 optionButton"
             variant="outline-dark"
@@ -96,15 +96,14 @@
           :member="member"
         />
       </b-row>
-      <hr class="my-5" style="border-color: var(--text-primary-color);"/>
+      <hr class="my-5 breakingLine" />
       <h4>
         {{ $t("page.session.during.estimation.message.finished") }}
         {{ membersEstimated.length }} /
         {{ membersPending.length + membersEstimated.length }}
       </h4>
       <b-row
-        class="my-1 d-flex justify-content-center flex-wrap overflow-auto"
-        style="max-height: 500px"
+        class="my-1 d-flex justify-content-center flex-wrap overflow-auto kick-user"
       >
         <kick-user-wrapper
           v-for="member of estimateFinished ? members : membersEstimated"
@@ -128,7 +127,7 @@
       <b-col v-if="!isMobile" cols="7">
         <div v-if="session_userStoryMode === 'US_JIRA'" class="refreshUserstories">
           <b-button
-            class="w-100 mb-3 refreshButton" 
+            class="w-100 mb-3 refreshButton"
             @click="refreshUserStories(); $event.target.blur();"
           >
             {{ $t("page.session.before.refreshStories") }}
@@ -147,7 +146,7 @@
       <b-col v-else cols="12">
         <div v-if="session_userStoryMode === 'US_JIRA'" class="refreshUserstories">
           <b-button
-            class="w-100 mb-3 refreshButton" 
+            class="w-100 mb-3 refreshButton"
             @click="refreshUserStories(); $event.target.blur();"
           >
             {{ $t("page.session.before.refreshStories") }}
@@ -576,6 +575,27 @@ export default Vue.extend({
 
 <style scoped>
 
+.optionButtonCol {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.breakingLine {
+  border-color: var(--text-primary-color);
+}
+
+.copy-popup {
+  text-align: center;
+}
+
+.kick-user {
+  max-height: 500px;
+}
+
+#sessionCloseCol {
+  min-width: 200px;
+}
+
 .headers {
   display: flex;
   align-items: center;
@@ -622,8 +642,12 @@ export default Vue.extend({
   color: var(--text-primary-color) !important;
 }
 
+#catGifDiv {
+  text-align: center;
+}
+
 .catGif {
-  width: 240px; 
+  width: 240px;
   height: 180px;
 }
 </style>

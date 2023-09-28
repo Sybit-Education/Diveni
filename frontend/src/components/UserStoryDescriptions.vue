@@ -5,8 +5,7 @@
         v-for="(story, idx) of userStories"
         v-show="idx === index"
         :key="story.id"
-        class="border-0"
-        style="background: transparent; padding: 0%"
+        class="border-0 description-box"
         variant="outline-secondary"
       >
         <div class="list-group list-group-horizontal">
@@ -35,7 +34,7 @@
                 $event.target.blur();
               "
             >
-              {{ num }} 
+              {{ num }}
             </b-dropdown-item>
           </b-dropdown>
         </div>
@@ -49,7 +48,7 @@
             @textValueChanged="(event) => valueChanged(idx, event)"
           />
         </div>
-        <div v-if="!editDescription" style="color: var(--text-primary-color)">
+        <div v-if="!editDescription">
           {{ userStories[idx].description }}
         </div>
       </b-list-group-item>
@@ -152,6 +151,11 @@ export default Vue.extend({
 </script>
 
 <style scoped>
+
+.description-box {
+  background: transparent;
+  padding: 0;
+}
 /* The side navigation menu */
 
 .form-control {

@@ -12,7 +12,7 @@
         <b-col>
           <h1>{{ $t("page.vote.title") }}</h1>
         </b-col>
-       
+
         <b-col cols="auto">
           <session-leave-button />
           <estimate-timer
@@ -88,7 +88,7 @@
         </b-row>
       </b-row>
       <b-row v-if="!isStartVoting && !votingFinished" class="my-5">
-        <h3 style="color: var(--text-primary-color);">
+        <h3 id="header">
           {{ $t("page.vote.waiting") }}
           <sub><b-icon-three-dots animation="fade" font-scale="1" /></sub>
         </h3>
@@ -327,6 +327,11 @@ export default Vue.extend({
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+
+#header {
+  color: var(--text-primary-color);
+}
+
 #flicking {
   /* overflow:visible;  Add when fix is clear how to stay responsiv*/
   width: 100%;

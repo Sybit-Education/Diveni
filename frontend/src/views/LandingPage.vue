@@ -104,7 +104,7 @@
       <p>DIVENI was initially developed by students of HTWG Constance and is open source now.</p>
       <p>
         More information could be found in the
-        <a href="https://docs.diveni.io/" style="color: var(--linkColor);">documentation</a>.
+        <a href="https://docs.diveni.io/" id="link">documentation</a>.
       </p>
     </b-container>
   </div>
@@ -195,6 +195,10 @@ export default Vue.extend({
 </script>
 
 <style scoped>
+
+#link {
+  color: var(--linkColor);
+}
 
 .jumbotron {
   background-color: rgba(255, 255, 255, 0.5);

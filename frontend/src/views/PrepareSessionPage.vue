@@ -3,7 +3,7 @@
     <h1>
       {{ $t("session.prepare.title") }}
     </h1>
-      
+
       <h4 class="mt-3">
        <b-img
         v-if="theme === 'light-theme'"
@@ -84,8 +84,8 @@
       <b-col>
         <b-button class="optionButtons" @click="setTimerDown(); $event.target.blur();"> - </b-button>
       </b-col>
-      <b-col class="text-center" style="margin-top: auto; margin-bottom: auto;" cols="auto">
-        <h4 style="background-color: var(--preparePageTimerBackground);">
+      <b-col class="text-center" id="timerCol" cols="auto">
+        <h4 id="timerBackground">
           {{ timer == 0 ? "∞" : formatTimer }}
         </h4>
       </b-col>
@@ -333,6 +333,16 @@ export default Vue.extend({
 </script>
 
 <style scoped>
+
+#timerBackground {
+  background-color: var(--preparePageTimerBackground);
+}
+
+#timerCol {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
 .mg_top_2_per {
   margin-top: 2%;
 }

@@ -2,7 +2,7 @@
   <div class="copy-session">
     {{ textBeforeSessionID }}
     <strong>
-      <b-link id="popover-link" style="color: var(--linkColor)" href="#" @click="copyLinkToClipboard()">
+      <b-link id="popover-link" href="#" @click="copyLinkToClipboard()">
         {{ sessionId }}
       </b-link>
     </strong>
@@ -102,14 +102,21 @@ export default Vue.extend({
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+
 .copy-session {
   font-size: 1.75rem;
   color: var(--text-primary-color);
 }
+
 #popover {
   max-width: 500px;
   background-color: var(--popUpMenu);
 }
+
+#popover-link {
+  color: var(--linkColor);
+}
+
 .qr-code {
   display: table;
   margin: 0 auto;

@@ -1,5 +1,5 @@
 <template>
-  <div 
+  <div
     class="rounded-avatar rounded-circle"
     :class="admin ? 'smallAvatars' : 'bigAvatars'"
     :style="`background-color: ${member.hexColor}`"
@@ -9,7 +9,7 @@
         :src="require(`@/assets/${member.avatarAnimal.toLowerCase()}.png`)"
         class="rounded-avatar__image"
       />
-      <div v-if="showName" class="rounded-avatar__label" style="color: black;">
+      <div v-if="showName" class="rounded-avatar__label">
         {{ member.name }}
       </div>
     </div>
@@ -57,5 +57,6 @@ export default Vue.extend({
   font-size: large;
   font-weight: bold;
   text-overflow: ellipsis;
+  color: black;
 }
 </style>
