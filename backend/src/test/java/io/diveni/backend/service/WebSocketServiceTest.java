@@ -17,11 +17,7 @@ import java.util.List;
 import java.util.Set;
 
 import io.diveni.backend.Utils;
-import io.diveni.backend.model.Member;
-import io.diveni.backend.model.MemberUpdate;
-import io.diveni.backend.model.Session;
-import io.diveni.backend.model.SessionConfig;
-import io.diveni.backend.model.SessionState;
+import io.diveni.backend.model.*;
 import io.diveni.backend.model.notification.Notification;
 import io.diveni.backend.model.notification.NotificationType;
 import io.diveni.backend.principals.AdminPrincipal;
@@ -365,5 +361,49 @@ public class WebSocketServiceTest {
     webSocketService.removeSession(session);
 
     assertTrue(webSocketService.getSessionPrincipalList().isEmpty());
+  }
+
+  @Test
+  public void adminSendsMessage_sendsTheMessageToAllUser() throws Exception {
+    final String message = "Test - Host 12:12:12";
+    val memberPrincipal =
+      new MemberPrincipal(defaultAdminPrincipal.getSessionID(), Utils.generateRandomID());
+    setDefaultAdminPrincipal(Set.of(defaultMemberPrincipal, memberPrincipal));
+    val session =
+      new Session(
+        new ObjectId(),
+        defaultAdminPrincipal.getSessionID(),
+        defaultAdminPrincipal.getAdminID(),
+        new SessionConfig(List.of(), List.of(), null, "US_MANUALLY", "password"),
+        null,
+        List.of(
+          new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null),
+          new Member(memberPrincipal.getMemberID(), null, null, null, null)),
+        new HashMap<>(),
+        new ArrayList<>(),
+        SessionState.WAITING_FOR_MEMBERS,
+        null,
+        null,
+        null);
+
+    webSocketService.sendMessage(session, message, defaultAdminPrincipal.getAdminID());
+
+    verify(simpMessagingTemplateMock, times(1))
+      .convertAndSendToUser(
+        defaultMemberPrincipal.getMemberID(),
+        WebSocketService.CHAT_MESSAGE_DESTINATION,
+        new ChatMessage(message, defaultAdminPrincipal.getAdminID()));
+
+    verify(simpMessagingTemplateMock, times(1))
+      .convertAndSendToUser(
+        memberPrincipal.getMemberID(),
+        WebSocketService.CHAT_MESSAGE_DESTINATION,
+        new ChatMessage(message, defaultAdminPrincipal.getAdminID()));
+
+    verify(simpMessagingTemplateMock, times(1))
+      .convertAndSendToUser(
+        defaultAdminPrincipal.getAdminID(),
+        WebSocketService.CHAT_MESSAGE_DESTINATION,
+        new ChatMessage(message, defaultAdminPrincipal.getAdminID()));
   }
 }

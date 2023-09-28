@@ -75,6 +75,10 @@
           "cancel": "Zurück",
           "ok": "OK"
         }
+      },
+      "chat": {
+        "title": "Gruppenchat",
+        "placeholder": "Sende eine Nachricht..."
       }
     },
     "results": {

@@ -75,6 +75,10 @@
           "cancel": "Cancel",
           "ok": "OK"
         }
+      },
+      "chat": {
+        "title": "Chat Room",
+        "placeholder": "Type in your message..."
       }
     },
     "results": {

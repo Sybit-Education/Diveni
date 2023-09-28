@@ -7,6 +7,7 @@ package io.diveni.backend.controller;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 
@@ -201,14 +202,8 @@ public class WebsocketController {
   public synchronized void processChatMessageAdmin(
       @Payload String message, AdminPrincipal principal) {
     LOGGER.debug("--> processChatMessageAdmin()");
-    message =
-        message
-            + "\n  - Host "
-            + LocalDateTime.now().getHour()
-            + ":"
-            + LocalDateTime.now().getMinute()
-            + ":"
-            + LocalDateTime.now().getSecond();
+    final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+    message = message + "\n  - Host " + LocalDateTime.now().format(formatter);
     val session =
         ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID());
     webSocketService.sendMessage(session, message, principal.getAdminID());
@@ -219,14 +214,8 @@ public class WebsocketController {
   public synchronized void processChatMessageMember(
       @Payload String message, MemberPrincipal principal) {
     LOGGER.debug("--> processChatMessageMember()");
-    message =
-        message
-            + " "
-            + LocalDateTime.now().getHour()
-            + ":"
-            + LocalDateTime.now().getMinute()
-            + ":"
-            + LocalDateTime.now().getSecond();
+    final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+    message = message + " " + LocalDateTime.now().format(formatter);
     val session =
         ControllerUtils.getSessionByMemberIDOrThrowResponse(
             databaseService, principal.getMemberID());

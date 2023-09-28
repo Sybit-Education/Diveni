@@ -12,7 +12,7 @@
         <b-col>
           <h1>{{ $t("page.vote.title") }}</h1>
         </b-col>
-       
+
         <b-col cols="auto">
           <session-leave-button />
           <estimate-timer
@@ -213,8 +213,6 @@ export default Vue.extend({
       triggerTimer: 0,
       estimateFinished: false,
       pauseSession: false,
-      chat: false,
-      message: "",
     };
   },
   computed: {
@@ -369,101 +367,5 @@ export default Vue.extend({
 .centerCards {
   margin-left: auto;
   margin-right: auto;
-}
-
-.chatButton {
-  background-color: var(--textAreaColour);
-  color: var(--text-primary-color);
-  border-color: black;
-  border-radius: var(--buttonShape);
-  bottom: 5%;
-  right: 1%;
-  position: absolute;
-}
-
-.chatButton:hover{
-  background-color: var(--textAreaColourHovered);
-  color: var(--text-primary-color);
-}
-
-.chatButton:focus{
-  background-color: var(--textAreaColourHovered) !important;
-  color: var(--text-primary-color)  !important;
-}
-
-.chatContainer {
-  position: fixed;
-  bottom: 0%;
-  right: 0%;
-
-  height: 25%;
-  width: 20%;
-}
-
-.chatContainerMobile {
-  position: relative;
-  bottom: 0%;
-  right: 1%;
-  margin-top: 4%;
-  overflow: hidden;
-}
-
-#chatting {
-  position: absolute;
-  right: 2.5%;
-  bottom: 20%;
-  width: 94.5%;
-  margin-bottom: 2%;
-  align-items: center;
-  justify-content: center;
-  display: flex;
-}
-
-#sendButtonDiv {
-  display:inline-block;
-  margin-left: 5%;
-}
-
-#sendButton {
-  background:none;
-  border:none;
-  color: var(--text-primary-color);
-  padding: 0;
-  height: 110%;
-  width: 110%;
-}
-
-#sendButton:focus {
-  background-color: transparent !important;
-  border-color: inherit;
-  -webkit-box-shadow: none;
-  box-shadow: none;
-}
-
-#chatTextArea {
-  resize: none;
-  background-color: var(--textAreaColour);
-  color: var(--text-primary-color);
-  width: 100%;
-  overflow:scroll;
-}
-
-#chatTextArea::placeholder {
-  color: var(--text-primary-color);
-}
-
-#chatRoom {
-  position: absolute;
-  width: 95%;
-  height: 60%;
-  bottom: 37%;
-  left: 2.5%;
-  margin-bottom: 15%;
-
-  background-color: var(--textAreaColour);
-  border-color: black;
-  border-style: solid;
-
-  overflow: scroll;
 }
 </style>

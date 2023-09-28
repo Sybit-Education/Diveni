@@ -1,6 +1,6 @@
 <template>
-  <div class="chatContainer">
-    <div v-if="!chat" class="chatContent">
+  <div>
+    <div>
       <b-button v-b-modal.modal-scrollable class="chatButton">
         <BIconMessenger></BIconMessenger>
       </b-button>
@@ -10,7 +10,7 @@
       hide-footer
       id="modal-scrollable"
       scrollable
-      title="ChatRoom"
+      :title="$t('page.session.chat.title')"
       header-class="chatRoom-Header"
     >
       <div class="messageDisplay">
@@ -23,11 +23,11 @@
           {{ message.message }}
         </div>
       </div>
-      <div id="chatting">
+      <div id="typingArea">
         <b-form-input
           v-model="message"
           id="chatTextArea"
-          placeholder="Type in your Message..."
+          :placeholder="$t('page.session.chat.placeholder')"
         />
         <div id="sendButtonDiv">
           <b-button
@@ -44,7 +44,6 @@
 </template>
 <script lang="ts">
 import Vue from "vue";
-import { BIconCursor, BIconMessenger } from "bootstrap-vue";
 import Constants from "../constants";
 import Chat from "@/model/Chat";
 
@@ -58,7 +57,6 @@ export default Vue.extend({
       name: { type: String, required: false, default: "Admin"},
     },
     data: () => ({
-        chat: false,
         message: ""
     }),
     methods: {
@@ -80,19 +78,7 @@ export default Vue.extend({
 
 <style scoped>
 
-#chatting {
-  position: absolute;
-  bottom: 1%;
-  width: 95%;
-  display: flex;
-  flex-direction: row;
-  border-bottom: transparent;
-  border-left: transparent;
-  border-right: transparent;
-  border-top: var(--text-primary-color);
-  border-style: solid;
-  padding-top: .5em;
-}
+/*Start of Styling the b-modal*/
 
 /deep/ .modal-content {
   height: 40em;
@@ -100,32 +86,23 @@ export default Vue.extend({
   color: var(--text-primary-color) !important;
 }
 
-.messageDisplay {
-  min-height: 50%;
-  max-height: 90%;
-  overflow: scroll;
-}
-
-.chatRoom-Header {
-  background: var(--background-color-primary);
-  color: var(--text-primary-color) !important;
-}
-
-.close {
+/deep/ .close {
   color: var(--text-primary-color);
 }
 
-.close:hover {
+/deep/ .close:hover {
   color: var(--text-primary-color);
 }
+
+/* End of styling the b-modal*/
 
 .chatButton {
   background-color: var(--textAreaColour) !important;
   color: var(--text-primary-color);
-  border-color: black;
   border-radius: var(--buttonShape);
-  bottom: 5%;
-  right: 1%;
+  border-color: black;
+  bottom: 0;
+  right: 0;
   position: absolute;
 }
 
@@ -139,12 +116,24 @@ export default Vue.extend({
   color: var(--text-primary-color)  !important;
 }
 
-.chatContainer {
+.messageDisplay {
+  min-height: 50%;
+  max-height: 90%;
+  overflow: scroll;
+}
 
-  z-index: 9;
+#typingArea {
+  position: absolute;
+  bottom: 1%;
+  width: 95%;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: row;
+  border-bottom: transparent;
+  border-left: transparent;
+  border-right: transparent;
+  border-top: var(--text-primary-color);
+  border-style: solid;
+  padding-top: .5em;
 }
 
 #sendButtonDiv {
@@ -185,6 +174,7 @@ export default Vue.extend({
   padding: .5em;
   margin-bottom: .5em;
   font-size: .8em;
+  overflow: hidden;
 }
 .message-out {
   background: #407FFF;

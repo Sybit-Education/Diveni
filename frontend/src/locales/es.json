@@ -75,6 +75,10 @@
           "cancel": "Cancelar",
           "ok": "De acuerdo"
         }
+      },
+      "chat": {
+        "title": "Chat Room",
+        "placeholder": "Type in your message..."
       }
     },
     "results": {
