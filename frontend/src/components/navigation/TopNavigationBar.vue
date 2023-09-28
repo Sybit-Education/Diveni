@@ -14,7 +14,7 @@
         <b-button :to="{ name: 'PrepareSessionPage' }" class="px-2 mr-2">New Session</b-button>
       </b-form>
       <b-form>
-        <b-button :to="{name: WhatsNewPage}"
+        <b-button :to="{name: 'WhatsNewPage'}"
           variant="outline-info">
           {{ $t("page.landing.news.buttons.info.label") }}
         </b-button>

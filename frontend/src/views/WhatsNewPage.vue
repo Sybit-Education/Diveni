@@ -14,84 +14,67 @@
       <div>
         <b-pagination align="center"
                       v-model="currentPage"
-                      :total-rows="rows"
-                      :per-page="perPage"
-                      aria-controls="my-table"
+                      :total-rows = "totalRows"
+                      :per-page = perPage
         ></b-pagination>
       </div>
-      <div>
-        <b-card-group deck>
-          <b-card
+      <div class="my-2" >
+        <b-card-group deck >
+          <b-card v-for="card in currentElements" :key = card.id
             border-variant="secondary"
             header="Date"
             header-border-variant="secondary"
             align="center">
-            <b-card-text>Title...</b-card-text>
-            <b-button variant="primary">LINK</b-button>
+            <b-card-text>{{card.title}}</b-card-text>
+            <b-button variant="primary">{{card.link}}</b-button>
           </b-card>
-
-          <b-card
-            border-variant="secondary"
-            header="Date"
-            header-border-variant="secondary"
-            align="center">
-            <b-card-text>Title...</b-card-text>
-            <b-button variant="primary">LINK</b-button>
-          </b-card>
-
-          <b-card
-            border-variant="secondary"
-            header="Date"
-            header-border-variant="secondary"
-            align="center">
-            <b-card-text>Title...</b-card-text>
-            <b-button variant="primary">LINK</b-button>
-          </b-card>
-
-
-        </b-card-group>
-      </div>
-      <div class="mt-3">
-        <b-card-group deck>
-
-          <b-card
-            border-variant="secondary"
-            header="Date"
-            header-border-variant="secondary"
-            align="center">
-            <b-card-text>Title...</b-card-text>
-            <b-button variant="primary">LINK</b-button>
-          </b-card>
-          <b-card
-            border-variant="secondary"
-            header="Date"
-            header-border-variant="secondary"
-            align="center">
-            <b-card-text>Title...</b-card-text>
-            <b-button variant="primary">LINK</b-button>
-          </b-card>
-          <b-card
-            border-variant="secondary"
-            header="Date"
-            header-border-variant="secondary"
-            align="center">
-            <b-card-text>Title...</b-card-text>
-            <b-button variant="primary">LINK</b-button>
-          </b-card>
-
         </b-card-group>
       </div>
     </b-container>
   </div>
 </template>
-
-
 <script lang="ts">
 import Vue from 'vue'
 
+
 export default Vue.extend({
-  name: "WhatsNewPage"
+  name: "WhatsNewPage",
+  data() {
+    return {
+
+      perPage: 4,
+      currentPage: 1,
+      items: [
+        { id: 1, title: 'Fred', link: 'Flintstone' },
+        { id: 2, title: 'Wilma', link: 'Flintstone' },
+        { id: 3, title: 'Barney', link: 'Rubble' },
+        { id: 4, title: 'Betty', link: 'Rubble' },
+        { id: 5, title: 'Pebbles', link: 'Flintstone' },
+        { id: 6, title: 'Bamm Bamm', link: 'Rubble' },
+        { id: 7, title: 'The Great', link: 'Gazzoo' },
+        { id: 8, title: 'Rockhead', link: 'Slate' },
+        { id: 9, title: 'Pearl', link: 'Slaghoople' },
+        { id: 10, title: 'Petko', link: 'Slaghoople' },
+        { id: 11, title: 'Ivan', link: 'Slaghoople' },
+        { id: 12, title: 'Gosho', link: 'Slaghoople' },
+        { id: 13, title: 'C', link: 'Slaghoople' },
+      ]
+    }
+  },
+  computed:{
+    totalRows(){
+      return this.items.length;
+    },
+    currentElements(){
+        let end = this.currentPage * this.perPage;
+        let start = end - this.perPage;
+        return this.items.slice(start, end);
+    },
+
+  }
 })
+
+
 </script>
 
 
