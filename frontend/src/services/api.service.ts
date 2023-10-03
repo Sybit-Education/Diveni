@@ -1,6 +1,6 @@
 import constants from "@/constants";
-import { JiraRequestTokenDto, JiraResponseCodeDto } from "@/types";
-import axios, { AxiosResponse } from "axios";
+import {JiraRequestTokenDto, JiraResponseCodeDto, PullRequestDto} from "@/types";
+import axios, {AxiosResponse} from "axios";
 
 class ApiService {
   public async getIssueTrackerConfig(): Promise<Record<string, string>> {
@@ -94,6 +94,23 @@ class ApiService {
       },
     });
     return response;
+  }
+
+  public async getPullRequests(state, page, pageSize): Promise<PullRequestDto[]> {
+    const queryParams = {
+      state: state,
+      per_page: pageSize,
+      page: page
+    }
+    const response = await axios.get(`${constants.backendURL}/news/pull-requests`,
+      {
+        headers: {
+          "Content-Type": "application/json"
+        },
+        params: queryParams
+      }
+    )
+    return response.data;
   }
 }
 

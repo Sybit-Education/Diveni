@@ -5,7 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.util.Map;
 
 @Data
 @AllArgsConstructor
@@ -20,6 +21,14 @@ public class PullRequest {
   private String title;
 
   @JsonProperty("merged_at")
-  private LocalDateTime mergedAt;
+  private LocalDate mergedAt;
+
+  @JsonProperty("user_type")
+  private String userType;
+
+  @JsonProperty("user")
+  private void unpackNestedProperty(Map<String, String> map) {
+    userType = map.get("type");
+  }
 
 }

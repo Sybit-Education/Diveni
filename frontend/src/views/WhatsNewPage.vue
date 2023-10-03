@@ -9,70 +9,90 @@
         </b-jumbotron>
       </b-container>
     </b-container>
-
     <b-container class="pb-5">
-      <div>
-        <b-pagination align="center"
-                      v-model="currentPage"
-                      :total-rows="totalRows"
-                      :per-page=perPage
-        ></b-pagination>
+      <div class="row" style="justify-content: center">
+        <b-card-group deck v-for="card in items" :key=card.number class="my-3 col-md-4">
+          <b-card
+            align="center"
+            border-variant="secondary"
+            :header="`${card.merged_at}`"
+            footer-tag="footer"
+            header-border-variant="secondary">
+            <b-card-text>{{ card.title }}</b-card-text>
+            <template #footer>
+              <b-link target="_blank" :href="card.html_url">#{{card.number}}</b-link>
+            </template>
+          </b-card>
+        </b-card-group>
       </div>
-      <div class="row">
-        <div v-for="card in currentElements" :key=card.id class="my-2 col-md-4">
-          <b-card-group deck>
-            <b-card
-              border-variant="secondary"
-              header="Date"
-              header-border-variant="secondary"
-              align="center">
-              <b-card-text>{{ card.title }}</b-card-text>
-              <b-button variant="primary">{{ card.link }}</b-button>
-            </b-card>
-          </b-card-group>
-        </div>
+      <div v-if="loading" align="center">
+        <b-spinner label="Loading..."></b-spinner>
       </div>
+
     </b-container>
   </div>
 </template>
 <script lang="ts">
 import Vue from 'vue'
+import apiService from "@/services/api.service";
+import {PullRequestDto} from "@/types";
+import Constants from "@/constants";
 
 
 export default Vue.extend({
   name: "WhatsNewPage",
   data() {
     return {
-
-      perPage: 6,
-      currentPage: 1,
-      items: [
-        {id: 1, title: 'Fred', link: 'Flintstone'},
-        {id: 2, title: 'Wilma', link: 'Flintstone'},
-        {id: 3, title: 'Barney', link: 'Rubble'},
-        {id: 4, title: 'Betty', link: 'Rubble'},
-        {id: 5, title: 'Pebbles', link: 'Flintstone'},
-        {id: 6, title: 'Bamm Bamm', link: 'Rubble'},
-        {id: 7, title: 'The Great', link: 'Gazzoo'},
-        {id: 8, title: 'Rockhead', link: 'Slate'},
-        {id: 9, title: 'Pearl', link: 'Slaghoople'},
-        {id: 10, title: 'Petko', link: 'Slaghoople'},
-        {id: 11, title: 'Ivan', link: 'Slaghoople'},
-        {id: 12, title: 'Gosho', link: 'Slaghoople'},
-        {id: 13, title: 'C', link: 'Slaghoople'},
-      ]
+      perPage: Constants.newsPageSize,
+      currentSet: 1,
+      items: [] as PullRequestDto[],
+      loading:false
     }
   },
-  computed: {
-    totalRows() {
-      return this.items.length;
-    },
-    currentElements() {
-      let end = this.currentPage * this.perPage;
-      let start = end - this.perPage;
-      return this.items.slice(start, end);
-    },
+  mounted() {
+    this.fetchData(1)
+    window.addEventListener('scroll', this.onScroll);
 
+  },
+  beforeDestroy() {
+    // Remove the scroll event listener when the component is destroyed
+    window.removeEventListener('scroll', this.onScroll);
+  },
+  methods: {
+    onScroll(){
+      if(window.scrollY !== 0){
+        const bottomOffset = window.innerHeight + window.scrollY;
+        const documentHeight = document.documentElement.offsetHeight;
+        const isAtBottom = bottomOffset >= documentHeight;
+
+        if(isAtBottom ){
+          this.fetchData(this.currentSet)
+        }
+      }
+    },
+    async fetchData(set) {
+      if(this.loading){
+        return;
+      }
+      this.loading = true;
+      try {
+        let localSet = set;
+        let data: PullRequestDto[] = await apiService.getPullRequests('closed', localSet, Constants.newsPageSize);
+        let dataCount = 0;
+        while (dataCount < 20 && data.length != 0) {
+          data = data.filter(e => e.merged_at != null && e.user_type !== Constants.botUserType)
+          dataCount+=data.length;
+          this.items = this.items.concat(data);
+          localSet++
+          data = await apiService.getPullRequests('closed', localSet, Constants.newsPageSize);
+        }
+        this.currentSet = localSet;
+      } catch (e) {
+        console.error(`got error: ${e}`);
+      }finally {
+        this.loading = false;
+      }
+    }
   }
 })
 
