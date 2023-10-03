@@ -32,7 +32,8 @@ public class ErrorMessages {
 
   public static String noPullRequestsMatchingCriteriaMessage = "There are no pull requests matching the criteria";
   public static String invalidPullRequestStateMessage = "Invalid pull request state. Valid states: open, closed, all";
-  public static String maxPullRequestsPerPage = "Max 100 pull requests can be returned per page";
+  public static String maxPullRequestsPerPageMessage = "Max 100 pull requests can be returned per page";
+  public static String serverLimitReachedMessage = "API rate limit reached";
 
   private ErrorMessages() {}
 }

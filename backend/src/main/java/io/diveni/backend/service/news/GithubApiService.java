@@ -48,7 +48,7 @@ public class GithubApiService {
     if (authToken != null && !authToken.equals("null")) {
       headers.setBearerAuth(authToken);
     }
-    headers.set(API_VERSION_HEADER,apiVersion);
+    headers.set(API_VERSION_HEADER, apiVersion);
 
     HttpEntity<Void> entity = new HttpEntity<>(null, headers);
 
@@ -58,8 +58,8 @@ public class GithubApiService {
     }
 
     if (perPage > MAX_PER_PAGE) {
-      logger.warn("Bad request: {}", ErrorMessages.maxPullRequestsPerPage);
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessages.maxPullRequestsPerPage);
+      logger.warn("Bad request: {}", ErrorMessages.maxPullRequestsPerPageMessage);
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessages.maxPullRequestsPerPageMessage);
     }
 
     UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(url)
@@ -67,9 +67,13 @@ public class GithubApiService {
       .queryParam(PAGE_PARAM, page)
       .queryParam(PER_PAGE_PARAM, perPage);
 
-    ResponseEntity<PullRequest[]> data = client.exchange(builder.toUriString(), HttpMethod.GET, entity, PullRequest[].class);
+    ResponseEntity<PullRequest[]> data;
+    try {
+      data = client.exchange(builder.toUriString(), HttpMethod.GET, entity, PullRequest[].class);
+    } catch (Exception ex) {
+      throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, ErrorMessages.serverLimitReachedMessage);
+    }
     PullRequest[] body = data.getBody();
-
     Arrays.sort(body, (o1, o2) -> Integer.compare(o2.getNumber(), o1.getNumber()));
     logger.debug("getPullRequests({},{},{})", state, perPage, page);
 

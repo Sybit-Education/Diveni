@@ -41,7 +41,7 @@ public class NewsControllerTest {
     this.mockMvc.perform(requestBuilder)
       .andDo(print())
       .andExpect(status().isBadRequest())
-      .andExpect(status().reason(ErrorMessages.maxPullRequestsPerPage));
+      .andExpect(status().reason(ErrorMessages.maxPullRequestsPerPageMessage));
   }
 
 
