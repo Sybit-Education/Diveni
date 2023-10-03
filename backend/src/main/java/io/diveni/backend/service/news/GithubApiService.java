@@ -23,11 +23,16 @@ public class GithubApiService {
   private static final List<String> VALID_STATES = List.of("open", "closed", "all");
   private static final int MAX_PER_PAGE = 100;
 
+  private static final String API_VERSION_HEADER = "X-GitHub-Api-Version";
+
   @Value("${vsc.github.api.pr.get}")
   private String url;
 
   @Value("${vsc.github.access-token}")
   private String authToken;
+
+  @Value("${vsc.github.api.version}")
+  private String apiVersion;
 
   private static final Logger logger = LoggerFactory.getLogger(GithubApiService.class);
   private RestTemplate client;
@@ -43,6 +48,7 @@ public class GithubApiService {
     if (authToken != null && !authToken.equals("null")) {
       headers.setBearerAuth(authToken);
     }
+    headers.set(API_VERSION_HEADER,apiVersion);
 
     HttpEntity<Void> entity = new HttpEntity<>(null, headers);
 
