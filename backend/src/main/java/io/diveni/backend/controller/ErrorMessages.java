@@ -30,5 +30,9 @@ public class ErrorMessages {
 
   public static String failedToRetrieveUsernameErrorMessage = "failed to retrieve current user";
 
+  public static String noPullRequestsMatchingCriteriaMessage = "There are no pull requests matching the criteria";
+  public static String invalidPullRequestStateMessage = "Invalid pull request state. Valid states: open, closed, all";
+  public static String maxPullRequestsPerPage = "Max 100 pull requests can be returned per page";
+
   private ErrorMessages() {}
 }
