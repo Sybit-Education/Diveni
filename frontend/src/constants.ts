@@ -48,7 +48,7 @@ class Constants {
 
   memberUpdateCloseSession = "SESSION_CLOSED";
 
-  newsPageSize = 20;
+  newsPageSize = 80;
 
   botUserType = "Bot";
 
