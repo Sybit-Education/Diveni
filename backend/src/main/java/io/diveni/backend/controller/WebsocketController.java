@@ -239,13 +239,13 @@ public class WebsocketController {
 
   @GetMapping("/get-timer-value")
   public synchronized ResponseEntity<Long> getTimeValue(String memberID) throws ParseException {
-    LOGGER.debug("--> get-timer-value");
+    LOGGER.debug("--> get-timer-value()");
     Session session =
         ControllerUtils.getSessionByMemberIDOrThrowResponse(databaseService, memberID);
     Date startDate = Utils.getDateFromString(session.getTimerTimestamp());
     Date currentDate = new Date();
     long timeDifference = currentDate.getTime() - startDate.getTime();
-    LOGGER.debug("<-- get-timer-value");
-    return new ResponseEntity<>(timeDifference, HttpStatus.CREATED);
+    LOGGER.debug("<-- get-timer-value() + " + timeDifference);
+    return new ResponseEntity<>(timeDifference, HttpStatus.OK);
   }
 }
