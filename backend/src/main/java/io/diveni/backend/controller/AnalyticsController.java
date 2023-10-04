@@ -35,10 +35,13 @@ public class AnalyticsController {
         databaseService.getDeletedSessions().stream()
             .collect(Collectors.summingInt(deletedSess -> deletedSess.getMembers().size()));
 
-    amountOfAllAttendees += databaseService.getDeletedSessions()
-    .stream()
-    .filter(ds -> databaseService.getRemovedMember().stream().anyMatch(rm -> rm.getSessionID().equals(ds.getSessionID())))
-    .count();
+    amountOfAllAttendees +=
+        databaseService.getDeletedSessions().stream()
+            .filter(
+                ds ->
+                    databaseService.getRemovedMember().stream()
+                        .anyMatch(rm -> rm.getSessionID().equals(ds.getSessionID())))
+            .count();
 
     int lastMonth = LocalDate.now().getMonthValue();
     int counter;
@@ -76,10 +79,13 @@ public class AnalyticsController {
         deletedsessionFromLastMonth.stream()
             .collect(Collectors.summingInt(s -> s.getMembers().size()));
 
-    amountOfAttendeesLastMonth += deletedsessionFromLastMonth
-        .stream()
-        .filter(ds -> databaseService.getRemovedMember().stream().anyMatch(rm -> rm.getSessionID().equals(ds.getSessionID())))
-        .count();
+    amountOfAttendeesLastMonth +=
+        deletedsessionFromLastMonth.stream()
+            .filter(
+                ds ->
+                    databaseService.getRemovedMember().stream()
+                        .anyMatch(rm -> rm.getSessionID().equals(ds.getSessionID())))
+            .count();
 
     int currentAmountOfSessions = databaseService.getSessions().size();
     int currentAmountOfAttendees =
