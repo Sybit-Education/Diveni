@@ -3,7 +3,15 @@ COPY --chown=gradle:gradle . /app/Diveni
 WORKDIR /app/Diveni
 RUN gradle --no-daemon assemble
 
-FROM openjdk:17 as production-stage
-WORKDIR /app/Diveni
+FROM oracle/graalvm-ce:latest as graalvm-build-stage
 COPY --from=build-stage /app/Diveni/build/libs/backend-1.0.0-SNAPSHOT.jar diveni.jar
-ENTRYPOINT ["java", "-jar", "diveni.jar"]
+WORKDIR /app/Diveni
+
+RUN gu install native-image
+
+RUN native-image --no-server -cp diveni.jar
+
+FROM debian:bullseye-slim as production-stage
+WORKDIR /app/Diveni
+COPY --from=graalvm-build-stage /app/Diveni/diveni diveni
+ENTRYPOINT ["./diveni"]
