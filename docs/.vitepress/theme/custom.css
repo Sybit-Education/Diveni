@@ -1,0 +1,16 @@
+:root {
+    --vp-c-brand: #8bc34a;
+    --vp-button-brand-bg: #8bc34a;
+}
+
+.medium-zoom-overlay {
+    z-index: 20;
+}
+
+.medium-zoom-image {
+    z-index: 21;
+}
+
+.go-to-top .icon-top{
+    color: #8bc34a;
+}

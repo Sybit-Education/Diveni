@@ -27,14 +27,19 @@
           "waiting": "Warte auf den Beitritt des Teams"
         },
         "button": "Starte das Planning",
+        "refreshStories": "Aktualisiere die Userstories",
         "userStories": {
+          "filter" : {
+            "noStoryFound": "Keine Stories gefunden!"
+          },
           "button": {
             "addFirstUserStory": "Noch keine Stories... Klicke um eine Story hinzuzufügen",
             "addUserStory": "Hinzufügen"
           },
           "placeholder": {
-            "userStoryTitle": "User Story Titel",
-            "userStoryDescription": "Beschreibung und Akzeptanzkriterien..."
+            "userStoryTitle": "Titel der User Story",
+            "userStoryDescription": "Beschreibung und Akzeptanzkriterien...",
+            "searchUserStories": "User Stories durchsuchen..."
           },
           "text": "Klicke auf ein User Story Titel um die Beschreibung zu sehen",
           "sum": "Summe:"
@@ -50,7 +55,7 @@
           "buttons": {
             "new": "Neu",
             "result": "Ergebnisse anzeigen",
-            "finish": "Beende die Session"
+            "finish": "Sitzung beenden"
           }
         },
         "modal": {
@@ -75,9 +80,9 @@
     },
     "results": {
       "title": "Ergebnisse",
-      "noUserStories": "Keine User Stories sind definiert...",
+      "noUserStories": "Es sind keine User Stories definiert ...",
       "button": {
-        "download": "Download als CSV-Datei",
+        "download": "Als CSV-Datei herunterladen",
         "home": "Zur Startseite"
       }
     },
@@ -136,7 +141,7 @@
       "waiting": "Warte, bis der Organisator die Schätzrunde startet",
       "button": {
         "leave": {
-          "label": "Session verlassen"
+          "label": "Sitzung verlassen"
         }
       },
       "hostLeft": "Warte, bis der Organisator die Sitzung wieder betritt..."
@@ -172,9 +177,9 @@
                 "toastSuccessNotification": "User Stories importiert",
                 "toastErrorNotification": "Beim importieren ist leider ein Fehler aufgetreten"
               },
-              "withJira": {
+              "withIssueTracker": {
                 "tab": {
-                  "label": "Planning mit Jira"
+                  "label": "Planning mit Issue-Tracker"
                 },
                 "subtitle": "Wähle die Jira-Integration für das Planning",
                 "descriptionLine1": "Logge dich mit deinen Anmeldedaten ein",
@@ -199,12 +204,18 @@
                   "signInWithJiraServer": {
                     "label": "Mit Jira Server anmelden"
                   },
+                  "signInWithAzureDevOps": {
+                    "label": "Mit Azure DevOps anmelden"
+                  },
                   "selectProject": {
                     "label": "Wählen Sie ihr Jira-Projekt aus"
                   },
                   "submit": {
                     "label": "Senden"
                   }
+                },
+                "placeholder": {
+                  "searchProjects": "Projekte durchsuchen..."
                 }
               }
             }
@@ -272,10 +283,10 @@
         "memberLeft": "Teilnehmer hat die Sitzung verlassen",
         "memberJoined": "Teilnehmer ist der Sitzung beigetreten",
         "memberRemoved": "Du wurdest vom Host aus der Sitzung entfernt",
-        "jiraCredentials": "Falsche Login-Daten",
-        "jiraLoginFailed": "Login fehlgeschlagen",
-        "jiraSynchronizeSuccess": "Änderungen mit Jira synchronisiert",
-        "jiraSynchronizeFailed": "Fehler beim Synchronisieren mit Jira",
+        "issueTrackerCredentials": "Falsche Login-Daten",
+        "issueTrackerLoginFailed": "Login fehlgeschlagen",
+        "issueTrackerSynchronizeSuccess": "Änderungen mit Issue-Tracker synchronisiert",
+        "issueTrackerSynchronizeFailed": "Fehler beim Synchronisieren mit Issue-Tracker",
         "wrongID": "Falscher Einladungscode",
         "password": "Falsches Passwort"
       }

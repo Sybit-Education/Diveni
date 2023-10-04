@@ -70,6 +70,7 @@
             :start-timestamp="timerTimestamp"
             :pause-timer="estimateFinished"
             :duration="timerCountdownNumber"
+            :votingStarted="planningStart"
             @timerFinished="sendVotingFinishedMessage"
           />
         </b-col>
@@ -80,21 +81,6 @@
         {{ membersPending.length }} /
         {{ membersPending.length + membersEstimated.length }}
       </h4>
-
-      <div id="demo">
-        <div
-          v-if="membersEstimated.length === membersPending.length + membersEstimated.length"
-          style="display: none"
-        >
-          {{ (estimateFinished = true) }}
-        </div>
-      </div>
-      <div id="demo">
-        <div v-if="membersEstimated.length === 0" style="display: none">
-          {{ (estimateFinished = false) }}
-        </div>
-      </div>
-
       <b-row v-if="!estimateFinished" class="my-1 d-flex justify-content-center flex-wrap">
         <kick-user-wrapper
           v-for="member of membersPending"
@@ -134,6 +120,11 @@
     </b-row>
     <b-row v-if="session_userStoryMode !== 'NO_US'">
       <b-col cols="4">
+        <div v-if="session_userStoryMode === 'US_JIRA'" class="refreshUserstories">
+          <b-button class="w-100 mb-3" variant="info" @click="refreshUserStories">
+            {{ $t("page.session.before.refreshStories") }}
+          </b-button>
+        </div>
         <user-stories
           :card-set="voteSet"
           :show-estimations="planningStart"
@@ -189,17 +180,18 @@ export default Vue.extend({
     NotifyHostComponent,
   },
   props: {
-    adminID: { type: String, required: true },
-    sessionID: { type: String, required: true },
-    voteSetJson: { type: String, required: true },
-    sessionState: { type: String, required: true },
-    timerSecondsString: { type: String, required: true },
+    adminID: { type: String, required: false },
+    sessionID: { type: String, required: false },
+    voteSetJson: { type: String, required: false },
+    sessionState: { type: String, required: false },
+    timerSecondsString: { type: String, required: false },
     startNewSessionOnMountedString: {
       type: String,
       required: false,
       default: "false",
     },
-    userStoryMode: { type: String, required: true },
+    userStoryMode: { type: String, required: false },
+    rejoined: { type: String, required: false, default: "true" },
   },
   data() {
     return {
@@ -252,14 +244,18 @@ export default Vue.extend({
     webSocketIsConnected(isConnected) {
       if (isConnected) {
         console.debug("SessionPage: member connected to websocket");
-        this.registerAdminPrincipalOnBackend();
-        this.subscribeWSMemberUpdated();
-        this.requestMemberUpdate();
-        this.subscribeOnTimerStart();
-        this.subscribeWSNotification();
-        if (this.startNewSessionOnMountedString === "true") {
-          this.sendRestartMessage();
-        }
+        setTimeout(() => {
+          this.registerAdminPrincipalOnBackend();
+          this.subscribeWSMemberUpdated();
+          this.requestMemberUpdate();
+          this.subscribeOnTimerStart();
+          if (this.rejoined === "false") {
+            this.subscribeWSNotification();
+          }
+          if (this.startNewSessionOnMountedString === "true") {
+            this.sendRestartMessage();
+          }
+        }, 300);
         setTimeout(() => {
           if (this.members.length === 0) {
             this.requestMemberUpdate();
@@ -276,9 +272,15 @@ export default Vue.extend({
         });
       }
     },
+    membersEstimated() {
+      if (this.membersPending.length  === 0 && this.membersEstimated.length > 0) {
+        this.estimateFinished = true;
+      }
+    },
   },
   async created() {
     this.copyPropsToData();
+    this.$store.commit("clearStoreWithoutUserStories");
     if (!this.session_sessionID || !this.session_adminID) {
       //check for cookie
       await this.checkAdminCookie();
@@ -293,11 +295,12 @@ export default Vue.extend({
     window.addEventListener("beforeunload", this.sendUnregisterCommand);
   },
   mounted() {
-    this.voteSet = JSON.parse(this.session_voteSetJson);
+    if (this.session_voteSetJson) {
+      this.voteSet = JSON.parse(this.session_voteSetJson);
+    }
     this.connectToWebSocket();
     if (this.session_sessionState === Constants.memberUpdateCommandStartVoting) {
       this.planningStart = true;
-      this.sendRestartMessage();
     } else if (this.session_sessionState === Constants.memberUpdateCommandVotingFinished) {
       this.planningStart = true;
       this.estimateFinished = true;
@@ -345,12 +348,14 @@ export default Vue.extend({
       }
     },
     copyPropsToData() {
-      this.session_adminID = this.adminID;
-      this.session_sessionID = this.sessionID;
-      this.session_sessionState = this.sessionState;
-      this.session_timerSecondsString = this.timerSecondsString;
-      this.session_voteSetJson = this.voteSetJson;
-      this.session_userStoryMode = this.userStoryMode;
+      if (this.adminID) {
+        this.session_adminID = this.adminID;
+        this.session_sessionID = this.sessionID;
+        this.session_sessionState = this.sessionState;
+        this.session_timerSecondsString = this.timerSecondsString;
+        this.session_voteSetJson = this.voteSetJson;
+        this.session_userStoryMode = this.userStoryMode;
+      }
     },
     assignSessionToData(session) {
       if (Object.keys(session).length !== 0) {
@@ -379,23 +384,25 @@ export default Vue.extend({
       this.timerCountdownNumber = parseInt(this.session_timerSecondsString, 10);
       //reconnect and reload member
       this.connectToWebSocket();
-      this.requestMemberUpdate();
+      setTimeout(() => {
+        this.subscribeWSNotification();
+      }, 300);
     },
     async onUserStoriesChanged({ us, idx, doRemove }) {
       console.log(`stories: ${us}`);
       console.log(`idx: ${idx}`);
       console.log(`doRemove: ${doRemove}`);
       console.log(`Syncing ${us[idx]}`);
-      // Jira sync
+      //Jira sync
       if (this.session_userStoryMode === "US_JIRA") {
         let response;
         if (doRemove) {
-          response = await apiService.deleteUserStory(us[idx].jiraId);
+          response = await apiService.deleteUserStory(us[idx].id);
           us.splice(idx, 1);
           doRemove = false;
         } else {
-          console.log(`JIRA ID: ${us[idx].jiraID}`);
-          if (us[idx].jiraId === null) {
+          console.log(`ID: ${us[idx].id}`);
+          if (us[idx].id === null) {
             response = await apiService.createUserStory(
               JSON.stringify(us[idx]),
               this.selectedProject.id
@@ -403,19 +410,19 @@ export default Vue.extend({
             if (response.status === 200) {
               us = this.userStories.map((s) =>
                 s.title === us[idx].title && s.description === us[idx].description
-                  ? { ...s, jiraId: response.data }
+                  ? { ...s, id: response.data }
                   : s
               );
-              console.log(`assigned id: ${us[idx].jiraId}`);
+              console.log(`assigned id: ${us[idx].id}`);
             }
           } else {
             response = await apiService.updateUserStory(JSON.stringify(us[idx]));
           }
         }
         if (response.status === 200) {
-          this.$toast.success(this.$t("session.notification.messages.jiraSynchronizeSuccess"));
+          this.$toast.success(this.$t("session.notification.messages.issueTrackerSynchronizeSuccess"));
         } else {
-          this.$toast.error(this.$t("session.notification.messages.jiraSynchronizeFailed"));
+          this.$toast.error(this.$t("session.notification.messages.issueTrackerSynchronizeFailed"));
         }
       }
       // WS send
@@ -431,14 +438,25 @@ export default Vue.extend({
         });
       }
     },
+    async refreshUserStories() {
+      const response = await apiService.getUserStoriesFromProject(this.selectedProject.name);
+      this.$store.commit("setUserStories", { stories: response });
+      if (this.webSocketIsConnected) {
+        const endPoint = `${Constants.webSocketAdminUpdatedUserStoriesRoute}`;
+        this.$store.commit("sendViaBackendWS", {
+          endPoint,
+          data: JSON.stringify(response),
+        });
+      }
+    },
     async onSynchronizeJira({ story, doRemove }) {
       if (this.session_userStoryMode === "US_JIRA") {
         let response;
         if (doRemove) {
-          response = await apiService.deleteUserStory(story.jiraId);
+          response = await apiService.deleteUserStory(story.id);
         } else {
-          console.log(`JIRA ID: ${story.jiraID}`);
-          if (story.jiraId === null) {
+          console.log(`ID: ${story.id}`);
+          if (story.id === null) {
             response = await apiService.createUserStory(
               JSON.stringify(story),
               this.selectedProject.id
@@ -454,13 +472,17 @@ export default Vue.extend({
           }
         }
         if (response.status === 200) {
-          this.$toast.success(this.$t("session.notification.messages.jiraSynchronizeSuccess"));
+          this.$toast.success(this.$t("session.notification.messages.issueTrackerSynchronizeSuccess"));
         } else {
-          this.$toast.error(this.$t("session.notification.messages.jiraSynchronizeFailed"));
+          this.$toast.error(this.$t("session.notification.messages.issueTrackerSynchronizeFailed"));
         }
       }
     },
     onSelectedStory($event) {
+      if (this.planningStart) {
+        const endPoint = Constants.webSocketAdminSelectedUserStoryRoute;
+        this.$store.commit("sendViaBackendWS", { endPoint, data: $event });
+      }
       this.index = $event;
     },
     connectToWebSocket() {

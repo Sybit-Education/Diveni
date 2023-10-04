@@ -49,6 +49,7 @@ export default Vue.extend({
         this.registerMemberPrincipalOnBackend();
         this.subscribeWSMemberUpdates();
         this.subscribeWSadminUpdatedUserStories();
+        this.subscribeWSStorySelected();
         this.subscribeWSMemberUpdated();
         this.subscribeOnTimerStart();
         this.subscribeWSNotification();
@@ -83,7 +84,7 @@ export default Vue.extend({
         const sessionConfig = result.data as {
           set: Array<string>;
           timerSeconds: number;
-          userStories: Array<{ title: string; description: string; estimation: string | null }>;
+          userStories: Array<{ title: string; description: string; estimation: string | null;}>;
           userStoryMode: string;
         };
         this.voteSet = JSON.stringify(sessionConfig.set);
@@ -117,6 +118,9 @@ export default Vue.extend({
     },
     subscribeWSadminUpdatedUserStories() {
       this.$store.commit("subscribeOnBackendWSStoriesUpdated");
+    },
+    subscribeWSStorySelected() {
+      this.$store.commit("subscribeOnBackendWSStorySelected");
     },
     subscribeWSMemberUpdated() {
       this.$store.commit("subscribeOnBackendWSAdminUpdate");

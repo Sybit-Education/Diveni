@@ -46,6 +46,7 @@ public class JiraCloudService implements ProjectManagementProviderOAuth2 {
   private static final int JIRA_CLOUD_API_VERSION = 2;
   private static final String JIRA_OAUTH_URL = "https://auth.atlassian.com/oauth";
   private static final String JIRA_HOME = "https://api.atlassian.com/ex/jira/%s/rest/api/";
+  private boolean serviceEnabled = false;
   @Getter private final Map<String, String> accessTokens = new HashMap<>();
 
   @Value("${JIRA_CLOUD_CLIENTID:#{null}}")
@@ -57,13 +58,33 @@ public class JiraCloudService implements ProjectManagementProviderOAuth2 {
   @Value("${JIRA_CLOUD_ESTIMATIONFIELD:customfield_10016}")
   private String ESTIMATION_FIELD;
 
+  @Value("${JIRA_CLOUD_AUTHORIZE_URL:#{null}}")
+  private String JIRA_CLOUD_AUTHORIZE_URL;
+
   @PostConstruct
-  public void logConfig() {
-    LOGGER.info("Jira-Cloud Service:");
+  public void setupAndLogConfig() {
+    if (CLIENT_ID != null
+        && CLIENT_SECRET != null
+        && ESTIMATION_FIELD != null
+        && JIRA_CLOUD_AUTHORIZE_URL != null) {
+      serviceEnabled = true;
+    }
+
+    LOGGER.info("Jira-Cloud Service: (enabled:" + serviceEnabled + ")");
 
     LOGGER.info("    JIRA_CLOUD_CLIENTID={}", CLIENT_ID == null ? "null" : "********");
     LOGGER.info("    JIRA_CLOUD_CLIENTSECRET={}", CLIENT_SECRET == null ? "null" : "********");
     LOGGER.info("    JIRA_SERVER_ESTIMATIONFIELD={}", ESTIMATION_FIELD);
+    LOGGER.info("    JIRA_CLOUD_AUTHORIZE_URL={}", JIRA_CLOUD_AUTHORIZE_URL);
+  }
+
+  @Override
+  public boolean serviceEnabled() {
+    return serviceEnabled;
+  }
+
+  public String getJiraCloudAuthorizeUrl() {
+    return JIRA_CLOUD_AUTHORIZE_URL;
   }
 
   static String getCloudID(String accessToken) {
@@ -209,7 +230,7 @@ public class JiraCloudService implements ProjectManagementProviderOAuth2 {
 
   @Override
   public void updateIssue(String tokenIdentifier, UserStory story) {
-    LOGGER.debug("--> updateIssue(), storyID={}", story.getJiraId());
+    LOGGER.debug("--> updateIssue(), storyID={}", story.getId());
     String cloudID = getCloudID(accessTokens.get(tokenIdentifier));
     Map<String, Map<String, Object>> content = new HashMap<>();
     Map<String, Object> fields = new HashMap<>();
@@ -227,7 +248,7 @@ public class JiraCloudService implements ProjectManagementProviderOAuth2 {
     content.put("fields", fields);
     try {
       executeRequest(
-          String.format(getJiraUrl(), cloudID) + "/issue/" + story.getJiraId(),
+          String.format(getJiraUrl(), cloudID) + "/issue/" + story.getId(),
           HttpMethod.PUT,
           accessTokens.get(tokenIdentifier),
           content);
@@ -240,12 +261,12 @@ public class JiraCloudService implements ProjectManagementProviderOAuth2 {
   }
 
   @Override
-  public void deleteIssue(String tokenIdentifier, String jiraID) {
-    LOGGER.debug("--> deleteIssue(), jiraID={}", jiraID);
+  public void deleteIssue(String tokenIdentifier, String issueID) {
+    LOGGER.debug("--> deleteIssue(), issueID={}", issueID);
     try {
       String cloudID = getCloudID(accessTokens.get(tokenIdentifier));
       executeRequest(
-          String.format(getJiraUrl(), cloudID) + "/issue/" + jiraID,
+          String.format(getJiraUrl(), cloudID) + "/issue/" + issueID,
           HttpMethod.DELETE,
           accessTokens.get(tokenIdentifier),
           null);

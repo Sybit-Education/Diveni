@@ -42,10 +42,10 @@
             You could import your user stories or connect JIRA to syncronize story points.
           </b-card-text>
 
-          <b-card-sub-title> Connecting Atlassian Jira </b-card-sub-title>
+          <b-card-sub-title> Connecting to Issue-Tracker </b-card-sub-title>
           <b-card-text>
-            DIVENI could connect to JIRA Server and Cloud to show user stories and update the voted
-            results of your planning poker.
+            DIVENI could connect to issue trackers like Azure DevOps, JIRA Server and Cloud to show
+            user stories and update the voted results of your planning poker.
           </b-card-text>
         </b-card>
         <b-card title="Invite your Team">
@@ -64,7 +64,7 @@
             Every member of team could use your defined set to vote the selected user story.
           </b-card-text>
           <b-card-text>
-            If erverybody has voted, DIVENI shows results and randomly selects two voters having
+            If everybody has voted, DIVENI shows results and randomly selects two voters having
             voted minimum / maximum to discuss their estimation.
           </b-card-text>
           <b-card-text> After discussion you could repeat estimation. </b-card-text>
@@ -121,7 +121,7 @@ export default Vue.extend({
               set: Array<string>;
               timerSeconds: number;
               userStories: Array<{
-                jiraId: number | null;
+                id: number | null;
                 title: string;
                 description: string;
                 estimation: string | null;

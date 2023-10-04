@@ -12,14 +12,21 @@
   "directories": {
     "doc": "docs"
   },
-  "scripts": {
-    "docs:dev": "vuepress dev docs",
-    "docs:build": "vuepress build docs"
-  },
+  "type": "module",
   "devDependencies": {
-    "vuepress": "^1.9.7",
-    "vuepress-plugin-mermaidjs": "^1.9.1",
-    "@vuepress/plugin-back-to-top": "^1.9.7",
-    "@vuepress/plugin-medium-zoom": "^1.9.7"
+    "@mermaid-js/mermaid-mindmap": "^9.3.0",
+    "mermaid": "9.1.7",
+    "vitepress": "^1.0.0-rc.12",
+    "vitepress-plugin-mermaid": "^2.0.10"
+  },
+  "scripts": {
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs"
+  },
+  "dependencies": {
+    "medium-zoom": "^1.0.8",
+    "vitepress-plugin-back-to-top": "^1.0.1",
+    "vitepress-plugin-search": "^1.0.4-alpha.20"
   }
 }

@@ -3,9 +3,23 @@ import { JiraRequestTokenDto, JiraResponseCodeDto } from "@/types";
 import axios, { AxiosResponse } from "axios";
 
 class ApiService {
+  public async getIssueTrackerConfig(): Promise<Record<string, string>> {
+    const response = await axios.get<Record<string, string>>(
+      `${constants.backendURL}/config/issueTracker`
+    );
+    return response.data;
+  }
+
+  public async getLocaleConfig(): Promise<Record<string, string>> {
+    const response = await axios.get<Record<string, string>>(
+      `${constants.backendURL}/config/locale`
+    );
+    return response.data;
+  }
+
   public async getJiraOauth1RequestToken(): Promise<JiraRequestTokenDto> {
     const response = await axios.get<JiraRequestTokenDto>(
-      `${constants.backendURL}/jira/oauth1/requestToken`
+      `${constants.backendURL}/issue-tracker/jira/oauth1/requestToken`
     );
     return response.data;
   }
@@ -15,7 +29,7 @@ class ApiService {
     token: string
   ): Promise<JiraResponseCodeDto> {
     const response = await axios.post<JiraResponseCodeDto>(
-      `${constants.backendURL}/jira/oauth1/verificationCode`,
+      `${constants.backendURL}/issue-tracker/jira/oauth1/verificationCode`,
       {
         code,
         token,
@@ -26,7 +40,7 @@ class ApiService {
 
   public async sendJiraOauth2AuthorizationCode(code: string): Promise<JiraResponseCodeDto> {
     const response = await axios.post<JiraResponseCodeDto>(
-      `${constants.backendURL}/jira/oauth2/authorizationCode`,
+      `${constants.backendURL}/issue-tracker/jira/oauth2/authorizationCode`,
       {
         code,
       }
@@ -34,18 +48,25 @@ class ApiService {
     return response.data;
   }
 
+  public async sendAzureOauth2AuthorizationCode(): Promise<JiraResponseCodeDto> {
+    const response = await axios.post<JiraResponseCodeDto>(
+      `${constants.backendURL}/issue-tracker/azure/oauth2/authorizationCode`
+    );
+    return response.data;
+  }
+
   public async getAllProjects(): Promise<unknown> {
-    const response = await axios.get(`${constants.backendURL}/jira/projects`);
+    const response = await axios.get(`${constants.backendURL}/issue-tracker/projects`);
     return response.data;
   }
 
   public async getUserStoriesFromProject(project): Promise<unknown> {
-    const response = await axios.get(`${constants.backendURL}/jira/projects/${project}/issues`);
+    const response = await axios.get(`${constants.backendURL}/issue-tracker/projects/${project}/issues`);
     return response.data;
   }
 
   public async updateUserStory(story): Promise<unknown> {
-    const response = await axios.put(`${constants.backendURL}/jira/issue`, story, {
+    const response = await axios.put(`${constants.backendURL}/issue-tracker/issue`, story, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -55,7 +76,7 @@ class ApiService {
 
   public async createUserStory(story, projectID): Promise<AxiosResponse> {
     const response = await axios.post(
-      `${constants.backendURL}/jira/issue?projectID=${projectID}`,
+      `${constants.backendURL}/issue-tracker/issue?projectID=${projectID}`,
       story,
       {
         headers: {
@@ -67,7 +88,7 @@ class ApiService {
   }
 
   public async deleteUserStory(jiraId): Promise<AxiosResponse> {
-    const response = await axios.delete(`${constants.backendURL}/jira/issue/${jiraId}`, {
+    const response = await axios.delete(`${constants.backendURL}/issue-tracker/issue/${jiraId}`, {
       headers: {
         "Content-Type": "application/json",
       },
