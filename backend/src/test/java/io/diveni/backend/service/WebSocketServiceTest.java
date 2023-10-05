@@ -311,8 +311,8 @@ public class WebSocketServiceTest {
             null,
             null,
             null,
-          false,
-          null);
+            false,
+            null);
 
     webSocketService.sendSelectedUserStoryToMembers(session, selectedUserStoryIndex);
 
