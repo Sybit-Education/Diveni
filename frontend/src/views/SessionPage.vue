@@ -265,7 +265,6 @@ export default Vue.extend({
       session: {},
       hostEstimation: "",
       safedHostVoting: false,
-      numberOfEstimatesInThisRound: 0,
     };
   },
   computed: {
@@ -328,7 +327,12 @@ export default Vue.extend({
     },
     membersEstimated() {
       if (this.membersPending.length  === 0 && this.membersEstimated.length > 0) {
-        this.estimateFinished = true;
+        if (this.safedHostVoting && this.hostEstimation !== '') {
+          this.estimateFinished = true
+        }
+        if (!this.safedHostVoting) {
+          this.estimateFinished = true;
+        }
       }
     },
   },
@@ -578,11 +582,6 @@ export default Vue.extend({
       this.estimateFinished = false;
       this.hostEstimation = '';
       this.safedHostVoting = this.session_hostVoting;
-      if (this.session_hostVoting) {
-        this.numberOfEstimatesInThisRound = this.members.length + 1;
-      } else {
-        this.numberOfEstimatesInThisRound = this.members.length;
-      }
       const endPoint = Constants.webSocketRestartPlanningRoute;
       this.$store.commit("sendViaBackendWS", { endPoint, data: this.session_hostVoting });
     },
@@ -592,11 +591,6 @@ export default Vue.extend({
     onPlanningStarted() {
       this.planningStart = true;
       this.safedHostVoting = this.session_hostVoting;
-      if (this.session_hostVoting) {
-        this.numberOfEstimatesInThisRound = this.members.length + 1;
-      } else {
-        this.numberOfEstimatesInThisRound = this.members.length;
-      }
     },
     vote(vote: string) {
       this.hostEstimation = vote;
