@@ -63,11 +63,11 @@ User Stories once you've started the session.
   change this value by clicking on one of these buttons. If you dont click any button the option to vote on the
   userstories is disabled for the host. But you can also change this later on.
 
-  <img :src="$withBase('/img/host_voting_option_preparePage.png')" alt="step 4_ Choose host voting">
+  ![step4_Choose_host_voting](../img/host_voting_option_preparePage.png)
 
 - To finish the setting, you can secure your session by an optional password.
 
-  ![step4_Choose_password](../img/Choose_password.png)
+  ![step5_Choose_password](../img/Choose_password.png)
 
 - Finalize by clicking „Start Session“ on the bottom of the page.
 - You get a code that the other members who want to join need.
@@ -116,9 +116,7 @@ cards once you've started the session.
 Once everybody of your team has joined your session, you can start the session. While you are waiting for your team members to join, you can change some settings for your session.
 
   - The admin of the session can vote
-    - As the admin of the session you can choose to vote aswell or to only let your members vote on the userstories.
-      <img :src="$withBase('/img/host_Voting.png')" alt="Host Voting">
-    - While the Estimation is running, you cannot change the voting option.
+    - As the admin of the session you can choose to vote as well or to only let your members vote on the userstories.
 
 ## Start voting of User Story
 
