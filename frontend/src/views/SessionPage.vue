@@ -5,8 +5,8 @@
         <h1>
           {{
             planningStart
-              ? $t("page.session.during.estimation.title")
-              : $t("page.session.before.title")
+            ? $t("page.session.during.estimation.title")
+            : $t("page.session.before.title")
           }}
         </h1>
       </b-col>
@@ -31,7 +31,6 @@
         :session-id="session_sessionID"
         :text-after-session-i-d="$t('page.session.before.text.afterID')"
       />
-
       <h4 class="text-center m-3">
         {{ $t("page.session.before.text.waiting") }}
         <sub><b-icon-three-dots animation="fade" font-scale="1" /></sub>

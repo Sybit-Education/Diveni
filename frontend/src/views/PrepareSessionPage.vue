@@ -12,7 +12,7 @@
         :title="$t('session.prepare.step.selection.mode.description.withoutUS.tab.label')"
         :title-link-class="linkClass(0)"
       >
-        <stroy-points-component />
+        <stroy-points-component/>
       </b-tab>
       <b-tab
         :title="$t('session.prepare.step.selection.mode.description.withUS.tab.label')"
@@ -26,7 +26,11 @@
           accept="text/csv"
           @change="importStory($event.target.files)"
         />
-        <b-button block color="primary" elevation="2" @click="openFileUploader()">
+        <b-button
+          block color="primary"
+          elevation="2"
+          @click="openFileUploader()"
+        >
           {{ $t("session.prepare.step.selection.mode.description.withUS.importButton") }}
         </b-button>
       </b-tab>
@@ -35,7 +39,7 @@
         :title="$t('session.prepare.step.selection.mode.description.withIssueTracker.tab.label')"
         :title-link-class="linkClass(2)"
       >
-        <jira-component class="mg_top_2_per" />
+        <jira-component class="mg_top_2_per"/>
       </b-tab>
     </b-tabs>
     <h4 class="mt-4">
@@ -139,8 +143,8 @@ export default Vue.extend({
       timer: 30,
       warningWhenUnderZero: "",
       tabIndex: 0,
-      isIssueTrackerEnabled: false,
       hostVoting: false,
+      isIssueTrackerEnabled: false,
     };
   },
   computed: {
@@ -233,8 +237,8 @@ export default Vue.extend({
           voteSetJson: JSON.stringify(session.sessionConfig.set),
           sessionState: session.sessionState,
           userStoryMode: session.sessionConfig.userStoryMode,
-          rejoined: "false",
           hostVoting: this.hostVoting.toString(),
+          rejoined: "false",
         },
       });
     },

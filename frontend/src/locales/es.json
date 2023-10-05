@@ -55,6 +55,8 @@
           "buttons": {
             "new": "Nuevo",
             "result": "Mostrar resultado",
+            "addHostVoting": "Enable host voting",
+            "removeHostVoting": "Disable host voting",
             "finish": "Finalizar sesión"
           }
         },
