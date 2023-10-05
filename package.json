@@ -12,10 +12,11 @@
   "directories": {
     "doc": "docs"
   },
+  "type": "module",
   "devDependencies": {
     "@mermaid-js/mermaid-mindmap": "^9.3.0",
     "mermaid": "9.1.7",
-    "vitepress": "^1.0.0-alpha.65",
+    "vitepress": "^1.0.0-rc.20",
     "vitepress-plugin-mermaid": "^2.0.10"
   },
   "scripts": {

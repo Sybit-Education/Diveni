@@ -1,5 +1,6 @@
 :root {
-    --vp-c-green: #8bc34a;
+    --vp-c-brand: #8bc34a;
+    --vp-button-brand-bg: #8bc34a;
 }
 
 .medium-zoom-overlay {

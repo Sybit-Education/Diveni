@@ -15,6 +15,7 @@ export interface StoreState {
   selectedProject: Project | undefined;
   hostVoting: boolean;
   hostEstimation: string | undefined;
+  selectedUserStoryIndex: number | undefined;
 }
 
 export interface JiraRequestTokenDto {

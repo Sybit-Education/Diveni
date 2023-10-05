@@ -21,6 +21,7 @@ export default new Vuex.Store<StoreState>({
     selectedProject: undefined,
     hostVoting: false,
     hostEstimation: undefined,
+    selectedUserStoryIndex: undefined,
   },
   mutations: {
     setMembers(state, members) {
@@ -51,6 +52,11 @@ export default new Vuex.Store<StoreState>({
     subscribeOnBackendWSStoriesUpdated(state) {
       state.stompClient?.subscribe(Constants.webSocketMemberListenUserStoriesRoute, (frame) => {
         state.userStories = JSON.parse(frame.body);
+      });
+    },
+    subscribeOnBackendWSStorySelected(state) {
+      state.stompClient?.subscribe(Constants.webSocketSelectedUserStoryRoute, (frame) => {
+        state.selectedUserStoryIndex = +frame.body;
       });
     },
     subscribeOnBackendWSAdminUpdate(state) {
@@ -87,6 +93,13 @@ export default new Vuex.Store<StoreState>({
     clearStore(state) {
       state.members = [];
       state.userStories = [];
+      state.memberUpdates = [];
+      state.notifications = [];
+      state.webSocketConnected = false;
+      state.stompClient = undefined;
+    },
+    clearStoreWithoutUserStories(state) {
+      state.members = [];
       state.memberUpdates = [];
       state.notifications = [];
       state.webSocketConnected = false;

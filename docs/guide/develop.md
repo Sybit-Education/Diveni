@@ -11,9 +11,9 @@ See also:
 
 ### Technical Requirements
 
-- Java 11
+- Java 17
   - Download from SAPMachine <https://sap.github.io/SapMachine/>
-    ![Download_Selection_Java11](../img/Java11_Installer_Selection.png)
+    ![Download_Selection_Java11](../img/Java17_Installer_Selection.png)
   - Select the appropriate installer for your OS
 - Gradle
   - Download from Gradle official site <https://gradle.org/install/>
@@ -36,7 +36,7 @@ See also:
 2. Start backend
    * Open  first terminal and enter these commands:
    * cd /backend
-   * mvn spring-boot:run
+   * gradle bootRun
    * The backend should now be running and accessible at http://localhost:8081
 3. Start frontend
    * Open the second terminal and enter these commands:

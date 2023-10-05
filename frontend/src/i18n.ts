@@ -1,6 +1,7 @@
 import Vue from "vue";
 import VueI18n from "vue-i18n";
 import constants from "./constants";
+import apiService from "@/services/api.service";
 
 Vue.use(VueI18n);
 
@@ -17,10 +18,16 @@ function loadLocaleMessages() {
   return messages;
 }
 
-const locale = localStorage.getItem("locale") || constants.i18nLocale || "de";
-
-export default new VueI18n({
-  locale,
-  fallbackLocale: constants.i18nFallbackLocale || "de",
+const i18n = new VueI18n({
+  locale: localStorage.getItem("locale") || constants.i18nDefaultLocale,
+  fallbackLocale: constants.i18nFallbackLocale,
   messages: loadLocaleMessages(),
 });
+
+if (!localStorage.getItem("locale")) {
+  apiService.getLocaleConfig().then((result) => {
+    i18n.locale = result.locale || constants.i18nDefaultLocale;
+  });
+}
+
+export default i18n;
