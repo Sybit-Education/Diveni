@@ -310,7 +310,9 @@ public class WebSocketServiceTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
-            null);
+            null,
+          false,
+          null);
 
     webSocketService.sendSelectedUserStoryToMembers(session, selectedUserStoryIndex);
 
