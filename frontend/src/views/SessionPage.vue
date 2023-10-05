@@ -5,52 +5,53 @@
         <h1>
           {{
             planningStart
-            ? $t("page.session.during.estimation.title")
-            : $t("page.session.before.title")
+              ? $t("page.session.during.estimation.title")
+              : $t("page.session.before.title")
           }}
         </h1>
       </b-col>
       <b-col cols="auto" class="mr-auto">
-        <copy-session-id-popup 
-          v-if="planningStart" 
-          class="float-end" 
-          :session-id="session_sessionID" 
+        <copy-session-id-popup
+          v-if="planningStart"
+          class="float-end"
+          :session-id="session_sessionID"
         />
       </b-col>
       <b-col cols="auto">
-        <session-close-button 
-          :is-planning-start="planningStart" 
-          :user-story-mode="session_userStoryMode" 
+        <session-close-button
+          :is-planning-start="planningStart"
+          :user-story-mode="session_userStoryMode"
         />
       </b-col>
     </b-row>
 
     <div v-if="!planningStart">
-      <copy-session-id-popup 
+      <copy-session-id-popup
         :text-before-session-i-d="$t('page.session.before.text.beforeID')"
-        :session-id="session_sessionID" 
-        :text-after-session-i-d="$t('page.session.before.text.afterID')" 
+        :session-id="session_sessionID"
+        :text-after-session-i-d="$t('page.session.before.text.afterID')"
       />
+
       <h4 class="text-center m-3">
         {{ $t("page.session.before.text.waiting") }}
         <sub><b-icon-three-dots animation="fade" font-scale="1" /></sub>
       </h4>
 
       <b-row class="d-flex justify-content-center overflow-auto" style="max-height: 500px">
-        <kick-user-wrapper 
-          v-for="member of members" 
-          :key="member.memberID" 
-          class="m-4" 
+        <kick-user-wrapper
+          v-for="member of members"
+          :key="member.memberID"
+          class="m-4"
           child="RoundedAvatar"
-          :member="member" 
+          :member="member"
         />
       </b-row>
       <b-row>
         <b-col class="text-center">
-          <session-start-button 
-            @clicked="onPlanningStarted" 
-            :members="members" 
-            :hostVoting="session_hostVoting" 
+          <session-start-button
+            @clicked="onPlanningStarted"
+            :members="members"
+            :hostVoting="session_hostVoting"
           />
         </b-col>
       </b-row>
@@ -69,11 +70,12 @@
           </b-button>
         </b-col>
         <b-col cols="auto">
-          <estimate-timer 
-            :start-timestamp="timerTimestamp" 
+          <estimate-timer
+            :start-timestamp="timerTimestamp"
             :pause-timer="estimateFinished"
-            :duration="timerCountdownNumber" 
-            @timerFinished="sendVotingFinishedMessage" 
+            :duration="timerCountdownNumber"
+            :votingStarted="planningStart"
+            @timerFinished="sendVotingFinishedMessage"
           />
         </b-col>
       </b-row>
@@ -83,26 +85,13 @@
         {{ membersPending.length }} /
         {{ membersPending.length + membersEstimated.length }}
       </h4>
-
-      <div id="demo">
-        <div v-if="membersEstimated.length === membersPending.length + membersEstimated.length && !session_hostVoting"
-          style="display: none">
-          {{ (estimateFinished = true) }}
-        </div>
-        <div
-          v-if="membersEstimated.length === membersPending.length + membersEstimated.length && (session_hostVoting && hostEstimation != '')"
-          style="display: none">
-          {{ (estimateFinished = true) }}
-        </div>
-      </div>
-
       <b-row v-if="!estimateFinished" class="my-1 d-flex justify-content-center flex-wrap">
         <kick-user-wrapper
-         v-for="member of membersPending" 
-          :key="member.memberID" 
-          class="mx-2" 
+          v-for="member of membersPending"
+          :key="member.memberID"
+          class="mx-2"
           child="RoundedAvatar"
-          :member="member" 
+          :member="member"
         />
       </b-row>
       <hr />
@@ -125,31 +114,31 @@
       </h4>
       <b-row class="my-1 d-flex justify-content-center flex-wrap overflow-auto" style="max-height: 500px"
         v-if="highlightedMembers.includes(adminID)">
-        <session-admin-card 
+        <session-admin-card
           v-if="safedHostVoting && estimateFinished || hostEstimation !== ''"
-          :currentEstimation="hostEstimation" 
+          :currentEstimation="hostEstimation"
           :estimateFinished="estimateFinished"
-          :highlight="highlightedMembers.includes(adminID) || highlightedMembers.length === 0" 
+          :highlight="highlightedMembers.includes(adminID) || highlightedMembers.length === 0"
         />
         <kick-user-wrapper
-          v-for="member of estimateFinished ? members : membersEstimated" 
+          v-for="member of estimateFinished ? members : membersEstimated"
           :key="member.memberID"
           child="SessionMemberCard" :member="member" :props="{
               estimateFinished: estimateFinished,
               highlight:
                 highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0,
-          }" 
+          }"
         />
       </b-row>
       <b-row class="my-1 d-flex justify-content-center flex-wrap overflow-auto" style="max-height: 500px" v-else>
-        <kick-user-wrapper 
-          v-for="member of estimateFinished ? members : membersEstimated" 
+        <kick-user-wrapper
+          v-for="member of estimateFinished ? members : membersEstimated"
           :key="member.memberID"
           child="SessionMemberCard" :member="member" :props="{
               estimateFinished: estimateFinished,
               highlight:
                 highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0,
-            }" 
+            }"
         />
         <session-admin-card
           v-if="safedHostVoting && estimateFinished || hostEstimation !== ''"
@@ -188,19 +177,19 @@
           :card-set="voteSet"
           :show-estimations="planningStart"
           :initial-stories="userStories"
-          :show-edit-buttons="true" 
-          :select-story="true" 
+          :show-edit-buttons="true"
+          :select-story="true"
           @userStoriesChanged="onUserStoriesChanged"
-          @selectedStory="onSelectedStory($event)" 
+          @selectedStory="onSelectedStory($event)"
         />
       </b-col>
       <b-col cols="8">
-        <user-story-descriptions 
-          :card-set="voteSet" 
-          :initial-stories="userStories" 
+        <user-story-descriptions
+          :card-set="voteSet"
+          :initial-stories="userStories"
           :edit-description="true"
-          :index="index" 
-          @userStoriesChanged="onUserStoriesChanged" 
+          :index="index"
+          @userStoriesChanged="onUserStoriesChanged"
         />
       </b-col>
     </b-row>
@@ -241,18 +230,19 @@ export default Vue.extend({
     SessionAdminCard,
   },
   props: {
-    adminID: { type: String, required: true },
-    sessionID: { type: String, required: true },
-    voteSetJson: { type: String, required: true },
-    sessionState: { type: String, required: true },
-    timerSecondsString: { type: String, required: true },
+    adminID: { type: String, required: false },
+    sessionID: { type: String, required: false },
+    voteSetJson: { type: String, required: false },
+    sessionState: { type: String, required: false },
+    timerSecondsString: { type: String, required: false },
     hostVoting: { type: String, required: true },
     startNewSessionOnMountedString: {
       type: String,
       required: false,
       default: "false",
     },
-    userStoryMode: { type: String, required: true },
+    userStoryMode: { type: String, required: false },
+    rejoined: { type: String, required: false, default: "true" },
   },
   data() {
     return {
@@ -309,14 +299,18 @@ export default Vue.extend({
     webSocketIsConnected(isConnected) {
       if (isConnected) {
         console.debug("SessionPage: member connected to websocket");
-        this.registerAdminPrincipalOnBackend();
-        this.subscribeWSMemberUpdated();
-        this.requestMemberUpdate();
-        this.subscribeOnTimerStart();
-        this.subscribeWSNotification();
-        if (this.startNewSessionOnMountedString === "true") {
-          this.sendRestartMessage();
-        }
+        setTimeout(() => {
+          this.registerAdminPrincipalOnBackend();
+          this.subscribeWSMemberUpdated();
+          this.requestMemberUpdate();
+          this.subscribeOnTimerStart();
+          if (this.rejoined === "false") {
+            this.subscribeWSNotification();
+          }
+          if (this.startNewSessionOnMountedString === "true") {
+            this.sendRestartMessage();
+          }
+        }, 300);
         setTimeout(() => {
           if (this.members.length === 0) {
             this.requestMemberUpdate();
@@ -333,9 +327,15 @@ export default Vue.extend({
         });
       }
     },
+    membersEstimated() {
+      if (this.membersPending.length  === 0 && this.membersEstimated.length > 0) {
+        this.estimateFinished = true;
+      }
+    },
   },
   async created() {
     this.copyPropsToData();
+    this.$store.commit("clearStoreWithoutUserStories");
     if (!this.session_sessionID || !this.session_adminID) {
       //check for cookie
       await this.checkAdminCookie();
@@ -350,11 +350,12 @@ export default Vue.extend({
     window.addEventListener("beforeunload", this.sendUnregisterCommand);
   },
   mounted() {
-    this.voteSet = JSON.parse(this.session_voteSetJson);
+    if (this.session_voteSetJson) {
+      this.voteSet = JSON.parse(this.session_voteSetJson);
+    }
     this.connectToWebSocket();
     if (this.session_sessionState === Constants.memberUpdateCommandStartVoting) {
       this.planningStart = true;
-      this.sendRestartMessage();
     } else if (this.session_sessionState === Constants.memberUpdateCommandVotingFinished) {
       this.planningStart = true;
       this.estimateFinished = true;
@@ -402,13 +403,15 @@ export default Vue.extend({
       }
     },
     copyPropsToData() {
-      this.session_adminID = this.adminID;
-      this.session_sessionID = this.sessionID;
-      this.session_sessionState = this.sessionState;
-      this.session_timerSecondsString = this.timerSecondsString;
-      this.session_voteSetJson = this.voteSetJson;
-      this.session_userStoryMode = this.userStoryMode;
-      this.session_hostVoting = (String(this.hostVoting).toLowerCase() === 'true');
+      if (this.adminID) {
+        this.session_adminID = this.adminID;
+        this.session_sessionID = this.sessionID;
+        this.session_sessionState = this.sessionState;
+        this.session_timerSecondsString = this.timerSecondsString;
+        this.session_voteSetJson = this.voteSetJson;
+        this.session_userStoryMode = this.userStoryMode;
+        this.session_hostVoting = (String(this.hostVoting).toLowerCase() === 'true');
+      }
     },
     assignSessionToData(session) {
       if (Object.keys(session).length !== 0) {
@@ -438,7 +441,9 @@ export default Vue.extend({
       this.timerCountdownNumber = parseInt(this.session_timerSecondsString, 10);
       //reconnect and reload member
       this.connectToWebSocket();
-      this.requestMemberUpdate();
+      setTimeout(() => {
+        this.subscribeWSNotification();
+      }, 300);
     },
     async onUserStoriesChanged({ us, idx, doRemove }) {
       console.log(`stories: ${us}`);
@@ -462,7 +467,7 @@ export default Vue.extend({
             if (response.status === 200) {
               us = this.userStories.map((s) =>
                 s.title === us[idx].title && s.description === us[idx].description
-                  ? { ...s, jiraId: response.data }
+                  ? { ...s, id: response.data }
                   : s
               );
               console.log(`assigned id: ${us[idx].id}`);
@@ -531,6 +536,10 @@ export default Vue.extend({
       }
     },
     onSelectedStory($event) {
+      if (this.planningStart) {
+        const endPoint = Constants.webSocketAdminSelectedUserStoryRoute;
+        this.$store.commit("sendViaBackendWS", { endPoint, data: $event });
+      }
       this.index = $event;
     },
     connectToWebSocket() {
@@ -561,9 +570,9 @@ export default Vue.extend({
     },
     sendVotingFinishedMessage() {
       if (!this.estimateFinished) {
-        this.estimateFinished = true;
         const endPoint = Constants.webSocketVotingFinishedRoute;
         this.$store.commit("sendViaBackendWS", { endPoint });
+        this.estimateFinished = true;
       }
     },
     sendRestartMessage() {

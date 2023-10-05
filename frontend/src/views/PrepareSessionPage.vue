@@ -12,22 +12,21 @@
         :title="$t('session.prepare.step.selection.mode.description.withoutUS.tab.label')"
         :title-link-class="linkClass(0)"
       >
-        <stroy-points-component/>
+        <stroy-points-component />
       </b-tab>
-      <b-tab :title="$t('session.prepare.step.selection.mode.description.withUS.tab.label')"
-             :title-link-class="linkClass(1)">
-        <user-story-component class="mg_top_2_per"/>
+      <b-tab
+        :title="$t('session.prepare.step.selection.mode.description.withUS.tab.label')"
+        :title-link-class="linkClass(1)"
+      >
+        <user-story-component class="mg_top_2_per" />
         <input
           id="fileUpload"
           type="file"
-          hidden accept="text/csv"
+          hidden
+          accept="text/csv"
           @change="importStory($event.target.files)"
         />
-        <b-button
-          block color="primary"
-          elevation="2"
-          @click="openFileUploader()"
-        >
+        <b-button block color="primary" elevation="2" @click="openFileUploader()">
           {{ $t("session.prepare.step.selection.mode.description.withUS.importButton") }}
         </b-button>
       </b-tab>
@@ -36,7 +35,7 @@
         :title="$t('session.prepare.step.selection.mode.description.withIssueTracker.tab.label')"
         :title-link-class="linkClass(2)"
       >
-        <jira-component class="mg_top_2_per"/>
+        <jira-component class="mg_top_2_per" />
       </b-tab>
     </b-tabs>
     <h4 class="mt-4">
@@ -121,9 +120,9 @@ import CardSetComponent from "../components/CardSetComponent.vue";
 import UserStoryComponent from "../components/UserStoryComponent.vue";
 import JiraComponent from "../components/JiraComponent.vue";
 import StroyPointsComponent from "@/components/StroyPointsComponent.vue";
-import constants from "../constants";
 import UserStory from "@/model/UserStory";
 import papaparse from "papaparse";
+import apiService from "@/services/api.service";
 
 export default Vue.extend({
   name: "PrepareSessionPage",
@@ -140,8 +139,8 @@ export default Vue.extend({
       timer: 30,
       warningWhenUnderZero: "",
       tabIndex: 0,
+      isIssueTrackerEnabled: false,
       hostVoting: false,
-      isIssueTrackerEnabled: constants.isIssueTrackerEnabled,
     };
   },
   computed: {
@@ -172,6 +171,12 @@ export default Vue.extend({
     this.tabIndex = isNaN(parsedTabIndex) ? 0 : parsedTabIndex;
   },
   mounted() {
+    apiService.getIssueTrackerConfig().then((result) => {
+      this.isIssueTrackerEnabled =
+        result.isJiraCloudEnabled === "true" ||
+        result.isJiraServerEnabled === "true" ||
+        result.isAzureDevOpsEnabled === "true";
+    });
     this.$store.commit("setUserStories", { stories: [] });
   },
   methods: {
@@ -228,6 +233,7 @@ export default Vue.extend({
           voteSetJson: JSON.stringify(session.sessionConfig.set),
           sessionState: session.sessionState,
           userStoryMode: session.sessionConfig.userStoryMode,
+          rejoined: "false",
           hostVoting: this.hostVoting.toString(),
         },
       });

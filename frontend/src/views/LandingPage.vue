@@ -61,7 +61,7 @@
             Every member of team could use your defined set to vote the selected user story.
           </b-card-text>
           <b-card-text>
-            If erverybody has voted, DIVENI shows results and randomly selects two voters having
+            If everybody has voted, DIVENI shows results and randomly selects two voters having
             voted minimum / maximum to discuss their estimation.
           </b-card-text>
           <b-card-text> After discussion you could repeat estimation. </b-card-text>
@@ -117,7 +117,7 @@ export default Vue.extend({
               set: Array<string>;
               timerSeconds: number;
               userStories: Array<{
-                jiraId: number | null;
+                id: number | null;
                 title: string;
                 description: string;
                 estimation: string | null;

@@ -37,7 +37,7 @@
             "addUserStory": "Hinzufügen"
           },
           "placeholder": {
-            "userStoryTitle": "User Story Titel",
+            "userStoryTitle": "Titel der User Story",
             "userStoryDescription": "Beschreibung und Akzeptanzkriterien...",
             "searchUserStories": "User Stories durchsuchen..."
           },
@@ -55,7 +55,7 @@
           "buttons": {
             "new": "Neu",
             "result": "Ergebnisse anzeigen",
-            "finish": "Beende die Session",
+            "finish": "Sitzung beenden",
             "addHostVoting": "Host darf mitabstimmen",
             "removeHostVoting": "Host darf nicht mitabstimmen"
           }
@@ -82,9 +82,9 @@
     },
     "results": {
       "title": "Ergebnisse",
-      "noUserStories": "Keine User Stories sind definiert...",
+      "noUserStories": "Es sind keine User Stories definiert ...",
       "button": {
-        "download": "Download als CSV-Datei",
+        "download": "Als CSV-Datei herunterladen",
         "home": "Zur Startseite"
       }
     },
@@ -135,7 +135,7 @@
       "waiting": "Warte, bis der Organisator die Schätzrunde startet",
       "button": {
         "leave": {
-          "label": "Session verlassen"
+          "label": "Sitzung verlassen"
         }
       },
       "hostLeft": "Warte, bis der Organisator die Sitzung wieder betritt..."

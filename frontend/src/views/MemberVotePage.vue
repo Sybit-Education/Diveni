@@ -23,6 +23,7 @@
             :start-timestamp="timerTimestamp"
             :pause-timer="estimateFinished || pauseSession"
             :duration="timerCountdownNumber"
+            :votingStarted="isStartVoting"
           />
         </b-col>
       </b-row>
@@ -147,6 +148,7 @@
               :show-estimations="true"
               :initial-stories="userStories"
               :show-edit-buttons="false"
+              :host-selected-story-index="hostSelectedStoryIndex"
               @selectedStory="onSelectedStory($event)"
             />
           </div>
@@ -167,6 +169,7 @@
             :show-estimations="true"
             :initial-stories="userStories"
             :show-edit-buttons="false"
+            :host-selected-story-index="hostSelectedStoryIndex"
             @selectedStory="onSelectedStory($event)"
           />
         </div>
@@ -223,6 +226,7 @@ export default Vue.extend({
   data() {
     return {
       index: 0,
+      hostSelectedStoryIndex: null,
       draggedVote: null,
       voteSet: [] as string[],
       timerCountdownNumber: 0,
@@ -278,6 +282,9 @@ export default Vue.extend({
         name: this.name,
       };
     },
+    selectedUserStoryIndex() {
+      return this.$store.state.selectedUserStoryIndex;
+    },
   },
   watch: {
     memberUpdates(updates) {
@@ -313,9 +320,11 @@ export default Vue.extend({
         this.leaveMeeting();
       }
     },
+    selectedUserStoryIndex(index) {
+      this.hostSelectedStoryIndex = index;
+    },
   },
   created() {
-    // window.addEventListener("beforeunload", this.sendUnregisterCommand);
     this.timerCountdownNumber = JSON.parse(this.timerSecondsString);
   },
   mounted() {
@@ -328,9 +337,6 @@ export default Vue.extend({
       this.goToJoinPage();
     }
     this.voteSet = JSON.parse(this.voteSetJson);
-  },
-  beforeDestroy() {
-    this.sendUnregisterCommand();
   },
   methods: {
     isAdminHighlighted() {
@@ -361,11 +367,6 @@ export default Vue.extend({
       this.draggedVote = vote;
       const endPoint = `${Constants.webSocketVoteRoute}`;
       this.$store.commit("sendViaBackendWS", { endPoint, data: vote });
-    },
-    sendUnregisterCommand() {
-      const endPoint = `${Constants.webSocketUnregisterRoute}`;
-      this.$store.commit("sendViaBackendWS", { endPoint, data: null });
-      this.$store.commit("clearStore");
     },
     goToJoinPage() {
       this.$router.push({ name: "JoinPage" });

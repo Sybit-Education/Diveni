@@ -10,26 +10,6 @@
 
 ---
 
-## Hacktoberfest 2022
-
-**Update 2022-11-02: Many thanks all contributors supporting us during Hacktoberfest 2022!** We are happy to announce that we had **15 PRs** where **11 PRs** have been merged successful during Hacktoberfest 🚀 
-
-
-Diveni participates on Hacktoberfest 2022! We are looking forward to your support to improve this awesome app!
-
-How to contribute:
-1) ⭐ the repository
-2) Connect to our Discord: [![Discord](https://img.shields.io/discord/935641426216222730?color=%237289DA&label=Discord&logo=Discord&logoColor=%237289DA)](https://discord.gg/7JmRyn5dc6)
-3) Pick an existing [issue tagged `hacktoberfest`](https://github.com/Sybit-Education/Diveni/issues?q=is%3Aissue+is%3Aopen+label%3Ahacktoberfest) or create a new one (new feature or bug fixing)
-4) Fork the repository and start working on your branch
-5) Create a Pull Request to the original repo and wait for a code review
-6) Have fun and learn new things
-
-Happy coding 🚀
-
-
----
-
 ![DIVENI Logo](docs/assets/diveni_banner.png)
 
 WebApp to do Planning Poker with remote teams using external issue tracker as source of stories.
@@ -45,6 +25,28 @@ Supported issue trackers:
 
 see: [Diveni Website](https://sybit-education.github.io/Diveni/)
 
+---
+
+## Hacktoberfest
+
+Diveni participates on [Hacktoberfest](https://hacktoberfest.com/)! We are looking forward to your support to improve this awesome app!
+
+How to contribute:
+1) ⭐ the repository
+2) Connect to our Discord: [![Discord](https://img.shields.io/discord/935641426216222730?color=%237289DA&label=Discord&logo=Discord&logoColor=%237289DA)](https://discord.gg/7JmRyn5dc6).
+   Do not hesitate to ask, if there are questions.
+4) Pick an existing [issue tagged `hacktoberfest`](https://github.com/Sybit-Education/Diveni/issues?q=is%3Aissue+is%3Aopen+label%3Ahacktoberfest) or create a new one (new feature or bug fixing).
+   To prevent double work, it is a good idea to comment within the issue, that you take it over. someone of the maintainers will assign it to you if we see any progress.
+5) Fork the repository and start working on your branch
+6) Create a Pull Request to the original repo and wait for a code review
+7) Have fun and learn new things
+
+Happy coding 🚀
+
+### Hacktoberfest 2022
+
+Many thanks all contributors supporting us during Hacktoberfest 2022!
+We are happy to announce that we had **15 PRs** where **11 PRs** have been merged successful during Hacktoberfest 🚀 
 
 ---
 
@@ -89,7 +91,7 @@ npm run serve
  
 #### Backend
 
-- gradle, springboot, java11
+- gradle, springboot, java17
 - switch to directory ``backend`` first
 - database must be started before
 
