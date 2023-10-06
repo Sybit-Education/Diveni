@@ -7,28 +7,7 @@
             v-for="item of userStoryMode === jiraTag ? allCardSetsWithJiraMode : allCardSets"
             :key="item.position"
             class="swipe-card my-5 mx-5"
-            :class="[selectedCardSet.name === item.name ? 'selectedCard' : 'inActiveCard',
-                    /*No_US || With_US Mode */
-                    item.position === 1 && theme ==='light-theme' && userStoryMode !== jiraTag ? 'fibo' : '',
-                    item.position === 2 && theme ==='light-theme' && userStoryMode !== jiraTag ? 'shirt' : '',
-                    item.position === 3 && theme ==='light-theme' && userStoryMode !== jiraTag ? 'hourEstimation' : '',
-                    item.position === 4 && theme ==='light-theme' && userStoryMode !== jiraTag ? 'numbers' : '',
-                    item.position === 5 && theme ==='light-theme' && userStoryMode !== jiraTag ? 'ownSet': '',
-
-                    item.position === 1 && theme ==='dark-theme' && userStoryMode !== jiraTag ? 'fibo-DarkMode' : '',
-                    item.position === 2 && theme ==='dark-theme' && userStoryMode !== jiraTag ? 'shirt-DarkMode' : '',
-                    item.position === 3 && theme ==='dark-theme' && userStoryMode !== jiraTag ? 'hourEstimation-DarkMode' : '',
-                    item.position === 4 && theme ==='dark-theme' && userStoryMode !== jiraTag ? 'numbers-DarkMode' : '',
-                    item.position === 5 && theme ==='dark-theme' && userStoryMode !== jiraTag ? 'ownSet-DarkMode': '',
-                    /*Jira Mode */
-                    item.position === 1 && theme ==='light-theme' && userStoryMode === jiraTag ? 'fibo' : '',
-                    item.position === 2 && theme ==='light-theme' && userStoryMode === jiraTag ? 'hourEstimation' : '',
-                    item.position === 3 && theme ==='light-theme' && userStoryMode === jiraTag ? 'numbers' : '',
-
-                    item.position === 1 && theme ==='dark-theme' && userStoryMode === jiraTag ? 'fibo-DarkMode' : '',
-                    item.position === 2 && theme ==='dark-theme' && userStoryMode === jiraTag ? 'hourEstimation-DarkMode' : '',
-                    item.position === 3 && theme ==='dark-theme' && userStoryMode === jiraTag ? 'numbers-DarkMode' : '',
-                    ]"
+            :class="getClasses(item)"
             @click="onCardSetSelected(item)"
           >
             <div id="text">
@@ -218,6 +197,27 @@ export default Vue.extend({
       }
       this.emitChanges();
     },
+    getClasses(item) {
+      return `${this.getCardActiveClass(item)} ${this.getPictureClass(item)}`;
+    },
+    getCardActiveClass(item) {
+      return this.selectedCardSet.name === item.name ? 'selectedCard' : 'inActiveCard';
+    },
+    getPictureClass(item) {
+      if (this.userStoryMode !== this.jiraTag) {
+        return this.theme + item.position;
+      }
+      switch (item.position) {
+        case 1:
+          return this.theme + item.position;
+        case 2:
+          return this.theme + "3";
+        case 3:
+          return this.theme + "4";
+        default:
+          break;
+      }
+    }
   },
 });
 </script>
@@ -248,49 +248,49 @@ export default Vue.extend({
   border-radius: var(--buttonShape);
 }
 
-.fibo {
-  background-image: url("@/assets/preparePage/Fibonacci-LightMode.png");
-  background-size: cover;
-  border-radius: var(--buttonShape);
-  box-shadow: 10px 10px 5px #ccc;
+.light-theme1 {
+    background-image: url("@/assets/preparePage/Fibonacci-LightMode.png") !important;
+    background-size: cover !important;
+    border-radius: var(--buttonShape) !important;
+    box-shadow: 10px 10px 5px #ccc !important;
 }
 
-.shirt{
+.light-theme2{
   background-image: url("@/assets/preparePage/TShirt-LightMode.png");
   background-size: cover;
   border-radius: var(--buttonShape);
   box-shadow: 10px 10px 5px #ccc;
 }
 
-.hourEstimation {
+.light-theme3 {
   background-image: url("@/assets/preparePage/Hour-LightMode.png");
   background-size: cover;
   border-radius: var(--buttonShape);
   box-shadow: 10px 10px 5px #ccc;
 }
 
-.numbers {
+.light-theme4 {
   background-image: url("@/assets/preparePage/Numbers-LightMode.png");
   background-size: cover;
   border-radius: var(--buttonShape);
   box-shadow: 10px 10px 5px #ccc;
 }
 
-.ownSet {
+.light-theme5 {
   background-image: url("@/assets/preparePage/OwnSet-LightMode.png");
   background-size: cover;
   border-radius: var(--buttonShape);
   box-shadow: 10px 10px 5px #ccc;
 }
 
-.fibo-DarkMode {
+.dark-theme1 {
   width: 226px;
   height: 303px;
   display: block;
   position: relative;
 }
 
-.fibo-DarkMode::after {
+.dark-theme1::after {
   background-image: url("@/assets/preparePage/Fibonacci-DarkMode.png");
   background-size: cover;
   content: "";
@@ -304,14 +304,14 @@ export default Vue.extend({
   border-radius: var(--buttonShape);
 }
 
-.shirt-DarkMode {
+.dark-theme2 {
   width: 226px;
   height: 303px;
   display: block;
   position: relative;
 }
 
-.shirt-DarkMode::after{
+.dark-theme2::after{
   background-image: url("@/assets/preparePage/TShirt-DarkMode.png");
   background-size: cover;
   content: "";
@@ -325,14 +325,14 @@ export default Vue.extend({
   border-radius: var(--buttonShape);
 }
 
-.hourEstimation-DarkMode {
+.dark-theme3 {
   width: 226px;
   height: 303px;
   display: block;
   position: relative;
 }
 
-.hourEstimation-DarkMode::after {
+.dark-theme3::after {
   background-image: url("@/assets/preparePage/Hour-DarkMode.png");
   background-size: cover;
   content: "";
@@ -346,14 +346,14 @@ export default Vue.extend({
   border-radius: var(--buttonShape);
 }
 
-.numbers-DarkMode {
+.dark-theme4 {
   width: 226px;
   height: 303px;
   display: block;
   position: relative;
 }
 
-.numbers-DarkMode::after {
+.dark-theme4::after {
   background-image: url("@/assets/preparePage/Numbers-DarkMode.png");
   background-size: cover;
   content: "";
@@ -367,14 +367,14 @@ export default Vue.extend({
   border-radius: var(--buttonShape);
 }
 
-.ownSet-DarkMode {
+.dark-theme5 {
   width: 226px;
   height: 303px;
   display: block;
   position: relative;
 }
 
-.ownSet-DarkMode::after {
+.dark-theme5::after {
   background-image: url("@/assets/preparePage/OwnSet-DarkMode.png");
   background-size: cover;
   content: "";
