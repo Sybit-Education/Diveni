@@ -13,6 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 import static io.diveni.backend.controller.NewsController.*;
@@ -42,7 +43,7 @@ public class GithubApiService {
     this.client = client;
   }
 
-  public PullRequest[] getPullRequests(String state, int perPage, int page) {
+  public PullRequest[] getPullRequests(String state, boolean isMerged, int perPage, int page) {
 
     HttpHeaders headers = new HttpHeaders();
     if (authToken != null && !authToken.equals("null")) {
@@ -74,7 +75,17 @@ public class GithubApiService {
       throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, ErrorMessages.serverLimitReachedMessage);
     }
     PullRequest[] body = data.getBody();
-    Arrays.sort(body, (o1, o2) ->o2.getUpdatedAt().compareTo(o1.getUpdatedAt()));
+
+    Comparator<PullRequest> sortOrder;
+
+    if (isMerged) {
+      body = Arrays.stream(body).filter(e -> e.getMergedAt() != null).toArray(PullRequest[]::new);
+      sortOrder = (o1, o2) -> o2.getMergedAt().compareTo(o1.getMergedAt());
+    } else {
+      sortOrder = (o1, o2) -> Integer.compare(o2.getNumber(),o1.getNumber());
+    }
+
+    Arrays.sort(body, sortOrder);
     logger.debug("getPullRequests({},{},{})", state, perPage, page);
 
     return body;
