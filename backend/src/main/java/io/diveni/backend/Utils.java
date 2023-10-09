@@ -7,6 +7,7 @@ package io.diveni.backend;
 
 import java.net.URI;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Base64;
 import java.util.Date;
@@ -66,5 +67,12 @@ public class Utils {
 
   public static String getTimestampISO8601(Date date) {
     return dateFormatISO8601.format(date);
+  }
+
+  public static Date getDateFromString(String dateString) throws ParseException {
+    TimeZone tz = TimeZone.getTimeZone("UTC");
+    DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+    df.setTimeZone(tz);
+    return df.parse(dateString);
   }
 }
