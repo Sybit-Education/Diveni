@@ -74,7 +74,7 @@ public class GithubApiService {
       throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, ErrorMessages.serverLimitReachedMessage);
     }
     PullRequest[] body = data.getBody();
-    Arrays.sort(body, (o1, o2) -> Integer.compare(o2.getNumber(), o1.getNumber()));
+    Arrays.sort(body, (o1, o2) ->o2.getUpdatedAt().compareTo(o1.getUpdatedAt()));
     logger.debug("getPullRequests({},{},{})", state, perPage, page);
 
     return body;

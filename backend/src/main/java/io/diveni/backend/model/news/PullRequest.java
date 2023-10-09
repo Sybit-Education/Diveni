@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Map;
 
 @Data
@@ -22,6 +23,9 @@ public class PullRequest {
 
   @JsonProperty("merged_at")
   private LocalDate mergedAt;
+
+  @JsonProperty("updated_at")
+  private LocalDateTime updatedAt;
 
   @JsonProperty("user_type")
   private String userType;
