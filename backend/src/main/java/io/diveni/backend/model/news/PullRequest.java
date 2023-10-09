@@ -22,7 +22,7 @@ public class PullRequest {
   private String title;
 
   @JsonProperty("merged_at")
-  private LocalDate mergedAt;
+  private LocalDateTime mergedAt;
 
   @JsonProperty("updated_at")
   private LocalDateTime updatedAt;

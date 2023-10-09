@@ -46,4 +46,5 @@ export interface PullRequestDto{
   title: string;
   merged_at: string
   user_type: string
+  updated_at: string
 }

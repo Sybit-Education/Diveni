@@ -15,7 +15,7 @@
           <b-card
             align="center"
             border-variant="secondary"
-            :header="`${card.merged_at}`"
+            :header="`${card.updated_at}`"
             footer-tag="footer"
             header-border-variant="secondary">
             <b-card-text>{{ card.title }}</b-card-text>
@@ -37,6 +37,7 @@ import Vue from 'vue'
 import apiService from "@/services/api.service";
 import {PullRequestDto} from "@/types";
 import Constants from "@/constants";
+import dateUtil from "@/utils/dateUtil";
 
 
 export default Vue.extend({
@@ -70,6 +71,13 @@ export default Vue.extend({
         }
       }
     },
+    parseDate(data){
+      for (let i = 0; i < data.length; i++) {
+        const pr = data[i];
+        pr.updated_at = dateUtil.convertDate(pr.updated_at)
+      }
+    }
+    ,
     async fetchData(set) {
       if(this.loading){
         return;
@@ -82,6 +90,7 @@ export default Vue.extend({
         while (dataCount < 80 && data.length != 0) {
           data = data.filter(e => e.merged_at != null && e.user_type !== Constants.botUserType)
           dataCount+=data.length;
+          this.parseDate(data)
           this.items = this.items.concat(data);
           localSet++
           data = await apiService.getPullRequests('closed', localSet, Constants.newsPageSize);
