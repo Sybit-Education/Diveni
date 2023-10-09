@@ -96,9 +96,10 @@ class ApiService {
     return response;
   }
 
-  public async getPullRequests(state, page, pageSize): Promise<PullRequestDto[]> {
+  public async getPullRequests(state,isMerged, page, pageSize): Promise<PullRequestDto[]> {
     const queryParams = {
       state: state,
+      is_merged:isMerged,
       per_page: pageSize,
       page: page
     }

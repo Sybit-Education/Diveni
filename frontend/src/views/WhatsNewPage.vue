@@ -85,7 +85,7 @@ export default Vue.extend({
       this.loading = true;
       try {
         let localSet = set;
-        let data: PullRequestDto[] = await apiService.getPullRequests('closed', localSet, Constants.newsPageSize);
+        let data: PullRequestDto[] = await apiService.getPullRequests('closed', true,localSet, Constants.newsPageSize);
         let dataCount = 0;
         while (dataCount < 80 && data.length != 0) {
           data = data.filter(e => e.merged_at != null && e.user_type !== Constants.botUserType)
@@ -93,7 +93,7 @@ export default Vue.extend({
           this.parseDate(data)
           this.items = this.items.concat(data);
           localSet++
-          data = await apiService.getPullRequests('closed', localSet, Constants.newsPageSize);
+          data = await apiService.getPullRequests('closed',true, localSet, Constants.newsPageSize);
         }
         this.currentSet = localSet;
       } catch (e) {
