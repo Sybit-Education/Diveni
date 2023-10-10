@@ -105,7 +105,6 @@ export default Vue.extend({
       }
     },
     handlePageChange(nextPage) {
-      console.log("test")
       if (nextPage === this.totalPages && !this.loading) {
         this.fetchData(++this.apiPage)
       } else {
