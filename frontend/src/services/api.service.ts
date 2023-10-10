@@ -96,12 +96,14 @@ class ApiService {
     return response;
   }
 
-  public async getPullRequests(state,isMerged, page, pageSize): Promise<PullRequestDto[]> {
+  public async getPullRequests(state,sort,direction,isMerged, page, pageSize): Promise<PullRequestDto[]> {
     const queryParams = {
       state: state,
       is_merged:isMerged,
       per_page: pageSize,
-      page: page
+      page: page,
+      sort:sort,
+      direction:direction
     }
     const response = await axios.get(`${constants.backendURL}/news/pull-requests`,
       {

@@ -18,6 +18,8 @@ public class NewsController {
   public static final String PAGE_PARAM = "page";
   public static final String PER_PAGE_PARAM = "per_page";
   public static final String IS_MERGED = "is_merged";
+  public static final String SORT = "sort";
+  public static final String SORT_DIRECTION = "direction";
 
   private GithubApiService service;
 
@@ -28,10 +30,12 @@ public class NewsController {
 
   @GetMapping("/pull-requests")
   public ResponseEntity<PullRequest[]> getPullRequests(@RequestParam(name = STATE_PARAM, defaultValue = "closed") String state,
+                                                       @RequestParam(name = SORT, defaultValue = "created") String sort,
+                                                       @RequestParam(name = SORT_DIRECTION, defaultValue = "asc") String direction,
                                                        @RequestParam(name = IS_MERGED, defaultValue = "false") Boolean isMerged,
                                                        @RequestParam(name = PER_PAGE_PARAM, defaultValue = "50") Integer perPage,
                                                        @RequestParam(name = PAGE_PARAM, defaultValue = "1") Integer page) {
 
-    return ResponseEntity.ok(service.getPullRequests(state, isMerged ,perPage, page));
+    return ResponseEntity.ok(service.getPullRequests(state,sort,direction, isMerged, perPage, page));
   }
 }

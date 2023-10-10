@@ -43,7 +43,7 @@ public class GithubApiService {
     this.client = client;
   }
 
-  public PullRequest[] getPullRequests(String state, boolean isMerged, int perPage, int page) {
+  public PullRequest[] getPullRequests(String state, String sort, String direction, boolean isMerged, int perPage, int page) {
 
     HttpHeaders headers = new HttpHeaders();
     if (authToken != null && !authToken.equals("null")) {
@@ -66,7 +66,8 @@ public class GithubApiService {
     UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(url)
       .queryParam(STATE_PARAM, state)
       .queryParam(PAGE_PARAM, page)
-      .queryParam(PER_PAGE_PARAM, perPage);
+      .queryParam(PER_PAGE_PARAM, perPage)
+      .queryParam(SORT, sort).queryParam(SORT_DIRECTION, direction);
 
     ResponseEntity<PullRequest[]> data;
     try {
@@ -76,16 +77,10 @@ public class GithubApiService {
     }
     PullRequest[] body = data.getBody();
 
-    Comparator<PullRequest> sortOrder;
-
     if (isMerged) {
       body = Arrays.stream(body).filter(e -> e.getMergedAt() != null).toArray(PullRequest[]::new);
-      sortOrder = (o1, o2) -> o2.getMergedAt().compareTo(o1.getMergedAt());
-    } else {
-      sortOrder = (o1, o2) -> Integer.compare(o2.getNumber(),o1.getNumber());
     }
 
-    Arrays.sort(body, sortOrder);
     logger.debug("getPullRequests({},{},{})", state, perPage, page);
 
     return body;
