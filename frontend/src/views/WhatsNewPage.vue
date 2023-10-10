@@ -58,8 +58,9 @@ export default Vue.extend({
     return {
       perPage: Constants.newsPageSize,
       currentPage: 1,
+      apiPage:1,
       items: [] as PullRequestDto[],
-      loading: false
+      loading: false,
     }
   },
   computed: {
@@ -76,7 +77,7 @@ export default Vue.extend({
     }
   },
   mounted() {
-    this.fetchData(1)
+    this.fetchData(this.apiPage)
 
   },
   methods: {
@@ -104,10 +105,10 @@ export default Vue.extend({
       }
     },
     handlePageChange(nextPage) {
+      console.log("test")
       if (nextPage === this.totalPages && !this.loading) {
-        this.fetchData(2)
+        this.fetchData(++this.apiPage)
       } else {
-        // Handle normal page change
         this.currentPage = nextPage;
       }
     }
