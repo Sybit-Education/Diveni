@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.json.JSONObject;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -26,10 +28,7 @@ import com.google.api.client.http.json.JsonHttpContent;
 import com.google.api.client.json.gson.GsonFactory;
 
 import io.diveni.backend.Utils;
-import io.diveni.backend.model.JiraRequestToken;
-import io.diveni.backend.model.Project;
-import io.diveni.backend.model.TokenIdentifier;
-import io.diveni.backend.model.UserStory;
+import io.diveni.backend.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -102,8 +101,14 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
   private static HttpResponse getResponseFromUrl(
       OAuthParameters parameters, GenericUrl jiraUrl, String requestMethod, HttpContent content)
       throws IOException {
+    if (content != null) {
+      content.writeTo(System.out);
+    }
     HttpRequestFactory requestFactory = new NetHttpTransport().createRequestFactory(parameters);
     HttpRequest request = requestFactory.buildRequest(requestMethod, jiraUrl, content);
+    if (request.getContent() != null) {
+      request.getContent().writeTo(System.out);
+    }
     return request.execute();
   }
 
@@ -250,7 +255,11 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
     fields.put("description", story.getDescription());
     if (story.getEstimation() != null) {
       try {
-        fields.put(ESTIMATION_FIELD, Double.parseDouble(story.getEstimation()));
+        if (story.getEstimation().equals("-")) {
+          fields.put(ESTIMATION_FIELD, null);
+        } else {
+          fields.put(ESTIMATION_FIELD, Double.parseDouble(story.getEstimation()));
+        }
       } catch (NumberFormatException e) {
         LOGGER.error("Failed to parse estimation into double!");
         throw new ResponseStatusException(
@@ -263,12 +272,17 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
       OAuthParameters parameters =
           jiraOAuthClient.getParameters(
               accessTokens.get(tokenIdentifier), CONSUMER_KEY, PRIVATE_KEY);
+      //System.out.println("Test: " + new JsonHttpContent(GsonFactory.getDefaultInstance(), content).getData().toString());
+      // still has the ESTIMATION FIELD KEY with its null VALUE
+      for (Object o : content.entrySet()) {
+        System.out.println(" --> " + o);
+      }
       HttpResponse response =
           getResponseFromUrl(
               parameters,
               new GenericUrl(getJiraUrl() + "/issue/" + story.getId()),
               "PUT",
-              new JsonHttpContent(GsonFactory.getDefaultInstance(), content));
+              new CustomJsonHttpContent(GsonFactory.getDefaultInstance(), content));
 
       LOGGER.debug("<-- updateIssue() {}", response.parseAsString());
     } catch (Exception e) {

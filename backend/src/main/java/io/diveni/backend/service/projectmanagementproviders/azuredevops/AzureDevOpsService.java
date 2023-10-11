@@ -210,7 +210,11 @@ public class AzureDevOpsService implements ProjectManagementProviderOAuth2 {
         Map<String, Object> updateEstimation = new HashMap<>();
         updateEstimation.put("op", "replace");
         updateEstimation.put("path", fieldPrefix + API_FIELD_ESTIMATION);
-        updateEstimation.put("value", Double.parseDouble(story.getEstimation()));
+        if (story.getEstimation().equals("-")) {
+          updateEstimation.put("value", null);
+        } else {
+          updateEstimation.put("value", Double.parseDouble(story.getEstimation()));
+        }
         content.add(updateEstimation);
       } catch (NumberFormatException e) {
         LOGGER.error("Failed to parse estimation into double!");

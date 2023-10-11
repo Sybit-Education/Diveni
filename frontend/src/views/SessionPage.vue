@@ -297,6 +297,7 @@ export default Vue.extend({
   mounted() {
     if (this.session_voteSetJson) {
       this.voteSet = JSON.parse(this.session_voteSetJson);
+      this.voteSet = ["-"].concat(this.voteSet);
     }
     this.connectToWebSocket();
     if (this.session_sessionState === Constants.memberUpdateCommandStartVoting) {
