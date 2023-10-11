@@ -58,7 +58,7 @@ export default Vue.extend({
     return {
       perPage: Constants.newsPageSize,
       currentPage: 1,
-      apiPage:1,
+      apiPage: 1,
       items: [] as PullRequestDto[],
       loading: false,
     }
@@ -83,8 +83,7 @@ export default Vue.extend({
   methods: {
     parseDate(data: string | any[]) {
       for (let i = 0; i < data.length; i++) {
-        const pr = data[i];
-        pr.updated_at = dateUtil.convertDate(pr.updated_at)
+        data[i].updated_at = dateUtil.convertDate(data[i].updated_at)
       }
     }
     ,
@@ -95,7 +94,7 @@ export default Vue.extend({
       this.loading = true;
       try {
         let data: PullRequestDto[] = await apiService.getPullRequests('closed', "updated", "desc", true, page, 100);
-        data = data.filter(e => e.merged_at != null && e.user_type !== Constants.botUserType)
+        data = data.filter(e => e.user_type !== Constants.botUserType)
         this.parseDate(data)
         this.items = this.items.concat(data)
       } catch (e) {
