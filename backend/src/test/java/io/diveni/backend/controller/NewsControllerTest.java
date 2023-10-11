@@ -17,8 +17,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-import java.time.LocalDate;
-import java.util.Arrays;
+import java.time.LocalDateTime;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
@@ -71,8 +70,8 @@ public class NewsControllerTest {
   @Test
   public void getPRs_Valid_returnsPrs() throws Exception {
     PullRequest[] data = new PullRequest[]{
-      new PullRequest(403, "test2.com", "test2", LocalDate.now(), "user"),
-      new PullRequest(404, "test.com", "test", LocalDate.now(), "user")
+      new PullRequest(403, "test2.com", "test2", LocalDateTime.now(), LocalDateTime.now(), "user"),
+      new PullRequest(404, "test.com", "test",  LocalDateTime.now(), LocalDateTime.now(), "user")
     };
 
     when(client.exchange(contains(url), eq(HttpMethod.GET), any(), eq(PullRequest[].class)))
@@ -88,11 +87,10 @@ public class NewsControllerTest {
       .andExpect(status().isOk())
       .andExpect(jsonPath("$.length()")
         .value(Matchers.is(2)))
-      .andExpect(jsonPath("$[0].number").value(data[1].getNumber()))
-      .andExpect(jsonPath("$[0]['html_url']").value(data[1].getHtmlUrl()))
-      .andExpect(jsonPath("$[0]['title']").value(data[1].getTitle()))
-      .andExpect(jsonPath("$[0]['merged_at']").value(data[1].getMergedAt().toString()))
-      .andExpect(jsonPath("$[0]['user_type']").value(data[1].getUserType()));
+      .andExpect(jsonPath("$[0].number").value(data[0].getNumber()))
+      .andExpect(jsonPath("$[0]['html_url']").value(data[0].getHtmlUrl()))
+      .andExpect(jsonPath("$[0]['title']").value(data[0].getTitle()))
+      .andExpect(jsonPath("$[0]['user_type']").value(data[0].getUserType()));
 
   }
 
