@@ -226,5 +226,34 @@ a.btn.startButton:focus {
   background-color: var(--topNavigationBarColor) !important;
   border-color: var(--text-primary-color) !important;
 }
+/*scrollbar - firefox*/
+:root{
+  scrollbar-color: #888 rgba(0, 0, 0, 0) !important;
+  scrollbar-width: thin !important;
+}
+/*scrollbar - chrome */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 5px;
+}
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+::-webkit-scrollbar-corner {
+  background: rgba(0,0,0,0);
+}
 
 </style>
