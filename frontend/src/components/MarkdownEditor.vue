@@ -9,6 +9,7 @@
       :placeholder="placeholder"
       initial-edit-type="wysiwyg"
       preview-style="vertical"
+      @blur="getTextValueFromEditor"
     />
   </div>
 </template>
@@ -53,6 +54,7 @@ export default Vue.extend({
   },
   data() {
     return {
+      text: "",
       editorOptions: {
         autofocus: false,
         height: "auto",
@@ -75,6 +77,15 @@ export default Vue.extend({
       },
     };
   },
+  methods: {
+    getTextValueFromEditor() {
+      if (this.$refs.toastuiEditor) {
+        const editor = this.$refs.toastuiEditor as Editor;
+        const editorText = editor.invoke('getMarkdown');
+        this.$emit("textValueChanged", { markdown: editorText});
+      }
+    }
+  }
 });
 </script>
 

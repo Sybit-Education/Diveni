@@ -4,7 +4,7 @@
       <b-list-group-item
         v-for="(story, idx) of userStories"
         v-show="idx === index"
-        :key="story.name"
+        :key="story.id"
         class="border-0"
         variant="outline-secondary"
       >
@@ -23,7 +23,7 @@
             v-show="editDescription"
             class="mx-1"
             :text="(userStories[idx].estimation ? userStories[idx].estimation : '?') + '    '"
-            variant="info"
+            variant="success"
           >
             <b-dropdown-item
               v-for="num in filteredCardSet"
@@ -35,7 +35,7 @@
                 publishChanges(idx);
               "
             >
-              {{ num }}
+              {{ num }} 
             </b-dropdown-item>
           </b-dropdown>
         </div>
@@ -46,11 +46,10 @@
             class="mt-1"
             :disabled="!editDescription"
             :placeholder="$t('page.session.before.userStories.placeholder.userStoryDescription')"
-            @blur="publishChanges(idx)"
+            @textValueChanged="(event) => valueChanged(idx, event)"
           />
         </div>
-        <div v-if="!editDescription">
-          
+        <div v-if="!editDescription"> 
           <b-form-textarea
           id="textarea-auto-height-plaintext"
           class="py-2"
@@ -124,6 +123,10 @@ export default Vue.extend({
     }>;
   },
   methods: {
+    valueChanged(idx, {markdown}) {
+      this.userStories[idx].description = markdown;
+      this.publishChanges(idx);
+    },
     setUserStoryAsActive(index) {
       const stories = this.userStories.map((s) => ({
         id: s.id,

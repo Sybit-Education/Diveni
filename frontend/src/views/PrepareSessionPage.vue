@@ -208,6 +208,7 @@ export default Vue.extend({
           voteSetJson: JSON.stringify(session.sessionConfig.set),
           sessionState: session.sessionState,
           userStoryMode: session.sessionConfig.userStoryMode,
+          rejoined: "false",
         },
       });
     },
