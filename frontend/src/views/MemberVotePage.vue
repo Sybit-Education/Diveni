@@ -23,6 +23,8 @@
             :start-timestamp="timerTimestamp"
             :pause-timer="estimateFinished || pauseSession"
             :duration="timerCountdownNumber"
+            :member="memberID"
+            :votingStarted="isStartVoting"
           />
         </b-col>
       </b-row>
