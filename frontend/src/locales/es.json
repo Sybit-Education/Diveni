@@ -27,10 +27,10 @@
           "waiting": "Esperando a que los miembros se unan"
         },
         "button": "Empezar a planear",
-        "refreshStories": "Actualizar las Historias de Usuario",
+        "refreshStories": "Refresh Userstories",
         "userStories": {
-          "filter" : {
-            "noStoryFound": "No se ha encontrado ninguna historia!"
+          "filter": {
+            "noStoryFound": "No stories found!"
           },
           "button": {
             "addFirstUserStory": "Aún no hay historias... haz clic para añadir historias",
@@ -39,7 +39,7 @@
           "placeholder": {
             "userStoryTitle": "Título de la historia del usuario",
             "userStoryDescription": "Criterios de descripción y aceptación...",
-            "searchUserStories": "Buscar historias de usuarios..."
+            "searchUserStories": "Search user stories..."
           },
           "text": "Haga clic en el título de una historia de usuario para ver la descripción",
           "sum": "Total:"
@@ -164,50 +164,50 @@
                 "descriptionLine2": "Añadir título y descripción a cada historia de usuario",
                 "descriptionLine3": "Utilice el CSV-Import para integrar historias de usuario en su sesión",
                 "descriptionLine4": "First line must contain the field names separated by semicolons: title;description;estimation",
-                "descriptionLine5": "Podrás añadir y editar historias de usuario una vez que hayas iniciado la sesión",
+                "descriptionLine5": "You will be able to add and edit User Stories once you've started the session",
                 "importButton": "Importar historias de usuario",
                 "toastSuccessNotification": "Historias de usuario importadas",
                 "toastErrorNotification": "Error al importar"
               },
               "withIssueTracker": {
                 "tab": {
-                  "label": "Planeando con Issue-Tracker"
+                  "label": "Planning with Issue-Tracker"
                 },
-                "subtitle": "Selecciona Jira para tu Planificación de Poker-Planning",
-                "descriptionLine1": "Inicia sesión con tus credenciales",
-                "descriptionLine2": "Seleccione su proyecto",
-                "descriptionLine3": "Después de hacer clic en la sesión de inicio, serás redirigido a la siguiente página para editar tus historias de usuario",
-                "descriptionLine4": "Podrás añadir y editar historias de usuario una vez que hayas iniciado la sesión",
-                "formSelection": "Por favor, selecciona tu proyecto",
-                "selectedProject": "Proyecto seleccionado: ",
-                "allUserStories": "Todas las historias de usuario",
+                "subtitle": "Select Jira for your Poker-Planning",
+                "descriptionLine1": "Sign in with your credentials",
+                "descriptionLine2": "Select your project",
+                "descriptionLine3": "After you click on start session, you will be redirected to the next page to edit your user stories",
+                "descriptionLine4": "You will be able to add and edit User Stories once you've started the session",
+                "formSelection": "Please select your Project",
+                "selectedProject": "Selected Project: ",
+                "allUserStories": "All User Stories",
                 "dialog": {
-                  "description": "Una nueva pestaña se abrirá inmediatamente, por favor concede acceso a esta aplicación en esta pestaña e introduce el código de verificación aquí."
+                  "description": "A new tab will open immediately, please grant access to this application in this tab and enter the verification code here."
                 },
                 "inputs": {
                   "verificationCode": {
-                    "placeholder": "Código de verificación"
+                    "placeholder": "Verification code"
                   }
                 },
                 "buttons": {
                   "signInWithJiraCloud": {
-                    "label": "Iniciar sesión con Jira Cloud"
+                    "label": "Sign in with Jira Cloud"
                   },
                   "signInWithJiraServer": {
-                    "label": "Iniciar sesión con Jira Server"
+                    "label": "Sign in with Jira Server"
                   },
                   "signInWithAzureDevOps": {
-                    "label": "Iniciar sesión con Azure DevOps"
+                    "label": "Sign in with Azure DevOps"
                   },
                   "selectProject": {
-                    "label": "Seleccione su proyecto jira"
+                    "label": "Select your jira project"
                   },
                   "submit": {
-                    "label": "Enviar"
+                    "label": "Submit"
                   }
                 },
                 "placeholder": {
-                  "searchProjects": "Buscar proyectos..."
+                  "searchProjects": "Search projects..."
                 }
               }
             }
@@ -275,10 +275,10 @@
         "memberLeft": "El miembro abandonó la sesión",
         "memberJoined": "Miembro se unió a la sesión",
         "memberRemoved": "Ha sido eliminado de la sesión por el host",
-        "issueTrackerCredentials": "Credenciales incorrectas",
-        "issueTrackerLoginFailed": "Error al iniciar sesión",
-        "issueTrackerSynchronizeSuccess": "Cambios sincronizados con Issue-Tracker",
-        "issueTrackerSynchronizeFailed": "Error al sincronizar los cambios con Issue-Tracker",
+        "issueTrackerCredentials": "Wrong credentials",
+        "issueTrackerLoginFailed": "Login failed",
+        "issueTrackerSynchronizeSuccess": "Synchronized changes with Issue-Tracker",
+        "issueTrackerSynchronizeFailed": "Failed to synchronize changes with Issue-Tracker",
         "wrongID": "Código de invitación incorrecto",
         "password": "Contraseña incorrecta"
       }
