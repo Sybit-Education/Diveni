@@ -3,7 +3,7 @@ COPY --chown=gradle:gradle . /app/Diveni
 WORKDIR /app/Diveni
 RUN gradle --no-daemon assemble
 
-FROM oracle/graalvm-ce:latest as graalvm-build-stage
+FROM ghcr.io/graalvm/graalvm-ce:ol8-java17 as graalvm-build-stage
 COPY --from=build-stage /app/Diveni/build/libs/backend-1.0.0-SNAPSHOT.jar diveni.jar
 WORKDIR /app/Diveni
 
