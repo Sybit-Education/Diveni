@@ -115,6 +115,14 @@
               "label": "Rejoin"
             }
           }
+        },
+        "analytics": {
+          "title": "Статистика Дивені",
+          "allCreatedSessionsTitle": "Overall",
+          "sessionText": "Sessions",
+          "attendeesText": "Attendees",
+          "lastMonthTitle": "Last Month",
+          "activeTitle": "Currently"
         }
       }
     },
