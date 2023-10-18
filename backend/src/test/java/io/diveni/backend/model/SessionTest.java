@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -44,6 +45,7 @@ public class SessionTest {
             null,
             null,
             null,
+            null,
             false,
             null);
     val sameSession =
@@ -60,6 +62,7 @@ public class SessionTest {
             null,
             null,
             null,
+            null,
             false,
             null);
     val otherSession =
@@ -73,6 +76,7 @@ public class SessionTest {
             new HashMap<>(),
             new ArrayList<>(),
             SessionState.WAITING_FOR_MEMBERS,
+            null,
             null,
             null,
             null,
@@ -104,6 +108,7 @@ public class SessionTest {
             new HashMap<>(),
             new ArrayList<>(),
             SessionState.WAITING_FOR_MEMBERS,
+            null,
             null,
             null,
             null,
@@ -141,6 +146,7 @@ public class SessionTest {
             null,
             null,
             null,
+            null,
             false,
             new AdminVote("10"));
 
@@ -169,6 +175,7 @@ public class SessionTest {
             null,
             null,
             null,
+            null,
             false,
             null);
     val result = session.updateSessionState(newSessionState);
@@ -188,6 +195,7 @@ public class SessionTest {
             new ArrayList<Member>(),
             new HashMap<>(),
             new ArrayList<>(),
+            null,
             null,
             null,
             null,
@@ -217,6 +225,7 @@ public class SessionTest {
             new HashMap<>(),
             new ArrayList<>(),
             SessionState.WAITING_FOR_MEMBERS,
+            null,
             null,
             null,
             null,
@@ -252,6 +261,7 @@ public class SessionTest {
             null,
             null,
             null,
+            null,
             false,
             null);
 
@@ -277,6 +287,7 @@ public class SessionTest {
             List.of(member1, member2, member3),
             new HashMap<>(),
             new ArrayList<>(),
+            null,
             null,
             null,
             null,
@@ -313,6 +324,7 @@ public class SessionTest {
             null,
             null,
             null,
+            null,
             true,
             new AdminVote("XS"));
 
@@ -342,6 +354,7 @@ public class SessionTest {
             List.of(member1, member2, member3, member4),
             new HashMap<>(),
             new ArrayList<>(),
+            null,
             null,
             null,
             null,
@@ -381,6 +394,7 @@ public class SessionTest {
             null,
             null,
             null,
+            null,
             false,
             null);
 
@@ -409,6 +423,7 @@ public class SessionTest {
             null,
             null,
             null,
+            null,
             false,
             null);
 
@@ -429,6 +444,7 @@ public class SessionTest {
             new ArrayList<>(),
             new HashMap<>(),
             new ArrayList<>(),
+            null,
             null,
             null,
             null,
@@ -458,12 +474,36 @@ public class SessionTest {
             null,
             null,
             Utils.getTimestampISO8601(new Date()),
+            null,
             false,
             null);
 
     val result = session.resetTimerTimestamp();
 
     assertNull(result.getTimerTimestamp());
+  }
+
+  @Test
+  public void getSessionCreationTime_works() {
+    val session =
+        new Session(
+            null,
+            null,
+            null,
+            null,
+            null,
+            new ArrayList<>(),
+            new HashMap<>(),
+            new ArrayList<>(),
+            null,
+            null,
+            null,
+            Utils.getTimestampISO8601(new Date()),
+            LocalDate.of(2222, 12, 3),
+            false,
+            null);
+
+    assertEquals(LocalDate.of(2222, 12, 3), session.getCreationTime());
   }
 
   @Test
@@ -482,6 +522,7 @@ public class SessionTest {
             null,
             null,
             Utils.getTimestampISO8601(new Date()),
+            null,
             false,
             null);
 
@@ -505,6 +546,7 @@ public class SessionTest {
             null,
             null,
             Utils.getTimestampISO8601(new Date()),
+            null,
             false,
             null);
 

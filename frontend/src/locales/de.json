@@ -117,6 +117,14 @@
               "label": "Erneut beitreten"
             }
           }
+        },
+        "analytics": {
+          "title": "Diveni's Statistiken",
+          "allCreatedSessionsTitle": "Gesamt",
+          "sessionText": "Sessions",
+          "attendeesText": "Teilnehmer",
+          "lastMonthTitle": "Letzter Monat",
+          "activeTitle": "Derzeit"
         }
       }
     },

@@ -6,6 +6,7 @@
 package io.diveni.backend.model;
 
 import java.util.AbstractMap;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Collections;
@@ -64,6 +65,8 @@ public class Session {
 
   private final String timerTimestamp;
 
+  private final LocalDate creationTime;
+
   private final boolean hostVoting;
 
   private final AdminVote hostEstimation;
@@ -96,6 +99,7 @@ public class Session {
         lastModified,
         accessToken,
         timerTimestamp,
+        creationTime,
         hostVoting,
         hostEstimation);
   }
@@ -145,6 +149,7 @@ public class Session {
           lastModified,
           accessToken,
           timerTimestamp,
+          creationTime,
           hostVoting,
           hostEstimation);
     }
@@ -236,6 +241,7 @@ public class Session {
         lastModified,
         accessToken,
         timerTimestamp,
+        creationTime,
         hostVoting,
         hostEstimation);
   }
@@ -254,6 +260,7 @@ public class Session {
         lastModified,
         accessToken,
         timerTimestamp,
+        creationTime,
         hostVoting,
         hostEstimation);
   }
@@ -279,6 +286,7 @@ public class Session {
         lastModified,
         accessToken,
         timerTimestamp,
+        creationTime,
         hostVoting,
         hostEstimation);
   }
@@ -299,6 +307,7 @@ public class Session {
         lastModified,
         accessToken,
         timerTimestamp,
+        creationTime,
         hostVoting,
         new AdminVote(""));
   }
@@ -317,6 +326,7 @@ public class Session {
         lastModified,
         accessToken,
         timerTimestamp,
+        creationTime,
         hostVoting,
         hostEstimation);
   }
@@ -335,6 +345,7 @@ public class Session {
         lastModified,
         accessToken,
         timerTimestamp,
+        creationTime,
         hostVoting,
         hostEstimation);
   }
@@ -355,6 +366,7 @@ public class Session {
         lastModified,
         accessToken,
         timerTimestamp,
+        creationTime,
         hostVoting,
         hostEstimation);
   }
@@ -377,6 +389,7 @@ public class Session {
         lastModified,
         accessToken,
         timerTimestamp,
+        creationTime,
         hostVoting,
         hostEstimation);
   }
@@ -395,6 +408,7 @@ public class Session {
         lastModified,
         accessToken,
         timestamp,
+        creationTime,
         hostVoting,
         hostEstimation);
   }
@@ -413,6 +427,7 @@ public class Session {
         lastModified,
         accessToken,
         null,
+        creationTime,
         hostVoting,
         hostEstimation);
   }
@@ -431,6 +446,7 @@ public class Session {
         lastModified,
         accessToken,
         timerTimestamp,
+        creationTime,
         hostVoting,
         hostEstimation);
   }
@@ -449,6 +465,7 @@ public class Session {
         lastModified,
         token,
         timerTimestamp,
+        creationTime,
         hostVoting,
         hostEstimation);
   }
@@ -467,6 +484,7 @@ public class Session {
         lastModified,
         accessToken,
         timerTimestamp,
+        creationTime,
         isHostVoting,
         hostEstimation);
   }
@@ -489,6 +507,7 @@ public class Session {
         lastModified,
         accessToken,
         timerTimestamp,
+        creationTime,
         hostVoting,
         new AdminVote(vote));
   }

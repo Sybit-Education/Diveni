@@ -179,6 +179,7 @@ public class WebsocketControllerTest {
             null,
             null,
             null,
+            null,
             false,
             null));
     val adminPrincipal = new AdminPrincipal(sessionID, adminID);
@@ -214,6 +215,7 @@ public class WebsocketControllerTest {
             new HashMap<>(),
             new ArrayList<>(),
             SessionState.WAITING_FOR_MEMBERS,
+            null,
             null,
             null,
             null,
@@ -260,6 +262,7 @@ public class WebsocketControllerTest {
             new HashMap<>(),
             List.of("asdf", "bsdf"),
             SessionState.WAITING_FOR_MEMBERS,
+            null,
             null,
             null,
             null,
@@ -322,6 +325,7 @@ public class WebsocketControllerTest {
             null,
             null,
             null,
+            null,
             false,
             null));
     val adminPrincipal = new AdminPrincipal(sessionID, adminID);
@@ -353,6 +357,7 @@ public class WebsocketControllerTest {
             new HashMap<>(),
             new ArrayList<>(),
             SessionState.WAITING_FOR_MEMBERS,
+            null,
             null,
             null,
             null,
@@ -393,6 +398,7 @@ public class WebsocketControllerTest {
             new HashMap<>(),
             new ArrayList<>(),
             SessionState.START_VOTING,
+            null,
             null,
             null,
             null,
@@ -438,6 +444,7 @@ public class WebsocketControllerTest {
             null,
             null,
             null,
+            null,
             false,
             null));
     val adminPrincipal = new AdminPrincipal(sessionID, adminID);
@@ -478,6 +485,7 @@ public class WebsocketControllerTest {
             null,
             null,
             null,
+            null,
             false,
             null));
     webSocketService.setAdminUser(adminPrincipal);
@@ -514,6 +522,7 @@ public class WebsocketControllerTest {
             new HashMap<>(),
             new ArrayList<>(),
             SessionState.WAITING_FOR_MEMBERS,
+            null,
             null,
             null,
             null,
@@ -557,6 +566,7 @@ public class WebsocketControllerTest {
             null,
             null,
             null,
+            null,
             false,
             null);
     sessionRepo.save(oldSession);
@@ -593,6 +603,7 @@ public class WebsocketControllerTest {
             new HashMap<>(),
             new ArrayList<>(),
             SessionState.WAITING_FOR_MEMBERS,
+            null,
             null,
             null,
             null,
@@ -635,6 +646,7 @@ public class WebsocketControllerTest {
             new HashMap<>(),
             new ArrayList<>(),
             SessionState.WAITING_FOR_MEMBERS,
+            null,
             null,
             null,
             null,

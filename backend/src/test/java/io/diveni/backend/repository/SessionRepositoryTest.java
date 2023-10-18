@@ -48,6 +48,7 @@ public class SessionRepositoryTest {
             null,
             null,
             null,
+            null,
             false,
             null);
 
@@ -72,6 +73,7 @@ public class SessionRepositoryTest {
             new HashMap<>(),
             new ArrayList<>(),
             SessionState.WAITING_FOR_MEMBERS,
+            null,
             null,
             null,
             null,

@@ -117,6 +117,14 @@
               "label": "Rejoindre"
             }
           }
+        },
+        "analytics": {
+          "title": "Statistiques de Diveni",
+          "allCreatedSessionsTitle": "Overall",
+          "sessionText": "Sessions",
+          "attendeesText": "Attendees",
+          "lastMonthTitle": "Last Month",
+          "activeTitle": "Currently"
         }
       }
     },

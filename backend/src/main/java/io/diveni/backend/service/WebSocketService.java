@@ -51,6 +51,8 @@ public class WebSocketService {
 
   @Autowired private SimpMessagingTemplate simpMessagingTemplate;
 
+  @Autowired private DatabaseService databaseService;
+
   @Getter private List<SessionPrincipals> sessionPrincipalList = List.of();
 
   public SessionPrincipals getSessionPrincipals(String sessionID) {
@@ -105,6 +107,7 @@ public class WebSocketService {
                   else return p;
                 })
             .collect(Collectors.toList());
+    databaseService.addRemovedMember(member);
     LOGGER.debug("<-- removeMember()");
   }
 

@@ -46,6 +46,8 @@ public class WebSocketServiceTest {
 
   @InjectMocks private WebSocketService webSocketService;
 
+  @Mock private DatabaseService databaseService;
+
   private final AdminPrincipal defaultAdminPrincipal =
       new AdminPrincipal(Utils.generateRandomID(), Utils.generateRandomID());
 
@@ -171,6 +173,7 @@ public class WebSocketServiceTest {
             null,
             null,
             null,
+            null,
             false,
             null);
 
@@ -197,6 +200,7 @@ public class WebSocketServiceTest {
             new HashMap<>(),
             new ArrayList<>(),
             SessionState.WAITING_FOR_MEMBERS,
+            null,
             null,
             null,
             null,
@@ -230,6 +234,7 @@ public class WebSocketServiceTest {
             new HashMap<>(),
             new ArrayList<>(),
             SessionState.WAITING_FOR_MEMBERS,
+            null,
             null,
             null,
             null,
@@ -268,6 +273,7 @@ public class WebSocketServiceTest {
             new HashMap<>(),
             new ArrayList<>(),
             SessionState.WAITING_FOR_MEMBERS,
+            null,
             null,
             null,
             null,
@@ -311,6 +317,7 @@ public class WebSocketServiceTest {
             null,
             null,
             null,
+            null,
             false,
             null);
 
@@ -344,6 +351,7 @@ public class WebSocketServiceTest {
             null,
             null,
             null,
+            null,
             false,
             null);
     val notification = new Notification(NotificationType.ADMIN_LEFT, null);
@@ -374,6 +382,7 @@ public class WebSocketServiceTest {
             null,
             null,
             null,
+            null,
             false,
             null);
 
@@ -395,6 +404,7 @@ public class WebSocketServiceTest {
             List.of(new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null)),
             new HashMap<>(),
             new ArrayList<>(),
+            null,
             null,
             null,
             null,
@@ -424,6 +434,7 @@ public class WebSocketServiceTest {
             List.of(new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null)),
             new HashMap<>(),
             new ArrayList<>(),
+            null,
             null,
             null,
             null,

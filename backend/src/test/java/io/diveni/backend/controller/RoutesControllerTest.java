@@ -11,6 +11,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -20,6 +21,8 @@ import io.diveni.backend.model.Session;
 import io.diveni.backend.model.SessionConfig;
 import io.diveni.backend.model.SessionState;
 import io.diveni.backend.repository.SessionRepository;
+import io.diveni.backend.service.DatabaseService;
+
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +46,8 @@ public class RoutesControllerTest {
   @Autowired SessionRepository sessionRepo;
 
   @Autowired private MockMvc mockMvc;
+
+  @Autowired DatabaseService databaseService;
 
   private static String sessionConfigToJson(SessionConfig config) {
     val set = config.getSet().stream().map(s -> "\"" + s + "\"").collect(Collectors.joining(","));
@@ -106,6 +111,7 @@ public class RoutesControllerTest {
             null,
             null,
             null,
+            LocalDate.of(2000, 12, 12),
             false,
             null));
 
@@ -151,6 +157,7 @@ public class RoutesControllerTest {
             null,
             null,
             null,
+            LocalDate.of(2000, 12, 12),
             false,
             null));
 
@@ -199,6 +206,7 @@ public class RoutesControllerTest {
             null,
             null,
             null,
+            LocalDate.of(2000, 12, 12),
             false,
             null));
     // @formatter:off
@@ -247,6 +255,7 @@ public class RoutesControllerTest {
             null,
             null,
             null,
+            LocalDate.of(2000, 12, 12),
             false,
             null));
 
@@ -293,6 +302,7 @@ public class RoutesControllerTest {
             null,
             null,
             null,
+            LocalDate.of(2000, 12, 12),
             false,
             null));
 
@@ -335,6 +345,7 @@ public class RoutesControllerTest {
             null,
             null,
             null,
+            LocalDate.of(2000, 12, 12),
             false,
             null));
 
@@ -377,6 +388,7 @@ public class RoutesControllerTest {
             null,
             null,
             null,
+            LocalDate.of(2000, 12, 12),
             false,
             null));
 
@@ -446,6 +458,7 @@ public class RoutesControllerTest {
             null,
             null,
             null,
+            LocalDate.of(2000, 12, 12),
             false,
             null));
 
@@ -497,6 +510,7 @@ public class RoutesControllerTest {
             null,
             null,
             null,
+            LocalDate.of(2000, 12, 12),
             false,
             null));
     this.mockMvc
@@ -523,6 +537,7 @@ public class RoutesControllerTest {
             null,
             null,
             null,
+            LocalDate.of(2000, 12, 12),
             false,
             null));
 
