@@ -9,7 +9,7 @@
     "licenses": {
       "frontend": "Licenze (Frontend)",
       "backend": "Licenze (Backend)",
-      "translations": "Migliorare la traduzione"
+      "translations": "Improve translation"
     }
   },
   "page": {
@@ -27,10 +27,10 @@
           "waiting": "In attesa che i membri si uniscano"
         },
         "button": "Avvia La Pianificazione",
-        "refreshStories": "Aggiornare le User Story",
+        "refreshStories": "Refresh Userstories",
         "userStories": {
-          "filter" : {
-            "noStoryFound": "Nessuna storia trovata!"
+          "filter": {
+            "noStoryFound": "No stories found!"
           },
           "button": {
             "addFirstUserStory": "Ancora nessuna storia... clicca per aggiungere storie",
@@ -39,7 +39,7 @@
           "placeholder": {
             "userStoryTitle": "Titolo Della Storia Utente",
             "userStoryDescription": "Descrizione e criteri di accettazione...",
-            "searchUserStories": "Ricerca di storie utente..."
+            "searchUserStories": "Search user stories..."
           },
           "text": "Fare clic su un titolo della storia utente per vedere la descrizione",
           "sum": "Totale:"
@@ -115,6 +115,14 @@
               "label": "Rejoin"
             }
           }
+        },
+        "analytics": {
+          "title": "Statistics of Diveni",
+          "allCreatedSessionsTitle": "Overall",
+          "sessionText": "Sessions",
+          "attendeesText": "Attendees",
+          "lastMonthTitle": "Last Month",
+          "activeTitle": "Currently"
         }
       }
     },
@@ -164,50 +172,50 @@
                 "descriptionLine2": "Aggiungi titolo e descrizione ad ogni storia utente",
                 "descriptionLine3": "Usa il CSV-Import per integrare le storie utente nella tua sessione",
                 "descriptionLine4": "First line must contain the field names separated by semicolons: title;description;estimation",
-                "descriptionLine5": "Sarai in grado di aggiungere e modificare le storie utente una volta che avrai iniziato la sessione",
+                "descriptionLine5": "You will be able to add and edit User Stories once you've started the session",
                 "importButton": "Importa Storie Utente",
                 "toastSuccessNotification": "Storie utente importate",
                 "toastErrorNotification": "Errore durante l'importazione"
               },
               "withIssueTracker": {
                 "tab": {
-                  "label": "Pianificazione con Issue-Tracker"
+                  "label": "Planning with Issue-Tracker"
                 },
-                "subtitle": "Seleziona Jira per il tuo Poker-Planning",
-                "descriptionLine1": "Accedi con le tue credenziali",
-                "descriptionLine2": "Seleziona il tuo progetto",
-                "descriptionLine3": "Dopo aver cliccato sulla sessione iniziale, sarai reindirizzato alla pagina successiva per modificare le storie degli utenti",
-                "descriptionLine4": "Sarai in grado di aggiungere e modificare le storie utente una volta che avrai iniziato la sessione",
-                "formSelection": "Seleziona il tuo progetto",
-                "selectedProject": "Progetto Selezionato: ",
-                "allUserStories": "Tutte Le Storie Utente",
+                "subtitle": "Select Jira for your Poker-Planning",
+                "descriptionLine1": "Sign in with your credentials",
+                "descriptionLine2": "Select your project",
+                "descriptionLine3": "After you click on start session, you will be redirected to the next page to edit your user stories",
+                "descriptionLine4": "You will be able to add and edit User Stories once you've started the session",
+                "formSelection": "Please select your Project",
+                "selectedProject": "Selected Project: ",
+                "allUserStories": "All User Stories",
                 "dialog": {
-                  "description": "Una nuova scheda si aprirà immediatamente, si prega di concedere l'accesso a questa applicazione in questa scheda e inserire il codice di verifica qui."
+                  "description": "A new tab will open immediately, please grant access to this application in this tab and enter the verification code here."
                 },
                 "inputs": {
                   "verificationCode": {
-                    "placeholder": "Codice di verifica"
+                    "placeholder": "Verification code"
                   }
                 },
                 "buttons": {
                   "signInWithJiraCloud": {
-                    "label": "Accedi con Jira Cloud"
+                    "label": "Sign in with Jira Cloud"
                   },
                   "signInWithJiraServer": {
-                    "label": "Accedi con il server Jira"
+                    "label": "Sign in with Jira Server"
                   },
                   "signInWithAzureDevOps": {
-                    "label": "Accedi con Azure DevOps"
+                    "label": "Sign in with Azure DevOps"
                   },
                   "selectProject": {
-                    "label": "Seleziona il tuo progetto jira"
+                    "label": "Select your jira project"
                   },
                   "submit": {
-                    "label": "Invia"
+                    "label": "Submit"
                   }
                 },
                 "placeholder": {
-                  "searchProjects": "Sfoglia i progetti..."
+                  "searchProjects": "Search projects..."
                 }
               }
             }
@@ -275,10 +283,10 @@
         "memberLeft": "Membro ha lasciato la sessione",
         "memberJoined": "Il membro è entrato nella sessione",
         "memberRemoved": "Sei stato rimosso dalla sessione dall'host",
-        "issueTrackerCredentials": "Credenziali errate",
-        "issueTrackerLoginFailed": "Accesso fallito",
-        "issueTrackerSynchronizeSuccess": "Modifiche sincronizzate con Issue-Tracker",
-        "issueTrackerSynchronizeFailed": "Impossibile sincronizzare le modifiche con Issue-Tracker",
+        "issueTrackerCredentials": "Wrong credentials",
+        "issueTrackerLoginFailed": "Login failed",
+        "issueTrackerSynchronizeSuccess": "Synchronized changes with Issue-Tracker",
+        "issueTrackerSynchronizeFailed": "Failed to synchronize changes with Issue-Tracker",
         "wrongID": "Codice di invito errato",
         "password": "Password errata"
       }
