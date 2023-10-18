@@ -1,5 +1,5 @@
 import constants from "@/constants";
-import { JiraRequestTokenDto, JiraResponseCodeDto } from "@/types";
+import {JiraRequestTokenDto, JiraResponseCodeDto, PullRequestDto} from "@/types";
 import axios, { AxiosResponse } from "axios";
 
 class ApiService {
