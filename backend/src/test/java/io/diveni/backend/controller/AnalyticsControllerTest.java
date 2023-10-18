@@ -55,8 +55,8 @@ public class AnalyticsControllerTest {
             null,
             null,
             LocalDate.of(2000, 12, 12),
-          false,
-          null));
+            false,
+            null));
     this.mockMvc
         .perform(get("/analytics/All"))
         .andExpect(status().isOk())
@@ -84,7 +84,7 @@ public class AnalyticsControllerTest {
             null,
             LocalDate.of(2000, 12, 12),
             false,
-          null));
+            null));
     Session willBeDelted =
         new Session(
             new ObjectId(),
@@ -100,8 +100,8 @@ public class AnalyticsControllerTest {
             null,
             null,
             LocalDate.of(2000, 12, 12),
-          false,
-          null);
+            false,
+            null);
     databaseService.saveSession(willBeDelted);
     databaseService.deleteSession(willBeDelted);
     this.mockMvc
@@ -129,8 +129,8 @@ public class AnalyticsControllerTest {
             null,
             null,
             LocalDate.of(2000, 12, 12),
-          false,
-          null));
+            false,
+            null));
     this.mockMvc
         .perform(get("/analytics/All"))
         .andExpect(status().isOk())
@@ -159,7 +159,7 @@ public class AnalyticsControllerTest {
             null,
             LocalDate.of(2000, 12, 12),
             false,
-          null));
+            null));
 
     Session willBeDelted =
         new Session(
@@ -176,8 +176,8 @@ public class AnalyticsControllerTest {
             null,
             null,
             LocalDate.of(2000, 12, 12),
-          false,
-          null);
+            false,
+            null);
     databaseService.saveSession(willBeDelted);
     databaseService.deleteSession(willBeDelted);
     this.mockMvc
@@ -205,8 +205,8 @@ public class AnalyticsControllerTest {
             null,
             null,
             LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonthValue() - 1, 12),
-          false,
-          null));
+            false,
+            null));
     this.mockMvc
         .perform(get("/analytics/All"))
         .andExpect(status().isOk())
@@ -236,8 +236,8 @@ public class AnalyticsControllerTest {
             null,
             null,
             LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonthValue() - 1, 12),
-          false,
-          null));
+            false,
+            null));
 
     sessionRepo.save(
         new Session(
@@ -254,8 +254,8 @@ public class AnalyticsControllerTest {
             null,
             null,
             LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonthValue(), 12),
-          false,
-          null));
+            false,
+            null));
 
     this.mockMvc
         .perform(get("/analytics/All"))
@@ -288,7 +288,7 @@ public class AnalyticsControllerTest {
             null,
             LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonthValue() - 1, 12),
             false,
-          null));
+            null));
 
     Session willbeDelted =
         new Session(
@@ -305,8 +305,8 @@ public class AnalyticsControllerTest {
             null,
             null,
             LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonthValue() - 1, 12),
-          false,
-          null);
+            false,
+            null);
 
     databaseService.saveSession(willbeDelted);
     databaseService.deleteSession(willbeDelted);
@@ -344,7 +344,7 @@ public class AnalyticsControllerTest {
             null,
             null,
             LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonthValue() - 1, 12),
-          false,
+            false,
             null));
 
     Session willbeDelted =
@@ -362,8 +362,8 @@ public class AnalyticsControllerTest {
             null,
             null,
             LocalDate.of(LocalDate.now().getYear(), outDatedMonth, 12),
-          false,
-          null);
+            false,
+            null);
 
     databaseService.saveSession(willbeDelted);
     databaseService.deleteSession(willbeDelted);
