@@ -49,8 +49,15 @@
             @textValueChanged="(event) => valueChanged(idx, event)"
           />
         </div>
-        <div v-if="!editDescription">
-          {{ userStories[idx].description }}
+        <div v-if="!editDescription"> 
+          <b-form-textarea
+          id="textarea-auto-height-plaintext"
+          class="py-2"
+          plaintext
+          :value=userStories[idx].description
+          rows="15"
+          size="m"
+          />
         </div>
       </b-list-group-item>
       <div
