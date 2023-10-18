@@ -116,6 +116,14 @@
             }
           }
         },
+        "analytics": {
+          "title": "Estadísticas de Diveni",
+          "allCreatedSessionsTitle": "Overall",
+          "sessionText": "Sessions",
+          "attendeesText": "Attendees",
+          "lastMonthTitle": "Last Month",
+          "activeTitle": "Currently"
+        },
         "news": {
           "buttons": {
             "info": {

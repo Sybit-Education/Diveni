@@ -115,6 +115,14 @@
               "label": "Ricongiungersi"
             }
           }
+        },
+        "analytics": {
+          "title": "Statistiche da Diveni",
+          "allCreatedSessionsTitle": "Overall",
+          "sessionText": "Sessions",
+          "attendeesText": "Attendees",
+          "lastMonthTitle": "Last Month",
+          "activeTitle": "Currently"
         }
       },
       "news": {

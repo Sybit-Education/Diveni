@@ -28,6 +28,9 @@
         />
       </b-card-group>
     </b-container>
+    <AnalyticsDataComponent ref="dataComponent">
+
+    </AnalyticsDataComponent>
     <b-container class="py-5">
       <h1>Remote Planning Poker using DIVENI</h1>
       <b-card-group deck>
@@ -82,12 +85,13 @@ import Vue from "vue";
 import LandingPageCard from "../components/LandingPageCard.vue";
 import Constants from "../constants";
 import Session from "../model/Session";
-
+import AnalyticsDataComponent from "../components/AnalyticsDataComponent.vue";
 export default Vue.extend({
   name: "LandingPage",
   components: {
     LandingPageCard,
-  },
+    AnalyticsDataComponent,
+},
   data() {
     return {
       sessionWrapper: {} as { session: Session },
@@ -126,6 +130,7 @@ export default Vue.extend({
               userStoryMode: string;
             };
             sessionState: string;
+            members: Array<string>;
           };
           this.sessionWrapper = { session };
         } catch (e) {

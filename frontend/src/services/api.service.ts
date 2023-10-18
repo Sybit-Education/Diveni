@@ -1,6 +1,6 @@
 import constants from "@/constants";
-import {JiraRequestTokenDto, JiraResponseCodeDto, PullRequestDto} from "@/types";
-import axios, {AxiosResponse} from "axios";
+import { JiraRequestTokenDto, JiraResponseCodeDto } from "@/types";
+import axios, { AxiosResponse } from "axios";
 
 class ApiService {
   public async getIssueTrackerConfig(): Promise<Record<string, string>> {
@@ -93,6 +93,18 @@ class ApiService {
         "Content-Type": "application/json",
       },
     });
+    return response;
+  }
+
+  public async getAllDiveniData() {
+    const response = (await axios.get(constants.backendURL + constants.getDiveniAnalytics)).data as {
+      amountOfAttendees: number;
+      amountOfSessions: number;
+      amountofAttendeesLastMonth: number;
+      amountOfSessionsLastMonth: number;
+      amountOfAttendeesCurrently: number;
+      amountOfSessionsCurrently: number;
+    };
     return response;
   }
 
