@@ -284,8 +284,8 @@
         "memberRemoved": "Ha sido eliminado de la sesión por el host",
         "issueTrackerCredentials": "Credenciales incorrectas",
         "issueTrackerLoginFailed": "Error al iniciar sesión",
-        "issueTrackerSynchronizeSuccess": "Cambios sincronizados con el gestor de problemas y tareas",
-        "issueTrackerSynchronizeFailed": "Error al sincronizar los cambios con el gestor de problemas y tareas",
+        "issueTrackerSynchronizeSuccess": "Cambios sincronizados con Issue-Tracker",
+        "issueTrackerSynchronizeFailed": "Error al sincronizar los cambios con Issue-Tracker",
         "wrongID": "Código de invitación incorrecto",
         "password": "Contraseña incorrecta"
       }
