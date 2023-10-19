@@ -9,7 +9,7 @@
     "licenses": {
       "frontend": "Ліцензії (інтерфейсу)",
       "backend": "Ліцензії (серверні)",
-      "translations": "Improve translation"
+      "translations": "Покращення перекладу"
     }
   },
   "page": {
@@ -26,10 +26,10 @@
           "afterID": "з колегами"
         },
         "button": "Почати планування",
-        "refreshStories": "Refresh Userstories",
+        "refreshStories": "оновити Історії користувачів",
         "userStories": {
           "filter": {
-            "noStoryFound": "No stories found!"
+            "noStoryFound": "Історій не знайдено!"
           },
           "button": {
             "addFirstUserStory": "Ще немає історій... натисніть, щоб додати історії",
@@ -38,7 +38,7 @@
           "placeholder": {
             "userStoryTitle": "Назва історії користувача",
             "userStoryDescription": "Опис і критерії прийняття...",
-            "searchUserStories": "Search user stories..."
+            "searchUserStories": "Пошук історій користувачів..."
           },
           "text": "Натисніть на назву історії користувача, щоб побачити опис",
           "sum": "Загалом:"
@@ -171,18 +171,18 @@
                 "descriptionLine2": "Додати заголовок і опис до кожної історії користувача",
                 "descriptionLine3": "Використовуйте CSV-імпорт для інтеграції розповіді користувачів у вашому сеансі",
                 "descriptionLine4": "First line must contain the field names separated by semicolons: title;description;estimation",
-                "descriptionLine5": "You will be able to add and edit User Stories once you've started the session",
+                "descriptionLine5": "Ви зможете додавати і редагувати історії користувачів після запуску сесії",
                 "importButton": "Імпорт історій користувача",
                 "toastSuccessNotification": "Історії користувача імпортовано",
                 "toastErrorNotification": "Помилка при спробі імпорту"
               },
               "withIssueTracker": {
                 "tab": {
-                  "label": "Planning with Issue-Tracker"
+                  "label": "Планування з Issue-Tracker"
                 },
-                "subtitle": "Select Jira for your Poker-Planning",
-                "descriptionLine1": "Sign in with your credentials",
-                "descriptionLine2": "Select your project",
+                "subtitle": "Виберіть Jira для вашого Poker-Planning",
+                "descriptionLine1": "Увійдіть за допомогою своїх облікових даних",
+                "descriptionLine2": "Виберіть свій проект",
                 "descriptionLine3": "After you click on start session, you will be redirected to the next page to edit your user stories",
                 "descriptionLine4": "You will be able to add and edit User Stories once you've started the session",
                 "formSelection": "Please select your Project",
@@ -210,7 +210,7 @@
                     "label": "Select your jira project"
                   },
                   "submit": {
-                    "label": "Submit"
+                    "label": "Відправити"
                   }
                 },
                 "placeholder": {
