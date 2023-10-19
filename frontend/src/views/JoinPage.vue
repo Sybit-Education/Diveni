@@ -3,7 +3,7 @@
     <h1 id="heading">
       {{ $t("page.join.title") }}
       <!-- <b-img :src="require('@/assets/ControllerJoinPage.png')" id="controller"/> -->
-      <BIconController id="controller"/>
+      <BIconController id="controller" />
     </h1>
     <join-page-card
       :color="hexColor"
@@ -27,8 +27,8 @@ export default Vue.extend({
   name: "JoinPage",
   components: {
     JoinPageCard,
-    BIconController
-},
+    BIconController,
+  },
   data() {
     return {
       hexColor: Constants.getRandomPastelColor(),
@@ -88,7 +88,7 @@ export default Vue.extend({
         const sessionConfig = result.data as {
           set: Array<string>;
           timerSeconds: number;
-          userStories: Array<{ title: string; description: string; estimation: string | null;}>;
+          userStories: Array<{ title: string; description: string; estimation: string | null }>;
           userStoryMode: string;
         };
         this.voteSet = JSON.stringify(sessionConfig.set);
@@ -171,7 +171,6 @@ export default Vue.extend({
   height: 49px;
   width: 78px;
   transform: rotate(315deg);
-  margin-left: 1%
+  margin-left: 1%;
 }
-
-</style>  
+</style>

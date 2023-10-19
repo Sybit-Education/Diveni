@@ -23,9 +23,7 @@ export default Vue.extend({
 </script>
 
 <style scoped>
-
 #textDescription {
   color: var(--text-primary-color);
 }
-
 </style>

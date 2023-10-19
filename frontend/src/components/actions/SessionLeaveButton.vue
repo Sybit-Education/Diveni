@@ -1,7 +1,7 @@
 <template>
   <div class="img-holderLeave mt-5">
     <div id="picture-holderLeave">
-      <b-img :src="require('@/assets/LeaveButton.png')" id="pandaPictureLeave"/>
+      <b-img id="pandaPictureLeave" :src="require('@/assets/LeaveButton.png')" />
     </div>
     <b-button
       v-b-modal.close-session-modal

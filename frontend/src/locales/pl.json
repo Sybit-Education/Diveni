@@ -28,7 +28,7 @@
         "button": "Rozpocznij planowanie",
         "refreshStories": "Odśwież Historie użytkowników",
         "userStories": {
-          "filter" : {
+          "filter": {
             "noStoryFound": "Nie znaleziono żadnych opowiadań!"
           },
           "button": {

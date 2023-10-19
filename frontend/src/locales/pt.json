@@ -28,7 +28,7 @@
         "button": "Iniciar Planejamento",
         "refreshStories": "Atualizar as Histórias de Usuário",
         "userStories": {
-          "filter" : {
+          "filter": {
             "noStoryFound": "Não foram encontradas histórias!"
           },
           "button": {

@@ -22,7 +22,7 @@
             :pause-timer="estimateFinished || pauseSession"
             :duration="timerCountdownNumber"
             :member="memberID"
-            :votingStarted="isStartVoting"
+            :voting-started="isStartVoting"
           />
         </b-col>
       </b-row>
@@ -329,7 +329,6 @@ export default Vue.extend({
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
 #header {
   color: var(--text-primary-color);
 }

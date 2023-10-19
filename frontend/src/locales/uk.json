@@ -28,7 +28,7 @@
         "button": "Почати планування",
         "refreshStories": "оновити Історії користувачів",
         "userStories": {
-          "filter" : {
+          "filter": {
             "noStoryFound": "Історій не знайдено!"
           },
           "button": {
