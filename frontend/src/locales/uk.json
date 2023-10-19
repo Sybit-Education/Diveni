@@ -116,7 +116,7 @@
           }
         },
         "analytics": {
-          "title": "Statistics of Diveni",
+          "title": "Статистика Дивені",
           "allCreatedSessionsTitle": "Overall",
           "sessionText": "Sessions",
           "attendeesText": "Attendees",
