@@ -23,14 +23,13 @@
         "title": "Warte auf die Teammitglieder...",
         "text": {
           "beforeID": "Teile den Code",
-          "afterID": "mit deinen Teammitgliedern",
-          "waiting": "Warte auf den Beitritt des Teams"
+          "afterID": "mit deinen Teammitgliedern"
         },
         "button": "Starte das Planning",
-        "refreshStories": "Refresh Userstories",
+        "refreshStories": "Aktualisiere die Userstories",
         "userStories": {
           "filter": {
-            "noStoryFound": "No stories found!"
+            "noStoryFound": "Keine Stories gefunden!"
           },
           "button": {
             "addFirstUserStory": "Noch keine Stories... Klicke um eine Story hinzuzufügen",
@@ -39,7 +38,7 @@
           "placeholder": {
             "userStoryTitle": "Titel der User Story",
             "userStoryDescription": "Beschreibung und Akzeptanzkriterien...",
-            "searchUserStories": "Search user stories..."
+            "searchUserStories": "User Stories durchsuchen ..."
           },
           "text": "Klicke auf ein User Story Titel um die Beschreibung zu sehen",
           "sum": "Summe:"
@@ -117,12 +116,12 @@
           }
         },
         "analytics": {
-          "title": "Statistics of Diveni",
-          "allCreatedSessionsTitle": "Overall",
-          "sessionText": "Sessions",
-          "attendeesText": "Attendees",
-          "lastMonthTitle": "Last Month",
-          "activeTitle": "Currently"
+          "title": "Statistiken von Diveni",
+          "allCreatedSessionsTitle": "Gesamt",
+          "sessionText": "Sitzungen",
+          "attendeesText": "Teilnehmer",
+          "lastMonthTitle": "Letzter Monat",
+          "activeTitle": "Momentan"
         }
       }
     },
@@ -153,7 +152,7 @@
       "step": {
         "selection": {
           "mode": {
-            "title": "1. Wähle den Modus für die User Stories",
+            "title": "Select the mode for your User Stories",
             "description": {
               "withoutUS": {
                 "tab": {
@@ -172,56 +171,56 @@
                 "descriptionLine2": "Füge jeder User Story Titel und Beschreibung hinzu",
                 "descriptionLine3": "Du kannst auch einen CSV-Import nutzen, um User Stories zu integrieren",
                 "descriptionLine4": "Die erste Zeile muss die Feldnamen enthalten, die durch Semikolons getrennt sind: title;description;estimation",
-                "descriptionLine5": "You will be able to add and edit User Stories once you've started the session",
+                "descriptionLine5": "Du kannst nach Start der Session User Stories bearbeiten oder neue hinzufügen",
                 "importButton": "User Stories importieren",
                 "toastSuccessNotification": "User Stories importiert",
-                "toastErrorNotification": "Beim importieren ist leider ein Fehler aufgetreten"
+                "toastErrorNotification": "Beim Importieren ist leider ein Fehler aufgetreten"
               },
               "withIssueTracker": {
                 "tab": {
-                  "label": "Planning with Issue-Tracker"
+                  "label": "Planning mit Issue-Tracker"
                 },
-                "subtitle": "Select Jira for your Poker-Planning",
-                "descriptionLine1": "Sign in with your credentials",
-                "descriptionLine2": "Select your project",
-                "descriptionLine3": "After you click on start session, you will be redirected to the next page to edit your user stories",
-                "descriptionLine4": "You will be able to add and edit User Stories once you've started the session",
-                "formSelection": "Please select your Project",
-                "selectedProject": "Selected Project: ",
-                "allUserStories": "All User Stories",
+                "subtitle": "Wähle die Jira-Integration für das Planning",
+                "descriptionLine1": "Logge dich mit deinen Anmeldedaten ein",
+                "descriptionLine2": "Wähle dein Projekt",
+                "descriptionLine3": "Nach dem Klicken auf Start Session, wirst du auf die nächste Seite gelangen, um die User Stories zu bearbeiten",
+                "descriptionLine4": "Du kannst nach Start der Session User Stories bearbeiten oder Neue hinzufügen",
+                "formSelection": "Bitte wähle dein Projekt aus",
+                "selectedProject": "Ausgewähltes Projekt: ",
+                "allUserStories": "Alle User Stories",
                 "dialog": {
-                  "description": "A new tab will open immediately, please grant access to this application in this tab and enter the verification code here."
+                  "description": "Es öffnet sich gleich ein neuer Tab. Bitte gewähre dieser Anwendung in diesem Tab den Zugriff und trage den Verifizierungscode hier ein."
                 },
                 "inputs": {
                   "verificationCode": {
-                    "placeholder": "Verification code"
+                    "placeholder": "Verifizierungscode"
                   }
                 },
                 "buttons": {
                   "signInWithJiraCloud": {
-                    "label": "Sign in with Jira Cloud"
+                    "label": "Mit Jira Cloud anmelden"
                   },
                   "signInWithJiraServer": {
-                    "label": "Sign in with Jira Server"
+                    "label": "Mit Jira Server anmelden"
                   },
                   "signInWithAzureDevOps": {
-                    "label": "Sign in with Azure DevOps"
+                    "label": "Mit Azure DevOps anmelden"
                   },
                   "selectProject": {
-                    "label": "Select your jira project"
+                    "label": "Wählen Sie ihr Jira-Projekt aus"
                   },
                   "submit": {
-                    "label": "Submit"
+                    "label": "Senden"
                   }
                 },
                 "placeholder": {
-                  "searchProjects": "Search projects..."
+                  "searchProjects": "Projekte durchsuchen..."
                 }
               }
             }
           },
           "cardSet": {
-            "title": "2. Wähle ein Kartenset mit den entsprechenden Werten",
+            "title": "Select a card set and its values",
             "sets": {
               "fibonacci": {
                 "label": "Fibonacci-Folge",
@@ -251,10 +250,10 @@
             }
           },
           "time": {
-            "title": "3. Bestimme die Zeit pro Schätzrunde"
+            "title": "Adjust the time per estimation"
           },
           "password": {
-            "title": "4. Wähle ein Passwort, falls gewünscht",
+            "title": "Choose a password if needed",
             "placeholder": "Passwort (leer lassen für eine offene Session)"
           }
         }
@@ -283,10 +282,10 @@
         "memberLeft": "Teilnehmer hat die Sitzung verlassen",
         "memberJoined": "Teilnehmer ist der Sitzung beigetreten",
         "memberRemoved": "Du wurdest vom Host aus der Sitzung entfernt",
-        "issueTrackerCredentials": "Wrong credentials",
-        "issueTrackerLoginFailed": "Login failed",
-        "issueTrackerSynchronizeSuccess": "Synchronized changes with Issue-Tracker",
-        "issueTrackerSynchronizeFailed": "Failed to synchronize changes with Issue-Tracker",
+        "issueTrackerCredentials": "Falsche Login-Daten",
+        "issueTrackerLoginFailed": "Login fehlgeschlagen",
+        "issueTrackerSynchronizeSuccess": "Synchronisierte Änderungen mit Issue-Tracker",
+        "issueTrackerSynchronizeFailed": "Fehler beim Synchronisieren der Änderungen mit Issue-Tracker",
         "wrongID": "Falscher Einladungscode",
         "password": "Falsches Passwort"
       }
