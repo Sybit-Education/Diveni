@@ -23,8 +23,7 @@
         "title": "En attente de membres...",
         "text": {
           "beforeID": "Partager le code",
-          "afterID": "avec vos coéquipiers",
-          "waiting": "En attente de l'adhésion des membres"
+          "afterID": "avec vos coéquipiers"
         },
         "button": "Commencer la planification",
         "refreshStories": "Actualiser les User Stories",
@@ -115,6 +114,14 @@
               "label": "Rejoindre"
             }
           }
+        },
+        "analytics": {
+          "title": "Statistiques de Diveni",
+          "allCreatedSessionsTitle": "Overall",
+          "sessionText": "Sessions",
+          "attendeesText": "Attendees",
+          "lastMonthTitle": "Last Month",
+          "activeTitle": "Currently"
         }
       }
     },
@@ -145,7 +152,7 @@
       "step": {
         "selection": {
           "mode": {
-            "title": "1. Sélectionnez le mode pour vos Histoires d’Utilisateur",
+            "title": "Sélectionnez le mode pour vos Histoires d’Utilisateur",
             "description": {
               "withoutUS": {
                 "tab": {
@@ -213,7 +220,7 @@
             }
           },
           "cardSet": {
-            "title": "2. Sélectionnez un jeu de cartes et ses valeurs",
+            "title": "Sélectionnez un jeu de cartes et ses valeurs",
             "sets": {
               "fibonacci": {
                 "label": "Fibonacci",
@@ -243,10 +250,10 @@
             }
           },
           "time": {
-            "title": "3. Ajuster le temps par estimation"
+            "title": "Ajuster le temps par estimation"
           },
           "password": {
-            "title": "4. Choisissez un mot de passe si nécessaire",
+            "title": "Choisissez un mot de passe si nécessaire",
             "placeholder": "Mot de passe (laisser vide pour une session non protégée)"
           }
         }

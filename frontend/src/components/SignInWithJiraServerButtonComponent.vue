@@ -1,11 +1,12 @@
 <template>
   <div>
     <b-button
-      variant="success"
+      id="button"
       :disabled="disabled"
       @click="
         openSignInWithJiraTab();
         openModal();
+        $event.target.blur();
       "
     >
       {{
@@ -22,7 +23,7 @@
       @hidden="resetModal"
       @ok="handleOk"
     >
-      <p>{{ $t("session.prepare.step.selection.mode.description.withIssueTracker.dialog.description") }}</p>
+      <p id="description">{{ $t("session.prepare.step.selection.mode.description.withIssueTracker.dialog.description") }}</p>
       <form ref="form" @submit.stop.prevent="handleSubmit">
         <b-form-group
           label="Verification code"
@@ -122,3 +123,21 @@ export default Vue.extend({
   },
 });
 </script>
+
+<style scoped>
+
+#description {
+  color: black;
+}
+
+#button {
+  background-color: var(--preparePageMainColor);
+  color: var(--text-primary-color);
+}
+
+#button:hover {
+  background-color: var(--startButtonHovered);
+  color: var(--text-primary-color);
+}
+
+</style>

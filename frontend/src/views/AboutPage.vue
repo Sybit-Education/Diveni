@@ -6,59 +6,59 @@
       stories.
     </p>
 
-    <h2>Open Source & Contribution</h2>
+    <h2 class="header">Open Source & Contribution</h2>
     <p>
       Diveni is open source and published under
-      <a href="https://github.com/Sybit-Education/Diveni/blob/main/LICENSE" target="_blank"
+      <a href="https://github.com/Sybit-Education/Diveni/blob/main/LICENSE" target="_blank" class="links"
         >GNU Affero General Public License v3.0</a
       >.
     </p>
     <p>
       Contributions are welcome on our public repository at
-      <a href="https://github.com/Sybit-Education/Diveni" target="_blank">GitHub</a>:
+      <a href="https://github.com/Sybit-Education/Diveni" target="_blank" class="links">GitHub</a>:
     </p>
     <ul>
-      <li><a href="https://github.com/Sybit-Education/Diveni/" target="_blank">Code</a></li>
-      <li><a href="https://github.com/Sybit-Education/Diveni/issues" target="_blank">Issues</a></li>
+      <li><a href="https://github.com/Sybit-Education/Diveni/" target="_blank" class="links">Code</a></li>
+      <li><a href="https://github.com/Sybit-Education/Diveni/issues" target="_blank" class="links">Issues</a></li>
       <li>
-        <a href="https://github.com/Sybit-Education/Diveni/discussions" target="_blank"
+        <a href="https://github.com/Sybit-Education/Diveni/discussions" target="_blank" class="links"
           >Discussions</a
         >
       </li>
     </ul>
 
-    <h2>Credits</h2>
-    <h3>HTWG Konstanz</h3>
+    <h2 class="header">Credits</h2>
+    <h3 class="header">HTWG Konstanz</h3>
     <p>TBD</p>
 
-    <h3>Sybit GmbH</h3>
+    <h3 class="header">Sybit GmbH</h3>
     <p>
       Sybit supports teaching at the university at HTWG Konstanz and acted as an industry partner in
       this project. A product owner represented Sybit's requirements to the students and released
       the sprints in the agile project development.
     </p>
     <p>Sybit GmbH will continue to support and maintain the project as an open source project.</p>
-    <h2>License</h2>
+    <h2 class="header">License</h2>
     <p>
       Diveni is licensed under
-      <a href="https://github.com/Sybit-Education/Diveni/blob/main/LICENSE" target="_blank"
+      <a href="https://github.com/Sybit-Education/Diveni/blob/main/LICENSE" target="_blank" class="links"
         >AGPL-3.0 license</a
       >.
     </p>
-    <h2>Used Libraries & Licenses</h2>
+    <h2 class="header">Used Libraries & Licenses</h2>
     <ul>
       <li>
-        <a href="/frontend-dependencies.json" target="_blank">
+        <a href="/frontend-dependencies.json" target="_blank" class="links">
           {{ $t("general.licenses.frontend") }}
         </a>
       </li>
       <li>
-        <a href="/backend-dependencies.txt" target="_blank">
+        <a href="/backend-dependencies.txt" target="_blank" class="links">
           {{ $t("general.licenses.backend") }}
         </a>
       </li>
       <li>
-        <a href="https://crowdin.com/project/diveni" target="_blank">
+        <a href="https://crowdin.com/project/diveni" target="_blank" class="links">
           {{ $t("general.licenses.translations") }}
         </a>
       </li>
@@ -72,3 +72,15 @@ export default Vue.extend({
   name: "AboutPage",
 });
 </script>
+
+<style scoped>
+
+.links {
+  color: var(--linkColor);
+}
+
+.header {
+  color: var(--text-primary-color);
+}
+
+</style>

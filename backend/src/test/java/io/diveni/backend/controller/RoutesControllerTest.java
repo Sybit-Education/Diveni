@@ -11,6 +11,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -20,6 +21,8 @@ import io.diveni.backend.model.Session;
 import io.diveni.backend.model.SessionConfig;
 import io.diveni.backend.model.SessionState;
 import io.diveni.backend.repository.SessionRepository;
+import io.diveni.backend.service.DatabaseService;
+
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +46,8 @@ public class RoutesControllerTest {
   @Autowired SessionRepository sessionRepo;
 
   @Autowired private MockMvc mockMvc;
+
+  @Autowired DatabaseService databaseService;
 
   private static String sessionConfigToJson(SessionConfig config) {
     val set = config.getSet().stream().map(s -> "\"" + s + "\"").collect(Collectors.joining(","));
@@ -105,7 +110,8 @@ public class RoutesControllerTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
-            null));
+            null,
+            LocalDate.of(2000, 12, 12)));
 
     // @formatter:off
     var memberAsJson =
@@ -148,7 +154,8 @@ public class RoutesControllerTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
-            null));
+            null,
+            LocalDate.of(2000, 12, 12)));
 
     // @formatter:off
     var memberAsJson =
@@ -194,7 +201,8 @@ public class RoutesControllerTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
-            null));
+            null,
+            LocalDate.of(2000, 12, 12)));
     // @formatter:off
     var memberAsJson =
         "{"
@@ -240,7 +248,8 @@ public class RoutesControllerTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
-            null));
+            null,
+            LocalDate.of(2000, 12, 12)));
 
     // @formatter:off
     var memberAsJson =
@@ -284,7 +293,8 @@ public class RoutesControllerTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
-            null));
+            null,
+            LocalDate.of(2000, 12, 12)));
 
     // @formatter:off
     var memberAsJson =
@@ -324,7 +334,8 @@ public class RoutesControllerTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
-            null));
+            null,
+            LocalDate.of(2000, 12, 12)));
 
     // @formatter:off
     var memberAsJson =
@@ -364,7 +375,8 @@ public class RoutesControllerTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
-            null));
+            null,
+            LocalDate.of(2000, 12, 12)));
 
     // @formatter:off
     var memberAsJson =
@@ -431,7 +443,8 @@ public class RoutesControllerTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
-            null));
+            null,
+            LocalDate.of(2000, 12, 12)));
 
     // @formatter:off
     var memberAsJson =
@@ -480,7 +493,8 @@ public class RoutesControllerTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
-            null));
+            null,
+            LocalDate.of(2000, 12, 12)));
     this.mockMvc
         .perform(get("/sessions/{sessionID}", sessionUUID))
         .andExpect(status().isOk())
@@ -504,7 +518,8 @@ public class RoutesControllerTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
-            null));
+            null,
+            LocalDate.of(2000, 12, 12)));
 
     this.mockMvc
         .perform(get("/sessions/{sessionID}", UUID.randomUUID()))

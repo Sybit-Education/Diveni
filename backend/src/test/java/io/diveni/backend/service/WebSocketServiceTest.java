@@ -45,6 +45,8 @@ public class WebSocketServiceTest {
 
   @InjectMocks private WebSocketService webSocketService;
 
+  @Mock private DatabaseService databaseService;
+
   private final AdminPrincipal defaultAdminPrincipal =
       new AdminPrincipal(Utils.generateRandomID(), Utils.generateRandomID());
 
@@ -169,6 +171,7 @@ public class WebSocketServiceTest {
             null,
             null,
             null,
+            null,
             null);
 
     webSocketService.sendMembersUpdate(session);
@@ -194,6 +197,7 @@ public class WebSocketServiceTest {
             new HashMap<>(),
             new ArrayList<>(),
             SessionState.WAITING_FOR_MEMBERS,
+            null,
             null,
             null,
             null);
@@ -225,6 +229,7 @@ public class WebSocketServiceTest {
             new HashMap<>(),
             new ArrayList<>(),
             SessionState.WAITING_FOR_MEMBERS,
+            null,
             null,
             null,
             null);
@@ -261,6 +266,7 @@ public class WebSocketServiceTest {
             new HashMap<>(),
             new ArrayList<>(),
             SessionState.WAITING_FOR_MEMBERS,
+            null,
             null,
             null,
             null);
@@ -301,6 +307,7 @@ public class WebSocketServiceTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
+            null,
             null);
 
     webSocketService.sendSelectedUserStoryToMembers(session, selectedUserStoryIndex);
@@ -332,6 +339,7 @@ public class WebSocketServiceTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
+            null,
             null);
     val notification = new Notification(NotificationType.ADMIN_LEFT, null);
 
@@ -358,6 +366,7 @@ public class WebSocketServiceTest {
             new HashMap<>(),
             new ArrayList<>(),
             SessionState.WAITING_FOR_MEMBERS,
+            null,
             null,
             null,
             null);

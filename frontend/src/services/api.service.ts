@@ -95,6 +95,18 @@ class ApiService {
     });
     return response;
   }
+
+  public async getAllDiveniData() {
+    const response = (await axios.get(constants.backendURL + constants.getDiveniAnalytics)).data as {
+      amountOfAttendees: number;
+      amountOfSessions: number;
+      amountofAttendeesLastMonth: number;
+      amountOfSessionsLastMonth: number;
+      amountOfAttendeesCurrently: number;
+      amountOfSessionsCurrently: number;
+    };
+    return response;
+  }
 }
 
 export default new ApiService();
