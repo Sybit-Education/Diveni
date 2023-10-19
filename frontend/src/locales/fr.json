@@ -220,7 +220,7 @@
             }
           },
           "cardSet": {
-            "title": "Select a card set and its values",
+            "title": "Sélectionnez un jeu de cartes et ses valeurs",
             "sets": {
               "fibonacci": {
                 "label": "Fibonacci",
@@ -250,10 +250,10 @@
             }
           },
           "time": {
-            "title": "Adjust the time per estimation"
+            "title": "Ajuster le temps par estimation"
           },
           "password": {
-            "title": "Choose a password if needed",
+            "title": "Choisissez un mot de passe si nécessaire",
             "placeholder": "Mot de passe (laisser vide pour une session non protégée)"
           }
         }
