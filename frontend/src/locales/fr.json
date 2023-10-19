@@ -23,14 +23,13 @@
         "title": "En attente de membres...",
         "text": {
           "beforeID": "Partager le code",
-          "afterID": "avec vos coéquipiers",
-          "waiting": "En attente de l'adhésion des membres"
+          "afterID": "avec vos coéquipiers"
         },
         "button": "Commencer la planification",
-        "refreshStories": "Refresh Userstories",
+        "refreshStories": "Actualiser les User Stories",
         "userStories": {
           "filter": {
-            "noStoryFound": "No stories found!"
+            "noStoryFound": "Aucune story trouvée!"
           },
           "button": {
             "addFirstUserStory": "Pas encore d'histoires... cliquez pour ajouter des histoires",
@@ -39,7 +38,7 @@
           "placeholder": {
             "userStoryTitle": "Titre de l'histoire de l'utilisateur",
             "userStoryDescription": "Critères de description et d'acception...",
-            "searchUserStories": "Search user stories..."
+            "searchUserStories": "Rechercher des user stories..."
           },
           "text": "Cliquez sur un titre de l'histoire de l'utilisateur pour voir la description",
           "sum": "Total:"
@@ -117,7 +116,7 @@
           }
         },
         "analytics": {
-          "title": "Statistics of Diveni",
+          "title": "Statistiques de Diveni",
           "allCreatedSessionsTitle": "Overall",
           "sessionText": "Sessions",
           "attendeesText": "Attendees",
@@ -153,7 +152,7 @@
       "step": {
         "selection": {
           "mode": {
-            "title": "1. Sélectionnez le mode pour vos Histoires d’Utilisateur",
+            "title": "Select the mode for your User Stories",
             "description": {
               "withoutUS": {
                 "tab": {
@@ -179,7 +178,7 @@
               },
               "withIssueTracker": {
                 "tab": {
-                  "label": "Planning with Issue-Tracker"
+                  "label": "Planification avec Issue-Tracker"
                 },
                 "subtitle": "Select Jira for your Poker-Planning",
                 "descriptionLine1": "Sign in with your credentials",
@@ -221,7 +220,7 @@
             }
           },
           "cardSet": {
-            "title": "2. Sélectionnez un jeu de cartes et ses valeurs",
+            "title": "Select a card set and its values",
             "sets": {
               "fibonacci": {
                 "label": "Fibonacci",
@@ -251,10 +250,10 @@
             }
           },
           "time": {
-            "title": "3. Ajuster le temps par estimation"
+            "title": "Adjust the time per estimation"
           },
           "password": {
-            "title": "4. Choisissez un mot de passe si nécessaire",
+            "title": "Choose a password if needed",
             "placeholder": "Mot de passe (laisser vide pour une session non protégée)"
           }
         }
