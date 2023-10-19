@@ -23,8 +23,7 @@
         "title": "Esperando a los miembros ...",
         "text": {
           "beforeID": "Compartir el código",
-          "afterID": "con tus compañeros de equipo",
-          "waiting": "Esperando a que los miembros se unan"
+          "afterID": "con tus compañeros de equipo"
         },
         "button": "Comience a planificar",
         "refreshStories": "Actualizar historias de usuario",
@@ -153,7 +152,7 @@
       "step": {
         "selection": {
           "mode": {
-            "title": "1. Seleccione el modo para sus historias de usuario",
+            "title": "Seleccione el modo para sus historias de usuario",
             "description": {
               "withoutUS": {
                 "tab": {
@@ -221,7 +220,7 @@
             }
           },
           "cardSet": {
-            "title": "2. Seleccione un conjunto de tarjetas y sus valores",
+            "title": "Seleccione un conjunto de tarjetas y sus valores",
             "sets": {
               "fibonacci": {
                 "label": "Fibonacci",
@@ -251,10 +250,10 @@
             }
           },
           "time": {
-            "title": "3. Ajustar el tiempo por estimación"
+            "title": "Ajustar el tiempo por estimación"
           },
           "password": {
-            "title": "4. Elija una contraseña si es necesario",
+            "title": "Elija una contraseña si es necesario",
             "placeholder": "Contraseña (dejar vacía para la sesión no protegida)"
           }
         }

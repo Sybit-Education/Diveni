@@ -23,8 +23,7 @@
         "title": "Warte auf die Teammitglieder...",
         "text": {
           "beforeID": "Teile den Code",
-          "afterID": "mit deinen Teammitgliedern",
-          "waiting": "Warte auf den Beitritt des Teams"
+          "afterID": "mit deinen Teammitgliedern"
         },
         "button": "Starte das Planning",
         "refreshStories": "Aktualisiere die Userstories",
@@ -153,7 +152,7 @@
       "step": {
         "selection": {
           "mode": {
-            "title": "1. Wähle den Modus für die User Stories",
+            "title": "Wähle den Modus für die User Stories",
             "description": {
               "withoutUS": {
                 "tab": {
@@ -221,7 +220,7 @@
             }
           },
           "cardSet": {
-            "title": "2. Wähle ein Kartenset mit den entsprechenden Werten",
+            "title": "Wähle ein Kartenset mit den entsprechenden Werten",
             "sets": {
               "fibonacci": {
                 "label": "Fibonacci-Folge",
@@ -251,10 +250,10 @@
             }
           },
           "time": {
-            "title": "3. Bestimme die Zeit pro Schätzrunde"
+            "title": "Bestimme die Zeit pro Schätzrunde"
           },
           "password": {
-            "title": "4. Wähle ein Passwort, falls gewünscht",
+            "title": "Wähle ein Passwort, falls gewünscht",
             "placeholder": "Passwort (leer lassen für eine offene Session)"
           }
         }

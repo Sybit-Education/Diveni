@@ -1,7 +1,7 @@
 <template>
   <b-container id="session-page">
-    <b-row class="mb-3">
-      <b-col>
+    <b-row class="headers">
+      <b-col cols="auto" sm="8">
         <h1>
           {{
             planningStart
@@ -10,14 +10,14 @@
           }}
         </h1>
       </b-col>
-      <b-col cols="auto" class="mr-auto">
+      <b-col cols="auto" >
         <copy-session-id-popup
           v-if="planningStart"
           class="float-end"
           :session-id="session_sessionID"
         />
       </b-col>
-      <b-col cols="auto">
+      <b-col cols="auto" id="sessionCloseCol">
         <session-close-button
           :is-planning-start="planningStart"
           :user-story-mode="session_userStoryMode"
@@ -26,18 +26,18 @@
     </b-row>
 
     <div v-if="!planningStart">
+      <div id="catGifDiv">
+        <b-img :src="require('@/assets/LoadingCat.gif')" class="catGif"/>
+      </div>
       <copy-session-id-popup
         :text-before-session-i-d="$t('page.session.before.text.beforeID')"
         :session-id="session_sessionID"
         :text-after-session-i-d="$t('page.session.before.text.afterID')"
+        class="copy-popup"
       />
 
-      <h4 class="text-center m-3">
-        {{ $t("page.session.before.text.waiting") }}
-        <sub><b-icon-three-dots animation="fade" font-scale="1" /></sub>
-      </h4>
 
-      <b-row class="d-flex justify-content-center overflow-auto" style="max-height: 500px">
+      <b-row class="d-flex justify-content-center overflow-auto kick-user">
         <kick-user-wrapper
           v-for="member of members"
           :key="member.memberID"
@@ -55,13 +55,20 @@
 
     <div v-else>
       <b-row class="d-flex justify-content-start pb-3">
-        <b-col cols="auto" class="mr-auto">
-          <b-button class="mr-3" variant="outline-dark" @click="sendRestartMessage">
-            <b-icon-arrow-clockwise />
+        <b-col cols="auto" class="mr-auto optionButtonCol">
+          <b-button
+            class="mr-3 optionButton"
+            variant="outline-dark"
+            @click="sendRestartMessage(); $event.target.blur();"
+          >
+            <BIconArrowClockwise class="bIcons"></BIconArrowClockwise>
             {{ $t("page.session.during.estimation.buttons.new") }}
           </b-button>
-          <b-button class="mr-3" variant="outline-dark" @click="sendVotingFinishedMessage">
-            <b-icon-bar-chart />
+          <b-button class="mr-3 optionButton"
+            variant="outline-dark"
+            @click="sendVotingFinishedMessage(); $event.target.blur();"
+          >
+            <BIconBarChartFill class="bIcons"></BIconBarChartFill>
             {{ $t("page.session.during.estimation.buttons.result") }}
           </b-button>
         </b-col>
@@ -81,7 +88,7 @@
         {{ membersPending.length }} /
         {{ membersPending.length + membersEstimated.length }}
       </h4>
-      <b-row v-if="!estimateFinished" class="my-1 d-flex justify-content-center flex-wrap">
+      <b-row v-if="!estimateFinished" class="my-2 d-flex justify-content-center flex-wrap">
         <kick-user-wrapper
           v-for="member of membersPending"
           :key="member.memberID"
@@ -90,15 +97,14 @@
           :member="member"
         />
       </b-row>
-      <hr />
+      <hr class="my-5 breakingLine" />
       <h4>
         {{ $t("page.session.during.estimation.message.finished") }}
         {{ membersEstimated.length }} /
         {{ membersPending.length + membersEstimated.length }}
       </h4>
       <b-row
-        class="my-1 d-flex justify-content-center flex-wrap overflow-auto"
-        style="max-height: 500px"
+        class="my-1 d-flex justify-content-center flex-wrap overflow-auto kick-user"
       >
         <kick-user-wrapper
           v-for="member of estimateFinished ? members : membersEstimated"
@@ -113,15 +119,18 @@
         />
       </b-row>
     </div>
-    <b-row v-if="session_userStoryMode !== 'NO_US'" class="mt-5">
+    <b-row v-if="session_userStoryMode !== 'NO_US'" class="mt-4">
       <b-col>
-        <user-story-sum-component />
+        <user-story-sum-component/>
       </b-col>
     </b-row>
     <b-row v-if="session_userStoryMode !== 'NO_US'">
-      <b-col cols="4">
+      <b-col v-if="!isMobile" cols="7">
         <div v-if="session_userStoryMode === 'US_JIRA'" class="refreshUserstories">
-          <b-button class="w-100 mb-3" variant="info" @click="refreshUserStories">
+          <b-button
+            class="w-100 mb-3 refreshButton"
+            @click="refreshUserStories(); $event.target.blur();"
+          >
             {{ $t("page.session.before.refreshStories") }}
           </b-button>
         </div>
@@ -135,7 +144,37 @@
           @selectedStory="onSelectedStory($event)"
         />
       </b-col>
-      <b-col cols="8">
+      <b-col v-else cols="12">
+        <div v-if="session_userStoryMode === 'US_JIRA'" class="refreshUserstories">
+          <b-button
+            class="w-100 mb-3 refreshButton"
+            @click="refreshUserStories(); $event.target.blur();"
+          >
+            {{ $t("page.session.before.refreshStories") }}
+          </b-button>
+        </div>
+        <user-stories
+          :card-set="voteSet"
+          :show-estimations="planningStart"
+          :initial-stories="userStories"
+          :show-edit-buttons="true"
+          :select-story="true"
+          @userStoriesChanged="onUserStoriesChanged"
+          @selectedStory="onSelectedStory($event)"
+        />
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col v-if="!isMobile" cols="10">
+        <user-story-descriptions
+          :card-set="voteSet"
+          :initial-stories="userStories"
+          :edit-description="true"
+          :index="index"
+          @userStoriesChanged="onUserStoriesChanged"
+        />
+      </b-col>
+      <b-col v-else cols="12">
         <user-story-descriptions
           :card-set="voteSet"
           :initial-stories="userStories"
@@ -165,6 +204,7 @@ import Project from "../model/Project";
 import KickUserWrapper from "@/components/KickUserWrapper.vue";
 import SessionCloseButton from "@/components/actions/SessionCloseButton.vue";
 import SessionStartButton from "@/components/actions/SessionStartButton.vue";
+import { BIconArrowClockwise, BIconBarChartFill } from "bootstrap-vue";
 
 export default Vue.extend({
   name: "SessionPage",
@@ -178,7 +218,9 @@ export default Vue.extend({
     CopySessionIdPopup,
     UserStoryDescriptions,
     NotifyHostComponent,
-  },
+    BIconArrowClockwise,
+    BIconBarChartFill
+},
   props: {
     adminID: { type: String, required: false },
     sessionID: { type: String, required: false },
@@ -238,6 +280,11 @@ export default Vue.extend({
     },
     timerTimestamp() {
       return this.$store.state.timerTimestamp ? this.$store.state.timerTimestamp : "";
+    },
+    isMobile() {
+      return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent
+      );
     },
   },
   watch: {
@@ -533,5 +580,81 @@ export default Vue.extend({
 });
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped></style>
+<style scoped>
+
+.optionButtonCol {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.breakingLine {
+  border-color: var(--text-primary-color);
+}
+
+.copy-popup {
+  text-align: center;
+}
+
+.kick-user {
+  max-height: 500px;
+}
+
+#sessionCloseCol {
+  min-width: 200px;
+}
+
+.headers {
+  display: flex;
+  align-items: center;
+  min-height: 20vh;
+}
+
+.bIcons {
+  height: 40px;
+  width: 40px;
+}
+
+.optionButton{
+  background-color: var(--textAreaColour);
+  color: var(--text-primary-color);
+  border-color: black;
+  border-radius: var(--buttonShape);
+  display: inline-flex;
+  align-items: center;
+}
+
+.optionButton:hover{
+  background-color: var(--textAreaColourHovered);
+  color: var(--text-primary-color);
+}
+
+.optionButton:focus{
+  background-color: var(--textAreaColourHovered) !important;
+  color: var(--text-primary-color)  !important;
+}
+
+.refreshButton {
+  border-radius: var(--element-size);
+  color: var(--text-primary-color);
+  background-color: var(--joinButton);
+}
+
+.refreshButton:hover {
+  color: var(--text-primary-color);
+  background-color: var(--joinButtonHovered);
+}
+
+.refreshButton:focus {
+  background-color: var(--joinButtonHovered) !important;
+  color: var(--text-primary-color) !important;
+}
+
+#catGifDiv {
+  text-align: center;
+}
+
+.catGif {
+  width: 240px;
+  height: 180px;
+}
+</style>

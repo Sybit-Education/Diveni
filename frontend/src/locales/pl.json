@@ -23,8 +23,7 @@
         "title": "Oczekiwanie na członków...",
         "text": {
           "beforeID": "Udostępnij kod",
-          "afterID": "z kolegami z drużyny",
-          "waiting": "Oczekiwanie na dołączenie członków"
+          "afterID": "z kolegami z drużyny"
         },
         "button": "Rozpocznij planowanie",
         "refreshStories": "Odśwież Historie użytkowników",
@@ -153,7 +152,7 @@
       "step": {
         "selection": {
           "mode": {
-            "title": "1. Wybierz tryb dla swoich Opowieści Użytkownika",
+            "title": "Wybierz tryb dla swoich Opowieści Użytkownika",
             "description": {
               "withoutUS": {
                 "tab": {
@@ -221,7 +220,7 @@
             }
           },
           "cardSet": {
-            "title": "2. Wybierz zestaw kart i jego wartości",
+            "title": "Wybierz zestaw kart i jego wartości",
             "sets": {
               "fibonacci": {
                 "label": "Fibonacci",
@@ -251,10 +250,10 @@
             }
           },
           "time": {
-            "title": "3. Dostosuj czas na oszacowanie"
+            "title": "Dostosuj czas na oszacowanie"
           },
           "password": {
-            "title": "4. W razie potrzeby wybierz hasło.",
+            "title": "W razie potrzeby wybierz hasło.",
             "placeholder": "Hasło (pozostaw puste dla sesji bez zabezpieczenia)"
           }
         }

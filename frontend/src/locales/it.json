@@ -23,8 +23,7 @@
         "title": "In attesa di membri ...",
         "text": {
           "beforeID": "Condividi il codice",
-          "afterID": "con i tuoi compagni di squadra",
-          "waiting": "In attesa che i membri si uniscano"
+          "afterID": "con i tuoi compagni di squadra"
         },
         "button": "Inizia a pianificare",
         "refreshStories": "Aggiorna storie utente",
@@ -153,7 +152,7 @@
       "step": {
         "selection": {
           "mode": {
-            "title": "1. Seleziona la modalità per le tue storie utente",
+            "title": "Seleziona la modalità per le tue storie utente",
             "description": {
               "withoutUS": {
                 "tab": {
@@ -221,7 +220,7 @@
             }
           },
           "cardSet": {
-            "title": "2. Seleziona un set di carte e i suoi valori",
+            "title": "Seleziona un set di carte e i suoi valori",
             "sets": {
               "fibonacci": {
                 "label": "Fibonacci",
@@ -251,10 +250,10 @@
             }
           },
           "time": {
-            "title": "3. Regola il tempo per stima"
+            "title": "Regola il tempo per stima"
           },
           "password": {
-            "title": "4. Scegli una password, se necessario",
+            "title": "Scegli una password, se necessario",
             "placeholder": "Password (lasciare vuota per la sessione non protetta)"
           }
         }

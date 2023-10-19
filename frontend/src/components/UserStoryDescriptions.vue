@@ -5,7 +5,7 @@
         v-for="(story, idx) of userStories"
         v-show="idx === index"
         :key="story.id"
-        class="border-0"
+        class="border-0 description-box"
         variant="outline-secondary"
       >
         <div class="list-group list-group-horizontal">
@@ -14,16 +14,14 @@
             rows="1"
             max-rows="3"
             :disabled="!editDescription"
-            class="border"
             size="lg"
             :placeholder="$t('page.session.before.userStories.placeholder.userStoryTitle')"
             @blur="publishChanges(idx)"
           />
           <b-dropdown
             v-show="editDescription"
-            class="mx-1"
+            class="mx-3 estimationDescription"
             :text="(userStories[idx].estimation ? userStories[idx].estimation : '?') + '    '"
-            variant="success"
           >
             <b-dropdown-item
               v-for="num in filteredCardSet"
@@ -33,9 +31,10 @@
               @click="
                 userStories[idx].estimation = num;
                 publishChanges(idx);
+                $event.target.blur();
               "
             >
-              {{ num }} 
+              {{ num }}
             </b-dropdown-item>
           </b-dropdown>
         </div>
@@ -43,7 +42,7 @@
           <markdown-editor
             id="textarea-auto-height"
             v-model="userStories[idx].description"
-            class="mt-1"
+            class="mt-1 my-5"
             :disabled="!editDescription"
             :placeholder="$t('page.session.before.userStories.placeholder.userStoryDescription')"
             @textValueChanged="(event) => valueChanged(idx, event)"
@@ -159,7 +158,34 @@ export default Vue.extend({
 </script>
 
 <style scoped>
+
+.description-box {
+  background: transparent;
+  padding: 0;
+}
 /* The side navigation menu */
+
+.form-control {
+  background-color: var(--textAreaColour);
+  color: var(--text-primary-color);
+  border:none;
+}
+
+.form-control:disabled {
+  background-color: var(--textAreaColour);
+  color: var(--text-primary-color);
+  border:none;
+}
+
+.form-control:focus {
+  background-color: var(--textAreaColour);
+  color: var(--text-primary-color);
+}
+
+.form-control::placeholder {
+  color: var(--text-primary-color);
+}
+
 .sidenav {
   float: right;
   height: 100%; /* 100% Full-height */

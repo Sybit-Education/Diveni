@@ -11,7 +11,7 @@
         member.currentEstimation
       }}</strong>
     </h1>
-    <rounded-avatar :member="member" />
+    <rounded-avatar :member="member" :admin="false"/>
   </div>
 </template>
 
@@ -37,6 +37,7 @@ export default Vue.extend({
 <style scoped>
 .fs-3-rem {
   font-size: 4rem;
+  color: black;
 }
 .card {
   position: relative;
