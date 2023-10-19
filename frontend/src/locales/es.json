@@ -116,10 +116,10 @@
           }
         },
         "analytics": {
-          "title": "Statistics of Diveni",
-          "allCreatedSessionsTitle": "Overall",
+          "title": "Estadísticas de Diveni",
+          "allCreatedSessionsTitle": "Total",
           "sessionText": "Sessions",
-          "attendeesText": "Attendees",
+          "attendeesText": "Colaboradores",
           "lastMonthTitle": "Last Month",
           "activeTitle": "Currently"
         }
@@ -152,7 +152,7 @@
       "step": {
         "selection": {
           "mode": {
-            "title": "Select the mode for your User Stories",
+            "title": "Selecciona el modo para tus historias de usuario",
             "description": {
               "withoutUS": {
                 "tab": {
@@ -220,7 +220,7 @@
             }
           },
           "cardSet": {
-            "title": "Select a card set and its values",
+            "title": "Seleccione un conjunto de tarjetas y sus valores",
             "sets": {
               "fibonacci": {
                 "label": "Fibonacci",
@@ -250,10 +250,10 @@
             }
           },
           "time": {
-            "title": "Adjust the time per estimation"
+            "title": "Ajuste el tiempo por estimación"
           },
           "password": {
-            "title": "Choose a password if needed",
+            "title": "Elija una contraseña si es necesario",
             "placeholder": "Contraseña (dejar vacío para la sesión sin protección)"
           }
         }
