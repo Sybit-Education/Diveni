@@ -152,7 +152,7 @@
       "step": {
         "selection": {
           "mode": {
-            "title": "Select the mode for your User Stories",
+            "title": "Wähle den Modus für die User Stories",
             "description": {
               "withoutUS": {
                 "tab": {
@@ -220,7 +220,7 @@
             }
           },
           "cardSet": {
-            "title": "Select a card set and its values",
+            "title": "Wähle ein Kartenset mit den entsprechenden Werten",
             "sets": {
               "fibonacci": {
                 "label": "Fibonacci-Folge",
@@ -250,10 +250,10 @@
             }
           },
           "time": {
-            "title": "Adjust the time per estimation"
+            "title": "Bestimme die Dauer pro Schätzrunde"
           },
           "password": {
-            "title": "Choose a password if needed",
+            "title": "Wähle ein Passwort, falls gewünscht",
             "placeholder": "Passwort (leer lassen für eine offene Session)"
           }
         }
