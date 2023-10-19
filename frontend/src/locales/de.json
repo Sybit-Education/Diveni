@@ -28,7 +28,7 @@
         "button": "Starte das Planning",
         "refreshStories": "Aktualisiere die Userstories",
         "userStories": {
-          "filter" : {
+          "filter": {
             "noStoryFound": "Keine Stories gefunden!"
           },
           "button": {
@@ -38,7 +38,7 @@
           "placeholder": {
             "userStoryTitle": "Titel der User Story",
             "userStoryDescription": "Beschreibung und Akzeptanzkriterien...",
-            "searchUserStories": "User Stories durchsuchen..."
+            "searchUserStories": "User Stories durchsuchen ..."
           },
           "text": "Klicke auf ein User Story Titel um die Beschreibung zu sehen",
           "sum": "Summe:"
@@ -72,7 +72,7 @@
         "description1": "Die Session wird für dich und alle Teammitglieder beendet.",
         "description2": "Im Anschluss kannst du die User Stories herunterladen.",
         "button": {
-          "cancel": "Zurück",
+          "cancel": "Abbrechen",
           "ok": "OK"
         }
       }
@@ -116,12 +116,12 @@
           }
         },
         "analytics": {
-          "title": "Diveni's Statistiken",
+          "title": "Statistiken von Diveni",
           "allCreatedSessionsTitle": "Gesamt",
-          "sessionText": "Sessions",
+          "sessionText": "Sitzungen",
           "attendeesText": "Teilnehmer",
           "lastMonthTitle": "Letzter Monat",
-          "activeTitle": "Derzeit"
+          "activeTitle": "Momentan"
         }
       }
     },
@@ -174,7 +174,7 @@
                 "descriptionLine5": "Du kannst nach Start der Session User Stories bearbeiten oder neue hinzufügen",
                 "importButton": "User Stories importieren",
                 "toastSuccessNotification": "User Stories importiert",
-                "toastErrorNotification": "Beim importieren ist leider ein Fehler aufgetreten"
+                "toastErrorNotification": "Beim Importieren ist leider ein Fehler aufgetreten"
               },
               "withIssueTracker": {
                 "tab": {
@@ -183,8 +183,8 @@
                 "subtitle": "Wähle die Jira-Integration für das Planning",
                 "descriptionLine1": "Logge dich mit deinen Anmeldedaten ein",
                 "descriptionLine2": "Wähle dein Projekt",
-                "descriptionLine3": "Nach dem klicken auf start session, wirst du auf die nächste Seite gelangen um die user Stories ggf. zu bearbeiten",
-                "descriptionLine4": "Du kannst nach Start der Session User Stories bearbeiten oder neue hinzufügen",
+                "descriptionLine3": "Nach dem Klicken auf Start Session, wirst du auf die nächste Seite gelangen, um die User Stories zu bearbeiten",
+                "descriptionLine4": "Du kannst nach Start der Session User Stories bearbeiten oder Neue hinzufügen",
                 "formSelection": "Bitte wähle dein Projekt aus",
                 "selectedProject": "Ausgewähltes Projekt: ",
                 "allUserStories": "Alle User Stories",
@@ -250,7 +250,7 @@
             }
           },
           "time": {
-            "title": "Bestimme die Zeit pro Schätzrunde"
+            "title": "Bestimme die Dauer pro Schätzrunde"
           },
           "password": {
             "title": "Wähle ein Passwort, falls gewünscht",
@@ -284,8 +284,8 @@
         "memberRemoved": "Du wurdest vom Host aus der Sitzung entfernt",
         "issueTrackerCredentials": "Falsche Login-Daten",
         "issueTrackerLoginFailed": "Login fehlgeschlagen",
-        "issueTrackerSynchronizeSuccess": "Änderungen mit Issue-Tracker synchronisiert",
-        "issueTrackerSynchronizeFailed": "Fehler beim Synchronisieren mit Issue-Tracker",
+        "issueTrackerSynchronizeSuccess": "Synchronisierte Änderungen mit Issue-Tracker",
+        "issueTrackerSynchronizeFailed": "Fehler beim Synchronisieren der Änderungen mit Issue-Tracker",
         "wrongID": "Falscher Einladungscode",
         "password": "Falsches Passwort"
       }

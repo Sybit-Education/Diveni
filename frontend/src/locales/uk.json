@@ -28,7 +28,7 @@
         "button": "Почати планування",
         "refreshStories": "оновити Історії користувачів",
         "userStories": {
-          "filter" : {
+          "filter": {
             "noStoryFound": "Історій не знайдено!"
           },
           "button": {
@@ -116,7 +116,7 @@
           }
         },
         "analytics": {
-          "title": "Статистика Дивені",
+          "title": "Statistics of Diveni",
           "allCreatedSessionsTitle": "Overall",
           "sessionText": "Sessions",
           "attendeesText": "Attendees",
@@ -201,7 +201,7 @@
                     "label": "Увійти до Jira Cloud"
                   },
                   "signInWithJiraServer": {
-                    "label": "Увійдіть через Jira сервер"
+                    "label": "Увійти до Jira Server"
                   },
                   "signInWithAzureDevOps": {
                     "label": "Увійдіть через Azure DevOps"

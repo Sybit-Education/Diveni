@@ -9,7 +9,7 @@
     "licenses": {
       "frontend": "Licencje (Frontend)",
       "backend": "Licencje (Backend)",
-      "translations": "Poprawić tłumaczenie"
+      "translations": "Popraw tłumaczenie"
     }
   },
   "page": {
@@ -26,10 +26,10 @@
           "afterID": "z kolegami z drużyny"
         },
         "button": "Rozpocznij planowanie",
-        "refreshStories": "Odśwież Historie użytkowników",
+        "refreshStories": "Odśwież historyjki użytkownika",
         "userStories": {
-          "filter" : {
-            "noStoryFound": "Nie znaleziono żadnych opowiadań!"
+          "filter": {
+            "noStoryFound": "Nie znaleziono historyjek!"
           },
           "button": {
             "addFirstUserStory": "Brak historii... kliknij aby dodać opowieści",
@@ -38,7 +38,7 @@
           "placeholder": {
             "userStoryTitle": "Tytuł Historii użytkownika",
             "userStoryDescription": "Opis i kryteria akceptacji...",
-            "searchUserStories": "Wyszukiwanie historii użytkowników..."
+            "searchUserStories": "Wyszukaj historyjki użytkownika..."
           },
           "text": "Kliknij na Tytuł Historii Użytkownika, aby zobaczyć opis",
           "sum": "Łącznie:"
@@ -93,7 +93,7 @@
           "description": "Przygotuj nową sesję, zaproś członków zespołu i zacznij szacować",
           "buttons": {
             "start": {
-              "label": "Start ..."
+              "label": "Rozpocznij..."
             }
           }
         },
@@ -102,7 +102,7 @@
           "description": "Dołącz do istniejącej sesji i pomóż swojemu zespołowi oszacować",
           "buttons": {
             "start": {
-              "label": "Join ..."
+              "label": "Dołącz..."
             }
           }
         },
@@ -111,17 +111,17 @@
           "description": "Połącz się ponownie z istniejącą sesją jako host",
           "buttons": {
             "start": {
-              "label": "Rejoin"
+              "label": "Dołącz ponownie"
             }
           }
         },
         "analytics": {
           "title": "Statystyki Diveni",
-          "allCreatedSessionsTitle": "Overall",
-          "sessionText": "Sessions",
-          "attendeesText": "Attendees",
-          "lastMonthTitle": "Last Month",
-          "activeTitle": "Currently"
+          "allCreatedSessionsTitle": "Ogółem",
+          "sessionText": "Sesje",
+          "attendeesText": "Uczestnicy",
+          "lastMonthTitle": "W zeszłym miesiącu",
+          "activeTitle": "Obecnie"
         }
       }
     },
@@ -170,26 +170,26 @@
                 "descriptionLine1": "Utwórz swoje Opowieści Użytkownika na następnej stronie",
                 "descriptionLine2": "Dodaj tytuł i opis do każdej historii użytkownika",
                 "descriptionLine3": "Użyj CSV-Import do integracji Opowieści Użytkowników w twojej sesji",
-                "descriptionLine4": "First line must contain the field names separated by semicolons: title;description;estimation",
-                "descriptionLine5": "Po rozpoczęciu sesji będziesz mógł dodać i edytować Opowieści Użytkownika",
+                "descriptionLine4": "Pierwszy wiersz musi zawierać nazwy pól oddzielone średnikami: tytuł;opis;estymacja",
+                "descriptionLine5": "Po rozpoczęciu sesji będziesz mógł dodawać i edytować Historyjki Użytkownika",
                 "importButton": "Importuj Historie Użytkownika",
                 "toastSuccessNotification": "Zaimportowano historie użytkownika",
                 "toastErrorNotification": "Błąd podczas próby importu"
               },
               "withIssueTracker": {
                 "tab": {
-                  "label": "Planowanie z Issue-Tracker"
+                  "label": "Planowanie z Issue-Trackerem"
                 },
-                "subtitle": "Wybierz Jira dla swojego Poker-Planowania",
+                "subtitle": "Wybierz Jirę do Planning Pokera",
                 "descriptionLine1": "Zaloguj się za pomocą swoich danych logowania",
                 "descriptionLine2": "Wybierz swój projekt",
-                "descriptionLine3": "Po kliknięciu na sesję początkową zostaniesz przekierowany na następną stronę, aby edytować historie użytkowników",
-                "descriptionLine4": "Po rozpoczęciu sesji będziesz mógł dodać i edytować Opowieści Użytkownika",
-                "formSelection": "Wybierz swój projekt",
-                "selectedProject": "Wybrany projekt: ",
-                "allUserStories": "Wszystkie Opowieści Użytkownika",
+                "descriptionLine3": "Po kliknięciu rozpoczęcie sesji zostaniesz przekierowany na następną stronę, gdzie będziesz mógł edytować historyjki użytkowników",
+                "descriptionLine4": "Po rozpoczęciu sesji będziesz mógł dodawać i edytować Historyjki Użytkownika",
+                "formSelection": "Wybierz projekt",
+                "selectedProject": "Wybrany Projekt: ",
+                "allUserStories": "Wszystkie historyjki użytkownika",
                 "dialog": {
-                  "description": "Nowa karta zostanie otwarta natychmiast, udziel dostępu do tej aplikacji w tej karcie i wprowadź kod weryfikacyjny tutaj."
+                  "description": "Zostanie otwarta nowa karta, udziel dostępu do tej aplikacji w tej karcie i wprowadź tutaj kod weryfikacyjny."
                 },
                 "inputs": {
                   "verificationCode": {
@@ -198,29 +198,29 @@
                 },
                 "buttons": {
                   "signInWithJiraCloud": {
-                    "label": "Zaloguj się przez Jira Cloud"
+                    "label": "Zaloguj się za pomocą Jira Cloud"
                   },
                   "signInWithJiraServer": {
-                    "label": "Zaloguj się za pomocą serwera Jira"
+                    "label": "Zaloguj się za pomocą Jira Server"
                   },
                   "signInWithAzureDevOps": {
                     "label": "Zaloguj się za pomocą Azure DevOps"
                   },
                   "selectProject": {
-                    "label": "Wybierz swój projekt jira"
+                    "label": "Wybierz swój projekt Jira"
                   },
                   "submit": {
                     "label": "Prześlij"
                   }
                 },
                 "placeholder": {
-                  "searchProjects": "Wyszukaj projekty..."
+                  "searchProjects": "Wyszukaj projekt..."
                 }
               }
             }
           },
           "cardSet": {
-            "title": "Wybierz zestaw kart i jego wartości",
+            "title": "Select a card set and its values",
             "sets": {
               "fibonacci": {
                 "label": "Fibonacci",
@@ -250,10 +250,10 @@
             }
           },
           "time": {
-            "title": "Dostosuj czas na oszacowanie"
+            "title": "Adjust the time per estimation"
           },
           "password": {
-            "title": "W razie potrzeby wybierz hasło.",
+            "title": "Choose a password if needed",
             "placeholder": "Hasło (pozostaw puste dla sesji bez zabezpieczenia)"
           }
         }
@@ -282,10 +282,10 @@
         "memberLeft": "Członek opuścił sesję",
         "memberJoined": "Członek dołączył do sesji",
         "memberRemoved": "Zostałeś usunięty z sesji przez hosta",
-        "issueTrackerCredentials": "Błędne dane logowania",
+        "issueTrackerCredentials": "Nieprawidłowe dane logowania",
         "issueTrackerLoginFailed": "Logowanie nie powiodło się",
-        "issueTrackerSynchronizeSuccess": "Zsynchronizowane zmiany z Issue-Tracker",
-        "issueTrackerSynchronizeFailed": "Nie udało się zsynchronizować zmian z Issue-Tracker",
+        "issueTrackerSynchronizeSuccess": "Zsynchronizowano zmiany z Issue-Trackerem",
+        "issueTrackerSynchronizeFailed": "Nie udało się zsynchronizować zmian z Issue-Trackerem",
         "wrongID": "Nieprawidłowy kod zaproszenia",
         "password": "Błędne hasło"
       }
