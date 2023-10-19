@@ -184,7 +184,7 @@
                 "descriptionLine1": "Accedi con le tue credenziali",
                 "descriptionLine2": "Seleziona il tuo progetto",
                 "descriptionLine3": "Dopo aver cliccato sulla sessione iniziale, sarai reindirizzato alla pagina successiva per modificare le storie degli utenti",
-                "descriptionLine4": "Sarai in grado di aggiungere e modificare le storie utente una volta che avrai iniziato la session",
+                "descriptionLine4": "Sarai in grado di aggiungere e modificare le storie utente una volta che avrai iniziato la sessione",
                 "formSelection": "Seleziona il tuo progetto",
                 "selectedProject": "Progetto Selezionato: ",
                 "allUserStories": "Tutte Le Storie Utente",
@@ -253,7 +253,7 @@
             "title": "Regolare il tempo per stima"
           },
           "password": {
-            "title": "Scegliere una password se necessari",
+            "title": "Scegliere una password se necessario",
             "placeholder": "Password (lasciare vuota per una sessione non protetta)"
           }
         }
