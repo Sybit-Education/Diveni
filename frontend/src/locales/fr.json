@@ -180,7 +180,7 @@
                 "tab": {
                   "label": "Planification avec Issue-Tracker"
                 },
-                "subtitle": "Select Jira for your Poker-Planning",
+                "subtitle": "Sélectionnez Jira pour votre Poker-Planning",
                 "descriptionLine1": "Sign in with your credentials",
                 "descriptionLine2": "Select your project",
                 "descriptionLine3": "After you click on start session, you will be redirected to the next page to edit your user stories",
@@ -198,13 +198,13 @@
                 },
                 "buttons": {
                   "signInWithJiraCloud": {
-                    "label": "Sign in with Jira Cloud"
+                    "label": "Connectez-vous avec Jira Cloud"
                   },
                   "signInWithJiraServer": {
-                    "label": "Sign in with Jira Server"
+                    "label": "Connectez-vous avec Jira Server"
                   },
                   "signInWithAzureDevOps": {
-                    "label": "Sign in with Azure DevOps"
+                    "label": "Connectez-vous avec Azure DevOps"
                   },
                   "selectProject": {
                     "label": "Select your jira project"
