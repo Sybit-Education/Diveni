@@ -22,9 +22,13 @@ import io.diveni.backend.service.WebSocketService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import java.text.ParseException;
 
 import io.diveni.backend.principals.AdminPrincipal;
 import io.diveni.backend.principals.MemberPrincipal;
@@ -221,5 +225,27 @@ public class WebsocketController {
     databaseService.saveSession(session);
     webSocketService.sendUpdatedUserStoriesToMembers(session);
     LOGGER.debug("<-- adminUpdatedUserStories()");
+  }
+
+  @MessageMapping("/adminSelectedUserStory")
+  public synchronized void adminSelectedUserStory(
+      AdminPrincipal principal, @Payload Integer index) {
+    LOGGER.debug("--> adminSelectedUserStory()");
+    val session =
+        ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID());
+    webSocketService.sendSelectedUserStoryToMembers(session, index);
+    LOGGER.debug("<-- adminSelectedUserStory()");
+  }
+
+  @GetMapping("/get-timer-value")
+  public synchronized ResponseEntity<Long> getTimeValue(String memberID) throws ParseException {
+    LOGGER.debug("--> get-timer-value()");
+    Session session =
+        ControllerUtils.getSessionByMemberIDOrThrowResponse(databaseService, memberID);
+    Date startDate = Utils.getDateFromString(session.getTimerTimestamp());
+    Date currentDate = new Date();
+    long timeDifference = currentDate.getTime() - startDate.getTime();
+    LOGGER.debug("<-- get-timer-value() + " + timeDifference);
+    return new ResponseEntity<>(timeDifference, HttpStatus.OK);
   }
 }

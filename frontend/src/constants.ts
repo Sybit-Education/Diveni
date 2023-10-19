@@ -6,6 +6,8 @@ class Constants {
 
   createSessionRoute = "/sessions";
 
+  getDiveniAnalytics = "/analytics/All";
+
   webSocketRegisterAdminUserRoute = "/ws/registerAdminUser";
 
   webSocketRegisterMemberRoute = "/ws/registerMember";
@@ -29,6 +31,10 @@ class Constants {
   webSocketVoteRoute = "/ws/vote";
 
   webSocketAdminUpdatedUserStoriesRoute = "/ws/adminUpdatedUserStories";
+
+  webSocketAdminSelectedUserStoryRoute = "/ws/adminSelectedUserStory";
+
+  webSocketSelectedUserStoryRoute = "/users/updates/userStorySelected";
 
   webSocketMemberListenUserStoriesRoute = "/users/updates/userStories";
 

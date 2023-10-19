@@ -47,6 +47,7 @@ public class SessionRepositoryTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
+            null,
             null);
 
     assertEquals(session, sessionRepo.save(session));
@@ -70,6 +71,7 @@ public class SessionRepositoryTest {
             new HashMap<>(),
             new ArrayList<>(),
             SessionState.WAITING_FOR_MEMBERS,
+            null,
             null,
             null,
             null);

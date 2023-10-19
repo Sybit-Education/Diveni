@@ -1,0 +1,25 @@
+name: Build Documentation
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/docs.yaml'
+      - 'docs/**'
+      - 'package.json'
+      - 'package-lock.json'
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: npm
+      - run: npm ci
+      - name: Build
+        run: npm run docs:build

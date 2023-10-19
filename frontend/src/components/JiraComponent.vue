@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="textDescription">
     <h5>
       <i>{{ $t("session.prepare.step.selection.mode.description.withIssueTracker.subtitle") }}</i>
     </h5>
@@ -88,3 +88,10 @@ export default Vue.extend({
   },
 });
 </script>
+<style scoped>
+
+#textDescription {
+  color: var(--text-primary-color);
+}
+
+</style>

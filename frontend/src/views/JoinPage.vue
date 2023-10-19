@@ -1,7 +1,9 @@
-<template>
-  <b-container id="join-page">
-    <h1 class="my-5 mt-2">
+<template class="main">
+  <b-container>
+    <h1 id="heading">
       {{ $t("page.join.title") }}
+      <!-- <b-img :src="require('@/assets/ControllerJoinPage.png')" id="controller"/> -->
+      <BIconController id="controller"/>
     </h1>
     <join-page-card
       :color="hexColor"
@@ -19,12 +21,14 @@ import { v4 as uuidv4 } from "uuid";
 import JoinPageCard from "../components/JoinPageCard.vue";
 import JoinCommand from "../model/JoinCommand";
 import Constants from "../constants";
+import { BIconController } from "bootstrap-vue";
 
 export default Vue.extend({
   name: "JoinPage",
   components: {
     JoinPageCard,
-  },
+    BIconController
+},
   data() {
     return {
       hexColor: Constants.getRandomPastelColor(),
@@ -49,6 +53,7 @@ export default Vue.extend({
         this.registerMemberPrincipalOnBackend();
         this.subscribeWSMemberUpdates();
         this.subscribeWSadminUpdatedUserStories();
+        this.subscribeWSStorySelected();
         this.subscribeWSMemberUpdated();
         this.subscribeOnTimerStart();
         this.subscribeWSNotification();
@@ -83,7 +88,7 @@ export default Vue.extend({
         const sessionConfig = result.data as {
           set: Array<string>;
           timerSeconds: number;
-          userStories: Array<{ title: string; description: string; estimation: string | null }>;
+          userStories: Array<{ title: string; description: string; estimation: string | null;}>;
           userStoryMode: string;
         };
         this.voteSet = JSON.stringify(sessionConfig.set);
@@ -118,6 +123,9 @@ export default Vue.extend({
     subscribeWSadminUpdatedUserStories() {
       this.$store.commit("subscribeOnBackendWSStoriesUpdated");
     },
+    subscribeWSStorySelected() {
+      this.$store.commit("subscribeOnBackendWSStorySelected");
+    },
     subscribeWSMemberUpdated() {
       this.$store.commit("subscribeOnBackendWSAdminUpdate");
     },
@@ -150,3 +158,20 @@ export default Vue.extend({
   },
 });
 </script>
+<style scoped>
+#heading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  min-height: 10vh;
+}
+
+#controller {
+  height: 49px;
+  width: 78px;
+  transform: rotate(315deg);
+  margin-left: 1%
+}
+
+</style>  

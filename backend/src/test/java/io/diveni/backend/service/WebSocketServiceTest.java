@@ -45,6 +45,8 @@ public class WebSocketServiceTest {
 
   @InjectMocks private WebSocketService webSocketService;
 
+  @Mock private DatabaseService databaseService;
+
   private final AdminPrincipal defaultAdminPrincipal =
       new AdminPrincipal(Utils.generateRandomID(), Utils.generateRandomID());
 
@@ -169,6 +171,7 @@ public class WebSocketServiceTest {
             null,
             null,
             null,
+            null,
             null);
 
     webSocketService.sendMembersUpdate(session);
@@ -194,6 +197,7 @@ public class WebSocketServiceTest {
             new HashMap<>(),
             new ArrayList<>(),
             SessionState.WAITING_FOR_MEMBERS,
+            null,
             null,
             null,
             null);
@@ -225,6 +229,7 @@ public class WebSocketServiceTest {
             new HashMap<>(),
             new ArrayList<>(),
             SessionState.WAITING_FOR_MEMBERS,
+            null,
             null,
             null,
             null);
@@ -263,6 +268,7 @@ public class WebSocketServiceTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
+            null,
             null);
 
     webSocketService.sendUpdatedUserStoriesToMembers(session);
@@ -277,6 +283,40 @@ public class WebSocketServiceTest {
             defaultMemberPrincipal.getMemberID(),
             WebSocketService.US_UPDATES_DESTINATION,
             session.getSessionConfig().getUserStories());
+  }
+
+  @Test
+  public void sendSelectedUserStoryToMembers_sendsToAll() throws Exception {
+    Integer selectedUserStoryIndex = 42;
+
+    val memberPrincipal =
+        new MemberPrincipal(defaultAdminPrincipal.getSessionID(), Utils.generateRandomID());
+    setDefaultAdminPrincipal(Set.of(defaultMemberPrincipal, memberPrincipal));
+    val session =
+        new Session(
+            new ObjectId(),
+            defaultAdminPrincipal.getSessionID(),
+            defaultAdminPrincipal.getAdminID(),
+            new SessionConfig(List.of(), List.of(), null, "US_MANUALLY", "password"),
+            null,
+            List.of(
+                new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null),
+                new Member(memberPrincipal.getMemberID(), null, null, null, null)),
+            new HashMap<>(),
+            new ArrayList<>(),
+            SessionState.WAITING_FOR_MEMBERS,
+            null,
+            null,
+            null,
+            null);
+
+    webSocketService.sendSelectedUserStoryToMembers(session, selectedUserStoryIndex);
+
+    verify(simpMessagingTemplateMock, times(1))
+        .convertAndSendToUser(
+            defaultMemberPrincipal.getMemberID(),
+            WebSocketService.USER_STORY_SELECTED_DESTINATION,
+            selectedUserStoryIndex);
   }
 
   @Test
@@ -297,6 +337,7 @@ public class WebSocketServiceTest {
             new HashMap<>(),
             new ArrayList<>(),
             SessionState.WAITING_FOR_MEMBERS,
+            null,
             null,
             null,
             null);
@@ -325,6 +366,7 @@ public class WebSocketServiceTest {
             new HashMap<>(),
             new ArrayList<>(),
             SessionState.WAITING_FOR_MEMBERS,
+            null,
             null,
             null,
             null);

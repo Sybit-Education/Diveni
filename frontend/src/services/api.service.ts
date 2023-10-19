@@ -38,19 +38,19 @@ class ApiService {
     return response.data;
   }
 
-  public async sendJiraOauth2AuthorizationCode(): Promise<JiraResponseCodeDto> {
+  public async sendJiraOauth2AuthorizationCode(code: string): Promise<JiraResponseCodeDto> {
     const response = await axios.post<JiraResponseCodeDto>(
-      `${constants.backendURL}/issue-tracker/jira/oauth2/authorizationCode`
+      `${constants.backendURL}/issue-tracker/jira/oauth2/authorizationCode`,
+      {
+        code,
+      }
     );
     return response.data;
   }
 
-  public async sendAzureOauth2AuthorizationCode(code: string): Promise<JiraResponseCodeDto> {
+  public async sendAzureOauth2AuthorizationCode(): Promise<JiraResponseCodeDto> {
     const response = await axios.post<JiraResponseCodeDto>(
-      `${constants.backendURL}/issue-tracker/azure/oauth2/authorizationCode`,
-      {
-        code,
-      }
+      `${constants.backendURL}/issue-tracker/azure/oauth2/authorizationCode`
     );
     return response.data;
   }
@@ -93,6 +93,18 @@ class ApiService {
         "Content-Type": "application/json",
       },
     });
+    return response;
+  }
+
+  public async getAllDiveniData() {
+    const response = (await axios.get(constants.backendURL + constants.getDiveniAnalytics)).data as {
+      amountOfAttendees: number;
+      amountOfSessions: number;
+      amountofAttendeesLastMonth: number;
+      amountOfSessionsLastMonth: number;
+      amountOfAttendeesCurrently: number;
+      amountOfSessionsCurrently: number;
+    };
     return response;
   }
 }
