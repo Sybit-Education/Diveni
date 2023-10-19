@@ -282,10 +282,10 @@
         "memberLeft": "Le membre a quitté la session",
         "memberJoined": "Le membre a rejoint la session",
         "memberRemoved": "Vous avez été retiré de la session par l'hôte",
-        "issueTrackerCredentials": "Wrong credentials",
-        "issueTrackerLoginFailed": "Login failed",
-        "issueTrackerSynchronizeSuccess": "Synchronized changes with Issue-Tracker",
-        "issueTrackerSynchronizeFailed": "Failed to synchronize changes with Issue-Tracker",
+        "issueTrackerCredentials": "Mauvais identifiants",
+        "issueTrackerLoginFailed": "Échec de la connexion",
+        "issueTrackerSynchronizeSuccess": "Changements synchronisés avec Issue-Tracker",
+        "issueTrackerSynchronizeFailed": "Impossible de synchroniser les modifications avec Issue-Tracker",
         "wrongID": "Mauvais code d'invitation",
         "password": "Mauvais mot de passe"
       }
