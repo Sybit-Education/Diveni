@@ -48,12 +48,12 @@
             @textValueChanged="(event) => valueChanged(idx, event)"
           />
         </div>
-        <div v-if="!editDescription"> 
+        <div v-if="!editDescription">
           <b-form-textarea
           id="textarea-auto-height-plaintext"
-          class="py-2"
           plaintext
           :value=userStories[idx].description
+          class="py-2 description-text-area"
           rows="15"
           size="m"
           />
@@ -87,6 +87,7 @@ export default Vue.extend({
   data() {
     return {
       sideBarOpen: false,
+      userTheme: 'light-theme',
       userStories: [] as Array<{
         id: string | null;
         title: string;
@@ -120,6 +121,10 @@ export default Vue.extend({
       estimation: string | null;
       isActive: boolean;
     }>;
+    if (localStorage.getItem("user-theme")) {
+      this.userTheme = localStorage.getItem("user-theme") ?? 'dark-theme'
+    }
+    console.log(localStorage.getItem("user-theme"))
   },
   methods: {
     valueChanged(idx, {markdown}) {
@@ -164,6 +169,10 @@ export default Vue.extend({
   padding: 0;
 }
 /* The side navigation menu */
+
+.description-text-area {
+  color: var(--text-primary-color);
+}
 
 .form-control {
   background-color: var(--textAreaColour);
