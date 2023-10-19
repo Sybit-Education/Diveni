@@ -23,8 +23,7 @@
         "title": "Очікування учасників...",
         "text": {
           "beforeID": "Поділитися кодом",
-          "afterID": "з колегами",
-          "waiting": "Чекаємо на учасників"
+          "afterID": "з колегами"
         },
         "button": "Почати планування",
         "refreshStories": "Refresh Userstories",
@@ -153,7 +152,7 @@
       "step": {
         "selection": {
           "mode": {
-            "title": "1. Виберіть режим для історій користувача",
+            "title": "Select the mode for your User Stories",
             "description": {
               "withoutUS": {
                 "tab": {
@@ -221,7 +220,7 @@
             }
           },
           "cardSet": {
-            "title": "2. Виберіть набір карт та їх значення",
+            "title": "Select a card set and its values",
             "sets": {
               "fibonacci": {
                 "label": "Фібоначчі",
@@ -251,10 +250,10 @@
             }
           },
           "time": {
-            "title": "3. Відрегулюйте час за оцінку"
+            "title": "Adjust the time per estimation"
           },
           "password": {
-            "title": "4. Виберіть пароль, якщо необхідно",
+            "title": "Choose a password if needed",
             "placeholder": "Пароль (залиште порожнім для незахищеної сесії)"
           }
         }
