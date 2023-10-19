@@ -152,7 +152,7 @@
       "step": {
         "selection": {
           "mode": {
-            "title": "Select the mode for your User Stories",
+            "title": "Wybierz tryb dla swoich Opowieści Użytkownika",
             "description": {
               "withoutUS": {
                 "tab": {
