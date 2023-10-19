@@ -87,7 +87,6 @@ export default Vue.extend({
   data() {
     return {
       sideBarOpen: false,
-      userTheme: 'light-theme',
       userStories: [] as Array<{
         id: string | null;
         title: string;
@@ -121,10 +120,6 @@ export default Vue.extend({
       estimation: string | null;
       isActive: boolean;
     }>;
-    if (localStorage.getItem("user-theme")) {
-      this.userTheme = localStorage.getItem("user-theme") ?? 'dark-theme'
-    }
-    console.log(localStorage.getItem("user-theme"))
   },
   methods: {
     valueChanged(idx, {markdown}) {
