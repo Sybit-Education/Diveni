@@ -389,9 +389,10 @@ export default Vue.extend({
 }
 
 #text {
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 500;
   padding-top: 16px;
+  text-align: center;
 }
 
 #cardDescription{
