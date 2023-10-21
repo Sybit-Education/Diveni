@@ -11,14 +11,12 @@
     </b-container>
     <b-container class="pb-5">
       <div class="row" style="justify-content: center">
-        <b-pagination
-          v-model="currentPage"
-          :total-rows="rows"
-          :per-page="perPage"
-          first-text="First"
-          prev-text="Prev"
-          next-text="Next"
-          @change="handlePageChange"
+        <b-pagination class="customPagination"
+                      first-class="customPagination"
+                      v-model="currentPage"
+                      :total-rows="rows"
+                      :per-page="perPage"
+                      @change="handlePageChange"
         >
         </b-pagination>
       </div>
@@ -27,12 +25,12 @@
           <b-spinner label="Loading..."></b-spinner>
         </div>
         <b-card-group deck v-for="card in paginatedData" :key=card.number class="my-3 col-md-4">
-          <b-card
-            align="center"
-            border-variant="secondary"
-            :header="`${card.updated_at}`"
-            footer-tag="footer"
-            header-border-variant="secondary">
+          <b-card class="pr-card"
+                  align="center"
+                  border-variant="secondary"
+                  :header="`${card.updated_at}`"
+                  footer-tag="footer"
+                  header-border-variant="secondary">
             <b-card-text>{{ card.title }}</b-card-text>
             <template #footer>
               <b-link target="_blank" :href="card.html_url">#{{ card.number }}</b-link>
@@ -119,13 +117,24 @@ export default Vue.extend({
 
 <style scoped>
 .teaser {
-  background: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)),
+  background: linear-gradient(var(--background-color-primary), var(--pictureGradientEnd)),
   url("~@/assets/img/diveni-background.png");
   background-size: cover;
   background-repeat: no-repeat;
 }
 
+.pr-card {
+  background-color: var(--landingPageCardsBackground);
+}
+
 .jumbotron {
   background-color: rgba(255, 255, 255, 0.5);
+}
+
+.customPagination /deep/ li > button,
+.customPagination /deep/ li > span {
+  background-color: var(--landingPageCardsBackground) !important;
+  color: var(--text-primary-color) !important;
+  border-color: var(--text-primary-color) !important;;
 }
 </style>
