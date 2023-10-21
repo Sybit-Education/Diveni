@@ -23,13 +23,12 @@
         "title": "Очікування учасників...",
         "text": {
           "beforeID": "Поділитися кодом",
-          "afterID": "з колегами",
-          "waiting": "Чекаємо на учасників"
+          "afterID": "з колегами"
         },
         "button": "Почати планування",
         "refreshStories": "оновити Історії користувачів",
         "userStories": {
-          "filter" : {
+          "filter": {
             "noStoryFound": "Історій не знайдено!"
           },
           "button": {
@@ -117,7 +116,7 @@
           }
         },
         "analytics": {
-          "title": "Статистика Дивені",
+          "title": "Statistics of Diveni",
           "allCreatedSessionsTitle": "Overall",
           "sessionText": "Sessions",
           "attendeesText": "Attendees",
@@ -160,7 +159,7 @@
       "step": {
         "selection": {
           "mode": {
-            "title": "1. Виберіть режим для історій користувача",
+            "title": "Виберіть режим для історій користувача",
             "description": {
               "withoutUS": {
                 "tab": {
@@ -209,7 +208,7 @@
                     "label": "Увійти до Jira Cloud"
                   },
                   "signInWithJiraServer": {
-                    "label": "Увійдіть через Jira сервер"
+                    "label": "Увійти до Jira Server"
                   },
                   "signInWithAzureDevOps": {
                     "label": "Увійдіть через Azure DevOps"
@@ -228,7 +227,7 @@
             }
           },
           "cardSet": {
-            "title": "2. Виберіть набір карт та їх значення",
+            "title": "Виберіть набір карт та їх значення",
             "sets": {
               "fibonacci": {
                 "label": "Фібоначчі",
@@ -258,10 +257,10 @@
             }
           },
           "time": {
-            "title": "3. Відрегулюйте час за оцінку"
+            "title": "Відрегулюйте час за оцінку"
           },
           "password": {
-            "title": "4. Виберіть пароль, якщо необхідно",
+            "title": "Виберіть пароль, якщо необхідно",
             "placeholder": "Пароль (залиште порожнім для незахищеної сесії)"
           }
         }

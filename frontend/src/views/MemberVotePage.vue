@@ -8,13 +8,11 @@
         </span>
       </template>
 
-      <b-row class="mt-5">
+      <b-row class="headers">
         <b-col>
           <h1>{{ $t("page.vote.title") }}</h1>
         </b-col>
-        <b-col cols="auto" class="mr-auto">
-          <rounded-avatar :member="getMember" />
-        </b-col>
+
         <b-col cols="auto">
           <session-leave-button />
           <estimate-timer
@@ -28,6 +26,11 @@
           />
         </b-col>
       </b-row>
+      <b-row>
+        <b-col cols="auto" class="memberIcon">
+          <rounded-avatar :member="getMember" :admin="false" />
+        </b-col>
+      </b-row>
       <b-row v-if="isMobile">
         <mobile-story-title
           v-if="userStoryMode !== 'NO_US'"
@@ -37,7 +40,7 @@
           :edit-description="false"
         />
       </b-row>
-      <b-row v-if="isStartVoting" class="my-5">
+      <b-row v-if="isStartVoting">
         <div v-if="isMobile">
           <flicking
             id="flicking"
@@ -65,7 +68,7 @@
             />
           </flicking>
         </div>
-        <b-row v-else class="d-flex justify-content-between flex-wrap text-center">
+        <b-row v-else class="centerCards d-flex justify-content-between flex-wrap text-center">
           <b-col>
             <div class="overflow-auto" style="max-height: 500px">
               <member-vote-card
@@ -87,14 +90,14 @@
         </b-row>
       </b-row>
       <b-row v-if="!isStartVoting && !votingFinished" class="my-5">
-        <h3>
+        <h3 id="header">
           {{ $t("page.vote.waiting") }}
           <sub><b-icon-three-dots animation="fade" font-scale="1" /></sub>
         </h3>
       </b-row>
       <b-row
         v-if="votingFinished"
-        class="my-1 d-flex justify-content-center flex-wrap overflow-auto"
+        class="d-flex justify-content-center flex-wrap overflow-auto"
         style="max-height: 500px"
       >
         <session-member-card
@@ -326,6 +329,11 @@ export default Vue.extend({
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+
+#header {
+  color: var(--text-primary-color);
+}
+
 #flicking {
   /* overflow:visible;  Add when fix is clear how to stay responsiv*/
   width: 100%;
@@ -335,5 +343,22 @@ export default Vue.extend({
   font-size: 2em;
   margin: 0.67em 0;
   font-weight: bold;
+}
+
+.headers {
+  display: flex;
+  align-items: center;
+  min-height: 10vh;
+}
+
+.memberIcon {
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 5%;
+}
+
+.centerCards {
+  margin-left: auto;
+  margin-right: auto;
 }
 </style>

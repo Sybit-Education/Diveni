@@ -4,7 +4,7 @@
       {{ description }}
     </b-card-text>
     <template #footer>
-      <b-button variant="success" @click="onClick">
+      <b-button class="landingPageCardButton" @click="onClick">
         {{ buttonText }}
       </b-button>
     </template>
@@ -24,10 +24,15 @@ export default Vue.extend({
   },
 });
 </script>
-
 <style scoped>
-.landing-page-card {
-  border-radius: 0.5rem;
-  background-color: rgba(200, 200, 200, 0.5);
+
+.landing-page-card{
+  border-radius: 2rem;
+  background-color: var(--landingPageCardsBackground);
 }
+
+.card-title{
+  color:var(--text-primary-color);
+}
+
 </style>

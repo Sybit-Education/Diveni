@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="textDescription">
     <h5>
       <i>{{ $t("session.prepare.step.selection.mode.description.withUS.subtitle") }}</i>
     </h5>
@@ -20,3 +20,10 @@ export default Vue.extend({
   name: "UserStoryComponent",
 });
 </script>
+<style scoped>
+
+.textDescription {
+  color: var(--text-primary-color) !important;
+}
+
+</style>
