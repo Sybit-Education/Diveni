@@ -278,7 +278,6 @@
         "issueTrackerCredentials": "Credenziali errate",
         "issueTrackerLoginFailed": "Accesso non riuscito",
         "issueTrackerSynchronizeSuccess": "Modifiche sincronizzate con Issue-Tracker",
-        "issueTrackerNothingChanged": "Nessuna modifica è stata effettuata",
         "issueTrackerSynchronizeFailed": "Impossibile sincronizzare le modifiche con Issue-Tracker",
         "wrongID": "Codice di invito errato",
         "password": "Password errata"

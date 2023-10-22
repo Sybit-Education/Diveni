@@ -278,7 +278,6 @@
         "issueTrackerCredentials": "Błędne dane logowania",
         "issueTrackerLoginFailed": "Logowanie nie powiodło się",
         "issueTrackerSynchronizeSuccess": "Zsynchronizowane zmiany z Issue-Tracker",
-        "issueTrackerNothingChanged": "Nie dokonano żadnych zmian",
         "issueTrackerSynchronizeFailed": "Nie udało się zsynchronizować zmian z Issue-Tracker",
         "wrongID": "Nieprawidłowy kod zaproszenia",
         "password": "Błędne hasło"
