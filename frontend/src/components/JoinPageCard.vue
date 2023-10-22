@@ -17,31 +17,32 @@
         />
       </b-row>
       <b-row class="mt-2">
-        <b-col>
+        <b-col class="inputText">
           <h6>{{ $t("page.join.input.name") }}</h6>
-          <b-form-input ref="name" v-model="name" class="mt-3" type="text" />
+          <b-form-input ref="name" v-model="name" class="mt-3 inputFields" type="text" />
         </b-col>
       </b-row>
       <b-row class="mt-4">
-        <b-col cols="12" :md="'6'">
+        <b-col cols="12" :md="'10'" class="inputText">
           <h6>{{ $t("page.join.input.code") }}</h6>
-          <b-form-input v-model="sessionID" class="mt-3" type="text" />
-        </b-col>
-        <b-col class="mt-2 mt-md-0" cols="12" md="6">
-          <h6>{{ $t("page.join.input.password") }}</h6>
-          <b-form-input v-model="password" class="mt-3" type="password" placeholder="(optional)" />
+          <b-form-input v-model="sessionID" class="mt-3 inputFields" type="text" />
         </b-col>
       </b-row>
       <b-row>
-        <b-button
-          class="mt-5"
-          variant="success"
+        <b-col class="mt-2 mt-md-0 inputText" cols="12" md="9" >
+          <h6>{{ $t("page.join.input.password") }}</h6>
+          <b-form-input v-model="password" class="mt-3 inputFields" type="password" placeholder="(optional)" />
+        </b-col>
+        <b-col cols="12" md="3" id="startButtonCol">
+          <b-button
+          class="rounded-circle startingButton "
           type="submit"
           :disabled="name.length < 1 || sessionID.length < 1"
           @click="onClickButton"
         >
           {{ buttonText }}
         </b-button>
+        </b-col>
       </b-row>
     </div>
     <div class="col-lg-3 col-md-2 col-sm-1" />
@@ -103,9 +104,49 @@ export default Vue.extend({
 <style scoped>
 #join-card {
   border-radius: 20px;
+  vertical-align: middle;
+  margin-bottom: 3%;
 }
 
 h6 {
   font-weight: 700;
+}
+
+.startingButton {
+  background-color: var(--startButton);
+  color: var(--text-primary-color);
+  border-radius: var(--buttonShape);
+  min-height: 75px;
+  min-width: 75px;
+  margin-top: 16%;
+  font-size: xx-large;
+  white-space: nowrap;
+}
+
+.startingButton:hover {
+  background-color: var(--startButtonHovered);
+  color: var(--text-primary-color);
+}
+
+.startingButton:focus {
+  background-color: var(--startButtonHovered) !important;
+  color: var(--text-primary-color);
+}
+
+.startingButton:hover:disabled {
+  background-color: grey;
+  color: var(--text-primary-color);
+}
+
+.inputText {
+  color: black;
+}
+
+.inputFields {
+  border-radius: var(--buttonShape);
+}
+
+#startButtonCol{
+  text-align: center;
 }
 </style>

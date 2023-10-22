@@ -1,5 +1,10 @@
 <template>
-  <b-nav-item-dropdown :text="locales[$i18n.locale]" right>
+  <b-nav-item-dropdown
+    :text="locales[$i18n.locale]"
+    right
+    toggle-class="dropDownLink"
+    menu-class="containerClass"
+  >
     <b-dropdown-item
       v-for="(locale, key) in locales"
       :key="key"
@@ -7,7 +12,7 @@
       @click="setLocale(key)"
       >{{ locale }}</b-dropdown-item
     >
-    <hr />
+    <hr id="breakingLine"/>
     <b-dropdown-item href="https://crowdin.com/project/diveni">{{ $t("general.licenses.translations")}}</b-dropdown-item>
   </b-nav-item-dropdown>
 </template>
@@ -39,3 +44,8 @@ export default Vue.extend({
   },
 });
 </script>
+<style scoped>
+#breakingLine {
+  border-color: var(--text-primary-color);
+}
+</style>

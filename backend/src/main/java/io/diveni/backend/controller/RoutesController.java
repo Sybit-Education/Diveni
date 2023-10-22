@@ -5,6 +5,7 @@
 */
 package io.diveni.backend.controller;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,6 +23,7 @@ import io.diveni.backend.model.SessionConfig;
 import io.diveni.backend.model.SessionState;
 import io.diveni.backend.service.DatabaseService;
 import io.diveni.backend.service.projectmanagementproviders.jiraserver.JiraServerService;
+
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -86,7 +88,8 @@ public class RoutesController {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             accessToken,
-            null);
+            null,
+            LocalDate.now());
     databaseService.saveSession(session);
     val responseMap = Map.of("session", session, "adminCookie", session.getAdminCookie());
 

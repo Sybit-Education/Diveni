@@ -26,6 +26,7 @@ export default withMermaid(
             { text: "Users Guide", link: '/guide/user' },
             { text: "Installation Guide", link: '/guide/install' },
             { text: "Contribution Guide", link: "/guide/contribution"},
+            { text: "Translation Guide", link: "/guide/translations"},
             { text: "Architecture", link: "/guide/architecture"},
             { text: "Testing", link: "/guide/testing"}
           ]
@@ -42,6 +43,7 @@ export default withMermaid(
             { text: "Users Guide", link: '/guide/user' },
             { text: "Installation Guide", link: '/guide/install' },
             { text: "Contribution Guide", link: "/guide/contribution"},
+            { text: "Translation Guide", link: "/guide/translations"},
             { text: "Architecture", link: "/guide/architecture"},
             { text: "Testing", link: "/guide/testing"}
           ]
