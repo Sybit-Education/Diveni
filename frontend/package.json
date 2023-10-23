@@ -15,7 +15,7 @@
     "@egjs/vue-flicking": "^4.11.0",
     "@toast-ui/editor-plugin-code-syntax-highlight": "^3.1.0",
     "@toast-ui/vue-editor": "^3.2.3",
-    "@types/sockjs-client": "^1.5.2",
+    "@types/sockjs-client": "^1.5.3",
     "axios": "^0.27.2",
     "bootstrap": "^4.6.1",
     "bootstrap-vue": "^2.23.1",
