@@ -3,6 +3,7 @@
     <b-container>
       <div>
         &copy; 2022-{{ currentYear }} Diveni |
+        <a target="_blank" href="https://github.com/Sybit-Education/Diveni/issues/new/choose">{{ $t("general.feedback") }}</a> |
         <a href="https://docs.diveni.io">{{ $t("general.about.docs") }}</a> |
         <router-link to="/about">{{ $t("general.about.label") }}</router-link>
       </div>
