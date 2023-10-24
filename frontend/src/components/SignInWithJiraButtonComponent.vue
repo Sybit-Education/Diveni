@@ -2,8 +2,7 @@
   <div>
     <div v-if="enableJiraCloud">
       <b-button
-        variant="success"
-        class="my-1"
+        class="my-1 button"
         @click="showJiraCloudCollapse = !showJiraCloudCollapse"
       >
         {{
@@ -12,7 +11,7 @@
           )
         }}
       </b-button>
-      <b-button id="jira-cloud-help" variant="outline-success" class="my-1 ml-2">
+      <b-button id="jira-cloud-help" variant="outline-secondary" class="my-1 ml-2">
         <b-icon-question-circle />
       </b-button>
       <b-popover target="jira-cloud-help" title="How to use JIRA Cloud" triggers="focus">
@@ -43,7 +42,7 @@
                     :state="jiraUrlState"
                   />
                   <b-input-group-append>
-                    <b-button variant="success" @click="handleJiraUrlSubmit">Connect</b-button>
+                    <b-button class="button" @click="handleJiraUrlSubmit">Connect</b-button>
                   </b-input-group-append>
                 </b-input-group>
               </b-col>
@@ -53,7 +52,7 @@
       </b-collapse>
     </div>
     <div v-if="enableJiraServer">
-      <b-button variant="success" @click="openSignInWithJira('server')">
+      <b-button class="button" @click="openSignInWithJira('server')">
         {{
           $t(
             "session.prepare.step.selection.mode.description.withIssueTracker.buttons.signInWithJiraServer.label"
@@ -69,7 +68,7 @@
       @hidden="resetModal"
       @ok="handleOk"
     >
-      <p>
+      <p id="description">
         {{
           $t("session.prepare.step.selection.mode.description.withIssueTracker.dialog.description")
         }}
@@ -203,3 +202,17 @@ export default Vue.extend({
   },
 });
 </script>
+
+<style scoped>
+#description {
+  color: black;
+}
+.button {
+  background-color: var(--preparePageMainColor);
+  color: var(--text-primary-color);
+}
+.button:hover {
+  background-color: var(--startButtonHovered);
+  color: var(--text-primary-color);
+}
+</style>
