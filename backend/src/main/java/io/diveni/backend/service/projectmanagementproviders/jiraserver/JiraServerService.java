@@ -6,27 +6,25 @@
 package io.diveni.backend.service.projectmanagementproviders.jiraserver;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.json.JSONObject;
+import com.google.api.client.http.*;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.api.client.auth.oauth.OAuthAuthorizeTemporaryTokenUrl;
 import com.google.api.client.auth.oauth.OAuthParameters;
-import com.google.api.client.http.GenericUrl;
-import com.google.api.client.http.HttpContent;
-import com.google.api.client.http.HttpRequest;
-import com.google.api.client.http.HttpRequestFactory;
-import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.http.json.JsonHttpContent;
 import com.google.api.client.json.gson.GsonFactory;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import io.diveni.backend.Utils;
 import io.diveni.backend.model.*;
 import org.slf4j.Logger;
@@ -101,14 +99,8 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
   private static HttpResponse getResponseFromUrl(
       OAuthParameters parameters, GenericUrl jiraUrl, String requestMethod, HttpContent content)
       throws IOException {
-    if (content != null) {
-      content.writeTo(System.out);
-    }
     HttpRequestFactory requestFactory = new NetHttpTransport().createRequestFactory(parameters);
     HttpRequest request = requestFactory.buildRequest(requestMethod, jiraUrl, content);
-    if (request.getContent() != null) {
-      request.getContent().writeTo(System.out);
-    }
     return request.execute();
   }
 
@@ -255,7 +247,7 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
     fields.put("description", story.getDescription());
     if (story.getEstimation() != null) {
       try {
-        if (story.getEstimation().equals("-")) {
+        if (story.getEstimation().equals("?")) {
           fields.put(ESTIMATION_FIELD, null);
         } else {
           fields.put(ESTIMATION_FIELD, Double.parseDouble(story.getEstimation()));
@@ -268,21 +260,22 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
     }
     content.put("fields", fields);
     try {
+
+      GsonBuilder builder = new GsonBuilder();
+      builder.serializeNulls();
+      Gson gson = builder.create();
+      HttpContent httpContent = new ByteArrayContent("application/json", gson.toJson(content).getBytes(StandardCharsets.UTF_8));
+
       JiraOAuthClient jiraOAuthClient = new JiraOAuthClient(JIRA_HOME);
       OAuthParameters parameters =
           jiraOAuthClient.getParameters(
               accessTokens.get(tokenIdentifier), CONSUMER_KEY, PRIVATE_KEY);
-      //System.out.println("Test: " + new JsonHttpContent(GsonFactory.getDefaultInstance(), content).getData().toString());
-      // still has the ESTIMATION FIELD KEY with its null VALUE
-      for (Object o : content.entrySet()) {
-        System.out.println(" --> " + o);
-      }
       HttpResponse response =
           getResponseFromUrl(
               parameters,
               new GenericUrl(getJiraUrl() + "/issue/" + story.getId()),
               "PUT",
-              new CustomJsonHttpContent(GsonFactory.getDefaultInstance(), content));
+              httpContent);
 
       LOGGER.debug("<-- updateIssue() {}", response.parseAsString());
     } catch (Exception e) {
