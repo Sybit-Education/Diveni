@@ -3,7 +3,6 @@ package io.diveni.backend.service.projectmanagementproviders.azuredevops;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import io.diveni.backend.Utils;
 import io.diveni.backend.controller.ErrorMessages;
 import io.diveni.backend.model.Project;

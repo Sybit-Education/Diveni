@@ -264,7 +264,9 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
       GsonBuilder builder = new GsonBuilder();
       builder.serializeNulls();
       Gson gson = builder.create();
-      HttpContent httpContent = new ByteArrayContent("application/json", gson.toJson(content).getBytes(StandardCharsets.UTF_8));
+      HttpContent httpContent =
+          new ByteArrayContent(
+              "application/json", gson.toJson(content).getBytes(StandardCharsets.UTF_8));
 
       JiraOAuthClient jiraOAuthClient = new JiraOAuthClient(JIRA_HOME);
       OAuthParameters parameters =
