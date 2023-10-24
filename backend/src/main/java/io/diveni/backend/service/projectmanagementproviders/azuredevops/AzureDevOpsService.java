@@ -3,6 +3,7 @@ package io.diveni.backend.service.projectmanagementproviders.azuredevops;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import io.diveni.backend.Utils;
 import io.diveni.backend.controller.ErrorMessages;
 import io.diveni.backend.model.Project;
@@ -208,11 +209,12 @@ public class AzureDevOpsService implements ProjectManagementProviderOAuth2 {
     if (story.getEstimation() != null) {
       try {
         Map<String, Object> updateEstimation = new HashMap<>();
-        updateEstimation.put("op", "replace");
-        updateEstimation.put("path", fieldPrefix + API_FIELD_ESTIMATION);
-        if (story.getEstimation().equals("-")) {
-          updateEstimation.put("value", null);
+        if (story.getEstimation().equals("?")) {
+          updateEstimation.put("op", "remove");
+          updateEstimation.put("path", fieldPrefix + API_FIELD_ESTIMATION);
         } else {
+          updateEstimation.put("op", "replace");
+          updateEstimation.put("path", fieldPrefix + API_FIELD_ESTIMATION);
           updateEstimation.put("value", Double.parseDouble(story.getEstimation()));
         }
         content.add(updateEstimation);
@@ -238,7 +240,6 @@ public class AzureDevOpsService implements ProjectManagementProviderOAuth2 {
       testRev.put("path", "/rev");
       testRev.put("value", node.get("rev").asText());
       content.add(testRev);
-
       executeRequest(
           String.format(
                   AZURE_DEVOPS_API,
