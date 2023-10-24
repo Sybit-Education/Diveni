@@ -3,7 +3,6 @@ package io.diveni.backend.service.projectmanagementproviders.azuredevops;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import io.diveni.backend.Utils;
 import io.diveni.backend.controller.ErrorMessages;
 import io.diveni.backend.model.Project;
@@ -240,6 +239,7 @@ public class AzureDevOpsService implements ProjectManagementProviderOAuth2 {
       testRev.put("path", "/rev");
       testRev.put("value", node.get("rev").asText());
       content.add(testRev);
+
       executeRequest(
           String.format(
                   AZURE_DEVOPS_API,

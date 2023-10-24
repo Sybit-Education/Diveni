@@ -29,7 +29,8 @@
               :disabled="!editDescription"
               :value="num"
               @click="
-                setEstimation(num, idx);
+                userStories[idx].estimation = num;
+                publishChanges(idx);
                 $event.target.blur();
               "
             >
@@ -144,13 +145,6 @@ export default Vue.extend({
     publishChanges(idx) {
       this.$emit("userStoriesChanged", { us: this.userStories, idx: idx, doRemove: false });
     },
-    setEstimation(num, idx) {
-      if (num === '-') {
-        //clear userstories
-      }
-      this.userStories[idx].estimation = num;
-      this.publishChanges(idx);
-    }
     // synchronizeJira(idx) {
     //   this.$emit("synchronizeJira", { story: this.userStories[idx], doRemove: false });
     // },
