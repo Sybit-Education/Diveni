@@ -1,6 +1,6 @@
 <template>
   <div id="landing-page">
-    <b-container fluid class="teaser my-5">
+    <b-container fluid class="teaser">
       <b-container>
         <b-jumbotron header="DIVENI" lead="Instant free and easy remote Planning Poker" />
       </b-container>
@@ -12,12 +12,14 @@
           :description="$t('page.landing.meeting.new.description')"
           :button-text="$t('page.landing.meeting.new.buttons.start.label')"
           :on-click="goToPrepareSessionPage"
+          class="newSessionCard"
         />
         <landing-page-card
           :title="$t('page.landing.meeting.join.title')"
           :description="$t('page.landing.meeting.join.description')"
           :button-text="$t('page.landing.meeting.join.buttons.start.label')"
           :on-click="goToJoinPage"
+          class="joinSessionCard"
         />
         <landing-page-card
           v-if="sessionWrapper.session"
@@ -25,53 +27,87 @@
           :description="$t('page.landing.meeting.reconnect.description')"
           :button-text="$t('page.landing.meeting.reconnect.buttons.start.label')"
           :on-click="goToSessionPage"
+          class="reconnectSessionCard"
         />
       </b-card-group>
     </b-container>
+    <AnalyticsDataComponent ref="dataComponent">
+
+    </AnalyticsDataComponent>
     <b-container class="py-5">
-      <h1>Remote Planning Poker using DIVENI</h1>
-      <b-card-group deck>
-        <b-card title="Set up Session">
-          <b-card-text>
-            Create a planning session and select your prefered voting set.
-          </b-card-text>
-          <b-card-text>
-            You could import your user stories or connect JIRA to syncronize story points.
-          </b-card-text>
+        <div class="parent py-5 px-5">
+          <div class="background py-5"></div>
+          <div class="text">
+            <h1>Remote Planning Poker using DIVENI</h1>
+            <b-card-group deck class="py-5">
+              <b-card class="pictureCard">
+                <b-card-text>
+                  <b-img
+                :src="require(`@/assets/SetUpSession.png`)"
+                class="landingPagePictures"
+                  />
+                </b-card-text>
+              </b-card>
+              <b-card class="pictureCard">
+                <b-card-text>
+                  <b-img
+                :src="require(`@/assets/InviteYourTeam.png`)"
+                class="landingPagePictures"
+                  />
+                </b-card-text>
+              </b-card>
+              <b-card class="pictureCard">
+                <b-card-text>
+                  <b-img
+                :src="require(`@/assets/EstimateUserStories.png`)"
+                class="landingPagePictures"
+                  />
+                </b-card-text>
+              </b-card>
+            </b-card-group>
+            <b-card-group deck>
+              <b-card class="aboutDiveni" title="Set up Session">
+                <b-card-text>
+                  Create a planning session and select your prefered voting set.
+                </b-card-text>
+                <b-card-text>
+                  You could import your user stories or connect JIRA to syncronize story points.
+                </b-card-text>
 
-          <b-card-sub-title> Connecting to Issue-Tracker </b-card-sub-title>
-          <b-card-text>
-            DIVENI could connect to issue trackers like Azure DevOps, JIRA Server and Cloud to show
-            user stories and update the voted results of your planning poker.
-          </b-card-text>
-        </b-card>
-        <b-card title="Invite your Team">
-          <b-card-text> Invite your team using QR-Code, invite link or code. </b-card-text>
-          <b-card-text>
-            Every user will be randomly assinged to a animal and is ready to estimate.
-          </b-card-text>
-          <b-card-text>
-            If everybody is in the session, you could start estimation. Having defined a time limit
-            this will be used as limit for voting time.
-          </b-card-text>
-        </b-card>
-
-        <b-card title="Estimate User Stories">
-          <b-card-text>
-            Every member of team could use your defined set to vote the selected user story.
-          </b-card-text>
-          <b-card-text>
-            If everybody has voted, DIVENI shows results and randomly selects two voters having
-            voted minimum / maximum to discuss their estimation.
-          </b-card-text>
-          <b-card-text> After discussion you could repeat estimation. </b-card-text>
-        </b-card>
-      </b-card-group>
+                <b-card-sub-title> Connecting to Issue-Tracker </b-card-sub-title>
+                <b-card-text>
+                  DIVENI could connect to issue trackers like Azure DevOps, JIRA Server and Cloud to show
+                  user stories and update the voted results of your planning poker.
+                </b-card-text>
+              </b-card>
+              <b-card class="aboutDiveni" title="Invite your Team">
+                <b-card-text> Invite your team using QR-Code, invite link or code. </b-card-text>
+                <b-card-text>
+                  Every user will be randomly assinged to a animal and is ready to estimate.
+                </b-card-text>
+                <b-card-text>
+                  If everybody is in the session, you could start estimation. Having defined a time limit
+                  this will be used as limit for voting time.
+                </b-card-text>
+              </b-card>
+              <b-card class="aboutDiveni" title="Estimate User Stories">
+                <b-card-text>
+                  Every member of team could use your defined set to vote the selected user story.
+                </b-card-text>
+                <b-card-text>
+                  If everybody has voted, DIVENI shows results and randomly selects two voters having
+                  voted minimum / maximum to discuss their estimation.
+                </b-card-text>
+                <b-card-text> After discussion you could repeat estimation. </b-card-text>
+              </b-card>
+            </b-card-group>
+          </div>
+        </div>
       <h1 class="mt-5">About DIVENI</h1>
       <p>DIVENI was initially developed by students of HTWG Constance and is open source now.</p>
       <p>
         More information could be found in the
-        <a href="https://docs.diveni.io/">documentation</a>.
+        <a href="https://docs.diveni.io/" id="link">documentation</a>.
       </p>
     </b-container>
   </div>
@@ -82,12 +118,13 @@ import Vue from "vue";
 import LandingPageCard from "../components/LandingPageCard.vue";
 import Constants from "../constants";
 import Session from "../model/Session";
-
+import AnalyticsDataComponent from "../components/AnalyticsDataComponent.vue";
 export default Vue.extend({
   name: "LandingPage",
   components: {
     LandingPageCard,
-  },
+    AnalyticsDataComponent,
+},
   data() {
     return {
       sessionWrapper: {} as { session: Session },
@@ -126,6 +163,7 @@ export default Vue.extend({
               userStoryMode: string;
             };
             sessionState: string;
+            members: Array<string>;
           };
           this.sessionWrapper = { session };
         } catch (e) {
@@ -162,13 +200,63 @@ export default Vue.extend({
 </script>
 
 <style scoped>
+
+#link {
+  color: var(--linkColor);
+}
+
+.jumbotron {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
 .teaser {
-  background: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)),
+  background: linear-gradient(var(--background-color-primary), var(--pictureGradientEnd)),
     url("~@/assets/img/diveni-background.png");
   background-size: cover;
   background-repeat: no-repeat;
 }
-.jumbotron {
-  background-color: rgba(255, 255, 255, 0.5);
+
+.aboutDiveni {
+  border-radius: 2rem;
+  background-color: var(--landingPageCardsBackground);
+  box-shadow: 0 0 5px 10px var(--landingPageCardsBackground);
+  border: none;
+}
+
+.card-sub-title {
+  color: red;
+}
+.card-title{
+  color:var(--text-primary-color)
+}
+
+.parent {
+  position: relative;
+  height: 110%;
+  width: 100%;
+}
+
+
+.background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--blurBackGroundColor);
+  filter: blur(10px);
+  z-index: 0;
+  border-radius: 1rem;
+}
+
+.pictureCard {
+  background: transparent;
+  border: none;
+  align-items: center;
+}
+
+.landingPagePictures {
+  height: 250px;
+  width: 250px;
 }
 </style>

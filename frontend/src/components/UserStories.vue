@@ -1,20 +1,29 @@
 <template>
   <div class="user-stories">
     <div v-if="userStories.length > 0 || filterActive" class="w-100 d-flex justify-content-left">
-      <b-input
-        v-model="input"
-        class="search"
-        type="text"
-        :placeholder="$t('page.session.before.userStories.placeholder.searchUserStories')"
-        @input="swapPriority"
-      />
+      <b-input-group>
+        <b-input-group-prepend>
+          <BIconSearch id="searchIcon"></BIconSearch>
+        </b-input-group-prepend>
+        <b-input
+          v-model="input"
+          id="search"
+          type="text"
+          :placeholder="$t('page.session.before.userStories.placeholder.searchUserStories')"
+          @input="swapPriority"
+        />
+      </b-input-group>
     </div>
-    <b-card-group class="my-3 overflow-auto" style="max-height: 70vh">
+    <b-card-group
+      class="my-3"
+      id="userStoryBlock"
+    >
       <b-list-group-item
         v-for="(story, index) of userStories"
         :key="index"
         :active="index === selectedStoryIndex"
         class="w-100 p-1 d-flex justify-content-left"
+        id="userStoryRow"
         :style="index === selectedStoryIndex ? 'border-width: 3px;' : ''"
         @mouseover="hover = index"
         @mouseleave="hover = null"
@@ -22,11 +31,11 @@
       >
         <b-button
           v-if="showEditButtons"
-          :variant="story.isActive ? 'success' : 'outline-success'"
+          :class="story.isActive ? 'selectedStory' : 'outlineColorStory'"
           size="sm"
-          @click="markUserStory(index)"
+          @click="markUserStory(index); $event.target.blur();"
         >
-          <b-icon-check2 />
+          <b-img :src="require('@/assets/ActiveUserStory.png')" id="userStoryPicture"/>
         </b-button>
 
         <b-button
@@ -40,14 +49,18 @@
 
         <b-form-input
           v-model="story.title"
-          :disabled="true"
-          class="mx-1 w-100"
+          class="mx-1 w-100 shadow-none"
+          id="userStoryTitles"
+          readonly
           size="sm"
           :placeholder="$t('page.session.before.userStories.placeholder.userStoryTitle')"
           @blur="publishChanges"
         />
 
-        <b-badge variant="success" class="p-2">
+        <b-badge
+          id="badge"
+          class="p-2"
+        >
           {{ story.estimation == null ? "?" : story.estimation }}
         </b-badge>
         <b-button
@@ -64,9 +77,8 @@
 
     <b-button
       v-if="userStories.length < 1 && showEditButtons && !filterActive"
-      class="w-100 mb-3"
-      variant="success"
-      @click="addUserStory()"
+      class="w-100 mb-3 addButton"
+      @click="addUserStory(); $event.target.blur();"
     >
       <b-icon-plus />
       {{ $t("page.session.before.userStories.button.addFirstUserStory") }}
@@ -82,9 +94,8 @@
 
     <b-button
       v-if="userStories.length > 0 && showEditButtons && !filterActive"
-      class="w-100 mb-3"
-      variant="success"
-      @click="addUserStory()"
+      class="w-100 mb-3 addButton"
+      @click="addUserStory(); $event.target.blur();"
     >
       <b-icon-plus />
       {{ $t("page.session.before.userStories.button.addUserStory") }}
@@ -141,6 +152,7 @@ export default Vue.extend({
         isActive: false,
       };
       this.userStories.push(story);
+      this.setUserStoryAsActive(this.userStories.length - 1);
     },
     swapPriority: function () {
       if (!this.filterActive) {
@@ -192,17 +204,113 @@ export default Vue.extend({
 </script>
 
 <style scoped>
-.list-group-item.active {
-  background-color: transparent;
-}
 
-.search {
-  background-image: url("@/assets/magnifying glass.png");
-  background-position: 3px;
-  background-repeat: no-repeat;
-  background-size: 22px 25px;
-  padding-left: 30px;
+
+#search {
+  border-radius: var(--element-size);
+  padding-left: 45px;
   border-color: black;
   overflow: auto;
+  z-index: 1;
+}
+
+#searchIcon {
+  position: absolute;
+  z-index: 2;
+  font-size: 25px;
+  top: 20%;
+  left: 1.5%;
+  rotate: 90deg;
+}
+
+.addButton {
+  background-color: var(--joinButton);
+  color: var(--text-primary-color);
+  border-radius: var(--element-size);
+}
+
+.addButton:hover {
+  background-color: var(--joinButtonHovered);
+  color: var(--text-primary-color);
+}
+
+.addButton:focus {
+  background-color: var(--joinButtonHovered);
+  color: var(--text-primary-color);
+}
+
+.selectedStory {
+  background-color: transparent;
+  border: none;
+}
+
+.selectedStory:hover {
+  background-color: transparent !important;
+  border: none;
+}
+
+.selectedStory:focus {
+  background-color: transparent !important;
+  border: none;
+  outline: none;
+  box-shadow: none;
+}
+
+.outlineColorStory {
+  background-color: transparent;
+  border: none;
+}
+
+.outlineColorStory:hover {
+  background-color: transparent;
+  border: none;
+}
+
+.outlineColorStory:focus {
+  background-color: transparent !important;
+  border: none;
+}
+
+.form-control {
+  background-color: var(--textAreaColour);
+  color: var(--text-primary-color);
+}
+
+.form-control:focus {
+  background-color: var(--textAreaColour);
+  color: var(--text-primary-color);
+}
+
+.form-control::placeholder {
+  color: var(--text-primary-color);
+}
+
+#userStoryRow{
+  background-color: var(--textAreaColour);
+  color: var(--text-primary-color);
+}
+
+#userStoryBlock {
+  max-height: 200px; /*exactly 4 User Stories tall*/
+  border-radius: 1rem;
+  overflow: scroll;
+  -webkit-overflow-scrolling: touch;
+}
+
+#userStoryTitles {
+  background-color: transparent;
+  color: var(--text-primary-color);
+  font-size: large;
+  border: none
+}
+#userStoryPicture {
+  height: 30px;
+  width: 30px;
+}
+
+#badge{
+  background-color: var(--joinButton);
+  color: var(--text-primary-color);
+  font-size: large;
 }
 </style>

@@ -1,6 +1,7 @@
 <template>
   <b-button
-    variant="success"
+    id="startButtonSessionPage"
+    class="my-5"
     :disabled="!members || members.length < 1"
     @click="sendStartEstimationMessages"
   >
@@ -28,3 +29,33 @@ export default Vue.extend({
   },
 });
 </script>
+
+<style>
+
+#startButtonSessionPage{
+  background-color: var(--startButton);
+  border-radius: 1rem;
+  color: var(--text-primary-color);
+  font-size: xx-large;
+}
+
+#startButtonSessionPage:hover {
+  background-color: var(--startButtonHovered);
+  border-radius: 1rem;
+  color: var(--text-primary-color);
+}
+
+
+#startButtonSessionPage:disabled {
+  background-color: var(--preparePageInActiveTab);
+  border-radius: 1rem;
+  color: var(--text-primary-color);
+}
+
+#startButtonSessionPage:disabled:hover {
+  background-color: grey;
+  border-radius: 1rem;
+  color: var(--text-primary-color);
+}
+
+</style>

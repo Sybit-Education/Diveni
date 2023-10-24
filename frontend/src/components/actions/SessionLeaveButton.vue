@@ -1,14 +1,18 @@
 <template>
-  <b-button
-    v-b-modal.close-session-modal
-    style="max-height: 40px"
-    variant="danger"
-    class="mt-4"
-    @click="leaveSession"
-  >
-    <b-icon-x />
-    {{ $t("page.vote.button.leave.label") }}
-  </b-button>
+  <div class="img-holderLeave mt-5">
+    <div id="picture-holderLeave">
+      <b-img :src="require('@/assets/LeaveButton.png')" id="pandaPictureLeave"/>
+    </div>
+    <b-button
+      v-b-modal.close-session-modal
+      variant="danger"
+      class="mt-4 button"
+      @click="leaveSession"
+    >
+      <b-icon-x />
+      {{ $t("page.vote.button.leave.label") }}
+    </b-button>
+  </div>
 </template>
 
 <script lang="ts">

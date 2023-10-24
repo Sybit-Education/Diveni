@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -43,6 +44,7 @@ public class SessionTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
+            null,
             null);
     val sameSession =
         new Session(
@@ -57,6 +59,7 @@ public class SessionTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
+            null,
             null);
     val otherSession =
         new Session(
@@ -69,6 +72,7 @@ public class SessionTest {
             new HashMap<>(),
             new ArrayList<>(),
             SessionState.WAITING_FOR_MEMBERS,
+            null,
             null,
             null,
             null);
@@ -98,6 +102,7 @@ public class SessionTest {
             new HashMap<>(),
             new ArrayList<>(),
             SessionState.WAITING_FOR_MEMBERS,
+            null,
             null,
             null,
             null);
@@ -132,6 +137,7 @@ public class SessionTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
+            null,
             null);
 
     val result = session.resetEstimations();
@@ -157,6 +163,7 @@ public class SessionTest {
             oldSessionState,
             null,
             null,
+            null,
             null);
     val result = session.updateSessionState(newSessionState);
 
@@ -175,6 +182,7 @@ public class SessionTest {
             new ArrayList<Member>(),
             new HashMap<>(),
             new ArrayList<>(),
+            null,
             null,
             null,
             null,
@@ -202,6 +210,7 @@ public class SessionTest {
             new HashMap<>(),
             new ArrayList<>(),
             SessionState.WAITING_FOR_MEMBERS,
+            null,
             null,
             null,
             null);
@@ -234,6 +243,7 @@ public class SessionTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
+            null,
             null);
 
     val result = session.removeMember(memberID1);
@@ -258,6 +268,7 @@ public class SessionTest {
             List.of(member1, member2, member3),
             new HashMap<>(),
             new ArrayList<>(),
+            null,
             null,
             null,
             null,
@@ -289,6 +300,7 @@ public class SessionTest {
             List.of(member1, member2, member3, member4),
             new HashMap<>(),
             new ArrayList<>(),
+            null,
             null,
             null,
             null,
@@ -325,6 +337,7 @@ public class SessionTest {
             null,
             null,
             null,
+            null,
             null);
 
     val result = session.selectHighlightedMembers();
@@ -351,6 +364,7 @@ public class SessionTest {
             null,
             null,
             null,
+            null,
             null);
 
     val result = session.resetCurrentHighlights();
@@ -370,6 +384,7 @@ public class SessionTest {
             new ArrayList<>(),
             new HashMap<>(),
             new ArrayList<>(),
+            null,
             null,
             null,
             null,
@@ -396,10 +411,32 @@ public class SessionTest {
             null,
             null,
             null,
-            Utils.getTimestampISO8601(new Date()));
+            Utils.getTimestampISO8601(new Date()),
+            null);
 
     val result = session.resetTimerTimestamp();
 
     assertNull(result.getTimerTimestamp());
+  }
+
+  @Test
+  public void getSessionCreationTime_works() {
+    val session =
+        new Session(
+            null,
+            null,
+            null,
+            null,
+            null,
+            new ArrayList<>(),
+            new HashMap<>(),
+            new ArrayList<>(),
+            null,
+            null,
+            null,
+            Utils.getTimestampISO8601(new Date()),
+            LocalDate.of(2222, 12, 3));
+
+    assertEquals(LocalDate.of(2222, 12, 3), session.getCreationTime());
   }
 }

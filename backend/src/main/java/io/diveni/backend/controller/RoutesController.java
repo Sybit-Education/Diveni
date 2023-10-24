@@ -5,6 +5,7 @@
 */
 package io.diveni.backend.controller;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -83,7 +84,8 @@ public class RoutesController {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             tokenIdentifier.orElse(null),
-            null);
+            null,
+            LocalDate.now());
     databaseService.saveSession(session);
     val responseMap = Map.of("session", session, "adminCookie", session.getAdminCookie());
 
