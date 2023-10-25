@@ -67,9 +67,8 @@
 </template>
 <script lang="ts">
 import Vue from "vue";
-import gsap from 'gsap'
+import gsap from "gsap";
 import apiService from "@/services/api.service";
-
 export default Vue.extend({
   name: "AnalyticsDataComponent",
   data() {
@@ -86,42 +85,45 @@ export default Vue.extend({
       tweenedOverAllSessionsFromLastMonth: 0,
       tweenedOverAllAttendeesFromLastMonth: 0,
       tweenedCurrentSessions: 0,
-      tweendCurrentAttendees: 0
+      tweendCurrentAttendees: 0,
     };
-  },
-  watch: {
-    overAllSessions(n) {
-      gsap.to(this, {duration: 1.25, tweenedOverAllSessions: Number(n) || 0})
-    },
-    overAllAttendees(n) {
-      gsap.to(this, {duration: 1.25, tweenedOverAllAttendees: Number(n) || 0})
-    },
-    overAllSessionsFromLastMonth(n) {
-      gsap.to(this, {duration: 1.25, tweenedOverAllSessionsFromLastMonth: Number(n) || 0})
-    },
-    overAllAttendeesFromLastMonth(n) {
-      gsap.to(this, {duration: 1.25, tweetweenedOverAllAttendeesFromLastMonthned: Number(n) || 0})
-    },
-    currentSessions(n) {
-      gsap.to(this, {duration: 1.25, tweenedCurrentSessions: Number(n) || 0})
-    },
-    currentAttendees(n) {
-      gsap.to(this, {duration: 1.25, tweendCurrentAttendees: Number(n) || 0})
-    }
-  },
-  created() {
-    this.getAllDiveniData();
   },
   computed: {
     headerText() {
-      return this.$t('page.landing.meeting.analytics.title');
+      return this.$t("page.landing.meeting.analytics.title");
     },
     allSessions() {
-      return this.$t('page.landing.meeting.analytics.sessionText');
+      return this.$t("page.landing.meeting.analytics.sessionText");
     },
     allAttendees() {
-      return this.$t('page.landing.meeting.analytics.attendeesText');
+      return this.$t("page.landing.meeting.analytics.attendeesText");
     },
+  },
+  watch: {
+    overAllSessions(n) {
+      gsap.to(this, { duration: 1.25, tweenedOverAllSessions: Number(n) || 0 });
+    },
+    overAllAttendees(n) {
+      gsap.to(this, { duration: 1.25, tweenedOverAllAttendees: Number(n) || 0 });
+    },
+    overAllSessionsFromLastMonth(n) {
+      gsap.to(this, { duration: 1.25, tweenedOverAllSessionsFromLastMonth: Number(n) || 0 });
+    },
+    overAllAttendeesFromLastMonth(n) {
+      gsap.to(this, {
+        duration: 1.25,
+        tweetweenedOverAllAttendeesFromLastMonthned: Number(n) || 0,
+      });
+    },
+    currentSessions(n) {
+      gsap.to(this, { duration: 1.25, tweenedCurrentSessions: Number(n) || 0 });
+    },
+    currentAttendees(n) {
+      gsap.to(this, { duration: 1.25, tweendCurrentAttendees: Number(n) || 0 });
+    },
+  },
+  created() {
+    this.getAllDiveniData();
   },
   methods: {
     async getAllDiveniData() {
@@ -147,15 +149,12 @@ export default Vue.extend({
     },
   },
 });
-
 </script>
 <style scoped>
-
 .statsCards {
   border-radius: 2rem;
   background-color: var(--landingPageCardsBackground);
 }
-
 .numbers {
   text-align: center;
 }

@@ -4,7 +4,9 @@
       v-model="selected"
       :items="getProjectNames"
       :placeholder="
-        $t('session.prepare.step.selection.mode.description.withIssueTracker.placeholder.searchProjects')
+        $t(
+          'session.prepare.step.selection.mode.description.withIssueTracker.placeholder.searchProjects'
+        )
       "
       @input="getUserStories"
     />

@@ -9,7 +9,10 @@
     <h2 class="header">Open Source & Contribution</h2>
     <p>
       Diveni is open source and published under
-      <a href="https://github.com/Sybit-Education/Diveni/blob/main/LICENSE" target="_blank" class="links"
+      <a
+        href="https://github.com/Sybit-Education/Diveni/blob/main/LICENSE"
+        target="_blank"
+        class="links"
         >GNU Affero General Public License v3.0</a
       >.
     </p>
@@ -18,10 +21,19 @@
       <a href="https://github.com/Sybit-Education/Diveni" target="_blank" class="links">GitHub</a>:
     </p>
     <ul>
-      <li><a href="https://github.com/Sybit-Education/Diveni/" target="_blank" class="links">Code</a></li>
-      <li><a href="https://github.com/Sybit-Education/Diveni/issues" target="_blank" class="links">Issues</a></li>
       <li>
-        <a href="https://github.com/Sybit-Education/Diveni/discussions" target="_blank" class="links"
+        <a href="https://github.com/Sybit-Education/Diveni/" target="_blank" class="links">Code</a>
+      </li>
+      <li>
+        <a href="https://github.com/Sybit-Education/Diveni/issues" target="_blank" class="links"
+          >Issues</a
+        >
+      </li>
+      <li>
+        <a
+          href="https://github.com/Sybit-Education/Diveni/discussions"
+          target="_blank"
+          class="links"
           >Discussions</a
         >
       </li>
@@ -41,7 +53,10 @@
     <h2 class="header">License</h2>
     <p>
       Diveni is licensed under
-      <a href="https://github.com/Sybit-Education/Diveni/blob/main/LICENSE" target="_blank" class="links"
+      <a
+        href="https://github.com/Sybit-Education/Diveni/blob/main/LICENSE"
+        target="_blank"
+        class="links"
         >AGPL-3.0 license</a
       >.
     </p>
@@ -74,7 +89,6 @@ export default Vue.extend({
 </script>
 
 <style scoped>
-
 .links {
   color: var(--linkColor);
 }
@@ -82,5 +96,4 @@ export default Vue.extend({
 .header {
   color: var(--text-primary-color);
 }
-
 </style>

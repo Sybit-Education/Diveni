@@ -31,8 +31,7 @@ export default Vue.extend({
 </script>
 
 <style>
-
-#startButtonSessionPage{
+#startButtonSessionPage {
   background-color: var(--startButton);
   border-radius: 1rem;
   color: var(--text-primary-color);
@@ -45,7 +44,6 @@ export default Vue.extend({
   color: var(--text-primary-color);
 }
 
-
 #startButtonSessionPage:disabled {
   background-color: var(--preparePageInActiveTab);
   border-radius: 1rem;
@@ -57,5 +55,4 @@ export default Vue.extend({
   border-radius: 1rem;
   color: var(--text-primary-color);
 }
-
 </style>

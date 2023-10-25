@@ -76,50 +76,49 @@ export default Vue.extend({
         ],
         plugins: [codeSyntaxHighlight],
       },
-      theme: localStorage.getItem('user-theme'),
+      theme: localStorage.getItem("user-theme"),
     };
   },
   mounted() {
-    window.addEventListener('user-theme-localstorage-changed', (event) => {
-        const customEvent = event as CustomEvent;
-        this.theme = customEvent.detail.storage;
+    window.addEventListener("user-theme-localstorage-changed", (event) => {
+      const customEvent = event as CustomEvent;
+      this.theme = customEvent.detail.storage;
     });
   },
   methods: {
     getTextValueFromEditor() {
       if (this.$refs.toastuiEditor) {
         const editor = this.$refs.toastuiEditor as Editor;
-        const editorText = editor.invoke('getMarkdown');
-        this.$emit("textValueChanged", { markdown: editorText});
+        const editorText = editor.invoke("getMarkdown");
+        this.$emit("textValueChanged", { markdown: editorText });
       }
-    }
-  }
+    },
+  },
 });
 </script>
 
 <style>
-
 .toastui-editor-popup {
   background-color: var(--topNavigationBarColor);
 }
 
 .toastui-editor-defaultUI-toolbar {
-  background-color: #7A777773;
+  background-color: #7a777773;
 }
 .toastui-editor-defaultUI-toolbar button {
-  border:none;
+  border: none;
   color: var(--text-primary-color);
 }
 
-.toastui-editor-defaultUI .ProseMirror{
+.toastui-editor-defaultUI .ProseMirror {
   background-color: #405c6c;
 }
 
 .toastui-editor-md-container .toastui-editor-md-preview {
-    overflow: auto;
-    padding: 0 25px;
-    height: 100%;
-    background-color: #405c6c;
+  overflow: auto;
+  padding: 0 25px;
+  height: 100%;
+  background-color: #405c6c;
 }
 
 .toastui-editor-mode-switch {
@@ -130,15 +129,15 @@ export default Vue.extend({
   color: var(--text-primary-color) !important;
 }
 
-.lightMode .toastui-editor-defaultUI .ProseMirror{
+.lightMode .toastui-editor-defaultUI .ProseMirror {
   background-color: var(--textAreaColour);
 }
 
 .lightMode .toastui-editor-md-container .toastui-editor-md-preview {
-    overflow: auto;
-    padding: 0 25px;
-    height: 100%;
-    background-color: var(--textAreaColour);
+  overflow: auto;
+  padding: 0 25px;
+  height: 100%;
+  background-color: var(--textAreaColour);
 }
 
 .lightMode .toastui-editor-mode-switch {

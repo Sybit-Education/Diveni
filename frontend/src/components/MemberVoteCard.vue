@@ -24,7 +24,7 @@
         :style="swipeableCardBackgroundColor"
         @click="onCardClicked()"
       >
-        <div class="text" >
+        <div class="text">
           {{ dragged ? "💪" : voteOption }}
         </div>
       </div>
@@ -97,6 +97,6 @@ export default Vue.extend({
 .text {
   font-size: 5rem;
   font-weight: 500;
-  color:black
+  color: black;
 }
 </style>
