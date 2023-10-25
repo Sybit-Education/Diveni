@@ -28,7 +28,7 @@
         "button": "Start Planning",
         "refreshStories": "Refresh Userstories",
         "userStories": {
-          "filter": {
+          "filter" : {
             "noStoryFound": "No stories found!"
           },
           "button": {
