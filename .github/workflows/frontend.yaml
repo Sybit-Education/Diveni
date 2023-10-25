@@ -51,6 +51,7 @@ jobs:
         working-directory: frontend
         run: npm run build
       - name: Upload artifacts
+        if: github.event.pull_request.head.repo.full_name == github.repository
         uses: actions/upload-artifact@v2
         with:
           name: frontend
