@@ -1,10 +1,10 @@
 <template>
-  <div>
-    <input id="checkbox" type="checkbox" class="switch-checkbox" @change="toggleTheme" />
-    <label for="checkbox" class="switch-label">
+  <div class="theme-toggle">
+    <input id="checkbox" type="checkbox" class="theme-toggle__checkbox" @change="toggleTheme" />
+    <label for="checkbox" class="theme-toggle__label">
       <span>🌙</span>
       <span>☀️</span>
-      <div class="switch-toggle" :class="{ 'switch-toggle-checked': userTheme === 'dark-theme' }" />
+      <div class="theme-toggle__toggle" :class="{ 'theme-toggle__toggle-checked': userTheme === 'dark-theme' }" />
     </label>
   </div>
 </template>
@@ -50,42 +50,51 @@ export default Vue.extend({
 });
 </script>
 
-<style scoped>
-.switch-checkbox {
-  display: none;
-}
-.switch-toggle-checked {
-  transform: translateX(calc(var(--element-size) * 0.625)) !important;
-}
-.switch-toggle {
-  position: absolute;
-  background-color: var(--background-color-primary);
-  border-radius: 50%;
-  left: 0rem;
-  height: calc(var(--element-size) * 0.3);
-  width: calc(var(--element-size) * 0.3);
-  transform: translateX(0);
-  transition: transform 0.3s ease, background-color 0.5s ease;
-}
-.switch-label {
-  /* for width, use the standard element-size */
-  width: 5.75rem;
-  user-select: none;
+<style scoped lang="scss">
+.theme-toggle {
+  $element-size: 1.5rem;
+  margin-left: 0.25rem;
+  margin-right: 0.25rem;
 
-  /* for other dimensions, calculate values based on it */
-  border-radius: var(--element-size);
-  border: calc(var(--element-size) * 0.025) solid var(--accent-color);
-  font-size: calc(var(--element-size) * 0.2);
-  height: calc(var(--element-size) * 0.35);
-  padding-left: 5px;
+  &__checkbox {
+    display: none;
+  }
 
-  align-items: center;
-  background: var(--text-primary-color);
-  cursor: pointer;
-  display: flex;
-  position: relative;
-  transition: background 0.5s ease;
-  justify-content: space-between;
-  z-index: 1;
+  &__toggle-checked {
+    transform: translateX(calc($element-size * 1.25)) !important;
+  }
+
+  &__toggle {
+    position: absolute;
+    background-color: var(--topNavigationBarColor);
+    border-radius: 50%;
+    left: 0;
+    height: calc($element-size);
+    width: calc($element-size);
+    transform: translateX(0);
+    transition: transform 0.3s ease, background-color 0.5s ease;
+  }
+
+  &__label {
+    /* for width, use the standard element-size */
+    width: calc($element-size * 2.25);
+    user-select: none;
+
+    /* for other dimensions, calculate values based on it */
+    border-radius: var(--buttonShape);
+    border-color: var(--accent-color);
+    font-size: calc($element-size * 0.75);
+    height: calc($element-size);
+    padding-left: 0;
+
+    align-items: center;
+    background: var(--text-primary-color);
+    cursor: pointer;
+    display: flex;
+    position: relative;
+    transition: background 0.5s ease;
+    justify-content: space-between;
+    z-index: 1;
+  }
 }
 </style>
