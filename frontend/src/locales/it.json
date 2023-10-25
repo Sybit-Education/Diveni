@@ -2,7 +2,7 @@
   "general": {
     "pleaseWait": "Attendere prego...",
     "about": {
-      "label": "Circa",
+      "label": "Informazioni",
       "repository": "GitHub",
       "docs": "Documentazione"
     },
@@ -16,39 +16,39 @@
     "session": {
       "before": {
         "copy": {
-          "id": "Copia il codice",
+          "id": "Copia codice",
           "link": "Copia link",
-          "qr": "Mostra codice QR"
+          "qr": "Show QR code"
         },
-        "title": "In attesa di membri ...",
+        "title": "In attesa dei membri...",
         "text": {
           "beforeID": "Condividi il codice",
           "afterID": "con i tuoi compagni di squadra"
         },
-        "button": "Inizia a pianificare",
-        "refreshStories": "Aggiorna storie utente",
+        "button": "Avvia La Pianificazione",
+        "refreshStories": "Aggiornare le User Story",
         "userStories": {
           "filter": {
             "noStoryFound": "Nessuna storia trovata!"
           },
           "button": {
-            "addFirstUserStory": "Ancora nessuna storia... Clicca per aggiungere storie",
-            "addUserStory": "Aggiungere"
+            "addFirstUserStory": "Ancora nessuna storia... clicca per aggiungere storie",
+            "addUserStory": "Aggiungi"
           },
           "placeholder": {
-            "userStoryTitle": "Titolo della storia utente",
+            "userStoryTitle": "Titolo Della Storia Utente",
             "userStoryDescription": "Descrizione e criteri di accettazione...",
-            "searchUserStories": "Cerca storie utente..."
+            "searchUserStories": "Ricerca di storie utente..."
           },
-          "text": "Fare clic sul titolo di una storia utente per visualizzare la descrizione",
+          "text": "Fare clic su un titolo della storia utente per vedere la descrizione",
           "sum": "Totale:"
         }
       },
       "during": {
         "estimation": {
-          "title": "Valutazione",
+          "title": "Stima",
           "message": {
-            "waitingFor": "Aspettando",
+            "waitingFor": "In attesa di",
             "finished": "Stima terminata"
           },
           "buttons": {
@@ -63,13 +63,13 @@
           "bodyPart2": " dalla tua sessione corrente?",
           "buttons": {
             "cancel": "Annulla",
-            "ok": "Togliere"
+            "ok": "Rimuovi"
           }
         }
       },
       "close": {
         "popup": "Sei sicuro?",
-        "description1": "La chiusura di questa sessione rimuove te e tutti i membri.",
+        "description1": "Chiudere questa sessione rimuove te e tutti i membri.",
         "description2": "È possibile scaricare le storie utente in seguito.",
         "button": {
           "cancel": "Annulla",
@@ -82,7 +82,7 @@
       "noUserStories": "Nessuna storia utente definita...",
       "button": {
         "download": "Scarica come CSV",
-        "home": "Va' a casa"
+        "home": "Vai a casa"
       }
     },
     "landing": {
@@ -98,8 +98,8 @@
           }
         },
         "join": {
-          "title": "Partecipa alla sessione",
-          "description": "Partecipa a una sessione esistente e aiuta il tuo team a stimare",
+          "title": "Unisciti alla sessione",
+          "description": "Unisciti a una sessione esistente e aiuta il tuo team a stimare",
           "buttons": {
             "start": {
               "label": "Entra ..."
@@ -107,8 +107,8 @@
           }
         },
         "reconnect": {
-          "title": "Riconnettersi alla sessione",
-          "description": "Riconnettersi alla sessione esistente come host",
+          "title": "Riconnetti alla sessione",
+          "description": "Riconnetti alla sessione esistente come host",
           "buttons": {
             "start": {
               "label": "Rientra"
@@ -133,29 +133,29 @@
       }
     },
     "join": {
-      "title": "Partecipa alla sessione",
+      "title": "Entra nella sessione",
       "input": {
-        "code": "Codice invito",
-        "password": "Parola d’ordine",
+        "code": "Codice di invito",
+        "password": "Password",
         "passwordPlaceholder": "(facoltativo)",
         "name": "Nome"
       },
-      "submit": "ANDARE"
+      "submit": "VAI"
     },
     "vote": {
-      "title": "Valutare!",
-      "waiting": "Aspettando che il tuo host inizi",
+      "title": "Stima!",
+      "waiting": "In attesa che il tuo host inizi",
       "button": {
         "leave": {
-          "label": "Abbandona la sessione"
+          "label": "Abbandona sessione"
         }
       },
-      "hostLeft": "In attesa che l'host torni..."
+      "hostLeft": "In attesa che l'host torni a..."
     }
   },
   "session": {
     "prepare": {
-      "title": "Prepara la tua sessione:",
+      "title": "Prepara la sessione:",
       "step": {
         "selection": {
           "mode": {
@@ -166,14 +166,14 @@
                   "label": "Pianificazione senza storie utente"
                 },
                 "subtitle": "Pianificazione senza storie utente",
-                "descriptionLine1": "Voterai con le tue schede selezionate",
-                "descriptionLine2": "Non sarà possibile aggiungere storie utente una volta avviata la sessione"
+                "descriptionLine1": "Voterai con le tue carte selezionate",
+                "descriptionLine2": "Non potrai aggiungere storie utente una volta avviata la sessione"
               },
               "withUS": {
                 "tab": {
-                  "label": "Pianificazione con storie utente"
+                  "label": "Pianificazione con le storie degli utenti"
                 },
-                "subtitle": "Integra le storie degli utenti nella tua pianificazione del poker",
+                "subtitle": "Integra le storie utente nel tuo Poker-Planning",
                 "descriptionLine1": "Crea le tue storie utente nella pagina successiva",
                 "descriptionLine2": "Aggiungi titolo e descrizione ad ogni storia utente",
                 "descriptionLine3": "Usa il CSV-Import per integrare le storie utente nella tua sessione",
@@ -181,20 +181,20 @@
                 "descriptionLine5": "Sarai in grado di aggiungere e modificare le storie utente una volta che avrai iniziato la sessione",
                 "importButton": "Importa Storie Utente",
                 "toastSuccessNotification": "Storie utente importate",
-                "toastErrorNotification": "Errore durante il tentativo di importazione"
+                "toastErrorNotification": "Errore durante l'importazione"
               },
               "withIssueTracker": {
                 "tab": {
                   "label": "Pianificazione con Issue-Tracker"
                 },
-                "subtitle": "Seleziona Jira per la tua pianificazione del poker",
+                "subtitle": "Seleziona Jira per il tuo Poker-Planning",
                 "descriptionLine1": "Accedi con le tue credenziali",
                 "descriptionLine2": "Seleziona il tuo progetto",
-                "descriptionLine3": "Dopo aver fatto clic su avvia sessione, verrai reindirizzato alla pagina successiva per modificare le tue storie utente",
-                "descriptionLine4": "Sarai in grado di aggiungere e modificare le storie utente una volta avviata la sessione",
+                "descriptionLine3": "Dopo aver cliccato sulla sessione iniziale, sarai reindirizzato alla pagina successiva per modificare le storie degli utenti",
+                "descriptionLine4": "Sarai in grado di aggiungere e modificare le storie utente una volta che avrai iniziato la sessione",
                 "formSelection": "Seleziona il tuo progetto",
-                "selectedProject": "Progetto selezionato: ",
-                "allUserStories": "Tutte le storie utente",
+                "selectedProject": "Progetto Selezionato: ",
+                "allUserStories": "Tutte Le Storie Utente",
                 "dialog": {
                   "description": "Una nuova scheda si aprirà immediatamente, si prega di concedere l'accesso a questa applicazione in questa scheda e inserire il codice di verifica qui."
                 },
@@ -221,7 +221,7 @@
                   }
                 },
                 "placeholder": {
-                  "searchProjects": "Cerca progetti..."
+                  "searchProjects": "Sfoglia i progetti..."
                 }
               }
             }
@@ -234,24 +234,24 @@
                 "description": "Ogni numero è la somma dei due precedenti"
               },
               "tShirtSizes": {
-                "label": "Taglie T-shirt",
-                "description": "Taglie base della T-shirt. Semplice ed efficace"
+                "label": "Taglie magliette",
+                "description": "Dimensioni base della maglietta. Semplice ed efficace"
               },
               "hours": {
-                "label": "Orario",
-                "description": "Semplicemente ore. Ottimo per le attività secondarie."
+                "label": "Ore",
+                "description": "Semplicemente ore. Ottimo per le mansioni secondarie."
               },
               "numbers": {
                 "label": "Numeri",
-                "description": "Numeri interi. Cos'altro vuoi?"
+                "description": "Numeri interi. Che altro vuoi?"
               },
               "ownSet": {
                 "label": "Set di carte proprie",
                 "description": "Qui puoi impostare la tua carta",
                 "hint": {
-                  "label": "Alludere",
-                  "description": "Nel campo di testo sottostante puoi impostare il tuo set di carte. Ogni voce è separata da un punto e virgola (;). Le voci duplicate vengono ignorate.",
-                  "example": "Esempio: 1;2;3;4;5;6;7;"
+                  "label": "Suggerimento",
+                  "description": "Nel campo di testo sottostante puoi impostare il tuo set di carte. Ogni voce è separata da un punto e virgola (;). Voci duplicate sono saltate.",
+                  "example": "Per esempio: 1;2;3;4;5;6;7;"
                 }
               }
             }
@@ -272,9 +272,9 @@
     "userStory": {
       "button": {
         "title": "Storie",
-        "add": "Aggiungere",
-        "edit": "Redigere",
-        "save": "Salvare",
+        "add": "Aggiungi",
+        "edit": "Modifica",
+        "save": "Salva",
         "noUserStories": "Ancora nessuna storia... Aggiungi una storia per iniziare a stimare.",
         "placeholder": {
           "title": "Titolo della storia",
@@ -284,14 +284,15 @@
     },
     "notification": {
       "messages": {
-        "hostLeft": "L'host ha abbandonato la sessione",
-        "hostJoined": "L'host si è unito alla sessione",
-        "memberLeft": "Il membro ha lasciato la sessione",
-        "memberJoined": "Il membro ha partecipato alla sessione",
+        "hostLeft": "Host ha lasciato la sessione",
+        "hostJoined": "L'host è entrato nella sessione",
+        "memberLeft": "Membro ha lasciato la sessione",
+        "memberJoined": "Il membro è entrato nella sessione",
         "memberRemoved": "Sei stato rimosso dalla sessione dall'host",
         "issueTrackerCredentials": "Credenziali errate",
-        "issueTrackerLoginFailed": "Accesso non riuscito",
+        "issueTrackerLoginFailed": "Accesso fallito",
         "issueTrackerSynchronizeSuccess": "Modifiche sincronizzate con Issue-Tracker",
+        "issueTrackerNothingChanged": "No changes were made",
         "issueTrackerSynchronizeFailed": "Impossibile sincronizzare le modifiche con Issue-Tracker",
         "wrongID": "Codice di invito errato",
         "password": "Password errata"

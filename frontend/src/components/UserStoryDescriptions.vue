@@ -48,12 +48,12 @@
             @textValueChanged="(event) => valueChanged(idx, event)"
           />
         </div>
-        <div v-if="!editDescription"> 
+        <div v-if="!editDescription">
           <b-form-textarea
           id="textarea-auto-height-plaintext"
-          class="py-2"
           plaintext
           :value=userStories[idx].description
+          class="py-2 description-text-area"
           rows="15"
           size="m"
           />
@@ -164,6 +164,10 @@ export default Vue.extend({
   padding: 0;
 }
 /* The side navigation menu */
+
+.description-text-area {
+  color: var(--text-primary-color);
+}
 
 .form-control {
   background-color: var(--textAreaColour);
