@@ -3,71 +3,73 @@
     <h1>{{ headerText }}</h1>
     <b-card-group deck>
       <b-card class="statsCards">
-        <b-card-title style="text-align: center">
-         {{$t('page.landing.meeting.analytics.allCreatedSessionsTitle')}}
+        <b-card-title class="title">
+          {{ $t('page.landing.meeting.analytics.allCreatedSessionsTitle') }}
         </b-card-title>
+        <div class="line"></div>
         <b-card-text>
           <h2 class="numbers">{{ tweenedOverAllSessions.toFixed(0) }}</h2>
           <div style="text-align: center;">
-              {{allSessions}}
+            {{ allSessions }}
           </div>
           <br/>
           <h2 class="numbers">{{ tweenedOverAllAttendees.toFixed(0) }}</h2>
           <div style="text-align: center;">
-            {{allAttendees}}
+            {{ allAttendees }}
           </div>
         </b-card-text>
       </b-card>
       <b-card class="statsCards">
-        <b-card-title style="text-align: center">
-          {{$t('page.landing.meeting.analytics.lastMonthTitle')}}
+        <b-card-title class="title">
+          {{ $t('page.landing.meeting.analytics.lastMonthTitle') }}
         </b-card-title>
+        <div class="line"></div>
         <b-card-text>
           <h2 class="numbers">
             {{ tweenedOverAllSessionsFromLastMonth.toFixed(0) }}
           </h2>
           <div style="text-align: center;">
-            {{allSessions}}
+            {{ allSessions }}
           </div>
           <br>
           <h2 class="numbers">
             {{ tweenedOverAllAttendeesFromLastMonth.toFixed(0) }}
           </h2>
           <div style="text-align: center;">
-            {{allAttendees}}
+            {{ allAttendees }}
           </div>
         </b-card-text>
       </b-card>
       <b-card class="statsCards">
-        <b-card-title style="text-align: center">
-          {{$t('page.landing.meeting.analytics.activeTitle')}}
+        <b-card-title class="title">
+          {{ $t('page.landing.meeting.analytics.activeTitle') }}
         </b-card-title>
+        <div class="line"></div>
         <b-card-text>
           <h2 class="numbers">
             {{ tweenedCurrentSessions.toFixed(0) }}
           </h2>
           <div style="text-align: center;">
-            {{allSessions}}
+            {{ allSessions }}
           </div>
           <br/>
           <h2 class="numbers">
             {{ tweendCurrentAttendees.toFixed(0) }}
           </h2>
           <div style="text-align: center;">
-            {{allAttendees}}
+            {{ allAttendees }}
           </div>
         </b-card-text>
       </b-card>
     </b-card-group>
     <br/>
   </b-container>
-
-
 </template>
 <script lang="ts">
 import Vue from "vue";
 import gsap from 'gsap'
 import apiService from "@/services/api.service";
+
 export default Vue.extend({
   name: "AnalyticsDataComponent",
   data() {
@@ -89,22 +91,22 @@ export default Vue.extend({
   },
   watch: {
     overAllSessions(n) {
-      gsap.to(this, { duration: 1.25, tweenedOverAllSessions: Number(n) || 0 })
+      gsap.to(this, {duration: 1.25, tweenedOverAllSessions: Number(n) || 0})
     },
     overAllAttendees(n) {
-      gsap.to(this, { duration: 1.25, tweenedOverAllAttendees: Number(n) || 0 })
+      gsap.to(this, {duration: 1.25, tweenedOverAllAttendees: Number(n) || 0})
     },
     overAllSessionsFromLastMonth(n) {
-      gsap.to(this, { duration: 1.25, tweenedOverAllSessionsFromLastMonth: Number(n) || 0 })
+      gsap.to(this, {duration: 1.25, tweenedOverAllSessionsFromLastMonth: Number(n) || 0})
     },
     overAllAttendeesFromLastMonth(n) {
-      gsap.to(this, { duration: 1.25, tweetweenedOverAllAttendeesFromLastMonthned: Number(n) || 0 })
+      gsap.to(this, {duration: 1.25, tweetweenedOverAllAttendeesFromLastMonthned: Number(n) || 0})
     },
     currentSessions(n) {
-      gsap.to(this, { duration: 1.25, tweenedCurrentSessions: Number(n) || 0 })
+      gsap.to(this, {duration: 1.25, tweenedCurrentSessions: Number(n) || 0})
     },
     currentAttendees(n) {
-      gsap.to(this, { duration: 1.25, tweendCurrentAttendees: Number(n) || 0 })
+      gsap.to(this, {duration: 1.25, tweendCurrentAttendees: Number(n) || 0})
     }
   },
   created() {
@@ -125,7 +127,7 @@ export default Vue.extend({
     async getAllDiveniData() {
       this.loaded = false;
       let response = apiService.getAllDiveniData();
-      let allData  = await response.then(function(result) {
+      let allData = await response.then(function (result) {
         let returnArray: Array<number> = [];
         returnArray.push(result.amountOfSessions);
         returnArray.push(result.amountOfAttendees);
@@ -150,12 +152,38 @@ export default Vue.extend({
 <style scoped>
 
 .statsCards {
-  border-radius: 0.5rem;
-  background-color: rgba(200, 200, 200, 0.5);
-}
-.numbers {
-  text-align: center;
-  font-weight: bold;
+  border-radius: 2rem;
+  background-color: var(--landingPageCardsBackground);
 }
 
+.numbers {
+  text-align: center;
+}
+
+.line {
+  background-color: rgba(0, 0, 0, 0.125);
+  height: 1px;
+  margin: 10px -20px;
+
+}
+
+.title {
+  text-align: center;
+  height: 60px;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
+@media (min-width: 768px) {
+  .title {
+    height: auto;
+  }
+}
+
+@media (max-width: 575px) {
+  .title {
+    height: auto;
+  }
+}
 </style>
