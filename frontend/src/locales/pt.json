@@ -23,13 +23,12 @@
         "title": "Esperando os membros ...",
         "text": {
           "beforeID": "Compartilhar o código",
-          "afterID": "com companheiros de equipe",
-          "waiting": "Aguardando os membros entrarem"
+          "afterID": "com companheiros de equipe"
         },
         "button": "Iniciar Planejamento",
-        "refreshStories": "Atualizar as Histórias de Usuário",
+        "refreshStories": "Atualizar histórias de usuário",
         "userStories": {
-          "filter" : {
+          "filter": {
             "noStoryFound": "Não foram encontradas histórias!"
           },
           "button": {
@@ -119,7 +118,7 @@
           }
         },
         "analytics": {
-          "title": "Estatísticas de Diveni",
+          "title": "Statistics of Diveni",
           "allCreatedSessionsTitle": "Overall",
           "sessionText": "Sessions",
           "attendeesText": "Attendees",
@@ -155,7 +154,7 @@
       "step": {
         "selection": {
           "mode": {
-            "title": "1. Selecione o modo para as suas histórias de usuários",
+            "title": "Selecione o modo para as suas histórias de utilizadores",
             "description": {
               "withoutUS": {
                 "tab": {
@@ -189,7 +188,7 @@
                 "descriptionLine3": "Depois de clicar no início da sessão, você será redirecionado para a próxima página para editar suas histórias de usuário",
                 "descriptionLine4": "Você poderá adicionar e editar histórias de usuários depois de iniciar a sessão",
                 "formSelection": "Por favor, selecione o seu projeto",
-                "selectedProject": "Projeto Selecionado: ",
+                "selectedProject": "Projeto Selecionado:",
                 "allUserStories": "Todas as histórias de usuários",
                 "dialog": {
                   "description": "Uma nova aba será aberta imediatamente, por favor, conceda acesso a este aplicativo nesta aba e insira o código de verificação aqui."
@@ -204,16 +203,16 @@
                     "label": "Entrar com o Jira Cloud"
                   },
                   "signInWithJiraServer": {
-                    "label": "Entrar com o servidor do Jira"
+                    "label": "Entrar com o Jira Server"
                   },
                   "signInWithAzureDevOps": {
-                    "label": "Entrar com o Azure DevOps"
+                    "label": "Entrar com Azure DevOps"
                   },
                   "selectProject": {
-                    "label": "Selecione seu projeto jira"
+                    "label": "Selecione seu projeto Jira"
                   },
                   "submit": {
-                    "label": "submeter"
+                    "label": "Submeter"
                   }
                 },
                 "placeholder": {
@@ -223,7 +222,7 @@
             }
           },
           "cardSet": {
-            "title": "2. Selecione um conjunto de cartões e seus valores",
+            "title": "Selecione um conjunto de cartões e seus valores",
             "sets": {
               "fibonacci": {
                 "label": "Fibonacci",
@@ -253,7 +252,7 @@
             }
           },
           "time": {
-            "title": "3. Ajuste o tempo por estimativa"
+            "title": "Ajuste o tempo por estimativa"
           },
           "hostVoting": {
             "title": "4. Should the host vote as well",
@@ -261,7 +260,7 @@
             "hostVotingOff": "No"
           },
           "password": {
-            "title": "5. Escolha uma senha, se necessário",
+            "title": "Escolha uma senha, se necessário",
             "placeholder": "Senha (deixe em branco para sessão desprotegida)"
           }
         }
@@ -293,6 +292,7 @@
         "issueTrackerCredentials": "Credenciais erradas",
         "issueTrackerLoginFailed": "Falha no login",
         "issueTrackerSynchronizeSuccess": "Alterações sincronizadas com Issue-Tracker",
+        "issueTrackerNothingChanged": "No changes were made",
         "issueTrackerSynchronizeFailed": "Falha ao sincronizar as mudanças com o Issue-Tracker",
         "wrongID": "Código de convite incorreto",
         "password": "Senha errada"

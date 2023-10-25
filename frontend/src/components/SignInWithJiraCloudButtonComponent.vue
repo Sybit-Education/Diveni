@@ -1,6 +1,13 @@
 <template>
   <div>
-    <b-button variant="success" :disabled="disabled" @click="redirectToJira()">
+    <b-button
+      id="button"
+      :disabled="disabled"
+      @click="
+        redirectToJira();
+        $event.target.blur();
+      "
+    >
       {{
         $t(
           "session.prepare.step.selection.mode.description.withIssueTracker.buttons.signInWithJiraCloud.label"
@@ -12,7 +19,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import {v4 as uuidv4} from "uuid";
+import { v4 as uuidv4 } from "uuid";
 import apiService from "@/services/api.service";
 
 export default Vue.extend({
@@ -35,3 +42,15 @@ export default Vue.extend({
   },
 });
 </script>
+
+<style scoped>
+#button {
+  background-color: var(--preparePageMainColor);
+  color: var(--text-primary-color);
+}
+
+#button:hover {
+  background-color: var(--startButtonHovered);
+  color: var(--text-primary-color);
+}
+</style>

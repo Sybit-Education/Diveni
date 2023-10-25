@@ -1,9 +1,9 @@
 <template>
-  <b-card id="estimate-timer" class="d-flex justify-content-end estimate-timer">
-    <b-card-text :style="`color: ${textColor}`">
+  <div class="d-flex justify-content-end estimate-timer">
+    <b-card-text :style="`color: ${textColor}`" class="timer">
       {{ formatTimer() }}
     </b-card-text>
-  </b-card>
+  </div>
 </template>
 
 <script lang="ts">
@@ -34,7 +34,7 @@ export default Vue.extend({
         return "#D4AC0D";
       }
       if (this.timerCount === 0) {
-        return "black";
+        return "grey";
       }
       return "#CB4335";
     },
@@ -94,13 +94,15 @@ export default Vue.extend({
       }, 100);
     },
     async localClockTimer() {
-      if (this.member !== '') {
-        const response = (await this.axios.get(constants.backendURL + "/get-timer-value",{
-              params: {
-                memberID: this.member,
-              },
-        })).data;
-        this.timerCount = Math.ceil(this.duration - (response / 1000));
+      if (this.member !== "") {
+        const response = (
+          await this.axios.get(constants.backendURL + "/get-timer-value", {
+            params: {
+              memberID: this.member,
+            },
+          })
+        ).data;
+        this.timerCount = Math.ceil(this.duration - response / 1000);
         this.intervalHandler = setInterval(() => {
           if (this.timerCount > 0) {
             this.timerCount = this.timerCount - 1;
@@ -110,7 +112,7 @@ export default Vue.extend({
           }
         }, 1000);
       }
-    }
+    },
   },
 });
 </script>
@@ -120,10 +122,21 @@ export default Vue.extend({
   font-size: 1.5rem;
   font-weight: 700;
   border-radius: 0.5rem;
-  min-width: 8rem;
-  text-align: right;
 }
 .card-body {
   padding: 0.5rem;
+}
+
+.card-text {
+  line-height: 485%;
+  text-align: center;
+}
+
+.timer {
+  width: 100px;
+  height: 117px;
+  background-image: url("@/assets/Timer.png");
+  background-size: contain;
+  user-select: none;
 }
 </style>

@@ -2,22 +2,15 @@
   "name": "diveni-docs",
   "version": "1.0.0",
   "description": "Diveni - The Planning-Poker App | Documentation Site",
+  "type": "module",
   "license": "aGPLv3",
   "authors": {
     "name": "Diveni Development Team",
     "email": "info@diveni.io"
   },
-
   "repository": "https://github.com/Sybit-Education/Diveni",
   "directories": {
     "doc": "docs"
-  },
-  "type": "module",
-  "devDependencies": {
-    "@mermaid-js/mermaid-mindmap": "^9.3.0",
-    "mermaid": "9.1.7",
-    "vitepress": "^1.0.0-rc.20",
-    "vitepress-plugin-mermaid": "^2.0.10"
   },
   "scripts": {
     "docs:dev": "vitepress dev docs",
@@ -28,5 +21,11 @@
     "medium-zoom": "^1.0.8",
     "vitepress-plugin-back-to-top": "^1.0.1",
     "vitepress-plugin-search": "^1.0.4-alpha.20"
+  },
+  "devDependencies": {
+    "@mermaid-js/mermaid-mindmap": "^9.3.0",
+    "mermaid": "^10.5.1",
+    "vitepress": "^1.0.0-rc.23",
+    "vitepress-plugin-mermaid": "^2.0.15"
   }
 }
