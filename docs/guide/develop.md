@@ -7,27 +7,47 @@ See also:
 * [Code of Conduct](../code_of_conduct)
 * [Contribution](./contribution)
 
-## Installation
+## Preconditions / Installation
 
-### Technical Requirements
+### Java Environment
 
-- Java 17
-  - Download from SAPMachine <https://sap.github.io/SapMachine/>
-    ![Download_Selection_Java11](../img/Java17_Installer_Selection.png)
-  - Select the appropriate installer for your OS
+Java 17 is required. We suggest SAPMachine.
+
+- Download SAPMachine <https://sap.github.io/SapMachine/>
+- Select the appropriate installer for your OS
+
+![Download_Selection_Java17](../img/Java17_Installer_Selection.png)
+  
 - Gradle
   - Download from Gradle official site <https://gradle.org/install/>
-- Node.js
-  - Download from nodejs <https://nodejs.org/en/download/>
-    ![Download_Selection_nodejs](../img/nodejs_Installer_Selection.png)
-  - Select the appropriate installer for your OS
-- MongoDB
-  - MongoDB is running in the background at port 27017
+
+### Frontend
+
+Node.js is required. We suggest Node.js 16 LTS.
+
+- Download from nodejs <https://nodejs.org/en/download/>
+- Select the appropriate installer for your OS
+
+![Download_Selection_nodejs](../img/nodejs_Installer_Selection.png)
+
+
+### Database: MongoDB
+
+MongoDB is running in the background at port 27017
   - <https://www.mongodb.com/docs/manual/administration/install-community/>
     ![Download_Selection_MongoDB](../img/MongoDB_Installer_Selection.png)
   - Select the appropriate installer for your OS and follow the instructions
 
-### Setup Project
+#### Docker
+
+On Linux/WSL, you can also use Docker to run MongoDB:
+
+```bash
+docker pull mongodb/mongodb-community-server
+docker run -p 27017:27017 --name mongo -d mongodb/mongodb-community-server
+```
+
+## Setup Project
 
 1. Clone repository with Git from GitHub:<br />
       *git clone https://github.com/Sybit-Education/Diveni.git* <br />
