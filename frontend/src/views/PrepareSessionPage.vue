@@ -4,18 +4,14 @@
       {{ $t("session.prepare.title") }}
     </h1>
 
-      <h4 class="mt-3">
-       <b-img
+    <h4 class="mt-3">
+      <b-img
         v-if="theme === 'light-theme'"
         :src="require('@/assets/preparePage/P1.png')"
         class="numberPictures"
-       />
-       <b-img
-        v-else
-        :src="require('@/assets/preparePage/P1D.png')"
-        class="numberPictures"
-       />
-       {{ $t("session.prepare.step.selection.mode.title") }}
+      />
+      <b-img v-else :src="require('@/assets/preparePage/P1D.png')" class="numberPictures" />
+      {{ $t("session.prepare.step.selection.mode.title") }}
     </h4>
     <b-tabs v-model="tabIndex" content-class="mt-3" fill>
       <b-tab
@@ -37,7 +33,15 @@
           accept="text/csv"
           @change="importStory($event.target.files)"
         />
-        <b-button block elevation="2" class="importUserStoryButton" @click="openFileUploader(); $event.target.blur();">
+        <b-button
+          block
+          elevation="2"
+          class="importUserStoryButton"
+          @click="
+            openFileUploader();
+            $event.target.blur();
+          "
+        >
           {{ $t("session.prepare.step.selection.mode.description.withUS.importButton") }}
         </b-button>
       </b-tab>
@@ -54,12 +58,8 @@
         v-if="theme === 'light-theme'"
         :src="require('@/assets/preparePage/P2.png')"
         class="numberPictures"
-       />
-       <b-img
-        v-else
-        :src="require('@/assets/preparePage/P2D.png')"
-        class="numberPictures"
-       />
+      />
+      <b-img v-else :src="require('@/assets/preparePage/P2D.png')" class="numberPictures" />
       {{ $t("session.prepare.step.selection.cardSet.title") }}
     </h4>
     <card-set-component
@@ -72,25 +72,37 @@
         v-if="theme === 'light-theme'"
         :src="require('@/assets/preparePage/P3.png')"
         class="numberPictures"
-       />
-       <b-img
-        v-else
-        :src="require('@/assets/preparePage/P3D.png')"
-        class="numberPictures"
-       />
+      />
+      <b-img v-else :src="require('@/assets/preparePage/P3D.png')" class="numberPictures" />
       {{ $t("session.prepare.step.selection.time.title") }}
     </h4>
     <b-row class="mt-3 text-center">
       <b-col>
-        <b-button class="optionButtons" @click="setTimerDown(); $event.target.blur();"> - </b-button>
+        <b-button
+          class="optionButtons"
+          @click="
+            setTimerDown();
+            $event.target.blur();
+          "
+        >
+          -
+        </b-button>
       </b-col>
-      <b-col class="text-center" id="timerCol" cols="auto">
+      <b-col id="timerCol" class="text-center" cols="auto">
         <h4 id="timerBackground">
           {{ timer == 0 ? "∞" : formatTimer }}
         </h4>
       </b-col>
       <b-col>
-        <b-button class="optionButtons" @click="setTimerUp(); $event.target.blur();"> +</b-button>
+        <b-button
+          class="optionButtons"
+          @click="
+            setTimerUp();
+            $event.target.blur();
+          "
+        >
+          +</b-button
+        >
       </b-col>
     </b-row>
     <h4 class="mt-3">
@@ -98,12 +110,8 @@
         v-if="theme === 'light-theme'"
         :src="require('@/assets/preparePage/P4.png')"
         class="numberPictures"
-       />
-       <b-img
-        v-else
-        :src="require('@/assets/preparePage/P4D.png')"
-        class="numberPictures"
-       />
+      />
+      <b-img v-else :src="require('@/assets/preparePage/P4D.png')" class="numberPictures" />
       {{ $t("session.prepare.step.selection.password.title") }}
     </h4>
     <b-row class="mt-3">
@@ -157,7 +165,7 @@ export default Vue.extend({
       warningWhenUnderZero: "",
       tabIndex: 0,
       isIssueTrackerEnabled: false,
-      theme: localStorage.getItem('user-theme'),
+      theme: localStorage.getItem("user-theme"),
     };
   },
   computed: {
@@ -188,9 +196,9 @@ export default Vue.extend({
     this.tabIndex = isNaN(parsedTabIndex) ? 0 : parsedTabIndex;
   },
   mounted() {
-    window.addEventListener('user-theme-localstorage-changed', (event) => {
-        const customEvent = event as CustomEvent;
-        this.theme = customEvent.detail.storage;
+    window.addEventListener("user-theme-localstorage-changed", (event) => {
+      const customEvent = event as CustomEvent;
+      this.theme = customEvent.detail.storage;
     });
     apiService.getIssueTrackerConfig().then((result) => {
       this.isIssueTrackerEnabled =
@@ -334,7 +342,6 @@ export default Vue.extend({
 </script>
 
 <style scoped>
-
 #timerBackground {
   background-color: var(--preparePageTimerBackground);
 }
@@ -358,13 +365,13 @@ export default Vue.extend({
   color: var(--text-primary-color);
 }
 
-.importUserStoryButton:focus{
+.importUserStoryButton:focus {
   background-color: var(--startButtonHovered) !important;
   color: var(--text-primary-color) !important;
 }
 
 .optionButtons {
-  color:var(--text-primary-color);
+  color: var(--text-primary-color);
   border-color: var(--text-primary-color);
   background-color: transparent;
   font-size: xx-large;
@@ -372,12 +379,12 @@ export default Vue.extend({
 }
 
 .optionButtons:hover {
-  color:var(--text-primary-color) !important;
+  color: var(--text-primary-color) !important;
   border-color: var(--text-primary-color);
   background-color: var(--preparePageInActiveTabHover);
 }
 .optionButtons:focus {
-  color:var(--text-primary-color);
+  color: var(--text-primary-color);
   border-color: var(--text-primary-color);
   background-color: transparent !important;
   outline: none;
@@ -409,7 +416,7 @@ export default Vue.extend({
   color: var(--text-primary-color);
 }
 
-.numberPictures{
+.numberPictures {
   height: 45px;
   width: 45px;
 }
