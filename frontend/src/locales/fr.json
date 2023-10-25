@@ -29,7 +29,7 @@
         "refreshStories": "Actualiser les User Stories",
         "userStories": {
           "filter": {
-            "noStoryFound": "Aucune histoire trouvée!"
+            "noStoryFound": "Aucune story trouvée!"
           },
           "button": {
             "addFirstUserStory": "Pas encore d'histoires... cliquez pour ajouter des histoires",
@@ -38,7 +38,7 @@
           "placeholder": {
             "userStoryTitle": "Titre de l'histoire de l'utilisateur",
             "userStoryDescription": "Critères de description et d'acception...",
-            "searchUserStories": "Rechercher des témoignages d'utilisateurs..."
+            "searchUserStories": "Rechercher des user stories..."
           },
           "text": "Cliquez sur un titre de l'histoire de l'utilisateur pour voir la description",
           "sum": "Total:"
@@ -152,7 +152,7 @@
       "step": {
         "selection": {
           "mode": {
-            "title": "Sélectionnez le mode pour vos Histoires d’Utilisateur",
+            "title": "Sélectionnez le mode pour vos user stories",
             "description": {
               "withoutUS": {
                 "tab": {
@@ -186,7 +186,7 @@
                 "descriptionLine3": "Après avoir cliqué sur la session de démarrage, vous serez redirigé vers la page suivante pour modifier vos histoires d'utilisateur",
                 "descriptionLine4": "Vous serez en mesure d'ajouter et de modifier des Histoires d'utilisateur une fois que vous aurez commencé la session",
                 "formSelection": "Veuillez sélectionner votre projet",
-                "selectedProject": "Projet sélectionné : ",
+                "selectedProject": "Projet sélectionné: ",
                 "allUserStories": "Toutes les histoires d'utilisateurs",
                 "dialog": {
                   "description": "Un nouvel onglet s'ouvrira immédiatement, veuillez accorder l'accès à cette application dans cet onglet et entrer le code de vérification ici."
@@ -201,20 +201,20 @@
                     "label": "Connectez-vous avec Jira Cloud"
                   },
                   "signInWithJiraServer": {
-                    "label": "Se connecter avec le serveur Jira"
+                    "label": "Connectez-vous avec Jira Server"
                   },
                   "signInWithAzureDevOps": {
-                    "label": "Se connecter avec Azure DevOps"
+                    "label": "Connectez-vous avec Azure DevOps"
                   },
                   "selectProject": {
-                    "label": "Sélectionnez votre projet jira"
+                    "label": "Se connecter avec le serveur Jira"
                   },
                   "submit": {
-                    "label": "Soumettre"
+                    "label": "Submit"
                   }
                 },
                 "placeholder": {
-                  "searchProjects": "Parcourir les projets..."
+                  "searchProjects": "Rechercher des projets…"
                 }
               }
             }
@@ -285,6 +285,7 @@
         "issueTrackerCredentials": "Mauvais identifiants",
         "issueTrackerLoginFailed": "Échec de la connexion",
         "issueTrackerSynchronizeSuccess": "Changements synchronisés avec Issue-Tracker",
+        "issueTrackerNothingChanged": "No changes were made",
         "issueTrackerSynchronizeFailed": "Impossible de synchroniser les modifications avec Issue-Tracker",
         "wrongID": "Mauvais code d'invitation",
         "password": "Mauvais mot de passe"

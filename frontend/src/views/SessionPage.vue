@@ -454,7 +454,11 @@ export default Vue.extend({
       if (this.session_userStoryMode === "US_JIRA") {
         let response;
         if (doRemove) {
-          response = await apiService.deleteUserStory(us[idx].id);
+          if (us[idx].id === null) {
+            response = 204;
+          } else {
+            response = await apiService.deleteUserStory(us[idx].id);
+          }
           us.splice(idx, 1);
           doRemove = false;
         } else {
@@ -477,9 +481,9 @@ export default Vue.extend({
           }
         }
         if (response.status === 200) {
-          this.$toast.success(
-            this.$t("session.notification.messages.issueTrackerSynchronizeSuccess")
-          );
+          this.$toast.success(this.$t("session.notification.messages.issueTrackerSynchronizeSuccess"));
+        } else if (response === 204) {
+          this.$toast.info(this.$t("session.notification.messages.issueTrackerNothingChanged"));
         } else {
           this.$toast.error(this.$t("session.notification.messages.issueTrackerSynchronizeFailed"));
         }

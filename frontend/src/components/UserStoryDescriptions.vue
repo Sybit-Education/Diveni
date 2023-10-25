@@ -51,7 +51,7 @@
         <div v-if="!editDescription">
           <b-form-textarea
             id="textarea-auto-height-plaintext"
-            class="py-2"
+            class="py-2 description-text-area"
             plaintext
             :value="userStories[idx].description"
             rows="15"
@@ -163,6 +163,10 @@ export default Vue.extend({
   padding: 0;
 }
 /* The side navigation menu */
+
+.description-text-area {
+  color: var(--text-primary-color);
+}
 
 .form-control {
   background-color: var(--textAreaColour);
