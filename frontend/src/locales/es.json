@@ -1,6 +1,6 @@
 {
   "general": {
-    "pleaseWait": "Espera...",
+    "pleaseWait": "Por favor espere...",
     "about": {
       "label": "Acerca de",
       "repository": "GitHub",
@@ -8,7 +8,7 @@
     },
     "licenses": {
       "frontend": "Licencias (Frontend)",
-      "backend": "Licencias (Backend)",
+      "backend": "Licencias (backend)",
       "translations": "Mejorar la traducción"
     }
   },
@@ -18,27 +18,27 @@
         "copy": {
           "id": "Copiar código",
           "link": "Copiar enlace",
-          "qr": "Mostrar código QR"
+          "qr": "Show QR code"
         },
-        "title": "Esperando a los miembros ...",
+        "title": "Esperando a los miembros...",
         "text": {
           "beforeID": "Compartir el código",
           "afterID": "con tus compañeros de equipo"
         },
-        "button": "Comience a planificar",
-        "refreshStories": "Actualizar historias de usuario",
+        "button": "Empezar a planear",
+        "refreshStories": "Actualizar Historias de Usuario",
         "userStories": {
           "filter": {
-            "noStoryFound": "¡No se han encontrado historias!"
+            "noStoryFound": "¡No se encontraron Historias de Usuario!"
           },
           "button": {
-            "addFirstUserStory": "Todavía no hay historias... Haga clic para agregar historias",
-            "addUserStory": "Agregar"
+            "addFirstUserStory": "Aún no hay historias... haz clic para añadir historias",
+            "addUserStory": "Añadir"
           },
           "placeholder": {
-            "userStoryTitle": "Título de la historia de usuario",
-            "userStoryDescription": "Descripción y criterios de aceptación...",
-            "searchUserStories": "Buscar historias de usuario..."
+            "userStoryTitle": "Título de la historia del usuario",
+            "userStoryDescription": "Criterios de descripción y aceptación...",
+            "searchUserStories": "Buscar Historias de Usuario..."
           },
           "text": "Haga clic en el título de una historia de usuario para ver la descripción",
           "sum": "Total:"
@@ -48,19 +48,19 @@
         "estimation": {
           "title": "Estimación",
           "message": {
-            "waitingFor": "Esperando",
+            "waitingFor": "Esperando por",
             "finished": "Estimación finalizada"
           },
           "buttons": {
             "new": "Nuevo",
             "result": "Mostrar resultado",
-            "finish": "Finalizar sesión"
+            "finish": "Terminar sesión"
           }
         },
         "modal": {
-          "title": "Quitar miembro",
-          "bodyPart1": "¿Está seguro de que desea eliminar ",
-          "bodyPart2": " de su sesión actual?",
+          "title": "Eliminar miembro",
+          "bodyPart1": "¿Está seguro que desea eliminar ",
+          "bodyPart2": " de tu sesión actual?",
           "buttons": {
             "cancel": "Cancelar",
             "ok": "Eliminar"
@@ -69,20 +69,20 @@
       },
       "close": {
         "popup": "¿Estás seguro?",
-        "description1": "Al cerrar esta sesión, usted y todos los miembros se eliminan.",
-        "description2": "Puede descargar las historias de usuario a partir de entonces.",
+        "description1": "Cerrar esta sesión elimina a usted y a todos los miembros.",
+        "description2": "Puede descargar las historias de los usuarios a partir de entonces.",
         "button": {
           "cancel": "Cancelar",
-          "ok": "De acuerdo"
+          "ok": "Ok"
         }
       }
     },
     "results": {
       "title": "Resultados",
-      "noUserStories": "No hay historias de usuario definidas ...",
+      "noUserStories": "No hay historias de usuario definidas...",
       "button": {
         "download": "Descargar como CSV",
-        "home": "Vete a casa"
+        "home": "Ir a casa"
       }
     },
     "landing": {
@@ -90,43 +90,43 @@
       "meeting": {
         "new": {
           "title": "Nueva sesión",
-          "description": "Prepare una nueva sesión, invite a los miembros del equipo y comience a estimar",
+          "description": "Prepara una nueva sesión, invita a los miembros del equipo y comienza a estimar",
           "buttons": {
             "start": {
-              "label": "Empezar..."
+              "label": "Comenzar..."
             }
           }
         },
         "join": {
-          "title": "Unirse a la sesión",
+          "title": "Unirse a sesión",
           "description": "Únete a una sesión existente y ayuda a tu equipo a estimar",
           "buttons": {
             "start": {
-              "label": "Juntar..."
+              "label": "Unirse..."
             }
           }
         },
         "reconnect": {
-          "title": "Volver a conectarse a la sesión",
-          "description": "Volver a conectarse a la sesión existente como host",
+          "title": "Volver a conectar a la sesión",
+          "description": "Volver a conectar a la sesión existente como host",
           "buttons": {
             "start": {
-              "label": "Reunirse"
+              "label": "Reconectar"
             }
           }
         },
         "analytics": {
           "title": "Estadísticas de Diveni",
-          "allCreatedSessionsTitle": "Overall",
+          "allCreatedSessionsTitle": "Total",
           "sessionText": "Sessions",
-          "attendeesText": "Attendees",
+          "attendeesText": "Colaboradores",
           "lastMonthTitle": "Last Month",
           "activeTitle": "Currently"
         }
       }
     },
     "join": {
-      "title": "Únete a la sesión",
+      "title": "Unirse a la sesión",
       "input": {
         "code": "Código de invitación",
         "password": "Contraseña",
@@ -137,13 +137,13 @@
     },
     "vote": {
       "title": "¡Estimar!",
-      "waiting": "Esperando a que comience el host",
+      "waiting": "Esperando que tu anfitrión comience",
       "button": {
         "leave": {
           "label": "Abandonar sesión"
         }
       },
-      "hostLeft": "Esperando que el anfitrión regrese ..."
+      "hostLeft": "Esperando que el anfitrión regrese..."
     }
   },
   "session": {
@@ -152,44 +152,44 @@
       "step": {
         "selection": {
           "mode": {
-            "title": "Seleccione el modo para sus historias de usuario",
+            "title": "Selecciona el modo para tus historias de usuario",
             "description": {
               "withoutUS": {
                 "tab": {
                   "label": "Planificación sin historias de usuario"
                 },
                 "subtitle": "Planificación sin historias de usuario",
-                "descriptionLine1": "Votarás con las tarjetas seleccionadas",
-                "descriptionLine2": "No podrá agregar historias de usuario una vez que haya iniciado la sesión"
+                "descriptionLine1": "Vas a votar con tus tarjetas seleccionadas",
+                "descriptionLine2": "No podrá añadir historias de usuario una vez que haya iniciado la sesión"
               },
               "withUS": {
                 "tab": {
                   "label": "Planificación con historias de usuario"
                 },
-                "subtitle": "Integre historias de usuario en su planificación de póquer",
-                "descriptionLine1": "Crea tus historias de usuario en la página siguiente",
-                "descriptionLine2": "Agregar título y descripción a cada historia de usuario",
-                "descriptionLine3": "Utilice CSV-Import para integrar historias de usuario en su sesión",
-                "descriptionLine4": "La primera línea debe contener los nombres de campo separados por punto y coma: título;descripción;estimación",
-                "descriptionLine5": "Podrá agregar y editar historias de usuario una vez que haya iniciado la sesión",
+                "subtitle": "Integra historias de usuario en tu plan de póquer",
+                "descriptionLine1": "Crea tus historias de usuario en la siguiente página",
+                "descriptionLine2": "Añadir título y descripción a cada historia de usuario",
+                "descriptionLine3": "Utilice el CSV-Import para integrar historias de usuario en su sesión",
+                "descriptionLine4": "La primera línea debe contener los nombres de los campos separados por punto y coma: título;descripción;estimación",
+                "descriptionLine5": "Podrás añadir y editar Historias de Usuario una vez que hayas iniciado la sesión",
                 "importButton": "Importar historias de usuario",
                 "toastSuccessNotification": "Historias de usuario importadas",
-                "toastErrorNotification": "Error al intentar importar"
+                "toastErrorNotification": "Error al importar"
               },
               "withIssueTracker": {
                 "tab": {
-                  "label": "Planificación con Issue-Tracker"
+                  "label": "Planificando con un gestor de problemas y tareas"
                 },
-                "subtitle": "Selecciona Jira para tu planificación de poker",
+                "subtitle": "Seleccionar Jira para tu planificación de Póker-Planning",
                 "descriptionLine1": "Inicia sesión con tus credenciales",
-                "descriptionLine2": "Seleccione su proyecto",
-                "descriptionLine3": "Después de hacer clic en iniciar sesión, será redirigido a la página siguiente para editar sus historias de usuario.",
-                "descriptionLine4": "Podrá agregar y editar historias de usuario una vez que haya iniciado la sesión",
-                "formSelection": "Por favor, seleccione su proyecto",
+                "descriptionLine2": "Selecciona tu proyecto",
+                "descriptionLine3": "Después de hacer clic en \"iniciar sesión\", serás redirigido a la siguiente página para editar tus historias de usuario",
+                "descriptionLine4": "Podrás añadir y editar Historias de Usuario una vez que hayas iniciado la sesión",
+                "formSelection": "Por favor, selecciona tu proyecto",
                 "selectedProject": "Proyecto seleccionado: ",
-                "allUserStories": "Todas las historias de usuario",
+                "allUserStories": "Todas las Historias de Usuario",
                 "dialog": {
-                  "description": "Se abrirá una nueva pestaña inmediatamente, otorgue acceso a esta aplicación en esta pestaña e ingrese el código de verificación aquí."
+                  "description": "Una nueva pestaña se abrirá inmediatamente, por favor concede acceso a esta aplicación en esta pestaña e introduce el código de verificación aquí."
                 },
                 "inputs": {
                   "verificationCode": {
@@ -198,16 +198,16 @@
                 },
                 "buttons": {
                   "signInWithJiraCloud": {
-                    "label": "Iniciar sesión con Jira Cloud"
+                    "label": "Inicia sesión con Jira Cloud"
                   },
                   "signInWithJiraServer": {
-                    "label": "Iniciar sesión con Jira Server"
+                    "label": "Inicia sesión con Jira Server"
                   },
                   "signInWithAzureDevOps": {
-                    "label": "Inicio de sesión con Azure DevOps"
+                    "label": "Inicia sesión con Azure DevOps"
                   },
                   "selectProject": {
-                    "label": "Selecciona tu proyecto de jira"
+                    "label": "Selecciona tu proyecto de Jira"
                   },
                   "submit": {
                     "label": "Enviar"
@@ -227,34 +227,34 @@
                 "description": "Cada número es la suma de los dos anteriores"
               },
               "tShirtSizes": {
-                "label": "Tallas de camisetas",
-                "description": "Tallas básicas de camiseta. Simple y eficaz"
+                "label": "Tamaños de camisa",
+                "description": "Tamaños básicos de la camiseta. Simple y eficaz"
               },
               "hours": {
                 "label": "Horas",
-                "description": "Simplemente horas. Ideal para subtareas."
+                "description": "Sencillamente horas. Excelente para subtareas."
               },
               "numbers": {
                 "label": "Números",
-                "description": "Números enteros. ¿Qué más quieres?"
+                "description": "Número entero. ¿Qué más quieres?"
               },
               "ownSet": {
-                "label": "Juego de cartas propio",
+                "label": "Juego de tarjetas propias",
                 "description": "Aquí puedes configurar tu propia tarjeta",
                 "hint": {
-                  "label": "Indirecta",
-                  "description": "En el campo de texto a continuación puede configurar su propio conjunto de tarjetas. Cada entrada está separada por un punto y coma (;). Se omiten las entradas duplicadas.",
-                  "example": "Por ejemplo: 1;2;3;4;5;6;7;"
+                  "label": "Pista",
+                  "description": "En el campo de texto de abajo puede configurar su propio conjunto de tarjetas. Cada entrada está separada por punto y coma (;). Se omiten entradas duplicadas.",
+                  "example": "Ej.: 1;2;3;4;5;6;7;"
                 }
               }
             }
           },
           "time": {
-            "title": "Ajustar el tiempo por estimación"
+            "title": "Ajuste el tiempo por estimación"
           },
           "password": {
             "title": "Elija una contraseña si es necesario",
-            "placeholder": "Contraseña (dejar vacía para la sesión no protegida)"
+            "placeholder": "Contraseña (dejar vacío para la sesión sin protección)"
           }
         }
       },
@@ -265,26 +265,27 @@
     "userStory": {
       "button": {
         "title": "Historias",
-        "add": "Agregar",
+        "add": "Añadir",
         "edit": "Editar",
-        "save": "Salvar",
-        "noUserStories": "Todavía no hay historias... Agregue una historia para comenzar a estimar.",
+        "save": "Guardar",
+        "noUserStories": "Aún no hay historias... Añade una historia para empezar a estimar.",
         "placeholder": {
-          "title": "Título de la historia",
+          "title": "Título de historia",
           "description": "Descripción y criterios de aceptación..."
         }
       }
     },
     "notification": {
       "messages": {
-        "hostLeft": "El anfitrión abandonó la sesión",
-        "hostJoined": "El anfitrión se unió a la sesión",
-        "memberLeft": "El miembro abandona el período de sesiones",
-        "memberJoined": "El miembro se unió a la sesión",
-        "memberRemoved": "El anfitrión le ha quitado de la sesión",
+        "hostLeft": "El host dejó la sesión",
+        "hostJoined": "Host se unió a la sesión",
+        "memberLeft": "El miembro abandonó la sesión",
+        "memberJoined": "Miembro se unió a la sesión",
+        "memberRemoved": "Ha sido eliminado de la sesión por el host",
         "issueTrackerCredentials": "Credenciales incorrectas",
-        "issueTrackerLoginFailed": "Error de inicio de sesión",
+        "issueTrackerLoginFailed": "Error al iniciar sesión",
         "issueTrackerSynchronizeSuccess": "Cambios sincronizados con Issue-Tracker",
+        "issueTrackerNothingChanged": "No changes were made",
         "issueTrackerSynchronizeFailed": "Error al sincronizar los cambios con Issue-Tracker",
         "wrongID": "Código de invitación incorrecto",
         "password": "Contraseña incorrecta"

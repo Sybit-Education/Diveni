@@ -24,14 +24,13 @@ export default Vue.extend({
   props: {
     member: { type: Object, required: true },
     showName: { type: Boolean, default: true },
-    admin: { type: Boolean, default: true},
+    admin: { type: Boolean, default: true },
   },
 });
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
 .rounded-avatar {
   padding: 8px;
   display: flex;
@@ -40,7 +39,7 @@ export default Vue.extend({
   overflow: hidden;
 }
 
-.smallAvatars{
+.smallAvatars {
   width: 100px;
   height: 100px;
 }
