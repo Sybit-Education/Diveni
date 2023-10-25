@@ -12,8 +12,10 @@
       @click="setLocale(key)"
       >{{ locale }}</b-dropdown-item
     >
-    <hr id="breakingLine"/>
-    <b-dropdown-item href="https://crowdin.com/project/diveni">{{ $t("general.licenses.translations")}}</b-dropdown-item>
+    <hr id="breakingLine" />
+    <b-dropdown-item href="https://crowdin.com/project/diveni">{{
+      $t("general.licenses.translations")
+    }}</b-dropdown-item>
   </b-nav-item-dropdown>
 </template>
 

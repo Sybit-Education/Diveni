@@ -29,19 +29,24 @@
         </b-col>
       </b-row>
       <b-row>
-        <b-col class="mt-2 mt-md-0 inputText" cols="12" md="9" >
+        <b-col class="mt-2 mt-md-0 inputText" cols="12" md="9">
           <h6>{{ $t("page.join.input.password") }}</h6>
-          <b-form-input v-model="password" class="mt-3 inputFields" type="password" placeholder="(optional)" />
+          <b-form-input
+            v-model="password"
+            class="mt-3 inputFields"
+            type="password"
+            placeholder="(optional)"
+          />
         </b-col>
-        <b-col cols="12" md="3" id="startButtonCol">
+        <b-col id="startButtonCol" cols="12" md="3">
           <b-button
-          class="rounded-circle startingButton "
-          type="submit"
-          :disabled="name.length < 1 || sessionID.length < 1"
-          @click="onClickButton"
-        >
-          {{ buttonText }}
-        </b-button>
+            class="rounded-circle startingButton"
+            type="submit"
+            :disabled="name.length < 1 || sessionID.length < 1"
+            @click="onClickButton"
+          >
+            {{ buttonText }}
+          </b-button>
         </b-col>
       </b-row>
     </div>
@@ -146,7 +151,7 @@ h6 {
   border-radius: var(--buttonShape);
 }
 
-#startButtonCol{
+#startButtonCol {
   text-align: center;
 }
 </style>

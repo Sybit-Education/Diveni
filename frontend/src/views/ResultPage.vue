@@ -7,14 +7,18 @@
       {{ $t("page.results.noUserStories") }}
     </div>
     <b-list-group v-else id="results">
-      <b-list-group-item v-for="(story, index) of userStories" :key="index" class="text-center stories">
+      <b-list-group-item
+        v-for="(story, index) of userStories"
+        :key="index"
+        class="text-center stories"
+      >
         {{ story.title ? story.title : "No title ..." }}
-        <b-button class="mx-2 estimationButtons" pill >
+        <b-button class="mx-2 estimationButtons" pill>
           {{ story.estimation ? story.estimation : "?" }}
         </b-button>
       </b-list-group-item>
     </b-list-group>
-    <b-row class=" text-center centerItems">
+    <b-row class="text-center centerItems">
       <b-col>
         <b-button
           id="downloadButton"
@@ -23,11 +27,7 @@
         >
           {{ $t("page.results.button.download") }}
         </b-button>
-        <b-button
-          id="goBackHomeButton"
-          class="mx-2"
-          @click="goHome()"
-        >
+        <b-button id="goBackHomeButton" class="mx-2" @click="goHome()">
           {{ $t("page.results.button.home") }}
         </b-button>
       </b-col>
@@ -73,7 +73,6 @@ export default Vue.extend({
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
 .centerItems {
   display: flex;
   justify-content: center;
@@ -82,7 +81,7 @@ export default Vue.extend({
   min-height: 10vh;
 }
 
-.estimationButtons  {
+.estimationButtons {
   background-color: var(--startButton);
   color: var(--text-primary-color);
 }
@@ -92,11 +91,11 @@ export default Vue.extend({
   color: var(--text-primary-color);
 }
 
-.estimationButtons:focus{
+.estimationButtons:focus {
   background-color: var(--startButtonHovered) !important;
   color: var(--text-primary-color);
 }
-.estimationButtons:active{
+.estimationButtons:active {
   background-color: var(--startButtonHovered) !important;
 }
 

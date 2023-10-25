@@ -8,7 +8,9 @@
       "
     >
       {{
-        $t("session.prepare.step.selection.mode.description.withIssueTracker.buttons.signInWithJira.label")
+        $t(
+          "session.prepare.step.selection.mode.description.withIssueTracker.buttons.signInWithJira.label"
+        )
       }}
     </b-button>
     <b-modal
@@ -19,7 +21,11 @@
       @hidden="resetModal"
       @ok="handleOk"
     >
-      <p>{{ $t("session.prepare.step.selection.mode.description.withIssueTracker.dialog.description") }}</p>
+      <p>
+        {{
+          $t("session.prepare.step.selection.mode.description.withIssueTracker.dialog.description")
+        }}
+      </p>
       <form ref="form" @submit.stop.prevent="handleSubmit">
         <b-form-group
           label="Verification code"
