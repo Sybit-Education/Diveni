@@ -33,7 +33,7 @@
           accept="text/csv"
           @change="importStory($event.target.files)"
         />
-        <b-button block color="primary" elevation="2" @click="openFileUploader()">
+        <b-button block class="importUserStoryButton" elevation="2" @click="openFileUploader()">
           {{ $t("session.prepare.step.selection.mode.description.withUS.importButton") }}
         </b-button>
       </b-tab>
@@ -109,7 +109,7 @@
     <b-row class="mt-3 text-center">
       <b-col>
         <b-button
-          variant="outline-secondary"
+          class="hostVotingButtons"
           @click="hostVoting = true"
           :class="{ active: hostVoting }"
         >
@@ -118,7 +118,7 @@
       </b-col>
       <b-col>
         <b-button
-          variant="outline-secondary"
+          class="hostVotingButtons"
           @click="hostVoting = false"
           :class="{ active: !hostVoting }"
         >
@@ -386,6 +386,28 @@ export default Vue.extend({
 .importUserStoryButton:focus {
   background-color: var(--startButtonHovered) !important;
   color: var(--text-primary-color) !important;
+}
+
+.hostVotingButtons {
+  color: var(--text-primary-color);
+  border-color: var(--text-primary-color);
+  background-color: transparent;
+  font-size: large;
+  width: 68px;
+  text-align: center;
+}
+
+.hostVotingButtons:hover {
+  color: var(--text-primary-color) !important;
+  border-color: var(--text-primary-color);
+  background-color: var(--preparePageInActiveTabHover);
+}
+.hostVotingButtons:focus {
+  color: var(--text-primary-color);
+  border-color: var(--text-primary-color);
+  background-color: transparent !important;
+  outline: none;
+  box-shadow: none;
 }
 
 .optionButtons {

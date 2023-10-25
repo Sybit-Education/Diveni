@@ -18,16 +18,16 @@
             class="rounded-avatar__image"
           />
           <div class="rounded-avatar__label">
-            <b>Host</b>
+            <b id="hostName">Host</b>
           </div>
         </div>
       </div>
     </div>
   </template>
-  
+
   <script lang="ts">
   import Vue from "vue";
-  
+
   export default Vue.extend({
     name: "SessionAdminCard",
     props: {
@@ -37,7 +37,7 @@
     },
   });
   </script>
-  
+
   <!-- Add "scoped" attribute to limit CSS to this component only -->
   <style scoped>
   .fs-3-rem {
@@ -60,8 +60,8 @@
     width: 100px;
   }
 .rounded-avatar {
-  width: 100px;
-  height: 100px;
+  width: 150px;
+  height: 150px;
   padding: 8px;
   display: flex;
   justify-content: center; /* Centering y-axis */
@@ -82,5 +82,8 @@
   opacity: 0.5;
   transform: scale(0.8);
 }
+
+#hostName {
+  font-size: large;
+}
   </style>
-  

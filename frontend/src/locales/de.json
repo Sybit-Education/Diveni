@@ -253,7 +253,7 @@
             "title": "Bestimme die Dauer pro Schätzrunde"
           },
           "hostVoting": {
-            "title": "4. Soll der Host auch abstimmen",
+            "title": "Soll der Host auch abstimmen",
             "hostVotingOn": "Ja",
             "hostVotingOff": "Nein"
           },

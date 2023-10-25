@@ -162,13 +162,13 @@
       </b-row>
       <div v-if="session_hostVoting && estimateFinished === false">
         <div v-if="!estimateFinished">
-          <hr />
+          <hr class="breakingLine"/>
           <h4 class="d-inline">
             Your Estimation
           </h4>
         </div>
-        <div v-if="!estimateFinished" class="newVotes">
-          <b-button v-for="item in voteSet" :key="item" class="m-1" pill style="width: 60px" @click="vote(item)">
+        <div v-if="!estimateFinished" class="newVotes m-1">
+          <b-button v-for="item in voteSet" :key="item" class="activePills m-1" pill style="width: 60px" @click="vote(item)">
             {{ item }}
           </b-button>
         </div>
@@ -674,6 +674,8 @@ export default Vue.extend({
 <style scoped>
 .newVotes {
   text-align: center;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .hostVotingButtons {
@@ -681,8 +683,7 @@ export default Vue.extend({
   top: 50%;
   transform: translateY(-50%);
 }
-</style>
-<style scoped>
+
 .optionButtonCol {
   margin-top: auto;
   margin-bottom: auto;
@@ -757,5 +758,20 @@ export default Vue.extend({
 .catGif {
   width: 240px;
   height: 180px;
+}
+
+.activePills {
+  background-color: var(--preparePageMainColor);
+  color: var(--text-primary-color);
+}
+
+.activePills:hover {
+  background-color: var(--preparePageInActiveTabHover);
+  color: var(--text-primary-color);
+}
+
+.activePills:focus {
+  background-color: var(--preparePageInActiveTabHover) !important;
+  color: var(--text-primary-color);
 }
 </style>
