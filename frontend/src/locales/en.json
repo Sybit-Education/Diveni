@@ -286,6 +286,7 @@
         "issueTrackerCredentials": "Wrong credentials",
         "issueTrackerLoginFailed": "Login failed",
         "issueTrackerSynchronizeSuccess": "Synchronized changes with Issue-Tracker",
+        "issueTrackerNothingChanged": "No changes were made",
         "issueTrackerSynchronizeFailed": "Failed to synchronize changes with Issue-Tracker",
         "wrongID": "Wrong invitation code",
         "password": "Wrong password"

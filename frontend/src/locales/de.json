@@ -286,6 +286,7 @@
         "issueTrackerCredentials": "Falsche Login-Daten",
         "issueTrackerLoginFailed": "Login fehlgeschlagen",
         "issueTrackerSynchronizeSuccess": "Synchronisierte Änderungen mit Issue-Tracker",
+        "issueTrackerNothingChanged": "No changes were made",
         "issueTrackerSynchronizeFailed": "Fehler beim Synchronisieren der Änderungen mit Issue-Tracker",
         "wrongID": "Falscher Einladungscode",
         "password": "Falsches Passwort"

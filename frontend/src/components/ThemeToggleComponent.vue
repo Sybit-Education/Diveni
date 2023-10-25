@@ -29,6 +29,8 @@ export default Vue.extend({
   created() {
     if (localStorage.getItem("user-theme")) {
       this.setTheme(localStorage.getItem("user-theme"));
+    } else {
+      this.setTheme(this.userTheme);
     }
   },
   methods: {
