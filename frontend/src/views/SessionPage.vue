@@ -232,17 +232,17 @@ export default Vue.extend({
     BIconBarChartFill,
   },
   props: {
-    adminID: { type: String, required: false },
-    sessionID: { type: String, required: false },
-    voteSetJson: { type: String, required: false },
-    sessionState: { type: String, required: false },
-    timerSecondsString: { type: String, required: false },
+    adminID: { type: String, required: false, default: undefined },
+    sessionID: { type: String, required: false, default: undefined },
+    voteSetJson: { type: String, required: false, default: undefined },
+    sessionState: { type: String, required: false, default: undefined },
+    timerSecondsString: { type: String, required: false, default: undefined },
     startNewSessionOnMountedString: {
       type: String,
       required: false,
       default: "false",
     },
-    userStoryMode: { type: String, required: false },
+    userStoryMode: { type: String, required: false, default: undefined },
     rejoined: { type: String, required: false, default: "true" },
   },
   data() {
@@ -481,7 +481,9 @@ export default Vue.extend({
           }
         }
         if (response.status === 200) {
-          this.$toast.success(this.$t("session.notification.messages.issueTrackerSynchronizeSuccess"));
+          this.$toast.success(
+            this.$t("session.notification.messages.issueTrackerSynchronizeSuccess")
+          );
         } else if (response === 204) {
           this.$toast.info(this.$t("session.notification.messages.issueTrackerNothingChanged"));
         } else {
