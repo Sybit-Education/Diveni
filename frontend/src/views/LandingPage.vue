@@ -199,16 +199,18 @@ export default Vue.extend({
     background-color: var(--startButton);
     border-radius: var(--buttonShape);
     color: var(--text-primary-color);
-
-    &:hover {
-      background-color: var(--startButtonHovered);
-      color: var(--text-primary-color);
-    }
-
-    &:focus {
-      background-color: var(--startButtonHovered) !important;
-    }
   }
+  .card-footer {
+    background-color: #52173100; /* So the Footer does not overflow */
+  }
+}
+
+.joinSessionCard {
+  .landingPageCardButton {
+    background-color: var(--joinButton);
+    border-radius: var(--buttonShape);
+  }
+
   .card-footer {
     background-color: #52173100; /* So the Footer does not overflow */
   }

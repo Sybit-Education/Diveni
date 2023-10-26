@@ -99,19 +99,6 @@ main {
   color: var(--text-primary-color) !important;
 }
 
-.joinSessionCard .landingPageCardButton {
-  background-color: var(--joinButton);
-  border-radius: var(--buttonShape);
-}
-
-.joinSessionCard .landingPageCardButton:hover {
-  background-color: var(--joinButtonHovered);
-}
-
-.joinSessionCard .card-footer {
-  background-color: #52173100; /* So the Footer does not overflow */
-}
-
 .reconnectSessionCard .landingPageCardButton {
   background-color: var(--reconnectButton);
   border-radius: var(--buttonShape);
