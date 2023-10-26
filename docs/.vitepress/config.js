@@ -27,6 +27,7 @@ export default withMermaid(
             { text: "Installation Guide", link: '/guide/install' },
             { text: "Contribution Guide", link: "/guide/contribution"},
             { text: "Translation Guide", link: "/guide/translations"},
+            { text: "Developers Guide", link: "/guide/develop"},
             { text: "Architecture", link: "/guide/architecture"},
             { text: "Testing", link: "/guide/testing"}
           ]
@@ -37,18 +38,26 @@ export default withMermaid(
         { text: 'License', link: '/license' }
       ],
 
-      sidebar: [
-        {
-          items: [
-            { text: "Users Guide", link: '/guide/user' },
-            { text: "Installation Guide", link: '/guide/install' },
-            { text: "Contribution Guide", link: "/guide/contribution"},
-            { text: "Translation Guide", link: "/guide/translations"},
-            { text: "Architecture", link: "/guide/architecture"},
-            { text: "Testing", link: "/guide/testing"}
-          ]
-        }
-      ],
+      sidebar: {
+          '/guide/': {
+            items: [
+              {
+              base: '/guide/',
+              collapsed: false,
+              text: 'Guides',
+              items: [
+                  { text: "Users Guide", link: 'user' },
+                  { text: "Installation Guide", link: 'install' },
+                  { text: "Contribution Guide", link: "contribution"},
+                  { text: "Translation Guide", link: "translations"},
+                  { text: "Developers Guide", link: "develop"},
+                  { text: "Architecture", link: "architecture"},
+                  { text: "Testing", link: "testing"}
+                ]
+              }
+            ]
+          },
+        },
 
       socialLinks: [
         { icon: 'github', link: 'https://github.com/Sybit-Education/Diveni' },
