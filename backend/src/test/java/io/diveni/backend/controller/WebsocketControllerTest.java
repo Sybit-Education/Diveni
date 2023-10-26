@@ -576,7 +576,7 @@ public class WebsocketControllerTest {
     TimeUnit.MILLISECONDS.sleep(TIMEOUT);
 
     val newMemmbers = sessionRepo.findBySessionID(sessionID).getMembers();
-    assertEquals(newMemmbers, List.of(member.updateEstimation("5")));
+    assertEquals(newMemmbers, List.of(member.updateEstimation(vote)));
   }
 
   @Test
