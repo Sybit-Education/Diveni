@@ -13,7 +13,6 @@
 import Vue from "vue";
 import Constants from "@/constants";
 import Member from "@/model/Member";
-
 export default Vue.extend({
   name: "SessionStartButton",
   props: {
@@ -22,6 +21,7 @@ export default Vue.extend({
       required: false,
       default: () => [] as Array<Member>,
     },
+    hostVoting: { type: Boolean, required: true },
     autoReveal: { type: Boolean, required: false },
     withUs: { type: Boolean, required: true },
   },
@@ -30,7 +30,8 @@ export default Vue.extend({
       const endPoint = Constants.webSocketStartPlanningRoute;
       this.$store.commit("sendViaBackendWS", {
         endPoint,
-        data: JSON.stringify(this.autoReveal)
+        data: this.hostVoting,
+        autoReveal: this.autoReveal
       });
       this.$emit("clicked");
     },

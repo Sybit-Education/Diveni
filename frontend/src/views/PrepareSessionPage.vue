@@ -33,15 +33,7 @@
           accept="text/csv"
           @change="importStory($event.target.files)"
         />
-        <b-button
-          block
-          elevation="2"
-          class="importUserStoryButton"
-          @click="
-            openFileUploader();
-            $event.target.blur();
-          "
-        >
+        <b-button block class="importUserStoryButton" elevation="2" @click="openFileUploader()">
           {{ $t("session.prepare.step.selection.mode.description.withUS.importButton") }}
         </b-button>
       </b-tab>
@@ -112,6 +104,29 @@
         class="numberPictures"
       />
       <b-img v-else :src="require('@/assets/preparePage/P4D.png')" class="numberPictures" />
+      {{ $t("session.prepare.step.selection.hostVoting.title") }}
+    </h4>
+    <b-row class="mt-3 text-center">
+      <b-col>
+        <b-button
+          class="hostVotingButtons"
+          @click="hostVoting = true"
+          :class="{ active: hostVoting }"
+        >
+          {{ $t("session.prepare.step.selection.hostVoting.hostVotingOn") }}
+        </b-button>
+      </b-col>
+      <b-col>
+        <b-button
+          class="hostVotingButtons"
+          @click="hostVoting = false"
+          :class="{ active: !hostVoting }"
+        >
+          {{ $t("session.prepare.step.selection.hostVoting.hostVotingOff") }}
+        </b-button>
+      </b-col>
+    </b-row>
+    <h4 class="mt-3">
       {{ $t("session.prepare.step.selection.password.title") }}
     </h4>
     <b-row class="mt-3">
@@ -164,6 +179,7 @@ export default Vue.extend({
       timer: 30,
       warningWhenUnderZero: "",
       tabIndex: 0,
+      hostVoting: false,
       isIssueTrackerEnabled: false,
       theme: localStorage.getItem("user-theme"),
     };
@@ -244,6 +260,7 @@ export default Vue.extend({
             sessionState: string;
           };
           adminCookie: string;
+          hostVoting: string;
         };
         window.localStorage.setItem("adminCookie", response.adminCookie);
         this.goToSessionPage(response.session as Session);
@@ -261,6 +278,7 @@ export default Vue.extend({
           voteSetJson: JSON.stringify(session.sessionConfig.set),
           sessionState: session.sessionState,
           userStoryMode: session.sessionConfig.userStoryMode,
+          hostVoting: this.hostVoting.toString(),
           rejoined: "false",
         },
       });
@@ -368,6 +386,28 @@ export default Vue.extend({
 .importUserStoryButton:focus {
   background-color: var(--startButtonHovered) !important;
   color: var(--text-primary-color) !important;
+}
+
+.hostVotingButtons {
+  color: var(--text-primary-color);
+  border-color: var(--text-primary-color);
+  background-color: transparent;
+  font-size: large;
+  width: 68px;
+  text-align: center;
+}
+
+.hostVotingButtons:hover {
+  color: var(--text-primary-color) !important;
+  border-color: var(--text-primary-color);
+  background-color: var(--preparePageInActiveTabHover);
+}
+.hostVotingButtons:focus {
+  color: var(--text-primary-color);
+  border-color: var(--text-primary-color);
+  background-color: transparent !important;
+  outline: none;
+  box-shadow: none;
 }
 
 .optionButtons {

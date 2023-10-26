@@ -73,6 +73,10 @@ public class WebsocketController {
       webSocketService.sendTimerStartMessageToUser(
           session, session.getTimerTimestamp(), principal.getMemberID());
     }
+    webSocketService.sendUpdatedHostVotingToMember(session, principal.getMemberID());
+    if (session.getHostVoting() && session.getSessionState().equals(SessionState.VOTING_FINISHED)) {
+      webSocketService.sendMembersAdminVote(session);
+    }
     webSocketService.sendNotification(
         session,
         new Notification(
@@ -96,7 +100,7 @@ public class WebsocketController {
           new Notification(
               NotificationType.MEMBER_LEFT,
               new MemberPayload(((MemberPrincipal) principal).getMemberID())));
-      boolean votingCompleted = checkIfAllMembersVoted(session.getMembers());
+      boolean votingCompleted = checkIfAllMembersVoted(session.getMembers(), session);
       if (votingCompleted) {
         votingFinished(
             new AdminPrincipal(
@@ -149,15 +153,17 @@ public class WebsocketController {
     LOGGER.debug("<-- getMemberUpdate()");
   }
 
-  @MessageMapping("/start-voting")
-  public void startEstimation(AdminPrincipal principal, @Payload boolean autoReveal) {
+  @MessageMapping("/startVoting")
+  public void startEstimation(AdminPrincipal principal, @Payload Boolean stateOfHostVoting, @Payload boolean autoReveal) {
     LOGGER.debug("--> startEstimation()");
     val session =
         ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID())
             .updateSessionState(SessionState.START_VOTING)
             .resetCurrentHighlights()
+            .setHostVoting(stateOfHostVoting)
             .setTimerTimestamp(Utils.getTimestampISO8601(new Date()));
     databaseService.saveSession(session);
+    webSocketService.sendMembersHostVoting(session);
     webSocketService.sendSessionStateToMembersWithAutoReveal(session, autoReveal);
     webSocketService.sendTimerStartMessage(session, session.getTimerTimestamp());
     LOGGER.debug("<-- startEstimation()");
@@ -172,9 +178,26 @@ public class WebsocketController {
             .selectHighlightedMembers()
             .resetTimerTimestamp();
     databaseService.saveSession(session);
+    if (session.getHostVoting()) {
+      webSocketService.sendMembersAdminVote(session);
+    }
     webSocketService.sendMembersUpdate(session);
     webSocketService.sendSessionStateToMembers(session);
     LOGGER.debug("<-- votingFinished()");
+  }
+
+  @MessageMapping("/vote/admin")
+  public synchronized void processVoteAdmin(@Payload String vote, AdminPrincipal admin) { // add Payload
+    LOGGER.debug("--> processVoteAdmin()");
+    val session =
+        ControllerUtils.getSessionOrThrowResponse(databaseService, admin.getSessionID())
+            .setHostEstimation(vote);
+    // webSocketService.sendMembersUpdate(session);
+    databaseService.saveSession(session);
+    if (checkIfAllMembersVoted(session.getMembers(), session)) {
+      votingFinished(new AdminPrincipal(admin.getSessionID(), admin.getAdminID()));
+    }
+    LOGGER.debug("<-- processVoteAdmin()");
   }
 
   @MessageMapping("/vote")
@@ -186,6 +209,7 @@ public class WebsocketController {
             .updateEstimation(member.getMemberID(), data[0]);
     webSocketService.sendMembersUpdate(session);
     databaseService.saveSession(session);
+
     if (data[1].equals("true")) {
       boolean votingCompleted = checkIfAllMembersVoted(session.getMembers());
       if (votingCompleted) {
@@ -198,23 +222,32 @@ public class WebsocketController {
     LOGGER.debug("<-- processVote()");
   }
 
-  private boolean checkIfAllMembersVoted(List<Member> members) {
-    return members.stream().filter(m -> m.getCurrentEstimation() == null).count() == 0;
+  private boolean checkIfAllMembersVoted(List<Member> members, Session session) {
+    if (session.getHostVoting() == false) {
+      return members.stream().filter(m -> m.getCurrentEstimation() == null).count() == 0;
+    }
+    return members.stream().filter(m -> m.getCurrentEstimation() == null).count() == 0
+        && null != session.getHostEstimation()
+        && !"".equals(session.getHostEstimation().getHostEstimation());
   }
 
   @MessageMapping("/restart")
-  public synchronized void restartVote(AdminPrincipal principal, @Payload boolean autoReveal) {
-    LOGGER.debug("--> restartVote");
+  public synchronized void restartVote(
+      AdminPrincipal principal, @Payload Boolean stateOfHostVoting, @Payload boolean autoReveal) {
+    LOGGER.debug("--> restartVote()");
     val session =
         ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID())
             .updateSessionState(SessionState.START_VOTING)
             .resetEstimations()
+            .setHostVoting(stateOfHostVoting)
             .setTimerTimestamp(Utils.getTimestampISO8601(new Date()));
     databaseService.saveSession(session);
     webSocketService.sendMembersUpdate(session);
+    webSocketService.sendMembersHostVoting(session);
     webSocketService.sendSessionStateToMembersWithAutoReveal(session, autoReveal);
     webSocketService.sendTimerStartMessage(session, session.getTimerTimestamp());
-    LOGGER.debug("<-- restartVote");
+    webSocketService.sendMembersAdminVote(session);
+    LOGGER.debug("<-- restartVote()");
   }
 
   @MessageMapping("/adminUpdatedUserStories")

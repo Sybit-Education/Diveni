@@ -58,6 +58,8 @@ export default Vue.extend({
         this.subscribeWSMemberUpdated();
         this.subscribeOnTimerStart();
         this.subscribeWSNotification();
+        this.subscribeWSMemberHostVotingUpdate();
+        this.subscribeWSMemberHostEstimation();
         this.goToEstimationPage();
       }
     },
@@ -114,6 +116,12 @@ export default Vue.extend({
     registerMemberPrincipalOnBackend() {
       const endPoint = Constants.webSocketRegisterMemberRoute;
       this.$store.commit("sendViaBackendWS", { endPoint });
+    },
+    subscribeWSMemberHostVotingUpdate() {
+      this.$store.commit("subscribeOnBackendWSHostVoting");
+    },
+    subscribeWSMemberHostEstimation() {
+      this.$store.commit("subscribeOnBackendWSHostEstimation");
     },
     subscribeWSMemberUpdates() {
       this.$store.commit("subscribeOnBackendWSMemberUpdates");
