@@ -93,9 +93,7 @@
           "description": "Przygotuj nową sesję, zaproś członków zespołu i zacznij szacować",
           "buttons": {
             "start": {
-              "label": "Start ...",
-              "addHostVoting": "Enable host voting",
-              "removeHostVoting": "Disable host voting"
+              "label": "Start ..."
             }
           }
         },
