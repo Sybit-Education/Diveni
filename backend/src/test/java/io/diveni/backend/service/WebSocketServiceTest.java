@@ -228,7 +228,7 @@ public class WebSocketServiceTest {
             null,
             null,
             null,
-          null);
+            null);
 
     webSocketService.sendSessionStateToMemberWithAutoReveal(
         session, defaultMemberPrincipal.getMemberID(), true);
@@ -257,7 +257,7 @@ public class WebSocketServiceTest {
             null,
             null,
             null,
-          null);
+            null);
 
     webSocketService.sendSessionStateToMemberWithAutoReveal(
         session, defaultMemberPrincipal.getMemberID(), false);
