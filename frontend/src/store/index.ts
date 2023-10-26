@@ -19,6 +19,7 @@ export default new Vuex.Store<StoreState>({
     tokenId: undefined,
     projects: [],
     selectedProject: undefined,
+    selectedUserStoryIndex: undefined,
     autoReveal: undefined,
   },
   mutations: {
@@ -29,7 +30,7 @@ export default new Vuex.Store<StoreState>({
       state.stompClient = webstomp.over(new SockJS(url));
       if (process.env.NODE_ENV === "production") {
         // eslint-disable-next-line @typescript-eslint/no-empty-function
-        state.stompClient.debug = () => { };
+        state.stompClient.debug = () => {};
       }
       state.stompClient.connect(
         {},
@@ -59,6 +60,11 @@ export default new Vuex.Store<StoreState>({
         state.userStories = JSON.parse(frame.body);
       });
     },
+    subscribeOnBackendWSStorySelected(state) {
+      state.stompClient?.subscribe(Constants.webSocketSelectedUserStoryRoute, (frame) => {
+        state.selectedUserStoryIndex = +frame.body;
+      });
+    },
     subscribeOnBackendWSAdminUpdate(state) {
       state.stompClient?.subscribe(Constants.webSocketMembersUpdatedRoute, (frame) => {
         console.log(`web socket admin receive update: message ${frame}`);
@@ -83,6 +89,13 @@ export default new Vuex.Store<StoreState>({
     clearStore(state) {
       state.members = [];
       state.userStories = [];
+      state.memberUpdates = [];
+      state.notifications = [];
+      state.webSocketConnected = false;
+      state.stompClient = undefined;
+    },
+    clearStoreWithoutUserStories(state) {
+      state.members = [];
       state.memberUpdates = [];
       state.notifications = [];
       state.webSocketConnected = false;

@@ -1,12 +1,12 @@
 <template>
   <b-container id="session-page">
-    <b-row class="mb-3">
-      <b-col>
+    <b-row class="headers">
+      <b-col cols="auto" sm="8">
         <h1>
           {{
             planningStart
-            ? $t("page.session.during.estimation.title")
-            : $t("page.session.before.title")
+              ? $t("page.session.during.estimation.title")
+              : $t("page.session.before.title")
           }}
         </h1>
       </b-col>
@@ -39,7 +39,7 @@
           :session-id="session_sessionID"
         />
       </b-col>
-      <b-col cols="auto">
+      <b-col id="sessionCloseCol" cols="auto">
         <session-close-button
           :is-planning-start="planningStart"
           :user-story-mode="session_userStoryMode"
@@ -48,20 +48,17 @@
     </b-row>
 
     <div v-if="!planningStart">
+      <div id="catGifDiv">
+        <b-img :src="require('@/assets/LoadingCat.gif')" class="catGif" />
+      </div>
       <copy-session-id-popup
         :text-before-session-i-d="$t('page.session.before.text.beforeID')"
         :session-id="session_sessionID"
         :text-after-session-i-d="$t('page.session.before.text.afterID')"
+        class="copy-popup"
       />
 
-      <h4 class="text-center m-3">
-        {{ $t("page.session.before.text.waiting") }}
-        <sub>
-          <b-icon-three-dots animation="fade" font-scale="1"/>
-        </sub>
-      </h4>
-
-      <b-row class="d-flex justify-content-center overflow-auto" style="max-height: 500px">
+      <b-row class="d-flex justify-content-center overflow-auto kick-user">
         <kick-user-wrapper
           v-for="member of members"
           :key="member.memberID"
@@ -83,21 +80,27 @@
 
     <div v-else>
       <b-row class="d-flex justify-content-start pb-3">
-        <b-col cols="auto" class="mr-auto">
+        <b-col cols="auto" class="mr-auto optionButtonCol">
           <b-button
-            class="mr-3"
+            class="mr-3 optionButton"
             variant="outline-dark"
-            @click="sendRestartMessage"
+            @click="
+              sendRestartMessage();
+              $event.target.blur();
+            "
           >
-            <b-icon-arrow-clockwise/>
+            <BIconArrowClockwise class="bIcons"></BIconArrowClockwise>
             {{ $t("page.session.during.estimation.buttons.new") }}
           </b-button>
           <b-button
-            class="mr-3"
+            class="mr-3 optionButton"
             variant="outline-dark"
-            @click="sendVotingFinishedMessage"
+            @click="
+              sendVotingFinishedMessage();
+              $event.target.blur();
+            "
           >
-            <b-icon-bar-chart/>
+            <BIconBarChartFill class="bIcons"></BIconBarChartFill>
             {{ $t("page.session.during.estimation.buttons.result") }}
           </b-button>
           <b-button
@@ -128,28 +131,18 @@
             :start-timestamp="timerTimestamp"
             :pause-timer="estimateFinished"
             :duration="timerCountdownNumber"
+            :voting-started="planningStart"
             @timerFinished="sendVotingFinishedMessage"
           />
         </b-col>
       </b-row>
+
       <h4 v-if="membersPending.length > 0 && !estimateFinished" class="d-inline">
         {{ $t("page.session.during.estimation.message.waitingFor") }}
         {{ membersPending.length }} /
         {{ membersPending.length + membersEstimated.length }}
       </h4>
-      <div id="demo">
-          <div
-            v-if="membersEstimated.length === membersPending.length + membersEstimated.length && autoReveal && !finishAlreadySent"
-            style="display: none">
-            {{ (estimateFinished = true) }}
-          </div>
-      </div>
-      <div id="demo">
-        <div v-if="membersEstimated.length === 0 && !finishAlreadySent" style="display: none">
-          {{ (estimateFinished = false) }}
-        </div>
-      </div>
-      <b-row v-if="!estimateFinished" class="my-1 d-flex justify-content-center flex-wrap">
+      <b-row v-if="!estimateFinished" class="my-2 d-flex justify-content-center flex-wrap">
         <kick-user-wrapper
           v-for="member of membersPending"
           :key="member.memberID"
@@ -158,39 +151,40 @@
           :member="member"
         />
       </b-row>
-      <hr />
+      <hr class="my-5 breakingLine" />
       <h4>
         {{ $t("page.session.during.estimation.message.finished") }}
         {{ membersEstimated.length }} /
         {{ membersPending.length + membersEstimated.length }}
       </h4>
-      <b-row class="my-1 d-flex justify-content-center flex-wrap overflow-auto"
-             style="max-height: 500px">
+      <b-row class="my-1 d-flex justify-content-center flex-wrap overflow-auto kick-user">
         <kick-user-wrapper
           v-for="member of estimateFinished ? members : membersEstimated"
           :key="member.memberID"
           child="SessionMemberCard"
           :member="member"
           :props="{
-              estimateFinished: estimateFinished,
-              highlight:
-                highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0,
-            }"
+            estimateFinished: estimateFinished,
+            highlight:
+              highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0,
+          }"
         />
       </b-row>
     </div>
-    <b-row v-if="session_userStoryMode !== 'NO_US'" class="mt-5">
+    <b-row v-if="session_userStoryMode !== 'NO_US'" class="mt-4">
       <b-col>
         <user-story-sum-component />
       </b-col>
     </b-row>
     <b-row v-if="session_userStoryMode !== 'NO_US'">
-      <b-col cols="4">
+      <b-col v-if="!isMobile" cols="7">
         <div v-if="session_userStoryMode === 'US_JIRA'" class="refreshUserstories">
           <b-button
-            class="w-100 mb-3"
-            variant="info"
-            @click="refreshUserStories"
+            class="w-100 mb-3 refreshButton"
+            @click="
+              refreshUserStories();
+              $event.target.blur();
+            "
           >
             {{ $t("page.session.before.refreshStories") }}
           </b-button>
@@ -205,7 +199,40 @@
           @selectedStory="onSelectedStory($event)"
         />
       </b-col>
-      <b-col cols="8">
+      <b-col v-else cols="12">
+        <div v-if="session_userStoryMode === 'US_JIRA'" class="refreshUserstories">
+          <b-button
+            class="w-100 mb-3 refreshButton"
+            @click="
+              refreshUserStories();
+              $event.target.blur();
+            "
+          >
+            {{ $t("page.session.before.refreshStories") }}
+          </b-button>
+        </div>
+        <user-stories
+          :card-set="voteSet"
+          :show-estimations="planningStart"
+          :initial-stories="userStories"
+          :show-edit-buttons="true"
+          :select-story="true"
+          @userStoriesChanged="onUserStoriesChanged"
+          @selectedStory="onSelectedStory($event)"
+        />
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col v-if="!isMobile" cols="10">
+        <user-story-descriptions
+          :card-set="voteSet"
+          :initial-stories="userStories"
+          :edit-description="true"
+          :index="index"
+          @userStoriesChanged="onUserStoriesChanged"
+        />
+      </b-col>
+      <b-col v-else cols="12">
         <user-story-descriptions
           :card-set="voteSet"
           :initial-stories="userStories"
@@ -235,6 +262,7 @@ import Project from "../model/Project";
 import KickUserWrapper from "@/components/KickUserWrapper.vue";
 import SessionCloseButton from "@/components/actions/SessionCloseButton.vue";
 import SessionStartButton from "@/components/actions/SessionStartButton.vue";
+import { BIconArrowClockwise, BIconBarChartFill } from "bootstrap-vue";
 
 export default Vue.extend({
   name: "SessionPage",
@@ -248,19 +276,22 @@ export default Vue.extend({
     CopySessionIdPopup,
     UserStoryDescriptions,
     NotifyHostComponent,
+    BIconArrowClockwise,
+    BIconBarChartFill,
   },
   props: {
-    adminID: { type: String, required: true },
-    sessionID: { type: String, required: true },
-    voteSetJson: { type: String, required: true },
-    sessionState: { type: String, required: true },
-    timerSecondsString: { type: String, required: true },
+    adminID: { type: String, required: false },
+    sessionID: { type: String, required: false },
+    voteSetJson: { type: String, required: false },
+    sessionState: { type: String, required: false },
+    timerSecondsString: { type: String, required: false },
     startNewSessionOnMountedString: {
       type: String,
       required: false,
       default: "false",
     },
-    userStoryMode: { type: String, required: true },
+    userStoryMode: { type: String, required: false },
+    rejoined: { type: String, required: false, default: "true" },
   },
   data() {
     return {
@@ -310,19 +341,28 @@ export default Vue.extend({
     timerTimestamp() {
       return this.$store.state.timerTimestamp ? this.$store.state.timerTimestamp : "";
     },
+    isMobile() {
+      return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent
+      );
+    },
   },
   watch: {
     webSocketIsConnected(isConnected) {
       if (isConnected) {
         console.debug("SessionPage: member connected to websocket");
-        this.registerAdminPrincipalOnBackend();
-        this.subscribeWSMemberUpdated();
-        this.requestMemberUpdate();
-        this.subscribeOnTimerStart();
-        this.subscribeWSNotification();
-        if (this.startNewSessionOnMountedString === "true") {
-          this.sendRestartMessage();
-        }
+        setTimeout(() => {
+          this.registerAdminPrincipalOnBackend();
+          this.subscribeWSMemberUpdated();
+          this.requestMemberUpdate();
+          this.subscribeOnTimerStart();
+          if (this.rejoined === "false") {
+            this.subscribeWSNotification();
+          }
+          if (this.startNewSessionOnMountedString === "true") {
+            this.sendRestartMessage();
+          }
+        }, 300);
         setTimeout(() => {
           if (this.members.length === 0) {
             this.requestMemberUpdate();
@@ -339,9 +379,15 @@ export default Vue.extend({
         });
       }
     },
+    membersEstimated() {
+      if (this.membersPending.length === 0 && this.membersEstimated.length > 0) {
+        this.estimateFinished = true;
+      }
+    },
   },
   async created() {
     this.copyPropsToData();
+    this.$store.commit("clearStoreWithoutUserStories");
     if (!this.session_sessionID || !this.session_adminID) {
       //check for cookie
       await this.checkAdminCookie();
@@ -356,11 +402,12 @@ export default Vue.extend({
     window.addEventListener("beforeunload", this.sendUnregisterCommand);
   },
   mounted() {
-    this.voteSet = JSON.parse(this.session_voteSetJson);
+    if (this.session_voteSetJson) {
+      this.voteSet = JSON.parse(this.session_voteSetJson);
+    }
     this.connectToWebSocket();
     if (this.session_sessionState === Constants.memberUpdateCommandStartVoting) {
       this.planningStart = true;
-      this.sendRestartMessage();
     } else if (this.session_sessionState === Constants.memberUpdateCommandVotingFinished) {
       this.planningStart = true;
       this.estimateFinished = true;
@@ -408,12 +455,14 @@ export default Vue.extend({
       }
     },
     copyPropsToData() {
-      this.session_adminID = this.adminID;
-      this.session_sessionID = this.sessionID;
-      this.session_sessionState = this.sessionState;
-      this.session_timerSecondsString = this.timerSecondsString;
-      this.session_voteSetJson = this.voteSetJson;
-      this.session_userStoryMode = this.userStoryMode;
+      if (this.adminID) {
+        this.session_adminID = this.adminID;
+        this.session_sessionID = this.sessionID;
+        this.session_sessionState = this.sessionState;
+        this.session_timerSecondsString = this.timerSecondsString;
+        this.session_voteSetJson = this.voteSetJson;
+        this.session_userStoryMode = this.userStoryMode;
+      }
     },
     assignSessionToData(session) {
       if (Object.keys(session).length !== 0) {
@@ -442,7 +491,9 @@ export default Vue.extend({
       this.timerCountdownNumber = parseInt(this.session_timerSecondsString, 10);
       //reconnect and reload member
       this.connectToWebSocket();
-      this.requestMemberUpdate();
+      setTimeout(() => {
+        this.subscribeWSNotification();
+      }, 300);
     },
     async onUserStoriesChanged({ us, idx, doRemove }) {
       console.log(`stories: ${us}`);
@@ -453,7 +504,11 @@ export default Vue.extend({
       if (this.session_userStoryMode === "US_JIRA") {
         let response;
         if (doRemove) {
-          response = await apiService.deleteUserStory(us[idx].id);
+          if (us[idx].id === null) {
+            response = 204;
+          } else {
+            response = await apiService.deleteUserStory(us[idx].id);
+          }
           us.splice(idx, 1);
           doRemove = false;
         } else {
@@ -466,7 +521,7 @@ export default Vue.extend({
             if (response.status === 200) {
               us = this.userStories.map((s) =>
                 s.title === us[idx].title && s.description === us[idx].description
-                  ? { ...s, jiraId: response.data }
+                  ? { ...s, id: response.data }
                   : s
               );
               console.log(`assigned id: ${us[idx].id}`);
@@ -477,6 +532,8 @@ export default Vue.extend({
         }
         if (response.status === 200) {
           this.$toast.success(this.$t("session.notification.messages.issueTrackerSynchronizeSuccess"));
+        } else if (response === 204) {
+          this.$toast.info(this.$t("session.notification.messages.issueTrackerNothingChanged"));
         } else {
           this.$toast.error(this.$t("session.notification.messages.issueTrackerSynchronizeFailed"));
         }
@@ -528,13 +585,19 @@ export default Vue.extend({
           }
         }
         if (response.status === 200) {
-          this.$toast.success(this.$t("session.notification.messages.issueTrackerSynchronizeSuccess"));
+          this.$toast.success(
+            this.$t("session.notification.messages.issueTrackerSynchronizeSuccess")
+          );
         } else {
           this.$toast.error(this.$t("session.notification.messages.issueTrackerSynchronizeFailed"));
         }
       }
     },
     onSelectedStory($event) {
+      if (this.planningStart) {
+        const endPoint = Constants.webSocketAdminSelectedUserStoryRoute;
+        this.$store.commit("sendViaBackendWS", { endPoint, data: $event });
+      }
       this.index = $event;
     },
     connectToWebSocket() {
@@ -593,5 +656,81 @@ export default Vue.extend({
   position: relative;
   top: 50%;
   transform: translateY(-50%);
+}
+
+.optionButtonCol {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.breakingLine {
+  border-color: var(--text-primary-color);
+}
+
+.copy-popup {
+  text-align: center;
+}
+
+.kick-user {
+  max-height: 500px;
+}
+
+#sessionCloseCol {
+  min-width: 200px;
+}
+
+.headers {
+  display: flex;
+  align-items: center;
+  min-height: 20vh;
+}
+
+.bIcons {
+  height: 40px;
+  width: 40px;
+}
+
+.optionButton {
+  background-color: var(--textAreaColour);
+  color: var(--text-primary-color);
+  border-color: black;
+  border-radius: var(--buttonShape);
+  display: inline-flex;
+  align-items: center;
+}
+
+.optionButton:hover {
+  background-color: var(--textAreaColourHovered);
+  color: var(--text-primary-color);
+}
+
+.optionButton:focus {
+  background-color: var(--textAreaColourHovered) !important;
+  color: var(--text-primary-color) !important;
+}
+
+.refreshButton {
+  border-radius: var(--element-size);
+  color: var(--text-primary-color);
+  background-color: var(--joinButton);
+}
+
+.refreshButton:hover {
+  color: var(--text-primary-color);
+  background-color: var(--joinButtonHovered);
+}
+
+.refreshButton:focus {
+  background-color: var(--joinButtonHovered) !important;
+  color: var(--text-primary-color) !important;
+}
+
+#catGifDiv {
+  text-align: center;
+}
+
+.catGif {
+  width: 240px;
+  height: 180px;
 }
 </style>

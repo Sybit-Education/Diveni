@@ -1,9 +1,16 @@
 <template>
-  <b-container id="prepare-session-page">
-    <h1 class="my-5">
+  <b-container class="main">
+    <h1>
       {{ $t("session.prepare.title") }}
     </h1>
+
     <h4 class="mt-3">
+      <b-img
+        v-if="theme === 'light-theme'"
+        :src="require('@/assets/preparePage/P1.png')"
+        class="numberPictures"
+      />
+      <b-img v-else :src="require('@/assets/preparePage/P1D.png')" class="numberPictures" />
       {{ $t("session.prepare.step.selection.mode.title") }}
     </h4>
     <b-tabs v-model="tabIndex" content-class="mt-3" fill>
@@ -12,7 +19,7 @@
         :title="$t('session.prepare.step.selection.mode.description.withoutUS.tab.label')"
         :title-link-class="linkClass(0)"
       >
-        <stroy-points-component />
+        <story-points-component />
       </b-tab>
       <b-tab
         :title="$t('session.prepare.step.selection.mode.description.withUS.tab.label')"
@@ -26,7 +33,15 @@
           accept="text/csv"
           @change="importStory($event.target.files)"
         />
-        <b-button block color="primary" elevation="2" @click="openFileUploader()">
+        <b-button
+          block
+          elevation="2"
+          class="importUserStoryButton"
+          @click="
+            openFileUploader();
+            $event.target.blur();
+          "
+        >
           {{ $t("session.prepare.step.selection.mode.description.withUS.importButton") }}
         </b-button>
       </b-tab>
@@ -39,6 +54,12 @@
       </b-tab>
     </b-tabs>
     <h4 class="mt-4">
+      <b-img
+        v-if="theme === 'light-theme'"
+        :src="require('@/assets/preparePage/P2.png')"
+        class="numberPictures"
+      />
+      <b-img v-else :src="require('@/assets/preparePage/P2D.png')" class="numberPictures" />
       {{ $t("session.prepare.step.selection.cardSet.title") }}
     </h4>
     <card-set-component
@@ -47,22 +68,50 @@
       @selectedCardSetOptions="setCardSetOptions"
     />
     <h4 class="mt-3">
+      <b-img
+        v-if="theme === 'light-theme'"
+        :src="require('@/assets/preparePage/P3.png')"
+        class="numberPictures"
+      />
+      <b-img v-else :src="require('@/assets/preparePage/P3D.png')" class="numberPictures" />
       {{ $t("session.prepare.step.selection.time.title") }}
     </h4>
     <b-row class="mt-3 text-center">
       <b-col>
-        <b-button variant="outline-secondary" @click="setTimerDown()"> -</b-button>
+        <b-button
+          class="optionButtons"
+          @click="
+            setTimerDown();
+            $event.target.blur();
+          "
+        >
+          -
+        </b-button>
       </b-col>
-      <b-col class="text-center">
-        <h4>
+      <b-col id="timerCol" class="text-center" cols="auto">
+        <h4 id="timerBackground">
           {{ timer == 0 ? "∞" : formatTimer }}
         </h4>
       </b-col>
       <b-col>
-        <b-button variant="outline-secondary" @click="setTimerUp()"> +</b-button>
+        <b-button
+          class="optionButtons"
+          @click="
+            setTimerUp();
+            $event.target.blur();
+          "
+        >
+          +</b-button
+        >
       </b-col>
     </b-row>
     <h4 class="mt-3">
+      <b-img
+        v-if="theme === 'light-theme'"
+        :src="require('@/assets/preparePage/P4.png')"
+        class="numberPictures"
+      />
+      <b-img v-else :src="require('@/assets/preparePage/P4D.png')" class="numberPictures" />
       {{ $t("session.prepare.step.selection.password.title") }}
     </h4>
     <b-row class="mt-3">
@@ -79,8 +128,7 @@
       </b-col>
     </b-row>
     <b-button
-      class="my-5"
-      variant="success"
+      class="my-5 startingButton"
       :disabled="buttonDisabled()"
       @click="sendCreateSessionRequest"
     >
@@ -96,10 +144,10 @@ import Constants from "../constants";
 import CardSetComponent from "../components/CardSetComponent.vue";
 import UserStoryComponent from "../components/UserStoryComponent.vue";
 import JiraComponent from "../components/JiraComponent.vue";
-import StroyPointsComponent from "@/components/StroyPointsComponent.vue";
-import constants from "../constants";
+import StoryPointsComponent from "@/components/StoryPointsComponent.vue";
 import UserStory from "@/model/UserStory";
 import papaparse from "papaparse";
+import apiService from "@/services/api.service";
 
 export default Vue.extend({
   name: "PrepareSessionPage",
@@ -107,7 +155,7 @@ export default Vue.extend({
     CardSetComponent,
     UserStoryComponent,
     JiraComponent,
-    StroyPointsComponent,
+    StoryPointsComponent,
   },
   data() {
     return {
@@ -116,7 +164,8 @@ export default Vue.extend({
       timer: 30,
       warningWhenUnderZero: "",
       tabIndex: 0,
-      isIssueTrackerEnabled: constants.isIssueTrackerEnabled,
+      isIssueTrackerEnabled: false,
+      theme: localStorage.getItem("user-theme"),
     };
   },
   computed: {
@@ -147,14 +196,24 @@ export default Vue.extend({
     this.tabIndex = isNaN(parsedTabIndex) ? 0 : parsedTabIndex;
   },
   mounted() {
+    window.addEventListener("user-theme-localstorage-changed", (event) => {
+      const customEvent = event as CustomEvent;
+      this.theme = customEvent.detail.storage;
+    });
+    apiService.getIssueTrackerConfig().then((result) => {
+      this.isIssueTrackerEnabled =
+        result.isJiraCloudEnabled === "true" ||
+        result.isJiraServerEnabled === "true" ||
+        result.isAzureDevOpsEnabled === "true";
+    });
     this.$store.commit("setUserStories", { stories: [] });
   },
   methods: {
     linkClass(idx) {
       if (this.tabIndex === idx) {
-        return ["bg-success", "text-light"];
+        return ["selectedTab", "selectedTextColor"];
       } else {
-        return ["bg-light", "text-dark"];
+        return ["notSelectedTab", "notSelectedTextColor"];
       }
     },
     async sendCreateSessionRequest() {
@@ -202,6 +261,7 @@ export default Vue.extend({
           voteSetJson: JSON.stringify(session.sessionConfig.set),
           sessionState: session.sessionState,
           userStoryMode: session.sessionConfig.userStoryMode,
+          rejoined: "false",
         },
       });
     },
@@ -282,7 +342,82 @@ export default Vue.extend({
 </script>
 
 <style scoped>
+#timerBackground {
+  background-color: var(--preparePageTimerBackground);
+}
+
+#timerCol {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
 .mg_top_2_per {
   margin-top: 2%;
+}
+
+.importUserStoryButton {
+  background-color: var(--preparePageMainColor);
+  color: var(--text-primary-color);
+}
+
+.importUserStoryButton:hover {
+  background-color: var(--startButtonHovered);
+  color: var(--text-primary-color);
+}
+
+.importUserStoryButton:focus {
+  background-color: var(--startButtonHovered) !important;
+  color: var(--text-primary-color) !important;
+}
+
+.optionButtons {
+  color: var(--text-primary-color);
+  border-color: var(--text-primary-color);
+  background-color: transparent;
+  font-size: xx-large;
+  width: 47.5px;
+}
+
+.optionButtons:hover {
+  color: var(--text-primary-color) !important;
+  border-color: var(--text-primary-color);
+  background-color: var(--preparePageInActiveTabHover);
+}
+.optionButtons:focus {
+  color: var(--text-primary-color);
+  border-color: var(--text-primary-color);
+  background-color: transparent !important;
+  outline: none;
+  box-shadow: none;
+}
+
+.startingButton {
+  background-color: var(--startButton);
+  color: var(--text-primary-color);
+  border-radius: var(--buttonShape);
+}
+
+.startingButton:hover {
+  background-color: var(--startButtonHovered);
+  color: var(--text-primary-color);
+}
+
+.startingButton:disabled {
+  color: var(--text-primary-color);
+}
+
+.startingButton:disabled:hover {
+  background-color: grey;
+  color: var(--text-primary-color);
+}
+
+.startingButton:focus {
+  background-color: var(--startButtonHovered) !important;
+  color: var(--text-primary-color);
+}
+
+.numberPictures {
+  height: 45px;
+  width: 45px;
 }
 </style>

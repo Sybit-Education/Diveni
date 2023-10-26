@@ -4,8 +4,8 @@
       <b-list-group-item
         v-for="(story, idx) of userStories"
         v-show="idx === index"
-        :key="story.name"
-        class="border-0"
+        :key="story.id"
+        class="border-0 description-box"
         variant="outline-secondary"
       >
         <div class="list-group list-group-horizontal">
@@ -14,16 +14,14 @@
             rows="1"
             max-rows="3"
             :disabled="!editDescription"
-            class="border"
             size="lg"
             :placeholder="$t('page.session.before.userStories.placeholder.userStoryTitle')"
             @blur="publishChanges(idx)"
           />
           <b-dropdown
             v-show="editDescription"
-            class="mx-1"
+            class="mx-3 estimationDescription"
             :text="(userStories[idx].estimation ? userStories[idx].estimation : '?') + '    '"
-            variant="info"
           >
             <b-dropdown-item
               v-for="num in filteredCardSet"
@@ -33,6 +31,7 @@
               @click="
                 userStories[idx].estimation = num;
                 publishChanges(idx);
+                $event.target.blur();
               "
             >
               {{ num }}
@@ -43,10 +42,20 @@
           <markdown-editor
             id="textarea-auto-height"
             v-model="userStories[idx].description"
-            class="mt-1"
+            class="mt-1 my-5"
             :disabled="!editDescription"
             :placeholder="$t('page.session.before.userStories.placeholder.userStoryDescription')"
-            @blur="publishChanges(idx)"
+            @textValueChanged="(event) => valueChanged(idx, event)"
+          />
+        </div>
+        <div v-if="!editDescription">
+          <b-form-textarea
+            id="textarea-auto-height-plaintext"
+            class="py-2 description-text-area"
+            plaintext
+            :value="userStories[idx].description"
+            rows="15"
+            size="m"
           />
         </div>
       </b-list-group-item>
@@ -79,7 +88,7 @@ export default Vue.extend({
     return {
       sideBarOpen: false,
       userStories: [] as Array<{
-        jiraId: string | null;
+        id: string | null;
         title: string;
         description: string;
         estimation: string | null;
@@ -95,7 +104,7 @@ export default Vue.extend({
   watch: {
     initialStories() {
       this.userStories = this.initialStories as Array<{
-        jiraId: string | null;
+        id: string | null;
         title: string;
         description: string;
         estimation: string | null;
@@ -105,7 +114,7 @@ export default Vue.extend({
   },
   created() {
     this.userStories = this.initialStories as Array<{
-      jiraId: string | null;
+      id: string | null;
       title: string;
       description: string;
       estimation: string | null;
@@ -113,6 +122,10 @@ export default Vue.extend({
     }>;
   },
   methods: {
+    valueChanged(idx, { markdown }) {
+      this.userStories[idx].description = markdown;
+      this.publishChanges(idx);
+    },
     setUserStoryAsActive(index) {
       const stories = this.userStories.map((s) => ({
         id: s.id,
@@ -127,7 +140,7 @@ export default Vue.extend({
     },
     addUserStory() {
       this.userStories.push({
-        jiraId: null,
+        id: null,
         title: "",
         description: "",
         estimation: null,
@@ -145,7 +158,37 @@ export default Vue.extend({
 </script>
 
 <style scoped>
+.description-box {
+  background: transparent;
+  padding: 0;
+}
 /* The side navigation menu */
+
+.description-text-area {
+  color: var(--text-primary-color);
+}
+
+.form-control {
+  background-color: var(--textAreaColour);
+  color: var(--text-primary-color);
+  border: none;
+}
+
+.form-control:disabled {
+  background-color: var(--textAreaColour);
+  color: var(--text-primary-color);
+  border: none;
+}
+
+.form-control:focus {
+  background-color: var(--textAreaColour);
+  color: var(--text-primary-color);
+}
+
+.form-control::placeholder {
+  color: var(--text-primary-color);
+}
+
 .sidenav {
   float: right;
   height: 100%; /* 100% Full-height */

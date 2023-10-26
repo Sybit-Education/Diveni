@@ -23,13 +23,12 @@
         "title": "In attesa dei membri...",
         "text": {
           "beforeID": "Condividi il codice",
-          "afterID": "con i tuoi compagni di squadra",
-          "waiting": "In attesa che i membri si uniscano"
+          "afterID": "con i tuoi compagni di squadra"
         },
         "button": "Avvia La Pianificazione",
         "refreshStories": "Aggiornare le User Story",
         "userStories": {
-          "filter" : {
+          "filter": {
             "noStoryFound": "Nessuna storia trovata!"
           },
           "button": {
@@ -96,7 +95,7 @@
           "description": "Prepara una nuova sessione, invita i membri del team e inizia a stimare",
           "buttons": {
             "start": {
-              "label": "Start ..."
+              "label": "Avvia..."
             }
           }
         },
@@ -105,7 +104,7 @@
           "description": "Unisciti a una sessione esistente e aiuta il tuo team a stimare",
           "buttons": {
             "start": {
-              "label": "Join ..."
+              "label": "Entra ..."
             }
           }
         },
@@ -114,9 +113,17 @@
           "description": "Riconnetti alla sessione esistente come host",
           "buttons": {
             "start": {
-              "label": "Rejoin"
+              "label": "Rientra"
             }
           }
+        },
+        "analytics": {
+          "title": "Statistics of Diveni",
+          "allCreatedSessionsTitle": "Overall",
+          "sessionText": "Sessions",
+          "attendeesText": "Attendees",
+          "lastMonthTitle": "Last Month",
+          "activeTitle": "Currently"
         }
       }
     },
@@ -147,7 +154,7 @@
       "step": {
         "selection": {
           "mode": {
-            "title": "1. Seleziona la modalità per le tue storie utente",
+            "title": "Seleziona la modalità per le tue storie utente",
             "description": {
               "withoutUS": {
                 "tab": {
@@ -165,7 +172,7 @@
                 "descriptionLine1": "Crea le tue storie utente nella pagina successiva",
                 "descriptionLine2": "Aggiungi titolo e descrizione ad ogni storia utente",
                 "descriptionLine3": "Usa il CSV-Import per integrare le storie utente nella tua sessione",
-                "descriptionLine4": "First line must contain the field names separated by semicolons: title;description;estimation",
+                "descriptionLine4": "La prima riga deve contenere i nomi dei campi separati da punti e virgole: titolo;descrizione;stima",
                 "descriptionLine5": "Sarai in grado di aggiungere e modificare le storie utente una volta che avrai iniziato la sessione",
                 "importButton": "Importa Storie Utente",
                 "toastSuccessNotification": "Storie utente importate",
@@ -196,13 +203,13 @@
                     "label": "Accedi con Jira Cloud"
                   },
                   "signInWithJiraServer": {
-                    "label": "Accedi con il server Jira"
+                    "label": "Accedi con Jira Server"
                   },
                   "signInWithAzureDevOps": {
                     "label": "Accedi con Azure DevOps"
                   },
                   "selectProject": {
-                    "label": "Seleziona il tuo progetto jira"
+                    "label": "Seleziona il tuo progetto Jira"
                   },
                   "submit": {
                     "label": "Invia"
@@ -215,7 +222,7 @@
             }
           },
           "cardSet": {
-            "title": "2. Selezionare un set di carte e i suoi valori",
+            "title": "Selezionare un set di carte e i suoi valori",
             "sets": {
               "fibonacci": {
                 "label": "Fibonacci",
@@ -245,10 +252,10 @@
             }
           },
           "time": {
-            "title": "3. Regolare il tempo per stima"
+            "title": "Regolare il tempo per stima"
           },
           "password": {
-            "title": "4. Scegliere una password se necessario",
+            "title": "Scegliere una password se necessario",
             "placeholder": "Password (lasciare vuota per una sessione non protetta)"
           }
         }
@@ -280,6 +287,7 @@
         "issueTrackerCredentials": "Credenziali errate",
         "issueTrackerLoginFailed": "Accesso fallito",
         "issueTrackerSynchronizeSuccess": "Modifiche sincronizzate con Issue-Tracker",
+        "issueTrackerNothingChanged": "No changes were made",
         "issueTrackerSynchronizeFailed": "Impossibile sincronizzare le modifiche con Issue-Tracker",
         "wrongID": "Codice di invito errato",
         "password": "Password errata"

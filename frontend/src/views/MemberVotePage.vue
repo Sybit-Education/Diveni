@@ -8,22 +8,27 @@
         </span>
       </template>
 
-      <b-row class="mt-5">
+      <b-row class="headers">
         <b-col>
           <h1>{{ $t("page.vote.title") }}</h1>
         </b-col>
-        <b-col cols="auto" class="mr-auto">
-          <rounded-avatar :member="getMember" />
-        </b-col>
+
         <b-col cols="auto">
-          <session-leave-button/>
+          <session-leave-button />
           <estimate-timer
             v-if="timerTimestamp"
             class="mt-3"
             :start-timestamp="timerTimestamp"
             :pause-timer="estimateFinished || pauseSession"
             :duration="timerCountdownNumber"
+            :member="memberID"
+            :voting-started="isStartVoting"
           />
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col cols="auto" class="memberIcon">
+          <rounded-avatar :member="getMember" :admin="false" />
         </b-col>
       </b-row>
       <b-row v-if="isMobile">
@@ -35,16 +40,19 @@
           :edit-description="false"
         />
       </b-row>
-      <b-row v-if="isStartVoting" class="my-5">
+      <b-row v-if="isStartVoting">
         <div v-if="isMobile">
-          <flicking id="flicking" :options="{
+          <flicking
+            id="flicking"
+            :options="{
               renderOnlyVisible: false,
               horizontal: true,
               align: 'center',
               bound: false,
               defaultIndex: 0,
               deceleration: 0.0005,
-            }">
+            }"
+          >
             <member-vote-card
               v-for="(voteOption, idx) in voteSet"
               :key="voteOption"
@@ -60,7 +68,7 @@
             />
           </flicking>
         </div>
-        <b-row v-else class="d-flex justify-content-between flex-wrap text-center">
+        <b-row v-else class="centerCards d-flex justify-content-between flex-wrap text-center">
           <b-col>
             <div class="overflow-auto" style="max-height: 500px">
               <member-vote-card
@@ -82,21 +90,24 @@
         </b-row>
       </b-row>
       <b-row v-if="!isStartVoting && !votingFinished" class="my-5">
-        <h3>
+        <h3 id="header">
           {{ $t("page.vote.waiting") }}
           <sub><b-icon-three-dots animation="fade" font-scale="1" /></sub>
         </h3>
       </b-row>
-      <b-row v-if="votingFinished"
-             class="my-1 d-flex justify-content-center flex-wrap overflow-auto"
-             style="max-height: 500px">
+      <b-row
+        v-if="votingFinished"
+        class="d-flex justify-content-center flex-wrap overflow-auto"
+        style="max-height: 500px"
+      >
         <session-member-card
           v-for="member of members"
           :key="member.memberID"
           :member="member"
           :props="{
             estimateFinished: votingFinished,
-            highlight: highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0,
+            highlight:
+              highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0,
           }"
         />
       </b-row>
@@ -113,6 +124,7 @@
               :show-estimations="true"
               :initial-stories="userStories"
               :show-edit-buttons="false"
+              :host-selected-story-index="hostSelectedStoryIndex"
               @selectedStory="onSelectedStory($event)"
             />
           </div>
@@ -133,6 +145,7 @@
             :show-estimations="true"
             :initial-stories="userStories"
             :show-edit-buttons="false"
+            :host-selected-story-index="hostSelectedStoryIndex"
             @selectedStory="onSelectedStory($event)"
           />
         </div>
@@ -187,6 +200,7 @@ export default Vue.extend({
   data() {
     return {
       index: 0,
+      hostSelectedStoryIndex: null,
       draggedVote: null,
       voteSet: [] as string[],
       timerCountdownNumber: 0,
@@ -238,6 +252,9 @@ export default Vue.extend({
         name: this.name,
       };
     },
+    selectedUserStoryIndex() {
+      return this.$store.state.selectedUserStoryIndex;
+    },
   },
   watch: {
     memberUpdates(updates) {
@@ -252,7 +269,7 @@ export default Vue.extend({
       }
     },
     votingFinished(isFinished) {
-      if ((isFinished && this.highlightedMembers.length === 0)) {
+      if (isFinished && this.highlightedMembers.length === 0) {
         confetti({
           particleCount: 100,
           startVelocity: 50,
@@ -269,9 +286,11 @@ export default Vue.extend({
         this.leaveMeeting();
       }
     },
+    selectedUserStoryIndex(index) {
+      this.hostSelectedStoryIndex = index;
+    },
   },
   created() {
-    // window.addEventListener("beforeunload", this.sendUnregisterCommand);
     this.timerCountdownNumber = JSON.parse(this.timerSecondsString);
   },
   mounted() {
@@ -285,9 +304,6 @@ export default Vue.extend({
     }
     this.voteSet = JSON.parse(this.voteSetJson);
   },
-  beforeDestroy() {
-    this.sendUnregisterCommand();
-  },
   methods: {
     onSelectedStory($event) {
       this.index = $event;
@@ -296,11 +312,6 @@ export default Vue.extend({
       this.draggedVote = vote;
       const endPoint = `${Constants.webSocketVoteRoute}`;
       this.$store.commit("sendViaBackendWS", { endPoint, data: vote + " " + this.isAutoRevealActive  });
-    },
-    sendUnregisterCommand() {
-      const endPoint = `${Constants.webSocketUnregisterRoute}`;
-      this.$store.commit("sendViaBackendWS", { endPoint, data: null });
-      this.$store.commit("clearStore");
     },
     goToJoinPage() {
       this.$router.push({ name: "JoinPage" });
@@ -321,6 +332,10 @@ export default Vue.extend({
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+#header {
+  color: var(--text-primary-color);
+}
+
 #flicking {
   /* overflow:visible;  Add when fix is clear how to stay responsiv*/
   width: 100%;
@@ -330,5 +345,22 @@ export default Vue.extend({
   font-size: 2em;
   margin: 0.67em 0;
   font-weight: bold;
+}
+
+.headers {
+  display: flex;
+  align-items: center;
+  min-height: 10vh;
+}
+
+.memberIcon {
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 5%;
+}
+
+.centerCards {
+  margin-left: auto;
+  margin-right: auto;
 }
 </style>

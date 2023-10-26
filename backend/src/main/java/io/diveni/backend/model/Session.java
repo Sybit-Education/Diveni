@@ -5,6 +5,7 @@
 */
 package io.diveni.backend.model;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Collections;
@@ -62,6 +63,8 @@ public class Session {
 
   private final String timerTimestamp;
 
+  private final LocalDate creationTime;
+
   static Comparator<String> estimationByIndex(List<String> set) {
     return Comparator.comparingInt((str) -> set.indexOf(str));
   }
@@ -89,7 +92,8 @@ public class Session {
         sessionState,
         lastModified,
         accessToken,
-        timerTimestamp);
+        timerTimestamp,
+        creationTime);
   }
 
   public Session selectHighlightedMembers() {
@@ -120,7 +124,8 @@ public class Session {
           sessionState,
           lastModified,
           accessToken,
-          timerTimestamp);
+          timerTimestamp,
+          creationTime);
     }
     val maxEstimationMembers =
         this.members.stream()
@@ -193,7 +198,8 @@ public class Session {
         sessionState,
         lastModified,
         accessToken,
-        timerTimestamp);
+        timerTimestamp,
+        creationTime);
   }
 
   public Session resetCurrentHighlights() {
@@ -209,7 +215,8 @@ public class Session {
         sessionState,
         lastModified,
         accessToken,
-        timerTimestamp);
+        timerTimestamp,
+        creationTime);
   }
 
   public Session updateUserStories(List<UserStory> userStories) {
@@ -232,7 +239,8 @@ public class Session {
         sessionState,
         lastModified,
         accessToken,
-        timerTimestamp);
+        timerTimestamp,
+        creationTime);
   }
 
   public Session resetEstimations() {
@@ -250,7 +258,8 @@ public class Session {
         sessionState,
         lastModified,
         accessToken,
-        timerTimestamp);
+        timerTimestamp,
+        creationTime);
   }
 
   public Session updateMembers(List<Member> updatedMembers) {
@@ -266,7 +275,8 @@ public class Session {
         sessionState,
         lastModified,
         accessToken,
-        timerTimestamp);
+        timerTimestamp,
+        creationTime);
   }
 
   public Session updateSessionState(SessionState updatedSessionState) {
@@ -282,7 +292,8 @@ public class Session {
         updatedSessionState,
         lastModified,
         accessToken,
-        timerTimestamp);
+        timerTimestamp,
+        creationTime);
   }
 
   public Session addMember(Member member) {
@@ -300,7 +311,8 @@ public class Session {
         sessionState,
         lastModified,
         accessToken,
-        timerTimestamp);
+        timerTimestamp,
+        creationTime);
   }
 
   public Session removeMember(String memberID) {
@@ -320,7 +332,8 @@ public class Session {
         sessionState,
         lastModified,
         accessToken,
-        timerTimestamp);
+        timerTimestamp,
+        creationTime);
   }
 
   public Session setTimerTimestamp(String timestamp) {
@@ -336,7 +349,8 @@ public class Session {
         sessionState,
         lastModified,
         accessToken,
-        timestamp);
+        timestamp,
+        creationTime);
   }
 
   public Session resetTimerTimestamp() {
@@ -352,7 +366,8 @@ public class Session {
         sessionState,
         lastModified,
         accessToken,
-        null);
+        null,
+        creationTime);
   }
 
   public Session setLastModified(Date lastModified) {
@@ -368,7 +383,8 @@ public class Session {
         sessionState,
         lastModified,
         accessToken,
-        timerTimestamp);
+        timerTimestamp,
+        creationTime);
   }
 
   public Session setAccessToken(String token) {
@@ -384,6 +400,7 @@ public class Session {
         sessionState,
         lastModified,
         token,
-        timerTimestamp);
+        timerTimestamp,
+        creationTime);
   }
 }

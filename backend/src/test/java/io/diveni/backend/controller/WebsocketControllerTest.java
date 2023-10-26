@@ -175,6 +175,7 @@ public class WebsocketControllerTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
+            null,
             null));
     val adminPrincipal = new AdminPrincipal(sessionID, adminID);
     StompSession session = getAdminSession(sessionID, adminID);
@@ -209,6 +210,7 @@ public class WebsocketControllerTest {
             new HashMap<>(),
             new ArrayList<>(),
             SessionState.WAITING_FOR_MEMBERS,
+            null,
             null,
             null,
             null));
@@ -253,6 +255,7 @@ public class WebsocketControllerTest {
             new HashMap<>(),
             List.of("asdf", "bsdf"),
             SessionState.WAITING_FOR_MEMBERS,
+            null,
             null,
             null,
             null));
@@ -312,6 +315,7 @@ public class WebsocketControllerTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
+            null,
             null));
     val adminPrincipal = new AdminPrincipal(sessionID, adminID);
     webSocketService.setAdminUser(adminPrincipal);
@@ -342,6 +346,7 @@ public class WebsocketControllerTest {
             new HashMap<>(),
             new ArrayList<>(),
             SessionState.WAITING_FOR_MEMBERS,
+            null,
             null,
             null,
             null));
@@ -380,6 +385,7 @@ public class WebsocketControllerTest {
             new HashMap<>(),
             new ArrayList<>(),
             SessionState.START_VOTING,
+            null,
             null,
             null,
             null));
@@ -422,6 +428,7 @@ public class WebsocketControllerTest {
             SessionState.START_VOTING,
             null,
             null,
+            null,
             null));
     val adminPrincipal = new AdminPrincipal(sessionID, adminID);
     val memberPrincipal = new MemberPrincipal(sessionID, memberID2);
@@ -458,6 +465,7 @@ public class WebsocketControllerTest {
             new HashMap<>(),
             new ArrayList<>(),
             SessionState.WAITING_FOR_MEMBERS,
+            null,
             null,
             null,
             null));
@@ -569,6 +577,7 @@ public class WebsocketControllerTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
+            null,
             null));
     webSocketService.setAdminUser(adminPrincipal);
     StompSession session = getMemberSession(sessionID, memberID);
@@ -605,6 +614,7 @@ public class WebsocketControllerTest {
             new HashMap<>(),
             new ArrayList<>(),
             SessionState.WAITING_FOR_MEMBERS,
+            null,
             null,
             null,
             null);
@@ -710,6 +720,7 @@ public class WebsocketControllerTest {
             new HashMap<>(),
             new ArrayList<>(),
             SessionState.WAITING_FOR_MEMBERS,
+            null,
             null,
             null,
             null);

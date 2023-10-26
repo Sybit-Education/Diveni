@@ -1,8 +1,7 @@
 <template>
   <div class="markdown-editor">
-    <viewer v-if="disabled" :initial-value="markdown" :height="height" :options="editorOptions" />
     <editor
-      v-else
+      v-if="!disabled"
       ref="toastuiEditor"
       :initial-value="markdown"
       :height="height"
@@ -10,8 +9,8 @@
       :placeholder="placeholder"
       initial-edit-type="wysiwyg"
       preview-style="vertical"
-      @blur="blur"
-      @change="change"
+      :class="theme === 'light-theme' ? 'lightMode' : 'DarkMode'"
+      @blur="getTextValueFromEditor"
     />
   </div>
 </template>
@@ -24,14 +23,13 @@ import "@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin
 import "@toast-ui/editor/dist/i18n/de-de";
 
 import Vue from "vue";
-import { Editor, Viewer } from "@toast-ui/vue-editor";
+import { Editor } from "@toast-ui/vue-editor";
 import codeSyntaxHighlight from "@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin-code-syntax-highlight-all";
 
 export default Vue.extend({
   name: "MarkdownEditor",
   components: {
     editor: Editor,
-    viewer: Viewer,
   },
   model: {
     prop: "markdown",
@@ -57,6 +55,7 @@ export default Vue.extend({
   },
   data() {
     return {
+      text: "",
       editorOptions: {
         autofocus: false,
         height: "auto",
@@ -77,28 +76,80 @@ export default Vue.extend({
         ],
         plugins: [codeSyntaxHighlight],
       },
+      theme: localStorage.getItem("user-theme"),
     };
   },
   mounted() {
-    if (!this.disabled && this.getEditorRef()) {
-      this.getEditorRef().invoke("placeholder", this.placeholder);
-    }
+    window.addEventListener("user-theme-localstorage-changed", (event) => {
+      const customEvent = event as CustomEvent;
+      this.theme = customEvent.detail.storage;
+    });
   },
   methods: {
-    change() {
-      this.$emit("change", this.getMarkdown());
-    },
-    blur() {
-      this.$emit("blur", this.getMarkdown());
-    },
-    getMarkdown() {
-      return this.getEditorRef().invoke("getMarkdown");
-    },
-    getEditorRef() {
-      return this.$refs.toastuiEditor;
+    getTextValueFromEditor() {
+      if (this.$refs.toastuiEditor) {
+        const editor = this.$refs.toastuiEditor as Editor;
+        const editorText = editor.invoke("getMarkdown");
+        this.$emit("textValueChanged", { markdown: editorText });
+      }
     },
   },
 });
 </script>
 
-<style scoped></style>
+<style>
+.toastui-editor-popup {
+  background-color: var(--topNavigationBarColor);
+}
+
+.toastui-editor-defaultUI-toolbar {
+  background-color: #7a777773;
+}
+.toastui-editor-defaultUI-toolbar button {
+  border: none;
+  color: var(--text-primary-color);
+}
+
+.toastui-editor-defaultUI .ProseMirror {
+  background-color: #405c6c;
+}
+
+.toastui-editor-md-container .toastui-editor-md-preview {
+  overflow: auto;
+  padding: 0 25px;
+  height: 100%;
+  background-color: #405c6c;
+}
+
+.toastui-editor-mode-switch {
+  background-color: #405c6c;
+}
+
+.toastui-editor-contents p {
+  color: var(--text-primary-color) !important;
+}
+
+.lightMode .toastui-editor-defaultUI .ProseMirror {
+  background-color: var(--textAreaColour);
+}
+
+.lightMode .toastui-editor-md-container .toastui-editor-md-preview {
+  overflow: auto;
+  padding: 0 25px;
+  height: 100%;
+  background-color: var(--textAreaColour);
+}
+
+.lightMode .toastui-editor-mode-switch {
+  background-color: var(--textAreaColour);
+}
+
+.lightMode .toastui-editor-popup {
+  background-color: grey;
+}
+
+.ProseMirror {
+  height: 100%;
+  color: var(--text-primary-color) !important;
+}
+</style>

@@ -23,13 +23,12 @@
         "title": "Waiting for members ...",
         "text": {
           "beforeID": "Share the code",
-          "afterID": "with your team mates",
-          "waiting": "Waiting for members to join"
+          "afterID": "with your team mates"
         },
         "button": "Start Planning",
         "refreshStories": "Refresh Userstories",
         "userStories": {
-          "filter" : {
+          "filter": {
             "noStoryFound": "No stories found!"
           },
           "button": {
@@ -117,6 +116,14 @@
               "label": "Rejoin"
             }
           }
+        },
+        "analytics": {
+          "title": "Statistics of Diveni",
+          "allCreatedSessionsTitle": "Overall",
+          "sessionText": "Sessions",
+          "attendeesText": "Attendees",
+          "lastMonthTitle": "Last Month",
+          "activeTitle": "Currently"
         }
       }
     },
@@ -147,7 +154,7 @@
       "step": {
         "selection": {
           "mode": {
-            "title": "1. Select the mode for your User Stories",
+            "title": "Select the mode for your User Stories",
             "description": {
               "withoutUS": {
                 "tab": {
@@ -215,7 +222,7 @@
             }
           },
           "cardSet": {
-            "title": "2. Select a card set and its values",
+            "title": "Select a card set and its values",
             "sets": {
               "fibonacci": {
                 "label": "Fibonacci",
@@ -245,10 +252,10 @@
             }
           },
           "time": {
-            "title": "3. Adjust the time per estimation"
+            "title": "Adjust the time per estimation"
           },
           "password": {
-            "title": "4. Choose a password if needed",
+            "title": "Choose a password if needed",
             "placeholder": "Password (leave empty for unprotected session)"
           }
         }
@@ -280,6 +287,7 @@
         "issueTrackerCredentials": "Wrong credentials",
         "issueTrackerLoginFailed": "Login failed",
         "issueTrackerSynchronizeSuccess": "Synchronized changes with Issue-Tracker",
+        "issueTrackerNothingChanged": "No changes were made",
         "issueTrackerSynchronizeFailed": "Failed to synchronize changes with Issue-Tracker",
         "wrongID": "Wrong invitation code",
         "password": "Wrong password"

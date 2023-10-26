@@ -1,16 +1,12 @@
 class Constants {
   backendURL = process.env.VUE_APP_SERVER_API_URL;
 
-  i18nLocale = process.env.VUE_APP_I18N_LOCALE;
+  i18nDefaultLocale = process.env.VUE_APP_I18N_DEFAULT_LOCALE;
   i18nFallbackLocale = process.env.VUE_APP_I18N_FALLBACK_LOCALE;
 
-  isJiraCloudEnabled = process.env.VUE_APP_ENABLE_JIRA_CLOUD === "true";
-  isJiraServerEnabled = process.env.VUE_APP_ENABLE_JIRA_SERVER === "true";
-  isAzureDevOpsEnabled = process.env.VUE_APP_ENABLE_AZURE_DEVOPS === "true";
-  isIssueTrackerEnabled = this.isJiraCloudEnabled || this.isJiraServerEnabled || this.isAzureDevOpsEnabled;
-  jiraCloudAuthorizeUrl = process.env.VUE_APP_JIRA_CLOUD_AUTHORIZE_URL;
-
   createSessionRoute = "/sessions";
+
+  getDiveniAnalytics = "/analytics/All";
 
   webSocketRegisterAdminUserRoute = "/ws/registerAdminUser";
 
@@ -35,6 +31,10 @@ class Constants {
   webSocketVoteRoute = "/ws/vote";
 
   webSocketAdminUpdatedUserStoriesRoute = "/ws/adminUpdatedUserStories";
+
+  webSocketAdminSelectedUserStoryRoute = "/ws/adminSelectedUserStory";
+
+  webSocketSelectedUserStoryRoute = "/users/updates/userStorySelected";
 
   webSocketMemberListenUserStoriesRoute = "/users/updates/userStories";
 

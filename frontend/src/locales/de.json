@@ -23,13 +23,12 @@
         "title": "Warte auf die Teammitglieder...",
         "text": {
           "beforeID": "Teile den Code",
-          "afterID": "mit deinen Teammitgliedern",
-          "waiting": "Warte auf den Beitritt des Teams"
+          "afterID": "mit deinen Teammitgliedern"
         },
         "button": "Starte das Planning",
         "refreshStories": "Aktualisiere die Userstories",
         "userStories": {
-          "filter" : {
+          "filter": {
             "noStoryFound": "Keine Stories gefunden!"
           },
           "button": {
@@ -37,9 +36,9 @@
             "addUserStory": "Hinzufügen"
           },
           "placeholder": {
-            "userStoryTitle": "User Story Titel",
+            "userStoryTitle": "Titel der User Story",
             "userStoryDescription": "Beschreibung und Akzeptanzkriterien...",
-            "searchUserStories": "User Stories durchsuchen..."
+            "searchUserStories": "User Stories durchsuchen ..."
           },
           "text": "Klicke auf ein User Story Titel um die Beschreibung zu sehen",
           "sum": "Summe:"
@@ -55,7 +54,7 @@
           "buttons": {
             "new": "Neu",
             "result": "Ergebnisse anzeigen",
-            "finish": "Beende die Session",
+            "finish": "Sitzung beenden",
             "autoRevealOn": "Schalte automatisches Aufdecken aus",
             "autoRevealOff": "Schalte automatisches Aufdecken ein"
           }
@@ -75,16 +74,16 @@
         "description1": "Die Session wird für dich und alle Teammitglieder beendet.",
         "description2": "Im Anschluss kannst du die User Stories herunterladen.",
         "button": {
-          "cancel": "Zurück",
+          "cancel": "Abbrechen",
           "ok": "OK"
         }
       }
     },
     "results": {
       "title": "Ergebnisse",
-      "noUserStories": "Keine User Stories sind definiert...",
+      "noUserStories": "Es sind keine User Stories definiert ...",
       "button": {
-        "download": "Download als CSV-Datei",
+        "download": "Als CSV-Datei herunterladen",
         "home": "Zur Startseite"
       }
     },
@@ -117,6 +116,14 @@
               "label": "Erneut beitreten"
             }
           }
+        },
+        "analytics": {
+          "title": "Statistiken von Diveni",
+          "allCreatedSessionsTitle": "Gesamt",
+          "sessionText": "Sitzungen",
+          "attendeesText": "Teilnehmer",
+          "lastMonthTitle": "Letzter Monat",
+          "activeTitle": "Momentan"
         }
       }
     },
@@ -135,7 +142,7 @@
       "waiting": "Warte, bis der Organisator die Schätzrunde startet",
       "button": {
         "leave": {
-          "label": "Session verlassen"
+          "label": "Sitzung verlassen"
         }
       },
       "hostLeft": "Warte, bis der Organisator die Sitzung wieder betritt..."
@@ -147,7 +154,7 @@
       "step": {
         "selection": {
           "mode": {
-            "title": "1. Wähle den Modus für die User Stories",
+            "title": "Wähle den Modus für die User Stories",
             "description": {
               "withoutUS": {
                 "tab": {
@@ -169,7 +176,7 @@
                 "descriptionLine5": "Du kannst nach Start der Session User Stories bearbeiten oder neue hinzufügen",
                 "importButton": "User Stories importieren",
                 "toastSuccessNotification": "User Stories importiert",
-                "toastErrorNotification": "Beim importieren ist leider ein Fehler aufgetreten"
+                "toastErrorNotification": "Beim Importieren ist leider ein Fehler aufgetreten"
               },
               "withIssueTracker": {
                 "tab": {
@@ -178,8 +185,8 @@
                 "subtitle": "Wähle die Jira-Integration für das Planning",
                 "descriptionLine1": "Logge dich mit deinen Anmeldedaten ein",
                 "descriptionLine2": "Wähle dein Projekt",
-                "descriptionLine3": "Nach dem klicken auf start session, wirst du auf die nächste Seite gelangen um die user Stories ggf. zu bearbeiten",
-                "descriptionLine4": "Du kannst nach Start der Session User Stories bearbeiten oder neue hinzufügen",
+                "descriptionLine3": "Nach dem Klicken auf Start Session, wirst du auf die nächste Seite gelangen, um die User Stories zu bearbeiten",
+                "descriptionLine4": "Du kannst nach Start der Session User Stories bearbeiten oder Neue hinzufügen",
                 "formSelection": "Bitte wähle dein Projekt aus",
                 "selectedProject": "Ausgewähltes Projekt: ",
                 "allUserStories": "Alle User Stories",
@@ -215,7 +222,7 @@
             }
           },
           "cardSet": {
-            "title": "2. Wähle ein Kartenset mit den entsprechenden Werten",
+            "title": "Wähle ein Kartenset mit den entsprechenden Werten",
             "sets": {
               "fibonacci": {
                 "label": "Fibonacci-Folge",
@@ -245,10 +252,10 @@
             }
           },
           "time": {
-            "title": "3. Bestimme die Zeit pro Schätzrunde"
+            "title": "Bestimme die Dauer pro Schätzrunde"
           },
           "password": {
-            "title": "4. Wähle ein Passwort, falls gewünscht",
+            "title": "Wähle ein Passwort, falls gewünscht",
             "placeholder": "Passwort (leer lassen für eine offene Session)"
           }
         }
@@ -279,8 +286,9 @@
         "memberRemoved": "Du wurdest vom Host aus der Sitzung entfernt",
         "issueTrackerCredentials": "Falsche Login-Daten",
         "issueTrackerLoginFailed": "Login fehlgeschlagen",
-        "issueTrackerSynchronizeSuccess": "Änderungen mit Issue-Tracker synchronisiert",
-        "issueTrackerSynchronizeFailed": "Fehler beim Synchronisieren mit Issue-Tracker",
+        "issueTrackerSynchronizeSuccess": "Synchronisierte Änderungen mit Issue-Tracker",
+        "issueTrackerNothingChanged": "No changes were made",
+        "issueTrackerSynchronizeFailed": "Fehler beim Synchronisieren der Änderungen mit Issue-Tracker",
         "wrongID": "Falscher Einladungscode",
         "password": "Falsches Passwort"
       }
