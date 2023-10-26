@@ -54,9 +54,7 @@
           "buttons": {
             "new": "New",
             "result": "Show result",
-            "finish": "Finish session",
-            "addHostVoting": "Enable host voting",
-            "removeHostVoting": "Disable host voting"
+            "finish": "Finish session"
           }
         },
         "modal": {
