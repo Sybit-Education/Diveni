@@ -258,7 +258,7 @@ export default Vue.extend({
     isStartVoting(): boolean {
       return this.memberUpdates.at(-1) === Constants.memberUpdateCommandStartVoting;
     },
-    isAutoRevealActive(): string {
+    isAutoRevealActive(): boolean {
       return this.$store.state.autoReveal;
     },
     votingFinished(): boolean {
@@ -376,7 +376,13 @@ export default Vue.extend({
     onSendVote({ vote }) {
       this.draggedVote = vote;
       const endPoint = `${Constants.webSocketVoteRoute}`;
-      this.$store.commit("sendViaBackendWS", { endPoint, data: vote + " " + this.isAutoRevealActive  });
+      this.$store.commit("sendViaBackendWS",
+        { endPoint,
+          data: JSON.stringify({
+            vote: vote,
+            autoReveal: this.isAutoRevealActive
+          })
+          });
     },
     goToJoinPage() {
       this.$router.push({ name: "JoinPage" });

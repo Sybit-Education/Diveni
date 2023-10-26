@@ -28,6 +28,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.10.1'
     implementation 'org.springdoc:springdoc-openapi-ui:1.7.0'
     implementation 'org.apache.httpcomponents:httpclient:4.5.14'
+    implementation 'org.json:json:20171018'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo'

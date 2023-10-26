@@ -19,6 +19,7 @@ import io.diveni.backend.model.notification.Notification;
 import io.diveni.backend.model.notification.NotificationType;
 import io.diveni.backend.service.DatabaseService;
 import io.diveni.backend.service.WebSocketService;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -154,8 +155,11 @@ public class WebsocketController {
   }
 
   @MessageMapping("/startVoting")
-  public void startEstimation(AdminPrincipal principal, @Payload Boolean stateOfHostVoting, @Payload boolean autoReveal) {
+  public void startEstimation(AdminPrincipal principal, @Payload String message) {
     LOGGER.debug("--> startEstimation()");
+    JSONObject jsonObject = new JSONObject(message);
+    boolean stateOfHostVoting = jsonObject.getBoolean("hostVoting");
+    boolean autoReveal = jsonObject.getBoolean("autoReveal");
     val session =
         ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID())
             .updateSessionState(SessionState.START_VOTING)
@@ -187,32 +191,38 @@ public class WebsocketController {
   }
 
   @MessageMapping("/vote/admin")
-  public synchronized void processVoteAdmin(@Payload String vote, AdminPrincipal admin) { // add Payload
+  public synchronized void processVoteAdmin(@Payload String message, AdminPrincipal admin) { // add Payload
     LOGGER.debug("--> processVoteAdmin()");
+    JSONObject jsonObject = new JSONObject(message);
+    String vote = jsonObject.getString("vote");
+    boolean autoReveal = jsonObject.getBoolean("autoReveal");
     val session =
         ControllerUtils.getSessionOrThrowResponse(databaseService, admin.getSessionID())
             .setHostEstimation(vote);
-    // webSocketService.sendMembersUpdate(session);
     databaseService.saveSession(session);
-    if (checkIfAllMembersVoted(session.getMembers(), session)) {
-      votingFinished(new AdminPrincipal(admin.getSessionID(), admin.getAdminID()));
+    if(autoReveal) {
+      if (checkIfAllMembersVoted(session.getMembers(), session)) {
+        votingFinished(new AdminPrincipal(admin.getSessionID(), admin.getAdminID()));
+      }
     }
     LOGGER.debug("<-- processVoteAdmin()");
   }
 
   @MessageMapping("/vote")
-  public synchronized void processVote(@Payload String vote, MemberPrincipal member) {
+  public synchronized void processVote(@Payload String message, MemberPrincipal member) {
     LOGGER.debug("--> processVote()");
-    String[] data = vote.split(" ");
+    JSONObject jsonObject = new JSONObject(message);
+    String vote = jsonObject.getString("vote");
+    boolean autoReveal = jsonObject.getBoolean("autoReveal");
+    System.out.println(message);
     val session =
         ControllerUtils.getSessionByMemberIDOrThrowResponse(databaseService, member.getMemberID())
-            .updateEstimation(member.getMemberID(), data[0]);
+            .updateEstimation(member.getMemberID(), vote);
     webSocketService.sendMembersUpdate(session);
     databaseService.saveSession(session);
 
-    if (data[1].equals("true")) {
-      boolean votingCompleted = checkIfAllMembersVoted(session.getMembers());
-      if (votingCompleted) {
+    if (autoReveal) {
+      if (checkIfAllMembersVoted(session.getMembers(), session)) {
         votingFinished(
             new AdminPrincipal(
                 member.getSessionID(),
@@ -233,8 +243,11 @@ public class WebsocketController {
 
   @MessageMapping("/restart")
   public synchronized void restartVote(
-      AdminPrincipal principal, @Payload Boolean stateOfHostVoting, @Payload boolean autoReveal) {
+      AdminPrincipal principal, @Payload String message) {
     LOGGER.debug("--> restartVote()");
+    JSONObject jsonObject = new JSONObject(message);
+    boolean stateOfHostVoting = jsonObject.getBoolean("hostVoting");
+    boolean autoReveal = jsonObject.getBoolean("autoReveal");
     val session =
         ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID())
             .updateSessionState(SessionState.START_VOTING)

@@ -492,13 +492,13 @@ public class WebsocketControllerTest {
     StompSession session = getMemberSession(sessionID, memberID);
     val vote = "5";
 
-    session.send(VOTE, vote);
+    session.send(VOTE, "{vote: '" + vote + "', autoReveal: true}");
 
     // Wait for server-side handling
     TimeUnit.MILLISECONDS.sleep(TIMEOUT);
 
-    val newMemmbers = sessionRepo.findBySessionID(sessionID).getMembers();
-    assertEquals(newMemmbers, List.of(member.updateEstimation(vote)));
+    val newMembers = sessionRepo.findBySessionID(sessionID).getMembers();
+    assertEquals(newMembers, List.of(member.updateEstimation(vote)));
   }
 
   @Test
@@ -524,12 +524,14 @@ public class WebsocketControllerTest {
             null,
             null,
             null,
+            null,
+            false,
             null));
     webSocketService.setAdminUser(adminPrincipal);
     StompSession session = getMemberSession(sessionID, memberID);
-    val vote = "5 true";
+    val vote = "5";
 
-    session.send(VOTE, vote);
+    session.send(VOTE, "{vote: '" + vote + "' , autoReveal: true}");
 
     // Wait for server-side handling
     TimeUnit.MILLISECONDS.sleep(TIMEOUT);
@@ -561,12 +563,14 @@ public class WebsocketControllerTest {
             null,
             null,
             null,
+            null,
+            false,
             null));
     webSocketService.setAdminUser(adminPrincipal);
     StompSession session = getMemberSession(sessionID, memberID);
-    val vote = "5 false";
+    val vote = "5";
 
-    session.send(VOTE, vote);
+    session.send(VOTE, "{vote: '" + vote + "', autoReveal: false}");
 
     // Wait for server-side handling
     TimeUnit.MILLISECONDS.sleep(TIMEOUT);
@@ -647,7 +651,7 @@ public class WebsocketControllerTest {
     webSocketService.setAdminUser(adminPrincipal);
     StompSession adminSession = getAdminSession(sessionID, adminID);
 
-    adminSession.send(START_VOTING, true);
+    adminSession.send(START_VOTING, "{hostVoting: true, autoReveal: true}");
     // Wait for server-side handling
     TimeUnit.MILLISECONDS.sleep(TIMEOUT);
 
@@ -679,12 +683,14 @@ public class WebsocketControllerTest {
         null,
         null,
         null,
+        null,
+        false,
         null);
     sessionRepo.save(oldSession);
     webSocketService.setAdminUser(adminPrincipal);
     StompSession adminSession = getAdminSession(sessionID, adminID);
 
-    adminSession.send(START_VOTING, true);
+    adminSession.send(START_VOTING, "{hostVoting: true, autoReveal: true}");
     // Wait for server-side handling
     TimeUnit.MILLISECONDS.sleep(TIMEOUT);
 
@@ -723,7 +729,7 @@ public class WebsocketControllerTest {
     webSocketService.setAdminUser(adminPrincipal);
     StompSession adminSession = getAdminSession(sessionID, adminID);
 
-    adminSession.send(RESTART, true);
+    adminSession.send(RESTART, "{hostVoting: true, autoReveal: true}");
     // Wait for server-side handling
     TimeUnit.MILLISECONDS.sleep(TIMEOUT);
 
@@ -797,12 +803,14 @@ public class WebsocketControllerTest {
         null,
         null,
         null,
+        null,
+        false,
         null);
     sessionRepo.save(oldSession);
     webSocketService.setAdminUser(adminPrincipal);
     StompSession adminSession = getAdminSession(sessionID, adminID);
 
-    adminSession.send(RESTART, true);
+    adminSession.send(RESTART, "{hostVoting: true, autoReveal: true}");
     // Wait for server-side handling
     TimeUnit.MILLISECONDS.sleep(TIMEOUT);
 
@@ -833,12 +841,14 @@ public class WebsocketControllerTest {
         null,
         null,
         null,
+        null,
+        false,
         null);
     sessionRepo.save(oldSession);
     webSocketService.setAdminUser(adminPrincipal);
     StompSession adminSession = getAdminSession(sessionID, adminID);
 
-    adminSession.send(RESTART, false);
+    adminSession.send(RESTART, "{hostVoting: true, autoReveal: false}");
     // Wait for server-side handling
     TimeUnit.MILLISECONDS.sleep(TIMEOUT);
 

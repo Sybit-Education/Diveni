@@ -233,6 +233,8 @@ public class WebSocketServiceTest {
             null,
             null,
             null,
+            null,
+            false,
             null);
 
     webSocketService.sendSessionStateToMemberWithAutoReveal(
@@ -262,6 +264,8 @@ public class WebSocketServiceTest {
             null,
             null,
             null,
+            null,
+            false,
             null);
 
     webSocketService.sendSessionStateToMemberWithAutoReveal(
@@ -334,6 +338,8 @@ public class WebSocketServiceTest {
             null,
             null,
             null,
+          null,
+          false,
             null);
 
     webSocketService.sendSessionStateToMembersWithAutoReveal(session, true);
@@ -371,6 +377,8 @@ public class WebSocketServiceTest {
             null,
             null,
             null,
+          null,
+          false,
             null);
 
     webSocketService.sendSessionStateToMembersWithAutoReveal(session, false);

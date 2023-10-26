@@ -76,12 +76,10 @@
             :members="members"
             :hostVoting="session_hostVoting"
             :autoReveal="autoReveal"
-            :withUs="true
           />
         </b-col>
       </b-row>
     </div>
-
     <div v-else>
       <b-row class="d-flex justify-content-start pb-3">
         <b-col cols="auto" class="mr-auto optionButtonCol">
@@ -178,7 +176,7 @@
       <b-row class="my-1 d-flex justify-content-center flex-wrap overflow-auto kick-user" style="max-height: 500px"
         v-if="highlightedMembers.includes(adminID)">
         <session-admin-card
-          v-if="safedHostVoting && estimateFinished || hostEstimation !== ''"
+          v-if="estimateFinished || hostEstimation !== ''"
           :currentEstimation="hostEstimation"
           :estimateFinished="estimateFinished"
           :highlight="highlightedMembers.includes(adminID) || highlightedMembers.length === 0"
@@ -204,7 +202,7 @@
             }"
         />
         <session-admin-card
-          v-if="safedHostVoting && estimateFinished || hostEstimation !== ''"
+          v-if="session_hostVoting && estimateFinished || hostEstimation !== ''"
           :currentEstimation="hostEstimation"
           :estimateFinished="estimateFinished"
           :highlight="highlightedMembers.includes(adminID) || highlightedMembers.length === 0"
@@ -370,9 +368,7 @@ export default Vue.extend({
       estimateFinished: false,
       session: {},
       hostEstimation: "",
-      safedHostVoting: false,
       autoReveal: false,
-      finishAlreadySent: false,
     };
   },
   computed: {
@@ -440,10 +436,9 @@ export default Vue.extend({
     },
     membersEstimated() {
       if (this.membersPending.length  === 0 && this.membersEstimated.length > 0 && this.autoReveal) {
-        if (this.safedHostVoting && this.hostEstimation !== '') {
-          this.estimateFinished = true
-        }
-        if (!this.safedHostVoting) {
+        if (this.session_hostVoting && this.hostEstimation !== '') {
+            this.estimateFinished = true
+        } else if (!this.session_hostVoting) {
           this.estimateFinished = true;
         }
       }
@@ -693,9 +688,8 @@ export default Vue.extend({
       this.$store.commit("clearStore");
     },
     sendVotingFinishedMessage() {
-      if (!this.estimateFinished && !this.finishAlreadySent) {
+      if (!this.estimateFinished) {
         this.estimateFinished = true;
-        this.finishAlreadySent = true;
         const endPoint = `${Constants.webSocketVotingFinishedRoute}`;
         this.$store.commit("sendViaBackendWS", { endPoint });
       }
@@ -703,24 +697,31 @@ export default Vue.extend({
     sendRestartMessage() {
       this.estimateFinished = false;
       this.hostEstimation = '';
-      this.safedHostVoting = this.session_hostVoting;
-      this.finishAlreadySent = false;
       const endPoint = Constants.webSocketRestartPlanningRoute;
       this.$store.commit("sendViaBackendWS", { endPoint,
-        data: this.session_hostVoting,
-        autoReveal: this.autoReveal});
+        data: JSON.stringify(
+          {
+          hostVoting: this.session_hostVoting,
+          autoReveal: this.autoReveal
+          })
+      });
     },
     goToLandingPage() {
       this.$router.push({ name: "LandingPage" });
     },
     onPlanningStarted() {
       this.planningStart = true;
-      this.safedHostVoting = this.session_hostVoting;
     },
     vote(vote: string) {
       this.hostEstimation = vote;
       const endPoint = `${Constants.webSocketVoteRouteAdmin}`;
-      this.$store.commit("sendViaBackendWS", { endPoint, data: vote });
+      this.$store.commit("sendViaBackendWS",
+        { endPoint,
+          data: JSON.stringify({
+            vote: this.hostEstimation,
+            autoReveal: this.autoReveal
+          })
+        });
     },
   },
 });
