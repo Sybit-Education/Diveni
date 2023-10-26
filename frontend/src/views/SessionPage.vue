@@ -10,14 +10,14 @@
           }}
         </h1>
       </b-col>
-      <b-col cols="auto" >
+      <b-col cols="auto">
         <copy-session-id-popup
           v-if="planningStart"
           class="float-end"
           :session-id="session_sessionID"
         />
       </b-col>
-      <b-col cols="auto" id="sessionCloseCol">
+      <b-col id="sessionCloseCol" cols="auto">
         <session-close-button
           :is-planning-start="planningStart"
           :user-story-mode="session_userStoryMode"
@@ -27,7 +27,7 @@
 
     <div v-if="!planningStart">
       <div id="catGifDiv">
-        <b-img :src="require('@/assets/LoadingCat.gif')" class="catGif"/>
+        <b-img :src="require('@/assets/LoadingCat.gif')" class="catGif" />
       </div>
       <copy-session-id-popup
         :text-before-session-i-d="$t('page.session.before.text.beforeID')"
@@ -35,7 +35,6 @@
         :text-after-session-i-d="$t('page.session.before.text.afterID')"
         class="copy-popup"
       />
-
 
       <b-row class="d-flex justify-content-center overflow-auto kick-user">
         <kick-user-wrapper
@@ -48,7 +47,11 @@
       </b-row>
       <b-row>
         <b-col class="text-center">
-          <session-start-button @clicked="onPlanningStarted" />
+          <session-start-button
+            @clicked="onPlanningStarted"
+            :members="members"
+            :hostVoting="session_hostVoting"
+          />
         </b-col>
       </b-row>
     </div>
@@ -59,14 +62,21 @@
           <b-button
             class="mr-3 optionButton"
             variant="outline-dark"
-            @click="sendRestartMessage(); $event.target.blur();"
+            @click="
+              sendRestartMessage();
+              $event.target.blur();
+            "
           >
             <BIconArrowClockwise class="bIcons"></BIconArrowClockwise>
             {{ $t("page.session.during.estimation.buttons.new") }}
           </b-button>
-          <b-button class="mr-3 optionButton"
+          <b-button
+            class="mr-3 optionButton"
             variant="outline-dark"
-            @click="sendVotingFinishedMessage(); $event.target.blur();"
+            @click="
+              sendVotingFinishedMessage();
+              $event.target.blur();
+            "
           >
             <BIconBarChartFill class="bIcons"></BIconBarChartFill>
             {{ $t("page.session.during.estimation.buttons.result") }}
@@ -77,7 +87,7 @@
             :start-timestamp="timerTimestamp"
             :pause-timer="estimateFinished"
             :duration="timerCountdownNumber"
-            :votingStarted="planningStart"
+            :voting-started="planningStart"
             @timerFinished="sendVotingFinishedMessage"
           />
         </b-col>
@@ -98,30 +108,75 @@
         />
       </b-row>
       <hr class="my-5 breakingLine" />
-      <h4>
+      <h4 v-if="!session_hostVoting">
         {{ $t("page.session.during.estimation.message.finished") }}
         {{ membersEstimated.length }} /
-        {{ membersPending.length + membersEstimated.length }}
+        {{ members.length }}
       </h4>
-      <b-row
-        class="my-1 d-flex justify-content-center flex-wrap overflow-auto kick-user"
-      >
+      <h4 v-else>
+        <div v-if="hostEstimation == ''">
+          {{ $t("page.session.during.estimation.message.finished") }}
+          {{ membersEstimated.length }} /
+          {{ members.length + 1 }}
+        </div>
+        <div v-else>
+          {{ $t("page.session.during.estimation.message.finished") }}
+          {{ membersEstimated.length + 1 }} /
+          {{ members.length + 1 }}
+        </div>
+      </h4>
+      <b-row class="my-1 d-flex justify-content-center flex-wrap overflow-auto kick-user" style="max-height: 500px"
+        v-if="highlightedMembers.includes(adminID)">
+        <session-admin-card
+          v-if="safedHostVoting && estimateFinished || hostEstimation !== ''"
+          :currentEstimation="hostEstimation"
+          :estimateFinished="estimateFinished"
+          :highlight="highlightedMembers.includes(adminID) || highlightedMembers.length === 0"
+        />
         <kick-user-wrapper
           v-for="member of estimateFinished ? members : membersEstimated"
           :key="member.memberID"
-          child="SessionMemberCard"
-          :member="member"
-          :props="{
-            estimateFinished: estimateFinished,
-            highlight:
-              highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0,
+          child="SessionMemberCard" :member="member" :props="{
+              estimateFinished: estimateFinished,
+              highlight:
+                highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0,
           }"
         />
       </b-row>
+      <b-row class="my-1 d-flex justify-content-center flex-wrap overflow-auto" style="max-height: 500px" v-else>
+        <kick-user-wrapper
+          v-for="member of estimateFinished ? members : membersEstimated"
+          :key="member.memberID"
+          child="SessionMemberCard" :member="member" :props="{
+              estimateFinished: estimateFinished,
+              highlight:
+                highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0,
+            }"
+        />
+        <session-admin-card
+          v-if="safedHostVoting && estimateFinished || hostEstimation !== ''"
+          :currentEstimation="hostEstimation"
+          :estimateFinished="estimateFinished"
+          :highlight="highlightedMembers.includes(adminID) || highlightedMembers.length === 0"
+        />
+      </b-row>
+      <div v-if="session_hostVoting && estimateFinished === false">
+        <div v-if="!estimateFinished">
+          <hr class="breakingLine"/>
+          <h4 class="d-inline">
+            Your Estimation
+          </h4>
+        </div>
+        <div v-if="!estimateFinished" class="newVotes m-1">
+          <b-button v-for="item in voteSet" :key="item" class="activePills m-1" pill style="width: 60px" @click="vote(item)">
+            {{ item }}
+          </b-button>
+        </div>
+      </div>
     </div>
     <b-row v-if="session_userStoryMode !== 'NO_US'" class="mt-4">
       <b-col>
-        <user-story-sum-component/>
+        <user-story-sum-component />
       </b-col>
     </b-row>
     <b-row v-if="session_userStoryMode !== 'NO_US'">
@@ -129,7 +184,10 @@
         <div v-if="session_userStoryMode === 'US_JIRA'" class="refreshUserstories">
           <b-button
             class="w-100 mb-3 refreshButton"
-            @click="refreshUserStories(); $event.target.blur();"
+            @click="
+              refreshUserStories();
+              $event.target.blur();
+            "
           >
             {{ $t("page.session.before.refreshStories") }}
           </b-button>
@@ -148,7 +206,10 @@
         <div v-if="session_userStoryMode === 'US_JIRA'" class="refreshUserstories">
           <b-button
             class="w-100 mb-3 refreshButton"
-            @click="refreshUserStories(); $event.target.blur();"
+            @click="
+              refreshUserStories();
+              $event.target.blur();
+            "
           >
             {{ $t("page.session.before.refreshStories") }}
           </b-button>
@@ -205,6 +266,7 @@ import KickUserWrapper from "@/components/KickUserWrapper.vue";
 import SessionCloseButton from "@/components/actions/SessionCloseButton.vue";
 import SessionStartButton from "@/components/actions/SessionStartButton.vue";
 import { BIconArrowClockwise, BIconBarChartFill } from "bootstrap-vue";
+import SessionAdminCard from "@/components/SessionAdminCard.vue";
 
 export default Vue.extend({
   name: "SessionPage",
@@ -219,14 +281,16 @@ export default Vue.extend({
     UserStoryDescriptions,
     NotifyHostComponent,
     BIconArrowClockwise,
-    BIconBarChartFill
-},
+    BIconBarChartFill,
+    SessionAdminCard,
+  },
   props: {
     adminID: { type: String, required: false },
     sessionID: { type: String, required: false },
     voteSetJson: { type: String, required: false },
     sessionState: { type: String, required: false },
     timerSecondsString: { type: String, required: false },
+    hostVoting: { type: String, required: true },
     startNewSessionOnMountedString: {
       type: String,
       required: false,
@@ -244,6 +308,7 @@ export default Vue.extend({
       session_sessionState: "",
       session_timerSecondsString: "",
       session_userStoryMode: "",
+      session_hostVoting: false,
       //data
       index: 0,
       stageLabelReady: "Ready",
@@ -254,6 +319,8 @@ export default Vue.extend({
       startTimerOnComponentCreation: true,
       estimateFinished: false,
       session: {},
+      hostEstimation: "",
+      safedHostVoting: false,
     };
   },
   computed: {
@@ -321,7 +388,12 @@ export default Vue.extend({
     },
     membersEstimated() {
       if (this.membersPending.length  === 0 && this.membersEstimated.length > 0) {
-        this.estimateFinished = true;
+        if (this.safedHostVoting && this.hostEstimation !== '') {
+          this.estimateFinished = true
+        }
+        if (!this.safedHostVoting) {
+          this.estimateFinished = true;
+        }
       }
     },
   },
@@ -402,6 +474,7 @@ export default Vue.extend({
         this.session_timerSecondsString = this.timerSecondsString;
         this.session_voteSetJson = this.voteSetJson;
         this.session_userStoryMode = this.userStoryMode;
+        this.session_hostVoting = (String(this.hostVoting).toLowerCase() === 'true');
       }
     },
     assignSessionToData(session) {
@@ -412,6 +485,7 @@ export default Vue.extend({
         this.session_timerSecondsString = session.sessionConfig.timerSeconds.toString();
         this.session_voteSetJson = JSON.stringify(session.sessionConfig.set);
         this.session_userStoryMode = session.sessionConfig.userStoryMode;
+        this.session_hostVoting = (String(session.hostVoting).toLowerCase() === 'true');
         this.$store.commit("setUserStories", {
           stories: session.sessionConfig.userStories,
         });
@@ -525,7 +599,9 @@ export default Vue.extend({
           }
         }
         if (response.status === 200) {
-          this.$toast.success(this.$t("session.notification.messages.issueTrackerSynchronizeSuccess"));
+          this.$toast.success(
+            this.$t("session.notification.messages.issueTrackerSynchronizeSuccess")
+          );
         } else {
           this.$toast.error(this.$t("session.notification.messages.issueTrackerSynchronizeFailed"));
         }
@@ -573,20 +649,40 @@ export default Vue.extend({
     },
     sendRestartMessage() {
       this.estimateFinished = false;
+      this.hostEstimation = '';
+      this.safedHostVoting = this.session_hostVoting;
       const endPoint = Constants.webSocketRestartPlanningRoute;
-      this.$store.commit("sendViaBackendWS", { endPoint });
+      this.$store.commit("sendViaBackendWS", { endPoint, data: this.session_hostVoting });
     },
     goToLandingPage() {
       this.$router.push({ name: "LandingPage" });
     },
     onPlanningStarted() {
       this.planningStart = true;
+      this.safedHostVoting = this.session_hostVoting;
+    },
+    vote(vote: string) {
+      this.hostEstimation = vote;
+      const endPoint = `${Constants.webSocketVoteRouteAdmin}`;
+      this.$store.commit("sendViaBackendWS", { endPoint, data: vote });
     },
   },
 });
 </script>
 
+<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.newVotes {
+  text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.hostVotingButtons {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
 
 .optionButtonCol {
   margin-top: auto;
@@ -620,7 +716,7 @@ export default Vue.extend({
   width: 40px;
 }
 
-.optionButton{
+.optionButton {
   background-color: var(--textAreaColour);
   color: var(--text-primary-color);
   border-color: black;
@@ -629,14 +725,14 @@ export default Vue.extend({
   align-items: center;
 }
 
-.optionButton:hover{
+.optionButton:hover {
   background-color: var(--textAreaColourHovered);
   color: var(--text-primary-color);
 }
 
-.optionButton:focus{
+.optionButton:focus {
   background-color: var(--textAreaColourHovered) !important;
-  color: var(--text-primary-color)  !important;
+  color: var(--text-primary-color) !important;
 }
 
 .refreshButton {
@@ -662,5 +758,20 @@ export default Vue.extend({
 .catGif {
   width: 240px;
   height: 180px;
+}
+
+.activePills {
+  background-color: var(--preparePageMainColor);
+  color: var(--text-primary-color);
+}
+
+.activePills:hover {
+  background-color: var(--preparePageInActiveTabHover);
+  color: var(--text-primary-color);
+}
+
+.activePills:focus {
+  background-color: var(--preparePageInActiveTabHover) !important;
+  color: var(--text-primary-color);
 }
 </style>

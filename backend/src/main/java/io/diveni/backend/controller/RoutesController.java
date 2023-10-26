@@ -89,7 +89,9 @@ public class RoutesController {
             null,
             accessToken,
             null,
-            LocalDate.now());
+            LocalDate.now(),
+            false,
+            null);
     databaseService.saveSession(session);
     val responseMap = Map.of("session", session, "adminCookie", session.getAdminCookie());
 

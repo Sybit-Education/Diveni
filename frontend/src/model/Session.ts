@@ -8,6 +8,8 @@ interface Session {
   sessionConfig: SessionConfig;
 
   sessionState: string;
+
+  hostVoting: string;
 }
 
 export default Session;

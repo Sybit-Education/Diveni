@@ -19,6 +19,8 @@ export default new Vuex.Store<StoreState>({
     tokenId: undefined,
     projects: [],
     selectedProject: undefined,
+    hostVoting: false,
+    hostEstimation: undefined,
     selectedUserStoryIndex: undefined,
   },
   mutations: {
@@ -63,6 +65,16 @@ export default new Vuex.Store<StoreState>({
         state.members = JSON.parse(frame.body).members;
         state.highlightedMembers = JSON.parse(frame.body).highlightedMembers;
       });
+    },
+    subscribeOnBackendWSHostVoting(state) {
+      state.stompClient?.subscribe(Constants.webSocketMemberListenHostVotingRoute, (frame) => {
+        state.hostVoting = JSON.parse(frame.body);
+      })
+    },
+    subscribeOnBackendWSHostEstimation(state) {
+      state.stompClient?.subscribe(Constants.webSocketMembersUpdatedHostEstimation, (frame) => {
+        state.hostEstimation = JSON.parse(frame.body);
+      })
     },
     subscribeOnBackendWSTimerStart(state) {
       state.stompClient?.subscribe(Constants.webSocketTimerStartRoute, (frame) => {

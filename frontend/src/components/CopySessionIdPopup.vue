@@ -8,13 +8,34 @@
     </strong>
     {{ textAfterSessionID }}
     <b-popover id="popover" target="popover-link" triggers="hover" placement="top">
-      <b-button class="mx-1" id="sessionCode" @click="copyIdToClipboard(); $event.target.blur();">
+      <b-button
+        id="sessionCode"
+        class="mx-1"
+        @click="
+          copyIdToClipboard();
+          $event.target.blur();
+        "
+      >
         {{ $t("page.session.before.copy.id") }}
       </b-button>
-      <b-button class="mx-1" id="link" @click="copyLinkToClipboard(); $event.target.blur();">
+      <b-button
+        id="link"
+        class="mx-1"
+        @click="
+          copyLinkToClipboard();
+          $event.target.blur();
+        "
+      >
         {{ $t("page.session.before.copy.link") }}
       </b-button>
-      <b-button class="mx-1" id="qrCode" @click="$bvModal.show('qr-modal'); $event.target.blur();">
+      <b-button
+        id="qrCode"
+        class="mx-1"
+        @click="
+          $bvModal.show('qr-modal');
+          $event.target.blur();
+        "
+      >
         {{ $t("page.session.before.copy.qr") }}
       </b-button>
     </b-popover>
@@ -102,7 +123,6 @@ export default Vue.extend({
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
 .copy-session {
   font-size: 1.75rem;
   color: var(--text-primary-color);
