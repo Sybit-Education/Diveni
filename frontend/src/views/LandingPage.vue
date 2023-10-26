@@ -191,7 +191,29 @@ export default Vue.extend({
 });
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+
+/* Landing Page */
+.newSessionCard {
+  .landingPageCardButton {
+    background-color: var(--startButton);
+    border-radius: var(--buttonShape);
+    color: var(--text-primary-color);
+
+    &:hover {
+      background-color: var(--startButtonHovered);
+      color: var(--text-primary-color);
+    }
+
+    &:focus {
+      background-color: var(--startButtonHovered) !important;
+    }
+  }
+  .card-footer {
+    background-color: #52173100; /* So the Footer does not overflow */
+  }
+}
+
 #link {
   color: var(--linkColor);
 }

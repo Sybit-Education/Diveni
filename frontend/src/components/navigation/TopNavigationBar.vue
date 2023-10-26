@@ -1,5 +1,5 @@
 <template>
-  <b-navbar toggleable="md" class="top-navigation" fixed="top" sticky>
+  <b-navbar class="top-navigation" type="light" fixed="top" sticky>
     <b-navbar-brand class="top-navigation__title" to="/">
       <b-img src="/img/icons/logo.svg" class="top-navigation__nav-logo" />
       {{ $t("page.landing.productTitle") }}
@@ -34,24 +34,25 @@ export default Vue.extend({
 });
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 /* TOP Navigation Bar */
 
 .top-navigation {
   background-color: var(--topNavigationBarColor);
-}
-.top-navigation__nav-logo {
-  height: 3rem;
-}
-.top-navigation__title {
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: var(--text-primary-color) !important;
-}
 
-.github-logo {
-  color: var(--text-primary-color);
-  width: 2.75rem;
-  height: 2.75rem;
+  &__nav-logo {
+    height: 3rem;
+  }
+  &__title {
+    font-size: 2.5rem;
+    font-weight: 700;
+  }
+
+
+  .github-logo {
+    color: var(--text-primary-color);
+    width: 2.75rem;
+    height: 2.75rem;
+  }
 }
 </style>

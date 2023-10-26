@@ -4,7 +4,7 @@
     <label for="checkbox" class="theme-toggle__label">
       <span>🌙</span>
       <span>☀️</span>
-      <div class="theme-toggle__toggle" :class="{ 'theme-toggle__toggle-checked': userTheme === 'dark-theme' }" />
+      <div class="theme-toggle__toggle" :class="{ 'theme-toggle__toggle-checked': userTheme === 'dark' }" />
     </label>
   </div>
 </template>
@@ -15,10 +15,10 @@ export default Vue.extend({
   name: "ThemeToggleComponent",
   data() {
     return {
-      userTheme: "light-theme",
+      userTheme: "light",
     };
   },
-  created() {
+  mounted() {
     if (localStorage.getItem("user-theme")) {
       this.setTheme(localStorage.getItem("user-theme"));
     } else {
@@ -28,16 +28,24 @@ export default Vue.extend({
   methods: {
     toggleTheme() {
       const activeTheme = localStorage.getItem("user-theme");
-      if (activeTheme === "light-theme") {
-        this.setTheme("dark-theme");
+      if (activeTheme === "light") {
+        this.setTheme("dark");
       } else {
-        this.setTheme("light-theme");
+        this.setTheme("light");
       }
     },
-    setTheme(theme) {
+    setTheme(theme: string | null) {
+      if(theme === null) {
+        theme = "light";
+      }
       localStorage.setItem("user-theme", theme);
       this.userTheme = theme;
       document.documentElement.className = theme;
+      if (theme === "dark") {
+        this.darkMode();
+      } else {
+        this.lightMode();
+      }
       window.dispatchEvent(
         new CustomEvent("user-theme-localstorage-changed", {
           detail: {
@@ -46,6 +54,44 @@ export default Vue.extend({
         })
       );
     },
+    /**
+     * @function darkmode
+     * @summary: firstly, checks if browser local storage has 'user-theme' key
+     * if key has 'dark' value then changes the theme to 'dark mode'
+     * Basically, replaces/toggles every CSS class that has '-light' class with '-dark'
+     */
+    darkMode() {
+      document.querySelectorAll(".bg-light").forEach((element) => {
+        element.className = element.className.replace(/-light/g, "-dark");
+      });
+      document.querySelectorAll(".navbar-light").forEach((element) => {
+        element.className = element.className.replace(/-light/g, "-dark");
+      });
+      document.body.classList.add("bg-dark");
+
+      if (document.body.classList.contains("text-dark")) {
+        document.body.classList.replace("text-dark", "text-light");
+      } else {
+        document.body.classList.add("text-light");
+      }
+    },
+
+    /**
+     * @function lightmode
+     * @summary: check whether the switch is on (checked) or not.
+     * If the switch is on then set 'lightSwitch' local storage key and call @function darkmode
+     * If the switch is off then it is light mode so, switch the theme and
+     *  remove 'lightSwitch' key from local storage
+     */
+    lightMode() {
+      document.querySelectorAll(".bg-dark").forEach((element) => {
+        element.className = element.className.replace(/-dark/g, "-light");
+      });
+      document.querySelectorAll(".navbar-dark").forEach((element) => {
+        element.className = element.className.replace(/-dark/g, "-light");
+      });
+      document.body.classList.replace("text-light", "text-dark");
+    }
   },
 });
 </script>
@@ -69,6 +115,7 @@ export default Vue.extend({
     background-color: var(--topNavigationBarColor);
     border-radius: 50%;
     left: 0;
+    opacity: 1;
     height: calc($element-size);
     width: calc($element-size);
     transform: translateX(0);
