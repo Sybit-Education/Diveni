@@ -21,6 +21,7 @@ import com.fasterxml.jackson.core.json.JsonWriteFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.diveni.backend.Utils;
+import io.diveni.backend.model.AdminVote;
 import io.diveni.backend.model.Member;
 import io.diveni.backend.model.MemberUpdate;
 import io.diveni.backend.model.Session;
@@ -72,6 +73,8 @@ public class WebsocketControllerTest {
   private static final String RESTART = "/ws/restart";
 
   private static final String VOTE = "/ws/vote";
+
+  private static final String ADMIN_VOTE = "/ws/vote/admin";
 
   private static final String UNREGISTER = "/ws/unregister";
 
@@ -176,6 +179,8 @@ public class WebsocketControllerTest {
             null,
             null,
             null,
+            null,
+            false,
             null));
     val adminPrincipal = new AdminPrincipal(sessionID, adminID);
     StompSession session = getAdminSession(sessionID, adminID);
@@ -213,6 +218,8 @@ public class WebsocketControllerTest {
             null,
             null,
             null,
+            null,
+            false,
             null));
     webSocketService.setAdminUser(adminPrincipal);
     val memberPrincipal = new MemberPrincipal(sessionID, memberID);
@@ -258,6 +265,8 @@ public class WebsocketControllerTest {
             null,
             null,
             null,
+            null,
+            false,
             null));
     webSocketService.setAdminUser(adminPrincipal);
     StompSession session = getMemberSession(sessionID, memberID);
@@ -316,6 +325,8 @@ public class WebsocketControllerTest {
             null,
             null,
             null,
+            null,
+            false,
             null));
     val adminPrincipal = new AdminPrincipal(sessionID, adminID);
     webSocketService.setAdminUser(adminPrincipal);
@@ -349,6 +360,8 @@ public class WebsocketControllerTest {
             null,
             null,
             null,
+            null,
+            false,
             null));
     val adminPrincipal = new AdminPrincipal(sessionID, adminID);
     val memberPrincipal = new MemberPrincipal(sessionID, memberID);
@@ -388,6 +401,8 @@ public class WebsocketControllerTest {
             null,
             null,
             null,
+            null,
+            false,
             null));
     val adminPrincipal = new AdminPrincipal(sessionID, adminID);
     val memberPrincipal = new MemberPrincipal(sessionID, memberID2);
@@ -429,6 +444,8 @@ public class WebsocketControllerTest {
             null,
             null,
             null,
+            null,
+            false,
             null));
     val adminPrincipal = new AdminPrincipal(sessionID, adminID);
     val memberPrincipal = new MemberPrincipal(sessionID, memberID2);
@@ -468,6 +485,8 @@ public class WebsocketControllerTest {
             null,
             null,
             null,
+            null,
+            false,
             null));
     webSocketService.setAdminUser(adminPrincipal);
     StompSession session = getMemberSession(sessionID, memberID);
@@ -506,6 +525,8 @@ public class WebsocketControllerTest {
             null,
             null,
             null,
+            null,
+            false,
             null));
     webSocketService.setAdminUser(adminPrincipal);
     StompSession session = getMemberSession(sessionID, memberID);
@@ -545,17 +566,20 @@ public class WebsocketControllerTest {
             null,
             null,
             null,
+            null,
+            false,
             null);
     sessionRepo.save(oldSession);
     webSocketService.setAdminUser(adminPrincipal);
     StompSession adminSession = getAdminSession(sessionID, adminID);
 
-    adminSession.send(START_VOTING, null);
+    adminSession.send(START_VOTING, true);
     // Wait for server-side handling
     TimeUnit.MILLISECONDS.sleep(TIMEOUT);
 
     val newSession = sessionRepo.findBySessionID(oldSession.getSessionID());
     Assertions.assertEquals(SessionState.START_VOTING, newSession.getSessionState());
+    Assertions.assertTrue(newSession.getHostVoting());
   }
 
   @Test
@@ -567,6 +591,7 @@ public class WebsocketControllerTest {
     val member = new Member(memberID, null, null, null, "5");
     val memberList = List.of(member);
     val adminPrincipal = new AdminPrincipal(sessionID, adminID);
+    val adminVote = new AdminVote("XL");
     val oldSession =
         new Session(
             dbID,
@@ -581,16 +606,61 @@ public class WebsocketControllerTest {
             null,
             null,
             null,
-            null);
+            null,
+            false,
+            adminVote);
     sessionRepo.save(oldSession);
     webSocketService.setAdminUser(adminPrincipal);
     StompSession adminSession = getAdminSession(sessionID, adminID);
 
-    adminSession.send(RESTART, null);
+    adminSession.send(RESTART, true);
     // Wait for server-side handling
     TimeUnit.MILLISECONDS.sleep(TIMEOUT);
 
     val newMembers = sessionRepo.findBySessionID(oldSession.getSessionID()).getMembers();
+    val newHostVoting = sessionRepo.findBySessionID(oldSession.getSessionID()).getHostVoting();
+    val newHostEstimation =
+        sessionRepo.findBySessionID(oldSession.getSessionID()).getHostEstimation();
     Assertions.assertTrue(newMembers.stream().allMatch(m -> m.getCurrentEstimation() == null));
+    Assertions.assertTrue(newHostVoting);
+    Assertions.assertTrue(newHostEstimation.getHostEstimation().equals(""));
+  }
+
+  public void adminVote_setsHostEstimation() throws Exception {
+    val dbID = new ObjectId();
+    val sessionID = Utils.generateRandomID();
+    val adminID = Utils.generateRandomID();
+    val memberID = Utils.generateRandomID();
+    val member = new Member(memberID, null, null, null, null);
+    val memberList = List.of(member);
+    val adminPrincipal = new AdminPrincipal(sessionID, adminID);
+    val adminVote = new AdminVote("");
+    sessionRepo.save(
+        new Session(
+            dbID,
+            sessionID,
+            adminID,
+            new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+            null,
+            memberList,
+            new HashMap<>(),
+            new ArrayList<>(),
+            SessionState.WAITING_FOR_MEMBERS,
+            null,
+            null,
+            null,
+            null,
+            true,
+            adminVote));
+    webSocketService.setAdminUser(adminPrincipal);
+    StompSession session = getAdminSession(sessionID, adminID);
+    val vote = "5";
+
+    session.send(ADMIN_VOTE, vote);
+    // Wait for server-side handling
+    TimeUnit.MILLISECONDS.sleep(TIMEOUT);
+
+    val newSession = sessionRepo.findBySessionID(sessionID);
+    assertEquals(newSession.getHostEstimation().getHostEstimation(), vote);
   }
 }
