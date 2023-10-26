@@ -102,12 +102,10 @@ main {
 .joinSessionCard .landingPageCardButton {
   background-color: var(--joinButton);
   border-radius: var(--buttonShape);
-  color: var(--text-primary-color);
 }
 
 .joinSessionCard .landingPageCardButton:hover {
   background-color: var(--joinButtonHovered);
-  color: var(--text-primary-color);
 }
 
 .joinSessionCard .card-footer {
@@ -117,12 +115,10 @@ main {
 .reconnectSessionCard .landingPageCardButton {
   background-color: var(--reconnectButton);
   border-radius: var(--buttonShape);
-  color: var(--text-primary-color);
 }
 
 .reconnectSessionCard .landingPageCardButton:hover {
   background-color: var(--reconnectButtonHovered);
-  color: var(--text-primary-color);
 }
 
 .reconnectSessionCard .landingPageCardButton:focus {
@@ -159,7 +155,6 @@ main {
 a.btn.joinButton {
   background-color: var(--joinButton);
   border-radius: var(--buttonShape);
-  color: var(--text-primary-color);
 }
 
 a.btn.joinButton:hover {
@@ -169,7 +164,6 @@ a.btn.joinButton:hover {
 a.btn.startButton {
   background-color: var(--startButton);
   border-radius: var(--buttonShape);
-  color: var(--text-primary-color);
 }
 
 a.btn.startButton:hover {
