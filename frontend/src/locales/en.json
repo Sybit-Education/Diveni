@@ -55,8 +55,8 @@
             "new": "New",
             "result": "Show result",
             "finish": "Finish session",
-            "autoRevealOn": "Disable automatic reveal",
-            "autoRevealOff": "Enable automatic reveal"
+            "autoRevealOn": "Auto reveal on",
+            "autoRevealOff": "Auto reveal off"
           }
         },
         "modal": {

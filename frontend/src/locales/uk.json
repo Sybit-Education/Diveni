@@ -54,9 +54,7 @@
           "buttons": {
             "new": "Створити",
             "result": "Показати результат",
-            "finish": "Завершити сеанс",
-            "autoRevealOn": "Disable automatic reveal",
-            "autoRevealOff": "Enable automatic reveal"
+            "finish": "Завершити сеанс"
           }
         },
         "modal": {

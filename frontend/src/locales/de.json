@@ -54,9 +54,7 @@
           "buttons": {
             "new": "Neu",
             "result": "Ergebnisse anzeigen",
-            "finish": "Sitzung beenden",
-            "autoRevealOn": "Schalte automatisches Aufdecken aus",
-            "autoRevealOff": "Schalte automatisches Aufdecken ein"
+            "finish": "Sitzung beenden"
           }
         },
         "modal": {
