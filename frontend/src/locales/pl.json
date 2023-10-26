@@ -252,6 +252,11 @@
           "time": {
             "title": "Adjust the time per estimation"
           },
+          "hostVoting": {
+            "title": "Should the host vote as well",
+            "hostVotingOn": "Yes",
+            "hostVotingOff": "No"
+          },
           "password": {
             "title": "Choose a password if needed",
             "placeholder": "Hasło (pozostaw puste dla sesji bez zabezpieczenia)"
