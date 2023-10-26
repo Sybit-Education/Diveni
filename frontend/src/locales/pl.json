@@ -93,7 +93,7 @@
           "description": "Przygotuj nową sesję, zaproś członków zespołu i zacznij szacować",
           "buttons": {
             "start": {
-              "label": "Start ..."
+              "label": "Rozpocznij..."
             }
           }
         },
