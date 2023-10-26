@@ -15,7 +15,7 @@
         <a href="https://github.com/Sybit-Education/Diveni" target="_blank">
           <BIconGithub class="github-logo p-2"></BIconGithub>
         </a>
-        <theme-toggle-component class="p-2" />
+        <theme-toggle class="p-2" />
         <locale-dropdown />
       </b-navbar-nav>
     </b-collapse>
@@ -26,11 +26,11 @@
 import Vue from "vue";
 import LocaleDropdown from "@/components/navigation/LocaleDropdown.vue";
 import { BIconGithub } from "bootstrap-vue";
-import ThemeToggleComponent from "@/components/ThemeToggleComponent.vue";
+import ThemeToggle from "@/components/actions/ThemeToggle.vue";
 
 export default Vue.extend({
   name: "TopNavigationBar",
-  components: { LocaleDropdown, BIconGithub, ThemeToggleComponent },
+  components: { LocaleDropdown, BIconGithub, ThemeToggle },
 });
 </script>
 

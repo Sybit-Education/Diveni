@@ -4,7 +4,10 @@
     <label for="checkbox" class="theme-toggle__label">
       <span>🌙</span>
       <span>☀️</span>
-      <div class="theme-toggle__toggle" :class="{ 'theme-toggle__toggle-checked': userTheme === 'dark' }" />
+      <div
+        class="theme-toggle__toggle"
+        :class="{ 'theme-toggle__toggle-checked': userTheme === 'dark' }"
+      />
     </label>
   </div>
 </template>
@@ -12,7 +15,7 @@
 <script lang="ts">
 import Vue from "vue";
 export default Vue.extend({
-  name: "ThemeToggleComponent",
+  name: "ThemeToggle",
   data() {
     return {
       userTheme: "light",
@@ -35,7 +38,7 @@ export default Vue.extend({
       }
     },
     setTheme(theme: string | null) {
-      if(theme === null) {
+      if (theme === null) {
         theme = "light";
       }
       localStorage.setItem("user-theme", theme);
