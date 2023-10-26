@@ -61,7 +61,7 @@ export default Vue.extend({
   }
 
   &__toggle-checked {
-    transform: translateX(calc($element-size * 1.25)) !important;
+    transform: translateX(calc($element-size * 1)) !important;
   }
 
   &__toggle {
@@ -76,19 +76,18 @@ export default Vue.extend({
   }
 
   &__label {
-    /* for width, use the standard element-size */
-    width: calc($element-size * 2.25);
+    height: calc($element-size);
+    width: calc($element-size * 2);
     user-select: none;
 
     /* for other dimensions, calculate values based on it */
     border-radius: var(--buttonShape);
     border-color: var(--accent-color);
+    background-color: var(--text-primary-color);
     font-size: calc($element-size * 0.75);
-    height: calc($element-size);
-    padding-left: 0;
 
     align-items: center;
-    background: var(--text-primary-color);
+
     cursor: pointer;
     display: flex;
     position: relative;
