@@ -191,7 +191,8 @@ public class WebsocketController {
   }
 
   @MessageMapping("/vote/admin")
-  public synchronized void processVoteAdmin(@Payload String message, AdminPrincipal admin) { // add Payload
+  public synchronized void processVoteAdmin(
+      @Payload String message, AdminPrincipal admin) { // add Payload
     LOGGER.debug("--> processVoteAdmin()");
     JSONObject jsonObject = new JSONObject(message);
     String vote = jsonObject.getString("vote");
@@ -200,7 +201,7 @@ public class WebsocketController {
         ControllerUtils.getSessionOrThrowResponse(databaseService, admin.getSessionID())
             .setHostEstimation(vote);
     databaseService.saveSession(session);
-    if(autoReveal) {
+    if (autoReveal) {
       if (checkIfAllMembersVoted(session.getMembers(), session)) {
         votingFinished(new AdminPrincipal(admin.getSessionID(), admin.getAdminID()));
       }
@@ -242,8 +243,7 @@ public class WebsocketController {
   }
 
   @MessageMapping("/restart")
-  public synchronized void restartVote(
-      AdminPrincipal principal, @Payload String message) {
+  public synchronized void restartVote(AdminPrincipal principal, @Payload String message) {
     LOGGER.debug("--> restartVote()");
     JSONObject jsonObject = new JSONObject(message);
     boolean stateOfHostVoting = jsonObject.getBoolean("hostVoting");
