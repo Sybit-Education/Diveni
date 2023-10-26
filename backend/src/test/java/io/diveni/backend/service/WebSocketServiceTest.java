@@ -227,7 +227,8 @@ public class WebSocketServiceTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
-            null);
+            null,
+          null);
 
     webSocketService.sendSessionStateToMemberWithAutoReveal(
         session, defaultMemberPrincipal.getMemberID(), true);
@@ -255,7 +256,8 @@ public class WebSocketServiceTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
-            null);
+            null,
+          null);
 
     webSocketService.sendSessionStateToMemberWithAutoReveal(
         session, defaultMemberPrincipal.getMemberID(), false);
@@ -324,6 +326,7 @@ public class WebSocketServiceTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
+            null,
             null);
 
     webSocketService.sendSessionStateToMembersWithAutoReveal(session, true);
@@ -358,6 +361,7 @@ public class WebSocketServiceTest {
             new HashMap<>(),
             new ArrayList<>(),
             SessionState.WAITING_FOR_MEMBERS,
+            null,
             null,
             null,
             null);

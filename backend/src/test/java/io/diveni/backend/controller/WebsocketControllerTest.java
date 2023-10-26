@@ -504,7 +504,8 @@ public class WebsocketControllerTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
-            null));
+            null,
+          null));
     webSocketService.setAdminUser(adminPrincipal);
     StompSession session = getMemberSession(sessionID, memberID);
     val vote = "5 true";
@@ -540,7 +541,8 @@ public class WebsocketControllerTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
-            null));
+            null,
+          null));
     webSocketService.setAdminUser(adminPrincipal);
     StompSession session = getMemberSession(sessionID, memberID);
     val vote = "5 false";
@@ -652,7 +654,8 @@ public class WebsocketControllerTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
-            null);
+            null,
+          null);
     sessionRepo.save(oldSession);
     webSocketService.setAdminUser(adminPrincipal);
     StompSession adminSession = getAdminSession(sessionID, adminID);
@@ -687,7 +690,8 @@ public class WebsocketControllerTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
-            null);
+            null,
+          null);
     sessionRepo.save(oldSession);
     webSocketService.setAdminUser(adminPrincipal);
     StompSession adminSession = getAdminSession(sessionID, adminID);
@@ -758,7 +762,8 @@ public class WebsocketControllerTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
-            null);
+            null,
+          null);
     sessionRepo.save(oldSession);
     webSocketService.setAdminUser(adminPrincipal);
     StompSession adminSession = getAdminSession(sessionID, adminID);
@@ -793,7 +798,8 @@ public class WebsocketControllerTest {
             SessionState.WAITING_FOR_MEMBERS,
             null,
             null,
-            null);
+            null,
+          null);
     sessionRepo.save(oldSession);
     webSocketService.setAdminUser(adminPrincipal);
     StompSession adminSession = getAdminSession(sessionID, adminID);
