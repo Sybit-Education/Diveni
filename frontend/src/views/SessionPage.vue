@@ -12,23 +12,25 @@
       </b-col>
       <b-col>
         <b-button
-          class="mr-3 autoRevealButtons"
-          variant="outline-dark"
-          :pressed="false"
-          @click="autoReveal = true"
           v-if="!autoReveal && !planningStart"
+          class="mr-3 autoRevealButtons optionButton"
+          variant="outline-dark"
+          @click="
+          autoReveal = true;
+          $event.target.blur();"
         >
-          <b-icon-eye-fill/>
+          <b-icon-eye-slash-fill class="bIcons"/>
           {{ $t("page.session.during.estimation.buttons.autoRevealOff") }}
         </b-button>
         <b-button
-          class="mr-3 autoRevealButtons"
-          variant="outline-dark"
-          :pressed="true"
-          @click="autoReveal = false"
           v-if="autoReveal && !planningStart"
+          class="mr-3 autoRevealButtons optionButton"
+          variant="outline-dark"
+          @click="
+          autoReveal = false;
+          $event.target.blur();"
         >
-          <b-icon-eye-slash-fill/>
+          <b-icon-eye-fill class="bIcons"/>
           {{ $t("page.session.during.estimation.buttons.autoRevealOn") }}
         </b-button>
       </b-col>
@@ -104,25 +106,27 @@
             {{ $t("page.session.during.estimation.buttons.result") }}
           </b-button>
           <b-button
-            class="mr-3"
-            variant="outline-dark"
-            :pressed="false"
-            @click="autoReveal = true"
             v-if="!autoReveal"
-            :disabled="planningStart == true && estimateFinished == false"
+            class="mr-3 optionButton"
+            variant="outline-dark"
+            @click="
+            autoReveal = true;
+            $event.target.blur();"
+            :disabled="planningStart && !estimateFinished"
           >
-            <b-icon-eye-fill/>
+            <b-icon-eye-slash-fill class="bIcons"/>
             {{ $t("page.session.during.estimation.buttons.autoRevealOff") }}
           </b-button>
           <b-button
-            class="mr-3"
-            variant="outline-dark"
-            :pressed="true"
-            @click="autoReveal = false"
             v-if="autoReveal"
-            :disabled="planningStart == true && estimateFinished == false"
+            class="mr-3 optionButton"
+            variant="outline-dark"
+            @click="
+            autoReveal = false;
+            $event.target.blur();"
+            :disabled="planningStart && !estimateFinished"
           >
-            <b-icon-eye-slash-fill/>
+            <b-icon-eye-fill class="bIcons"/>
             {{ $t("page.session.during.estimation.buttons.autoRevealOn") }}
           </b-button>
         </b-col>
@@ -380,7 +384,7 @@ export default Vue.extend({
       }
     },
     membersEstimated() {
-      if (this.membersPending.length === 0 && this.membersEstimated.length > 0) {
+      if (this.membersPending.length === 0 && this.membersEstimated.length > 0 && this.autoReveal) {
         this.estimateFinished = true;
       }
     },
@@ -652,11 +656,6 @@ export default Vue.extend({
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.autoRevealButtons {
-  position: relative;
-  top: 50%;
-  transform: translateY(-50%);
-}
 
 .optionButtonCol {
   margin-top: auto;
@@ -705,6 +704,11 @@ export default Vue.extend({
 }
 
 .optionButton:focus {
+  background-color: var(--textAreaColourHovered) !important;
+  color: var(--text-primary-color) !important;
+}
+
+.optionButton:disabled {
   background-color: var(--textAreaColourHovered) !important;
   color: var(--text-primary-color) !important;
 }
