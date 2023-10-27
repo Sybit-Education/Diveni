@@ -141,7 +141,6 @@ main {
 
 a.btn.joinButton {
   background-color: var(--joinButton);
-  border-radius: var(--buttonShape);
 }
 
 a.btn.joinButton:hover {
@@ -150,7 +149,6 @@ a.btn.joinButton:hover {
 
 a.btn.startButton {
   background-color: var(--startButton);
-  border-radius: var(--buttonShape);
 }
 
 a.btn.startButton:hover {

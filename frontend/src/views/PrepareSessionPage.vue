@@ -394,7 +394,6 @@ export default Vue.extend({
 .startingButton {
   background-color: var(--startButton);
   color: var(--text-primary-color);
-  border-radius: var(--buttonShape);
 }
 
 .startingButton:hover {

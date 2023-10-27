@@ -635,7 +635,6 @@ export default Vue.extend({
   background-color: var(--textAreaColour);
   color: var(--text-primary-color);
   border-color: black;
-  border-radius: var(--buttonShape);
   display: inline-flex;
   align-items: center;
 }

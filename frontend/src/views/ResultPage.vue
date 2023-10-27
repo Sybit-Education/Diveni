@@ -101,19 +101,16 @@ export default Vue.extend({
 
 #downloadButton {
   background-color: var(--startButton);
-  border-radius: var(--buttonShape);
   color: var(--text-primary-color);
 }
 
 #downloadButton:hover {
   background-color: var(--startButtonHovered);
-  border-radius: var(--buttonShape);
   color: var(--text-primary-color);
 }
 
 #goBackHomeButton {
   background-color: var(--joinButton);
-  border-radius: var(--buttonShape);
   color: var(--text-primary-color);
 }
 

@@ -143,7 +143,6 @@ export default Vue.extend({
 }
 
 #sessionCode {
-  border-radius: var(--buttonShape);
   background-color: var(--startButton);
   color: var(--text-primary-color);
 }
@@ -159,7 +158,6 @@ export default Vue.extend({
 }
 
 #link {
-  border-radius: var(--buttonShape);
   background-color: var(--joinButton);
   color: var(--text-primary-color);
 }
@@ -175,7 +173,6 @@ export default Vue.extend({
 }
 
 #qrCode {
-  border-radius: var(--buttonShape);
   background-color: var(--reconnectButton);
   color: var(--text-primary-color);
 }

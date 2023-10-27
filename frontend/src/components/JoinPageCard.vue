@@ -120,7 +120,6 @@ h6 {
 .startingButton {
   background-color: var(--startButton);
   color: var(--text-primary-color);
-  border-radius: var(--buttonShape);
   min-height: 75px;
   min-width: 75px;
   margin-top: 16%;
@@ -145,10 +144,6 @@ h6 {
 
 .inputText {
   color: black;
-}
-
-.inputFields {
-  border-radius: var(--buttonShape);
 }
 
 #startButtonCol {
