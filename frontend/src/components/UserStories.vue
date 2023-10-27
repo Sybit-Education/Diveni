@@ -258,20 +258,6 @@ export default Vue.extend({
   border: none;
 }
 
-.form-control {
-  background-color: var(--textAreaColour);
-  color: var(--text-primary-color);
-}
-
-.form-control:focus {
-  background-color: var(--textAreaColour);
-  color: var(--text-primary-color);
-}
-
-.form-control::placeholder {
-  color: var(--text-primary-color);
-}
-
 #userStoryRow {
   background-color: var(--textAreaColour);
   color: var(--text-primary-color);

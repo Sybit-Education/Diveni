@@ -80,3 +80,17 @@
     color: var(--text-primary-color);
   }
 }
+
+.form-control {
+  background-color: var(--textAreaColour);
+  color: var(--text-primary-color);
+
+  &:focus {
+    background-color: var(--textAreaColour);
+    color: var(--text-primary-color);
+  }
+
+  &::placeholder {
+    color: var(--text-primary-color);
+  }
+}

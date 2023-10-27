@@ -167,28 +167,6 @@ export default Vue.extend({
 .description-text-area {
   color: var(--text-primary-color);
 }
-
-.form-control {
-  background-color: var(--textAreaColour);
-  color: var(--text-primary-color);
-  border: none;
-}
-
-.form-control:disabled {
-  background-color: var(--textAreaColour);
-  color: var(--text-primary-color);
-  border: none;
-}
-
-.form-control:focus {
-  background-color: var(--textAreaColour);
-  color: var(--text-primary-color);
-}
-
-.form-control::placeholder {
-  color: var(--text-primary-color);
-}
-
 .sidenav {
   float: right;
   height: 100%; /* 100% Full-height */
