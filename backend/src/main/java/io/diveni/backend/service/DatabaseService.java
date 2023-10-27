@@ -32,7 +32,7 @@ public class DatabaseService {
 
   @Autowired SessionRepository sessionRepo;
 
-  @Autowired StatisticRepository statisticRepository;
+  @Autowired StatisticRepository statisticRepo;
 
 
   public Optional<Session> getSessionByID(String sessionID) {
@@ -62,33 +62,33 @@ public class DatabaseService {
 
   public void deleteSession(Session session) {
     LOGGER.debug("--> deleteSession()");
-    statisticRepository.save(getOrCreateStatistic().incrementOverallSessions());
+    statisticRepo.save(getOrCreateStatistic().incrementOverallSessions());
     sessionRepo.delete(session);
     LOGGER.debug("<-- deleteSession()");
   }
 
   public void addRemovedMember() {
     LOGGER.debug("addRemovedMember()");
-    statisticRepository.save(getOrCreateStatistic().incrementOverallAttendees());
+    statisticRepo.save(getOrCreateStatistic().incrementOverallAttendees());
   }
 
   public Integer getRemovedMember() {
     LOGGER.debug("getRemovedMember()");
-    return statisticRepository.findById(statEntryIdentifier)
+    return statisticRepo.findById(statEntryIdentifier)
       .map(Statistic::getOverallAttendees)
       .orElse(0);
   }
 
   public Integer getDeletedSessions() {
     LOGGER.debug("getDeletedSessions()");
-    return statisticRepository.findById(statEntryIdentifier)
+    return statisticRepo.findById(statEntryIdentifier)
       .map(Statistic::getOverallSessions)
       .orElse(0);
   }
 
   private Statistic getOrCreateStatistic() {
     LOGGER.debug("getOrCreateStatistic()");
-    return statisticRepository.findById(statEntryIdentifier)
-      .orElseGet(() -> statisticRepository.save(new Statistic(statEntryIdentifier, 0, 0)));
+    return statisticRepo.findById(statEntryIdentifier)
+      .orElseGet(() -> statisticRepo.save(new Statistic(statEntryIdentifier, 0, 0)));
   }
 }
