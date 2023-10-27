@@ -1,24 +1,22 @@
 package io.diveni.backend.model;
 
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-
 @Getter
+@AllArgsConstructor
 @EqualsAndHashCode
 @Document("statistics")
 public class Statistic {
 
+  @Id private String id;
 
-  @Id
-  private String id = "STAT_V1";
+  private Integer overallSessions;
 
-  private Integer overallSessions = 0;
-
-  private Integer overallAttendees = 0;
-
+  private Integer overallAttendees;
 
   public Statistic incrementOverallSessions() {
     overallSessions++;
@@ -29,5 +27,4 @@ public class Statistic {
     overallAttendees++;
     return this;
   }
-
 }
