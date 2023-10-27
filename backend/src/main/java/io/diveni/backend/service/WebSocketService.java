@@ -107,7 +107,7 @@ public class WebSocketService {
                   else return p;
                 })
             .collect(Collectors.toList());
-    databaseService.addRemovedMember(member);
+    databaseService.addRemovedMember();
     LOGGER.debug("<-- removeMember()");
   }
 
