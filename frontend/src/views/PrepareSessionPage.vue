@@ -6,7 +6,7 @@
 
     <h4 class="mt-3">
       <b-img
-        v-if="theme === 'light-theme'"
+        v-if="theme === 'light'"
         :src="require('@/assets/preparePage/P1.png')"
         class="numberPictures"
       />
@@ -55,7 +55,7 @@
     </b-tabs>
     <h4 class="mt-4">
       <b-img
-        v-if="theme === 'light-theme'"
+        v-if="theme === 'light'"
         :src="require('@/assets/preparePage/P2.png')"
         class="numberPictures"
       />
@@ -69,7 +69,7 @@
     />
     <h4 class="mt-3">
       <b-img
-        v-if="theme === 'light-theme'"
+        v-if="theme === 'light'"
         :src="require('@/assets/preparePage/P3.png')"
         class="numberPictures"
       />
