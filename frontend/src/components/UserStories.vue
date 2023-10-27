@@ -74,7 +74,8 @@
 
     <b-button
       v-if="userStories.length < 1 && showEditButtons && !filterActive"
-      class="w-100 mb-3 addButton"
+      class="w-100 mb-3"
+      variant="secondary"
       @click="
         addUserStory();
         $event.target.blur();
@@ -94,7 +95,8 @@
 
     <b-button
       v-if="userStories.length > 0 && showEditButtons && !filterActive"
-      class="w-100 mb-3 addButton"
+      class="w-100 mb-3"
+      variant="secondary"
       @click="
         addUserStory();
         $event.target.blur();
@@ -222,22 +224,6 @@ export default Vue.extend({
   top: 20%;
   left: 1.5%;
   rotate: 90deg;
-}
-
-.addButton {
-  background-color: var(--secondary-button);
-  color: var(--text-primary-color);
-  border-radius: var(--element-size);
-}
-
-.addButton:hover {
-  background-color: var(--secondary-button-hovered);
-  color: var(--text-primary-color);
-}
-
-.addButton:focus {
-  background-color: var(--secondary-button-hovered);
-  color: var(--text-primary-color);
 }
 
 .selectedStory {
