@@ -72,9 +72,6 @@ public class DatabaseService {
 
   private Statistic getOrCreateStatistic() {
     return statisticRepository.findById(stat_V1)
-      .orElseGet(() -> {
-        Statistic statistic = new Statistic();
-        return statisticRepository.save(statistic);
-      });
+      .orElseGet(() -> statisticRepository.save(new Statistic()));
   }
 }
