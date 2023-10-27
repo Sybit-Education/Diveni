@@ -118,7 +118,7 @@ h6 {
 }
 
 .startingButton {
-  background-color: var(--startButton);
+  background-color: var(--primary-button);
   color: var(--text-primary-color);
   min-height: 75px;
   min-width: 75px;
@@ -128,12 +128,12 @@ h6 {
 }
 
 .startingButton:hover {
-  background-color: var(--startButtonHovered);
+  background-color: var(--primary-button-hovered);
   color: var(--text-primary-color);
 }
 
 .startingButton:focus {
-  background-color: var(--startButtonHovered) !important;
+  background-color: var(--primary-button-hovered) !important;
   color: var(--text-primary-color);
 }
 

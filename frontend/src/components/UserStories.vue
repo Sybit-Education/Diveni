@@ -225,18 +225,18 @@ export default Vue.extend({
 }
 
 .addButton {
-  background-color: var(--joinButton);
+  background-color: var(--secondary-button);
   color: var(--text-primary-color);
   border-radius: var(--element-size);
 }
 
 .addButton:hover {
-  background-color: var(--joinButtonHovered);
+  background-color: var(--secondary-button-hovered);
   color: var(--text-primary-color);
 }
 
 .addButton:focus {
-  background-color: var(--joinButtonHovered);
+  background-color: var(--secondary-button-hovered);
   color: var(--text-primary-color);
 }
 
@@ -310,7 +310,7 @@ export default Vue.extend({
 }
 
 #badge {
-  background-color: var(--joinButton);
+  background-color: var(--secondary-button);
   color: var(--text-primary-color);
   font-size: large;
 }

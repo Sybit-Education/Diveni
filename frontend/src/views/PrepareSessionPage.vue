@@ -13,30 +13,27 @@
       <b-img v-else :src="require('@/assets/preparePage/P1D.png')" class="numberPictures" />
       {{ $t("session.prepare.step.selection.mode.title") }}
     </h4>
-    <b-tabs v-model="tabIndex" content-class="mt-3" fill>
+    <b-tabs v-model="tabIndex" fill>
       <b-tab
-        class="mg_top_2_per"
+        class="mt-2"
         :title="$t('session.prepare.step.selection.mode.description.withoutUS.tab.label')"
-        :title-link-class="linkClass(0)"
       >
         <story-points-component />
       </b-tab>
-      <b-tab
-        :title="$t('session.prepare.step.selection.mode.description.withUS.tab.label')"
-        :title-link-class="linkClass(1)"
-      >
-        <user-story-component class="mg_top_2_per" />
+      <b-tab :title="$t('session.prepare.step.selection.mode.description.withUS.tab.label')">
+        <user-story-component class="mt-2" />
         <input
           id="fileUpload"
           type="file"
           hidden
           accept="text/csv"
-          @change="importStory($event.target.files)"
+          @change="importStory($event.target?.files)"
         />
         <b-button
           block
           elevation="2"
-          class="importUserStoryButton"
+          class="btn-primary"
+          variant="primary"
           @click="
             openFileUploader();
             $event.target.blur();
@@ -48,9 +45,8 @@
       <b-tab
         v-if="isIssueTrackerEnabled"
         :title="$t('session.prepare.step.selection.mode.description.withIssueTracker.tab.label')"
-        :title-link-class="linkClass(2)"
       >
-        <jira-component class="mg_top_2_per" />
+        <jira-component class="mt-2" />
       </b-tab>
     </b-tabs>
     <h4 class="mt-4">
@@ -203,13 +199,6 @@ export default Vue.extend({
     this.$store.commit("setUserStories", { stories: [] });
   },
   methods: {
-    linkClass(idx) {
-      if (this.tabIndex === idx) {
-        return ["selectedTab", "selectedTextColor"];
-      } else {
-        return ["notSelectedTab", "notSelectedTextColor"];
-      }
-    },
     async sendCreateSessionRequest() {
       const url = Constants.backendURL + Constants.createSessionRoute;
       const sessionConfig = {
@@ -382,33 +371,16 @@ export default Vue.extend({
   }
 }
 
-.mg_top_2_per {
-  margin-top: 2%;
-}
 
-.importUserStoryButton {
-  background-color: var(--preparePageMainColor);
-  color: var(--text-primary-color);
-}
-
-.importUserStoryButton:hover {
-  background-color: var(--startButtonHovered);
-  color: var(--text-primary-color);
-}
-
-.importUserStoryButton:focus {
-  background-color: var(--startButtonHovered) !important;
-  color: var(--text-primary-color) !important;
-}
 
 
 .startingButton {
-  background-color: var(--startButton);
+  background-color: var(--primary-button);
   color: var(--text-primary-color);
 }
 
 .startingButton:hover {
-  background-color: var(--startButtonHovered);
+  background-color: var(--primary-button-hovered);
   color: var(--text-primary-color);
 }
 
@@ -422,7 +394,7 @@ export default Vue.extend({
 }
 
 .startingButton:focus {
-  background-color: var(--startButtonHovered) !important;
+  background-color: var(--primary-button-hovered) !important;
   color: var(--text-primary-color);
 }
 

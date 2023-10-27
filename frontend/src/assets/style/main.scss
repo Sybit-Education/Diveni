@@ -48,3 +48,62 @@
         color: var(--text-primary-color);
     }
 }
+
+.btn-primary {
+    background-color: var(--primary-button);
+    border-color: $gray-600;
+    &:hover {
+        background-color: var(--primary-button-hovered);
+    }
+    &:disabled, &.disabled:hover {
+      background-color: var(--primary-button);
+      border-color: $gray-600;
+    }
+    &:focus {
+        background-color: var(--primary-button-hovered);
+        color: var(--text-primary-color);
+      }
+}
+
+.btn-secondary {
+  background-color: var(--secondary-button);
+  border-color: $gray-600;
+  &:hover {
+      background-color: var(--secondary-button-hovered);
+  }
+  &:disabled, &.disabled:hover {
+    background-color: var(--secondary-button);
+    border-color: $gray-600;
+  }
+  &:focus {
+    background-color: var(--secondary-button-hovered);
+    color: var(--text-primary-color);
+  }
+}
+
+
+.btn.dropdown-toggle {
+    /* User Estimation Button */
+    color: var(--text-primary-color);
+    background-color: var(--secondary-button);
+
+    &:active {
+      /* User Estimation Button hold */
+      background-color: var(--secondary-button-hovered) !important;
+      color: var(--text-primary-color) !important;
+    }
+
+    &:hover {
+      /* User Estimation Button Hover */
+      background-color: var(--secondary-button-hovered);
+      color: var(--text-primary-color);
+    }
+  }
+
+  .btn-secondary:not(:disabled):not(.disabled).active,
+  .show > .btn-secondary.dropdown-toggle {
+    /* User Estimation Button clicked */
+    background-color: var(--secondary-button) !important;
+    color: var(--text-primary-color) !important;
+  }
+

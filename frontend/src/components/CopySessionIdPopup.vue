@@ -143,32 +143,32 @@ export default Vue.extend({
 }
 
 #sessionCode {
-  background-color: var(--startButton);
+  background-color: var(--primary-button);
   color: var(--text-primary-color);
 }
 
 #sessionCode:hover {
-  background-color: var(--startButtonHovered);
+  background-color: var(--primary-button-hovered);
   color: var(--text-primary-color);
 }
 
 #sessionCode:focus {
-  background-color: var(--startButtonHovered) !important;
+  background-color: var(--primary-button-hovered) !important;
   color: var(--text-primary-color);
 }
 
 #link {
-  background-color: var(--joinButton);
+  background-color: var(--secondary-button);
   color: var(--text-primary-color);
 }
 
 #link:hover {
-  background-color: var(--joinButtonHovered);
+  background-color: var(--secondary-button-hovered);
   color: var(--text-primary-color);
 }
 
 #link:focus {
-  background-color: var(--joinButtonHovered) !important;
+  background-color: var(--secondary-button-hovered) !important;
   color: var(--text-primary-color);
 }
 
