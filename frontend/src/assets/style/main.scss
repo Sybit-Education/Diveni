@@ -1,4 +1,4 @@
-@import "variables.scss";
+@import "_variables.scss";
 
 @import "bootstrap/scss/bootstrap";
 @import "bootstrap-vue/src/index.scss";
@@ -32,6 +32,12 @@
 
 ::-webkit-scrollbar-corner {
     background: rgba(0, 0, 0, 0);
+}
+
+.jumbotron {
+    background-color: var(--background-color-primary);
+    color: var(--text-primary-color);
+    opacity: 0.7;
 }
 
 .dropdown-menu {
