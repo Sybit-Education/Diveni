@@ -107,7 +107,6 @@
     </b-row>
     <h4 class="mt-3">
       <b-img
-        v-if="theme === 'light-theme'"
         v-if="theme === 'light'"
         :src="require('@/assets/preparePage/P4.png')"
         class="numberPictures"
