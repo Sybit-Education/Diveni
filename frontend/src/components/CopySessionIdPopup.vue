@@ -9,7 +9,7 @@
     {{ textAfterSessionID }}
     <b-popover id="popover" target="popover-link" triggers="hover" placement="top">
       <b-button
-        id="sessionCode"
+        variant="primary"
         class="mx-1"
         @click="
           copyIdToClipboard();
@@ -19,8 +19,8 @@
         {{ $t("page.session.before.copy.id") }}
       </b-button>
       <b-button
-        id="link"
         class="mx-1"
+        variant="secondary"
         @click="
           copyLinkToClipboard();
           $event.target.blur();
@@ -29,8 +29,8 @@
         {{ $t("page.session.before.copy.link") }}
       </b-button>
       <b-button
-        id="qrCode"
         class="mx-1"
+        variant="info"
         @click="
           $bvModal.show('qr-modal');
           $event.target.blur();
@@ -140,50 +140,5 @@ export default Vue.extend({
 .qr-code {
   display: table;
   margin: 0 auto;
-}
-
-#sessionCode {
-  background-color: var(--primary-button);
-  color: var(--text-primary-color);
-}
-
-#sessionCode:hover {
-  background-color: var(--primary-button-hovered);
-  color: var(--text-primary-color);
-}
-
-#sessionCode:focus {
-  background-color: var(--primary-button-hovered) !important;
-  color: var(--text-primary-color);
-}
-
-#link {
-  background-color: var(--secondary-button);
-  color: var(--text-primary-color);
-}
-
-#link:hover {
-  background-color: var(--secondary-button-hovered);
-  color: var(--text-primary-color);
-}
-
-#link:focus {
-  background-color: var(--secondary-button-hovered) !important;
-  color: var(--text-primary-color);
-}
-
-#qrCode {
-  background-color: var(--reconnectButton);
-  color: var(--text-primary-color);
-}
-
-#qrCode:hover {
-  background-color: var(--reconnectButtonHovered);
-  color: var(--text-primary-color);
-}
-
-#qrCode:focus {
-  background-color: var(--reconnectButtonHovered) !important;
-  color: var(--text-primary-color);
 }
 </style>
