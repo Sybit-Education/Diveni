@@ -53,14 +53,10 @@ export default Vue.extend({
       loaded: false,
       overAllSessions: 0,
       overAllAttendees: 0,
-      overAllSessionsFromLastMonth: 0,
-      overAllAttendeesFromLastMonth: 0,
       currentSessions: 0,
       currentAttendees: 0,
       tweenedOverAllSessions: 0,
       tweenedOverAllAttendees: 0,
-      tweenedOverAllSessionsFromLastMonth: 0,
-      tweenedOverAllAttendeesFromLastMonth: 0,
       tweenedCurrentSessions: 0,
       tweendCurrentAttendees: 0,
     };
@@ -83,15 +79,6 @@ export default Vue.extend({
     overAllAttendees(n) {
       gsap.to(this, { duration: 1.25, tweenedOverAllAttendees: Number(n) || 0 });
     },
-    overAllSessionsFromLastMonth(n) {
-      gsap.to(this, { duration: 1.25, tweenedOverAllSessionsFromLastMonth: Number(n) || 0 });
-    },
-    overAllAttendeesFromLastMonth(n) {
-      gsap.to(this, {
-        duration: 1.25,
-        tweetweenedOverAllAttendeesFromLastMonthned: Number(n) || 0,
-      });
-    },
     currentSessions(n) {
       gsap.to(this, { duration: 1.25, tweenedCurrentSessions: Number(n) || 0 });
     },
@@ -110,18 +97,14 @@ export default Vue.extend({
         let returnArray: Array<number> = [];
         returnArray.push(result.amountOfSessions);
         returnArray.push(result.amountOfAttendees);
-        returnArray.push(result.amountOfSessionsLastMonth);
-        returnArray.push(result.amountofAttendeesLastMonth);
         returnArray.push(result.amountOfSessionsCurrently);
         returnArray.push(result.amountOfAttendeesCurrently);
         return returnArray;
       });
       this.overAllSessions = allData[0];
       this.overAllAttendees = allData[1];
-      this.overAllSessionsFromLastMonth = allData[2];
-      this.overAllAttendeesFromLastMonth = allData[3];
-      this.currentSessions = allData[4];
-      this.currentAttendees = allData[5];
+      this.currentSessions = allData[2];
+      this.currentAttendees = allData[3];
       this.loaded = true;
     },
   },
