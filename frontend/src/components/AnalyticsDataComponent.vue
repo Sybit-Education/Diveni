@@ -20,26 +20,6 @@
       </b-card>
       <b-card class="statsCards">
         <b-card-title style="text-align: center">
-          {{ $t("page.landing.meeting.analytics.lastMonthTitle") }}
-        </b-card-title>
-        <b-card-text>
-          <h2 class="numbers">
-            {{ tweenedOverAllSessionsFromLastMonth.toFixed(0) }}
-          </h2>
-          <div style="text-align: center">
-            {{ allSessions }}
-          </div>
-          <br />
-          <h2 class="numbers">
-            {{ tweenedOverAllAttendeesFromLastMonth.toFixed(0) }}
-          </h2>
-          <div style="text-align: center">
-            {{ allAttendees }}
-          </div>
-        </b-card-text>
-      </b-card>
-      <b-card class="statsCards">
-        <b-card-title style="text-align: center">
           {{ $t("page.landing.meeting.analytics.activeTitle") }}
         </b-card-title>
         <b-card-text>
