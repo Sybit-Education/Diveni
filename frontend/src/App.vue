@@ -99,46 +99,6 @@ main {
   color: var(--text-primary-color) !important;
 }
 
-.reconnectSessionCard .landingPageCardButton {
-  background-color: var(--reconnectButton);
-  border-radius: var(--buttonShape);
-}
-
-.reconnectSessionCard .landingPageCardButton:hover {
-  background-color: var(--reconnectButtonHovered);
-}
-
-.reconnectSessionCard .landingPageCardButton:focus {
-  background-color: var(--reconnectButtonHovered) !important;
-}
-
-.reconnectSessionCard .card-footer {
-  background-color: #52173100; /* So the Footer does not overflow */
-}
-/* Prepare Page */
-.selectedTab {
-  background-color: var(--preparePageMainColor) !important;
-}
-
-.selectedTextColor {
-  color: var(--text-primary-color) !important;
-}
-
-.notSelectedTab {
-  background-color: var(--preparePageInActiveTab) !important;
-  border-color: var(--preparePageBorderTab) !important;
-}
-
-.notSelectedTab:hover {
-  background-color: var(--preparePageInActiveTabHover) !important;
-}
-
-.notSelectedTextColor {
-  color: var(--text-primary-color) !important;
-}
-
-/*End of prepare Page */
-
 a.btn.joinButton {
   background-color: var(--joinButton);
 }
