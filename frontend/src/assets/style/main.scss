@@ -34,6 +34,11 @@
     background: rgba(0, 0, 0, 0);
 }
 
+a {
+  color: var(--link-color);
+}
+
+
 .jumbotron {
     background-color: var(--background-color-primary);
     color: var(--text-primary-color);
@@ -93,4 +98,11 @@
   &::placeholder {
     color: var(--text-primary-color);
   }
+}
+
+.card {
+    background-color: var(--background-color-primary);
+    .card-subtitle {
+        color: var(--text-primary-color);
+    }
 }

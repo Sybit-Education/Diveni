@@ -99,7 +99,7 @@
       <p>DIVENI was initially developed by students of HTWG Constance and is open source now.</p>
       <p>
         More information could be found in the
-        <a id="link" href="https://docs.diveni.io/">documentation</a>.
+        <a href="https://docs.diveni.io/">documentation</a>.
       </p>
     </b-container>
   </div>
@@ -210,10 +210,6 @@ export default Vue.extend({
   .card-footer {
     background-color: #52173100; /* So the Footer does not overflow */
   }
-}
-
-#link {
-  color: var(--linkColor);
 }
 
 .reconnectSessionCard {
