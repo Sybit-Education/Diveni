@@ -27,4 +27,9 @@ public class Statistic {
     overallAttendees++;
     return this;
   }
+
+  public Statistic addOverallAttendees(int overallAttendees) {
+    this.overallAttendees += overallAttendees;
+    return this;
+  }
 }

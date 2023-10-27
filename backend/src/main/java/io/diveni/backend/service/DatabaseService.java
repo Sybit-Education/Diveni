@@ -62,7 +62,9 @@ public class DatabaseService {
 
   public void deleteSession(Session session) {
     LOGGER.debug("--> deleteSession()");
-    statisticRepo.save(getOrCreateStatistic().incrementOverallSessions());
+    statisticRepo.save(getOrCreateStatistic()
+      .incrementOverallSessions()
+      .addOverallAttendees(session.getMembers().size()));
     sessionRepo.delete(session);
     LOGGER.debug("<-- deleteSession()");
   }
