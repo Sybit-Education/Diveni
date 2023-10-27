@@ -80,30 +80,3 @@
     color: var(--text-primary-color);
   }
 }
-
-
-.btn.dropdown-toggle {
-    /* User Estimation Button */
-    color: var(--text-primary-color);
-    background-color: var(--secondary-button);
-
-    &:active {
-      /* User Estimation Button hold */
-      background-color: var(--secondary-button-hovered) !important;
-      color: var(--text-primary-color) !important;
-    }
-
-    &:hover {
-      /* User Estimation Button Hover */
-      background-color: var(--secondary-button-hovered);
-      color: var(--text-primary-color);
-    }
-  }
-
-  .btn-secondary:not(:disabled):not(.disabled).active,
-  .show > .btn-secondary.dropdown-toggle {
-    /* User Estimation Button clicked */
-    background-color: var(--secondary-button) !important;
-    color: var(--text-primary-color) !important;
-  }
-
