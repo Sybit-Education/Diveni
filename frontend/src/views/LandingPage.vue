@@ -216,8 +216,14 @@ export default Vue.extend({
   color: var(--linkColor);
 }
 
-.jumbotron {
-  background-color: rgba(255, 255, 255, 0.5);
+.reconnectSessionCard {
+  .landingPageCardButton {
+    background-color: var(--reconnectButton);
+  }
+
+  .card-footer {
+    background-color: #52173100; /* So the Footer does not overflow */
+  }
 }
 
 .teaser {
