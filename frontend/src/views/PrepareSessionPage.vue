@@ -76,35 +76,29 @@
       <b-img v-else :src="require('@/assets/preparePage/P3D.png')" class="numberPictures" />
       {{ $t("session.prepare.step.selection.time.title") }}
     </h4>
-    <b-row class="mt-3 text-center">
-      <b-col>
-        <b-button
-          class="optionButtons"
-          @click="
-            setTimerDown();
-            $event.target.blur();
-          "
-        >
-          -
-        </b-button>
-      </b-col>
-      <b-col id="timerCol" class="text-center" cols="auto">
-        <h4 id="timerBackground">
-          {{ timer == 0 ? "∞" : formatTimer }}
-        </h4>
-      </b-col>
-      <b-col>
-        <b-button
-          class="optionButtons"
-          @click="
-            setTimerUp();
-            $event.target.blur();
-          "
-        >
-          +</b-button
-        >
-      </b-col>
-    </b-row>
+    <div id="timer-control">
+      <b-button
+        class="btn-sm btn-outline-light"
+        @click="
+          setTimerDown();
+          $event.target.blur();
+        "
+      >
+        -
+      </b-button>
+      <div id="timer-value" class="font-weight-bolder px-2 text-center">
+        {{ timer == 0 ? "∞" : formatTimer }}
+      </div>
+      <b-button
+        class="btn-sm btn-outline-light"
+        @click="
+          setTimerUp();
+          $event.target.blur();
+        "
+      >
+        +
+      </b-button>
+    </div>
     <h4 class="mt-3">
       <b-img
         v-if="theme === 'light'"
@@ -341,14 +335,51 @@ export default Vue.extend({
 });
 </script>
 
-<style scoped>
-#timerBackground {
-  background-color: var(--preparePageTimerBackground);
+<style lang="scss" scoped>
+@import "@/assets/style/_variables.scss";
+
+/* Prepare Page */
+.selectedTab {
+  background-color: var(--preparePageMainColor) !important;
 }
 
-#timerCol {
-  margin-top: auto;
-  margin-bottom: auto;
+.selectedTextColor {
+  color: var(--text-primary-color) !important;
+}
+
+.notSelectedTab {
+  background-color: var(--preparePageInActiveTab) !important;
+  border-color: var(--preparePageBorderTab) !important;
+}
+
+.notSelectedTab:hover {
+  background-color: var(--preparePageInActiveTabHover) !important;
+}
+
+.notSelectedTextColor {
+  color: var(--text-primary-color) !important;
+}
+
+#timer-control {
+  display: flex;
+  border-radius: $border-radius;
+  background-color: var(--preparePageTimerBackground);
+  font-size: 1.25rem;
+  width: 9rem;
+  height: 2rem;
+  padding: 0;
+
+  button {
+    flex: auto;
+    width: 2rem;
+    height: 2rem;
+    margin: 0;
+  }
+
+  #timer-value {
+    flex: content;
+    width: 5rem;
+  }
 }
 
 .mg_top_2_per {
@@ -370,26 +401,6 @@ export default Vue.extend({
   color: var(--text-primary-color) !important;
 }
 
-.optionButtons {
-  color: var(--text-primary-color);
-  border-color: var(--text-primary-color);
-  background-color: transparent;
-  font-size: xx-large;
-  width: 47.5px;
-}
-
-.optionButtons:hover {
-  color: var(--text-primary-color) !important;
-  border-color: var(--text-primary-color);
-  background-color: var(--preparePageInActiveTabHover);
-}
-.optionButtons:focus {
-  color: var(--text-primary-color);
-  border-color: var(--text-primary-color);
-  background-color: transparent !important;
-  outline: none;
-  box-shadow: none;
-}
 
 .startingButton {
   background-color: var(--startButton);
