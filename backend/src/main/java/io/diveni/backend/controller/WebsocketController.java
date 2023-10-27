@@ -280,4 +280,12 @@ public class WebsocketController {
     LOGGER.debug("<-- get-timer-value() + " + timeDifference);
     return new ResponseEntity<>(timeDifference, HttpStatus.OK);
   }
+
+  public boolean isMemberInSession(Principal principal) {
+    val session =
+      ControllerUtils.getSessionByMemberIDOrThrowResponse(
+          databaseService, ((MemberPrincipal) principal).getMemberID());
+      return session != null;
+  }
+
 }
