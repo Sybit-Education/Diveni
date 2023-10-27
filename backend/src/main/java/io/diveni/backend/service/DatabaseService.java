@@ -5,28 +5,29 @@
 */
 package io.diveni.backend.service;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 import io.diveni.backend.model.Session;
-import io.diveni.backend.principals.MemberPrincipal;
+import io.diveni.backend.model.Statistic;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import io.diveni.backend.repository.SessionRepository;
+import io.diveni.backend.repository.StatisticRepository;
 
 @Service
 public class DatabaseService {
 
+  private final String stat_V1 = "STAT_V1";
+
   @Autowired SessionRepository sessionRepo;
 
-  private List<Session> deletedSessions = new ArrayList<>();
+  @Autowired StatisticRepository statisticRepository;
 
-  private List<MemberPrincipal> removedMembers = new ArrayList<>();
 
   public Optional<Session> getSessionByID(String sessionID) {
     return Optional.ofNullable(sessionRepo.findBySessionID(sessionID));
@@ -49,19 +50,31 @@ public class DatabaseService {
   }
 
   public void deleteSession(Session session) {
-    deletedSessions.add(session);
+    statisticRepository.save(getOrCreateStatistic().incrementOverallSessions());
     sessionRepo.delete(session);
   }
 
-  public void addRemovedMember(MemberPrincipal removedMember) {
-    this.removedMembers.add(removedMember);
+  public void addRemovedMember() {
+    statisticRepository.save(getOrCreateStatistic().incrementOverallAttendees());
   }
 
-  public List<MemberPrincipal> getRemovedMember() {
-    return this.removedMembers;
+  public Integer getRemovedMember() {
+    return statisticRepository.findById(stat_V1)
+      .map(Statistic::getOverallAttendees)
+      .orElse(0);
   }
 
-  public List<Session> getDeletedSessions() {
-    return this.deletedSessions;
+  public Integer getDeletedSessions() {
+    return statisticRepository.findById(stat_V1)
+      .map(Statistic::getOverallSessions)
+      .orElse(0);
+  }
+
+  private Statistic getOrCreateStatistic() {
+    return statisticRepository.findById(stat_V1)
+      .orElseGet(() -> {
+        Statistic statistic = new Statistic();
+        return statisticRepository.save(statistic);
+      });
   }
 }
