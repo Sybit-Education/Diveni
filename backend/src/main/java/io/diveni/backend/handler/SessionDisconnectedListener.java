@@ -1,8 +1,3 @@
-/*
-  SPDX-License-Identifier: AGPL-3.0-or-later
-  Diveni - The Planing-Poker App
-  Copyright (C) 2022 Diveni Team, AUME-Team 21/22, HTWG Konstanz
-*/
 package io.diveni.backend.handler;
 
 import io.diveni.backend.controller.WebsocketController;
@@ -25,7 +20,9 @@ public class SessionDisconnectedListener implements ApplicationListener<SessionD
     LOGGER.debug("--> onApplicationEvent()");
     var principal = event.getUser();
     if (principal instanceof MemberPrincipal) {
-      controller.removeMember(principal);
+      if (controller.isMemberInSession(principal)) {
+        controller.removeMember(principal);
+      }
     }
     LOGGER.debug("<-- onApplicationEvent()");
   }
