@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import io.diveni.backend.repository.SessionRepository;
 import io.diveni.backend.repository.StatisticRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class DatabaseService {
@@ -28,6 +29,7 @@ public class DatabaseService {
 
   //Sets the database entry identifier in our 'statistics' table.
   //Only modify if you want to create a new database entry!!!
+  //Variable can be further extracted
   private final String statEntryIdentifier = "STAT_V1";
 
   @Autowired SessionRepository sessionRepo;
@@ -60,18 +62,22 @@ public class DatabaseService {
     return sessionRepo.save(session.setLastModified(new Date()));
   }
 
+  @Transactional
   public void deleteSession(Session session) {
     LOGGER.debug("--> deleteSession()");
-    statisticRepo.save(getOrCreateStatistic()
-      .incrementOverallSessions()
-      .addOverallAttendees(session.getMembers().size()));
+    Statistic statistic = getOrCreateStatistic();
+    statistic.incrementOverallSessions().addOverallAttendees(session.getMembers().size());
+    statisticRepo.save(statistic);
     sessionRepo.delete(session);
     LOGGER.debug("<-- deleteSession()");
   }
 
-  public void addRemovedMember() {
-    LOGGER.debug("addRemovedMember()");
-    statisticRepo.save(getOrCreateStatistic().incrementOverallAttendees());
+  public void addRemovedMember()  {
+    LOGGER.debug("--> addRemovedMember()");
+    Statistic statistic = getOrCreateStatistic();
+    statistic.incrementOverallAttendees();
+    statisticRepo.save(statistic);
+    LOGGER.debug("<-- addRemovedMember()");
   }
 
   public Integer getRemovedMember() {

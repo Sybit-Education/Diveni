@@ -30,8 +30,6 @@ public class AnalyticsControllerTest {
 
   @Autowired SessionRepository sessionRepo;
 
-  @Autowired StatisticRepository statisticRepo;
-
   @Autowired private MockMvc mockMvc;
 
   @Autowired DatabaseService databaseService;
