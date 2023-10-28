@@ -1,7 +1,6 @@
 package io.diveni.backend.controller;
 
 import io.diveni.backend.model.*;
-import io.diveni.backend.repository.StatisticRepository;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
