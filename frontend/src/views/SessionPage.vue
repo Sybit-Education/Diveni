@@ -358,8 +358,8 @@ export default Vue.extend({
     webSocketIsConnected(isConnected) {
       if (isConnected) {
         console.debug("SessionPage: member connected to websocket");
+        this.registerAdminPrincipalOnBackend();
         setTimeout(() => {
-          this.registerAdminPrincipalOnBackend();
           this.subscribeWSMemberUpdated();
           this.requestMemberUpdate();
           this.subscribeOnTimerStart();
