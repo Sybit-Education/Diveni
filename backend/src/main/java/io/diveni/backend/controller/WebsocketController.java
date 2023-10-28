@@ -280,10 +280,12 @@ public class WebsocketController {
   }
 
   public boolean isMemberInSession(Principal principal) {
-    val session =
-      ControllerUtils.getSessionByMemberIDOrThrowResponse(
-          databaseService, ((MemberPrincipal) principal).getMemberID());
-      return session != null;
+    LOGGER.debug("--> isMemberInSession()");
+    if (principal instanceof MemberPrincipal) {
+      LOGGER.debug("<-- isMemberInSession()");
+      return databaseService.getSessionByMemberID(((MemberPrincipal) principal).getMemberID()).isPresent();
+    }
+    LOGGER.debug("<-- isMemberInSession(). principal is NOT instanceof MemberPrincipal");
+    return false;
   }
-
 }
