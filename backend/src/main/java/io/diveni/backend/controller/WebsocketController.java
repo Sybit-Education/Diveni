@@ -137,8 +137,6 @@ public class WebsocketController {
         ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID());
     webSocketService.sendSessionStateToMembers(
         session.updateSessionState(SessionState.SESSION_CLOSED));
-    webSocketService.getSessionPrincipals(session.getSessionID()).memberPrincipals().stream()
-        .forEach(memberP -> removeMember(memberP));
     webSocketService.removeSession(session);
     databaseService.deleteSession(session);
     LOGGER.debug("<-- closeSession()");
