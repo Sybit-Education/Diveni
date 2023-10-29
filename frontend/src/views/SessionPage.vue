@@ -358,10 +358,9 @@ export default Vue.extend({
     webSocketIsConnected(isConnected) {
       if (isConnected) {
         console.debug("SessionPage: member connected to websocket");
-        this.registerAdminPrincipalOnBackend();
         setTimeout(() => {
+          this.registerAdminPrincipalOnBackend();
           this.subscribeWSMemberUpdated();
-          this.requestMemberUpdate();
           this.subscribeOnTimerStart();
           if (this.rejoined === "false") {
             this.subscribeWSNotification();
@@ -371,10 +370,8 @@ export default Vue.extend({
           }
         }, 300);
         setTimeout(() => {
-          if (this.members.length === 0) {
-            this.requestMemberUpdate();
-          }
-        }, 300);
+          this.requestMemberUpdate();
+        }, 500);
       }
     },
     highlightedMembers(highlights) {
