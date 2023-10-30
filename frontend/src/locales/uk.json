@@ -252,6 +252,11 @@
           "time": {
             "title": "Відрегулюйте час за оцінку"
           },
+          "hostVoting": {
+            "title": "Should the host vote as well",
+            "hostVotingOn": "Yes",
+            "hostVotingOff": "No"
+          },
           "password": {
             "title": "Виберіть пароль, якщо необхідно",
             "placeholder": "Пароль (залиште порожнім для незахищеної сесії)"

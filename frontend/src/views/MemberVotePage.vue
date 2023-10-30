@@ -95,14 +95,17 @@
           <sub><b-icon-three-dots animation="fade" font-scale="1" /></sub>
         </h3>
       </b-row>
-      <b-row v-if="votingFinished && isAdminHighlighted()"
-        class="my-1 d-flex justify-content-center flex-wrap overflow-auto" style="max-height: 500px">
+      <b-row
+        v-if="votingFinished && isAdminHighlighted()"
+        class="my-1 d-flex justify-content-center flex-wrap overflow-auto"
+        style="max-height: 500px"
+      >
         <div v-if="hostEstimation !== undefined">
           <div v-if="hostVoting && hostEstimation.hostEstimation !== null">
             <session-admin-card
               v-if="hostEstimation.hostEstimation !== null"
-              :currentEstimation="hostEstimation.hostEstimation"
-              :estimateFinished="votingFinished"
+              :current-estimation="hostEstimation.hostEstimation"
+              :estimate-finished="votingFinished"
               :highlight="isAdminHighlighted()"
             />
           </div>
@@ -118,9 +121,11 @@
           }"
         />
       </b-row>
-      <b-row v-if="votingFinished && isAdminHighlighted() === false"
-             class="my-1 d-flex justify-content-center flex-wrap overflow-auto"
-             style="max-height: 500px">
+      <b-row
+        v-if="votingFinished && isAdminHighlighted() === false"
+        class="my-1 d-flex justify-content-center flex-wrap overflow-auto"
+        style="max-height: 500px"
+      >
         <session-member-card
           v-for="member of members"
           :key="member.memberID"
@@ -135,8 +140,8 @@
           <div v-if="hostVoting && hostEstimation.hostEstimation !== null">
             <session-admin-card
               v-if="hostEstimation.hostEstimation !== null"
-              :currentEstimation="hostEstimation.hostEstimation"
-              :estimateFinished="votingFinished"
+              :current-estimation="hostEstimation.hostEstimation"
+              :estimate-finished="votingFinished"
               :highlight="isAdminHighlighted()"
             />
           </div>
@@ -354,13 +359,13 @@ export default Vue.extend({
         return true;
       }
       let highlightedMap = new Map<string, boolean>();
-      this.highlightedMembers.forEach(highlightedMemberID => {
+      this.highlightedMembers.forEach((highlightedMemberID) => {
         let isMemberID = false;
-        this.members.forEach(member => {
+        this.members.forEach((member) => {
           if (member.memberID === highlightedMemberID) {
             isMemberID = true;
           }
-        })
+        });
         highlightedMap.set(highlightedMemberID, isMemberID);
       });
       for (let value of highlightedMap.values()) {

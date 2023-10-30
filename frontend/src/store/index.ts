@@ -77,12 +77,12 @@ export default new Vuex.Store<StoreState>({
     subscribeOnBackendWSHostVoting(state) {
       state.stompClient?.subscribe(Constants.webSocketMemberListenHostVotingRoute, (frame) => {
         state.hostVoting = JSON.parse(frame.body);
-      })
+      });
     },
     subscribeOnBackendWSHostEstimation(state) {
       state.stompClient?.subscribe(Constants.webSocketMembersUpdatedHostEstimation, (frame) => {
         state.hostEstimation = JSON.parse(frame.body);
-      })
+      });
     },
     subscribeOnBackendWSTimerStart(state) {
       state.stompClient?.subscribe(Constants.webSocketTimerStartRoute, (frame) => {

@@ -1,5 +1,5 @@
 interface AdminVote {
-    hostEstimation: string;
-  }
-  
-  export default AdminVote;
+  hostEstimation: string;
+}
+
+export default AdminVote;
