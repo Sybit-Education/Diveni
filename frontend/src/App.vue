@@ -23,7 +23,7 @@ import FeedbackButton from "@/components/FeedbackButton.vue";
 
 export default Vue.extend({
   name: "App",
-  components: {FeedbackButton, FooterBar, TopNavigationBar },
+  components: { FeedbackButton, FooterBar, TopNavigationBar },
   mounted() {
     document.title = "DIVENI";
   },

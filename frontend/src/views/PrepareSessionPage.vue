@@ -110,8 +110,8 @@
       <b-col>
         <b-button
           class="hostVotingButtons"
-          @click="hostVoting = true"
           :class="{ active: hostVoting }"
+          @click="hostVoting = true"
         >
           {{ $t("session.prepare.step.selection.hostVoting.hostVotingOn") }}
         </b-button>
@@ -119,8 +119,8 @@
       <b-col>
         <b-button
           class="hostVotingButtons"
-          @click="hostVoting = false"
           :class="{ active: !hostVoting }"
+          @click="hostVoting = false"
         >
           {{ $t("session.prepare.step.selection.hostVoting.hostVotingOff") }}
         </b-button>
