@@ -10,14 +10,14 @@
           }}
         </h1>
       </b-col>
-      <b-col cols="auto" >
+      <b-col cols="auto">
         <copy-session-id-popup
           v-if="planningStart"
           class="float-end"
           :session-id="session_sessionID"
         />
       </b-col>
-      <b-col cols="auto" id="sessionCloseCol">
+      <b-col id="sessionCloseCol" cols="auto">
         <session-close-button
           :is-planning-start="planningStart"
           :user-story-mode="session_userStoryMode"
@@ -27,7 +27,7 @@
 
     <div v-if="!planningStart">
       <div id="catGifDiv">
-        <b-img :src="require('@/assets/LoadingCat.gif')" class="catGif"/>
+        <b-img :src="require('@/assets/LoadingCat.gif')" class="catGif" />
       </div>
       <copy-session-id-popup
         :text-before-session-i-d="$t('page.session.before.text.beforeID')"
@@ -35,7 +35,6 @@
         :text-after-session-i-d="$t('page.session.before.text.afterID')"
         class="copy-popup"
       />
-
 
       <b-row class="d-flex justify-content-center overflow-auto kick-user">
         <kick-user-wrapper
@@ -59,14 +58,21 @@
           <b-button
             class="mr-3 optionButton"
             variant="outline-dark"
-            @click="sendRestartMessage(); $event.target.blur();"
+            @click="
+              sendRestartMessage();
+              $event.target.blur();
+            "
           >
             <BIconArrowClockwise class="bIcons"></BIconArrowClockwise>
             {{ $t("page.session.during.estimation.buttons.new") }}
           </b-button>
-          <b-button class="mr-3 optionButton"
+          <b-button
+            class="mr-3 optionButton"
             variant="outline-dark"
-            @click="sendVotingFinishedMessage(); $event.target.blur();"
+            @click="
+              sendVotingFinishedMessage();
+              $event.target.blur();
+            "
           >
             <BIconBarChartFill class="bIcons"></BIconBarChartFill>
             {{ $t("page.session.during.estimation.buttons.result") }}
@@ -77,7 +83,7 @@
             :start-timestamp="timerTimestamp"
             :pause-timer="estimateFinished"
             :duration="timerCountdownNumber"
-            :votingStarted="planningStart"
+            :voting-started="planningStart"
             @timerFinished="sendVotingFinishedMessage"
           />
         </b-col>
@@ -103,9 +109,7 @@
         {{ membersEstimated.length }} /
         {{ membersPending.length + membersEstimated.length }}
       </h4>
-      <b-row
-        class="my-1 d-flex justify-content-center flex-wrap overflow-auto kick-user"
-      >
+      <b-row class="my-1 d-flex justify-content-center flex-wrap overflow-auto kick-user">
         <kick-user-wrapper
           v-for="member of estimateFinished ? members : membersEstimated"
           :key="member.memberID"
@@ -121,7 +125,7 @@
     </div>
     <b-row v-if="session_userStoryMode !== 'NO_US'" class="mt-4">
       <b-col>
-        <user-story-sum-component/>
+        <user-story-sum-component />
       </b-col>
     </b-row>
     <b-row v-if="session_userStoryMode !== 'NO_US'">
@@ -129,7 +133,10 @@
         <div v-if="session_userStoryMode === 'US_JIRA'" class="refreshUserstories">
           <b-button
             class="w-100 mb-3 refreshButton"
-            @click="refreshUserStories(); $event.target.blur();"
+            @click="
+              refreshUserStories();
+              $event.target.blur();
+            "
           >
             {{ $t("page.session.before.refreshStories") }}
           </b-button>
@@ -148,7 +155,10 @@
         <div v-if="session_userStoryMode === 'US_JIRA'" class="refreshUserstories">
           <b-button
             class="w-100 mb-3 refreshButton"
-            @click="refreshUserStories(); $event.target.blur();"
+            @click="
+              refreshUserStories();
+              $event.target.blur();
+            "
           >
             {{ $t("page.session.before.refreshStories") }}
           </b-button>
@@ -219,8 +229,8 @@ export default Vue.extend({
     UserStoryDescriptions,
     NotifyHostComponent,
     BIconArrowClockwise,
-    BIconBarChartFill
-},
+    BIconBarChartFill,
+  },
   props: {
     adminID: { type: String, required: false },
     sessionID: { type: String, required: false },
@@ -320,7 +330,7 @@ export default Vue.extend({
       }
     },
     membersEstimated() {
-      if (this.membersPending.length  === 0 && this.membersEstimated.length > 0) {
+      if (this.membersPending.length === 0 && this.membersEstimated.length > 0) {
         this.estimateFinished = true;
       }
     },
@@ -467,7 +477,9 @@ export default Vue.extend({
           }
         }
         if (response.status === 200) {
-          this.$toast.success(this.$t("session.notification.messages.issueTrackerSynchronizeSuccess"));
+          this.$toast.success(
+            this.$t("session.notification.messages.issueTrackerSynchronizeSuccess")
+          );
         } else {
           this.$toast.error(this.$t("session.notification.messages.issueTrackerSynchronizeFailed"));
         }
@@ -519,7 +531,9 @@ export default Vue.extend({
           }
         }
         if (response.status === 200) {
-          this.$toast.success(this.$t("session.notification.messages.issueTrackerSynchronizeSuccess"));
+          this.$toast.success(
+            this.$t("session.notification.messages.issueTrackerSynchronizeSuccess")
+          );
         } else {
           this.$toast.error(this.$t("session.notification.messages.issueTrackerSynchronizeFailed"));
         }
@@ -581,7 +595,6 @@ export default Vue.extend({
 </script>
 
 <style scoped>
-
 .optionButtonCol {
   margin-top: auto;
   margin-bottom: auto;
@@ -614,7 +627,7 @@ export default Vue.extend({
   width: 40px;
 }
 
-.optionButton{
+.optionButton {
   background-color: var(--textAreaColour);
   color: var(--text-primary-color);
   border-color: black;
@@ -623,14 +636,14 @@ export default Vue.extend({
   align-items: center;
 }
 
-.optionButton:hover{
+.optionButton:hover {
   background-color: var(--textAreaColourHovered);
   color: var(--text-primary-color);
 }
 
-.optionButton:focus{
+.optionButton:focus {
   background-color: var(--textAreaColourHovered) !important;
-  color: var(--text-primary-color)  !important;
+  color: var(--text-primary-color) !important;
 }
 
 .refreshButton {

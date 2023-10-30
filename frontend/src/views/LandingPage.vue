@@ -2,7 +2,7 @@
   <div id="landing-page">
     <b-container fluid class="teaser">
       <b-container>
-        <b-jumbotron header="DIVENI" lead="Instant free and easy remote Planning Poker"/>
+        <b-jumbotron header="DIVENI" lead="Instant free and easy remote Planning Poker" />
       </b-container>
     </b-container>
     <b-container class="my-5">
@@ -31,9 +31,7 @@
         />
       </b-card-group>
     </b-container>
-    <AnalyticsDataComponent ref="dataComponent">
-
-    </AnalyticsDataComponent>
+    <AnalyticsDataComponent ref="dataComponent"> </AnalyticsDataComponent>
     <b-container class="py-5">
       <div class="parent py-5 px-5">
         <div class="background py-5"></div>
@@ -42,18 +40,12 @@
           <b-card-group deck class="py-5">
             <b-card class="pictureCard">
               <b-card-text>
-                <b-img
-                  :src="require(`@/assets/SetUpSession.png`)"
-                  class="landingPagePictures"
-                />
+                <b-img :src="require(`@/assets/SetUpSession.png`)" class="landingPagePictures" />
               </b-card-text>
             </b-card>
             <b-card class="pictureCard">
               <b-card-text>
-                <b-img
-                  :src="require(`@/assets/InviteYourTeam.png`)"
-                  class="landingPagePictures"
-                />
+                <b-img :src="require(`@/assets/InviteYourTeam.png`)" class="landingPagePictures" />
               </b-card-text>
             </b-card>
             <b-card class="pictureCard">
@@ -70,7 +62,7 @@
               <b-card-text v-html="$t('page.instruction.setUpSession')"></b-card-text>
             </b-card>
             <b-card class="aboutDiveni" title="Invite your Team">
-                <b-card-text v-html="$t('page.instruction.inviteYourTeam')"></b-card-text>
+              <b-card-text v-html="$t('page.instruction.inviteYourTeam')"></b-card-text>
             </b-card>
             <b-card class="aboutDiveni" title="Estimate User Stories">
               <b-card-text v-html="$t('page.instruction.estimateUserStories')"></b-card-text>
@@ -82,7 +74,7 @@
       <p>DIVENI was initially developed by students of HTWG Constance and is open source now.</p>
       <p>
         More information could be found in the
-        <a href="https://docs.diveni.io/" id="link">documentation</a>.
+        <a id="link" href="https://docs.diveni.io/">documentation</a>.
       </p>
     </b-container>
   </div>
@@ -141,7 +133,7 @@ export default Vue.extend({
             sessionState: string;
             members: Array<string>;
           };
-          this.sessionWrapper = {session};
+          this.sessionWrapper = { session };
         } catch (e) {
           console.error(`got error: ${e}`);
           window.localStorage.removeItem("adminCookie");
@@ -149,10 +141,10 @@ export default Vue.extend({
       }
     },
     goToJoinPage() {
-      this.$router.push({name: "JoinPage"});
+      this.$router.push({ name: "JoinPage" });
     },
     goToPrepareSessionPage() {
-      this.$router.push({name: "PrepareSessionPage"});
+      this.$router.push({ name: "PrepareSessionPage" });
     },
     goToSessionPage() {
       this.$store.commit("setUserStories", {
@@ -176,7 +168,6 @@ export default Vue.extend({
 </script>
 
 <style scoped>
-
 #link {
   color: var(--linkColor);
 }
@@ -187,7 +178,7 @@ export default Vue.extend({
 
 .teaser {
   background: linear-gradient(var(--background-color-primary), var(--pictureGradientEnd)),
-  url("~@/assets/img/diveni-background.png");
+    url("~@/assets/img/diveni-background.png");
   background-size: cover;
   background-repeat: no-repeat;
 }
@@ -204,7 +195,7 @@ export default Vue.extend({
 }
 
 .card-title {
-  color: var(--text-primary-color)
+  color: var(--text-primary-color);
 }
 
 .parent {
@@ -212,7 +203,6 @@ export default Vue.extend({
   height: 110%;
   width: 100%;
 }
-
 
 .background {
   position: absolute;

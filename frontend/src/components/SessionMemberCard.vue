@@ -11,7 +11,7 @@
         member.currentEstimation
       }}</strong>
     </h1>
-    <rounded-avatar :member="member" :admin="false"/>
+    <rounded-avatar :member="member" :admin="false" />
   </div>
 </template>
 
