@@ -21,13 +21,14 @@ export default Vue.extend({
       required: false,
       default: () => [] as Array<Member>,
     },
-    hostVoting: { type: Boolean, required: true }
+    hostVoting: { type: Boolean, required: true },
   },
   methods: {
     sendStartEstimationMessages() {
       const endPoint = Constants.webSocketStartPlanningRoute;
       this.$store.commit("sendViaBackendWS", {
-        endPoint, data: this.hostVoting
+        endPoint,
+        data: this.hostVoting,
       });
       this.$emit("clicked");
     },

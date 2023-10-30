@@ -1,0 +1,49 @@
+@import "_variables.scss";
+
+@import "bootstrap/scss/bootstrap";
+@import "bootstrap-vue/src/index.scss";
+
+
+/*scrollbar - firefox*/
+:root {
+    scrollbar-color: #888 rgba(0, 0, 0, 0) !important;
+    scrollbar-width: thin !important;
+}
+/*scrollbar - chrome */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 5px;
+}
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+::-webkit-scrollbar-corner {
+    background: rgba(0, 0, 0, 0);
+}
+
+.jumbotron {
+    background-color: var(--background-color-primary);
+    color: var(--text-primary-color);
+    opacity: 0.7;
+}
+
+.dropdown-menu {
+    background-color: var(--topNavigationBarColor);
+    border-color: var(--text-primary-color);
+    .dropdown-item {
+        color: var(--text-primary-color);
+    }
+}
