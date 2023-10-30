@@ -29,11 +29,10 @@ export default Vue.extend({
       const endPoint = Constants.webSocketStartPlanningRoute;
       this.$store.commit("sendViaBackendWS", {
         endPoint,
-        data: JSON.stringify(
-          {
+        data: JSON.stringify({
           hostVoting: this.hostVoting,
-          autoReveal: this.autoReveal
-          })
+          autoReveal: this.autoReveal,
+        }),
       });
       this.$emit("clicked");
     },

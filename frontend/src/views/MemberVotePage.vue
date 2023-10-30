@@ -381,13 +381,13 @@ export default Vue.extend({
     onSendVote({ vote }) {
       this.draggedVote = vote;
       const endPoint = `${Constants.webSocketVoteRoute}`;
-      this.$store.commit("sendViaBackendWS",
-        { endPoint,
-          data: JSON.stringify({
-            vote: vote,
-            autoReveal: this.isAutoRevealActive
-          })
-          });
+      this.$store.commit("sendViaBackendWS", {
+        endPoint,
+        data: JSON.stringify({
+          vote: vote,
+          autoReveal: this.isAutoRevealActive,
+        }),
+      });
     },
     goToJoinPage() {
       this.$router.push({ name: "JoinPage" });

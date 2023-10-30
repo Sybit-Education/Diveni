@@ -52,10 +52,10 @@ export default new Vuex.Store<StoreState>({
     },
     subscribeOnBackendWSMemberUpdatesWithAutoReveal(state) {
       state.stompClient?.subscribe(Constants.webSocketMemberAutoRevealListenRoute, (frame) => {
-        const splittedFrame = frame.body.split(' ');
-        state.autoReveal = splittedFrame[1] === 'true';
+        const splittedFrame = frame.body.split(" ");
+        state.autoReveal = splittedFrame[1] === "true";
         state.memberUpdates = state.memberUpdates.concat([splittedFrame[0]]);
-      })
+      });
     },
     subscribeOnBackendWSStoriesUpdated(state) {
       state.stompClient?.subscribe(Constants.webSocketMemberListenUserStoriesRoute, (frame) => {

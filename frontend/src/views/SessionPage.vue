@@ -16,10 +16,11 @@
           class="mr-3 autoRevealButtons optionButton"
           variant="outline-dark"
           @click="
-          autoReveal = true;
-          $event.target.blur();"
+            autoReveal = true;
+            $event.target.blur();
+          "
         >
-          <b-icon-eye-slash-fill class="bIcons"/>
+          <b-icon-eye-slash-fill class="bIcons" />
           {{ $t("page.session.during.estimation.buttons.autoRevealOff") }}
         </b-button>
         <b-button
@@ -27,10 +28,11 @@
           class="mr-3 autoRevealButtons optionButton"
           variant="outline-dark"
           @click="
-          autoReveal = false;
-          $event.target.blur();"
+            autoReveal = false;
+            $event.target.blur();
+          "
         >
-          <b-icon-eye-fill class="bIcons"/>
+          <b-icon-eye-fill class="bIcons" />
           {{ $t("page.session.during.estimation.buttons.autoRevealOn") }}
         </b-button>
       </b-col>
@@ -73,9 +75,9 @@
         <b-col class="text-center">
           <session-start-button
             :members="members"
-            :hostVoting="session_hostVoting"
-            :autoReveal="autoReveal"
-            @clicked="onPlanningStarted"            
+            :host-voting="session_hostVoting"
+            :auto-reveal="autoReveal"
+            @clicked="onPlanningStarted"
           />
         </b-col>
       </b-row>
@@ -109,24 +111,26 @@
             v-if="!autoReveal"
             class="mr-3 optionButton"
             variant="outline-dark"
-            @click="
-            autoReveal = true;
-            $event.target.blur();"
             :disabled="planningStart && !estimateFinished"
+            @click="
+              autoReveal = true;
+              $event.target.blur();
+            "
           >
-            <b-icon-eye-slash-fill class="bIcons"/>
+            <b-icon-eye-slash-fill class="bIcons" />
             {{ $t("page.session.during.estimation.buttons.autoRevealOff") }}
           </b-button>
           <b-button
             v-if="autoReveal"
             class="mr-3 optionButton"
             variant="outline-dark"
-            @click="
-            autoReveal = false;
-            $event.target.blur();"
             :disabled="planningStart && !estimateFinished"
+            @click="
+              autoReveal = false;
+              $event.target.blur();
+            "
           >
-            <b-icon-eye-fill class="bIcons"/>
+            <b-icon-eye-fill class="bIcons" />
             {{ $t("page.session.during.estimation.buttons.autoRevealOn") }}
           </b-button>
         </b-col>
@@ -718,12 +722,12 @@ export default Vue.extend({
       this.hostEstimation = "";
       this.safedHostVoting = this.session_hostVoting;
       const endPoint = Constants.webSocketRestartPlanningRoute;
-      this.$store.commit("sendViaBackendWS", { endPoint,
-        data: JSON.stringify(
-          {
+      this.$store.commit("sendViaBackendWS", {
+        endPoint,
+        data: JSON.stringify({
           hostVoting: this.session_hostVoting,
-          autoReveal: this.autoReveal
-          })
+          autoReveal: this.autoReveal,
+        }),
       });
     },
     goToLandingPage() {
@@ -735,13 +739,13 @@ export default Vue.extend({
     vote(vote: string) {
       this.hostEstimation = vote;
       const endPoint = `${Constants.webSocketVoteRouteAdmin}`;
-      this.$store.commit("sendViaBackendWS",
-        { endPoint,
-          data: JSON.stringify({
-            vote: this.hostEstimation,
-            autoReveal: this.autoReveal
-          })
-        });
+      this.$store.commit("sendViaBackendWS", {
+        endPoint,
+        data: JSON.stringify({
+          vote: this.hostEstimation,
+          autoReveal: this.autoReveal,
+        }),
+      });
     },
   },
 });
@@ -749,7 +753,6 @@ export default Vue.extend({
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
 .newVotes {
   text-align: center;
   margin-left: auto;
