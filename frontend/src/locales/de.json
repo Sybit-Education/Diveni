@@ -144,7 +144,13 @@
         }
       },
       "hostLeft": "Warte, bis der Organisator die Sitzung wieder betritt..."
+    },
+    "instruction": {
+      "setUpSession": "Erstellen Sie eine Planungssitzung und wählen Sie Ihr bevorzugtes Abstimmungsset aus. <br> <br> Sie können Ihre User Stories importieren oder JIRA verbinden, um Story Points zu synchronisieren. <br> <br> <span style='color: grey;'>Verbindung zum Issue-Tracker</span> <br> <br> DIVENI kann sich mit Issue-Trackern wie Azure DevOps, JIRA Server und Cloud verbinden, um User Stories anzuzeigen und die abgestimmten Ergebnisse Ihres Planning Pokers zu aktualisieren.",
+      "inviteYourTeam": "Laden Sie Ihr Team mit QR-Code, Einladungslink oder Code ein. <br> <br> Jeder Benutzer wird zufällig einem Tier zugewiesen und ist bereit zur Schätzung. <br> <br> Wenn alle in der Sitzung sind, können Sie mit der Schätzung beginnen. Wenn Sie ein Zeitlimit festgelegt haben, wird dieses als Limit für die Abstimmungszeit verwendet.",
+      "estimateUserStories": "Jedes Mitglied des Teams kann sein definiertes Set verwenden, um die ausgewählte User Story zu bewerten. <br> <br> Wenn alle abgestimmt haben, zeigt DIVENI die Ergebnisse und wählt zufällig zwei Wähler aus, die das Minimum / Maximum gewählt haben, um ihre Schätzung zu besprechen. <br> <br> Nach der Diskussion können Sie die Schätzung wiederholen."
     }
+
   },
   "session": {
     "prepare": {

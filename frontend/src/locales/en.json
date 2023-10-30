@@ -144,6 +144,11 @@
         }
       },
       "hostLeft": "Waiting for the host to come back..."
+    },
+    "instruction": {
+      "setUpSession": "Create a planning session and select your prefered voting set. <br> <br> You could import your user stories or connect JIRA to syncronize story points. <br> <br> <span style='color: grey;'>Connecting to Issue-Tracker </span> <br> <br> DIVENI could connect to issue trackers like Azure DevOps, JIRA Server and Cloud to show user stories and update the voted results of your planning poker.",
+      "inviteYourTeam": "Invite your team using QR-Code, invite link or code. <br> <br>  Every user will be randomly assinged to a animal and is ready to estimate. <br> <br> If everybody is in the session, you could start estimation. Having defined a time limit this will be used as limit for voting time.",
+      "estimateUserStories": "Every member of the Team could use your defined set to vote the selected user story. <br> <br> If everybody has voted, DIVENI shows results and randomly selects two voters having voted minimum / maximum to discuss their estimation. <br> <br> After discussion you could repeat estimation."
     }
   },
   "session": {
