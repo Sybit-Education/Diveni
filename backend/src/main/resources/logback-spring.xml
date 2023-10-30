@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <property name="LOGS" value="./log"/>
-    <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
-        <layout class="ch.qos.logback.classic.PatternLayout">
-            <Pattern>%black(%d{ISO8601}) %highlight(%-5level) [%blue(%t)] %yellow(%C{1.}): %msg%n%throwable</Pattern>
-        </layout>
-    </appender>
+
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+    <include resource="org/springframework/boot/logging/logback/file-appender.xml" />
 
     <springProfile name="prod">
         <root level="warn">
-            <appender-ref ref="Console"/>
+            <appender-ref ref="CONSOLE"/>
         </root>
         <logger name="io.diveni" level="info" additivity="false">
-            <appender-ref ref="Console"/>
+            <appender-ref ref="CONSOLE"/>
         </logger>
     </springProfile>
 
@@ -21,19 +20,19 @@
             <appender-ref ref="Console"/>
         </root>
         <logger name="org.springframework" level="info">
-            <appender-ref ref="Console"/>
+            <appender-ref ref="CONSOLE"/>
         </logger>
         <logger name="io.diveni" level="debug" additivity="false">
-            <appender-ref ref="Console"/>
+            <appender-ref ref="CONSOLE"/>
         </logger>
     </springProfile>
 
     <springProfile name="default">
         <root level="warn">
-            <appender-ref ref="Console"/>
+            <appender-ref ref="CONSOLE"/>
         </root>
         <logger name="io.diveni" level="debug" additivity="false">
-            <appender-ref ref="Console"/>
+            <appender-ref ref="CONSOLE"/>
         </logger>
     </springProfile>
 </configuration>
