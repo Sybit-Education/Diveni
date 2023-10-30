@@ -307,7 +307,6 @@ export default Vue.extend({
     sessionState: { type: String, required: false, default: undefined },
     timerSecondsString: { type: String, required: false, default: undefined },
     hostVoting: { type: String, required: true },
-
     startNewSessionOnMountedString: {
       type: String,
       required: false,
