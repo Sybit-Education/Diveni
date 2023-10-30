@@ -388,6 +388,7 @@ export default Vue.extend({
       estimateFinished: false,
       session: {},
       hostEstimation: "",
+      safedHostVoting: false,
       autoReveal: false,
     };
   },
