@@ -8,6 +8,7 @@ Copyright (C) 2022 AUME-Team 21/22, HTWG Konstanz
   <div>
     <top-navigation-bar />
     <main>
+      <feedback-button></feedback-button>
       <router-view />
     </main>
     <footer-bar />
@@ -18,10 +19,11 @@ Copyright (C) 2022 AUME-Team 21/22, HTWG Konstanz
 import Vue from "vue";
 import TopNavigationBar from "@/components/navigation/TopNavigationBar.vue";
 import FooterBar from "@/components/navigation/FooterBar.vue";
+import FeedbackButton from "@/components/FeedbackButton.vue";
 
 export default Vue.extend({
   name: "App",
-  components: { FooterBar, TopNavigationBar },
+  components: {FeedbackButton, FooterBar, TopNavigationBar },
   mounted() {
     document.title = "DIVENI";
   },

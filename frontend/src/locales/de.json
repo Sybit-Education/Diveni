@@ -252,6 +252,11 @@
           "time": {
             "title": "Bestimme die Dauer pro Schätzrunde"
           },
+          "hostVoting": {
+            "title": "Soll der Host auch abstimmen",
+            "hostVotingOn": "Ja",
+            "hostVotingOff": "Nein"
+          },
           "password": {
             "title": "Wähle ein Passwort, falls gewünscht",
             "placeholder": "Passwort (leer lassen für eine offene Session)"
