@@ -34,16 +34,75 @@
     background: rgba(0, 0, 0, 0);
 }
 
+a {
+  color: var(--link-color);
+}
+
+
 .jumbotron {
     background-color: var(--background-color-primary);
     color: var(--text-primary-color);
     opacity: 0.7;
+    border-radius: 0;
 }
 
 .dropdown-menu {
     background-color: var(--topNavigationBarColor);
     border-color: var(--text-primary-color);
     .dropdown-item {
+        color: var(--text-primary-color);
+    }
+}
+
+.btn-primary {
+    background-color: var(--primary-button);
+    border-color: $gray-600;
+    &:hover {
+        background-color: var(--primary-button-hovered);
+    }
+    &:disabled, &.disabled:hover {
+      background-color: var(--primary-button);
+      border-color: $gray-600;
+    }
+    &:focus {
+        background-color: var(--primary-button-hovered);
+        color: var(--text-primary-color);
+      }
+}
+
+.btn-secondary {
+  background-color: var(--secondary-button);
+  border-color: $gray-600;
+  &:hover {
+      background-color: var(--secondary-button-hovered);
+  }
+  &:disabled, &.disabled:hover {
+    background-color: var(--secondary-button);
+    border-color: $gray-600;
+  }
+  &:focus {
+    background-color: var(--secondary-button-hovered);
+    color: var(--text-primary-color);
+  }
+}
+
+.form-control {
+  background-color: var(--textAreaColour);
+  color: var(--text-primary-color);
+
+  &:focus {
+    background-color: var(--textAreaColour);
+    color: var(--text-primary-color);
+  }
+
+  &::placeholder {
+    color: var(--text-primary-color);
+  }
+}
+
+.card {
+    background-color: var(--background-color-primary);
+    .card-subtitle {
         color: var(--text-primary-color);
     }
 }

@@ -738,7 +738,6 @@ export default Vue.extend({
   background-color: var(--textAreaColour);
   color: var(--text-primary-color);
   border-color: black;
-  border-radius: var(--buttonShape);
   display: inline-flex;
   align-items: center;
 }
@@ -756,16 +755,16 @@ export default Vue.extend({
 .refreshButton {
   border-radius: var(--element-size);
   color: var(--text-primary-color);
-  background-color: var(--joinButton);
+  background-color: var(--secondary-button);
 }
 
 .refreshButton:hover {
   color: var(--text-primary-color);
-  background-color: var(--joinButtonHovered);
+  background-color: var(--secondary-button-hovered);
 }
 
 .refreshButton:focus {
-  background-color: var(--joinButtonHovered) !important;
+  background-color: var(--secondary-button-hovered) !important;
   color: var(--text-primary-color) !important;
 }
 

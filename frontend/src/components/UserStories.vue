@@ -3,7 +3,7 @@
     <div v-if="userStories.length > 0 || filterActive" class="w-100 d-flex justify-content-left">
       <b-input-group>
         <b-input-group-prepend>
-          <BIconSearch id="searchIcon"></BIconSearch>
+          <b-input-group-text><BIconSearch id="searchIcon"></BIconSearch></b-input-group-text>
         </b-input-group-prepend>
         <b-input
           id="search"
@@ -74,7 +74,8 @@
 
     <b-button
       v-if="userStories.length < 1 && showEditButtons && !filterActive"
-      class="w-100 mb-3 addButton"
+      class="w-100 mb-3"
+      variant="secondary"
       @click="
         addUserStory();
         $event.target.blur();
@@ -94,7 +95,8 @@
 
     <b-button
       v-if="userStories.length > 0 && showEditButtons && !filterActive"
-      class="w-100 mb-3 addButton"
+      class="w-100 mb-3"
+      variant="secondary"
       @click="
         addUserStory();
         $event.target.blur();
@@ -206,38 +208,9 @@ export default Vue.extend({
 });
 </script>
 
-<style scoped>
-#search {
-  border-radius: var(--element-size);
-  padding-left: 45px;
-  border-color: black;
-  overflow: auto;
-  z-index: 1;
-}
-
+<style lang="scss" scoped>
 #searchIcon {
-  position: absolute;
-  z-index: 2;
-  font-size: 25px;
-  top: 20%;
-  left: 1.5%;
   rotate: 90deg;
-}
-
-.addButton {
-  background-color: var(--joinButton);
-  color: var(--text-primary-color);
-  border-radius: var(--element-size);
-}
-
-.addButton:hover {
-  background-color: var(--joinButtonHovered);
-  color: var(--text-primary-color);
-}
-
-.addButton:focus {
-  background-color: var(--joinButtonHovered);
-  color: var(--text-primary-color);
 }
 
 .selectedStory {
@@ -272,20 +245,6 @@ export default Vue.extend({
   border: none;
 }
 
-.form-control {
-  background-color: var(--textAreaColour);
-  color: var(--text-primary-color);
-}
-
-.form-control:focus {
-  background-color: var(--textAreaColour);
-  color: var(--text-primary-color);
-}
-
-.form-control::placeholder {
-  color: var(--text-primary-color);
-}
-
 #userStoryRow {
   background-color: var(--textAreaColour);
   color: var(--text-primary-color);
@@ -310,7 +269,7 @@ export default Vue.extend({
 }
 
 #badge {
-  background-color: var(--joinButton);
+  background-color: var(--secondary-button);
   color: var(--text-primary-color);
   font-size: large;
 }
