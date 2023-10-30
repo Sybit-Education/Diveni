@@ -5,6 +5,7 @@
 */
 package io.diveni.backend.model;
 
+import java.util.AbstractMap;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.Map.Entry;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -65,6 +67,10 @@ public class Session {
 
   private final LocalDate creationTime;
 
+  private final boolean hostVoting;
+
+  private final AdminVote hostEstimation;
+
   static Comparator<String> estimationByIndex(List<String> set) {
     return Comparator.comparingInt((str) -> set.indexOf(str));
   }
@@ -93,7 +99,9 @@ public class Session {
         lastModified,
         accessToken,
         timerTimestamp,
-        creationTime);
+        creationTime,
+        hostVoting,
+        hostEstimation);
   }
 
   public Session selectHighlightedMembers() {
@@ -106,10 +114,26 @@ public class Session {
             .filter((string) -> !string.equals("?"))
             .collect(Collectors.toList());
 
-    Optional<String> maxEstimation =
-        getFilteredEstimationStream(this.members).max(estimationByIndex(filteredSet));
-    Optional<String> minEstimation =
-        getFilteredEstimationStream(this.members).min(estimationByIndex(filteredSet));
+    Optional<String> maxEstimation;
+    Optional<String> minEstimation;
+    if (!this.hostVoting || this.hostEstimation.getHostEstimation().equals("")) {
+      maxEstimation = getFilteredEstimationStream(this.members).max(estimationByIndex(filteredSet));
+    } else {
+      Stream<String> filteredEstimationsMember = getFilteredEstimationStream(this.members);
+      Stream<String> allEstimations =
+          Stream.concat(
+              filteredEstimationsMember, Stream.of(this.hostEstimation.getHostEstimation()));
+      maxEstimation = allEstimations.max(estimationByIndex(filteredSet));
+    }
+    if (!this.hostVoting || this.hostEstimation.getHostEstimation().equals("")) {
+      minEstimation = getFilteredEstimationStream(this.members).min(estimationByIndex(filteredSet));
+    } else {
+      Stream<String> filteredEstimationsMember = getFilteredEstimationStream(this.members);
+      Stream<String> allEstimations =
+          Stream.concat(
+              filteredEstimationsMember, Stream.of(this.hostEstimation.getHostEstimation()));
+      minEstimation = allEstimations.min(estimationByIndex(filteredSet));
+    }
 
     if (maxEstimation.equals(minEstimation)) {
       return new Session(
@@ -125,7 +149,9 @@ public class Session {
           lastModified,
           accessToken,
           timerTimestamp,
-          creationTime);
+          creationTime,
+          hostVoting,
+          hostEstimation);
     }
     val maxEstimationMembers =
         this.members.stream()
@@ -134,13 +160,21 @@ public class Session {
                     member.getCurrentEstimation() != null
                         && member.getCurrentEstimation().equals(maxEstimation.get()))
             .collect(Collectors.toList());
-    val maxOptions =
+
+    List<Entry<String, Integer>> maxOptions =
         memberVoted.entrySet().stream()
             .filter(
                 (entry) ->
                     maxEstimationMembers.stream()
                         .anyMatch((member) -> member.getMemberID().equals(entry.getKey())))
             .collect(Collectors.toList());
+
+    if (hostVoting == true) {
+      if (maxEstimation.get().equals(this.hostEstimation.getHostEstimation())) {
+        maxOptions.add(new AbstractMap.SimpleEntry<String, Integer>(this.adminID, 0));
+      }
+    }
+
     val maxMemberID =
         Collections.max(maxOptions, Comparator.comparingInt(Map.Entry::getValue)).getKey();
 
@@ -151,13 +185,21 @@ public class Session {
                     member.getCurrentEstimation() != null
                         && member.getCurrentEstimation().equals(minEstimation.get()))
             .collect(Collectors.toList());
-    val minOptions =
+
+    List<Entry<String, Integer>> minOptions =
         memberVoted.entrySet().stream()
             .filter(
                 (entry) ->
                     minEstimationMembers.stream()
                         .anyMatch((member) -> member.getMemberID().equals(entry.getKey())))
             .collect(Collectors.toList());
+
+    if (hostVoting == true) {
+      if (minEstimation.get().equals(this.hostEstimation.getHostEstimation())) {
+        minOptions.add(new AbstractMap.SimpleEntry<String, Integer>(this.adminID, 0));
+      }
+    }
+
     val minMemberID =
         Collections.max(minOptions, Comparator.comparingInt(Map.Entry::getValue)).getKey();
 
@@ -199,7 +241,9 @@ public class Session {
         lastModified,
         accessToken,
         timerTimestamp,
-        creationTime);
+        creationTime,
+        hostVoting,
+        hostEstimation);
   }
 
   public Session resetCurrentHighlights() {
@@ -216,7 +260,9 @@ public class Session {
         lastModified,
         accessToken,
         timerTimestamp,
-        creationTime);
+        creationTime,
+        hostVoting,
+        hostEstimation);
   }
 
   public Session updateUserStories(List<UserStory> userStories) {
@@ -240,7 +286,9 @@ public class Session {
         lastModified,
         accessToken,
         timerTimestamp,
-        creationTime);
+        creationTime,
+        hostVoting,
+        hostEstimation);
   }
 
   public Session resetEstimations() {
@@ -259,7 +307,9 @@ public class Session {
         lastModified,
         accessToken,
         timerTimestamp,
-        creationTime);
+        creationTime,
+        hostVoting,
+        new AdminVote(""));
   }
 
   public Session updateMembers(List<Member> updatedMembers) {
@@ -276,7 +326,9 @@ public class Session {
         lastModified,
         accessToken,
         timerTimestamp,
-        creationTime);
+        creationTime,
+        hostVoting,
+        hostEstimation);
   }
 
   public Session updateSessionState(SessionState updatedSessionState) {
@@ -293,7 +345,9 @@ public class Session {
         lastModified,
         accessToken,
         timerTimestamp,
-        creationTime);
+        creationTime,
+        hostVoting,
+        hostEstimation);
   }
 
   public Session addMember(Member member) {
@@ -312,7 +366,9 @@ public class Session {
         lastModified,
         accessToken,
         timerTimestamp,
-        creationTime);
+        creationTime,
+        hostVoting,
+        hostEstimation);
   }
 
   public Session removeMember(String memberID) {
@@ -333,7 +389,9 @@ public class Session {
         lastModified,
         accessToken,
         timerTimestamp,
-        creationTime);
+        creationTime,
+        hostVoting,
+        hostEstimation);
   }
 
   public Session setTimerTimestamp(String timestamp) {
@@ -350,7 +408,9 @@ public class Session {
         lastModified,
         accessToken,
         timestamp,
-        creationTime);
+        creationTime,
+        hostVoting,
+        hostEstimation);
   }
 
   public Session resetTimerTimestamp() {
@@ -367,7 +427,9 @@ public class Session {
         lastModified,
         accessToken,
         null,
-        creationTime);
+        creationTime,
+        hostVoting,
+        hostEstimation);
   }
 
   public Session setLastModified(Date lastModified) {
@@ -384,7 +446,9 @@ public class Session {
         lastModified,
         accessToken,
         timerTimestamp,
-        creationTime);
+        creationTime,
+        hostVoting,
+        hostEstimation);
   }
 
   public Session setAccessToken(String token) {
@@ -401,6 +465,50 @@ public class Session {
         lastModified,
         token,
         timerTimestamp,
-        creationTime);
+        creationTime,
+        hostVoting,
+        hostEstimation);
+  }
+
+  public Session setHostVoting(boolean isHostVoting) {
+    return new Session(
+        databaseID,
+        sessionID,
+        adminID,
+        sessionConfig,
+        adminCookie,
+        members,
+        memberVoted,
+        currentHighlights,
+        sessionState,
+        lastModified,
+        accessToken,
+        timerTimestamp,
+        creationTime,
+        isHostVoting,
+        hostEstimation);
+  }
+
+  public boolean getHostVoting() {
+    return hostVoting;
+  }
+
+  public Session setHostEstimation(String vote) {
+    return new Session(
+        databaseID,
+        sessionID,
+        adminID,
+        sessionConfig,
+        adminCookie,
+        members,
+        memberVoted,
+        currentHighlights,
+        sessionState,
+        lastModified,
+        accessToken,
+        timerTimestamp,
+        creationTime,
+        hostVoting,
+        new AdminVote(vote));
   }
 }

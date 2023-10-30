@@ -13,17 +13,30 @@ env:
 
 jobs:
   formatting:
+    name: Formatting
     runs-on: ubuntu-latest
     steps:
-      - if: github.event_name != 'pull_request'
+      - name: Checkout
+        if: github.event_name != 'pull_request'
         uses: actions/checkout@v3
-      - if: github.event_name == 'pull_request'
+      - name: Checkout
+        if: github.event_name == 'pull_request'
         uses: actions/checkout@v3
         with:
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           ref: ${{ github.event.pull_request.head.ref }}
-      - uses: axel-op/googlejavaformat-action@v3
+      - name: Format
+        if: github.event.pull_request.head.repo.full_name == github.repository
+        uses: axel-op/googlejavaformat-action@v3
         with:
+          args: "--skip-sorting-imports --replace"
+          # Recommended if you use MacOS:
+          # githubToken: ${{ secrets.GITHUB_TOKEN }}
+      - name: Format
+        if: github.event.pull_request.head.repo.full_name != github.repository
+        uses: axel-op/googlejavaformat-action@v3
+        with:
+          skip-commit: true
           args: "--skip-sorting-imports --replace"
           # Recommended if you use MacOS:
           # githubToken: ${{ secrets.GITHUB_TOKEN }}
@@ -45,6 +58,7 @@ jobs:
           arguments: assemble
           build-root-directory: backend
       - name: Upload artifacts
+        if: github.event.pull_request.head.repo.full_name == github.repository
         uses: actions/upload-artifact@v2
         with:
           name: backend
@@ -70,6 +84,7 @@ jobs:
           arguments: test
           build-root-directory: backend
       - name: Publish Test Report
+        if: github.event.pull_request.head.repo.full_name == github.repository
         uses: scacap/action-surefire-report@v1
         with:
           report_paths: '**/build/test-results/test/TEST-*.xml'
@@ -78,6 +93,7 @@ jobs:
           echo "coverage = ${{ steps.jacoco.outputs.coverage }}"
           echo "branch coverage = ${{ steps.jacoco.outputs.branches }}"
       - name: Upload JaCoCo coverage report
+        if: github.event.pull_request.head.repo.full_name == github.repository
         uses: actions/upload-artifact@v2
         with:
           name: jacoco-report
