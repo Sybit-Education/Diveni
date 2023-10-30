@@ -1,18 +1,21 @@
 <template>
   <div class="feedback">
-    <a target="_blank" href="https://github.com/Sybit-Education/Diveni/issues/new/choose"
-       id="feedback-btn" >{{ $t("general.feedback") }}</a>
+    <a
+      id="feedback-btn"
+      target="_blank"
+      href="https://github.com/Sybit-Education/Diveni/issues/new/choose"
+      >{{ $t("general.feedback") }}</a
+    >
   </div>
 </template>
 
 <script lang="ts">
-import {defineComponent} from 'vue'
+import { defineComponent } from "vue";
 
 export default defineComponent({
-  name: "FeedbackButton"
-})
+  name: "FeedbackButton",
+});
 </script>
-
 
 <style scoped>
 .feedback {
@@ -21,7 +24,6 @@ export default defineComponent({
   position: sticky;
   top: 50%;
   z-index: 100;
-
 }
 #feedback-btn {
   padding: 5px 15px;
@@ -32,7 +34,7 @@ export default defineComponent({
   transform: rotate(270deg) translate(50%, -50%);
   transform-origin: right;
 }
-#feedback-btn:hover{
+#feedback-btn:hover {
   text-decoration: none;
 }
 </style>
