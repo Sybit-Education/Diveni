@@ -132,6 +132,7 @@ export default Vue.extend({
             };
             sessionState: string;
             members: Array<string>;
+            hostVoting: string;
           };
           this.sessionWrapper = { session };
         } catch (e) {
@@ -160,6 +161,7 @@ export default Vue.extend({
           timerSecondsString: this.sessionWrapper.session.sessionConfig.timerSeconds.toString(),
           startNewSessionOnMountedString: this.startNewSessionOnMounted.toString(),
           userStoryMode: this.sessionWrapper.session.sessionConfig.userStoryMode,
+          hostVoting: this.sessionWrapper.session.hostVoting,
         },
       });
     },
