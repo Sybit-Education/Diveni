@@ -27,7 +27,7 @@ dependencies {
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo'
+    testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo.spring31x:4.9.3'
 }
 
 group = 'io.diveni'
