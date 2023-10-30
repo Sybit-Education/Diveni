@@ -94,7 +94,7 @@ export default Vue.extend({
         element.className = element.className.replace(/-dark/g, "-light");
       });
       document.body.classList.replace("text-light", "text-dark");
-    }
+    },
   },
 });
 </script>

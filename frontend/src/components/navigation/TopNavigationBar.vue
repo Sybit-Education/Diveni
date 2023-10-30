@@ -8,7 +8,9 @@
 
     <b-collapse id="nav-collapse" is-nav>
       <b-navbar-nav class="ml-auto">
-        <b-button :to="{ name: 'PrepareSessionPage' }" class="startButton mr-2">New Session</b-button>
+        <b-button :to="{ name: 'PrepareSessionPage' }" class="startButton mr-2"
+          >New Session</b-button
+        >
         <b-button :to="{ name: 'JoinPage' }" class="joinButton mr-2">
           {{ $t("page.landing.meeting.join.buttons.start.label") }}
         </b-button>
@@ -47,7 +49,6 @@ export default Vue.extend({
     font-size: 2.5rem;
     font-weight: 700;
   }
-
 
   .github-logo {
     color: var(--text-primary-color);

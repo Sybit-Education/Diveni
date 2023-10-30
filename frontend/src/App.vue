@@ -193,5 +193,4 @@ a.btn.startButton:focus {
   background-color: var(--joinButtonHovered) !important;
   color: var(--text-primary-color) !important;
 }
-
 </style>

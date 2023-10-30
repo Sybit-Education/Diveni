@@ -194,7 +194,6 @@ export default Vue.extend({
 </script>
 
 <style lang="scss">
-
 /* Landing Page */
 .newSessionCard {
   .landingPageCardButton {
