@@ -12,18 +12,24 @@
 <script lang="ts">
 import Vue from "vue";
 import Constants from "@/constants";
-
+import Member from "@/model/Member";
 export default Vue.extend({
   name: "SessionStartButton",
-  computed: {
-    members() {
-      return this.$store.state.members;
+  props: {
+    members: {
+      type: Array,
+      required: false,
+      default: () => [] as Array<Member>,
     },
+    hostVoting: { type: Boolean, required: true },
   },
   methods: {
     sendStartEstimationMessages() {
       const endPoint = Constants.webSocketStartPlanningRoute;
-      this.$store.commit("sendViaBackendWS", { endPoint });
+      this.$store.commit("sendViaBackendWS", {
+        endPoint,
+        data: this.hostVoting,
+      });
       this.$emit("clicked");
     },
   },
@@ -31,8 +37,7 @@ export default Vue.extend({
 </script>
 
 <style>
-
-#startButtonSessionPage{
+#startButtonSessionPage {
   background-color: var(--startButton);
   border-radius: 1rem;
   color: var(--text-primary-color);
@@ -45,7 +50,6 @@ export default Vue.extend({
   color: var(--text-primary-color);
 }
 
-
 #startButtonSessionPage:disabled {
   background-color: var(--preparePageInActiveTab);
   border-radius: 1rem;
@@ -57,5 +61,4 @@ export default Vue.extend({
   border-radius: 1rem;
   color: var(--text-primary-color);
 }
-
 </style>

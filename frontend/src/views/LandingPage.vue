@@ -31,9 +31,7 @@
         />
       </b-card-group>
     </b-container>
-    <AnalyticsDataComponent ref="dataComponent">
-
-    </AnalyticsDataComponent>
+    <AnalyticsDataComponent ref="dataComponent"> </AnalyticsDataComponent>
     <b-container class="py-5">
       <div class="parent py-5 px-5">
         <div class="background py-5"></div>
@@ -42,18 +40,12 @@
           <b-card-group deck class="py-5">
             <b-card class="pictureCard">
               <b-card-text>
-                <b-img
-                  :src="require(`@/assets/SetUpSession.png`)"
-                  class="landingPagePictures"
-                />
+                <b-img :src="require(`@/assets/SetUpSession.png`)" class="landingPagePictures" />
               </b-card-text>
             </b-card>
             <b-card class="pictureCard">
               <b-card-text>
-                <b-img
-                  :src="require(`@/assets/InviteYourTeam.png`)"
-                  class="landingPagePictures"
-                />
+                <b-img :src="require(`@/assets/InviteYourTeam.png`)" class="landingPagePictures" />
               </b-card-text>
             </b-card>
             <b-card class="pictureCard">
@@ -82,7 +74,7 @@
       <p>DIVENI was initially developed by students of HTWG Constance and is open source now.</p>
       <p>
         More information could be found in the
-        <a href="https://docs.diveni.io/" id="link">documentation</a>.
+        <a id="link" href="https://docs.diveni.io/">documentation</a>.
       </p>
     </b-container>
   </div>
@@ -140,6 +132,7 @@ export default Vue.extend({
             };
             sessionState: string;
             members: Array<string>;
+            hostVoting: string;
           };
           this.sessionWrapper = {session};
         } catch (e) {
@@ -168,6 +161,7 @@ export default Vue.extend({
           timerSecondsString: this.sessionWrapper.session.sessionConfig.timerSeconds.toString(),
           startNewSessionOnMountedString: this.startNewSessionOnMounted.toString(),
           userStoryMode: this.sessionWrapper.session.sessionConfig.userStoryMode,
+          hostVoting: this.sessionWrapper.session.hostVoting,
         },
       });
     },
@@ -176,7 +170,6 @@ export default Vue.extend({
 </script>
 
 <style scoped>
-
 #link {
   color: var(--linkColor);
 }
@@ -204,7 +197,7 @@ export default Vue.extend({
 }
 
 .card-title {
-  color: var(--text-primary-color)
+  color: var(--text-primary-color);
 }
 
 .parent {
@@ -212,7 +205,6 @@ export default Vue.extend({
   height: 110%;
   width: 100%;
 }
-
 
 .background {
   position: absolute;

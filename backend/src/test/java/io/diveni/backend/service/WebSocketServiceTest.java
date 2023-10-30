@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Set;
 
 import io.diveni.backend.Utils;
+import io.diveni.backend.model.AdminVote;
 import io.diveni.backend.model.Member;
 import io.diveni.backend.model.MemberUpdate;
 import io.diveni.backend.model.Session;
@@ -172,6 +173,8 @@ public class WebSocketServiceTest {
             null,
             null,
             null,
+            null,
+            false,
             null);
 
     webSocketService.sendMembersUpdate(session);
@@ -200,6 +203,8 @@ public class WebSocketServiceTest {
             null,
             null,
             null,
+            null,
+            false,
             null);
 
     webSocketService.sendSessionStateToMember(session, defaultMemberPrincipal.getMemberID());
@@ -232,6 +237,8 @@ public class WebSocketServiceTest {
             null,
             null,
             null,
+            null,
+            false,
             null);
 
     webSocketService.sendSessionStateToMembers(session);
@@ -269,6 +276,8 @@ public class WebSocketServiceTest {
             null,
             null,
             null,
+            null,
+            false,
             null);
 
     webSocketService.sendUpdatedUserStoriesToMembers(session);
@@ -308,6 +317,8 @@ public class WebSocketServiceTest {
             null,
             null,
             null,
+            null,
+            false,
             null);
 
     webSocketService.sendSelectedUserStoryToMembers(session, selectedUserStoryIndex);
@@ -340,6 +351,8 @@ public class WebSocketServiceTest {
             null,
             null,
             null,
+            null,
+            false,
             null);
     val notification = new Notification(NotificationType.ADMIN_LEFT, null);
 
@@ -369,10 +382,72 @@ public class WebSocketServiceTest {
             null,
             null,
             null,
+            null,
+            false,
             null);
 
     webSocketService.removeSession(session);
 
     assertTrue(webSocketService.getSessionPrincipalList().isEmpty());
+  }
+
+  @Test
+  public void sendMembersHostVoting_sendsHostVotingUpdate() throws Exception {
+    setDefaultAdminPrincipal(Set.of(defaultMemberPrincipal));
+    val session =
+        new Session(
+            new ObjectId(),
+            defaultAdminPrincipal.getSessionID(),
+            defaultAdminPrincipal.getAdminID(),
+            null,
+            null,
+            List.of(new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null)),
+            new HashMap<>(),
+            new ArrayList<>(),
+            null,
+            null,
+            null,
+            null,
+            null,
+            false,
+            null);
+
+    webSocketService.sendMembersHostVoting(session);
+
+    verify(simpMessagingTemplateMock, times(1))
+        .convertAndSendToUser(
+            defaultMemberPrincipal.getMemberID(),
+            WebSocketService.MEMBER_UPDATES_HOSTVOTING,
+            session.getHostVoting());
+  }
+
+  @Test
+  public void sendMembersHostEstimation_sendsHostEstimationUpdate() throws Exception {
+    setDefaultAdminPrincipal(Set.of(defaultMemberPrincipal));
+    val session =
+        new Session(
+            new ObjectId(),
+            defaultAdminPrincipal.getSessionID(),
+            defaultAdminPrincipal.getAdminID(),
+            null,
+            null,
+            List.of(new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null)),
+            new HashMap<>(),
+            new ArrayList<>(),
+            null,
+            null,
+            null,
+            null,
+            null,
+            false,
+            new AdminVote("XL"));
+
+    webSocketService.sendMembersAdminVote(session);
+
+    verify(simpMessagingTemplateMock, times(1))
+        .convertAndSendToUser(
+            defaultMemberPrincipal.getMemberID(),
+            WebSocketService.ADMIN_UPDATED_ESTIMATION,
+            session.getHostEstimation());
   }
 }

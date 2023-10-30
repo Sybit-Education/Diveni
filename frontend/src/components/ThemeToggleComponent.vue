@@ -1,18 +1,10 @@
 <template>
   <div>
-    <input
-      @change="toggleTheme"
-      id="checkbox"
-      type="checkbox"
-      class="switch-checkbox"
-    />
+    <input id="checkbox" type="checkbox" class="switch-checkbox" @change="toggleTheme" />
     <label for="checkbox" class="switch-label">
       <span>🌙</span>
       <span>☀️</span>
-      <div
-        class="switch-toggle"
-        :class="{ 'switch-toggle-checked': userTheme === 'dark-theme' }"
-      />
+      <div class="switch-toggle" :class="{ 'switch-toggle-checked': userTheme === 'dark-theme' }" />
     </label>
   </div>
 </template>
@@ -23,12 +15,14 @@ export default Vue.extend({
   name: "ThemeToggleComponent",
   data() {
     return {
-      userTheme: "light-theme"
-    }
+      userTheme: "light-theme",
+    };
   },
   created() {
     if (localStorage.getItem("user-theme")) {
       this.setTheme(localStorage.getItem("user-theme"));
+    } else {
+      this.setTheme(this.userTheme);
     }
   },
   methods: {
@@ -44,13 +38,15 @@ export default Vue.extend({
       localStorage.setItem("user-theme", theme);
       this.userTheme = theme;
       document.documentElement.className = theme;
-      window.dispatchEvent(new CustomEvent('user-theme-localstorage-changed', {
-        detail: {
-          storage: localStorage.getItem('user-theme')
-        }
-      }));
+      window.dispatchEvent(
+        new CustomEvent("user-theme-localstorage-changed", {
+          detail: {
+            storage: localStorage.getItem("user-theme"),
+          },
+        })
+      );
     },
-  }
+  },
 });
 </script>
 
