@@ -4,65 +4,65 @@
     <b-card-group deck>
       <b-card class="statsCards">
         <b-card-title class="title">
-          {{ $t('page.landing.meeting.analytics.allCreatedSessionsTitle') }}
+          {{ $t("page.landing.meeting.analytics.allCreatedSessionsTitle") }}
         </b-card-title>
         <div class="line"></div>
         <b-card-text>
           <h2 class="numbers">{{ tweenedOverAllSessions.toFixed(0) }}</h2>
-          <div style="text-align: center;">
+          <div style="text-align: center">
             {{ allSessions }}
           </div>
-          <br/>
+          <br />
           <h2 class="numbers">{{ tweenedOverAllAttendees.toFixed(0) }}</h2>
-          <div style="text-align: center;">
+          <div style="text-align: center">
             {{ allAttendees }}
           </div>
         </b-card-text>
       </b-card>
       <b-card class="statsCards">
         <b-card-title class="title">
-          {{ $t('page.landing.meeting.analytics.lastMonthTitle') }}
+          {{ $t("page.landing.meeting.analytics.lastMonthTitle") }}
         </b-card-title>
         <div class="line"></div>
         <b-card-text>
           <h2 class="numbers">
             {{ tweenedOverAllSessionsFromLastMonth.toFixed(0) }}
           </h2>
-          <div style="text-align: center;">
+          <div style="text-align: center">
             {{ allSessions }}
           </div>
-          <br>
+          <br />
           <h2 class="numbers">
             {{ tweenedOverAllAttendeesFromLastMonth.toFixed(0) }}
           </h2>
-          <div style="text-align: center;">
+          <div style="text-align: center">
             {{ allAttendees }}
           </div>
         </b-card-text>
       </b-card>
       <b-card class="statsCards">
         <b-card-title class="title">
-          {{ $t('page.landing.meeting.analytics.activeTitle') }}
+          {{ $t("page.landing.meeting.analytics.activeTitle") }}
         </b-card-title>
         <div class="line"></div>
         <b-card-text>
           <h2 class="numbers">
             {{ tweenedCurrentSessions.toFixed(0) }}
           </h2>
-          <div style="text-align: center;">
+          <div style="text-align: center">
             {{ allSessions }}
           </div>
-          <br/>
+          <br />
           <h2 class="numbers">
             {{ tweendCurrentAttendees.toFixed(0) }}
           </h2>
-          <div style="text-align: center;">
+          <div style="text-align: center">
             {{ allAttendees }}
           </div>
         </b-card-text>
       </b-card>
     </b-card-group>
-    <br/>
+    <br />
   </b-container>
 </template>
 <script lang="ts">
@@ -155,15 +155,12 @@ export default Vue.extend({
   text-align: center;
   border-radius: 2rem;
   background-color: var(--landingPageCardsBackground);
-
 }
-
 
 .line {
   background-color: rgba(0, 0, 0, 0.125);
   height: 1px;
   margin: 10px -20px;
-
 }
 
 .title {
@@ -171,7 +168,6 @@ export default Vue.extend({
   align-items: center;
   justify-content: center;
   display: flex;
-
 }
 
 @media (min-width: 768px) {
