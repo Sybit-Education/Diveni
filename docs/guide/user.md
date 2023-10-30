@@ -59,9 +59,15 @@ User Stories once you've started the session.
 
   ![step3_Adjust_time](../img/adjust_time.png)
 
+- In the fourth row, you can choose if you want to let the host vote aswell on the userstories. You can easily
+  change this value by clicking on one of these buttons. If you dont click any button the option to vote on the
+  userstories is disabled for the host. But you can also change this later on.
+
+  ![step4_Choose_host_voting](../img/host_voting_option_preparePage.png)
+
 - To finish the setting, you can secure your session by an optional password.
 
-  ![step4_Choose_password](../img/Choose_password.png)
+  ![step5_Choose_password](../img/Choose_password.png)
 
 - Finalize by clicking „Start Session“ on the bottom of the page.
 - You get a code that the other members who want to join need.
@@ -106,6 +112,11 @@ cards once you've started the session.
 ## Invite Team Members
 
 ## Start Session
+
+Once everybody of your team has joined your session, you can start the session. While you are waiting for your team members to join, you can change some settings for your session.
+
+  - The admin of the session can vote
+    - As the admin of the session you can choose to vote as well or to only let your members vote on the userstories.
 
 ## Start voting of User Story
 

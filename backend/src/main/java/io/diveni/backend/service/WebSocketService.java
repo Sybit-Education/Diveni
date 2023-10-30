@@ -39,6 +39,10 @@ public class WebSocketService {
 
   public static String US_UPDATES_DESTINATION = "/updates/userStories";
 
+  public static String MEMBER_UPDATES_HOSTVOTING = "/updates/hostVoting";
+
+  public static String ADMIN_UPDATED_ESTIMATION = "/updates/hostEstimation";
+
   public static String NOTIFICATIONS_DESTINATION = "/updates/notifications";
 
   public static String START_TIMER_DESTINATION = "/updates/startTimer";
@@ -146,6 +150,24 @@ public class WebSocketService {
     LOGGER.debug("<-- setAdminUser()");
   }
 
+  public void sendMembersHostVoting(Session session) {
+    LOGGER.debug("--> sendMembersHostVoting(), sessionID={}", session.getSessionID());
+    getSessionPrincipals(session.getSessionID())
+        .memberPrincipals()
+        .forEach(member -> sendUpdatedHostVotingToMember(session, member.getMemberID()));
+    LOGGER.debug("<-- sendMembersHostVoting()");
+  }
+
+  public void sendUpdatedHostVotingToMember(Session session, String memberID) {
+    LOGGER.debug(
+        "--> sendUpdatedHostVotingToMember(), sessionID={}, memberID={}",
+        session.getSessionID(),
+        memberID);
+    simpMessagingTemplate.convertAndSendToUser(
+        memberID, MEMBER_UPDATES_HOSTVOTING, session.getHostVoting());
+    LOGGER.debug("<-- sendUpdatedHostVotingToMember()");
+  }
+
   public void sendMembersUpdate(Session session) {
     LOGGER.debug("--> sendMembersUpdate(), sessionID={}", session.getSessionID());
     val sessionPrincipals = getSessionPrincipals(session.getSessionID());
@@ -170,6 +192,17 @@ public class WebSocketService {
                     MEMBERS_UPDATED_DESTINATION,
                     new MemberUpdate(session.getMembers(), session.getCurrentHighlights())));
     LOGGER.debug("<-- sendMembersUpdateToMembers()");
+  }
+
+  public void sendMembersAdminVote(Session session) {
+    LOGGER.debug("--> sendMembersAdminVote(), sessionID={}", session.getSessionID());
+    getSessionPrincipals(session.getSessionID())
+        .memberPrincipals()
+        .forEach(
+            member ->
+                simpMessagingTemplate.convertAndSendToUser(
+                    member.getMemberID(), ADMIN_UPDATED_ESTIMATION, session.getHostEstimation()));
+    LOGGER.debug("<-- sendMembersAdminVote()");
   }
 
   public void sendSessionStateToMembers(Session session) {

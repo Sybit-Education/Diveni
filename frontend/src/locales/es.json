@@ -252,6 +252,11 @@
           "time": {
             "title": "Ajuste el tiempo por estimación"
           },
+          "hostVoting": {
+            "title": "Should the host vote as well",
+            "hostVotingOn": "Yes",
+            "hostVotingOff": "No"
+          },
           "password": {
             "title": "Elija una contraseña si es necesario",
             "placeholder": "Contraseña (dejar vacío para la sesión sin protección)"
