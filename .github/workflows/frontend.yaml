@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
 
 env:
-  NODE_VERSION: 14
+  NODE_VERSION: 16
 
 jobs:
   lint:
@@ -25,9 +25,14 @@ jobs:
       - name: Install Node.js dependencies
         working-directory: frontend
         run: npm ci
-      - name: Run ESLint
+      - name: Run ESLint fix
+        if: github.event.pull_request.head.repo.full_name == github.repository
         working-directory: frontend
         run: npm run lint:fix
+      - name: Run ESLint on forked project without fix
+        if: github.event.pull_request.head.repo.full_name != github.repository
+        working-directory: frontend
+        run: npm run lint
 
   build:
     name: Build
@@ -46,6 +51,7 @@ jobs:
         working-directory: frontend
         run: npm run build
       - name: Upload artifacts
+        if: github.event.pull_request.head.repo.full_name == github.repository
         uses: actions/upload-artifact@v2
         with:
           name: frontend
