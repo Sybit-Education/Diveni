@@ -23,7 +23,11 @@
       @hidden="resetModal"
       @ok="handleOk"
     >
-      <p id="description">{{ $t("session.prepare.step.selection.mode.description.withIssueTracker.dialog.description") }}</p>
+      <p id="description">
+        {{
+          $t("session.prepare.step.selection.mode.description.withIssueTracker.dialog.description")
+        }}
+      </p>
       <form ref="form" @submit.stop.prevent="handleSubmit">
         <b-form-group
           label="Verification code"
@@ -125,7 +129,6 @@ export default Vue.extend({
 </script>
 
 <style scoped>
-
 #description {
   color: black;
 }
@@ -139,5 +142,4 @@ export default Vue.extend({
   background-color: var(--startButtonHovered);
   color: var(--text-primary-color);
 }
-
 </style>

@@ -50,12 +50,12 @@
         </div>
         <div v-if="!editDescription">
           <b-form-textarea
-          id="textarea-auto-height-plaintext"
-          plaintext
-          :value=userStories[idx].description
-          class="py-2 description-text-area"
-          rows="15"
-          size="m"
+            id="textarea-auto-height-plaintext"
+            class="py-2 description-text-area"
+            plaintext
+            :value="userStories[idx].description"
+            rows="15"
+            size="m"
           />
         </div>
       </b-list-group-item>
@@ -122,7 +122,7 @@ export default Vue.extend({
     }>;
   },
   methods: {
-    valueChanged(idx, {markdown}) {
+    valueChanged(idx, { markdown }) {
       this.userStories[idx].description = markdown;
       this.publishChanges(idx);
     },
@@ -158,7 +158,6 @@ export default Vue.extend({
 </script>
 
 <style scoped>
-
 .description-box {
   background: transparent;
   padding: 0;
@@ -172,13 +171,13 @@ export default Vue.extend({
 .form-control {
   background-color: var(--textAreaColour);
   color: var(--text-primary-color);
-  border:none;
+  border: none;
 }
 
 .form-control:disabled {
   background-color: var(--textAreaColour);
   color: var(--text-primary-color);
-  border:none;
+  border: none;
 }
 
 .form-control:focus {

@@ -4,42 +4,42 @@
   --blurredColour2: rgba(0, 0, 0, 0.219);
   --blurredColour3: rgba(216, 125, 6, 0);
   --blurredColour4: rgba(17, 9, 0, 0);
-  
+
   /* Bottom */
   --blurredColour5: rgba(6, 1, 8, 0.24);
   --blurredColour6: rgba(80, 80, 80, 0.219);
-  
+
   /*other basic stuff*/
   --accent-color: #cacaca;
   --text-primary-color: #222;
   --element-size: 6rem;
   --buttonShape: 1rem;
   --linkColor: #254bb3;
-  
+  --feedbackButtonBackground: black;
+
   /*Landing Page*/
   --startButton: #946234e0;
   --startButtonHovered: #9c5b1d;
-  --joinButton: #658462; 
+  --joinButton: #658462;
   --joinButtonHovered: #4d8a47;
-  --reconnectButton: #822E1C;
+  --reconnectButton: #822e1c;
   --reconnectButtonHovered: #9e2e15;
   --pictureGradientEnd: rgba(19, 44, 20, 0.5);
   --landingPageCardsBackground: #e4e4e4;
   --blurBackGroundColor: rgba(80, 80, 80, 0.219);
   /*Prepare page*/
-  --preparePageMainColor:#946234;
+  --preparePageMainColor: #946234;
   --preparePageInActiveTab: #ffffff;
-  --preparePageInActiveTabHover: #718A6F91;
+  --preparePageInActiveTabHover: #718a6f91;
   --preparePageBorderTab: grey;
   --preparePageImportUserStoriesButton: #30a858;
   --preparePageActiveCardSet: black;
   --preparePageInActiveCardSet: #e27712;
-  --preparePageTimerBackground: #974F0D3D;
+  --preparePageTimerBackground: #974f0d3d;
 
   /*Session Page*/
   --textAreaColour: #c3c7bd;
   --textAreaColourHovered: #c3c7bdb6;
-
 
   /*other Stuff*/
   --topNavigationBarColor: rgba(200, 200, 200, 0.75);
@@ -63,11 +63,12 @@
   --accent-color: rgba(34, 34, 34, 0.863);
   --text-primary-color: #ffffff;
   --linkColor: #00ffdd;
+  --feedbackButtonBackground: #658462;
 
   /*Landing Page*/
-  --startButton: #13276D;
+  --startButton: #13276d;
   --startButtonHovered: #13266dc9;
-  --joinButton: #42104B;
+  --joinButton: #42104b;
   --joinButtonHovered: #42104bb4;
   --reconnectButton: #033347;
   --reconnectButtonHovered: #033347bd;
@@ -77,16 +78,16 @@
 
   /*Prepare Page*/
 
-  --preparePageMainColor:#13276D;
+  --preparePageMainColor: #13276d;
   --preparePageInActiveTab: #666565;
-  --preparePageInActiveTabHover: #42104B;
+  --preparePageInActiveTabHover: #42104b;
   --preparePageBorderTab: white;
   --preparePageImportUserStoriesButton: #7e5a0c;
   --preparePageActiveCardSet: white;
   --preparePageInActiveCardSet: #e27712;
-  --preparePageTimerBackground: #7EBCC98A; 
+  --preparePageTimerBackground: #7ebcc98a;
   /*Session Page*/
-  --textAreaColour: #A8E8F65C;
+  --textAreaColour: #a8e8f65c;
   --textAreaColourHovered: #a8e8f6b9;
 
   /*other Stuff*/
