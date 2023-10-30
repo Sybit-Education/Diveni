@@ -397,8 +397,6 @@ export default Vue.extend({
   }
 }
 
-
-
 .importUserStoryButton {
   background-color: var(--preparePageMainColor);
   color: var(--text-primary-color);
