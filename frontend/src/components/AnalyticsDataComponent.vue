@@ -152,12 +152,12 @@ export default Vue.extend({
 </script>
 <style scoped>
 .statsCards {
+  text-align: center;
   border-radius: 2rem;
   background-color: var(--landingPageCardsBackground);
+
 }
-.numbers {
-  text-align: center;
-}
+
 
 .line {
   background-color: rgba(0, 0, 0, 0.125);
@@ -167,11 +167,11 @@ export default Vue.extend({
 }
 
 .title {
-  text-align: center;
   height: 60px;
   align-items: center;
-  display: flex;
   justify-content: center;
+  display: flex;
+
 }
 
 @media (min-width: 768px) {
