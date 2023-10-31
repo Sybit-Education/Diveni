@@ -104,24 +104,16 @@
       <b-img v-else :src="require('@/assets/preparePage/P4D.png')" class="numberPictures" />
       {{ $t("session.prepare.step.selection.hostVoting.title") }}
     </h4>
-    <b-row class="mt-3 text-center">
+    <b-row class="mt-3">
       <b-col>
-        <b-button
-          class="hostVotingButtons"
-          :class="{ active: hostVoting }"
-          @click="hostVoting = true"
-        >
-          {{ $t("session.prepare.step.selection.hostVoting.hostVotingOn") }}
-        </b-button>
-      </b-col>
-      <b-col>
-        <b-button
-          class="hostVotingButtons"
-          :class="{ active: !hostVoting }"
-          @click="hostVoting = false"
-        >
-          {{ $t("session.prepare.step.selection.hostVoting.hostVotingOff") }}
-        </b-button>
+        <b-form-radio-group v-model="hostVoting" buttons>
+          <b-form-radio :value="true">
+            {{ $t("session.prepare.step.selection.hostVoting.hostVotingOn") }}
+          </b-form-radio>
+          <b-form-radio :value="false">
+            {{ $t("session.prepare.step.selection.hostVoting.hostVotingOff") }}
+          </b-form-radio>
+        </b-form-radio-group>
       </b-col>
     </b-row>
     <h4 class="mt-3">
@@ -397,8 +389,63 @@ export default Vue.extend({
   }
 }
 
+.importUserStoryButton {
+  background-color: var(--preparePageMainColor);
+  color: var(--text-primary-color);
+}
 
+.importUserStoryButton:hover {
+  background-color: var(--startButtonHovered);
+  color: var(--text-primary-color);
+}
 
+.importUserStoryButton:focus {
+  background-color: var(--startButtonHovered) !important;
+  color: var(--text-primary-color) !important;
+}
+
+.hostVotingButtons {
+  color: var(--text-primary-color);
+  border-color: var(--text-primary-color);
+  background-color: transparent;
+  font-size: large;
+  width: 68px;
+  text-align: center;
+}
+
+.hostVotingButtons:hover {
+  color: var(--text-primary-color) !important;
+  border-color: var(--text-primary-color);
+  background-color: var(--preparePageInActiveTabHover);
+}
+.hostVotingButtons:focus {
+  color: var(--text-primary-color);
+  border-color: var(--text-primary-color);
+  background-color: transparent !important;
+  outline: none;
+  box-shadow: none;
+}
+
+.optionButtons {
+  color: var(--text-primary-color);
+  border-color: var(--text-primary-color);
+  background-color: transparent;
+  font-size: xx-large;
+  width: 47.5px;
+}
+
+.optionButtons:hover {
+  color: var(--text-primary-color) !important;
+  border-color: var(--text-primary-color);
+  background-color: var(--preparePageInActiveTabHover);
+}
+.optionButtons:focus {
+  color: var(--text-primary-color);
+  border-color: var(--text-primary-color);
+  background-color: transparent !important;
+  outline: none;
+  box-shadow: none;
+}
 
 .startingButton {
   background-color: var(--primary-button);
