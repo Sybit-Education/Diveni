@@ -34,6 +34,11 @@
     background: rgba(0, 0, 0, 0);
 }
 
+body {
+  background-color: var(--background-color-primary);
+  color: var(--text-primary-color);
+}
+
 a {
   color: var(--link-color);
 }
@@ -116,8 +121,13 @@ a {
 }
 
 .card {
-    background-color: var(--background-color-primary);
-    .card-subtitle {
-        color: var(--text-primary-color);
-    }
+  background-color: var(--background-color-primary);
+  .card-subtitle {
+    color: var(--text-primary-color);
+  }
+}
+
+.modal-content {
+  background-color: var(--background-color-primary);
+  color: var(--text-primary-color);
 }
