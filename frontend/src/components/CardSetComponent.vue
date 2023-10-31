@@ -4,14 +4,14 @@
       <b-col
         v-for="item of userStoryMode === jiraTag ? allCardSetsWithJiraMode : allCardSets"
         :key="item.position"
-        class="swipe-card m-2"
+        class="card m-2"
         :class="getClasses(item)"
         @click="onCardSetSelected(item)"
       >
-        <div id="text">
+        <div class="card-title">
           {{ item.name }}
         </div>
-        <div id="cardDescription">
+        <div class="card-description">
           {{ item.description }}
           <div v-if="item.values.length === 0">
             <span id="createSetHint">
@@ -35,13 +35,13 @@
       </b-col>
     </b-row>
     <b-row v-if="selectedCardSet.name !== ''">
-      <div v-if="selectedCardSet.values.length !== 0" class="text-center mt-3 pillPosition">
+      <div v-if="selectedCardSet.values.length !== 0" class="text-center mt-3 pill-group">
         <b-button
           v-for="item in selectedCardSet.values"
           :key="item"
           :class="isActiveCardSetNumber(item)"
           pill
-          class="pills"
+          class="pill m-2"
           @click="
             onCardSetNumberSelected(item);
             $event.target.blur();
@@ -50,7 +50,7 @@
           {{ item }}
         </b-button>
       </div>
-      <b-row v-else class="mt-3 d-flex px-5 pillPosition">
+      <b-row v-else class="mt-3 pill-group">
         <b-col sm="6">
           <b-form-input
             v-model="createSetInput"
@@ -62,7 +62,7 @@
             v-for="item in selectedCardSet.activeValues"
             :key="item"
             :class="isActiveCardSetNumber(item)"
-            class="pills"
+            class="pill"
             pill
           >
             {{ item }}
@@ -176,9 +176,7 @@ export default Vue.extend({
   },
   methods: {
     isActiveCardSetNumber(num) {
-      return this.selectedCardSet.activeValues.includes(num)
-        ? "activePills m-1"
-        : "outline-secondary inActivePills m-1";
+      return this.selectedCardSet.activeValues.includes(num) ? "active" : "outline-secondary";
     },
     onCardSetSelected(set) {
       this.selectedCardSet = set;
@@ -204,7 +202,7 @@ export default Vue.extend({
       return `${this.getCardActiveClass(item)} ${this.getPictureClass(item)}`;
     },
     getCardActiveClass(item) {
-      return this.selectedCardSet.name === item.name ? "selectedCard" : "inActiveCard";
+      return this.selectedCardSet.name === item.name ? "selected" : "";
     },
     getPictureClass(item) {
       if (this.userStoryMode !== this.jiraTag) {
@@ -227,7 +225,7 @@ export default Vue.extend({
 
 <style lang="scss" scoped>
 @import "@/assets/style/variables.scss";
-.swipe-card {
+.card {
   width: 224px;
   height: 300px;
   justify-content: flex-start;
@@ -235,205 +233,108 @@ export default Vue.extend({
   display: flex;
   flex-direction: column;
   cursor: pointer;
-
-  .selectedCard {
-    border-color: var(--preparePageActiveCardSet);
-    border-style: solid;
-    border-radius: $border-radius;
-  }
-}
-
-
-
-.inActiveCard:hover {
-  border-width: large;
-  border-color: var(--preparePageInActiveCardSet);
-  border-style: solid;
   border-radius: $border-radius;
+  box-shadow: 10px 10px 5px var(--accent-color);
+
+  &:hover {
+    border-width: 3px;
+    border-color: var(--preparePageInActiveCardSet);
+    border-style: solid;
+  }
+  &.selected {
+    border-width: 3px;
+    border-color: var(--primary-button);
+    border-style: solid;
+  }
+
+  .card-title {
+    font-size: 22px;
+    font-weight: 500;
+    padding-top: 16px;
+    text-align: center;
+  }
+
+  .card-description {
+    padding: 16px;
+    text-align: center;
+  }
 }
 
 .light1 {
   background-image: url("@/assets/preparePage/Fibonacci-LightMode.png");
   background-size: cover;
-  border-radius: $border-radius;
-  box-shadow: 10px 10px 5px #ccc;
 }
 
 .light2 {
   background-image: url("@/assets/preparePage/TShirt-LightMode.png");
   background-size: cover;
-  border-radius: $border-radius;
-  box-shadow: 10px 10px 5px #ccc;
 }
 
 .light3 {
   background-image: url("@/assets/preparePage/Hour-LightMode.png");
   background-size: cover;
-  border-radius: $border-radius;
-  box-shadow: 10px 10px 5px #ccc;
 }
 
 .light4 {
   background-image: url("@/assets/preparePage/Numbers-LightMode.png");
   background-size: cover;
-  border-radius: $border-radius;
-  box-shadow: 10px 10px 5px #ccc;
 }
 
 .light5 {
   background-image: url("@/assets/preparePage/OwnSet-LightMode.png");
   background-size: cover;
-  border-radius: $border-radius;
-  box-shadow: 10px 10px 5px #ccc;
 }
 
 .dark1 {
-  width: 226px;
-  height: 303px;
-  display: block;
-  position: relative;
-}
-
-.dark1::after {
   background-image: url("@/assets/preparePage/Fibonacci-DarkMode.png");
   background-size: cover;
-  content: "";
-  opacity: 0.45;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  position: absolute;
-  z-index: -1;
-  border-radius: $border-radius;
 }
 
 .dark2 {
-  width: 226px;
-  height: 303px;
-  display: block;
-  position: relative;
-}
-
-.dark2::after {
   background-image: url("@/assets/preparePage/TShirt-DarkMode.png");
   background-size: cover;
-  content: "";
-  opacity: 0.45;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  position: absolute;
-  z-index: -1;
-  border-radius: $border-radius;
 }
 
 .dark3 {
-  width: 226px;
-  height: 303px;
-  display: block;
-  position: relative;
-}
-
-.dark3::after {
   background-image: url("@/assets/preparePage/Hour-DarkMode.png");
   background-size: cover;
-  content: "";
-  opacity: 0.45;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  position: absolute;
-  z-index: -1;
-  border-radius: $border-radius;
 }
 
 .dark4 {
-  width: 226px;
-  height: 303px;
-  display: block;
-  position: relative;
-}
-
-.dark4::after {
   background-image: url("@/assets/preparePage/Numbers-DarkMode.png");
   background-size: cover;
-  content: "";
-  opacity: 0.45;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  position: absolute;
-  z-index: -1;
-  border-radius: $border-radius;
 }
 
 .dark5 {
-  width: 226px;
-  height: 303px;
-  display: block;
-  position: relative;
-}
-
-.dark5::after {
   background-image: url("@/assets/preparePage/OwnSet-DarkMode.png");
   background-size: cover;
-  content: "";
-  opacity: 0.45;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  position: absolute;
-  z-index: -1;
-  border-radius: $border-radius;
-}
-
-#text {
-  font-size: 22px;
-  font-weight: 500;
-  padding-top: 16px;
-  text-align: center;
-}
-
-#cardDescription {
-  padding: 16px;
-  text-align: center;
 }
 
 #popUp {
   background-color: var(--landingPageCardsBackground);
 }
 
-.pills {
-  width: 60px;
-}
-
-.activePills {
-  background-color: var(--preparePageMainColor);
-  color: var(--text-primary-color);
-}
-
-.activePills:hover {
-  background-color: var(--preparePageInActiveTabHover);
-  color: var(--text-primary-color);
-}
-
-.activePills:focus {
-  background-color: var(--preparePageInActiveTabHover);
-  color: var(--text-primary-color);
-}
-
-.inActivePills:focus {
-  background-color: grey !important;
-  color: var(--text-primary-color);
-}
-
-.pillPosition {
+.pill-group {
   margin-left: auto;
   margin-right: auto;
+
+  .pill {
+    width: 4rem;
+
+    .active {
+      background-color: var(--preparePageMainColor);
+      color: var(--text-primary-color);
+    }
+
+    .active:hover {
+      background-color: var(--preparePageInActiveTabHover);
+      color: var(--text-primary-color);
+    }
+
+    .active:focus {
+      background-color: var(--preparePageInActiveTabHover);
+      color: var(--text-primary-color);
+    }
+  }
 }
 </style>

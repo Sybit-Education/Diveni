@@ -121,15 +121,11 @@
     </h4>
     <b-row class="mt-3">
       <b-col>
-        <b-form>
-          <b-form-group label-for="input-password">
-            <b-form-input
-              id="input-password"
-              v-model="password"
-              :placeholder="$t('session.prepare.step.selection.password.placeholder')"
-            />
-          </b-form-group>
-        </b-form>
+        <b-form-input
+          id="input-password"
+          v-model="password"
+          :placeholder="$t('session.prepare.step.selection.password.placeholder')"
+        />
       </b-col>
     </b-row>
     <b-button
@@ -347,7 +343,7 @@ export default Vue.extend({
 
 /* Prepare Page */
 .selectedTab {
-  background-color: var(--preparePageMainColor) !important;
+  background-color: var(--primary-button);
 }
 
 .selectedTextColor {
@@ -387,21 +383,6 @@ export default Vue.extend({
     flex: content;
     width: 5rem;
   }
-}
-
-.importUserStoryButton {
-  background-color: var(--preparePageMainColor);
-  color: var(--text-primary-color);
-}
-
-.importUserStoryButton:hover {
-  background-color: var(--startButtonHovered);
-  color: var(--text-primary-color);
-}
-
-.importUserStoryButton:focus {
-  background-color: var(--startButtonHovered) !important;
-  color: var(--text-primary-color) !important;
 }
 
 .hostVotingButtons {
