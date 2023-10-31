@@ -58,7 +58,7 @@ export default Vue.extend({
 }
 
 #button:hover {
-  background-color: var(--startButtonHovered);
+  background-color: var(--primary-button-hovered);
   color: var(--text-primary-color);
 }
 </style>

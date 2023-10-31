@@ -42,7 +42,7 @@ import io.diveni.backend.service.projectmanagementproviders.ProjectManagementPro
 import lombok.Getter;
 import lombok.val;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 
 @Service
 public class JiraServerService implements ProjectManagementProviderOAuth1 {

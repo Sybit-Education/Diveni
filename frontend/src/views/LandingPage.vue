@@ -99,7 +99,7 @@
       <p>DIVENI was initially developed by students of HTWG Constance and is open source now.</p>
       <p>
         More information could be found in the
-        <a id="link" href="https://docs.diveni.io/">documentation</a>.
+        <a href="https://docs.diveni.io/">documentation</a>.
       </p>
     </b-container>
   </div>
@@ -193,13 +193,35 @@ export default Vue.extend({
 });
 </script>
 
-<style scoped>
-#link {
-  color: var(--linkColor);
+<style lang="scss">
+.newSessionCard {
+  .landingPageCardButton {
+    background-color: var(--primary-button);
+    color: var(--text-primary-color);
+  }
+  .card-footer {
+    background-color: #52173100; /* So the Footer does not overflow */
+  }
 }
 
-.jumbotron {
-  background-color: rgba(255, 255, 255, 0.5);
+.joinSessionCard {
+  .landingPageCardButton {
+    background-color: var(--secondary-button);
+  }
+
+  .card-footer {
+    background-color: #52173100; /* So the Footer does not overflow */
+  }
+}
+
+.reconnectSessionCard {
+  .landingPageCardButton {
+    background-color: var(--reconnectButton);
+  }
+
+  .card-footer {
+    background-color: #52173100; /* So the Footer does not overflow */
+  }
 }
 
 .teaser {

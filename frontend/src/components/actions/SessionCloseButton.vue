@@ -87,7 +87,6 @@ export default Vue.extend({
   left: 13.5%;
   bottom: 28%;
   white-space: nowrap;
-  border-radius: var(--buttonShape);
   max-height: 40px;
 }
 
@@ -111,7 +110,6 @@ export default Vue.extend({
   position: absolute !important;
   text-align: left;
   max-height: 40px;
-  border-radius: var(--buttonShape);
   bottom: 0px;
   white-space: nowrap;
 }

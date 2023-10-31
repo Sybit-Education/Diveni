@@ -1,3 +1,9 @@
+/* all variables, see node_modules/bootstrap/scss/_variables.scss */
+
+$border-radius:               0.8rem !default;
+$border-radius-lg:            0.9rem !default;
+$border-radius-sm:            1rem !default;
+
 :root {
   --background-color-primary: #e2e2e2;
   --blurredColour1: #94623400;
@@ -13,15 +19,14 @@
   --accent-color: #cacaca;
   --text-primary-color: #222;
   --element-size: 6rem;
-  --buttonShape: 1rem;
-  --linkColor: #254bb3;
+  --link-color: #254bb3;
   --feedbackButtonBackground: black;
 
   /*Landing Page*/
-  --startButton: #946234e0;
-  --startButtonHovered: #9c5b1d;
-  --joinButton: #658462;
-  --joinButtonHovered: #4d8a47;
+  --primary-button: #946234e0;
+  --primary-button-hovered: #9c5b1d;
+  --secondary-button: #658462;
+  --secondary-button-hovered: #4d8a47;
   --reconnectButton: #822e1c;
   --reconnectButtonHovered: #9e2e15;
   --pictureGradientEnd: rgba(19, 44, 20, 0.5);
@@ -47,7 +52,7 @@
 }
 
 /* Define styles for the root window with dark - mode preference */
-:root.dark-theme {
+:root.dark {
   /*Background Colors*/
   --background-color-primary: #010617;
   --blurredColour1: rgba(76, 134, 185, 0.219);
@@ -62,14 +67,14 @@
   /*other basic stuff*/
   --accent-color: rgba(34, 34, 34, 0.863);
   --text-primary-color: #ffffff;
-  --linkColor: #00ffdd;
+  --link-color: #00ffdd;
   --feedbackButtonBackground: #658462;
 
   /*Landing Page*/
-  --startButton: #13276d;
-  --startButtonHovered: #13266dc9;
-  --joinButton: #42104b;
-  --joinButtonHovered: #42104bb4;
+  --primary-button: #13276d;
+  --primary-button-hovered: #13266dc9;
+  --secondary-button: #42104b;
+  --secondary-button-hovered: #42104bb4;
   --reconnectButton: #033347;
   --reconnectButtonHovered: #033347bd;
   --landingPageCardsBackground: #525252;
