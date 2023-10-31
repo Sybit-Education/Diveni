@@ -164,27 +164,9 @@ export default Vue.extend({
 }
 /* The side navigation menu */
 
-.form-control {
-  background-color: var(--textAreaColour);
-  color: var(--text-primary-color);
-  border: none;
-}
-
-.form-control:disabled {
-  background-color: var(--textAreaColour);
-  color: var(--text-primary-color);
-  border: none;
-}
-
-.form-control:focus {
-  background-color: var(--textAreaColour);
+.description-text-area {
   color: var(--text-primary-color);
 }
-
-.form-control::placeholder {
-  color: var(--text-primary-color);
-}
-
 .sidenav {
   float: right;
   height: 100%; /* 100% Full-height */

@@ -74,7 +74,7 @@
       <p>DIVENI was initially developed by students of HTWG Constance and is open source now.</p>
       <p>
         More information could be found in the
-        <a id="link" href="https://docs.diveni.io/">documentation</a>.
+        <a href="https://docs.diveni.io/">documentation</a>.
       </p>
     </b-container>
   </div>
@@ -170,12 +170,9 @@ export default Vue.extend({
 </script>
 
 <style lang="scss">
-
-/* Landing Page */
 .newSessionCard {
   .landingPageCardButton {
-    background-color: var(--startButton);
-    border-radius: var(--buttonShape);
+    background-color: var(--primary-button);
     color: var(--text-primary-color);
   }
   .card-footer {
@@ -185,8 +182,7 @@ export default Vue.extend({
 
 .joinSessionCard {
   .landingPageCardButton {
-    background-color: var(--joinButton);
-    border-radius: var(--buttonShape);
+    background-color: var(--secondary-button);
   }
 
   .card-footer {
@@ -194,12 +190,14 @@ export default Vue.extend({
   }
 }
 
-#link {
-  color: var(--linkColor);
-}
+.reconnectSessionCard {
+  .landingPageCardButton {
+    background-color: var(--reconnectButton);
+  }
 
-.jumbotron {
-  background-color: rgba(255, 255, 255, 0.5);
+  .card-footer {
+    background-color: #52173100; /* So the Footer does not overflow */
+  }
 }
 
 .teaser {
