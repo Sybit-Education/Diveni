@@ -215,7 +215,6 @@ public class WebsocketController {
     JSONObject jsonObject = new JSONObject(message);
     String vote = jsonObject.getString("vote");
     boolean autoReveal = jsonObject.getBoolean("autoReveal");
-    System.out.println(message);
     val session =
         ControllerUtils.getSessionByMemberIDOrThrowResponse(databaseService, member.getMemberID())
             .updateEstimation(member.getMemberID(), vote);

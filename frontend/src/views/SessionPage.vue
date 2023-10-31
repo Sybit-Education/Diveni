@@ -183,7 +183,7 @@
         style="max-height: 500px"
       >
         <session-admin-card
-          v-if="(safedHostVoting && estimateFinished) || hostEstimation !== ''"
+          v-if="estimateFinished || hostEstimation !== ''"
           :current-estimation="hostEstimation"
           :estimate-finished="estimateFinished"
           :highlight="highlightedMembers.includes(adminID) || highlightedMembers.length === 0"
@@ -217,7 +217,7 @@
           }"
         />
         <session-admin-card
-          v-if="(safedHostVoting && estimateFinished) || hostEstimation !== ''"
+          v-if="estimateFinished || hostEstimation !== ''"
           :current-estimation="hostEstimation"
           :estimate-finished="estimateFinished"
           :highlight="highlightedMembers.includes(adminID) || highlightedMembers.length === 0"
@@ -388,7 +388,6 @@ export default Vue.extend({
       estimateFinished: false,
       session: {},
       hostEstimation: "",
-      safedHostVoting: false,
       autoReveal: false,
     };
   },
@@ -457,10 +456,11 @@ export default Vue.extend({
     },
     membersEstimated() {
       if (this.membersPending.length === 0 && this.membersEstimated.length > 0 && this.autoReveal) {
-        if (this.safedHostVoting && this.hostEstimation !== "") {
+        if (this.session_hostVoting && this.hostEstimation !== "") {
+          console.log("HIER?????");
           this.estimateFinished = true;
-        }
-        if (!this.safedHostVoting) {
+        } else if (!this.session_hostVoting) {
+          console.log("hier?");
           this.estimateFinished = true;
         }
       }
@@ -491,6 +491,7 @@ export default Vue.extend({
       this.planningStart = true;
     } else if (this.session_sessionState === Constants.memberUpdateCommandVotingFinished) {
       this.planningStart = true;
+      console.log("ON MOUNTED");
       this.estimateFinished = true;
     }
   },
@@ -569,6 +570,7 @@ export default Vue.extend({
         this.planningStart = true;
       }
       if (this.session_sessionState === Constants.memberUpdateCommandVotingFinished) {
+        console.log("ON HANDLE RELOAD");
         this.estimateFinished = true;
       }
       this.timerCountdownNumber = parseInt(this.session_timerSecondsString, 10);
@@ -713,6 +715,7 @@ export default Vue.extend({
     },
     sendVotingFinishedMessage() {
       if (!this.estimateFinished) {
+        console.log("SENDVOTINGFINISHEDMESSAGE");
         this.estimateFinished = true;
         const endPoint = `${Constants.webSocketVotingFinishedRoute}`;
         this.$store.commit("sendViaBackendWS", { endPoint });
@@ -721,7 +724,6 @@ export default Vue.extend({
     sendRestartMessage() {
       this.estimateFinished = false;
       this.hostEstimation = "";
-      this.safedHostVoting = this.session_hostVoting;
       const endPoint = Constants.webSocketRestartPlanningRoute;
       this.$store.commit("sendViaBackendWS", {
         endPoint,
