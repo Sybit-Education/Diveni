@@ -86,6 +86,21 @@ a {
   }
 }
 
+
+.btn-secondary:not(:disabled):not(.disabled),
+.show > .btn-secondary.dropdown-toggle {
+  background-color: var(--blurredColour2);
+}
+
+.btn-secondary:not(:disabled):not(.disabled):active,
+.btn-secondary:not(:disabled):not(.disabled).active,
+.show > .btn-secondary.dropdown-toggle {
+  background-color: var(--secondary-button);
+  border-color: var(--blurredColour2);
+  border-width: 3px;
+  font-weight: bolder;
+}
+
 .form-control {
   background-color: var(--textAreaColour);
   color: var(--text-primary-color);

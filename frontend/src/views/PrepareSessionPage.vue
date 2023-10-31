@@ -104,24 +104,16 @@
       <b-img v-else :src="require('@/assets/preparePage/P4D.png')" class="numberPictures" />
       {{ $t("session.prepare.step.selection.hostVoting.title") }}
     </h4>
-    <b-row class="mt-3 text-center">
+    <b-row class="mt-3">
       <b-col>
-        <b-button
-          class="hostVotingButtons"
-          :class="{ active: hostVoting }"
-          @click="hostVoting = true"
-        >
-          {{ $t("session.prepare.step.selection.hostVoting.hostVotingOn") }}
-        </b-button>
-      </b-col>
-      <b-col>
-        <b-button
-          class="hostVotingButtons"
-          :class="{ active: !hostVoting }"
-          @click="hostVoting = false"
-        >
-          {{ $t("session.prepare.step.selection.hostVoting.hostVotingOff") }}
-        </b-button>
+        <b-form-radio-group v-model="hostVoting" buttons>
+          <b-form-radio :value="true">
+            {{ $t("session.prepare.step.selection.hostVoting.hostVotingOn") }}
+          </b-form-radio>
+          <b-form-radio :value="false">
+            {{ $t("session.prepare.step.selection.hostVoting.hostVotingOff") }}
+          </b-form-radio>
+        </b-form-radio-group>
       </b-col>
     </b-row>
     <h4 class="mt-3">
