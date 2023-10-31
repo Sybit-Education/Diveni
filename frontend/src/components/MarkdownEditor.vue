@@ -9,7 +9,7 @@
       :placeholder="placeholder"
       initial-edit-type="wysiwyg"
       preview-style="vertical"
-      :class="theme === 'light-theme' ? 'lightMode' : 'DarkMode'"
+      :class="theme === 'light' ? 'lightMode' : 'darkMode'"
       @blur="getTextValueFromEditor"
     />
   </div>

@@ -8,10 +8,10 @@
 
     <b-collapse id="nav-collapse" is-nav>
       <b-navbar-nav class="ml-auto">
-        <b-button :to="{ name: 'PrepareSessionPage' }" class="startButton mr-2"
+        <b-button :to="{ name: 'PrepareSessionPage' }" variant="primary" class="mr-2"
           >New Session</b-button
         >
-        <b-button :to="{ name: 'JoinPage' }" class="joinButton mr-2">
+        <b-button :to="{ name: 'JoinPage' }" class="mr-2">
           {{ $t("page.landing.meeting.join.buttons.start.label") }}
         </b-button>
         <a href="https://github.com/Sybit-Education/Diveni" target="_blank">

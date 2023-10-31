@@ -100,6 +100,7 @@ export default Vue.extend({
 </script>
 
 <style scoped lang="scss">
+@import "@/assets/style/variables.scss";
 .theme-toggle {
   $element-size: 1.5rem;
   margin-left: 0.25rem;
@@ -131,7 +132,7 @@ export default Vue.extend({
     user-select: none;
 
     /* for other dimensions, calculate values based on it */
-    border-radius: var(--buttonShape);
+    border-radius: $border-radius;
     border-color: var(--accent-color);
     background-color: var(--text-primary-color);
     font-size: calc($element-size * 0.75);

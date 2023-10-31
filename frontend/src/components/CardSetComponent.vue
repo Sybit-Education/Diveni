@@ -227,8 +227,8 @@ export default Vue.extend({
 });
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style lang="scss" scoped>
+@import "@/assets/style/variables.scss";
 .swipe-card {
   width: 226px;
   height: 303px;
@@ -240,50 +240,50 @@ export default Vue.extend({
 }
 
 .selectedCard {
-  border-color: var(--preparePageActiveCardSet) !important;
+  border-color: var(--preparePageActiveCardSet);
   border-style: solid;
-  border-radius: var(--buttonShape);
+  border-radius: $border-radius;
 }
 
 .inActiveCard:hover {
   border-width: large;
   border-color: var(--preparePageInActiveCardSet);
   border-style: solid;
-  border-radius: var(--buttonShape);
+  border-radius: $border-radius;
 }
 
 .light1 {
-  background-image: url("@/assets/preparePage/Fibonacci-LightMode.png") !important;
-  background-size: cover !important;
-  border-radius: var(--buttonShape) !important;
-  box-shadow: 10px 10px 5px #ccc !important;
+  background-image: url("@/assets/preparePage/Fibonacci-LightMode.png");
+  background-size: cover;
+  border-radius: $border-radius;
+  box-shadow: 10px 10px 5px #ccc;
 }
 
 .light2 {
   background-image: url("@/assets/preparePage/TShirt-LightMode.png");
   background-size: cover;
-  border-radius: var(--buttonShape);
+  border-radius: $border-radius;
   box-shadow: 10px 10px 5px #ccc;
 }
 
 .light3 {
   background-image: url("@/assets/preparePage/Hour-LightMode.png");
   background-size: cover;
-  border-radius: var(--buttonShape);
+  border-radius: $border-radius;
   box-shadow: 10px 10px 5px #ccc;
 }
 
 .light4 {
   background-image: url("@/assets/preparePage/Numbers-LightMode.png");
   background-size: cover;
-  border-radius: var(--buttonShape);
+  border-radius: $border-radius;
   box-shadow: 10px 10px 5px #ccc;
 }
 
 .light5 {
   background-image: url("@/assets/preparePage/OwnSet-LightMode.png");
   background-size: cover;
-  border-radius: var(--buttonShape);
+  border-radius: $border-radius;
   box-shadow: 10px 10px 5px #ccc;
 }
 
@@ -305,7 +305,7 @@ export default Vue.extend({
   right: 0;
   position: absolute;
   z-index: -1;
-  border-radius: var(--buttonShape);
+  border-radius: $border-radius;
 }
 
 .dark2 {
@@ -326,7 +326,7 @@ export default Vue.extend({
   right: 0;
   position: absolute;
   z-index: -1;
-  border-radius: var(--buttonShape);
+  border-radius: $border-radius;
 }
 
 .dark3 {
@@ -347,7 +347,7 @@ export default Vue.extend({
   right: 0;
   position: absolute;
   z-index: -1;
-  border-radius: var(--buttonShape);
+  border-radius: $border-radius;
 }
 
 .dark4 {
@@ -368,7 +368,7 @@ export default Vue.extend({
   right: 0;
   position: absolute;
   z-index: -1;
-  border-radius: var(--buttonShape);
+  border-radius: $border-radius;
 }
 
 .dark5 {
@@ -389,7 +389,7 @@ export default Vue.extend({
   right: 0;
   position: absolute;
   z-index: -1;
-  border-radius: var(--buttonShape);
+  border-radius: $border-radius;
 }
 
 #text {
