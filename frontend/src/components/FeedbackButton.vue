@@ -17,7 +17,7 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .feedback {
   display: inline-block;
   left: 100%;
@@ -26,15 +26,16 @@ export default defineComponent({
   z-index: 100;
   transform-origin: bottom right;
   transform: rotate(270deg);
-}
-#feedback-btn {
-  padding: 5px 15px;
-  background-color: var(--feedbackButtonBackground);
-  color: white;
-  font-size: 17px;
-  border-radius: 0;
-}
-#feedback-btn:hover {
-  text-decoration: none;
+
+  #feedback-btn {
+    padding: 5px 15px;
+    background-color: var(--text-primary-color);
+    color: var(--accent-color);
+    font-size: 17px;
+    border-radius: 0;
+  }
+  #feedback-btn:hover {
+    text-decoration: none;
+  }
 }
 </style>
