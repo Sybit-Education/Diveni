@@ -226,7 +226,7 @@ export default Vue.extend({
 <style lang="scss" scoped>
 @import "@/assets/style/variables.scss";
 .card {
-  width: 224px;
+  max-width: 224px;
   height: 300px;
   justify-content: flex-start;
   align-items: center;
