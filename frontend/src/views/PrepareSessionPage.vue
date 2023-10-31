@@ -102,6 +102,29 @@
         class="numberPictures"
       />
       <b-img v-else :src="require('@/assets/preparePage/P4D.png')" class="numberPictures" />
+      {{ $t("session.prepare.step.selection.hostVoting.title") }}
+    </h4>
+    <b-row class="mt-3 text-center">
+      <b-col>
+        <b-button
+          class="hostVotingButtons"
+          :class="{ active: hostVoting }"
+          @click="hostVoting = true"
+        >
+          {{ $t("session.prepare.step.selection.hostVoting.hostVotingOn") }}
+        </b-button>
+      </b-col>
+      <b-col>
+        <b-button
+          class="hostVotingButtons"
+          :class="{ active: !hostVoting }"
+          @click="hostVoting = false"
+        >
+          {{ $t("session.prepare.step.selection.hostVoting.hostVotingOff") }}
+        </b-button>
+      </b-col>
+    </b-row>
+    <h4 class="mt-3">
       {{ $t("session.prepare.step.selection.password.title") }}
     </h4>
     <b-row class="mt-3">
@@ -154,6 +177,7 @@ export default Vue.extend({
       timer: 30,
       warningWhenUnderZero: "",
       tabIndex: 0,
+      hostVoting: false,
       isIssueTrackerEnabled: false,
       theme: localStorage.getItem("user-theme"),
     };
@@ -227,6 +251,7 @@ export default Vue.extend({
             sessionState: string;
           };
           adminCookie: string;
+          hostVoting: string;
         };
         window.localStorage.setItem("adminCookie", response.adminCookie);
         this.goToSessionPage(response.session as Session);
@@ -244,6 +269,7 @@ export default Vue.extend({
           voteSetJson: JSON.stringify(session.sessionConfig.set),
           sessionState: session.sessionState,
           userStoryMode: session.sessionConfig.userStoryMode,
+          hostVoting: this.hostVoting.toString(),
           rejoined: "false",
         },
       });

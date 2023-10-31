@@ -48,7 +48,6 @@ export default Vue.extend({
     font-weight: 700;
   }
 
-
   .github-logo {
     color: var(--text-primary-color);
     width: 2.75rem;
