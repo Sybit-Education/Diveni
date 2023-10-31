@@ -29,8 +29,8 @@ export default Vue.extend({
   },
 });
 </script>
-<style>
-@import "./assets/variables.css";
+<style lang="scss">
+@import "./assets/style/variables.scss";
 main {
   min-height: calc(100vh - 10rem);
   background:
@@ -101,61 +101,13 @@ main {
   color: var(--text-primary-color) !important;
 }
 
-p {
-  color: var(--text-primary-color);
-}
-
-h1 {
-  color: var(--text-primary-color);
-}
-
-h4 {
-  color: var(--text-primary-color);
-}
-/* Landing Page */
-.newSessionCard .landingPageCardButton {
-  background-color: var(--startButton);
-  border-radius: var(--buttonShape);
-  color: var(--text-primary-color);
-}
-
-.newSessionCard .landingPageCardButton:hover {
-  background-color: var(--startButtonHovered);
-  color: var(--text-primary-color);
-}
-
-.newSessionCard .landingPageCardButton:focus {
-  background-color: var(--startButtonHovered) !important;
-}
-
-.newSessionCard .card-footer {
-  background-color: #52173100; /* So the Footer does not overflow */
-}
-
-.joinSessionCard .landingPageCardButton {
-  background-color: var(--joinButton);
-  border-radius: var(--buttonShape);
-  color: var(--text-primary-color);
-}
-
-.joinSessionCard .landingPageCardButton:hover {
-  background-color: var(--joinButtonHovered);
-  color: var(--text-primary-color);
-}
-
-.joinSessionCard .card-footer {
-  background-color: #52173100; /* So the Footer does not overflow */
-}
-
 .reconnectSessionCard .landingPageCardButton {
   background-color: var(--reconnectButton);
   border-radius: var(--buttonShape);
-  color: var(--text-primary-color);
 }
 
 .reconnectSessionCard .landingPageCardButton:hover {
   background-color: var(--reconnectButtonHovered);
-  color: var(--text-primary-color);
 }
 
 .reconnectSessionCard .landingPageCardButton:focus {
@@ -189,30 +141,9 @@ h4 {
 
 /*End of prepare Page */
 
-.dropDownLink {
-  color: var(--text-primary-color) !important;
-}
-.containerClass {
-  background-color: var(--landingPageCardsBackground) !important;
-  color: var(--text-primary-color) !important;
-}
-
-.dropdown-item {
-  color: var(--text-primary-color) !important;
-}
-
-.dropdown-item:hover {
-  color: black !important;
-}
-
-.dropdown-item.active {
-  background-color: var(--startButton) !important;
-}
-
 a.btn.joinButton {
   background-color: var(--joinButton);
   border-radius: var(--buttonShape);
-  color: var(--text-primary-color);
 }
 
 a.btn.joinButton:hover {
@@ -222,7 +153,6 @@ a.btn.joinButton:hover {
 a.btn.startButton {
   background-color: var(--startButton);
   border-radius: var(--buttonShape);
-  color: var(--text-primary-color);
 }
 
 a.btn.startButton:hover {
@@ -264,45 +194,4 @@ a.btn.startButton:focus {
   color: var(--text-primary-color) !important;
 }
 
-.a.dropdown-item {
-  color: var(--text-primary-color) !important;
-}
-
-.a.dropdown-item:hover {
-  color: black !important;
-}
-
-.dropdown-menu {
-  background-color: var(--topNavigationBarColor) !important;
-  border-color: var(--text-primary-color) !important;
-}
-/*scrollbar - firefox*/
-:root {
-  scrollbar-color: #888 rgba(0, 0, 0, 0) !important;
-  scrollbar-width: thin !important;
-}
-/*scrollbar - chrome */
-::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
-}
-
-/* Track */
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-  background: #888;
-  border-radius: 5px;
-}
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  background: #555;
-}
-
-::-webkit-scrollbar-corner {
-  background: rgba(0, 0, 0, 0);
-}
 </style>
