@@ -20,7 +20,7 @@
     "bootstrap": "^4.6.1",
     "bootstrap-vue": "^2.23.1",
     "canvas-confetti": "^1.9.0",
-    "core-js": "^3.33.1",
+    "core-js": "^3.33.2",
     "papaparse": "^5.4.1",
     "gsap": "^3.11.5",
     "popper.js": "^1.16.1",
