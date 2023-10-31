@@ -22,7 +22,7 @@
             :pause-timer="estimateFinished || pauseSession"
             :duration="timerCountdownNumber"
             :member="memberID"
-            :votingStarted="isStartVoting"
+            :voting-started="isStartVoting"
           />
         </b-col>
       </b-row>
@@ -96,8 +96,34 @@
         </h3>
       </b-row>
       <b-row
-        v-if="votingFinished"
-        class="d-flex justify-content-center flex-wrap overflow-auto"
+        v-if="votingFinished && isAdminHighlighted()"
+        class="my-1 d-flex justify-content-center flex-wrap overflow-auto"
+        style="max-height: 500px"
+      >
+        <div v-if="hostEstimation !== undefined">
+          <div v-if="hostVoting && hostEstimation.hostEstimation !== null">
+            <session-admin-card
+              v-if="hostEstimation.hostEstimation !== null"
+              :current-estimation="hostEstimation.hostEstimation"
+              :estimate-finished="votingFinished"
+              :highlight="isAdminHighlighted()"
+            />
+          </div>
+        </div>
+        <session-member-card
+          v-for="member of members"
+          :key="member.memberID"
+          :member="member"
+          :props="{
+            estimateFinished: votingFinished,
+            highlight:
+              highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0,
+          }"
+        />
+      </b-row>
+      <b-row
+        v-if="votingFinished && isAdminHighlighted() === false"
+        class="my-1 d-flex justify-content-center flex-wrap overflow-auto"
         style="max-height: 500px"
       >
         <session-member-card
@@ -110,6 +136,16 @@
               highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0,
           }"
         />
+        <div v-if="hostEstimation !== undefined">
+          <div v-if="hostVoting && hostEstimation.hostEstimation !== null">
+            <session-admin-card
+              v-if="hostEstimation.hostEstimation !== null"
+              :current-estimation="hostEstimation.hostEstimation"
+              :estimate-finished="votingFinished"
+              :highlight="isAdminHighlighted()"
+            />
+          </div>
+        </div>
       </b-row>
       <b-row v-if="userStoryMode !== 'NO_US'" class="mt-5">
         <b-col md="6">
@@ -172,6 +208,7 @@ import MobileStoryList from "../components/MobileStoryList.vue";
 import MobileStoryTitle from "../components/MobileStoryTitle.vue";
 import UserStorySumComponent from "@/components/UserStorySum.vue";
 import SessionLeaveButton from "@/components/actions/SessionLeaveButton.vue";
+import SessionAdminCard from "@/components/SessionAdminCard.vue";
 
 export default Vue.extend({
   name: "MemberVotePage",
@@ -181,6 +218,7 @@ export default Vue.extend({
     MemberVoteCard,
     EstimateTimer,
     SessionMemberCard,
+    SessionAdminCard,
     NotifyMemberComponent,
     UserStories,
     UserStoryDescriptions,
@@ -207,6 +245,7 @@ export default Vue.extend({
       triggerTimer: 0,
       estimateFinished: false,
       pauseSession: false,
+      safedHostEstimation: null,
     };
   },
   computed: {
@@ -242,6 +281,12 @@ export default Vue.extend({
     notifications() {
       return this.$store.state.notifications;
     },
+    hostVoting(): boolean {
+      return this.$store.state.hostVoting;
+    },
+    hostEstimation() {
+      return this.$store.state.hostEstimation;
+    },
     getMember() {
       return {
         hexColor: this.hexColor,
@@ -258,6 +303,7 @@ export default Vue.extend({
       if (updates.at(-1) === Constants.memberUpdateCommandStartVoting) {
         this.draggedVote = null;
         this.estimateFinished = false;
+        this.safedHostEstimation = null;
         this.triggerTimer = (this.triggerTimer + 1) % 5;
       } else if (updates.at(-1) === Constants.memberUpdateCommandVotingFinished) {
         this.estimateFinished = true;
@@ -272,6 +318,9 @@ export default Vue.extend({
           startVelocity: 50,
           spread: 100,
         });
+      }
+      if (this.hostVoting) {
+        this.safedHostEstimation = this.hostEstimation.hostEstimation;
       }
     },
     notifications(notifications) {
@@ -302,6 +351,27 @@ export default Vue.extend({
     this.voteSet = JSON.parse(this.voteSetJson);
   },
   methods: {
+    isAdminHighlighted() {
+      if (this.highlightedMembers.length === 0) {
+        return true;
+      }
+      let highlightedMap = new Map<string, boolean>();
+      this.highlightedMembers.forEach((highlightedMemberID) => {
+        let isMemberID = false;
+        this.members.forEach((member) => {
+          if (member.memberID === highlightedMemberID) {
+            isMemberID = true;
+          }
+        });
+        highlightedMap.set(highlightedMemberID, isMemberID);
+      });
+      for (let value of highlightedMap.values()) {
+        if (value === false) {
+          return true;
+        }
+      }
+      return false;
+    },
     onSelectedStory($event) {
       this.index = $event;
     },
@@ -329,7 +399,6 @@ export default Vue.extend({
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
 #header {
   color: var(--text-primary-color);
 }

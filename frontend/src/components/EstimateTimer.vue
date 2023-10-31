@@ -4,7 +4,6 @@
       {{ formatTimer() }}
     </b-card-text>
   </div>
-
 </template>
 
 <script lang="ts">
@@ -95,13 +94,15 @@ export default Vue.extend({
       }, 100);
     },
     async localClockTimer() {
-      if (this.member !== '') {
-        const response = (await this.axios.get(constants.backendURL + "/get-timer-value",{
-              params: {
-                memberID: this.member,
-              },
-        })).data;
-        this.timerCount = Math.ceil(this.duration - (response / 1000));
+      if (this.member !== "") {
+        const response = (
+          await this.axios.get(constants.backendURL + "/get-timer-value", {
+            params: {
+              memberID: this.member,
+            },
+          })
+        ).data;
+        this.timerCount = Math.ceil(this.duration - response / 1000);
         this.intervalHandler = setInterval(() => {
           if (this.timerCount > 0) {
             this.timerCount = this.timerCount - 1;
@@ -111,7 +112,7 @@ export default Vue.extend({
           }
         }, 1000);
       }
-    }
+    },
   },
 });
 </script>
@@ -128,13 +129,13 @@ export default Vue.extend({
 
 .card-text {
   line-height: 485%;
-  text-align: center;;
+  text-align: center;
 }
 
 .timer {
   width: 100px;
   height: 117px;
-  background-image: url('@/assets/Timer.png');
+  background-image: url("@/assets/Timer.png");
   background-size: contain;
   user-select: none;
 }

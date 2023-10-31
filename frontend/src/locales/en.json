@@ -10,7 +10,8 @@
       "frontend": "Licenses (Frontend)",
       "backend": "Licenses (Backend)",
       "translations": "Improve translation"
-    }
+    },
+    "feedback": "Feedback"
   },
   "page": {
     "session": {
@@ -28,7 +29,7 @@
         "button": "Start Planning",
         "refreshStories": "Refresh Userstories",
         "userStories": {
-          "filter" : {
+          "filter": {
             "noStoryFound": "No stories found!"
           },
           "button": {
@@ -252,6 +253,11 @@
           "time": {
             "title": "Adjust the time per estimation"
           },
+          "hostVoting": {
+            "title": "Should the host vote as well",
+            "hostVotingOn": "Yes",
+            "hostVotingOff": "No"
+          },
           "password": {
             "title": "Choose a password if needed",
             "placeholder": "Password (leave empty for unprotected session)"
@@ -285,6 +291,7 @@
         "issueTrackerCredentials": "Wrong credentials",
         "issueTrackerLoginFailed": "Login failed",
         "issueTrackerSynchronizeSuccess": "Synchronized changes with Issue-Tracker",
+        "issueTrackerNothingChanged": "No changes were made",
         "issueTrackerSynchronizeFailed": "Failed to synchronize changes with Issue-Tracker",
         "wrongID": "Wrong invitation code",
         "password": "Wrong password"

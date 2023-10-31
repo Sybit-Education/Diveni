@@ -1,6 +1,13 @@
 <template>
   <div>
-    <b-button id="button" :disabled="disabled" @click="signIn(); $event.target.blur();">
+    <b-button
+      id="button"
+      :disabled="disabled"
+      @click="
+        signIn();
+        $event.target.blur();
+      "
+    >
       {{
         $t(
           "session.prepare.step.selection.mode.description.withIssueTracker.buttons.signInWithAzureDevOps.label"
@@ -51,7 +58,7 @@ export default Vue.extend({
 }
 
 #button:hover {
-  background-color: var(--startButtonHovered);
+  background-color: var(--primary-button-hovered);
   color: var(--text-primary-color);
 }
 </style>

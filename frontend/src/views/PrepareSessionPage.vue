@@ -4,62 +4,58 @@
       {{ $t("session.prepare.title") }}
     </h1>
 
-      <h4 class="mt-3">
-       <b-img
-        v-if="theme === 'light-theme'"
+    <h4 class="mt-3">
+      <b-img
+        v-if="theme === 'light'"
         :src="require('@/assets/preparePage/P1.png')"
         class="numberPictures"
-       />
-       <b-img
-        v-else
-        :src="require('@/assets/preparePage/P1D.png')"
-        class="numberPictures"
-       />
-       {{ $t("session.prepare.step.selection.mode.title") }}
+      />
+      <b-img v-else :src="require('@/assets/preparePage/P1D.png')" class="numberPictures" />
+      {{ $t("session.prepare.step.selection.mode.title") }}
     </h4>
-    <b-tabs v-model="tabIndex" content-class="mt-3" fill>
+    <b-tabs v-model="tabIndex" fill>
       <b-tab
-        class="mg_top_2_per"
+        class="mt-2"
         :title="$t('session.prepare.step.selection.mode.description.withoutUS.tab.label')"
-        :title-link-class="linkClass(0)"
       >
         <story-points-component />
       </b-tab>
-      <b-tab
-        :title="$t('session.prepare.step.selection.mode.description.withUS.tab.label')"
-        :title-link-class="linkClass(1)"
-      >
-        <user-story-component class="mg_top_2_per" />
+      <b-tab :title="$t('session.prepare.step.selection.mode.description.withUS.tab.label')">
+        <user-story-component class="mt-2" />
         <input
           id="fileUpload"
           type="file"
           hidden
           accept="text/csv"
-          @change="importStory($event.target.files)"
+          @change="importStory($event.target?.files)"
         />
-        <b-button block elevation="2" class="importUserStoryButton" @click="openFileUploader(); $event.target.blur();">
+        <b-button
+          block
+          elevation="2"
+          class="btn-primary"
+          variant="primary"
+          @click="
+            openFileUploader();
+            $event.target.blur();
+          "
+        >
           {{ $t("session.prepare.step.selection.mode.description.withUS.importButton") }}
         </b-button>
       </b-tab>
       <b-tab
         v-if="isIssueTrackerEnabled"
         :title="$t('session.prepare.step.selection.mode.description.withIssueTracker.tab.label')"
-        :title-link-class="linkClass(2)"
       >
-        <jira-component class="mg_top_2_per" />
+        <jira-component class="mt-2" />
       </b-tab>
     </b-tabs>
     <h4 class="mt-4">
       <b-img
-        v-if="theme === 'light-theme'"
+        v-if="theme === 'light'"
         :src="require('@/assets/preparePage/P2.png')"
         class="numberPictures"
-       />
-       <b-img
-        v-else
-        :src="require('@/assets/preparePage/P2D.png')"
-        class="numberPictures"
-       />
+      />
+      <b-img v-else :src="require('@/assets/preparePage/P2D.png')" class="numberPictures" />
       {{ $t("session.prepare.step.selection.cardSet.title") }}
     </h4>
     <card-set-component
@@ -69,41 +65,66 @@
     />
     <h4 class="mt-3">
       <b-img
-        v-if="theme === 'light-theme'"
+        v-if="theme === 'light'"
         :src="require('@/assets/preparePage/P3.png')"
         class="numberPictures"
-       />
-       <b-img
-        v-else
-        :src="require('@/assets/preparePage/P3D.png')"
-        class="numberPictures"
-       />
+      />
+      <b-img v-else :src="require('@/assets/preparePage/P3D.png')" class="numberPictures" />
       {{ $t("session.prepare.step.selection.time.title") }}
+    </h4>
+    <div id="timer-control">
+      <b-button
+        class="btn-sm btn-outline-light"
+        @click="
+          setTimerDown();
+          $event.target.blur();
+        "
+      >
+        -
+      </b-button>
+      <div id="timer-value" class="font-weight-bolder px-2 text-center">
+        {{ timer == 0 ? "∞" : formatTimer }}
+      </div>
+      <b-button
+        class="btn-sm btn-outline-light"
+        @click="
+          setTimerUp();
+          $event.target.blur();
+        "
+      >
+        +
+      </b-button>
+    </div>
+    <h4 class="mt-3">
+      <b-img
+        v-if="theme === 'light'"
+        :src="require('@/assets/preparePage/P4.png')"
+        class="numberPictures"
+      />
+      <b-img v-else :src="require('@/assets/preparePage/P4D.png')" class="numberPictures" />
+      {{ $t("session.prepare.step.selection.hostVoting.title") }}
     </h4>
     <b-row class="mt-3 text-center">
       <b-col>
-        <b-button class="optionButtons" @click="setTimerDown(); $event.target.blur();"> - </b-button>
-      </b-col>
-      <b-col class="text-center" id="timerCol" cols="auto">
-        <h4 id="timerBackground">
-          {{ timer == 0 ? "∞" : formatTimer }}
-        </h4>
+        <b-button
+          class="hostVotingButtons"
+          :class="{ active: hostVoting }"
+          @click="hostVoting = true"
+        >
+          {{ $t("session.prepare.step.selection.hostVoting.hostVotingOn") }}
+        </b-button>
       </b-col>
       <b-col>
-        <b-button class="optionButtons" @click="setTimerUp(); $event.target.blur();"> +</b-button>
+        <b-button
+          class="hostVotingButtons"
+          :class="{ active: !hostVoting }"
+          @click="hostVoting = false"
+        >
+          {{ $t("session.prepare.step.selection.hostVoting.hostVotingOff") }}
+        </b-button>
       </b-col>
     </b-row>
     <h4 class="mt-3">
-      <b-img
-        v-if="theme === 'light-theme'"
-        :src="require('@/assets/preparePage/P4.png')"
-        class="numberPictures"
-       />
-       <b-img
-        v-else
-        :src="require('@/assets/preparePage/P4D.png')"
-        class="numberPictures"
-       />
       {{ $t("session.prepare.step.selection.password.title") }}
     </h4>
     <b-row class="mt-3">
@@ -156,8 +177,9 @@ export default Vue.extend({
       timer: 30,
       warningWhenUnderZero: "",
       tabIndex: 0,
+      hostVoting: false,
       isIssueTrackerEnabled: false,
-      theme: localStorage.getItem('user-theme'),
+      theme: localStorage.getItem("user-theme"),
     };
   },
   computed: {
@@ -188,9 +210,9 @@ export default Vue.extend({
     this.tabIndex = isNaN(parsedTabIndex) ? 0 : parsedTabIndex;
   },
   mounted() {
-    window.addEventListener('user-theme-localstorage-changed', (event) => {
-        const customEvent = event as CustomEvent;
-        this.theme = customEvent.detail.storage;
+    window.addEventListener("user-theme-localstorage-changed", (event) => {
+      const customEvent = event as CustomEvent;
+      this.theme = customEvent.detail.storage;
     });
     apiService.getIssueTrackerConfig().then((result) => {
       this.isIssueTrackerEnabled =
@@ -201,13 +223,6 @@ export default Vue.extend({
     this.$store.commit("setUserStories", { stories: [] });
   },
   methods: {
-    linkClass(idx) {
-      if (this.tabIndex === idx) {
-        return ["selectedTab", "selectedTextColor"];
-      } else {
-        return ["notSelectedTab", "notSelectedTextColor"];
-      }
-    },
     async sendCreateSessionRequest() {
       const url = Constants.backendURL + Constants.createSessionRoute;
       const sessionConfig = {
@@ -236,6 +251,7 @@ export default Vue.extend({
             sessionState: string;
           };
           adminCookie: string;
+          hostVoting: string;
         };
         window.localStorage.setItem("adminCookie", response.adminCookie);
         this.goToSessionPage(response.session as Session);
@@ -253,6 +269,7 @@ export default Vue.extend({
           voteSetJson: JSON.stringify(session.sessionConfig.set),
           sessionState: session.sessionState,
           userStoryMode: session.sessionConfig.userStoryMode,
+          hostVoting: this.hostVoting.toString(),
           rejoined: "false",
         },
       });
@@ -333,19 +350,51 @@ export default Vue.extend({
 });
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import "@/assets/style/_variables.scss";
 
-#timerBackground {
+/* Prepare Page */
+.selectedTab {
+  background-color: var(--preparePageMainColor) !important;
+}
+
+.selectedTextColor {
+  color: var(--text-primary-color) !important;
+}
+
+.notSelectedTab {
+  background-color: var(--preparePageInActiveTab) !important;
+  border-color: var(--preparePageBorderTab) !important;
+}
+
+.notSelectedTab:hover {
+  background-color: var(--preparePageInActiveTabHover) !important;
+}
+
+.notSelectedTextColor {
+  color: var(--text-primary-color) !important;
+}
+
+#timer-control {
+  display: flex;
+  border-radius: $border-radius;
   background-color: var(--preparePageTimerBackground);
-}
+  font-size: 1.25rem;
+  width: 9rem;
+  height: 2rem;
+  padding: 0;
 
-#timerCol {
-  margin-top: auto;
-  margin-bottom: auto;
-}
+  button {
+    flex: auto;
+    width: 2rem;
+    height: 2rem;
+    margin: 0;
+  }
 
-.mg_top_2_per {
-  margin-top: 2%;
+  #timer-value {
+    flex: content;
+    width: 5rem;
+  }
 }
 
 .importUserStoryButton {
@@ -358,13 +407,35 @@ export default Vue.extend({
   color: var(--text-primary-color);
 }
 
-.importUserStoryButton:focus{
+.importUserStoryButton:focus {
   background-color: var(--startButtonHovered) !important;
   color: var(--text-primary-color) !important;
 }
 
+.hostVotingButtons {
+  color: var(--text-primary-color);
+  border-color: var(--text-primary-color);
+  background-color: transparent;
+  font-size: large;
+  width: 68px;
+  text-align: center;
+}
+
+.hostVotingButtons:hover {
+  color: var(--text-primary-color) !important;
+  border-color: var(--text-primary-color);
+  background-color: var(--preparePageInActiveTabHover);
+}
+.hostVotingButtons:focus {
+  color: var(--text-primary-color);
+  border-color: var(--text-primary-color);
+  background-color: transparent !important;
+  outline: none;
+  box-shadow: none;
+}
+
 .optionButtons {
-  color:var(--text-primary-color);
+  color: var(--text-primary-color);
   border-color: var(--text-primary-color);
   background-color: transparent;
   font-size: xx-large;
@@ -372,12 +443,12 @@ export default Vue.extend({
 }
 
 .optionButtons:hover {
-  color:var(--text-primary-color) !important;
+  color: var(--text-primary-color) !important;
   border-color: var(--text-primary-color);
   background-color: var(--preparePageInActiveTabHover);
 }
 .optionButtons:focus {
-  color:var(--text-primary-color);
+  color: var(--text-primary-color);
   border-color: var(--text-primary-color);
   background-color: transparent !important;
   outline: none;
@@ -385,13 +456,12 @@ export default Vue.extend({
 }
 
 .startingButton {
-  background-color: var(--startButton);
+  background-color: var(--primary-button);
   color: var(--text-primary-color);
-  border-radius: var(--buttonShape);
 }
 
 .startingButton:hover {
-  background-color: var(--startButtonHovered);
+  background-color: var(--primary-button-hovered);
   color: var(--text-primary-color);
 }
 
@@ -405,11 +475,11 @@ export default Vue.extend({
 }
 
 .startingButton:focus {
-  background-color: var(--startButtonHovered) !important;
+  background-color: var(--primary-button-hovered) !important;
   color: var(--text-primary-color);
 }
 
-.numberPictures{
+.numberPictures {
   height: 45px;
   width: 45px;
 }

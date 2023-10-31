@@ -1,40 +1,40 @@
 <template>
   <div>
     <b-row class="d-flex justify-content-around">
-          <b-col
-            cols="4"
-            md="auto"
-            v-for="item of userStoryMode === jiraTag ? allCardSetsWithJiraMode : allCardSets"
-            :key="item.position"
-            class="swipe-card my-5 mx-5"
-            :class="getClasses(item)"
-            @click="onCardSetSelected(item)"
-          >
-            <div id="text">
-              {{ item.name }}
-            </div>
-            <div id="cardDescription">
-              {{ item.description }}
-              <div v-if="item.values.length === 0">
-                <span id="createSetHint">
-                  <b-icon-info-circle class="mt-3 me-1" />{{
-                    $t("session.prepare.step.selection.cardSet.sets.ownSet.hint.label")
-                  }}</span
-                >
-                <b-popover target="createSetHint" triggers="hover" placement="top" id="popUp">
-                  <template #title>
-                    {{ $t("session.prepare.step.selection.cardSet.sets.ownSet.hint.label") }}
-                  </template>
-                  <p>
-                    {{ $t("session.prepare.step.selection.cardSet.sets.ownSet.hint.description") }}
-                  </p>
-                  <p>
-                    {{ $t("session.prepare.step.selection.cardSet.sets.ownSet.hint.example") }}
-                  </p>
-                </b-popover>
-              </div>
-            </div>
-          </b-col>
+      <b-col
+        v-for="item of userStoryMode === jiraTag ? allCardSetsWithJiraMode : allCardSets"
+        :key="item.position"
+        cols="4"
+        md="auto"
+        class="swipe-card my-5 mx-5"
+        :class="getClasses(item)"
+        @click="onCardSetSelected(item)"
+      >
+        <div id="text">
+          {{ item.name }}
+        </div>
+        <div id="cardDescription">
+          {{ item.description }}
+          <div v-if="item.values.length === 0">
+            <span id="createSetHint">
+              <b-icon-info-circle class="mt-3 me-1" />{{
+                $t("session.prepare.step.selection.cardSet.sets.ownSet.hint.label")
+              }}</span
+            >
+            <b-popover id="popUp" target="createSetHint" triggers="hover" placement="top">
+              <template #title>
+                {{ $t("session.prepare.step.selection.cardSet.sets.ownSet.hint.label") }}
+              </template>
+              <p>
+                {{ $t("session.prepare.step.selection.cardSet.sets.ownSet.hint.description") }}
+              </p>
+              <p>
+                {{ $t("session.prepare.step.selection.cardSet.sets.ownSet.hint.example") }}
+              </p>
+            </b-popover>
+          </div>
+        </div>
+      </b-col>
     </b-row>
     <b-row v-if="selectedCardSet.name !== ''">
       <div v-if="selectedCardSet.values.length !== 0" class="text-center mt-3 pillPosition">
@@ -44,7 +44,10 @@
           :class="isActiveCardSetNumber(item)"
           pill
           class="pills"
-          @click="onCardSetNumberSelected(item); $event.target.blur();"
+          @click="
+            onCardSetNumberSelected(item);
+            $event.target.blur();
+          "
         >
           {{ item }}
         </b-button>
@@ -82,7 +85,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      theme: localStorage.getItem('user-theme'),
+      theme: localStorage.getItem("user-theme"),
       jiraTag: "US_JIRA",
       selectedCardSet: {
         name: "",
@@ -168,14 +171,16 @@ export default Vue.extend({
     },
   },
   mounted() {
-    window.addEventListener('user-theme-localstorage-changed', (event) => {
-        const customEvent = event as CustomEvent;
-        this.theme = customEvent.detail.storage;
+    window.addEventListener("user-theme-localstorage-changed", (event) => {
+      const customEvent = event as CustomEvent;
+      this.theme = customEvent.detail.storage;
     });
   },
   methods: {
     isActiveCardSetNumber(num) {
-      return this.selectedCardSet.activeValues.includes(num) ? "activePills m-1" : "outline-secondary inActivePills m-1";
+      return this.selectedCardSet.activeValues.includes(num)
+        ? "activePills m-1"
+        : "outline-secondary inActivePills m-1";
     },
     onCardSetSelected(set) {
       this.selectedCardSet = set;
@@ -201,7 +206,7 @@ export default Vue.extend({
       return `${this.getCardActiveClass(item)} ${this.getPictureClass(item)}`;
     },
     getCardActiveClass(item) {
-      return this.selectedCardSet.name === item.name ? 'selectedCard' : 'inActiveCard';
+      return this.selectedCardSet.name === item.name ? "selectedCard" : "inActiveCard";
     },
     getPictureClass(item) {
       if (this.userStoryMode !== this.jiraTag) {
@@ -217,14 +222,13 @@ export default Vue.extend({
         default:
           break;
       }
-    }
+    },
   },
 });
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-
+<style lang="scss" scoped>
+@import "@/assets/style/variables.scss";
 .swipe-card {
   width: 226px;
   height: 303px;
@@ -236,61 +240,61 @@ export default Vue.extend({
 }
 
 .selectedCard {
-  border-color: var(--preparePageActiveCardSet) !important;
+  border-color: var(--preparePageActiveCardSet);
   border-style: solid;
-  border-radius: var(--buttonShape);
+  border-radius: $border-radius;
 }
 
 .inActiveCard:hover {
   border-width: large;
   border-color: var(--preparePageInActiveCardSet);
   border-style: solid;
-  border-radius: var(--buttonShape);
+  border-radius: $border-radius;
 }
 
-.light-theme1 {
-    background-image: url("@/assets/preparePage/Fibonacci-LightMode.png") !important;
-    background-size: cover !important;
-    border-radius: var(--buttonShape) !important;
-    box-shadow: 10px 10px 5px #ccc !important;
+.light1 {
+  background-image: url("@/assets/preparePage/Fibonacci-LightMode.png");
+  background-size: cover;
+  border-radius: $border-radius;
+  box-shadow: 10px 10px 5px #ccc;
 }
 
-.light-theme2{
+.light2 {
   background-image: url("@/assets/preparePage/TShirt-LightMode.png");
   background-size: cover;
-  border-radius: var(--buttonShape);
+  border-radius: $border-radius;
   box-shadow: 10px 10px 5px #ccc;
 }
 
-.light-theme3 {
+.light3 {
   background-image: url("@/assets/preparePage/Hour-LightMode.png");
   background-size: cover;
-  border-radius: var(--buttonShape);
+  border-radius: $border-radius;
   box-shadow: 10px 10px 5px #ccc;
 }
 
-.light-theme4 {
+.light4 {
   background-image: url("@/assets/preparePage/Numbers-LightMode.png");
   background-size: cover;
-  border-radius: var(--buttonShape);
+  border-radius: $border-radius;
   box-shadow: 10px 10px 5px #ccc;
 }
 
-.light-theme5 {
+.light5 {
   background-image: url("@/assets/preparePage/OwnSet-LightMode.png");
   background-size: cover;
-  border-radius: var(--buttonShape);
+  border-radius: $border-radius;
   box-shadow: 10px 10px 5px #ccc;
 }
 
-.dark-theme1 {
+.dark1 {
   width: 226px;
   height: 303px;
   display: block;
   position: relative;
 }
 
-.dark-theme1::after {
+.dark1::after {
   background-image: url("@/assets/preparePage/Fibonacci-DarkMode.png");
   background-size: cover;
   content: "";
@@ -301,17 +305,17 @@ export default Vue.extend({
   right: 0;
   position: absolute;
   z-index: -1;
-  border-radius: var(--buttonShape);
+  border-radius: $border-radius;
 }
 
-.dark-theme2 {
+.dark2 {
   width: 226px;
   height: 303px;
   display: block;
   position: relative;
 }
 
-.dark-theme2::after{
+.dark2::after {
   background-image: url("@/assets/preparePage/TShirt-DarkMode.png");
   background-size: cover;
   content: "";
@@ -322,17 +326,17 @@ export default Vue.extend({
   right: 0;
   position: absolute;
   z-index: -1;
-  border-radius: var(--buttonShape);
+  border-radius: $border-radius;
 }
 
-.dark-theme3 {
+.dark3 {
   width: 226px;
   height: 303px;
   display: block;
   position: relative;
 }
 
-.dark-theme3::after {
+.dark3::after {
   background-image: url("@/assets/preparePage/Hour-DarkMode.png");
   background-size: cover;
   content: "";
@@ -343,17 +347,17 @@ export default Vue.extend({
   right: 0;
   position: absolute;
   z-index: -1;
-  border-radius: var(--buttonShape);
+  border-radius: $border-radius;
 }
 
-.dark-theme4 {
+.dark4 {
   width: 226px;
   height: 303px;
   display: block;
   position: relative;
 }
 
-.dark-theme4::after {
+.dark4::after {
   background-image: url("@/assets/preparePage/Numbers-DarkMode.png");
   background-size: cover;
   content: "";
@@ -364,17 +368,17 @@ export default Vue.extend({
   right: 0;
   position: absolute;
   z-index: -1;
-  border-radius: var(--buttonShape);
+  border-radius: $border-radius;
 }
 
-.dark-theme5 {
+.dark5 {
   width: 226px;
   height: 303px;
   display: block;
   position: relative;
 }
 
-.dark-theme5::after {
+.dark5::after {
   background-image: url("@/assets/preparePage/OwnSet-DarkMode.png");
   background-size: cover;
   content: "";
@@ -385,16 +389,17 @@ export default Vue.extend({
   right: 0;
   position: absolute;
   z-index: -1;
-  border-radius: var(--buttonShape);
+  border-radius: $border-radius;
 }
 
 #text {
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 500;
   padding-top: 16px;
+  text-align: center;
 }
 
-#cardDescription{
+#cardDescription {
   padding: 16px;
   text-align: center;
 }

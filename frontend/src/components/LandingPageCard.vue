@@ -24,15 +24,9 @@ export default Vue.extend({
   },
 });
 </script>
-<style scoped>
-
-.landing-page-card{
+<style scoped lang="scss">
+.landing-page-card {
   border-radius: 2rem;
   background-color: var(--landingPageCardsBackground);
 }
-
-.card-title{
-  color:var(--text-primary-color);
-}
-
 </style>
