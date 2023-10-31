@@ -8,17 +8,27 @@
 
     <b-collapse id="nav-collapse" is-nav>
       <b-navbar-nav class="ml-auto">
-        <b-button :to="{ name: 'PrepareSessionPage' }" variant="primary" class="mr-2"
-          >New Session</b-button
-        >
-        <b-button :to="{ name: 'JoinPage' }" class="mr-2">
-          {{ $t("page.landing.meeting.join.buttons.start.label") }}
-        </b-button>
-        <a href="https://github.com/Sybit-Education/Diveni" target="_blank">
-          <BIconGithub class="github-logo p-2"></BIconGithub>
-        </a>
-        <theme-toggle class="p-2" />
-        <locale-dropdown />
+        <b-nav-form>
+          <b-button :to="{ name: 'PrepareSessionPage' }" variant="primary" class="mr-2">
+            {{ $t("page.landing.meeting.new.buttons.start.label") }}
+          </b-button>
+        </b-nav-form>
+        <b-nav-form>
+          <b-button :to="{ name: 'JoinPage' }" class="mr-2">
+            {{ $t("page.landing.meeting.join.buttons.start.label") }}
+          </b-button>
+        </b-nav-form>
+        <b-nav-item>
+          <a href="https://github.com/Sybit-Education/Diveni" target="_blank">
+            <BIconGithub class="github-logo py-2"></BIconGithub>
+          </a>
+        </b-nav-item>
+        <b-nav-text>
+          <theme-toggle class="my-2" />
+        </b-nav-text>
+        <b-nav-item>
+          <locale-dropdown />
+        </b-nav-item>
       </b-navbar-nav>
     </b-collapse>
   </b-navbar>
@@ -37,8 +47,6 @@ export default Vue.extend({
 </script>
 
 <style scoped lang="scss">
-/* TOP Navigation Bar */
-
 .top-navigation {
   background-color: var(--topNavigationBarColor);
 
