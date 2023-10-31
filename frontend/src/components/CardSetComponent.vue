@@ -4,9 +4,7 @@
       <b-col
         v-for="item of userStoryMode === jiraTag ? allCardSetsWithJiraMode : allCardSets"
         :key="item.position"
-        cols="4"
-        md="auto"
-        class="swipe-card my-5 mx-5"
+        class="swipe-card m-2"
         :class="getClasses(item)"
         @click="onCardSetSelected(item)"
       >
@@ -230,20 +228,22 @@ export default Vue.extend({
 <style lang="scss" scoped>
 @import "@/assets/style/variables.scss";
 .swipe-card {
-  width: 226px;
-  height: 303px;
-  justify-content: flex-start; /* Centering y-axis 202 */
-  align-items: center; /* Centering x-axis 168 */
+  width: 224px;
+  height: 300px;
+  justify-content: flex-start;
+  align-items: center;
   display: flex;
   flex-direction: column;
   cursor: pointer;
+
+  .selectedCard {
+    border-color: var(--preparePageActiveCardSet);
+    border-style: solid;
+    border-radius: $border-radius;
+  }
 }
 
-.selectedCard {
-  border-color: var(--preparePageActiveCardSet);
-  border-style: solid;
-  border-radius: $border-radius;
-}
+
 
 .inActiveCard:hover {
   border-width: large;
@@ -423,7 +423,7 @@ export default Vue.extend({
 }
 
 .activePills:focus {
-  background-color: var(--preparePageInActiveTabHover) !important;
+  background-color: var(--preparePageInActiveTabHover);
   color: var(--text-primary-color);
 }
 
