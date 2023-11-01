@@ -34,7 +34,7 @@ import ThemeToggleComponent from "@/components/ThemeToggleComponent.vue";
 
 export default Vue.extend({
   name: "TopNavigationBar",
-  components: { LocaleDropdown, BIconGithub, ThemeToggleComponent }
+  components: { LocaleDropdown, BIconGithub, ThemeToggleComponent },
 });
 </script>
 

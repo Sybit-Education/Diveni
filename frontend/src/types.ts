@@ -42,11 +42,11 @@ export interface JiraRequestTokenDto {
   url: string;
 }
 
-export interface PullRequestDto{
-  number:number;
+export interface PullRequestDto {
+  number: number;
   html_url: string;
   title: string;
-  merged_at: string
-  user_type: string
-  updated_at: string
+  merged_at: string;
+  user_type: string;
+  updated_at: string;
 }

@@ -56,7 +56,7 @@ const routes: Array<RouteConfig> = [
   {
     path: "/whats-new",
     name: "WhatsNewPage",
-    component: () => import("../views/WhatsNewPage.vue")
+    component: () => import("../views/WhatsNewPage.vue"),
   },
   {
     path: "*",

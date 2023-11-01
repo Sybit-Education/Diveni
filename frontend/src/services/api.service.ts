@@ -1,5 +1,5 @@
 import constants from "@/constants";
-import {JiraRequestTokenDto, JiraResponseCodeDto, PullRequestDto} from "@/types";
+import { JiraRequestTokenDto, JiraResponseCodeDto, PullRequestDto } from "@/types";
 import axios, { AxiosResponse } from "axios";
 
 class ApiService {
@@ -111,23 +111,28 @@ class ApiService {
     return response;
   }
 
-  public async getPullRequests(state,sort,direction,isMerged, page, pageSize): Promise<PullRequestDto[]> {
+  public async getPullRequests(
+    state,
+    sort,
+    direction,
+    isMerged,
+    page,
+    pageSize
+  ): Promise<PullRequestDto[]> {
     const queryParams = {
       state: state,
-      is_merged:isMerged,
+      is_merged: isMerged,
       per_page: pageSize,
       page: page,
-      sort:sort,
-      direction:direction
-    }
-    const response = await axios.get(`${constants.backendURL}/news/pull-requests`,
-      {
-        headers: {
-          "Content-Type": "application/json"
-        },
-        params: queryParams
-      }
-    )
+      sort: sort,
+      direction: direction,
+    };
+    const response = await axios.get(`${constants.backendURL}/news/pull-requests`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      params: queryParams,
+    });
     return response.data;
   }
 }
