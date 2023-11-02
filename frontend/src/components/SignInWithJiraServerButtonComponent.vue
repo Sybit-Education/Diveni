@@ -10,12 +10,13 @@
       "
     >
       {{
-        $t(
+        t(
           "session.prepare.step.selection.mode.description.withIssueTracker.buttons.signInWithJiraServer.label"
         )
       }}
     </b-button>
     <b-modal
+      v-if="showVerificationModal"
       id="modal-verification-code"
       ref="modal"
       title="Verification code"
@@ -25,7 +26,7 @@
     >
       <p id="description">
         {{
-          $t("session.prepare.step.selection.mode.description.withIssueTracker.dialog.description")
+          t("session.prepare.step.selection.mode.description.withIssueTracker.dialog.description")
         }}
       </p>
       <form ref="form" @submit.stop.prevent="handleSubmit">
@@ -40,7 +41,7 @@
             v-model="verificationCode"
             required
             :placeholder="
-              $t(
+              t(
                 'session.prepare.step.selection.mode.description.withIssueTracker.inputs.verificationCode.placeholder'
               )
             "
@@ -54,10 +55,14 @@
 
 <script lang="ts">
 // eslint-disable-next-line
-import Vue from "vue";
+import { defineComponent } from "vue";
 import apiService from "@/services/api.service";
+import { useDiveniStore } from "@/store";
+import { useToast } from "vue-toastification";
+import * as Vue from "vue";
+import { useI18n } from "vue-i18n";
 
-export default Vue.extend({
+export default defineComponent({
   name: "SignInWithJiraServerButtonComponent",
   props: {
     disabled: {
@@ -71,11 +76,18 @@ export default Vue.extend({
       token: "",
       verificationCode: "",
       verificationCodeState: false,
+      showVerificationModal: false,
     };
+  },
+  setup() {
+    const store = useDiveniStore();
+    const toast = useToast();
+    const { t } = useI18n();
+    return { store, toast, t };
   },
   methods: {
     checkFormValidity() {
-      const valid = (this.$refs.form as Vue & { checkValidity: () => boolean }).checkValidity();
+      const valid = (this.$refs.form as any & { checkValidity: () => boolean }).checkValidity();
       this.verificationCodeState = valid;
       return valid;
     },
@@ -86,7 +98,7 @@ export default Vue.extend({
     },
     openModal() {
       this.$nextTick(() => {
-        this.$bvModal.show("modal-verification-code");
+        this.showVerificationModal = true;
       });
     },
     resetModal() {
@@ -108,19 +120,19 @@ export default Vue.extend({
           this.token
         );
         localStorage.setItem("tokenId", response.tokenId);
-        this.$store.commit("setTokenId", response.tokenId);
+        this.store.setTokenId(response.tokenId);
       } catch (e) {
         this.showToast(e);
       }
       this.$nextTick(() => {
-        this.$bvModal.hide("modal-verification-code");
+        this.showVerificationModal = false;
       });
     },
     showToast(error) {
       if (error.message == "failed to retrieve access token") {
-        this.$toast.error(this.$t("session.notification.messages.issueTrackerCredentials"));
+        this.toast.error(this.t("session.notification.messages.issueTrackerCredentials"));
       } else {
-        this.$toast.error(this.$t("session.notification.messages.issueTrackerLoginFailed"));
+        this.toast.error(this.t("session.notification.messages.issueTrackerLoginFailed"));
       }
       console.error(error);
     },

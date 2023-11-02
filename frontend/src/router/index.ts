@@ -1,5 +1,4 @@
-import Vue from "vue";
-import VueRouter, { RouteConfig } from "vue-router";
+import { createRouter, createWebHistory } from "vue-router";
 import LandingPage from "../views/LandingPage.vue";
 import JoinPage from "../views/JoinPage.vue";
 import SessionPage from "../views/SessionPage.vue";
@@ -7,9 +6,7 @@ import MemberVotePage from "../views/MemberVotePage.vue";
 import PrepareSessionPage from "../views/PrepareSessionPage.vue";
 import ResultPage from "../views/ResultPage.vue";
 
-Vue.use(VueRouter);
-
-const routes: Array<RouteConfig> = [
+const routes = [
   {
     path: "/",
     name: "LandingPage",
@@ -54,15 +51,14 @@ const routes: Array<RouteConfig> = [
     component: () => import(/* webpackChunkName: "about" */ "../views/AboutPage.vue"),
   },
   {
-    path: "*",
+    path: "/:catchAll(.*)",
     component: LandingPage,
   },
 ];
 
-const router = new VueRouter({
-  mode: "history",
-  base: process.env.BASE_URL,
-  routes,
+const router = createRouter({
+  history: createWebHistory(process.env.BASE_URL),
+  routes: routes,
 });
 
 export default router;

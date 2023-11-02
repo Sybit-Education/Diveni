@@ -15,7 +15,7 @@
             max-rows="3"
             :disabled="!editDescription"
             size="lg"
-            :placeholder="$t('page.session.before.userStories.placeholder.userStoryTitle')"
+            :placeholder="t('page.session.before.userStories.placeholder.userStoryTitle')"
             @blur="publishChanges(idx)"
           />
           <b-dropdown
@@ -44,7 +44,7 @@
             v-model="userStories[idx].description"
             class="mt-1 my-5"
             :disabled="!editDescription"
-            :placeholder="$t('page.session.before.userStories.placeholder.userStoryDescription')"
+            :placeholder="t('page.session.before.userStories.placeholder.userStoryDescription')"
             @textValueChanged="(event) => valueChanged(idx, event)"
           />
         </div>
@@ -63,17 +63,18 @@
         v-if="userStories.length <= index && userStories.length"
         class="text-center rounded p-3 m-2"
       >
-        <b-card class="border-0" :title="$t('page.session.before.userStories.text')" />
+        <b-card class="border-0" :title="t('page.session.before.userStories.text')" />
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
 import MarkdownEditor from "@/components/MarkdownEditor.vue";
+import { useI18n } from "vue-i18n";
 
-export default Vue.extend({
+export default defineComponent({
   name: "UserStoryDescriptions",
   components: { MarkdownEditor },
   props: {
@@ -83,6 +84,10 @@ export default Vue.extend({
     editDescription: { type: Boolean, required: true, default: false },
     showEstimations: { type: Boolean, required: false },
     showEditButtons: { type: Boolean, required: false, default: true },
+  },
+  setup() {
+    const { t } = useI18n();
+    return { t };
   },
   data() {
     return {

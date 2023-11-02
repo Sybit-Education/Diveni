@@ -5,8 +5,8 @@
         <h1>
           {{
             planningStart
-              ? $t("page.session.during.estimation.title")
-              : $t("page.session.before.title")
+              ? t("page.session.during.estimation.title")
+              : t("page.session.before.title")
           }}
         </h1>
       </b-col>
@@ -30,9 +30,9 @@
         <b-img :src="require('@/assets/LoadingCat.gif')" class="catGif" />
       </div>
       <copy-session-id-popup
-        :text-before-session-i-d="$t('page.session.before.text.beforeID')"
+        :text-before-session-i-d="t('page.session.before.text.beforeID')"
         :session-id="session_sessionID"
-        :text-after-session-i-d="$t('page.session.before.text.afterID')"
+        :text-after-session-i-d="t('page.session.before.text.afterID')"
         class="copy-popup"
       />
 
@@ -47,11 +47,7 @@
       </b-row>
       <b-row>
         <b-col class="text-center">
-          <session-start-button
-            :members="members"
-            :host-voting="session_hostVoting"
-            @clicked="onPlanningStarted"
-          />
+          <session-start-button :host-voting="session_hostVoting" @clicked="onPlanningStarted" />
         </b-col>
       </b-row>
     </div>
@@ -68,7 +64,7 @@
             "
           >
             <BIconArrowClockwise class="bIcons"></BIconArrowClockwise>
-            {{ $t("page.session.during.estimation.buttons.new") }}
+            {{ t("page.session.during.estimation.buttons.new") }}
           </b-button>
           <b-button
             class="mr-3 optionButton"
@@ -79,7 +75,7 @@
             "
           >
             <BIconBarChartFill class="bIcons"></BIconBarChartFill>
-            {{ $t("page.session.during.estimation.buttons.result") }}
+            {{ t("page.session.during.estimation.buttons.result") }}
           </b-button>
         </b-col>
         <b-col cols="auto">
@@ -94,7 +90,7 @@
       </b-row>
 
       <h4 v-if="membersPending.length > 0 && !estimateFinished" class="d-inline">
-        {{ $t("page.session.during.estimation.message.waitingFor") }}
+        {{ t("page.session.during.estimation.message.waitingFor") }}
         {{ membersPending.length }} /
         {{ membersPending.length + membersEstimated.length }}
       </h4>
@@ -109,18 +105,18 @@
       </b-row>
       <hr class="my-5 breakingLine" />
       <h4 v-if="!session_hostVoting">
-        {{ $t("page.session.during.estimation.message.finished") }}
+        {{ t("page.session.during.estimation.message.finished") }}
         {{ membersEstimated.length }} /
         {{ members.length }}
       </h4>
       <h4 v-else>
         <div v-if="hostEstimation == ''">
-          {{ $t("page.session.during.estimation.message.finished") }}
+          {{ t("page.session.during.estimation.message.finished") }}
           {{ membersEstimated.length }} /
           {{ members.length + 1 }}
         </div>
         <div v-else>
-          {{ $t("page.session.during.estimation.message.finished") }}
+          {{ t("page.session.during.estimation.message.finished") }}
           {{ membersEstimated.length + 1 }} /
           {{ members.length + 1 }}
         </div>
@@ -205,7 +201,7 @@
               $event.target.blur();
             "
           >
-            {{ $t("page.session.before.refreshStories") }}
+            {{ t("page.session.before.refreshStories") }}
           </b-button>
         </div>
         <user-stories
@@ -227,7 +223,7 @@
               $event.target.blur();
             "
           >
-            {{ $t("page.session.before.refreshStories") }}
+            {{ t("page.session.before.refreshStories") }}
           </b-button>
         </div>
         <user-stories
@@ -266,7 +262,6 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
 import Constants from "../constants";
 import Member from "../model/Member";
 import UserStories from "../components/UserStories.vue";
@@ -282,9 +277,13 @@ import KickUserWrapper from "@/components/KickUserWrapper.vue";
 import SessionCloseButton from "@/components/actions/SessionCloseButton.vue";
 import SessionStartButton from "@/components/actions/SessionStartButton.vue";
 import { BIconArrowClockwise, BIconBarChartFill } from "bootstrap-vue";
+import { defineComponent } from "vue";
+import { useDiveniStore } from "@/store";
+import { useToast } from "vue-toastification";
+import { useI18n } from "vue-i18n";
 import SessionAdminCard from "@/components/SessionAdminCard.vue";
 
-export default Vue.extend({
+export default defineComponent({
   name: "SessionPage",
   components: {
     SessionStartButton,
@@ -315,15 +314,21 @@ export default Vue.extend({
     userStoryMode: { type: String, required: false, default: undefined },
     rejoined: { type: String, required: false, default: "true" },
   },
+  setup() {
+    const store = useDiveniStore();
+    const toast = useToast();
+    const { t } = useI18n();
+    return { store, toast, t };
+  },
   data() {
     return {
       //props copy
-      session_adminID: "",
-      session_sessionID: "",
-      session_voteSetJson: "",
-      session_sessionState: "",
-      session_timerSecondsString: "",
-      session_userStoryMode: "",
+      session_adminID: "" as string | undefined,
+      session_sessionID: "" as string | undefined,
+      session_voteSetJson: "" as string | undefined,
+      session_sessionState: "" as string | undefined,
+      session_timerSecondsString: "" as string | undefined,
+      session_userStoryMode: "" as string | undefined,
       session_hostVoting: false,
       //data
       index: 0,
@@ -340,20 +345,20 @@ export default Vue.extend({
     };
   },
   computed: {
-    selectedProject(): Project {
-      return this.$store.state.selectedProject;
+    selectedProject() {
+      return this.store.selectedProject;
     },
     userStories() {
-      return this.$store.state.userStories;
+      return this.store.userStories;
     },
     members() {
-      return this.$store.state.members;
+      return this.store.members;
     },
     webSocketIsConnected() {
-      return this.$store.state.webSocketConnected;
+      return this.store.webSocketConnected;
     },
     highlightedMembers() {
-      return this.$store.state.highlightedMembers;
+      return this.store.highlightedMembers;
     },
     membersPending(): Member[] {
       return this.members.filter((member: Member) => member.currentEstimation === null);
@@ -362,7 +367,7 @@ export default Vue.extend({
       return this.members.filter((member: Member) => member.currentEstimation !== null);
     },
     timerTimestamp() {
-      return this.$store.state.timerTimestamp ? this.$store.state.timerTimestamp : "";
+      return this.store.timerTimestamp ? this.store.timerTimestamp : "";
     },
     isMobile() {
       return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
@@ -415,18 +420,18 @@ export default Vue.extend({
   },
   async created() {
     this.copyPropsToData();
-    this.$store.commit("clearStoreWithoutUserStories");
+    this.store.clearStoreWithoutUserStories();
     if (!this.session_sessionID || !this.session_adminID) {
       //check for cookie
       await this.checkAdminCookie();
       this.assignSessionToData(this.session);
-      if (this.session_sessionID.length === 0) {
+      if (this.session_sessionID?.length === 0) {
         this.goToLandingPage();
       } else {
         this.handleReload();
       }
     }
-    this.timerCountdownNumber = parseInt(this.session_timerSecondsString, 10);
+    this.timerCountdownNumber = parseInt(this.session_timerSecondsString ?? "0", 10);
     window.addEventListener("beforeunload", this.sendUnregisterCommand);
   },
   mounted() {
@@ -502,9 +507,8 @@ export default Vue.extend({
         this.session_voteSetJson = JSON.stringify(session.sessionConfig.set);
         this.session_userStoryMode = session.sessionConfig.userStoryMode;
         this.session_hostVoting = String(session.hostVoting).toLowerCase() === "true";
-        this.$store.commit("setUserStories", {
-          stories: session.sessionConfig.userStories,
-        });
+
+        this.store.setUserStories({ stories: session.sessionConfig.userStories });
         this.voteSet = JSON.parse(this.session_voteSetJson);
       }
     },
@@ -518,7 +522,7 @@ export default Vue.extend({
       if (this.session_sessionState === Constants.memberUpdateCommandVotingFinished) {
         this.estimateFinished = true;
       }
-      this.timerCountdownNumber = parseInt(this.session_timerSecondsString, 10);
+      this.timerCountdownNumber = parseInt(this.session_timerSecondsString ?? "0", 10);
       //reconnect and reload member
       this.connectToWebSocket();
       setTimeout(() => {
@@ -543,7 +547,7 @@ export default Vue.extend({
           doRemove = false;
         } else {
           console.log(`ID: ${us[idx].id}`);
-          if (us[idx].id === null) {
+          if (us[idx].id === null && this.selectedProject?.id) {
             response = await apiService.createUserStory(
               JSON.stringify(us[idx]),
               this.selectedProject.id
@@ -561,37 +565,31 @@ export default Vue.extend({
           }
         }
         if (response.status === 200) {
-          this.$toast.success(
-            this.$t("session.notification.messages.issueTrackerSynchronizeSuccess")
+          this.toast.success(
+            this.t("session.notification.messages.issueTrackerSynchronizeSuccess")
           );
         } else if (response === 204) {
-          this.$toast.info(this.$t("session.notification.messages.issueTrackerNothingChanged"));
+          this.toast.info(this.t("session.notification.messages.issueTrackerNothingChanged"));
         } else {
-          this.$toast.error(this.$t("session.notification.messages.issueTrackerSynchronizeFailed"));
+          this.toast.error(this.t("session.notification.messages.issueTrackerSynchronizeFailed"));
         }
       }
       // WS send
       if (doRemove) {
         us.splice(idx, 1);
       }
-      this.$store.commit("setUserStories", { stories: us });
+      this.store.setUserStories({ stories: us });
       if (this.webSocketIsConnected) {
         const endPoint = `${Constants.webSocketAdminUpdatedUserStoriesRoute}`;
-        this.$store.commit("sendViaBackendWS", {
-          endPoint,
-          data: JSON.stringify(us),
-        });
+        this.store.sendViaBackendWS(endPoint, JSON.stringify(us));
       }
     },
     async refreshUserStories() {
-      const response = await apiService.getUserStoriesFromProject(this.selectedProject.name);
-      this.$store.commit("setUserStories", { stories: response });
+      const response = await apiService.getUserStoriesFromProject(this.selectedProject?.name);
+      this.store.setUserStories({ stories: response });
       if (this.webSocketIsConnected) {
         const endPoint = `${Constants.webSocketAdminUpdatedUserStoriesRoute}`;
-        this.$store.commit("sendViaBackendWS", {
-          endPoint,
-          data: JSON.stringify(response),
-        });
+        this.store.sendViaBackendWS(endPoint, JSON.stringify(response));
       }
     },
     async onSynchronizeJira({ story, doRemove }) {
@@ -604,64 +602,64 @@ export default Vue.extend({
           if (story.id === null) {
             response = await apiService.createUserStory(
               JSON.stringify(story),
-              this.selectedProject.id
+              this.selectedProject?.id
             );
             if (response.status === 200) {
               const updatedStories = this.userStories.map(
                 (s) => s.title === story.title && s.description === story.description
               );
-              this.$store.commit("setUserStories", updatedStories);
+              this.store.setUserStories({ stories: updatedStories });
             }
           } else {
             response = await apiService.updateUserStory(JSON.stringify(story));
           }
         }
         if (response.status === 200) {
-          this.$toast.success(
-            this.$t("session.notification.messages.issueTrackerSynchronizeSuccess")
+          this.toast.success(
+            this.t("session.notification.messages.issueTrackerSynchronizeSuccess")
           );
         } else {
-          this.$toast.error(this.$t("session.notification.messages.issueTrackerSynchronizeFailed"));
+          this.toast.error(this.t("session.notification.messages.issueTrackerSynchronizeFailed"));
         }
       }
     },
     onSelectedStory($event) {
       if (this.planningStart) {
         const endPoint = Constants.webSocketAdminSelectedUserStoryRoute;
-        this.$store.commit("sendViaBackendWS", { endPoint, data: $event });
+        this.store.sendViaBackendWS(endPoint, $event);
       }
       this.index = $event;
     },
     connectToWebSocket() {
       const url = `${Constants.backendURL}/connect?sessionID=${this.session_sessionID}&adminID=${this.session_adminID}`;
-      this.$store.commit("connectToBackendWS", url);
+      this.store.connectToBackendWS(url);
     },
     registerAdminPrincipalOnBackend() {
       const endPoint = Constants.webSocketRegisterAdminUserRoute;
-      this.$store.commit("sendViaBackendWS", { endPoint });
+      this.store.sendViaBackendWS(endPoint);
     },
     subscribeWSMemberUpdated() {
-      this.$store.commit("subscribeOnBackendWSAdminUpdate");
+      this.store.subscribeOnBackendWSAdminUpdate();
     },
     subscribeOnTimerStart() {
-      this.$store.commit("subscribeOnBackendWSTimerStart");
+      this.store.subscribeOnBackendWSTimerStart();
     },
     requestMemberUpdate() {
       const endPoint = Constants.webSocketGetMemberUpdateRoute;
-      this.$store.commit("sendViaBackendWS", { endPoint });
+      this.store.sendViaBackendWS(endPoint);
     },
     subscribeWSNotification() {
-      this.$store.commit("subscribeOnBackendWSNotify");
+      this.store.subscribeOnBackendWSNotify();
     },
     sendUnregisterCommand() {
       const endPoint = `${Constants.webSocketUnregisterRoute}`;
-      this.$store.commit("sendViaBackendWS", { endPoint, data: null });
-      this.$store.commit("clearStore");
+      this.store.sendViaBackendWS(endPoint, null);
+      this.store.clearStore();
     },
     sendVotingFinishedMessage() {
       if (!this.estimateFinished) {
         const endPoint = Constants.webSocketVotingFinishedRoute;
-        this.$store.commit("sendViaBackendWS", { endPoint });
+        this.store.sendViaBackendWS(endPoint);
         this.estimateFinished = true;
       }
     },
@@ -670,7 +668,7 @@ export default Vue.extend({
       this.hostEstimation = "";
       this.safedHostVoting = this.session_hostVoting;
       const endPoint = Constants.webSocketRestartPlanningRoute;
-      this.$store.commit("sendViaBackendWS", { endPoint, data: this.session_hostVoting });
+      this.store.sendViaBackendWS(endPoint, this.session_hostVoting);
     },
     goToLandingPage() {
       this.$router.push({ name: "LandingPage" });
@@ -682,7 +680,7 @@ export default Vue.extend({
     vote(vote: string) {
       this.hostEstimation = vote;
       const endPoint = `${Constants.webSocketVoteRouteAdmin}`;
-      this.$store.commit("sendViaBackendWS", { endPoint, data: vote });
+      this.store.sendViaBackendWS(endPoint, vote);
     },
   },
 });

@@ -4,7 +4,7 @@
       v-model="selected"
       :items="getProjectNames"
       :placeholder="
-        $t(
+        t(
           'session.prepare.step.selection.mode.description.withIssueTracker.placeholder.searchProjects'
         )
       "
@@ -12,25 +12,31 @@
     />
 
     <div class="mt-3">
-      {{ $t("session.prepare.step.selection.mode.description.withIssueTracker.selectedProject") }}
+      {{ t("session.prepare.step.selection.mode.description.withIssueTracker.selectedProject") }}
       <strong>{{ aCorrectProject ? selected : "-" }}</strong>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
 import apiService from "@/services/api.service";
 import Project from "../model/Project";
-import autocomplete from "vue2-autocomplete-input-tag";
+import autocomplete from "vue-autocomplete-input-tag";
+import { useDiveniStore } from "@/store";
+import { useI18n } from "vue-i18n";
 
-export default Vue.extend({
+export default defineComponent({
   name: "ProjectSelectionComponent",
 
   components: {
     autocomplete,
   },
-
+  setup() {
+    const store = useDiveniStore();
+    const { t } = useI18n();
+    return { store, t };
+  },
   data() {
     return {
       selected: null,
@@ -41,7 +47,7 @@ export default Vue.extend({
   },
   computed: {
     projects(): Array<Project> {
-      return this.$store.state.projects;
+      return this.store.projects;
     },
 
     getProjectNames(): Array<string> {
@@ -58,10 +64,10 @@ export default Vue.extend({
       if (selectedProject) {
         this.aCorrectProject = true;
         console.log(`Selected: ${selectedProject}`);
-        this.$store.commit("setSelectedProject", selectedProject);
+        this.store.setSelectedProject(selectedProject);
         console.log(`Selected Project: ${this.selected}`);
         const response = await apiService.getUserStoriesFromProject(this.selected);
-        this.$store.commit("setUserStories", { stories: response });
+        this.store.setUserStories({ stories: response });
       }
     },
   },

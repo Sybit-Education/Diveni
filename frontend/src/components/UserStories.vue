@@ -9,7 +9,7 @@
           id="search"
           v-model="input"
           type="text"
-          :placeholder="$t('page.session.before.userStories.placeholder.searchUserStories')"
+          :placeholder="t('page.session.before.userStories.placeholder.searchUserStories')"
           @input="swapPriority"
         />
       </b-input-group>
@@ -53,7 +53,7 @@
           class="mx-1 w-100 shadow-none"
           readonly
           size="sm"
-          :placeholder="$t('page.session.before.userStories.placeholder.userStoryTitle')"
+          :placeholder="t('page.session.before.userStories.placeholder.userStoryTitle')"
           @blur="publishChanges"
         />
 
@@ -82,7 +82,7 @@
       "
     >
       <b-icon-plus />
-      {{ $t("page.session.before.userStories.button.addFirstUserStory") }}
+      {{ t("page.session.before.userStories.button.addFirstUserStory") }}
     </b-button>
 
     <b-alert
@@ -90,7 +90,7 @@
       show
       variant="warning"
     >
-      {{ $t("page.session.before.userStories.filter.noStoryFound") }}
+      {{ t("page.session.before.userStories.filter.noStoryFound") }}
     </b-alert>
 
     <b-button
@@ -103,15 +103,17 @@
       "
     >
       <b-icon-plus />
-      {{ $t("page.session.before.userStories.button.addUserStory") }}
+      {{ t("page.session.before.userStories.button.addUserStory") }}
     </b-button>
   </div>
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
 import UserStory from "../model/UserStory";
-export default Vue.extend({
+import { useI18n } from "vue-i18n";
+
+export default defineComponent({
   name: "UserStories",
   props: {
     cardSet: { type: Array, required: true },
@@ -119,6 +121,10 @@ export default Vue.extend({
     showEstimations: { type: Boolean, required: true },
     showEditButtons: { type: Boolean, required: false, default: true },
     hostSelectedStoryIndex: { type: Number, required: false, default: null },
+  },
+  setup() {
+    const { t } = useI18n();
+    return { t };
   },
   data() {
     return {
@@ -263,6 +269,7 @@ export default Vue.extend({
   font-size: large;
   border: none;
 }
+
 #userStoryPicture {
   height: 30px;
   width: 30px;

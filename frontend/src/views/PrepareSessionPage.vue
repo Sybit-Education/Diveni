@@ -1,7 +1,7 @@
 <template>
   <b-container class="main">
     <h1>
-      {{ $t("session.prepare.title") }}
+      {{ t("session.prepare.title") }}
     </h1>
 
     <h4 class="mt-3">
@@ -11,16 +11,16 @@
         class="numberPictures"
       />
       <b-img v-else :src="require('@/assets/preparePage/P1D.png')" class="numberPictures" />
-      {{ $t("session.prepare.step.selection.mode.title") }}
+      {{ t("session.prepare.step.selection.mode.title") }}
     </h4>
     <b-tabs v-model="tabIndex" fill>
       <b-tab
         class="mt-2"
-        :title="$t('session.prepare.step.selection.mode.description.withoutUS.tab.label')"
+        :title="t('session.prepare.step.selection.mode.description.withoutUS.tab.label')"
       >
         <story-points-component />
       </b-tab>
-      <b-tab :title="$t('session.prepare.step.selection.mode.description.withUS.tab.label')">
+      <b-tab :title="t('session.prepare.step.selection.mode.description.withUS.tab.label')">
         <user-story-component class="mt-2" />
         <input
           id="fileUpload"
@@ -39,12 +39,12 @@
             $event.target.blur();
           "
         >
-          {{ $t("session.prepare.step.selection.mode.description.withUS.importButton") }}
+          {{ t("session.prepare.step.selection.mode.description.withUS.importButton") }}
         </b-button>
       </b-tab>
       <b-tab
         v-if="isIssueTrackerEnabled"
-        :title="$t('session.prepare.step.selection.mode.description.withIssueTracker.tab.label')"
+        :title="t('session.prepare.step.selection.mode.description.withIssueTracker.tab.label')"
       >
         <jira-component class="mt-2" />
       </b-tab>
@@ -56,7 +56,7 @@
         class="numberPictures"
       />
       <b-img v-else :src="require('@/assets/preparePage/P2D.png')" class="numberPictures" />
-      {{ $t("session.prepare.step.selection.cardSet.title") }}
+      {{ t("session.prepare.step.selection.cardSet.title") }}
     </h4>
     <card-set-component
       class="mt-3"
@@ -70,7 +70,7 @@
         class="numberPictures"
       />
       <b-img v-else :src="require('@/assets/preparePage/P3D.png')" class="numberPictures" />
-      {{ $t("session.prepare.step.selection.time.title") }}
+      {{ t("session.prepare.step.selection.time.title") }}
     </h4>
     <div id="timer-control">
       <b-button
@@ -102,7 +102,7 @@
         class="numberPictures"
       />
       <b-img v-else :src="require('@/assets/preparePage/P4D.png')" class="numberPictures" />
-      {{ $t("session.prepare.step.selection.hostVoting.title") }}
+      {{ t("session.prepare.step.selection.hostVoting.title") }}
     </h4>
     <b-row class="mt-3 text-center">
       <b-col>
@@ -111,7 +111,7 @@
           :class="{ active: hostVoting }"
           @click="hostVoting = true"
         >
-          {{ $t("session.prepare.step.selection.hostVoting.hostVotingOn") }}
+          {{ t("session.prepare.step.selection.hostVoting.hostVotingOn") }}
         </b-button>
       </b-col>
       <b-col>
@@ -120,12 +120,12 @@
           :class="{ active: !hostVoting }"
           @click="hostVoting = false"
         >
-          {{ $t("session.prepare.step.selection.hostVoting.hostVotingOff") }}
+          {{ t("session.prepare.step.selection.hostVoting.hostVotingOff") }}
         </b-button>
       </b-col>
     </b-row>
     <h4 class="mt-3">
-      {{ $t("session.prepare.step.selection.password.title") }}
+      {{ t("session.prepare.step.selection.password.title") }}
     </h4>
     <b-row class="mt-3">
       <b-col>
@@ -134,7 +134,7 @@
             <b-form-input
               id="input-password"
               v-model="password"
-              :placeholder="$t('session.prepare.step.selection.password.placeholder')"
+              :placeholder="t('session.prepare.step.selection.password.placeholder')"
             />
           </b-form-group>
         </b-form>
@@ -145,13 +145,13 @@
       :disabled="buttonDisabled()"
       @click="sendCreateSessionRequest"
     >
-      {{ $t("session.prepare.button.start") }}
+      {{ t("session.prepare.button.start") }}
     </b-button>
   </b-container>
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
 import Session from "../model/Session";
 import Constants from "../constants";
 import CardSetComponent from "../components/CardSetComponent.vue";
@@ -161,14 +161,23 @@ import StoryPointsComponent from "@/components/StoryPointsComponent.vue";
 import UserStory from "@/model/UserStory";
 import papaparse from "papaparse";
 import apiService from "@/services/api.service";
+import { useDiveniStore } from "@/store";
+import { useToast } from "vue-toastification";
+import { useI18n } from "vue-i18n";
 
-export default Vue.extend({
+export default defineComponent({
   name: "PrepareSessionPage",
   components: {
     CardSetComponent,
     UserStoryComponent,
     JiraComponent,
     StoryPointsComponent,
+  },
+  setup() {
+    const store = useDiveniStore();
+    const toast = useToast();
+    const { t } = useI18n();
+    return { store, toast, t };
   },
   data() {
     return {
@@ -184,7 +193,7 @@ export default Vue.extend({
   },
   computed: {
     userStories() {
-      return this.$store.state.userStories;
+      return this.store.userStories;
     },
     userStoryMode(): string {
       return ["NO_US", "US_MANUALLY", "US_JIRA"][this.tabIndex];
@@ -220,7 +229,7 @@ export default Vue.extend({
         result.isJiraServerEnabled === "true" ||
         result.isAzureDevOpsEnabled === "true";
     });
-    this.$store.commit("setUserStories", { stories: [] });
+    this.store.setUserStories({ stories: [] });
   },
   methods: {
     async sendCreateSessionRequest() {
@@ -281,7 +290,7 @@ export default Vue.extend({
       return this.selectedCardSetOptions.length < 1;
     },
     onUserStoriesChanged(stories) {
-      this.$store.commit("setUserStories", { stories });
+      this.store.setUserStories({ stories });
     },
     setTimerUp() {
       if (this.timer === 4 * 60 + 15) {
@@ -330,18 +339,16 @@ export default Vue.extend({
               isActive: false,
             });
           });
-          this.$store.commit("setUserStories", {
-            stories: stories,
-          });
-          this.$toast.success(
-            this.$t(
+          this.store.setUserStories({ stories: stories });
+          this.toast.success(
+            this.t(
               "session.prepare.step.selection.mode.description.withUS.toastSuccessNotification"
             )
           );
         },
         error: () => {
-          this.$toast.error(
-            this.$t("session.prepare.step.selection.mode.description.withUS.toastErrorNotification")
+          this.toast.error(
+            this.t("session.prepare.step.selection.mode.description.withUS.toastErrorNotification")
           );
         },
       });

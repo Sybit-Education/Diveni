@@ -16,7 +16,7 @@
           $event.target.blur();
         "
       >
-        {{ $t("page.session.before.copy.id") }}
+        {{ t("page.session.before.copy.id") }}
       </b-button>
       <b-button
         class="mx-1"
@@ -26,20 +26,20 @@
           $event.target.blur();
         "
       >
-        {{ $t("page.session.before.copy.link") }}
+        {{ t("page.session.before.copy.link") }}
       </b-button>
       <b-button
         class="mx-1"
         variant="info"
         @click="
-          $bvModal.show('qr-modal');
+          toggleQrModal();
           $event.target.blur();
         "
       >
-        {{ $t("page.session.before.copy.qr") }}
+        {{ t("page.session.before.copy.qr") }}
       </b-button>
     </b-popover>
-    <b-modal id="qr-modal" ok-only>
+    <b-modal v-if="showQrModal" id="qr-modal" ok-only>
       <template #modal-header>
         <h3>QR code</h3>
       </template>
@@ -49,10 +49,11 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
+import { useI18n } from "vue-i18n";
 import QrcodeVue from "qrcode.vue";
 
-export default Vue.extend({
+export default defineComponent({
   name: "CopySessionIdPopup",
   components: {
     QrcodeVue,
@@ -62,8 +63,13 @@ export default Vue.extend({
     sessionId: { type: String, required: true },
     textAfterSessionID: { type: String, required: false, default: "" },
   },
+  setup() {
+    const { t } = useI18n();
+    return { t };
+  },
   data: () => ({
     canCopy: false,
+    showQrModal: false,
   }),
   computed: {
     sessionLink(): string {
@@ -87,6 +93,9 @@ export default Vue.extend({
       } else {
         this.copyToClipboardAlternative(this.sessionId);
       }
+    },
+    toggleQrModal() {
+      this.showQrModal = !this.showQrModal;
     },
     copyLinkToClipboard() {
       const text = this.sessionLink;

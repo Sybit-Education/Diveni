@@ -16,14 +16,15 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent, PropType } from "vue";
 import RoundedAvatar from "@/components/RoundedAvatar.vue";
+import Member from "@/model/Member";
 
-export default Vue.extend({
+export default defineComponent({
   name: "SessionMemberCard",
   components: { RoundedAvatar },
   props: {
-    member: { type: Object, required: true },
+    member: { type: Object as PropType<Member>, required: true },
     props: {
       type: Object,
       required: false,

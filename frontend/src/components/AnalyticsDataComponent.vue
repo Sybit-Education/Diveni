@@ -3,8 +3,8 @@
     <h1>{{ headerText }}</h1>
     <b-card-group deck>
       <b-card class="statsCards">
-        <b-card-title style="text-align: center">
-          {{ $t("page.landing.meeting.analytics.allCreatedSessionsTitle") }}
+        <b-card-title style="text-align: center"
+          >{{ t("page.landing.meeting.analytics.allCreatedSessionsTitle") }}
         </b-card-title>
         <b-card-text>
           <h2 class="numbers">{{ tweenedOverAllSessions.toFixed(0) }}</h2>
@@ -20,7 +20,7 @@
       </b-card>
       <b-card class="statsCards">
         <b-card-title style="text-align: center">
-          {{ $t("page.landing.meeting.analytics.lastMonthTitle") }}
+          {{ t("page.landing.meeting.analytics.lastMonthTitle") }}
         </b-card-title>
         <b-card-text>
           <h2 class="numbers">
@@ -40,7 +40,7 @@
       </b-card>
       <b-card class="statsCards">
         <b-card-title style="text-align: center">
-          {{ $t("page.landing.meeting.analytics.activeTitle") }}
+          {{ t("page.landing.meeting.analytics.activeTitle") }}
         </b-card-title>
         <b-card-text>
           <h2 class="numbers">
@@ -63,11 +63,16 @@
   </b-container>
 </template>
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
 import gsap from "gsap";
 import apiService from "@/services/api.service";
-export default Vue.extend({
+import { useI18n } from "vue-i18n";
+export default defineComponent({
   name: "AnalyticsDataComponent",
+  setup() {
+    const { t } = useI18n();
+    return { t };
+  },
   data() {
     return {
       loaded: false,
@@ -87,13 +92,13 @@ export default Vue.extend({
   },
   computed: {
     headerText() {
-      return this.$t("page.landing.meeting.analytics.title");
+      return this.t("page.landing.meeting.analytics.title");
     },
     allSessions() {
-      return this.$t("page.landing.meeting.analytics.sessionText");
+      return this.t("page.landing.meeting.analytics.sessionText");
     },
     allAttendees() {
-      return this.$t("page.landing.meeting.analytics.attendeesText");
+      return this.t("page.landing.meeting.analytics.attendeesText");
     },
   },
   watch: {

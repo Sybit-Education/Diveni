@@ -3,18 +3,23 @@
     <b-container>
       <div>
         &copy; 2022-{{ currentYear }} Diveni |
-        <a href="https://docs.diveni.io">{{ $t("general.about.docs") }}</a> |
-        <router-link to="/about">{{ $t("general.about.label") }}</router-link>
+        <a href="https://docs.diveni.io">{{ t("general.about.docs") }}</a> |
+        <router-link to="/about">{{ t("general.about.label") }}</router-link>
       </div>
       <div>Made with ❤️ by Diveni Development Team</div>
     </b-container>
   </footer>
 </template>
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
+import { useI18n } from "vue-i18n";
 
-export default Vue.extend({
+export default defineComponent({
   name: "FooterBar",
+  setup() {
+    const { t } = useI18n();
+    return { t };
+  },
   computed: {
     currentYear() {
       return new Date().getFullYear();

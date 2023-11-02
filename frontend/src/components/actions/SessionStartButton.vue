@@ -6,31 +6,36 @@
     :disabled="!members || members.length < 1"
     @click="sendStartEstimationMessages"
   >
-    {{ $t("page.session.before.button") }}
+    {{ t("page.session.before.button") }}
   </b-button>
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
 import Constants from "@/constants";
 import Member from "@/model/Member";
-export default Vue.extend({
+import { useDiveniStore } from "@/store";
+import { useI18n } from "vue-i18n";
+
+export default defineComponent({
   name: "SessionStartButton",
   props: {
-    members: {
-      type: Array,
-      required: false,
-      default: () => [] as Array<Member>,
-    },
     hostVoting: { type: Boolean, required: true },
+  },
+  setup() {
+    const store = useDiveniStore();
+    const { t } = useI18n();
+    return { store, t };
+  },
+  computed: {
+    members() {
+      return this.store.members;
+    },
   },
   methods: {
     sendStartEstimationMessages() {
       const endPoint = Constants.webSocketStartPlanningRoute;
-      this.$store.commit("sendViaBackendWS", {
-        endPoint,
-        data: this.hostVoting,
-      });
+      this.store.sendViaBackendWS(endPoint, this.hostVoting);
       this.$emit("clicked");
     },
   },

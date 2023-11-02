@@ -8,24 +8,24 @@
     <b-container class="my-5">
       <b-card-group deck class="justify-content-center">
         <landing-page-card
-          :title="$t('page.landing.meeting.new.title')"
-          :description="$t('page.landing.meeting.new.description')"
-          :button-text="$t('page.landing.meeting.new.buttons.start.label')"
+          :title="t('page.landing.meeting.new.title')"
+          :description="t('page.landing.meeting.new.description')"
+          :button-text="t('page.landing.meeting.new.buttons.start.label')"
           :on-click="goToPrepareSessionPage"
           class="newSessionCard"
         />
         <landing-page-card
-          :title="$t('page.landing.meeting.join.title')"
-          :description="$t('page.landing.meeting.join.description')"
-          :button-text="$t('page.landing.meeting.join.buttons.start.label')"
+          :title="t('page.landing.meeting.join.title')"
+          :description="t('page.landing.meeting.join.description')"
+          :button-text="t('page.landing.meeting.join.buttons.start.label')"
           :on-click="goToJoinPage"
           class="joinSessionCard"
         />
         <landing-page-card
           v-if="sessionWrapper.session"
-          :title="$t('page.landing.meeting.reconnect.title')"
-          :description="$t('page.landing.meeting.reconnect.description')"
-          :button-text="$t('page.landing.meeting.reconnect.buttons.start.label')"
+          :title="t('page.landing.meeting.reconnect.title')"
+          :description="t('page.landing.meeting.reconnect.description')"
+          :button-text="t('page.landing.meeting.reconnect.buttons.start.label')"
           :on-click="goToSessionPage"
           class="reconnectSessionCard"
         />
@@ -106,16 +106,24 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
 import LandingPageCard from "../components/LandingPageCard.vue";
 import Constants from "../constants";
 import Session from "../model/Session";
 import AnalyticsDataComponent from "../components/AnalyticsDataComponent.vue";
-export default Vue.extend({
+import { useDiveniStore } from "@/store";
+import { useI18n } from "vue-i18n";
+
+export default defineComponent({
   name: "LandingPage",
   components: {
     LandingPageCard,
     AnalyticsDataComponent,
+  },
+  setup() {
+    const store = useDiveniStore();
+    const { t } = useI18n();
+    return { store, t };
   },
   data() {
     return {
@@ -172,7 +180,7 @@ export default Vue.extend({
       this.$router.push({ name: "PrepareSessionPage" });
     },
     goToSessionPage() {
-      this.$store.commit("setUserStories", {
+      this.store.setUserStories({
         stories: this.sessionWrapper.session.sessionConfig.userStories,
       });
       this.$router.push({

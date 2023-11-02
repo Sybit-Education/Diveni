@@ -4,13 +4,13 @@
       <template #overlay>
         <b-spinner class="me-2" />
         <span class="overlayText">
-          {{ $t("page.vote.hostLeft") }}
+          {{ t("page.vote.hostLeft") }}
         </span>
       </template>
 
       <b-row class="headers">
         <b-col>
-          <h1>{{ $t("page.vote.title") }}</h1>
+          <h1>{{ t("page.vote.title") }}</h1>
         </b-col>
 
         <b-col cols="auto">
@@ -60,7 +60,7 @@
               class="flicking-panel mx-2"
               :vote-option="voteOption"
               :index="idx"
-              :hex-color="hexColor"
+              :hex-color="hexColor ?? ''"
               :dragged="voteOption === draggedVote"
               :is-mobile="true"
               :disabled="pauseSession"
@@ -79,7 +79,7 @@
                 class="flicking-panel m-2"
                 :vote-option="voteOption"
                 :index="idx"
-                :hex-color="hexColor"
+                :hex-color="hexColor ?? ''"
                 :dragged="voteOption === draggedVote"
                 :is-mobile="false"
                 :disabled="pauseSession"
@@ -91,8 +91,10 @@
       </b-row>
       <b-row v-if="!isStartVoting && !votingFinished" class="my-5">
         <h3 id="header">
-          {{ $t("page.vote.waiting") }}
-          <sub><b-icon-three-dots animation="fade" font-scale="1" /></sub>
+          {{ t("page.vote.waiting") }}
+          <sub>
+            <b-icon-three-dots animation="fade" font-scale="1" />
+          </sub>
         </h3>
       </b-row>
       <b-row
@@ -193,7 +195,6 @@
 
 <script lang="ts">
 // eslint-disable-next-line
-import Vue from "vue";
 import RoundedAvatar from "../components/RoundedAvatar.vue";
 import MemberVoteCard from "../components/MemberVoteCard.vue";
 import Constants from "../constants";
@@ -209,8 +210,13 @@ import MobileStoryTitle from "../components/MobileStoryTitle.vue";
 import UserStorySumComponent from "@/components/UserStorySum.vue";
 import SessionLeaveButton from "@/components/actions/SessionLeaveButton.vue";
 import SessionAdminCard from "@/components/SessionAdminCard.vue";
+import { defineComponent } from "vue";
+import { useDiveniStore } from "@/store";
+import { useToast } from "vue-toastification";
+import { useI18n } from "vue-i18n";
+import AdminVote from "@/model/AdminVote";
 
-export default Vue.extend({
+export default defineComponent({
   name: "MemberVotePage",
   components: {
     SessionLeaveButton,
@@ -226,26 +232,30 @@ export default Vue.extend({
     MobileStoryTitle,
     UserStorySumComponent,
   },
-  props: {
-    memberID: { type: String, default: undefined },
-    name: { type: String, default: undefined },
-    hexColor: { type: String, default: undefined },
-    avatarAnimalAssetName: { type: String, default: undefined },
-    voteSetJson: { type: String, default: undefined },
-    timerSecondsString: { type: String, default: undefined },
-    userStoryMode: { type: String, default: undefined },
+  setup() {
+    const store = useDiveniStore();
+    const toast = useToast();
+    const { t } = useI18n();
+    return { store, toast, t };
   },
   data() {
     return {
       index: 0,
-      hostSelectedStoryIndex: null,
+      hostSelectedStoryIndex: undefined,
       draggedVote: null,
       voteSet: [] as string[],
       timerCountdownNumber: 0,
       triggerTimer: 0,
       estimateFinished: false,
       pauseSession: false,
-      safedHostEstimation: null,
+      memberID: history.state.memberID,
+      name: history.state.name,
+      hexColor: history.state.hexColor,
+      avatarAnimalAssetName: history.state.avatarAnimalAssetName,
+      voteSetJson: history.state.voteSetJson,
+      timerSecondsString: history.state.timerSecondsString,
+      userStoryMode: history.state.userStoryMode,
+      safedHostEstimation: undefined as string | undefined,
     };
   },
   computed: {
@@ -255,10 +265,10 @@ export default Vue.extend({
       );
     },
     userStories() {
-      return this.$store.state.userStories;
+      return this.store.userStories;
     },
     memberUpdates() {
-      return this.$store.state.memberUpdates;
+      return this.store.memberUpdates;
     },
     isStartVoting(): boolean {
       return this.memberUpdates.at(-1) === Constants.memberUpdateCommandStartVoting;
@@ -267,35 +277,37 @@ export default Vue.extend({
       return this.memberUpdates.at(-1) === Constants.memberUpdateCommandVotingFinished;
     },
     members() {
-      return this.$store.state.members;
+      return this.store.members;
     },
     membersEstimated(): Member[] {
       return this.members.filter((member: Member) => member.currentEstimation !== null);
     },
     highlightedMembers() {
-      return this.$store.state.highlightedMembers;
+      return this.store.highlightedMembers;
     },
     timerTimestamp() {
-      return this.$store.state.timerTimestamp ? this.$store.state.timerTimestamp : "";
+      return this.store.timerTimestamp ? this.store.timerTimestamp : "";
     },
     notifications() {
-      return this.$store.state.notifications;
+      return this.store.notifications;
     },
     hostVoting(): boolean {
-      return this.$store.state.hostVoting;
+      return this.store.hostVoting;
     },
     hostEstimation() {
-      return this.$store.state.hostEstimation;
+      return this.store.hostEstimation;
     },
     getMember() {
       return {
-        hexColor: this.hexColor,
-        avatarAnimal: this.avatarAnimalAssetName,
+        memberID: "",
         name: this.name,
-      };
+        hexColor: this.hexColor,
+        avatarAnimalAssetName: this.avatarAnimalAssetName,
+        currentEstimation: "",
+      } as Member;
     },
     selectedUserStoryIndex() {
-      return this.$store.state.selectedUserStoryIndex;
+      return this.store.selectedUserStoryIndex;
     },
   },
   watch: {
@@ -303,7 +315,7 @@ export default Vue.extend({
       if (updates.at(-1) === Constants.memberUpdateCommandStartVoting) {
         this.draggedVote = null;
         this.estimateFinished = false;
-        this.safedHostEstimation = null;
+        this.safedHostEstimation = undefined;
         this.triggerTimer = (this.triggerTimer + 1) % 5;
       } else if (updates.at(-1) === Constants.memberUpdateCommandVotingFinished) {
         this.estimateFinished = true;
@@ -320,15 +332,17 @@ export default Vue.extend({
         });
       }
       if (this.hostVoting) {
-        this.safedHostEstimation = this.hostEstimation.hostEstimation;
+        this.safedHostEstimation = this.hostEstimation?.hostEstimation;
       }
     },
     notifications(notifications) {
+      const lastNotification = this.notifications.at(-1);
       if (
-        notifications.at(-1).type === "MEMBER_LEFT" &&
-        notifications.at(-1).payload.memberID === this.memberID
+        lastNotification &&
+        lastNotification?.type === "MEMBER_LEFT" &&
+        lastNotification?.payload.memberID === this.memberID
       ) {
-        this.$toast.error(this.$t("session.notification.messages.memberRemoved"));
+        this.toast.error(this.t("session.notification.messages.memberRemoved"));
         this.leaveMeeting();
       }
     },
@@ -337,7 +351,9 @@ export default Vue.extend({
     },
   },
   created() {
-    this.timerCountdownNumber = JSON.parse(this.timerSecondsString);
+    if (this.timerSecondsString !== undefined) {
+      this.timerCountdownNumber = Number.parseInt(this.timerSecondsString);
+    }
   },
   mounted() {
     if (
@@ -348,7 +364,7 @@ export default Vue.extend({
     ) {
       this.goToJoinPage();
     }
-    this.voteSet = JSON.parse(this.voteSetJson);
+    this.voteSet = JSON.parse(this.voteSetJson ?? "{}");
   },
   methods: {
     isAdminHighlighted() {
@@ -378,7 +394,7 @@ export default Vue.extend({
     onSendVote({ vote }) {
       this.draggedVote = vote;
       const endPoint = `${Constants.webSocketVoteRoute}`;
-      this.$store.commit("sendViaBackendWS", { endPoint, data: vote });
+      this.store.sendViaBackendWS(endPoint, vote);
     },
     goToJoinPage() {
       this.$router.push({ name: "JoinPage" });
