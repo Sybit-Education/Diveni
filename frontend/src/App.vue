@@ -98,6 +98,6 @@ main {
     );
   background-color: var(--background-color-primary);
   backdrop-filter: blur(5px);
-  color: var(--text-primary-color) !important;
+  color: var(--text-primary-color);
 }
 </style>
