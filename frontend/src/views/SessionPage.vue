@@ -43,7 +43,7 @@
           :session-id="session_sessionID"
         />
       </b-col>
-      <b-col id="sessionCloseCol" cols="auto">
+      <b-col cols="auto">
         <session-close-button
           :is-planning-start="planningStart"
           :user-story-mode="session_userStoryMode"
@@ -785,14 +785,11 @@ export default Vue.extend({
   max-height: 500px;
 }
 
-#sessionCloseCol {
-  min-width: 200px;
-}
-
 .headers {
   display: flex;
   align-items: center;
   min-height: 20vh;
+  margin-right: 130px;
 }
 
 .bIcons {
