@@ -55,7 +55,9 @@
           "buttons": {
             "new": "New",
             "result": "Show result",
-            "finish": "Finish session"
+            "finish": "Finish session",
+            "autoRevealOn": "Auto reveal on",
+            "autoRevealOff": "Auto reveal off"
           }
         },
         "modal": {
