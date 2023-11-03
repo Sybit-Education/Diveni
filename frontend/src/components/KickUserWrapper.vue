@@ -48,16 +48,16 @@ export default defineComponent({
     member: { type: Object as PropType<Member>, required: true },
     props: { type: Object, required: false, default: () => ({}) },
   },
-  data() {
-    return {
-      showModal: false,
-      showPopover: false,
-    };
-  },
   setup() {
     const store = useDiveniStore();
     const { t } = useI18n();
     return { store, t };
+  },
+  data() {
+    return {
+      showModal: false,
+      showPopover: true,
+    };
   },
   computed: {
     width() {
@@ -74,13 +74,10 @@ export default defineComponent({
   methods: {
     openModal() {
       this.showModal = true;
-      this.showPopover = true;
-      // this.$root.$emit("bv::hide::popover");
-      // this.$root.$emit("bv::show::modal", `modal${this.member.memberID}`, "#btnShow");
+      this.showPopover = false;
     },
     closeModal() {
       this.showModal = false;
-      // this.$root.$emit("bv::hide::modal", `modal${this.member.memberID}`, "#btnShow");
     },
     removeMember() {
       const endPoint = Constants.webSocketKickMemberRoute;
