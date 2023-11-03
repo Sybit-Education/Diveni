@@ -17,10 +17,13 @@
       <b-tab
         class="mt-2"
         :title="$t('session.prepare.step.selection.mode.description.withoutUS.tab.label')"
+        :title-link-class="linkClass(0)"
       >
         <story-points-component />
       </b-tab>
-      <b-tab :title="$t('session.prepare.step.selection.mode.description.withUS.tab.label')">
+      <b-tab :title="$t('session.prepare.step.selection.mode.description.withUS.tab.label')"
+             :title-link-class="linkClass(1)"
+      >
         <user-story-component class="mt-2" />
         <input
           id="fileUpload"
@@ -45,6 +48,7 @@
       <b-tab
         v-if="isIssueTrackerEnabled"
         :title="$t('session.prepare.step.selection.mode.description.withIssueTracker.tab.label')"
+        :title-link-class="linkClass(3)"
       >
         <jira-component class="mt-2" />
       </b-tab>
@@ -211,6 +215,13 @@ export default Vue.extend({
     this.$store.commit("setUserStories", { stories: [] });
   },
   methods: {
+    linkClass(idx) {
+      if (this.tabIndex === idx) {
+        return ["selectedTab", "selectedTextColor"];
+      } else {
+        return ["notSelectedTab", "notSelectedTextColor"];
+      }
+    },
     async sendCreateSessionRequest() {
       const url = Constants.backendURL + Constants.createSessionRoute;
       const sessionConfig = {
@@ -338,12 +349,12 @@ export default Vue.extend({
 });
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import "@/assets/style/_variables.scss";
 
 /* Prepare Page */
 .selectedTab {
-  background-color: var(--primary-button);
+  background-color: var(--primary-button) !important;
 }
 
 .selectedTextColor {
@@ -399,6 +410,7 @@ export default Vue.extend({
   border-color: var(--text-primary-color);
   background-color: var(--preparePageInActiveTabHover);
 }
+
 .hostVotingButtons:focus {
   color: var(--text-primary-color);
   border-color: var(--text-primary-color);
