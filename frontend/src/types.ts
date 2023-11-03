@@ -16,6 +16,7 @@ export interface StoreState {
   hostVoting: boolean;
   hostEstimation: string | undefined;
   selectedUserStoryIndex: number | undefined;
+  autoReveal: boolean;
 }
 
 export interface JiraRequestTokenDto {

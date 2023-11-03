@@ -52,6 +52,7 @@ export default Vue.extend({
         console.debug("JoinPage: member connected to websocket");
         this.registerMemberPrincipalOnBackend();
         this.subscribeWSMemberUpdates();
+        this.subscribeWSMemberUpdatesWithAutoReveal();
         this.subscribeWSadminUpdatedUserStories();
         this.subscribeWSStorySelected();
         this.subscribeWSMemberUpdated();
@@ -124,6 +125,9 @@ export default Vue.extend({
     },
     subscribeWSMemberUpdates() {
       this.$store.commit("subscribeOnBackendWSMemberUpdates");
+    },
+    subscribeWSMemberUpdatesWithAutoReveal() {
+      this.$store.commit("subscribeOnBackendWSMemberUpdatesWithAutoReveal");
     },
     subscribeWSNotification() {
       this.$store.commit("subscribeOnBackendWSNotify");
