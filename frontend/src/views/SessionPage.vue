@@ -183,7 +183,7 @@
         style="max-height: 500px"
       >
         <session-admin-card
-          v-if="estimateFinished || hostEstimation !== ''"
+          v-if="(estimateFinished && session_hostVoting) || hostEstimation !== ''"
           :current-estimation="hostEstimation"
           :estimate-finished="estimateFinished"
           :highlight="highlightedMembers.includes(adminID) || highlightedMembers.length === 0"
@@ -217,7 +217,7 @@
           }"
         />
         <session-admin-card
-          v-if="estimateFinished || hostEstimation !== ''"
+          v-if="(estimateFinished && session_hostVoting) || hostEstimation !== ''"
           :current-estimation="hostEstimation"
           :estimate-finished="estimateFinished"
           :highlight="highlightedMembers.includes(adminID) || highlightedMembers.length === 0"
