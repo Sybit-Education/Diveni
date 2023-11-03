@@ -59,38 +59,13 @@
           </b-card-group>
           <b-card-group deck>
             <b-card class="aboutDiveni" title="Set up Session">
-              <b-card-text>
-                Create a planning session and select your prefered voting set.
-              </b-card-text>
-              <b-card-text>
-                You could import your user stories or connect JIRA to syncronize story points.
-              </b-card-text>
-
-              <b-card-sub-title> Connecting to Issue-Tracker </b-card-sub-title>
-              <b-card-text>
-                DIVENI could connect to issue trackers like Azure DevOps, JIRA Server and Cloud to
-                show user stories and update the voted results of your planning poker.
-              </b-card-text>
+              <b-card-text v-html="$t('page.instruction.setUpSession')"></b-card-text>
             </b-card>
             <b-card class="aboutDiveni" title="Invite your Team">
-              <b-card-text> Invite your team using QR-Code, invite link or code. </b-card-text>
-              <b-card-text>
-                Every user will be randomly assinged to a animal and is ready to estimate.
-              </b-card-text>
-              <b-card-text>
-                If everybody is in the session, you could start estimation. Having defined a time
-                limit this will be used as limit for voting time.
-              </b-card-text>
+              <b-card-text v-html="$t('page.instruction.inviteYourTeam')"></b-card-text>
             </b-card>
             <b-card class="aboutDiveni" title="Estimate User Stories">
-              <b-card-text>
-                Every member of team could use your defined set to vote the selected user story.
-              </b-card-text>
-              <b-card-text>
-                If everybody has voted, DIVENI shows results and randomly selects two voters having
-                voted minimum / maximum to discuss their estimation.
-              </b-card-text>
-              <b-card-text> After discussion you could repeat estimation. </b-card-text>
+              <b-card-text v-html="$t('page.instruction.estimateUserStories')"></b-card-text>
             </b-card>
           </b-card-group>
         </div>
@@ -111,6 +86,7 @@ import LandingPageCard from "../components/LandingPageCard.vue";
 import Constants from "../constants";
 import Session from "../model/Session";
 import AnalyticsDataComponent from "../components/AnalyticsDataComponent.vue";
+
 export default Vue.extend({
   name: "LandingPage",
   components: {
@@ -241,6 +217,7 @@ export default Vue.extend({
 .card-sub-title {
   color: red;
 }
+
 .card-title {
   color: var(--text-primary-color);
 }

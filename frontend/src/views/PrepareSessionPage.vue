@@ -165,7 +165,6 @@ export default Vue.extend({
       timer: 30,
       warningWhenUnderZero: "",
       tabIndex: 0,
-      hostVoting: false,
       isIssueTrackerEnabled: false,
       theme: localStorage.getItem("user-theme"),
     };
@@ -239,7 +238,6 @@ export default Vue.extend({
             sessionState: string;
           };
           adminCookie: string;
-          hostVoting: string;
         };
         window.localStorage.setItem("adminCookie", response.adminCookie);
         this.goToSessionPage(response.session as Session);
@@ -257,7 +255,6 @@ export default Vue.extend({
           voteSetJson: JSON.stringify(session.sessionConfig.set),
           sessionState: session.sessionState,
           userStoryMode: session.sessionConfig.userStoryMode,
-          hostVoting: this.hostVoting.toString(),
           rejoined: "false",
         },
       });
