@@ -232,10 +232,8 @@ export default Vue.extend({
 }
 
 .aboutDiveni {
-  border-radius: 2rem;
-  background-color: var(--landingPageCardsBackground);
-  box-shadow: 0 0 5px 10px var(--landingPageCardsBackground);
-  border: none;
+  box-shadow: 0 0 5px 5px var(--landingPageCardsBackground);
+  border: none !important;
 }
 
 .card-sub-title {
@@ -265,8 +263,9 @@ export default Vue.extend({
 
 .pictureCard {
   background: transparent;
-  border: none;
   align-items: center;
+  box-shadow: 0 0 5px 5px var(--landingPageCardsBackground);
+  border: none !important;
 }
 
 .landingPagePictures {
