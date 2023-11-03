@@ -102,19 +102,30 @@
         class="numberPictures"
       />
       <b-img v-else :src="require('@/assets/preparePage/P4D.png')" class="numberPictures" />
+      {{ $t("session.prepare.step.selection.hostVoting.title") }}
+    </h4>
+    <b-row class="mt-3">
+      <b-col>
+        <b-form-radio-group v-model="hostVoting" buttons>
+          <b-form-radio :value="true">
+            {{ $t("session.prepare.step.selection.hostVoting.hostVotingOn") }}
+          </b-form-radio>
+          <b-form-radio :value="false">
+            {{ $t("session.prepare.step.selection.hostVoting.hostVotingOff") }}
+          </b-form-radio>
+        </b-form-radio-group>
+      </b-col>
+    </b-row>
+    <h4 class="mt-3">
       {{ $t("session.prepare.step.selection.password.title") }}
     </h4>
     <b-row class="mt-3">
       <b-col>
-        <b-form>
-          <b-form-group label-for="input-password">
-            <b-form-input
-              id="input-password"
-              v-model="password"
-              :placeholder="$t('session.prepare.step.selection.password.placeholder')"
-            />
-          </b-form-group>
-        </b-form>
+        <b-form-input
+          id="input-password"
+          v-model="password"
+          :placeholder="$t('session.prepare.step.selection.password.placeholder')"
+        />
       </b-col>
     </b-row>
     <b-button
@@ -329,7 +340,7 @@ export default Vue.extend({
 
 /* Prepare Page */
 .selectedTab {
-  background-color: var(--preparePageMainColor) !important;
+  background-color: var(--primary-button);
 }
 
 .selectedTextColor {
@@ -371,19 +382,26 @@ export default Vue.extend({
   }
 }
 
-.importUserStoryButton {
-  background-color: var(--preparePageMainColor);
+.hostVotingButtons {
   color: var(--text-primary-color);
+  border-color: var(--text-primary-color);
+  background-color: transparent;
+  font-size: large;
+  width: 68px;
+  text-align: center;
 }
 
-.importUserStoryButton:hover {
-  background-color: var(--startButtonHovered);
-  color: var(--text-primary-color);
-}
-
-.importUserStoryButton:focus {
-  background-color: var(--startButtonHovered) !important;
+.hostVotingButtons:hover {
   color: var(--text-primary-color) !important;
+  border-color: var(--text-primary-color);
+  background-color: var(--preparePageInActiveTabHover);
+}
+.hostVotingButtons:focus {
+  color: var(--text-primary-color);
+  border-color: var(--text-primary-color);
+  background-color: transparent !important;
+  outline: none;
+  box-shadow: none;
 }
 
 .optionButtons {
