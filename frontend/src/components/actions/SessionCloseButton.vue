@@ -8,8 +8,8 @@
       {{ $t("page.session.during.estimation.buttons.finish") }}
     </b-button>
     <b-modal
-      class="modal-header"
       id="close-session-modal"
+      class="modal-header"
       :title="$t('page.session.close.popup')"
       :cancel-title="$t('page.session.close.button.cancel')"
       :ok-title="$t('page.session.close.button.ok')"

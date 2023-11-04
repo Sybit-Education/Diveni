@@ -273,4 +273,9 @@ export default Vue.extend({
   color: var(--text-primary-color);
   font-size: large;
 }
+
+.btn-secondary:not(:disabled):not(.disabled),
+.show > .btn-secondary.dropdown-toggle {
+  background-color: var(--primary-button) !important;
+}
 </style>

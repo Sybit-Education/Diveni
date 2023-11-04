@@ -234,7 +234,7 @@ export default Vue.extend({
   flex-direction: column;
   cursor: pointer;
   border-radius: $border-radius;
-  box-shadow: 10px 10px 5px var(--accent-color);
+  box-shadow: 8px 8px 5px var(--box-shadow);
 
   &:hover {
     border-width: 4px;
@@ -242,7 +242,7 @@ export default Vue.extend({
     border-style: solid;
   }
   &.selected {
-    border-width: 3px;
+    border-width: 5px;
     border-color: var(--primary-button);
     border-style: solid;
   }

@@ -21,8 +21,9 @@
       >
         <story-points-component />
       </b-tab>
-      <b-tab :title="$t('session.prepare.step.selection.mode.description.withUS.tab.label')"
-             :title-link-class="linkClass(1)"
+      <b-tab
+        :title="$t('session.prepare.step.selection.mode.description.withUS.tab.label')"
+        :title-link-class="linkClass(1)"
       >
         <user-story-component class="mt-2" />
         <input
@@ -355,7 +356,7 @@ export default Vue.extend({
 /* Prepare Page */
 .btn-secondary:not(:disabled):not(.disabled),
 .show > .btn-secondary.dropdown-toggle {
-  background-color: var(--preparePageNotSelectedTabBackground) !important;
+  background-color: var(--preparePageTimerBackground);
 }
 
 .btn-secondary:not(:disabled):not(.disabled):active,
@@ -393,7 +394,7 @@ export default Vue.extend({
 .hostVotingButtons {
   color: var(--text-primary-color);
   border-color: var(--text-primary-color);
-  background-color: red !important;
+  background-color: transparent;
   font-size: large;
   width: 68px;
   text-align: center;

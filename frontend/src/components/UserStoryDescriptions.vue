@@ -20,6 +20,7 @@
           />
           <b-dropdown
             v-show="editDescription"
+            variant="none"
             class="mx-3 estimationDescription"
             :text="(userStories[idx].estimation ? userStories[idx].estimation : '?') + '    '"
           >
@@ -158,6 +159,18 @@ export default Vue.extend({
 </script>
 
 <style scoped>
+.estimationDescription {
+  border: 3px inset var(--blurredColour8);
+  border-radius: 13px;
+  background-color: var(--blurredColour8) !important;
+}
+
+.estimationDescription:hover {
+  border: 3px inset var(--secondary-button);
+  border-radius: 13px;
+  background-color: var(--secondary-button) !important;
+}
+
 .description-box {
   background: transparent;
   padding: 0;

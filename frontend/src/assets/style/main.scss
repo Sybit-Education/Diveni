@@ -92,7 +92,7 @@ a {
 
 .btn-secondary:not(:disabled):not(.disabled),
 .show > .btn-secondary.dropdown-toggle {
-  background-color: var(--primary-button); //TODO --primary-button --blurredColour8
+  background-color: var(--blurredColour8);
 }
 
 .btn-secondary:not(:disabled):not(.disabled):active,
