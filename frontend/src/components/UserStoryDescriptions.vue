@@ -53,6 +53,7 @@
           <b-form-textarea
             id="textarea-auto-height-plaintext"
             class="py-2 description-text-area"
+            :disabled="!editDescription"
             plaintext
             :value="userStories[idx].description"
             rows="15"
@@ -176,10 +177,23 @@ export default Vue.extend({
   padding: 0;
 }
 /* The side navigation menu */
+.form-control-lg {
+  border : none;
+}
+
+.form-control-lg:disabled {
+  background-color: var(--blurredColour8) !important;
+  border-radius: 13px;
+}
 
 .description-text-area {
+  padding-left: 10px;
   color: var(--text-primary-color);
+  background-color: var(--blurredColour8);
+  border-radius: 13px;
+  box-shadow: none !important;
 }
+
 .sidenav {
   float: right;
   height: 100%; /* 100% Full-height */

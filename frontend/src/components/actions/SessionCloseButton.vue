@@ -61,7 +61,7 @@ export default Vue.extend({
 </script>
 <style>
 .description {
-  color: black;
+  color: var(--text-primary-color);
 }
 
 #picture-holderClose {
