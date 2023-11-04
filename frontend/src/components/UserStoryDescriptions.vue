@@ -178,7 +178,7 @@ export default Vue.extend({
 }
 /* The side navigation menu */
 .form-control-lg {
-  border : none;
+  border: none;
 }
 
 .form-control-lg:disabled {
