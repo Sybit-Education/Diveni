@@ -104,6 +104,17 @@ a {
   font-weight: bolder;
 }
 
+.btn {
+  color: var(--text-primary-color);
+  box-shadow: none;
+  border: none;
+}
+
+.btn:focus {
+  box-shadow: none;
+  border: none;
+}
+
 .form-control {
   background-color: var(--preparePageNotSelectedTabBackground);
   color: var(--text-primary-color);
