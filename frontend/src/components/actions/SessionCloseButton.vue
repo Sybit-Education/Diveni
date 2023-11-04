@@ -8,13 +8,14 @@
       {{ $t("page.session.during.estimation.buttons.finish") }}
     </b-button>
     <b-modal
+      class="modal-header"
       id="close-session-modal"
       :title="$t('page.session.close.popup')"
       :cancel-title="$t('page.session.close.button.cancel')"
       :ok-title="$t('page.session.close.button.ok')"
       @ok="closeSession"
     >
-      <p class="my-4 description">
+      <p class="modal-body my-4 description">
         {{ $t("page.session.close.description1") }}
       </p>
       <p v-if="userStoryMode !== 'NO_US'" class="description">

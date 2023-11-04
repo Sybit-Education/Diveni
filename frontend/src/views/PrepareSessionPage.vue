@@ -349,29 +349,19 @@ export default Vue.extend({
 });
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import "@/assets/style/_variables.scss";
 
 /* Prepare Page */
-.selectedTab {
-  background-color: var(--primary-button) !important;
-}
-
-.selectedTextColor {
-  color: var(--text-primary-color) !important;
-}
-
-.notSelectedTab {
+.btn-secondary:not(:disabled):not(.disabled),
+.show > .btn-secondary.dropdown-toggle {
   background-color: var(--preparePageNotSelectedTabBackground) !important;
-  border-color: var(--preparePageBorderTab) !important;
 }
 
-.notSelectedTab:hover {
-  background-color: var(--preparePageInActiveTabHover) !important;
-}
-
-.notSelectedTextColor {
-  color: var(--text-primary-color) !important;
+.btn-secondary:not(:disabled):not(.disabled):active,
+.btn-secondary:not(:disabled):not(.disabled).active,
+.show > .btn-secondary.dropdown-toggle {
+  background-color: var(--primary-button) !important;
 }
 
 #timer-control {
@@ -403,7 +393,7 @@ export default Vue.extend({
 .hostVotingButtons {
   color: var(--text-primary-color);
   border-color: var(--text-primary-color);
-  background-color: transparent;
+  background-color: red !important;
   font-size: large;
   width: 68px;
   text-align: center;

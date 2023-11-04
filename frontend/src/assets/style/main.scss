@@ -90,10 +90,9 @@ a {
   }
 }
 
-
 .btn-secondary:not(:disabled):not(.disabled),
 .show > .btn-secondary.dropdown-toggle {
-  background-color: var(--blurredColour2);
+  background-color: var(--primary-button); //TODO --primary-button --blurredColour8
 }
 
 .btn-secondary:not(:disabled):not(.disabled):active,
@@ -138,11 +137,37 @@ a {
   color: var(--text-primary-color);
 }
 
+.modal-body {
+  color: var(--text-primary-color);
+}
+
 /* Hint-Popover */
 .popover-header {
   background-color: var(--primary-button) !important;
 }
 
 .popover-body {
+  color: var(--text-primary-color) !important;
+}
+
+.selectedTab {
+  background-color: var(--primary-button) !important;
+}
+
+.selectedTextColor {
+  color: var(--text-primary-color) !important;
+}
+
+/* PreparePage - Tab Style */
+.notSelectedTab {
+  background-color: var(--preparePageNotSelectedTabBackground) !important;
+  border-color: var(--preparePageBorderTab) !important;
+}
+
+.notSelectedTab:hover {
+  background-color: var(--preparePageInActiveTabHover) !important;
+}
+
+.notSelectedTextColor {
   color: var(--text-primary-color) !important;
 }

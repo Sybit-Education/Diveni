@@ -196,7 +196,7 @@ export default Vue.extend({
 <style lang="scss">
 .newSessionCard {
   .landingPageCardButton {
-    background-color: var(--primary-button);
+    background-color: var(--primary-button) !important;
     color: var(--text-primary-color);
   }
   .card-footer {
@@ -206,7 +206,7 @@ export default Vue.extend({
 
 .joinSessionCard {
   .landingPageCardButton {
-    background-color: var(--secondary-button);
+    background-color: var(--secondary-button) !important;
   }
 
   .card-footer {
@@ -216,7 +216,7 @@ export default Vue.extend({
 
 .reconnectSessionCard {
   .landingPageCardButton {
-    background-color: var(--reconnectButton);
+    background-color: var(--reconnectButton) !important;
   }
 
   .card-footer {
