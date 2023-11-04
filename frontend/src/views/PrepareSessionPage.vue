@@ -362,7 +362,7 @@ export default Vue.extend({
 }
 
 .notSelectedTab {
-  background-color: var(--preparePageInActiveTab) !important;
+  background-color: var(--preparePageNotSelectedTabBackground) !important;
   border-color: var(--preparePageBorderTab) !important;
 }
 
@@ -388,6 +388,10 @@ export default Vue.extend({
     width: 2rem;
     height: 2rem;
     margin: 0;
+  }
+
+  button:hover {
+    border-color: var(--preparePageInActiveTabHover);
   }
 
   #timer-value {
@@ -441,7 +445,7 @@ export default Vue.extend({
 }
 
 .startingButton {
-  background-color: var(--primary-button);
+  background-color: var(--primary-button) !important;
   color: var(--text-primary-color);
 }
 

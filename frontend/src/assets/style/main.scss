@@ -99,19 +99,26 @@ a {
 .btn-secondary:not(:disabled):not(.disabled):active,
 .btn-secondary:not(:disabled):not(.disabled).active,
 .show > .btn-secondary.dropdown-toggle {
-  background-color: var(--secondary-button);
+  background-color: var(--primary-button);
   border-color: var(--blurredColour2);
   border-width: 3px;
   font-weight: bolder;
 }
 
 .form-control {
-  background-color: var(--textAreaColour);
+  background-color: var(--preparePageNotSelectedTabBackground);
   color: var(--text-primary-color);
+  border-width: 2px;
+
+  &:hover {
+    border-color: var(--secondary-button);
+  }
 
   &:focus {
     background-color: var(--textAreaColour);
     color: var(--text-primary-color);
+    border-color: var(--primary-button);
+    box-shadow: none !important;
   }
 
   &::placeholder {
