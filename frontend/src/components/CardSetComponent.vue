@@ -237,8 +237,8 @@ export default Vue.extend({
   box-shadow: 10px 10px 5px var(--accent-color);
 
   &:hover {
-    border-width: 3px;
-    border-color: var(--preparePageInActiveCardSet);
+    border-width: 4px;
+    border-color: var(--preparePageInActiveTabHover);
     border-style: solid;
   }
   &.selected {
@@ -283,50 +283,45 @@ export default Vue.extend({
 .light5 {
   background-image: url("@/assets/preparePage/OwnSet-LightMode.png");
   background-size: cover;
-  filter: hue-rotate(20deg);
 }
 
 .dark1 {
   background-image: url("@/assets/preparePage/Fibonacci-DarkMode.png");
   background-size: cover;
-  filter: hue-rotate(20deg);
-  text-shadow: #000 0 0 5px;
+  text-shadow: #000 0 0 3px;
   -webkit-font-smoothing: antialiased;
 }
 
 .dark2 {
   background-image: url("@/assets/preparePage/TShirt-DarkMode.png");
   background-size: cover;
-  filter: hue-rotate(20deg);
-  text-shadow: #000 0 0 5px;
+  text-shadow: #000 0 0 3px;
   -webkit-font-smoothing: antialiased;
 }
 
 .dark3 {
   background-image: url("@/assets/preparePage/Hour-DarkMode.png");
   background-size: cover;
-  filter: hue-rotate(20deg);
-  text-shadow: #000 0 0 5px;
+  text-shadow: #000 0 0 3px;
   -webkit-font-smoothing: antialiased;
 }
 
 .dark4 {
   background-image: url("@/assets/preparePage/Numbers-DarkMode.png");
   background-size: cover;
-  filter: hue-rotate(20deg);
-  text-shadow: #000 0 0 5px;
+  text-shadow: #000 0 0 3px;
   -webkit-font-smoothing: antialiased;
 }
 
 .dark5 {
   background-image: url("@/assets/preparePage/OwnSet-DarkMode.png");
   background-size: cover;
-  filter: hue-rotate(20deg);
-  text-shadow: #000 0 0 5px;
+  text-shadow: #000 0 0 3px;
   -webkit-font-smoothing: antialiased;
 }
 
 #popUp {
+  color: var(--text-primary-color);
   background-color: var(--landingPageCardsBackground);
 }
 

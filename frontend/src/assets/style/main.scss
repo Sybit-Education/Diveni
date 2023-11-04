@@ -43,7 +43,6 @@ a {
   color: var(--link-color);
 }
 
-
 .jumbotron {
     background-color: var(--background-color-primary);
     color: var(--text-primary-color);
@@ -130,4 +129,13 @@ a {
 .modal-content {
   background-color: var(--background-color-primary);
   color: var(--text-primary-color);
+}
+
+/* Hint-Popover */
+.popover-header {
+  background-color: var(--primary-button) !important;
+}
+
+.popover-body {
+  color: var(--text-primary-color) !important;
 }
