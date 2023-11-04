@@ -48,7 +48,7 @@
       <b-tab
         v-if="isIssueTrackerEnabled"
         :title="$t('session.prepare.step.selection.mode.description.withIssueTracker.tab.label')"
-        :title-link-class="linkClass(3)"
+        :title-link-class="linkClass(2)"
       >
         <jira-component class="mt-2" />
       </b-tab>
