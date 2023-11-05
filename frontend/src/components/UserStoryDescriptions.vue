@@ -178,16 +178,17 @@ export default Vue.extend({
 }
 /* The side navigation menu */
 .form-control-lg {
-  border: none;
+  border-color: var(--estimateButtonBorder) !important;
 }
 
 .form-control-lg:disabled {
   background-color: var(--blurredColour8) !important;
   border-radius: 13px;
+  border: none;
 }
 
 .description-text-area {
-  padding-left: 10px;
+  padding-left: 7px;
   color: var(--text-primary-color);
   background-color: var(--blurredColour8);
   border-radius: 13px;
