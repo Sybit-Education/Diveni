@@ -43,7 +43,7 @@
           <markdown-editor
             id="textarea-auto-height"
             v-model="userStories[idx].description"
-            class="mt-1 my-5"
+            class="my-2"
             :disabled="!editDescription"
             :placeholder="$t('page.session.before.userStories.placeholder.userStoryDescription')"
             @textValueChanged="(event) => valueChanged(idx, event)"
