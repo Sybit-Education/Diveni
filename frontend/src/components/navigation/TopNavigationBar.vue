@@ -18,10 +18,8 @@
             {{ $t("page.landing.meeting.join.buttons.start.label") }}
           </b-button>
         </b-nav-form>
-        <b-nav-item>
-          <a href="https://github.com/Sybit-Education/Diveni" target="_blank">
-            <BIconGithub class="github-logo py-2"></BIconGithub>
-          </a>
+        <b-nav-item href="https://github.com/Sybit-Education/Diveni" target="_blank">
+          <BIconGithub class="github-logo py-2"></BIconGithub>
         </b-nav-item>
         <b-nav-text>
           <theme-toggle class="my-2" />
