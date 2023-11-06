@@ -103,7 +103,7 @@ export default Vue.extend({
 }
 
 .toastui-editor-defaultUI-toolbar {
-  background-color: #7a777773;
+  background-color: var(--editorToolbar-Switch-bg);
 }
 .toastui-editor-defaultUI-toolbar button {
   border: 12px;
@@ -111,18 +111,18 @@ export default Vue.extend({
 }
 
 .toastui-editor-defaultUI .ProseMirror {
-  background-color: #3e4b6c;
+  background-color: var(--editorDefaultUI-container-bg);
 }
 
 .toastui-editor-md-container .toastui-editor-md-preview {
   overflow: auto;
   padding: 0 25px;
   height: 100%;
-  background-color: #3e4b6c;
+  background-color: var(--editorDefaultUI-container-bg);
 }
 
 .toastui-editor-mode-switch {
-  background-color: #7a777773;
+  background-color: var(--editorToolbar-Switch-bg);
 }
 
 .toastui-editor-contents p {
@@ -141,7 +141,7 @@ export default Vue.extend({
 }
 
 .lightMode .toastui-editor-mode-switch {
-  background-color: #7a777773;
+  background-color: var(--editorToolbar-Switch-bg);
 }
 
 .lightMode .toastui-editor-popup {

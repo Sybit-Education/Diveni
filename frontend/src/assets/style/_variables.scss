@@ -50,6 +50,10 @@
   /*other Stuff*/
   --topNavigationBarColor: rgba(200, 200, 200, 0.75);
   --popUpMenu: rgb(143, 143, 143);
+
+  /*Editor*/
+  --editorToolbar-Switch-bg: #7a777773;
+  --editorDefaultUI-container-bg: #3e4b6c;
 }
 
 /* Define styles for the root window with dark - mode preference */
@@ -105,6 +109,10 @@
   /*other Stuff*/
   --topNavigationBarColor: rgba(34, 34, 34, 0.863);
   --popUpMenu: rgb(201, 201, 201);
+
+  /*Editor*/
+  --editorToolbar-Switch-bg: #7a777773;
+  --editorDefaultUI-container-bg: #3e4b6c;
 }
 
 $border-radius:               0.8rem !default;
