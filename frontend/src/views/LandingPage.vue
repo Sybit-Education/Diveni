@@ -262,9 +262,9 @@ export default Vue.extend({
 }
 
 .pictureCard {
-  background: transparent;
+  background: transparent !important;
   align-items: center;
-  box-shadow: 0 0 5px 5px var(--landingPageCardsBackground);
+  box-shadow: none !important;
   border: none !important;
 }
 
