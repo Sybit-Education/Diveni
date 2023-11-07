@@ -68,7 +68,7 @@ export default Vue.extend({
 });
 </script>
 
-<style>
+<style lang="scss">
 input {
   width: 100%;
   border: 1px solid #ccc;

@@ -208,6 +208,7 @@ export default Vue.extend({
 });
 </script>
 
+<!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
 <style lang="scss" scoped>
 #searchIcon {
   rotate: 90deg;

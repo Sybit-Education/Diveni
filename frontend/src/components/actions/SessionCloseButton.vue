@@ -59,7 +59,9 @@ export default Vue.extend({
   },
 });
 </script>
-<style>
+
+<!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
+<style lang="scss">
 .description {
   color: var(--text-primary-color);
 }

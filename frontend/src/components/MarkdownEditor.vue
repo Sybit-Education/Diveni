@@ -97,7 +97,8 @@ export default Vue.extend({
 });
 </script>
 
-<style>
+
+<style lang="scss">
 .toastui-editor-popup {
   background-color: var(--topNavigationBarColor);
 }
