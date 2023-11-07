@@ -1,6 +1,7 @@
 /* all variables, see node_modules/bootstrap/scss/_variables.scss */
 
 :root {
+  /*Background Colors*/
   --background-color-primary: #e2e2e2;
   --blurredColour1: #94623400;
   --blurredColour2: rgba(0, 0, 0, 0.219);
@@ -8,7 +9,6 @@
   --blurredColour4: rgba(17, 9, 0, 0);
   --blurredColour7: #658462;
   --blurredColour8: rgba(192, 175, 156, 0.4);
-
 
   /* Bottom */
   --blurredColour5: rgba(6, 1, 8, 0.24);
@@ -31,6 +31,7 @@
   --pictureGradientEnd: rgba(19, 44, 20, 0.5);
   --landingPageCardsBackground: #e4e4e4;
   --blurBackGroundColor: rgba(80, 80, 80, 0.219);
+
   /*Prepare page*/
   --preparePageMainColor: #946234;
   --preparePageInActiveTab: #ffffff;
@@ -52,8 +53,8 @@
   --popUpMenu: rgb(143, 143, 143);
 
   /*Editor*/
-  --editorToolbar-Switch-bg: #7a777773;
-  --editorDefaultUI-container-bg: #3e4b6c;
+  --editor-toolbar-switch-bg: #7a777773;
+  --editor-defaultui-container-bg: #3e4b6c;
 }
 
 /* Define styles for the root window with dark - mode preference */
@@ -89,7 +90,6 @@
   --pictureGradientEnd: rgba(44, 19, 32, 0.5);
 
   /*Prepare Page*/
-
   --preparePageMainColor: #13276d;
   --preparePageInActiveTab: #666565;
   --preparePageInActiveTabHover: #42104b;
@@ -99,7 +99,6 @@
   --preparePageInActiveCardSet: #e27712;
   --preparePageTimerBackground: rgba(137, 152, 187, 0.4);
   --preparePageNotSelectedTabBackground: rgba(137, 152, 187, 0.4);
-
 
   /*Session Page*/
   --textAreaColour: rgba(137, 152, 187, 0.4);
@@ -111,8 +110,8 @@
   --popUpMenu: rgb(201, 201, 201);
 
   /*Editor*/
-  --editorToolbar-Switch-bg: #7a777773;
-  --editorDefaultUI-container-bg: #3e4b6c;
+  --editor-toolbar-switch-bg: #7a777773;
+  --editor-defaultui-container-bg: #3e4b6c;
 }
 
 $border-radius:               0.8rem !default;
