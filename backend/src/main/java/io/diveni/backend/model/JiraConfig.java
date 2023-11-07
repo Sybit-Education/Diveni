@@ -3,7 +3,7 @@ package io.diveni.backend.model;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 @Getter
 @AllArgsConstructor

@@ -31,7 +31,7 @@ import io.diveni.backend.controller.ErrorMessages;
 import io.diveni.backend.service.projectmanagementproviders.ProjectManagementProviderOAuth1;
 import lombok.Getter;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 
 @Service
 public class JiraServerService implements ProjectManagementProviderOAuth1 {

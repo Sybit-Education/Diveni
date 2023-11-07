@@ -144,7 +144,7 @@ import Session from "../model/Session";
 import Constants from "../constants";
 import CardSetComponent from "../components/CardSetComponent.vue";
 import UserStoryComponent from "../components/UserStoryComponent.vue";
-import JiraComponent from "../components/JiraComponent.vue";
+import IssueTrackerComponent from "../components/IssueTrackerComponent.vue";
 import StoryPointsComponent from "@/components/StoryPointsComponent.vue";
 import UserStory from "@/model/UserStory";
 import papaparse from "papaparse";
