@@ -3,27 +3,24 @@
     <div v-if="userStories.length > 0 || filterActive" class="w-100 d-flex justify-content-left">
       <b-input-group>
         <b-input-group-prepend>
-          <BIconSearch id="searchIcon"></BIconSearch>
+          <b-input-group-text><BIconSearch id="searchIcon"></BIconSearch></b-input-group-text>
         </b-input-group-prepend>
         <b-input
-          v-model="input"
           id="search"
+          v-model="input"
           type="text"
           :placeholder="$t('page.session.before.userStories.placeholder.searchUserStories')"
           @input="swapPriority"
         />
       </b-input-group>
     </div>
-    <b-card-group
-      class="my-3"
-      id="userStoryBlock"
-    >
+    <b-card-group id="userStoryBlock" class="my-3">
       <b-list-group-item
         v-for="(story, index) of userStories"
+        id="userStoryRow"
         :key="index"
         :active="index === selectedStoryIndex"
         class="w-100 p-1 d-flex justify-content-left"
-        id="userStoryRow"
         :style="index === selectedStoryIndex ? 'border-width: 3px;' : ''"
         @mouseover="hover = index"
         @mouseleave="hover = null"
@@ -33,9 +30,12 @@
           v-if="showEditButtons"
           :class="story.isActive ? 'selectedStory' : 'outlineColorStory'"
           size="sm"
-          @click="markUserStory(index); $event.target.blur();"
+          @click="
+            markUserStory(index);
+            $event.target.blur();
+          "
         >
-          <b-img :src="require('@/assets/ActiveUserStory.png')" id="userStoryPicture"/>
+          <b-img id="userStoryPicture" :src="require('@/assets/ActiveUserStory.png')" />
         </b-button>
 
         <b-button
@@ -48,19 +48,16 @@
         </b-button>
 
         <b-form-input
+          id="userStoryTitles"
           v-model="story.title"
           class="mx-1 w-100 shadow-none"
-          id="userStoryTitles"
           readonly
           size="sm"
           :placeholder="$t('page.session.before.userStories.placeholder.userStoryTitle')"
           @blur="publishChanges"
         />
 
-        <b-badge
-          id="badge"
-          class="p-2"
-        >
+        <b-badge id="badge" class="p-2">
           {{ story.estimation == null ? "?" : story.estimation }}
         </b-badge>
         <b-button
@@ -77,8 +74,12 @@
 
     <b-button
       v-if="userStories.length < 1 && showEditButtons && !filterActive"
-      class="w-100 mb-3 addButton"
-      @click="addUserStory(); $event.target.blur();"
+      class="w-100 mb-3"
+      variant="secondary"
+      @click="
+        addUserStory();
+        $event.target.blur();
+      "
     >
       <b-icon-plus />
       {{ $t("page.session.before.userStories.button.addFirstUserStory") }}
@@ -94,8 +95,12 @@
 
     <b-button
       v-if="userStories.length > 0 && showEditButtons && !filterActive"
-      class="w-100 mb-3 addButton"
-      @click="addUserStory(); $event.target.blur();"
+      class="w-100 mb-3"
+      variant="secondary"
+      @click="
+        addUserStory();
+        $event.target.blur();
+      "
     >
       <b-icon-plus />
       {{ $t("page.session.before.userStories.button.addUserStory") }}
@@ -203,40 +208,9 @@ export default Vue.extend({
 });
 </script>
 
-<style scoped>
-
-
-#search {
-  border-radius: var(--element-size);
-  padding-left: 45px;
-  border-color: black;
-  overflow: auto;
-  z-index: 1;
-}
-
+<style lang="scss" scoped>
 #searchIcon {
-  position: absolute;
-  z-index: 2;
-  font-size: 25px;
-  top: 20%;
-  left: 1.5%;
   rotate: 90deg;
-}
-
-.addButton {
-  background-color: var(--joinButton);
-  color: var(--text-primary-color);
-  border-radius: var(--element-size);
-}
-
-.addButton:hover {
-  background-color: var(--joinButtonHovered);
-  color: var(--text-primary-color);
-}
-
-.addButton:focus {
-  background-color: var(--joinButtonHovered);
-  color: var(--text-primary-color);
 }
 
 .selectedStory {
@@ -271,21 +245,7 @@ export default Vue.extend({
   border: none;
 }
 
-.form-control {
-  background-color: var(--textAreaColour);
-  color: var(--text-primary-color);
-}
-
-.form-control:focus {
-  background-color: var(--textAreaColour);
-  color: var(--text-primary-color);
-}
-
-.form-control::placeholder {
-  color: var(--text-primary-color);
-}
-
-#userStoryRow{
+#userStoryRow {
   background-color: var(--textAreaColour);
   color: var(--text-primary-color);
 }
@@ -301,15 +261,15 @@ export default Vue.extend({
   background-color: transparent;
   color: var(--text-primary-color);
   font-size: large;
-  border: none
+  border: none;
 }
 #userStoryPicture {
   height: 30px;
   width: 30px;
 }
 
-#badge{
-  background-color: var(--joinButton);
+#badge {
+  background-color: var(--secondary-button);
   color: var(--text-primary-color);
   font-size: large;
 }

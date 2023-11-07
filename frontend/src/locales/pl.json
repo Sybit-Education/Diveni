@@ -10,7 +10,8 @@
       "frontend": "Licencje (Frontend)",
       "backend": "Licencje (Backend)",
       "translations": "Popraw tłumaczenie"
-    }
+    },
+    "feedback": "Feedback"
   },
   "page": {
     "session": {
@@ -259,6 +260,11 @@
           "time": {
             "title": "Adjust the time per estimation"
           },
+          "hostVoting": {
+            "title": "Should the host vote as well",
+            "hostVotingOn": "Yes",
+            "hostVotingOff": "No"
+          },
           "password": {
             "title": "Choose a password if needed",
             "placeholder": "Hasło (pozostaw puste dla sesji bez zabezpieczenia)"
@@ -293,6 +299,7 @@
         "issueTrackerLoginFailed": "Logowanie nie powiodło się",
         "jiraCloudRequestTokenFailed": "Failed to authorize to JIRA Cloud! Make sure the application link is set up correctly!",
         "issueTrackerSynchronizeSuccess": "Zsynchronizowano zmiany z Issue-Trackerem",
+        "issueTrackerNothingChanged": "No changes were made",
         "issueTrackerSynchronizeFailed": "Nie udało się zsynchronizować zmian z Issue-Trackerem",
         "wrongID": "Nieprawidłowy kod zaproszenia",
         "password": "Błędne hasło"

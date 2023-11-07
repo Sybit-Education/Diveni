@@ -16,8 +16,8 @@ import i18n from "./i18n";
 import setupInterceptors from "./interceptors";
 
 import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
-import "bootstrap/dist/css/bootstrap.css";
-import "bootstrap-vue/dist/bootstrap-vue.css";
+
+import "./assets/style/main.scss";
 
 import VueFlicking from "@egjs/vue-flicking";
 

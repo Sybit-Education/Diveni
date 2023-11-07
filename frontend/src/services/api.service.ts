@@ -72,7 +72,9 @@ class ApiService {
   }
 
   public async getUserStoriesFromProject(project): Promise<unknown> {
-    const response = await axios.get(`${constants.backendURL}/issue-tracker/projects/${project}/issues`);
+    const response = await axios.get(
+      `${constants.backendURL}/issue-tracker/projects/${project}/issues`
+    );
     return response.data;
   }
 
@@ -108,7 +110,8 @@ class ApiService {
   }
 
   public async getAllDiveniData() {
-    const response = (await axios.get(constants.backendURL + constants.getDiveniAnalytics)).data as {
+    const response = (await axios.get(constants.backendURL + constants.getDiveniAnalytics))
+      .data as {
       amountOfAttendees: number;
       amountOfSessions: number;
       amountofAttendeesLastMonth: number;

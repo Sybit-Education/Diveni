@@ -10,7 +10,8 @@
       "frontend": "Licenses (Frontend)",
       "backend": "Licenses (Backend)",
       "translations": "Improve translation"
-    }
+    },
+    "feedback": "Feedback"
   },
   "page": {
     "session": {
@@ -28,7 +29,7 @@
         "button": "Start Planning",
         "refreshStories": "Refresh Userstories",
         "userStories": {
-          "filter" : {
+          "filter": {
             "noStoryFound": "No stories found!"
           },
           "button": {
@@ -54,7 +55,9 @@
           "buttons": {
             "new": "New",
             "result": "Show result",
-            "finish": "Finish session"
+            "finish": "Finish session",
+            "autoRevealOn": "Auto reveal on",
+            "autoRevealOff": "Auto reveal off"
           }
         },
         "modal": {
@@ -259,6 +262,11 @@
           "time": {
             "title": "Adjust the time per estimation"
           },
+          "hostVoting": {
+            "title": "Should the host vote as well",
+            "hostVotingOn": "Yes",
+            "hostVotingOff": "No"
+          },
           "password": {
             "title": "Choose a password if needed",
             "placeholder": "Password (leave empty for unprotected session)"
@@ -293,6 +301,7 @@
         "issueTrackerLoginFailed": "Login failed",
         "jiraCloudRequestTokenFailed": "Failed to authorize to JIRA Cloud! Make sure the application link is set up correctly!",
         "issueTrackerSynchronizeSuccess": "Synchronized changes with Issue-Tracker",
+        "issueTrackerNothingChanged": "No changes were made",
         "issueTrackerSynchronizeFailed": "Failed to synchronize changes with Issue-Tracker",
         "wrongID": "Wrong invitation code",
         "password": "Wrong password"

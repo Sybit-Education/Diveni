@@ -18,6 +18,8 @@ class Constants {
 
   webSocketCloseSessionRoute = "/ws/closeSession";
 
+  webSocketMemberListenHostVotingRoute = "/users/updates/hostVoting";
+
   webSocketGetMemberUpdateRoute = "/ws/memberUpdate";
 
   webSocketMembersUpdatedRoute = "/users/updates/membersUpdated";
@@ -30,6 +32,10 @@ class Constants {
 
   webSocketVoteRoute = "/ws/vote";
 
+  webSocketVoteRouteAdmin = "/ws/vote/admin";
+
+  webSocketMembersUpdatedHostEstimation = "/users/updates/hostEstimation";
+
   webSocketAdminUpdatedUserStoriesRoute = "/ws/adminUpdatedUserStories";
 
   webSocketAdminSelectedUserStoryRoute = "/ws/adminSelectedUserStory";
@@ -41,6 +47,8 @@ class Constants {
   webSocketTimerStartRoute = "/users/updates/startTimer";
 
   webSocketMemberListenRoute = "/users/updates/member";
+
+  webSocketMemberAutoRevealListenRoute = "/users/updates/member/autoreveal";
 
   websocketNotification = "/users/updates/notifications";
 

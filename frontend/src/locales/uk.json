@@ -10,7 +10,8 @@
       "frontend": "Ліцензії (інтерфейсу)",
       "backend": "Ліцензії (серверні)",
       "translations": "Покращення перекладу"
-    }
+    },
+    "feedback": "Feedback"
   },
   "page": {
     "session": {
@@ -116,7 +117,7 @@
           }
         },
         "analytics": {
-          "title": "Statistics of Diveni",
+          "title": "Статистика Дивені",
           "allCreatedSessionsTitle": "Overall",
           "sessionText": "Sessions",
           "attendeesText": "Attendees",
@@ -259,6 +260,11 @@
           "time": {
             "title": "Відрегулюйте час за оцінку"
           },
+          "hostVoting": {
+            "title": "Should the host vote as well",
+            "hostVotingOn": "Yes",
+            "hostVotingOff": "No"
+          },
           "password": {
             "title": "Виберіть пароль, якщо необхідно",
             "placeholder": "Пароль (залиште порожнім для незахищеної сесії)"
@@ -293,6 +299,7 @@
         "issueTrackerLoginFailed": "Помилка входу в систему",
         "jiraCloudRequestTokenFailed": "Failed to authorize to JIRA Cloud! Make sure the application link is set up correctly!",
         "issueTrackerSynchronizeSuccess": "Синхронізовані зміни з Issue-Tracker",
+        "issueTrackerNothingChanged": "No changes were made",
         "issueTrackerSynchronizeFailed": "Не вдалося синхронізувати зміни з Issue-Tracker",
         "wrongID": "Невірний код запрошення",
         "password": "Хибний пароль"

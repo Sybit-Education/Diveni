@@ -17,17 +17,23 @@
           class="my-1" />
       </li>
       <li>
-        {{ $t("session.prepare.step.selection.mode.description.withIssueTracker.descriptionLine2") }}
+        {{
+          $t("session.prepare.step.selection.mode.description.withIssueTracker.descriptionLine2")
+        }}
         <project-selection-component
           v-if="isLoggedInWithJira"
           class="my-1"
         ></project-selection-component>
       </li>
       <li>
-        {{ $t("session.prepare.step.selection.mode.description.withIssueTracker.descriptionLine3") }}
+        {{
+          $t("session.prepare.step.selection.mode.description.withIssueTracker.descriptionLine3")
+        }}
       </li>
       <li>
-        {{ $t("session.prepare.step.selection.mode.description.withIssueTracker.descriptionLine4") }}
+        {{
+          $t("session.prepare.step.selection.mode.description.withIssueTracker.descriptionLine4")
+        }}
       </li>
     </ul>
   </div>
@@ -86,9 +92,7 @@ export default Vue.extend({
 });
 </script>
 <style scoped>
-
 #textDescription {
   color: var(--text-primary-color);
 }
-
 </style>

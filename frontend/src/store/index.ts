@@ -19,7 +19,10 @@ export default new Vuex.Store<StoreState>({
     tokenId: undefined,
     projects: [],
     selectedProject: undefined,
+    hostVoting: false,
+    hostEstimation: undefined,
     selectedUserStoryIndex: undefined,
+    autoReveal: false,
   },
   mutations: {
     setMembers(state, members) {
@@ -47,6 +50,13 @@ export default new Vuex.Store<StoreState>({
         state.memberUpdates = state.memberUpdates.concat([frame.body]);
       });
     },
+    subscribeOnBackendWSMemberUpdatesWithAutoReveal(state) {
+      state.stompClient?.subscribe(Constants.webSocketMemberAutoRevealListenRoute, (frame) => {
+        const splittedFrame = frame.body.split(" ");
+        state.autoReveal = splittedFrame[1] === "true";
+        state.memberUpdates = state.memberUpdates.concat([splittedFrame[0]]);
+      });
+    },
     subscribeOnBackendWSStoriesUpdated(state) {
       state.stompClient?.subscribe(Constants.webSocketMemberListenUserStoriesRoute, (frame) => {
         state.userStories = JSON.parse(frame.body);
@@ -62,6 +72,16 @@ export default new Vuex.Store<StoreState>({
         console.log(`web socket admin receive update: message ${frame}`);
         state.members = JSON.parse(frame.body).members;
         state.highlightedMembers = JSON.parse(frame.body).highlightedMembers;
+      });
+    },
+    subscribeOnBackendWSHostVoting(state) {
+      state.stompClient?.subscribe(Constants.webSocketMemberListenHostVotingRoute, (frame) => {
+        state.hostVoting = JSON.parse(frame.body);
+      });
+    },
+    subscribeOnBackendWSHostEstimation(state) {
+      state.stompClient?.subscribe(Constants.webSocketMembersUpdatedHostEstimation, (frame) => {
+        state.hostEstimation = JSON.parse(frame.body);
       });
     },
     subscribeOnBackendWSTimerStart(state) {
