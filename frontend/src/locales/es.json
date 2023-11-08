@@ -122,15 +122,7 @@
           "attendeesText": "Colaboradores",
           "lastMonthTitle": "Last Month",
           "activeTitle": "Currently"
-        },
-        "news": {
-          "buttons": {
-            "info": {
-              "label": "Qué hay de nuevo"
-            }
-          }
         }
-      }
     },
     "join": {
       "title": "Unirse a la sesión",

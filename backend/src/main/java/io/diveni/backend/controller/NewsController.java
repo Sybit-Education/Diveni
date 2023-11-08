@@ -36,6 +36,6 @@ public class NewsController {
                                                        @RequestParam(name = PER_PAGE_PARAM, defaultValue = "50") Integer perPage,
                                                        @RequestParam(name = PAGE_PARAM, defaultValue = "1") Integer page) {
 
-    return ResponseEntity.ok(service.getPullRequests(state,sort,direction, isMerged, perPage, page));
+    return new ResponseEntity<>(service.getPullRequests(state,sort,direction, isMerged, perPage, page), HttpStatus.OK);
   }
 }

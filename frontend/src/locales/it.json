@@ -123,13 +123,6 @@
           "lastMonthTitle": "Last Month",
           "activeTitle": "Currently"
         }
-      },
-      "news": {
-        "buttons": {
-          "info": {
-            "label": "Cosa c'è di nuovo"
-          }
-        }
       }
     },
     "join": {

@@ -13,7 +13,6 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 
 import static io.diveni.backend.controller.NewsController.*;

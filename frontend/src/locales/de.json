@@ -123,13 +123,6 @@
           "lastMonthTitle": "Letzter Monat",
           "activeTitle": "Momentan"
         }
-      },
-      "news": {
-        "buttons": {
-          "info": {
-            "label": "Was ist neu"
-          }
-        }
       }
     },
     "join": {

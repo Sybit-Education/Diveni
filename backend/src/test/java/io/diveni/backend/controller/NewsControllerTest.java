@@ -1,7 +1,6 @@
 package io.diveni.backend.controller;
 
 import io.diveni.backend.model.news.PullRequest;
-import io.diveni.backend.service.news.GithubApiService;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 

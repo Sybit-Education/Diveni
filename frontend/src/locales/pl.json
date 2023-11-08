@@ -123,13 +123,6 @@
           "lastMonthTitle": "W zeszłym miesiącu",
           "activeTitle": "Obecnie"
         }
-      },
-      "news": {
-        "buttons": {
-          "info": {
-            "label": "Co nowego"
-          }
-        }
       }
     },
     "join": {
