@@ -3,9 +3,10 @@
     <h1>{{ headerText }}</h1>
     <b-card-group deck>
       <b-card class="statsCards">
-        <b-card-title style="text-align: center">
+        <b-card-title class="title">
           {{ $t("page.landing.meeting.analytics.allCreatedSessionsTitle") }}
         </b-card-title>
+        <div class="line"></div>
         <b-card-text>
           <h2 class="numbers">{{ tweenedOverAllSessions.toFixed(0) }}</h2>
           <div style="text-align: center">
@@ -19,9 +20,10 @@
         </b-card-text>
       </b-card>
       <b-card class="statsCards">
-        <b-card-title style="text-align: center">
+        <b-card-title class="title">
           {{ $t("page.landing.meeting.analytics.lastMonthTitle") }}
         </b-card-title>
+        <div class="line"></div>
         <b-card-text>
           <h2 class="numbers">
             {{ tweenedOverAllSessionsFromLastMonth.toFixed(0) }}
@@ -39,9 +41,10 @@
         </b-card-text>
       </b-card>
       <b-card class="statsCards">
-        <b-card-title style="text-align: center">
+        <b-card-title class="title">
           {{ $t("page.landing.meeting.analytics.activeTitle") }}
         </b-card-title>
+        <div class="line"></div>
         <b-card-text>
           <h2 class="numbers">
             {{ tweenedCurrentSessions.toFixed(0) }}
@@ -149,11 +152,33 @@ export default Vue.extend({
 </script>
 <style scoped>
 .statsCards {
-  border-radius: 0.5rem;
-  background-color: rgba(200, 200, 200, 0.5);
-}
-.numbers {
   text-align: center;
-  font-weight: bold;
+  border-radius: 2rem;
+  background-color: var(--landingPageCardsBackground);
+}
+
+.line {
+  background-color: rgba(0, 0, 0, 0.125);
+  height: 1px;
+  margin: 10px -20px;
+}
+
+.title {
+  height: 60px;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+}
+
+@media (min-width: 768px) {
+  .title {
+    height: auto;
+  }
+}
+
+@media (max-width: 575px) {
+  .title {
+    height: auto;
+  }
 }
 </style>
