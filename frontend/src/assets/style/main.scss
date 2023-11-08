@@ -62,7 +62,8 @@ a {
     background-color: var(--primary-button);
     border-color: $gray-600;
     &:hover {
-        background-color: var(--primary-button-hovered);
+      background-color: var(--primary-button-hovered);
+      color: var(--text-color-hover);
     }
     &:disabled, &.disabled:hover {
       background-color: var(--primary-button);
@@ -72,13 +73,17 @@ a {
         background-color: var(--primary-button-hovered);
         color: var(--text-primary-color);
       }
+    &:active {
+      color: var(--text-color-hover) !important;
+    }
 }
 
 .btn-secondary {
   background-color: var(--secondary-button);
   border-color: $gray-600;
   &:hover {
-      background-color: var(--secondary-button-hovered);
+    background-color: var(--secondary-button-hovered);
+    color: var(--text-color-hover);
   }
   &:disabled, &.disabled:hover {
     background-color: var(--secondary-button);
@@ -87,6 +92,9 @@ a {
   &:focus {
     background-color: var(--secondary-button-hovered);
     color: var(--text-primary-color);
+  }
+  &:active {
+    color: var(--text-color-hover) !important;
   }
 }
 

@@ -14,7 +14,7 @@
           </b-button>
         </b-nav-form>
         <b-nav-form>
-          <b-button :to="{ name: 'JoinPage' }" class="mr-2">
+          <b-button :to="{ name: 'JoinPage' }" variant="secondary" class="mr-2">
             {{ $t("page.landing.meeting.join.buttons.start.label") }}
           </b-button>
         </b-nav-form>

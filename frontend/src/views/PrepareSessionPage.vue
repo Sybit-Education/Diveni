@@ -378,10 +378,9 @@ export default Vue.extend({
     width: 2rem;
     height: 2rem;
     margin: 0;
-  }
-
-  button:hover {
-    border-color: var(--preparePageInActiveTabHover);
+    &:hover {
+      color: var(--text-color-hover);
+    }
   }
 
   #timer-value {
