@@ -353,7 +353,6 @@ export default Vue.extend({
 <style lang="scss" scoped>
 @import "@/assets/style/_variables.scss";
 
-/* Prepare Page */
 .btn-secondary:not(:disabled):not(.disabled),
 .show > .btn-secondary.dropdown-toggle {
   background-color: var(--preparePageTimerBackground);
@@ -389,50 +388,6 @@ export default Vue.extend({
     flex: content;
     width: 5rem;
   }
-}
-
-.hostVotingButtons {
-  color: var(--text-primary-color);
-  border-color: var(--text-primary-color);
-  background-color: transparent;
-  font-size: large;
-  width: 68px;
-  text-align: center;
-}
-
-.hostVotingButtons:hover {
-  color: var(--text-primary-color) !important;
-  border-color: var(--text-primary-color);
-  background-color: var(--preparePageInActiveTabHover);
-}
-
-.hostVotingButtons:focus {
-  color: var(--text-primary-color);
-  border-color: var(--text-primary-color);
-  background-color: transparent !important;
-  outline: none;
-  box-shadow: none;
-}
-
-.optionButtons {
-  color: var(--text-primary-color);
-  border-color: var(--text-primary-color);
-  background-color: transparent;
-  font-size: xx-large;
-  width: 47.5px;
-}
-
-.optionButtons:hover {
-  color: var(--text-primary-color) !important;
-  border-color: var(--text-primary-color);
-  background-color: var(--preparePageInActiveTabHover);
-}
-.optionButtons:focus {
-  color: var(--text-primary-color);
-  border-color: var(--text-primary-color);
-  background-color: transparent !important;
-  outline: none;
-  box-shadow: none;
 }
 
 .startingButton {

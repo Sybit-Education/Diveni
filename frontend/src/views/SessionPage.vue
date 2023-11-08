@@ -762,12 +762,6 @@ export default Vue.extend({
   margin-right: auto;
 }
 
-.hostVotingButtons {
-  position: relative;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
 .optionButtonCol {
   margin-top: auto;
   margin-bottom: auto;
