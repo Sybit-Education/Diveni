@@ -67,7 +67,8 @@
               </b-card-text>
               <b-card-sub-title>
                 <a href="https://sybit-education.github.io/Diveni/guide" target="_blank">
-                Connecting to Issue-Tracker</a>
+                  Connecting to Issue-Tracker</a
+                >
               </b-card-sub-title>
               <b-card-text>
                 DIVENI could connect to issue trackers like Azure DevOps, JIRA Server and Cloud to
