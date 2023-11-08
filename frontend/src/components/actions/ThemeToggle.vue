@@ -111,7 +111,7 @@ export default Vue.extend({
   .toggle {
     position: absolute;
     top: 0;
-    left: 0;
+    left: 1px;
     bottom: 0;
     margin: auto;
     width: 20px;
