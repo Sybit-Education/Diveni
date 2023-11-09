@@ -10,7 +10,8 @@
       "frontend": "Lizenzen (Frontend)",
       "backend": "Lizenzen (Backend)",
       "translations": "Übersetzung verbessern"
-    }
+    },
+    "feedback": "Feedback"
   },
   "page": {
     "session": {
@@ -264,7 +265,7 @@
         }
       },
       "button": {
-        "start": "Starte die Session"
+        "start": "Sitzung starten"
       }
     },
     "userStory": {
@@ -290,7 +291,7 @@
         "issueTrackerCredentials": "Falsche Login-Daten",
         "issueTrackerLoginFailed": "Login fehlgeschlagen",
         "issueTrackerSynchronizeSuccess": "Synchronisierte Änderungen mit Issue-Tracker",
-        "issueTrackerNothingChanged": "No changes were made",
+        "issueTrackerNothingChanged": "Es wurden keine Änderungen vorgenommen",
         "issueTrackerSynchronizeFailed": "Fehler beim Synchronisieren der Änderungen mit Issue-Tracker",
         "wrongID": "Falscher Einladungscode",
         "password": "Falsches Passwort"

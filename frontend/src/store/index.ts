@@ -22,6 +22,7 @@ export default new Vuex.Store<StoreState>({
     hostVoting: false,
     hostEstimation: undefined,
     selectedUserStoryIndex: undefined,
+    autoReveal: false,
   },
   mutations: {
     setMembers(state, members) {
@@ -47,6 +48,13 @@ export default new Vuex.Store<StoreState>({
     subscribeOnBackendWSMemberUpdates(state) {
       state.stompClient?.subscribe(Constants.webSocketMemberListenRoute, (frame) => {
         state.memberUpdates = state.memberUpdates.concat([frame.body]);
+      });
+    },
+    subscribeOnBackendWSMemberUpdatesWithAutoReveal(state) {
+      state.stompClient?.subscribe(Constants.webSocketMemberAutoRevealListenRoute, (frame) => {
+        const splittedFrame = frame.body.split(" ");
+        state.autoReveal = splittedFrame[1] === "true";
+        state.memberUpdates = state.memberUpdates.concat([splittedFrame[0]]);
       });
     },
     subscribeOnBackendWSStoriesUpdated(state) {

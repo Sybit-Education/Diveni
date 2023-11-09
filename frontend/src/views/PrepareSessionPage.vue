@@ -17,10 +17,14 @@
       <b-tab
         class="mt-2"
         :title="$t('session.prepare.step.selection.mode.description.withoutUS.tab.label')"
+        :title-link-class="linkClass(0)"
       >
         <story-points-component />
       </b-tab>
-      <b-tab :title="$t('session.prepare.step.selection.mode.description.withUS.tab.label')">
+      <b-tab
+        :title="$t('session.prepare.step.selection.mode.description.withUS.tab.label')"
+        :title-link-class="linkClass(1)"
+      >
         <user-story-component class="mt-2" />
         <input
           id="fileUpload"
@@ -45,6 +49,7 @@
       <b-tab
         v-if="isIssueTrackerEnabled"
         :title="$t('session.prepare.step.selection.mode.description.withIssueTracker.tab.label')"
+        :title-link-class="linkClass(2)"
       >
         <jira-component class="mt-2" />
       </b-tab>
@@ -104,24 +109,16 @@
       <b-img v-else :src="require('@/assets/preparePage/P4D.png')" class="numberPictures" />
       {{ $t("session.prepare.step.selection.hostVoting.title") }}
     </h4>
-    <b-row class="mt-3 text-center">
+    <b-row class="mt-3">
       <b-col>
-        <b-button
-          class="hostVotingButtons"
-          :class="{ active: hostVoting }"
-          @click="hostVoting = true"
-        >
-          {{ $t("session.prepare.step.selection.hostVoting.hostVotingOn") }}
-        </b-button>
-      </b-col>
-      <b-col>
-        <b-button
-          class="hostVotingButtons"
-          :class="{ active: !hostVoting }"
-          @click="hostVoting = false"
-        >
-          {{ $t("session.prepare.step.selection.hostVoting.hostVotingOff") }}
-        </b-button>
+        <b-form-radio-group v-model="hostVoting" buttons>
+          <b-form-radio :value="true">
+            {{ $t("session.prepare.step.selection.hostVoting.hostVotingOn") }}
+          </b-form-radio>
+          <b-form-radio :value="false">
+            {{ $t("session.prepare.step.selection.hostVoting.hostVotingOff") }}
+          </b-form-radio>
+        </b-form-radio-group>
       </b-col>
     </b-row>
     <h4 class="mt-3">
@@ -129,15 +126,11 @@
     </h4>
     <b-row class="mt-3">
       <b-col>
-        <b-form>
-          <b-form-group label-for="input-password">
-            <b-form-input
-              id="input-password"
-              v-model="password"
-              :placeholder="$t('session.prepare.step.selection.password.placeholder')"
-            />
-          </b-form-group>
-        </b-form>
+        <b-form-input
+          id="input-password"
+          v-model="password"
+          :placeholder="$t('session.prepare.step.selection.password.placeholder')"
+        />
       </b-col>
     </b-row>
     <b-button
@@ -223,6 +216,13 @@ export default Vue.extend({
     this.$store.commit("setUserStories", { stories: [] });
   },
   methods: {
+    linkClass(idx) {
+      if (this.tabIndex === idx) {
+        return ["selectedTab", "selectedTextColor"];
+      } else {
+        return ["notSelectedTab", "notSelectedTextColor"];
+      }
+    },
     async sendCreateSessionRequest() {
       const url = Constants.backendURL + Constants.createSessionRoute;
       const sessionConfig = {
@@ -353,26 +353,15 @@ export default Vue.extend({
 <style lang="scss" scoped>
 @import "@/assets/style/_variables.scss";
 
-/* Prepare Page */
-.selectedTab {
-  background-color: var(--preparePageMainColor) !important;
+.btn-secondary:not(:disabled):not(.disabled),
+.show > .btn-secondary.dropdown-toggle {
+  background-color: var(--preparePageTimerBackground);
 }
 
-.selectedTextColor {
-  color: var(--text-primary-color) !important;
-}
-
-.notSelectedTab {
-  background-color: var(--preparePageInActiveTab) !important;
-  border-color: var(--preparePageBorderTab) !important;
-}
-
-.notSelectedTab:hover {
-  background-color: var(--preparePageInActiveTabHover) !important;
-}
-
-.notSelectedTextColor {
-  color: var(--text-primary-color) !important;
+.btn-secondary:not(:disabled):not(.disabled):active,
+.btn-secondary:not(:disabled):not(.disabled).active,
+.show > .btn-secondary.dropdown-toggle {
+  background-color: var(--primary-button) !important;
 }
 
 #timer-control {
@@ -389,6 +378,9 @@ export default Vue.extend({
     width: 2rem;
     height: 2rem;
     margin: 0;
+    &:hover {
+      color: var(--text-color-hover);
+    }
   }
 
   #timer-value {
@@ -397,66 +389,8 @@ export default Vue.extend({
   }
 }
 
-.importUserStoryButton {
-  background-color: var(--preparePageMainColor);
-  color: var(--text-primary-color);
-}
-
-.importUserStoryButton:hover {
-  background-color: var(--startButtonHovered);
-  color: var(--text-primary-color);
-}
-
-.importUserStoryButton:focus {
-  background-color: var(--startButtonHovered) !important;
-  color: var(--text-primary-color) !important;
-}
-
-.hostVotingButtons {
-  color: var(--text-primary-color);
-  border-color: var(--text-primary-color);
-  background-color: transparent;
-  font-size: large;
-  width: 68px;
-  text-align: center;
-}
-
-.hostVotingButtons:hover {
-  color: var(--text-primary-color) !important;
-  border-color: var(--text-primary-color);
-  background-color: var(--preparePageInActiveTabHover);
-}
-.hostVotingButtons:focus {
-  color: var(--text-primary-color);
-  border-color: var(--text-primary-color);
-  background-color: transparent !important;
-  outline: none;
-  box-shadow: none;
-}
-
-.optionButtons {
-  color: var(--text-primary-color);
-  border-color: var(--text-primary-color);
-  background-color: transparent;
-  font-size: xx-large;
-  width: 47.5px;
-}
-
-.optionButtons:hover {
-  color: var(--text-primary-color) !important;
-  border-color: var(--text-primary-color);
-  background-color: var(--preparePageInActiveTabHover);
-}
-.optionButtons:focus {
-  color: var(--text-primary-color);
-  border-color: var(--text-primary-color);
-  background-color: transparent !important;
-  outline: none;
-  box-shadow: none;
-}
-
 .startingButton {
-  background-color: var(--primary-button);
+  background-color: var(--primary-button) !important;
   color: var(--text-primary-color);
 }
 

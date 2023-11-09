@@ -10,7 +10,8 @@
       "frontend": "Licencias (Frontend)",
       "backend": "Licencias (backend)",
       "translations": "Mejorar la traducción"
-    }
+    },
+    "feedback": "Feedback"
   },
   "page": {
     "session": {

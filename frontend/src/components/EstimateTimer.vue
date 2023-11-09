@@ -117,7 +117,8 @@ export default Vue.extend({
 });
 </script>
 
-<style scoped>
+<!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
+<style lang="scss" scoped>
 .estimate-timer {
   font-size: 1.5rem;
   font-weight: 700;

@@ -23,13 +23,17 @@ export default Vue.extend({
       default: () => [] as Array<Member>,
     },
     hostVoting: { type: Boolean, required: true },
+    autoReveal: { type: Boolean, required: false },
   },
   methods: {
     sendStartEstimationMessages() {
       const endPoint = Constants.webSocketStartPlanningRoute;
       this.$store.commit("sendViaBackendWS", {
         endPoint,
-        data: this.hostVoting,
+        data: JSON.stringify({
+          hostVoting: this.hostVoting,
+          autoReveal: this.autoReveal,
+        }),
       });
       this.$emit("clicked");
     },

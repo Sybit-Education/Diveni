@@ -110,7 +110,9 @@ export default Vue.extend({
   },
 });
 </script>
-<style scoped>
+
+<!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
+<style lang="scss" scoped>
 .statsCards {
   border-radius: 0.5rem;
   background-color: rgba(200, 200, 200, 0.5);

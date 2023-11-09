@@ -115,8 +115,19 @@ cards once you've started the session.
 
 Once everybody of your team has joined your session, you can start the session. While you are waiting for your team members to join, you can change some settings for your session.
 
+  - Automatic Reveal The Votes
+    - You can either choose to automatically reveal the votes, once everybody has given up his vote
+      or you select the option to wait until the given timer has finished.
+      ![AutomaticReveal](../img/automatic_reveal.png)
+    - While the Estimation is running, you cannot change the revealing option.
+
+Once everybody of your team has joined your session, you can start the session. While you are waiting for your team members to join, you can change some settings for your session.
+
   - The admin of the session can vote
     - As the admin of the session you can choose to vote as well or to only let your members vote on the userstories.
+  - The admin of the session can vote
+    - As the admin of the session you can choose to vote as well or to only let your members vote on the userstories.
+
 
 ## Start voting of User Story
 
