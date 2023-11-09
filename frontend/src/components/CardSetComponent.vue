@@ -223,6 +223,7 @@ export default Vue.extend({
 });
 </script>
 
+<!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
 <style lang="scss" scoped>
 @import "@/assets/style/variables.scss";
 .card {
@@ -234,15 +235,15 @@ export default Vue.extend({
   flex-direction: column;
   cursor: pointer;
   border-radius: $border-radius;
-  box-shadow: 10px 10px 5px var(--accent-color);
+  box-shadow: 8px 8px 5px var(--box-shadow);
 
   &:hover {
-    border-width: 3px;
-    border-color: var(--preparePageInActiveCardSet);
+    border-width: 4px;
+    border-color: var(--preparePageInActiveTabHover);
     border-style: solid;
   }
   &.selected {
-    border-width: 3px;
+    border-width: 5px;
     border-color: var(--primary-button);
     border-style: solid;
   }
@@ -288,29 +289,40 @@ export default Vue.extend({
 .dark1 {
   background-image: url("@/assets/preparePage/Fibonacci-DarkMode.png");
   background-size: cover;
+  text-shadow: #000 0 0 3px;
+  -webkit-font-smoothing: antialiased;
 }
 
 .dark2 {
   background-image: url("@/assets/preparePage/TShirt-DarkMode.png");
   background-size: cover;
+  text-shadow: #000 0 0 3px;
+  -webkit-font-smoothing: antialiased;
 }
 
 .dark3 {
   background-image: url("@/assets/preparePage/Hour-DarkMode.png");
   background-size: cover;
+  text-shadow: #000 0 0 3px;
+  -webkit-font-smoothing: antialiased;
 }
 
 .dark4 {
   background-image: url("@/assets/preparePage/Numbers-DarkMode.png");
   background-size: cover;
+  text-shadow: #000 0 0 3px;
+  -webkit-font-smoothing: antialiased;
 }
 
 .dark5 {
   background-image: url("@/assets/preparePage/OwnSet-DarkMode.png");
   background-size: cover;
+  text-shadow: #000 0 0 3px;
+  -webkit-font-smoothing: antialiased;
 }
 
 #popUp {
+  color: var(--text-primary-color);
   background-color: var(--landingPageCardsBackground);
 }
 

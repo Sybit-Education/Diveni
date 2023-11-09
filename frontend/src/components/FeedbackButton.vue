@@ -17,7 +17,8 @@ export default defineComponent({
 });
 </script>
 
-<style scoped lang="scss">
+<!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
+<style lang="scss" scoped>
 .feedback {
   display: inline-block;
   left: 100%;

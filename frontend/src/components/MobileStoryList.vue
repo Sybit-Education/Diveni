@@ -113,7 +113,8 @@ export default Vue.extend({
 });
 </script>
 
-<style scoped>
+<!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
+<style lang="scss" scoped>
 .list-group-item.active {
   background-color: white !important;
   border-width: 3px;

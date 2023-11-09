@@ -20,7 +20,9 @@ export default Vue.extend({
   name: "UserStoryComponent",
 });
 </script>
-<style scoped>
+
+<!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
+<style lang="scss" scoped>
 .textDescription {
   color: var(--text-primary-color) !important;
 }

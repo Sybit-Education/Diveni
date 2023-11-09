@@ -1,19 +1,16 @@
 <template>
-  <div class="theme-toggle">
-    <input id="checkbox" type="checkbox" class="theme-toggle__checkbox" @change="toggleTheme" />
-    <label for="checkbox" class="theme-toggle__label">
-      <span>🌙</span>
-      <span>☀️</span>
-      <div
-        class="theme-toggle__toggle"
-        :class="{ 'theme-toggle__toggle-checked': userTheme === 'dark' }"
-      />
-    </label>
+  <div class="flex">
+    <div class="mode-toggle" @click="modeToggle">
+      <div class="toggle">
+        <div id="dark-mode" type="checkbox"></div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
+
 export default Vue.extend({
   name: "ThemeToggle",
   data() {
@@ -29,7 +26,7 @@ export default Vue.extend({
     }
   },
   methods: {
-    toggleTheme() {
+    modeToggle() {
       const activeTheme = localStorage.getItem("user-theme");
       if (activeTheme === "light") {
         this.setTheme("dark");
@@ -45,9 +42,9 @@ export default Vue.extend({
       this.userTheme = theme;
       document.documentElement.className = theme;
       if (theme === "dark") {
-        this.darkMode();
+        this.dark();
       } else {
-        this.lightMode();
+        this.light();
       }
       window.dispatchEvent(
         new CustomEvent("user-theme-localstorage-changed", {
@@ -57,13 +54,8 @@ export default Vue.extend({
         })
       );
     },
-    /**
-     * @function darkmode
-     * @summary: firstly, checks if browser local storage has 'user-theme' key
-     * if key has 'dark' value then changes the theme to 'dark mode'
-     * Basically, replaces/toggles every CSS class that has '-light' class with '-dark'
-     */
-    darkMode() {
+    dark() {
+      document.querySelector("body")?.classList.add("dark-mode");
       document.querySelectorAll(".bg-light").forEach((element) => {
         element.className = element.className.replace(/-light/g, "-dark");
       });
@@ -78,15 +70,8 @@ export default Vue.extend({
         document.body.classList.add("text-light");
       }
     },
-
-    /**
-     * @function lightmode
-     * @summary: check whether the switch is on (checked) or not.
-     * If the switch is on then set 'lightSwitch' local storage key and call @function darkmode
-     * If the switch is off then it is light mode so, switch the theme and
-     *  remove 'lightSwitch' key from local storage
-     */
-    lightMode() {
+    light() {
+      document.querySelector("body")?.classList.remove("dark-mode");
       document.querySelectorAll(".bg-dark").forEach((element) => {
         element.className = element.className.replace(/-dark/g, "-light");
       });
@@ -99,52 +84,86 @@ export default Vue.extend({
 });
 </script>
 
-<style scoped lang="scss">
+<!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
+<style lang="scss" scoped>
 @import "@/assets/style/variables.scss";
-.theme-toggle {
-  $element-size: 1.5rem;
-  margin-left: 0.25rem;
-  margin-right: 0.25rem;
 
-  &__checkbox {
-    display: none;
-  }
+.mode-toggle {
+  position: relative;
+  padding: 0;
+  width: 44px;
+  height: 24px;
+  min-width: 36px;
+  min-height: 20px;
+  background-color: var(--topNavigationBarColor);
+  border: 1px solid;
+  border-radius: 24px;
+  border-color: var(--text-primary-color);
+  outline: 0;
+  overflow: hidden;
+  cursor: pointer;
+  z-index: 2;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  -webkit-touch-callout: none;
+  appearance: none;
+  transition: background-color 0.5s ease;
 
-  &__toggle-checked {
-    transform: translateX(calc($element-size * 1)) !important;
-  }
-
-  &__toggle {
+  .toggle {
     position: absolute;
-    background-color: var(--topNavigationBarColor);
+    top: 0;
+    left: 1px;
+    bottom: 0;
+    margin: auto;
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
-    left: 0;
-    opacity: 1;
-    height: calc($element-size);
-    width: calc($element-size);
-    transform: translateX(0);
-    transition: transform 0.3s ease, background-color 0.5s ease;
+    border: 3px solid transparent;
+    box-shadow: inset 0 0 0 2px var(--text-primary-color);
+    overflow: hidden;
+    transition: transform 0.5s ease;
+
+    #dark-mode {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      border-radius: 50%;
+
+      &:before {
+        content: "";
+        position: relative;
+        width: 100%;
+        height: 100%;
+        left: 50%;
+        float: left;
+        background-color: var(--text-primary-color);
+        transition: border-radius 0.5s ease, width 0.5s ease, height 0.5s ease, left 0.5s ease,
+          transform 0.5s ease;
+      }
+    }
   }
+}
 
-  &__label {
-    height: calc($element-size);
-    width: calc($element-size * 2);
-    user-select: none;
+body.dark-mode {
+  .mode-toggle {
+    background-color: lighten(#262626, 5%);
+    border-color: var(--text-primary-color);
 
-    /* for other dimensions, calculate values based on it */
-    border-radius: $border-radius;
-    border-color: var(--accent-color);
-    background-color: var(--text-primary-color);
-    font-size: calc($element-size * 0.75);
+    .toggle {
+      transform: translateX(19px);
+      box-shadow: inset 0 0 0 2px var(--text-primary-color);
 
-    align-items: center;
-
-    cursor: pointer;
-    display: flex;
-    position: relative;
-    transition: background 0.5s ease;
-    justify-content: space-between;
-    z-index: 1;
+      #dark-mode {
+        &:before {
+          border-radius: 50%;
+          width: 150%;
+          height: 85%;
+          left: 45%;
+          transform: translate(-10%, -40%), rotate(-35deg);
+          background-color: white;
+        }
+      }
+    }
   }
 }
 </style>

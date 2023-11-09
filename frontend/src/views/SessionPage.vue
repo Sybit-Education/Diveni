@@ -754,18 +754,12 @@ export default Vue.extend({
 });
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
+<style lang="scss" scoped>
 .newVotes {
   text-align: center;
   margin-left: auto;
   margin-right: auto;
-}
-
-.hostVotingButtons {
-  position: relative;
-  top: 50%;
-  transform: translateY(-50%);
 }
 
 .optionButtonCol {
