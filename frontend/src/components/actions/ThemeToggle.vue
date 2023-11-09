@@ -111,7 +111,7 @@ export default Vue.extend({
   .toggle {
     position: absolute;
     top: 0;
-    left: 1px;
+    left: 0;
     bottom: 0;
     margin: auto;
     width: 20px;
@@ -150,7 +150,7 @@ body.dark-mode {
     border-color: var(--text-primary-color);
 
     .toggle {
-      transform: translateX(19px);
+      transform: translateX(21px);
       box-shadow: inset 0 0 0 2px var(--text-primary-color);
 
       #dark-mode {
