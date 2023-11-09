@@ -106,12 +106,12 @@ export default Vue.extend({
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   -webkit-touch-callout: none;
   appearance: none;
-  transition: background-color 0.5s ease;
+  transition: background-color 0.1s ease;
 
   .toggle {
     position: absolute;
     top: 0;
-    left: 1px;
+    left: 0;
     bottom: 0;
     margin: auto;
     width: 20px;
@@ -120,7 +120,7 @@ export default Vue.extend({
     border: 3px solid transparent;
     box-shadow: inset 0 0 0 2px var(--text-primary-color);
     overflow: hidden;
-    transition: transform 0.5s ease;
+    transition: transform 0.1s ease;
 
     #dark-mode {
       position: relative;
@@ -137,8 +137,8 @@ export default Vue.extend({
         left: 50%;
         float: left;
         background-color: var(--text-primary-color);
-        transition: border-radius 0.5s ease, width 0.5s ease, height 0.5s ease, left 0.5s ease,
-          transform 0.5s ease;
+        transition: border-radius 0.1s ease, width 0.1s ease, height 0.1s ease, left 0.1s ease,
+          transform 0.1s ease;
       }
     }
   }
@@ -150,7 +150,7 @@ body.dark-mode {
     border-color: var(--text-primary-color);
 
     .toggle {
-      transform: translateX(19px);
+      transform: translateX(21px);
       box-shadow: inset 0 0 0 2px var(--text-primary-color);
 
       #dark-mode {
