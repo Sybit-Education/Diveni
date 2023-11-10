@@ -138,8 +138,6 @@ public class WebsocketController {
         ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID());
     webSocketService.sendSessionStateToMembers(
         session.updateSessionState(SessionState.SESSION_CLOSED));
-    webSocketService.getSessionPrincipals(session.getSessionID()).memberPrincipals().stream()
-        .forEach(memberP -> removeMember(memberP));
     webSocketService.removeSession(session);
     databaseService.deleteSession(session);
     LOGGER.debug("<-- closeSession()");
@@ -294,5 +292,15 @@ public class WebsocketController {
     long timeDifference = currentDate.getTime() - startDate.getTime();
     LOGGER.debug("<-- get-timer-value() + " + timeDifference);
     return new ResponseEntity<>(timeDifference, HttpStatus.OK);
+  }
+
+  public boolean isMemberInSession(Principal principal) {
+    LOGGER.debug("--> isMemberInSession()");
+    if (principal instanceof MemberPrincipal) {
+      LOGGER.debug("<-- isMemberInSession()");
+      return databaseService.getSessionByMemberID(((MemberPrincipal) principal).getMemberID()).isPresent();
+    }
+    LOGGER.debug("<-- isMemberInSession(). principal is NOT instanceof MemberPrincipal");
+    return false;
   }
 }
