@@ -5,6 +5,7 @@
 */
 package io.diveni.backend.service;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -97,6 +98,6 @@ public class DatabaseService {
   private Statistic getOrCreateStatistic() {
     LOGGER.debug("getOrCreateStatistic()");
     return statisticRepo.findById(statEntryIdentifier)
-      .orElseGet(() -> statisticRepo.save(new Statistic(statEntryIdentifier, 0, 0)));
+      .orElseGet(() -> statisticRepo.save(new Statistic(statEntryIdentifier, 0, 0, LocalDate.now())));
   }
 }

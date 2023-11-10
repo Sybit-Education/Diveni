@@ -6,6 +6,8 @@ import lombok.Getter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDate;
+
 @Getter
 @AllArgsConstructor
 @EqualsAndHashCode
@@ -17,6 +19,8 @@ public class Statistic {
   private Integer overallSessions;
 
   private Integer overallAttendees;
+
+  private final LocalDate creationTime;
 
   public Statistic incrementOverallSessions() {
     overallSessions++;
