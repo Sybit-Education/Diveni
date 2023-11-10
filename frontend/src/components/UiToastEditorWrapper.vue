@@ -36,7 +36,7 @@ onMounted(() => {
     plugins: [codeSyntaxHighlight],
     el: editor.value,
     initialEditType: "wysiwyg",
-    initialValue: props.initialValue,
+    initialValue: props.initialValue ?? "",
     previewStyle: "vertical",
     events: {
       change: () => emit("update:modelValue", e.getMarkdown()),

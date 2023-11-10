@@ -11,17 +11,10 @@
         </h1>
       </b-col>
       <b-col cols="auto">
-        <copy-session-id-popup
-          v-if="planningStart"
-          class="float-end"
-          :session-id="session_sessionID"
-        />
+        <copy-session-id-popup v-if="planningStart" class="float-end" :session-id="sessionID" />
       </b-col>
       <b-col id="sessionCloseCol" cols="auto">
-        <session-close-button
-          :is-planning-start="planningStart"
-          :user-story-mode="session_userStoryMode"
-        />
+        <session-close-button :is-planning-start="planningStart" :user-story-mode="userStoryMode" />
       </b-col>
     </b-row>
 
@@ -31,7 +24,7 @@
       </div>
       <copy-session-id-popup
         :text-before-session-i-d="t('page.session.before.text.beforeID')"
-        :session-id="session_sessionID"
+        :session-id="sessionID"
         :text-after-session-i-d="t('page.session.before.text.afterID')"
         class="copy-popup"
       />
@@ -47,7 +40,7 @@
       </b-row>
       <b-row>
         <b-col class="text-center">
-          <session-start-button :host-voting="session_hostVoting" @clicked="onPlanningStarted" />
+          <session-start-button :host-voting="hostVoting" @clicked="onPlanningStarted" />
         </b-col>
       </b-row>
     </div>
@@ -104,7 +97,7 @@
         />
       </b-row>
       <hr class="my-5 breakingLine" />
-      <h4 v-if="!session_hostVoting">
+      <h4 v-if="!hostVoting">
         {{ t("page.session.during.estimation.message.finished") }}
         {{ membersEstimated.length }} /
         {{ members.length }}
@@ -167,7 +160,7 @@
           :highlight="highlightedMembers.includes(adminID) || highlightedMembers.length === 0"
         />
       </b-row>
-      <div v-if="session_hostVoting && estimateFinished === false">
+      <div v-if="hostVoting && !estimateFinished">
         <div v-if="!estimateFinished">
           <hr class="breakingLine" />
           <h4 class="d-inline">Your Estimation</h4>
@@ -186,14 +179,14 @@
         </div>
       </div>
     </div>
-    <b-row v-if="session_userStoryMode !== 'NO_US'" class="mt-4">
+    <b-row v-if="userStoryMode !== 'NO_US'" class="mt-4">
       <b-col>
         <user-story-sum-component />
       </b-col>
     </b-row>
-    <b-row v-if="session_userStoryMode !== 'NO_US'">
+    <b-row v-if="userStoryMode !== 'NO_US'">
       <b-col v-if="!isMobile" cols="7">
-        <div v-if="session_userStoryMode === 'US_JIRA'" class="refreshUserstories">
+        <div v-if="userStoryMode === 'US_JIRA'" class="refreshUserstories">
           <b-button
             class="w-100 mb-3 refreshButton"
             @click="
@@ -215,7 +208,7 @@
         />
       </b-col>
       <b-col v-else cols="12">
-        <div v-if="session_userStoryMode === 'US_JIRA'" class="refreshUserstories">
+        <div v-if="userStoryMode === 'US_JIRA'" class="refreshUserstories">
           <b-button
             class="w-100 mb-3 refreshButton"
             @click="
@@ -272,7 +265,6 @@ import confetti from "canvas-confetti";
 import NotifyHostComponent from "../components/NotifyHostComponent.vue";
 import apiService from "@/services/api.service";
 import UserStorySumComponent from "@/components/UserStorySum.vue";
-import Project from "../model/Project";
 import KickUserWrapper from "@/components/KickUserWrapper.vue";
 import SessionCloseButton from "@/components/actions/SessionCloseButton.vue";
 import SessionStartButton from "@/components/actions/SessionStartButton.vue";
@@ -299,21 +291,21 @@ export default defineComponent({
     BIconBarChartFill,
     SessionAdminCard,
   },
-  props: {
-    adminID: { type: String, required: false, default: undefined },
-    sessionID: { type: String, required: false, default: undefined },
-    voteSetJson: { type: String, required: false, default: undefined },
-    sessionState: { type: String, required: false, default: undefined },
-    timerSecondsString: { type: String, required: false, default: undefined },
-    hostVoting: { type: String, required: true },
-    startNewSessionOnMountedString: {
-      type: String,
-      required: false,
-      default: "false",
-    },
-    userStoryMode: { type: String, required: false, default: undefined },
-    rejoined: { type: String, required: false, default: "true" },
-  },
+  // props: {
+  //   adminID: { type: String, required: false, default: undefined },
+  //   sessionID: { type: String, required: false, default: undefined },
+  //   voteSetJson: { type: String, required: false, default: undefined },
+  //   sessionState: { type: String, required: false, default: undefined },
+  //   timerSecondsString: { type: String, required: false, default: undefined },
+  //   hostVoting: { type: String, required: true },
+  //   startNewSessionOnMountedString: {
+  //     type: String,
+  //     required: false,
+  //     default: "false",
+  //   },
+  //   userStoryMode: { type: String, required: false, default: undefined },
+  //   rejoined: { type: String, required: false, default: "true" },
+  // },
   setup() {
     const store = useDiveniStore();
     const toast = useToast();
@@ -322,14 +314,23 @@ export default defineComponent({
   },
   data() {
     return {
+      sessionID: history.state.sessionID,
+      adminID: history.state.adminID,
+      voteSetJson: history.state.voteSetJson,
+      sessionState: history.state.sessionState,
+      timerSecondsString: history.state.timerSecondsString,
+      startNewSessionOnMountedString: history.state.startNewSessionOnMountedString,
+      userStoryMode: history.state.userStoryMode,
+      hostVoting: history.state.hostVoting as boolean,
+      rejoined: history.state.rejoined,
       //props copy
-      session_adminID: "" as string | undefined,
-      session_sessionID: "" as string | undefined,
-      session_voteSetJson: "" as string | undefined,
-      session_sessionState: "" as string | undefined,
-      session_timerSecondsString: "" as string | undefined,
-      session_userStoryMode: "" as string | undefined,
-      session_hostVoting: false,
+      // session_adminID: "" as string | undefined,
+      // session_sessionID: "" as string,
+      // session_voteSetJson: "" as string | undefined,
+      // session_sessionState: "" as string | undefined,
+      // session_timerSecondsString: "" as string | undefined,
+      // session_userStoryMode: "" as string,
+      // session_hostVoting: false,
       //data
       index: 0,
       stageLabelReady: "Ready",
@@ -419,29 +420,30 @@ export default defineComponent({
     },
   },
   async created() {
+    console.log("history: " + JSON.stringify(history.state));
     this.copyPropsToData();
     this.store.clearStoreWithoutUserStories();
-    if (!this.session_sessionID || !this.session_adminID) {
+    if (!this.sessionID || !this.adminID) {
       //check for cookie
       await this.checkAdminCookie();
       this.assignSessionToData(this.session);
-      if (this.session_sessionID?.length === 0) {
+      if (this.sessionID?.length === 0) {
         this.goToLandingPage();
       } else {
         this.handleReload();
       }
     }
-    this.timerCountdownNumber = parseInt(this.session_timerSecondsString ?? "0", 10);
+    this.timerCountdownNumber = parseInt(this.timerSecondsString ?? "0", 10);
     window.addEventListener("beforeunload", this.sendUnregisterCommand);
   },
   mounted() {
-    if (this.session_voteSetJson) {
-      this.voteSet = JSON.parse(this.session_voteSetJson);
+    if (this.voteSetJson) {
+      this.voteSet = JSON.parse(this.voteSetJson);
     }
     this.connectToWebSocket();
-    if (this.session_sessionState === Constants.memberUpdateCommandStartVoting) {
+    if (this.sessionState === Constants.memberUpdateCommandStartVoting) {
       this.planningStart = true;
-    } else if (this.session_sessionState === Constants.memberUpdateCommandVotingFinished) {
+    } else if (this.sessionState === Constants.memberUpdateCommandVotingFinished) {
       this.planningStart = true;
       this.estimateFinished = true;
     }
@@ -488,41 +490,42 @@ export default defineComponent({
       }
     },
     copyPropsToData() {
-      if (this.adminID) {
-        this.session_adminID = this.adminID;
-        this.session_sessionID = this.sessionID;
-        this.session_sessionState = this.sessionState;
-        this.session_timerSecondsString = this.timerSecondsString;
-        this.session_voteSetJson = this.voteSetJson;
-        this.session_userStoryMode = this.userStoryMode;
-        this.session_hostVoting = String(this.hostVoting).toLowerCase() === "true";
-      }
+      // if (this.adminID) {
+      //   this.session_adminID = this.adminID;
+      //   this.session_sessionID = this.sessionID;
+      //   this.session_sessionState = this.sessionState;
+      //   this.session_timerSecondsString = this.timerSecondsString;
+      //   this.session_voteSetJson = this.voteSetJson;
+      //   this.session_userStoryMode = this.userStoryMode;
+      //   this.session_hostVoting = String(this.hostVoting).toLowerCase() === "true";
+      // }
     },
     assignSessionToData(session) {
+      console.log("history: " + history.state);
       if (Object.keys(session).length !== 0) {
-        this.session_adminID = session.adminID;
-        this.session_sessionID = session.sessionID;
-        this.session_sessionState = session.sessionState;
-        this.session_timerSecondsString = session.sessionConfig.timerSeconds.toString();
-        this.session_voteSetJson = JSON.stringify(session.sessionConfig.set);
-        this.session_userStoryMode = session.sessionConfig.userStoryMode;
-        this.session_hostVoting = String(session.hostVoting).toLowerCase() === "true";
+        this.adminID = session.adminID;
+        this.sessionID = session.sessionID;
+        this.sessionState = session.sessionState;
+        this.timerSecondsString = session.sessionConfig.timerSeconds.toString();
+        this.voteSetJson = JSON.stringify(session.sessionConfig.set);
+        this.userStoryMode = session.sessionConfig.userStoryMode;
+        this.hostVoting = String(session.hostVoting).toLowerCase() === "true";
 
         this.store.setUserStories({ stories: session.sessionConfig.userStories });
-        this.voteSet = JSON.parse(this.session_voteSetJson);
+        this.voteSet = JSON.parse(this.voteSetJson);
       }
     },
     handleReload() {
       if (
-        this.session_sessionState === Constants.memberUpdateCommandStartVoting ||
-        this.session_sessionState === Constants.memberUpdateCommandVotingFinished
+        this.sessionState === Constants.memberUpdateCommandStartVoting ||
+        this.sessionState === Constants.memberUpdateCommandVotingFinished
       ) {
         this.planningStart = true;
       }
-      if (this.session_sessionState === Constants.memberUpdateCommandVotingFinished) {
+      if (this.sessionState === Constants.memberUpdateCommandVotingFinished) {
         this.estimateFinished = true;
       }
-      this.timerCountdownNumber = parseInt(this.session_timerSecondsString ?? "0", 10);
+      this.timerCountdownNumber = parseInt(this.timerSecondsString ?? "0", 10);
       //reconnect and reload member
       this.connectToWebSocket();
       setTimeout(() => {
@@ -535,7 +538,7 @@ export default defineComponent({
       console.log(`doRemove: ${doRemove}`);
       console.log(`Syncing ${us[idx]}`);
       //Jira sync
-      if (this.session_userStoryMode === "US_JIRA") {
+      if (this.userStoryMode === "US_JIRA") {
         let response;
         if (doRemove) {
           if (us[idx].id === null) {
@@ -593,7 +596,7 @@ export default defineComponent({
       }
     },
     async onSynchronizeJira({ story, doRemove }) {
-      if (this.session_userStoryMode === "US_JIRA") {
+      if (this.userStoryMode === "US_JIRA") {
         let response;
         if (doRemove) {
           response = await apiService.deleteUserStory(story.id);
@@ -631,7 +634,7 @@ export default defineComponent({
       this.index = $event;
     },
     connectToWebSocket() {
-      const url = `${Constants.backendURL}/connect?sessionID=${this.session_sessionID}&adminID=${this.session_adminID}`;
+      const url = `${Constants.backendURL}/connect?sessionID=${this.sessionID}&adminID=${this.adminID}`;
       this.store.connectToBackendWS(url);
     },
     registerAdminPrincipalOnBackend() {
@@ -666,16 +669,16 @@ export default defineComponent({
     sendRestartMessage() {
       this.estimateFinished = false;
       this.hostEstimation = "";
-      this.safedHostVoting = this.session_hostVoting;
+      this.safedHostVoting = this.hostVoting;
       const endPoint = Constants.webSocketRestartPlanningRoute;
-      this.store.sendViaBackendWS(endPoint, this.session_hostVoting);
+      this.store.sendViaBackendWS(endPoint, this.hostVoting);
     },
     goToLandingPage() {
       this.$router.push({ name: "LandingPage" });
     },
     onPlanningStarted() {
       this.planningStart = true;
-      this.safedHostVoting = this.session_hostVoting;
+      this.safedHostVoting = this.hostVoting;
     },
     vote(vote: string) {
       this.hostEstimation = vote;

@@ -164,7 +164,7 @@ export default defineComponent({
             };
             sessionState: string;
             members: Array<string>;
-            hostVoting: string;
+            hostVoting: boolean;
           };
           this.sessionWrapper = { session };
         } catch (e) {
@@ -185,7 +185,7 @@ export default defineComponent({
       });
       this.$router.push({
         name: "SessionPage",
-        params: {
+        state: {
           sessionID: this.sessionWrapper.session.sessionID,
           adminID: this.sessionWrapper.session.adminID,
           voteSetJson: JSON.stringify(this.sessionWrapper.session.sessionConfig.set),

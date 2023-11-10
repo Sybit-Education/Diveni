@@ -271,14 +271,14 @@ export default defineComponent({
     goToSessionPage(session: Session) {
       this.$router.push({
         name: "SessionPage",
-        params: {
+        state: {
           sessionID: session.sessionID,
           adminID: session.adminID,
           timerSecondsString: this.timer.toString(),
           voteSetJson: JSON.stringify(session.sessionConfig.set),
           sessionState: session.sessionState,
           userStoryMode: session.sessionConfig.userStoryMode,
-          hostVoting: this.hostVoting.toString(),
+          hostVoting: this.hostVoting,
           rejoined: "false",
         },
       });

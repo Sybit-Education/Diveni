@@ -59,7 +59,6 @@ import { defineComponent } from "vue";
 import apiService from "@/services/api.service";
 import { useDiveniStore } from "@/store";
 import { useToast } from "vue-toastification";
-import * as Vue from "vue";
 import { useI18n } from "vue-i18n";
 
 export default defineComponent({
@@ -71,6 +70,12 @@ export default defineComponent({
       default: false,
     },
   },
+  setup() {
+    const store = useDiveniStore();
+    const toast = useToast();
+    const { t } = useI18n();
+    return { store, toast, t };
+  },
   data() {
     return {
       token: "",
@@ -78,12 +83,6 @@ export default defineComponent({
       verificationCodeState: false,
       showVerificationModal: false,
     };
-  },
-  setup() {
-    const store = useDiveniStore();
-    const toast = useToast();
-    const { t } = useI18n();
-    return { store, toast, t };
   },
   methods: {
     checkFormValidity() {

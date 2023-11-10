@@ -46,7 +46,8 @@ export default defineComponent({
     },
     markdown: {
       type: String,
-      default: null,
+      required: false,
+      default: "",
     },
     placeholder: {
       type: String,
