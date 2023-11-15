@@ -10,7 +10,8 @@
       "frontend": "Ліцензії (інтерфейсу)",
       "backend": "Ліцензії (серверні)",
       "translations": "Покращення перекладу"
-    }
+    },
+    "feedback": "Feedback"
   },
   "page": {
     "session": {

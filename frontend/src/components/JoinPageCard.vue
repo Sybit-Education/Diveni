@@ -106,7 +106,8 @@ export default Vue.extend({
 });
 </script>
 
-<style scoped>
+<!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
+<style lang="scss" scoped>
 #join-card {
   border-radius: 20px;
   vertical-align: middle;
@@ -118,9 +119,8 @@ h6 {
 }
 
 .startingButton {
-  background-color: var(--startButton);
+  background-color: var(--primary-button);
   color: var(--text-primary-color);
-  border-radius: var(--buttonShape);
   min-height: 75px;
   min-width: 75px;
   margin-top: 16%;
@@ -129,12 +129,12 @@ h6 {
 }
 
 .startingButton:hover {
-  background-color: var(--startButtonHovered);
+  background-color: var(--primary-button-hovered);
   color: var(--text-primary-color);
 }
 
 .startingButton:focus {
-  background-color: var(--startButtonHovered) !important;
+  background-color: var(--primary-button-hovered) !important;
   color: var(--text-primary-color);
 }
 
@@ -145,10 +145,6 @@ h6 {
 
 .inputText {
   color: black;
-}
-
-.inputFields {
-  border-radius: var(--buttonShape);
 }
 
 #startButtonCol {

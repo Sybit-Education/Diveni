@@ -9,7 +9,7 @@
     {{ textAfterSessionID }}
     <b-popover id="popover" target="popover-link" triggers="hover" placement="top">
       <b-button
-        id="sessionCode"
+        variant="primary"
         class="mx-1"
         @click="
           copyIdToClipboard();
@@ -19,8 +19,8 @@
         {{ $t("page.session.before.copy.id") }}
       </b-button>
       <b-button
-        id="link"
         class="mx-1"
+        variant="secondary"
         @click="
           copyLinkToClipboard();
           $event.target.blur();
@@ -29,8 +29,8 @@
         {{ $t("page.session.before.copy.link") }}
       </b-button>
       <b-button
-        id="qrCode"
         class="mx-1"
+        variant="info"
         @click="
           $bvModal.show('qr-modal');
           $event.target.blur();
@@ -121,8 +121,8 @@ export default Vue.extend({
 });
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
+<style lang="scss" scoped>
 .copy-session {
   font-size: 1.75rem;
   color: var(--text-primary-color);
@@ -140,53 +140,5 @@ export default Vue.extend({
 .qr-code {
   display: table;
   margin: 0 auto;
-}
-
-#sessionCode {
-  border-radius: var(--buttonShape);
-  background-color: var(--startButton);
-  color: var(--text-primary-color);
-}
-
-#sessionCode:hover {
-  background-color: var(--startButtonHovered);
-  color: var(--text-primary-color);
-}
-
-#sessionCode:focus {
-  background-color: var(--startButtonHovered) !important;
-  color: var(--text-primary-color);
-}
-
-#link {
-  border-radius: var(--buttonShape);
-  background-color: var(--joinButton);
-  color: var(--text-primary-color);
-}
-
-#link:hover {
-  background-color: var(--joinButtonHovered);
-  color: var(--text-primary-color);
-}
-
-#link:focus {
-  background-color: var(--joinButtonHovered) !important;
-  color: var(--text-primary-color);
-}
-
-#qrCode {
-  border-radius: var(--buttonShape);
-  background-color: var(--reconnectButton);
-  color: var(--text-primary-color);
-}
-
-#qrCode:hover {
-  background-color: var(--reconnectButtonHovered);
-  color: var(--text-primary-color);
-}
-
-#qrCode:focus {
-  background-color: var(--reconnectButtonHovered) !important;
-  color: var(--text-primary-color);
 }
 </style>

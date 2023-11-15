@@ -51,14 +51,16 @@ export default Vue.extend({
   },
 });
 </script>
-<style scoped>
+
+<!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
+<style lang="scss" scoped>
 #button {
   background-color: var(--preparePageMainColor);
   color: var(--text-primary-color);
 }
 
 #button:hover {
-  background-color: var(--startButtonHovered);
+  background-color: var(--primary-button-hovered);
   color: var(--text-primary-color);
 }
 </style>

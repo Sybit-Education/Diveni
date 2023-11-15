@@ -40,7 +40,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompFrameHandler;
@@ -492,7 +492,85 @@ public class WebsocketControllerTest {
     StompSession session = getMemberSession(sessionID, memberID);
     val vote = "5";
 
-    session.send(VOTE, vote);
+    session.send(VOTE, "{vote: '" + vote + "', autoReveal: true}");
+
+    // Wait for server-side handling
+    TimeUnit.MILLISECONDS.sleep(TIMEOUT);
+
+    val newMembers = sessionRepo.findBySessionID(sessionID).getMembers();
+    assertEquals(newMembers, List.of(member.updateEstimation(vote)));
+  }
+
+  @Test
+  public void voteWithAutoRevealAndTrue_setsVote() throws Exception {
+    val dbID = new ObjectId();
+    val sessionID = Utils.generateRandomID();
+    val adminID = Utils.generateRandomID();
+    val memberID = Utils.generateRandomID();
+    val member = new Member(memberID, null, null, null, null);
+    val memberList = List.of(member);
+    val adminPrincipal = new AdminPrincipal(sessionID, adminID);
+    sessionRepo.save(
+        new Session(
+            dbID,
+            sessionID,
+            adminID,
+            new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+            null,
+            memberList,
+            new HashMap<>(),
+            new ArrayList<>(),
+            SessionState.WAITING_FOR_MEMBERS,
+            null,
+            null,
+            null,
+            null,
+            false,
+            null));
+    webSocketService.setAdminUser(adminPrincipal);
+    StompSession session = getMemberSession(sessionID, memberID);
+    val vote = "5";
+
+    session.send(VOTE, "{vote: '" + vote + "' , autoReveal: true}");
+
+    // Wait for server-side handling
+    TimeUnit.MILLISECONDS.sleep(TIMEOUT);
+
+    val newMemmbers = sessionRepo.findBySessionID(sessionID).getMembers();
+    assertEquals(newMemmbers, List.of(member.updateEstimation("5")));
+  }
+
+  @Test
+  public void voteWithAutoRevealAndFalse_setsVote() throws Exception {
+    val dbID = new ObjectId();
+    val sessionID = Utils.generateRandomID();
+    val adminID = Utils.generateRandomID();
+    val memberID = Utils.generateRandomID();
+    val member = new Member(memberID, null, null, null, null);
+    val memberList = List.of(member);
+    val adminPrincipal = new AdminPrincipal(sessionID, adminID);
+    sessionRepo.save(
+        new Session(
+            dbID,
+            sessionID,
+            adminID,
+            new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+            null,
+            memberList,
+            new HashMap<>(),
+            new ArrayList<>(),
+            SessionState.WAITING_FOR_MEMBERS,
+            null,
+            null,
+            null,
+            null,
+            false,
+            null));
+    webSocketService.setAdminUser(adminPrincipal);
+    StompSession session = getMemberSession(sessionID, memberID);
+    val vote = "5";
+
+    session.send(VOTE, "{vote: '" + vote + "', autoReveal: false}");
 
     // Wait for server-side handling
     TimeUnit.MILLISECONDS.sleep(TIMEOUT);
@@ -573,13 +651,51 @@ public class WebsocketControllerTest {
     webSocketService.setAdminUser(adminPrincipal);
     StompSession adminSession = getAdminSession(sessionID, adminID);
 
-    adminSession.send(START_VOTING, true);
+    adminSession.send(START_VOTING, "{hostVoting: true, autoReveal: true}");
     // Wait for server-side handling
     TimeUnit.MILLISECONDS.sleep(TIMEOUT);
 
     val newSession = sessionRepo.findBySessionID(oldSession.getSessionID());
     Assertions.assertEquals(SessionState.START_VOTING, newSession.getSessionState());
     Assertions.assertTrue(newSession.getHostVoting());
+  }
+
+  @Test
+  public void startVotingWithAutoRevealAndTrue_updatesState() throws Exception {
+    val dbID = new ObjectId();
+    val sessionID = Utils.generateRandomID();
+    val adminID = Utils.generateRandomID();
+    val memberID = Utils.generateRandomID();
+    val member = new Member(memberID, null, null, null, null);
+    val memberList = List.of(member);
+    val adminPrincipal = new AdminPrincipal(sessionID, adminID);
+    val oldSession =
+        new Session(
+            dbID,
+            sessionID,
+            adminID,
+            new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+            null,
+            memberList,
+            new HashMap<>(),
+            new ArrayList<>(),
+            SessionState.WAITING_FOR_MEMBERS,
+            null,
+            null,
+            null,
+            null,
+            false,
+            null);
+    sessionRepo.save(oldSession);
+    webSocketService.setAdminUser(adminPrincipal);
+    StompSession adminSession = getAdminSession(sessionID, adminID);
+
+    adminSession.send(START_VOTING, "{hostVoting: true, autoReveal: true}");
+    // Wait for server-side handling
+    TimeUnit.MILLISECONDS.sleep(TIMEOUT);
+
+    val newSession = sessionRepo.findBySessionID(oldSession.getSessionID());
+    Assertions.assertEquals(SessionState.START_VOTING, newSession.getSessionState());
   }
 
   @Test
@@ -613,7 +729,7 @@ public class WebsocketControllerTest {
     webSocketService.setAdminUser(adminPrincipal);
     StompSession adminSession = getAdminSession(sessionID, adminID);
 
-    adminSession.send(RESTART, true);
+    adminSession.send(RESTART, "{hostVoting: true, autoReveal: true}");
     // Wait for server-side handling
     TimeUnit.MILLISECONDS.sleep(TIMEOUT);
 
@@ -662,5 +778,81 @@ public class WebsocketControllerTest {
 
     val newSession = sessionRepo.findBySessionID(sessionID);
     assertEquals(newSession.getHostEstimation().getHostEstimation(), vote);
+  }
+
+  @Test
+  public void restartVotingWithAutoRevealAndTrue_resetsEstimations() throws Exception {
+    val dbID = new ObjectId();
+    val sessionID = Utils.generateRandomID();
+    val adminID = Utils.generateRandomID();
+    val memberID = Utils.generateRandomID();
+    val member = new Member(memberID, null, null, null, "5");
+    val memberList = List.of(member);
+    val adminPrincipal = new AdminPrincipal(sessionID, adminID);
+    val oldSession =
+        new Session(
+            dbID,
+            sessionID,
+            adminID,
+            new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+            null,
+            memberList,
+            new HashMap<>(),
+            new ArrayList<>(),
+            SessionState.WAITING_FOR_MEMBERS,
+            null,
+            null,
+            null,
+            null,
+            false,
+            null);
+    sessionRepo.save(oldSession);
+    webSocketService.setAdminUser(adminPrincipal);
+    StompSession adminSession = getAdminSession(sessionID, adminID);
+
+    adminSession.send(RESTART, "{hostVoting: true, autoReveal: true}");
+    // Wait for server-side handling
+    TimeUnit.MILLISECONDS.sleep(TIMEOUT);
+
+    val newMembers = sessionRepo.findBySessionID(oldSession.getSessionID()).getMembers();
+    Assertions.assertTrue(newMembers.stream().allMatch(m -> m.getCurrentEstimation() == null));
+  }
+
+  @Test
+  public void restartVotingWithAutoRevealAndFalse_resetsEstimations() throws Exception {
+    val dbID = new ObjectId();
+    val sessionID = Utils.generateRandomID();
+    val adminID = Utils.generateRandomID();
+    val memberID = Utils.generateRandomID();
+    val member = new Member(memberID, null, null, null, "5");
+    val memberList = List.of(member);
+    val adminPrincipal = new AdminPrincipal(sessionID, adminID);
+    val oldSession =
+        new Session(
+            dbID,
+            sessionID,
+            adminID,
+            new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+            null,
+            memberList,
+            new HashMap<>(),
+            new ArrayList<>(),
+            SessionState.WAITING_FOR_MEMBERS,
+            null,
+            null,
+            null,
+            null,
+            false,
+            null);
+    sessionRepo.save(oldSession);
+    webSocketService.setAdminUser(adminPrincipal);
+    StompSession adminSession = getAdminSession(sessionID, adminID);
+
+    adminSession.send(RESTART, "{hostVoting: true, autoReveal: false}");
+    // Wait for server-side handling
+    TimeUnit.MILLISECONDS.sleep(TIMEOUT);
+
+    val newMembers = sessionRepo.findBySessionID(oldSession.getSessionID()).getMembers();
+    Assertions.assertTrue(newMembers.stream().allMatch(m -> m.getCurrentEstimation() == null));
   }
 }

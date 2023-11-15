@@ -65,8 +65,11 @@
               <b-card-text>
                 You could import your user stories or connect JIRA to syncronize story points.
               </b-card-text>
-
-              <b-card-sub-title> Connecting to Issue-Tracker </b-card-sub-title>
+              <b-card-sub-title>
+                <a href="https://sybit-education.github.io/Diveni/guide" target="_blank">
+                  Connecting to Issue-Tracker</a
+                >
+              </b-card-sub-title>
               <b-card-text>
                 DIVENI could connect to issue trackers like Azure DevOps, JIRA Server and Cloud to
                 show user stories and update the voted results of your planning poker.
@@ -99,7 +102,7 @@
       <p>DIVENI was initially developed by students of HTWG Constance and is open source now.</p>
       <p>
         More information could be found in the
-        <a id="link" href="https://docs.diveni.io/">documentation</a>.
+        <a href="https://docs.diveni.io/">documentation</a>.
       </p>
     </b-container>
   </div>
@@ -193,13 +196,36 @@ export default Vue.extend({
 });
 </script>
 
-<style scoped>
-#link {
-  color: var(--linkColor);
+<!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
+<style lang="scss">
+.newSessionCard {
+  .landingPageCardButton {
+    background-color: var(--primary-button) !important;
+    color: var(--text-primary-color);
+  }
+  .card-footer {
+    background-color: #52173100; /* So the Footer does not overflow */
+  }
 }
 
-.jumbotron {
-  background-color: rgba(255, 255, 255, 0.5);
+.joinSessionCard {
+  .landingPageCardButton {
+    background-color: var(--secondary-button) !important;
+  }
+
+  .card-footer {
+    background-color: #52173100; /* So the Footer does not overflow */
+  }
+}
+
+.reconnectSessionCard {
+  .landingPageCardButton {
+    background-color: var(--reconnectButton) !important;
+  }
+
+  .card-footer {
+    background-color: #52173100; /* So the Footer does not overflow */
+  }
 }
 
 .teaser {
@@ -210,15 +236,10 @@ export default Vue.extend({
 }
 
 .aboutDiveni {
-  border-radius: 2rem;
-  background-color: var(--landingPageCardsBackground);
-  box-shadow: 0 0 5px 10px var(--landingPageCardsBackground);
-  border: none;
+  box-shadow: 0 0 5px 5px var(--landingPageCardsBackground);
+  border: none !important;
 }
 
-.card-sub-title {
-  color: red;
-}
 .card-title {
   color: var(--text-primary-color);
 }
@@ -242,9 +263,10 @@ export default Vue.extend({
 }
 
 .pictureCard {
-  background: transparent;
-  border: none;
+  background: transparent !important;
   align-items: center;
+  box-shadow: none !important;
+  border: none !important;
 }
 
 .landingPagePictures {

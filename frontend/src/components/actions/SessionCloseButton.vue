@@ -9,12 +9,13 @@
     </b-button>
     <b-modal
       id="close-session-modal"
+      class="modal-header"
       :title="$t('page.session.close.popup')"
       :cancel-title="$t('page.session.close.button.cancel')"
       :ok-title="$t('page.session.close.button.ok')"
       @ok="closeSession"
     >
-      <p class="my-4 description">
+      <p class="modal-body my-4 description">
         {{ $t("page.session.close.description1") }}
       </p>
       <p v-if="userStoryMode !== 'NO_US'" class="description">
@@ -58,9 +59,11 @@ export default Vue.extend({
   },
 });
 </script>
-<style>
+
+<!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
+<style lang="scss">
 .description {
-  color: black;
+  color: var(--text-primary-color);
 }
 
 #picture-holderClose {
@@ -87,7 +90,6 @@ export default Vue.extend({
   left: 13.5%;
   bottom: 28%;
   white-space: nowrap;
-  border-radius: var(--buttonShape);
   max-height: 40px;
 }
 
@@ -111,7 +113,6 @@ export default Vue.extend({
   position: absolute !important;
   text-align: left;
   max-height: 40px;
-  border-radius: var(--buttonShape);
   bottom: 0px;
   white-space: nowrap;
 }

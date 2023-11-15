@@ -71,8 +71,8 @@ export default Vue.extend({
 });
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
+<style lang="scss" scoped>
 .centerItems {
   display: flex;
   justify-content: center;
@@ -82,43 +82,40 @@ export default Vue.extend({
 }
 
 .estimationButtons {
-  background-color: var(--startButton);
+  background-color: var(--primary-button);
   color: var(--text-primary-color);
 }
 
 .estimationButtons:hover {
-  background-color: var(--startButtonHovered);
+  background-color: var(--primary-button-hovered);
   color: var(--text-primary-color);
 }
 
 .estimationButtons:focus {
-  background-color: var(--startButtonHovered) !important;
+  background-color: var(--primary-button-hovered) !important;
   color: var(--text-primary-color);
 }
 .estimationButtons:active {
-  background-color: var(--startButtonHovered) !important;
+  background-color: var(--primary-button-hovered) !important;
 }
 
 #downloadButton {
-  background-color: var(--startButton);
-  border-radius: var(--buttonShape);
+  background-color: var(--primary-button);
   color: var(--text-primary-color);
 }
 
 #downloadButton:hover {
-  background-color: var(--startButtonHovered);
-  border-radius: var(--buttonShape);
+  background-color: var(--primary-button-hovered);
   color: var(--text-primary-color);
 }
 
 #goBackHomeButton {
-  background-color: var(--joinButton);
-  border-radius: var(--buttonShape);
+  background-color: var(--secondary-button);
   color: var(--text-primary-color);
 }
 
 #goBackHomeButton:hover {
-  background-color: var(--joinButtonHovered);
+  background-color: var(--secondary-button-hovered);
   color: var(--text-primary-color);
 }
 

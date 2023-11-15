@@ -1,0 +1,192 @@
+@import "_variables.scss";
+
+@import "bootstrap/scss/bootstrap";
+@import "bootstrap-vue/src/index.scss";
+
+
+/*scrollbar - firefox*/
+:root {
+    scrollbar-color: #888 rgba(0, 0, 0, 0) !important;
+    scrollbar-width: thin !important;
+}
+/*scrollbar - chrome */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 5px;
+}
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+::-webkit-scrollbar-corner {
+    background: rgba(0, 0, 0, 0);
+}
+
+body {
+  background-color: var(--background-color-primary);
+  color: var(--text-primary-color);
+}
+
+a {
+  color: var(--link-color);
+}
+
+.jumbotron {
+    background-color: var(--background-color-primary);
+    color: var(--text-primary-color);
+    opacity: 0.7;
+    border-radius: 0;
+}
+
+.dropdown-menu {
+    background-color: var(--topNavigationBarColor);
+    border-color: var(--text-primary-color);
+    .dropdown-item {
+        color: var(--text-primary-color);
+    }
+}
+
+.btn-primary {
+    background-color: var(--primary-button);
+    border-color: $gray-600;
+    &:hover {
+      background-color: var(--primary-button-hovered);
+      color: var(--text-color-hover);
+    }
+    &:disabled, &.disabled:hover {
+      background-color: var(--primary-button);
+      border-color: $gray-600;
+    }
+    &:focus {
+        background-color: var(--primary-button-hovered);
+        color: var(--text-primary-color);
+      }
+    &:active {
+      color: var(--text-color-hover) !important;
+    }
+}
+
+.btn-secondary {
+  background-color: var(--secondary-button);
+  border-color: $gray-600;
+  &:hover {
+    background-color: var(--secondary-button-hovered);
+    color: var(--text-color-hover);
+  }
+  &:disabled, &.disabled:hover {
+    background-color: var(--secondary-button);
+    border-color: $gray-600;
+  }
+  &:focus {
+    background-color: var(--secondary-button-hovered);
+    color: var(--text-primary-color);
+  }
+  &:active {
+    color: var(--text-color-hover) !important;
+  }
+}
+
+.btn-secondary:not(:disabled):not(.disabled),
+.show > .btn-secondary.dropdown-toggle {
+  background-color: var(--blurredColour8);
+}
+
+.btn-secondary:not(:disabled):not(.disabled):active,
+.btn-secondary:not(:disabled):not(.disabled).active,
+.show > .btn-secondary.dropdown-toggle {
+  background-color: var(--primary-button);
+  border-color: var(--blurredColour2);
+  border-width: 3px;
+  font-weight: bolder;
+}
+
+.btn {
+  color: var(--text-primary-color);
+  box-shadow: none;
+  border: none;
+}
+
+.btn:focus {
+  box-shadow: none;
+  border: none;
+}
+
+.form-control {
+  background-color: var(--preparePageNotSelectedTabBackground);
+  color: var(--text-primary-color);
+  border-width: 2px;
+
+  &:hover {
+    border-color: var(--secondary-button);
+  }
+
+  &:focus {
+    background-color: var(--textAreaColour);
+    color: var(--text-primary-color);
+    border-color: var(--primary-button);
+    box-shadow: none !important;
+  }
+
+  &::placeholder {
+    color: var(--text-primary-color);
+  }
+}
+
+.card {
+  background-color: var(--landingPageCardsBackground);
+  .card-subtitle {
+    color: var(--text-primary-color);
+  }
+}
+
+.modal-content {
+  background-color: var(--background-color-primary);
+  color: var(--text-primary-color);
+}
+
+.modal-body {
+  color: var(--text-primary-color);
+}
+
+/* Hint-Popover */
+.popover-header {
+  background-color: var(--primary-button) !important;
+}
+
+.popover-body {
+  color: var(--text-primary-color) !important;
+}
+
+.selectedTab {
+  background-color: var(--primary-button) !important;
+}
+
+.selectedTextColor {
+  color: var(--text-primary-color) !important;
+}
+
+/* PreparePage - Tab Style */
+.notSelectedTab {
+  background-color: var(--preparePageNotSelectedTabBackground) !important;
+  border-color: var(--preparePageBorderTab) !important;
+}
+
+.notSelectedTab:hover {
+  background-color: var(--preparePageInActiveTabHover) !important;
+}
+
+.notSelectedTextColor {
+  color: var(--text-primary-color) !important;
+}

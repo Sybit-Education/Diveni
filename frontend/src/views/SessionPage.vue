@@ -10,14 +10,40 @@
           }}
         </h1>
       </b-col>
-      <b-col cols="auto">
+      <b-col>
+        <b-button
+          v-if="!autoReveal && !planningStart"
+          class="mr-3 autoRevealButtons optionButton"
+          variant="outline-dark"
+          @click="
+            autoReveal = true;
+            $event.target.blur();
+          "
+        >
+          <b-icon-eye-slash-fill class="bIcons" />
+          {{ $t("page.session.during.estimation.buttons.autoRevealOff") }}
+        </b-button>
+        <b-button
+          v-if="autoReveal && !planningStart"
+          class="mr-3 autoRevealButtons optionButton"
+          variant="outline-dark"
+          @click="
+            autoReveal = false;
+            $event.target.blur();
+          "
+        >
+          <b-icon-eye-fill class="bIcons" />
+          {{ $t("page.session.during.estimation.buttons.autoRevealOn") }}
+        </b-button>
+      </b-col>
+      <b-col cols="auto" class="mr-auto">
         <copy-session-id-popup
           v-if="planningStart"
           class="float-end"
           :session-id="session_sessionID"
         />
       </b-col>
-      <b-col id="sessionCloseCol" cols="auto">
+      <b-col cols="auto">
         <session-close-button
           :is-planning-start="planningStart"
           :user-story-mode="session_userStoryMode"
@@ -50,12 +76,12 @@
           <session-start-button
             :members="members"
             :host-voting="session_hostVoting"
+            :auto-reveal="autoReveal"
             @clicked="onPlanningStarted"
           />
         </b-col>
       </b-row>
     </div>
-
     <div v-else>
       <b-row class="d-flex justify-content-start pb-3">
         <b-col cols="auto" class="mr-auto optionButtonCol">
@@ -80,6 +106,32 @@
           >
             <BIconBarChartFill class="bIcons"></BIconBarChartFill>
             {{ $t("page.session.during.estimation.buttons.result") }}
+          </b-button>
+          <b-button
+            v-if="!autoReveal"
+            class="mr-3 optionButton"
+            variant="outline-dark"
+            :disabled="planningStart && !estimateFinished"
+            @click="
+              autoReveal = true;
+              $event.target.blur();
+            "
+          >
+            <b-icon-eye-slash-fill class="bIcons" />
+            {{ $t("page.session.during.estimation.buttons.autoRevealOff") }}
+          </b-button>
+          <b-button
+            v-if="autoReveal"
+            class="mr-3 optionButton"
+            variant="outline-dark"
+            :disabled="planningStart && !estimateFinished"
+            @click="
+              autoReveal = false;
+              $event.target.blur();
+            "
+          >
+            <b-icon-eye-fill class="bIcons" />
+            {{ $t("page.session.during.estimation.buttons.autoRevealOn") }}
           </b-button>
         </b-col>
         <b-col cols="auto">
@@ -131,7 +183,7 @@
         style="max-height: 500px"
       >
         <session-admin-card
-          v-if="(safedHostVoting && estimateFinished) || hostEstimation !== ''"
+          v-if="(estimateFinished && session_hostVoting) || hostEstimation !== ''"
           :current-estimation="hostEstimation"
           :estimate-finished="estimateFinished"
           :highlight="highlightedMembers.includes(adminID) || highlightedMembers.length === 0"
@@ -165,7 +217,7 @@
           }"
         />
         <session-admin-card
-          v-if="(safedHostVoting && estimateFinished) || hostEstimation !== ''"
+          v-if="(estimateFinished && session_hostVoting) || hostEstimation !== ''"
           :current-estimation="hostEstimation"
           :estimate-finished="estimateFinished"
           :highlight="highlightedMembers.includes(adminID) || highlightedMembers.length === 0"
@@ -336,7 +388,7 @@ export default Vue.extend({
       estimateFinished: false,
       session: {},
       hostEstimation: "",
-      safedHostVoting: false,
+      autoReveal: false,
     };
   },
   computed: {
@@ -377,7 +429,6 @@ export default Vue.extend({
         setTimeout(() => {
           this.registerAdminPrincipalOnBackend();
           this.subscribeWSMemberUpdated();
-          this.requestMemberUpdate();
           this.subscribeOnTimerStart();
           if (this.rejoined === "false") {
             this.subscribeWSNotification();
@@ -387,10 +438,8 @@ export default Vue.extend({
           }
         }, 300);
         setTimeout(() => {
-          if (this.members.length === 0) {
-            this.requestMemberUpdate();
-          }
-        }, 300);
+          this.requestMemberUpdate();
+        }, 500);
       }
     },
     highlightedMembers(highlights) {
@@ -403,11 +452,12 @@ export default Vue.extend({
       }
     },
     membersEstimated() {
-      if (this.membersPending.length === 0 && this.membersEstimated.length > 0) {
-        if (this.safedHostVoting && this.hostEstimation !== "") {
+      if (this.membersPending.length === 0 && this.membersEstimated.length > 0 && this.autoReveal) {
+        if (this.session_hostVoting && this.hostEstimation !== "") {
+          console.log("HIER?????");
           this.estimateFinished = true;
-        }
-        if (!this.safedHostVoting) {
+        } else if (!this.session_hostVoting) {
+          console.log("hier?");
           this.estimateFinished = true;
         }
       }
@@ -438,6 +488,7 @@ export default Vue.extend({
       this.planningStart = true;
     } else if (this.session_sessionState === Constants.memberUpdateCommandVotingFinished) {
       this.planningStart = true;
+      console.log("ON MOUNTED");
       this.estimateFinished = true;
     }
   },
@@ -516,6 +567,7 @@ export default Vue.extend({
         this.planningStart = true;
       }
       if (this.session_sessionState === Constants.memberUpdateCommandVotingFinished) {
+        console.log("ON HANDLE RELOAD");
         this.estimateFinished = true;
       }
       this.timerCountdownNumber = parseInt(this.session_timerSecondsString, 10);
@@ -660,46 +712,51 @@ export default Vue.extend({
     },
     sendVotingFinishedMessage() {
       if (!this.estimateFinished) {
-        const endPoint = Constants.webSocketVotingFinishedRoute;
-        this.$store.commit("sendViaBackendWS", { endPoint });
+        console.log("SENDVOTINGFINISHEDMESSAGE");
         this.estimateFinished = true;
+        const endPoint = `${Constants.webSocketVotingFinishedRoute}`;
+        this.$store.commit("sendViaBackendWS", { endPoint });
       }
     },
     sendRestartMessage() {
       this.estimateFinished = false;
       this.hostEstimation = "";
-      this.safedHostVoting = this.session_hostVoting;
       const endPoint = Constants.webSocketRestartPlanningRoute;
-      this.$store.commit("sendViaBackendWS", { endPoint, data: this.session_hostVoting });
+      this.$store.commit("sendViaBackendWS", {
+        endPoint,
+        data: JSON.stringify({
+          hostVoting: this.session_hostVoting,
+          autoReveal: this.autoReveal,
+        }),
+      });
     },
     goToLandingPage() {
       this.$router.push({ name: "LandingPage" });
     },
     onPlanningStarted() {
       this.planningStart = true;
-      this.safedHostVoting = this.session_hostVoting;
     },
     vote(vote: string) {
       this.hostEstimation = vote;
       const endPoint = `${Constants.webSocketVoteRouteAdmin}`;
-      this.$store.commit("sendViaBackendWS", { endPoint, data: vote });
+      this.$store.commit("sendViaBackendWS", {
+        endPoint,
+        data: JSON.stringify({
+          vote: this.hostEstimation,
+          autoReveal: this.autoReveal,
+        }),
+      });
     },
   },
 });
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
+<style lang="scss" scoped>
 .newVotes {
   text-align: center;
   margin-left: auto;
   margin-right: auto;
-}
-
-.hostVotingButtons {
-  position: relative;
-  top: 50%;
-  transform: translateY(-50%);
 }
 
 .optionButtonCol {
@@ -719,14 +776,11 @@ export default Vue.extend({
   max-height: 500px;
 }
 
-#sessionCloseCol {
-  min-width: 200px;
-}
-
 .headers {
   display: flex;
   align-items: center;
   min-height: 20vh;
+  margin-right: 130px;
 }
 
 .bIcons {
@@ -738,7 +792,6 @@ export default Vue.extend({
   background-color: var(--textAreaColour);
   color: var(--text-primary-color);
   border-color: black;
-  border-radius: var(--buttonShape);
   display: inline-flex;
   align-items: center;
 }
@@ -753,19 +806,24 @@ export default Vue.extend({
   color: var(--text-primary-color) !important;
 }
 
+.optionButton:disabled {
+  background-color: var(--textAreaColourHovered) !important;
+  color: var(--text-primary-color) !important;
+}
+
 .refreshButton {
   border-radius: var(--element-size);
   color: var(--text-primary-color);
-  background-color: var(--joinButton);
+  background-color: var(--secondary-button);
 }
 
 .refreshButton:hover {
   color: var(--text-primary-color);
-  background-color: var(--joinButtonHovered);
+  background-color: var(--secondary-button-hovered);
 }
 
 .refreshButton:focus {
-  background-color: var(--joinButtonHovered) !important;
+  background-color: var(--secondary-button-hovered) !important;
   color: var(--text-primary-color) !important;
 }
 

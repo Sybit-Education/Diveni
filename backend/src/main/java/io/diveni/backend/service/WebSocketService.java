@@ -37,6 +37,8 @@ public class WebSocketService {
 
   public static String MEMBER_UPDATES_DESTINATION = "/updates/member";
 
+  public static String MEMBER_UPDATES_DESTINATION_AUTOREVEAL = "/updates/member/autoreveal";
+
   public static String US_UPDATES_DESTINATION = "/updates/userStories";
 
   public static String MEMBER_UPDATES_HOSTVOTING = "/updates/hostVoting";
@@ -107,7 +109,7 @@ public class WebSocketService {
                   else return p;
                 })
             .collect(Collectors.toList());
-    databaseService.addRemovedMember(member);
+    databaseService.addRemovedMember();
     LOGGER.debug("<-- removeMember()");
   }
 
@@ -213,12 +215,36 @@ public class WebSocketService {
     LOGGER.debug("<-- sendSessionStateToMembers()");
   }
 
+  public void sendSessionStateToMembersWithAutoReveal(Session session, boolean autoReveal) {
+    LOGGER.debug(
+        "--> sendSessionStateToMembersWithAutoReveal(), sessionID={}", session.getSessionID());
+    // TODO: Send highlighted with it
+    getSessionPrincipals(session.getSessionID()).memberPrincipals().stream()
+        .forEach(
+            member ->
+                sendSessionStateToMemberWithAutoReveal(session, member.getMemberID(), autoReveal));
+    LOGGER.debug("<-- sendSessionStateToMembersWithAutoReveal()");
+  }
+
   public void sendUpdatedUserStoriesToMembers(Session session) {
     LOGGER.debug("--> sendUpdatedUserStoriesToMembers(), sessionID={}", session.getSessionID());
     getSessionPrincipals(session.getSessionID())
         .memberPrincipals()
         .forEach(member -> sendUpdatedUserStoriesToMember(session, member.getMemberID()));
     LOGGER.debug("<-- sendUpdatedUserStoriesToMembers()");
+  }
+
+  public void sendSessionStateToMemberWithAutoReveal(
+      Session session, String memberID, boolean autoReveal) {
+    LOGGER.debug(
+        "--> sendSessionStateToMemberWithAutoReveal(), sessionID={}, memberID={}",
+        session.getSessionID(),
+        memberID);
+    simpMessagingTemplate.convertAndSendToUser(
+        memberID,
+        MEMBER_UPDATES_DESTINATION_AUTOREVEAL,
+        session.getSessionState().toString() + " " + autoReveal);
+    LOGGER.debug("<-- sendSessionStateToMemberWithAutoReveal()");
   }
 
   public void sendSessionStateToMember(Session session, String memberID) {

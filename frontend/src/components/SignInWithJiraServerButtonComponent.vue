@@ -1,8 +1,8 @@
 <template>
   <div>
     <b-button
-      id="button"
       :disabled="disabled"
+      variant="primary"
       @click="
         openSignInWithJiraTab();
         openModal();
@@ -23,7 +23,7 @@
       @hidden="resetModal"
       @ok="handleOk"
     >
-      <p id="description">
+      <p>
         {{
           $t("session.prepare.step.selection.mode.description.withIssueTracker.dialog.description")
         }}
@@ -127,19 +127,3 @@ export default Vue.extend({
   },
 });
 </script>
-
-<style scoped>
-#description {
-  color: black;
-}
-
-#button {
-  background-color: var(--preparePageMainColor);
-  color: var(--text-primary-color);
-}
-
-#button:hover {
-  background-color: var(--startButtonHovered);
-  color: var(--text-primary-color);
-}
-</style>

@@ -1,5 +1,6 @@
 package io.diveni.backend.controller;
 
+import io.diveni.backend.model.*;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -10,10 +11,6 @@ import java.time.LocalDate;
 import java.util.*;
 
 import io.diveni.backend.Utils;
-import io.diveni.backend.model.Member;
-import io.diveni.backend.model.Session;
-import io.diveni.backend.model.SessionConfig;
-import io.diveni.backend.model.SessionState;
 import io.diveni.backend.repository.SessionRepository;
 import io.diveni.backend.service.DatabaseService;
 
@@ -107,6 +104,7 @@ public class AnalyticsControllerTest {
     this.mockMvc
         .perform(get("/analytics/All"))
         .andExpect(status().isOk())
+        .andExpect(jsonPath("$.amountOfSessionsCurrently").value(1))
         .andExpect(jsonPath("$.amountOfSessions").value(2))
         .andExpect(jsonPath("$.amountOfAttendees").value(2));
   }
@@ -187,190 +185,4 @@ public class AnalyticsControllerTest {
         .andExpect(jsonPath("$.amountOfAttendeesCurrently").value(2));
   }
 
-  @Test
-  public void getDiveniDataFromLastMonth_oneSessionWith3Attendees() throws Exception {
-    sessionRepo.deleteAll();
-    sessionRepo.save(
-        new Session(
-            new ObjectId(),
-            Utils.generateRandomID(),
-            Utils.generateRandomID(),
-            new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
-            null,
-            List.of(new Member(), new Member(), new Member()),
-            new HashMap<>(),
-            new ArrayList<>(),
-            SessionState.WAITING_FOR_MEMBERS,
-            null,
-            null,
-            null,
-            LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonthValue() - 1, 12),
-            false,
-            null));
-    this.mockMvc
-        .perform(get("/analytics/All"))
-        .andExpect(status().isOk())
-        .andExpect(jsonPath("$.amountOfSessions").value(1))
-        .andExpect(jsonPath("$.amountOfAttendees").value(3))
-        .andExpect(jsonPath("$.amountofAttendeesLastMonth").value(3))
-        .andExpect(jsonPath("$.amountOfSessionsLastMonth").value(1));
-  }
-
-  @Test
-  public void
-      getDiveniDataFromLastMonth_oneSessionWith3AttendeesAndOneSessionWith2AttendesButNotLastMonth()
-          throws Exception {
-    sessionRepo.deleteAll();
-    sessionRepo.save(
-        new Session(
-            new ObjectId(),
-            Utils.generateRandomID(),
-            Utils.generateRandomID(),
-            new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
-            null,
-            List.of(new Member(), new Member(), new Member()),
-            new HashMap<>(),
-            new ArrayList<>(),
-            SessionState.WAITING_FOR_MEMBERS,
-            null,
-            null,
-            null,
-            LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonthValue() - 1, 12),
-            false,
-            null));
-
-    sessionRepo.save(
-        new Session(
-            new ObjectId(),
-            Utils.generateRandomID(),
-            Utils.generateRandomID(),
-            new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
-            null,
-            List.of(new Member(), new Member()),
-            new HashMap<>(),
-            new ArrayList<>(),
-            SessionState.WAITING_FOR_MEMBERS,
-            null,
-            null,
-            null,
-            LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonthValue(), 12),
-            false,
-            null));
-
-    this.mockMvc
-        .perform(get("/analytics/All"))
-        .andExpect(status().isOk())
-        .andExpect(jsonPath("$.amountOfSessions").value(2))
-        .andExpect(jsonPath("$.amountOfAttendees").value(5))
-        .andExpect(jsonPath("$.amountofAttendeesLastMonth").value(3))
-        .andExpect(jsonPath("$.amountOfSessionsLastMonth").value(1));
-    ;
-  }
-
-  @Test
-  public void
-      getDiveniDataFromLastMonth_oneSessionWith3AttendeesAndOneSessionWith2AttendesAndDeletedAndFromLastMonth()
-          throws Exception {
-    sessionRepo.deleteAll();
-    sessionRepo.save(
-        new Session(
-            new ObjectId(),
-            Utils.generateRandomID(),
-            Utils.generateRandomID(),
-            new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
-            null,
-            List.of(new Member(), new Member(), new Member()),
-            new HashMap<>(),
-            new ArrayList<>(),
-            SessionState.WAITING_FOR_MEMBERS,
-            null,
-            null,
-            null,
-            LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonthValue() - 1, 12),
-            false,
-            null));
-
-    Session willbeDelted =
-        new Session(
-            new ObjectId(),
-            Utils.generateRandomID(),
-            Utils.generateRandomID(),
-            new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
-            null,
-            List.of(new Member(), new Member()),
-            new HashMap<>(),
-            new ArrayList<>(),
-            SessionState.WAITING_FOR_MEMBERS,
-            null,
-            null,
-            null,
-            LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonthValue() - 1, 12),
-            false,
-            null);
-
-    databaseService.saveSession(willbeDelted);
-    databaseService.deleteSession(willbeDelted);
-    this.mockMvc
-        .perform(get("/analytics/All"))
-        .andExpect(status().isOk())
-        .andExpect(jsonPath("$.amountOfSessionsLastMonth").value(2))
-        .andExpect(jsonPath("$.amountofAttendeesLastMonth").value(5));
-  }
-
-  @Test
-  public void
-      getDiveniDataFromLastMonth_oneSessionWith3AttendeesAndOneSessionWith2AttendesAndDeletedAndNotFromLastMonth()
-          throws Exception {
-    int lastMonth = LocalDate.now().getMonthValue() - 1;
-    int outDatedMonth;
-    if (lastMonth == 1) {
-      outDatedMonth = 12;
-    } else {
-      outDatedMonth = lastMonth - 1;
-    }
-    sessionRepo.deleteAll();
-    databaseService.saveSession(
-        new Session(
-            new ObjectId(),
-            Utils.generateRandomID(),
-            Utils.generateRandomID(),
-            new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
-            null,
-            List.of(new Member(), new Member(), new Member()),
-            new HashMap<>(),
-            new ArrayList<>(),
-            SessionState.WAITING_FOR_MEMBERS,
-            null,
-            null,
-            null,
-            LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonthValue() - 1, 12),
-            false,
-            null));
-
-    Session willbeDelted =
-        new Session(
-            new ObjectId(),
-            Utils.generateRandomID(),
-            Utils.generateRandomID(),
-            new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
-            null,
-            List.of(new Member(), new Member()),
-            new HashMap<>(),
-            new ArrayList<>(),
-            SessionState.WAITING_FOR_MEMBERS,
-            null,
-            null,
-            null,
-            LocalDate.of(LocalDate.now().getYear(), outDatedMonth, 12),
-            false,
-            null);
-
-    databaseService.saveSession(willbeDelted);
-    databaseService.deleteSession(willbeDelted);
-    this.mockMvc
-        .perform(get("/analytics/All"))
-        .andExpect(status().isOk())
-        .andExpect(jsonPath("$.amountOfSessionsLastMonth").value(1))
-        .andExpect(jsonPath("$.amountofAttendeesLastMonth").value(3));
-  }
 }

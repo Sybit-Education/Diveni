@@ -48,6 +48,8 @@ class Constants {
 
   webSocketMemberListenRoute = "/users/updates/member";
 
+  webSocketMemberAutoRevealListenRoute = "/users/updates/member/autoreveal";
+
   websocketNotification = "/users/updates/notifications";
 
   memberUpdateCommandStartVoting = "START_VOTING";

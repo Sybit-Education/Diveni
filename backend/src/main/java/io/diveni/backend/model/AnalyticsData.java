@@ -16,10 +16,6 @@ public class AnalyticsData {
 
   private final int amountOfSessions;
 
-  private final int amountofAttendeesLastMonth;
-
-  private final int amountOfSessionsLastMonth;
-
   private final int amountOfAttendeesCurrently;
 
   private final int amountOfSessionsCurrently;

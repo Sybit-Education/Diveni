@@ -17,24 +17,26 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
+<!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
+<style lang="scss" scoped>
 .feedback {
-  display: flex;
-  justify-content: end;
+  display: inline-block;
+  left: 100%;
   position: sticky;
   top: 50%;
   z-index: 100;
-}
-#feedback-btn {
-  padding: 5px 15px;
-  background-color: var(--feedbackButtonBackground);
-  color: white;
-  font-size: 16px;
-  border-radius: 0;
-  transform: rotate(270deg) translate(50%, -50%);
-  transform-origin: right;
-}
-#feedback-btn:hover {
-  text-decoration: none;
+  transform-origin: bottom right;
+  transform: rotate(270deg);
+
+  #feedback-btn {
+    padding: 5px 15px;
+    background-color: var(--text-primary-color);
+    color: var(--accent-color);
+    font-size: 17px;
+    border-radius: 0;
+  }
+  #feedback-btn:hover {
+    text-decoration: none;
+  }
 }
 </style>

@@ -4,16 +4,14 @@
       <b-col
         v-for="item of userStoryMode === jiraTag ? allCardSetsWithJiraMode : allCardSets"
         :key="item.position"
-        cols="4"
-        md="auto"
-        class="swipe-card my-5 mx-5"
+        class="card m-2"
         :class="getClasses(item)"
         @click="onCardSetSelected(item)"
       >
-        <div id="text">
+        <div class="card-title">
           {{ item.name }}
         </div>
-        <div id="cardDescription">
+        <div class="card-description">
           {{ item.description }}
           <div v-if="item.values.length === 0">
             <span id="createSetHint">
@@ -37,13 +35,13 @@
       </b-col>
     </b-row>
     <b-row v-if="selectedCardSet.name !== ''">
-      <div v-if="selectedCardSet.values.length !== 0" class="text-center mt-3 pillPosition">
+      <div v-if="selectedCardSet.values.length !== 0" class="text-center mt-3 pill-group">
         <b-button
           v-for="item in selectedCardSet.values"
           :key="item"
           :class="isActiveCardSetNumber(item)"
           pill
-          class="pills"
+          class="pill m-2"
           @click="
             onCardSetNumberSelected(item);
             $event.target.blur();
@@ -52,7 +50,7 @@
           {{ item }}
         </b-button>
       </div>
-      <b-row v-else class="mt-3 d-flex px-5 pillPosition">
+      <b-row v-else class="mt-3 pill-group">
         <b-col sm="6">
           <b-form-input
             v-model="createSetInput"
@@ -64,7 +62,7 @@
             v-for="item in selectedCardSet.activeValues"
             :key="item"
             :class="isActiveCardSetNumber(item)"
-            class="pills"
+            class="pill"
             pill
           >
             {{ item }}
@@ -178,9 +176,7 @@ export default Vue.extend({
   },
   methods: {
     isActiveCardSetNumber(num) {
-      return this.selectedCardSet.activeValues.includes(num)
-        ? "activePills m-1"
-        : "outline-secondary inActivePills m-1";
+      return this.selectedCardSet.activeValues.includes(num) ? "active" : "outline-secondary";
     },
     onCardSetSelected(set) {
       this.selectedCardSet = set;
@@ -206,7 +202,7 @@ export default Vue.extend({
       return `${this.getCardActiveClass(item)} ${this.getPictureClass(item)}`;
     },
     getCardActiveClass(item) {
-      return this.selectedCardSet.name === item.name ? "selectedCard" : "inActiveCard";
+      return this.selectedCardSet.name === item.name ? "selected" : "";
     },
     getPictureClass(item) {
       if (this.userStoryMode !== this.jiraTag) {
@@ -227,213 +223,130 @@ export default Vue.extend({
 });
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-.swipe-card {
-  width: 226px;
-  height: 303px;
-  justify-content: flex-start; /* Centering y-axis 202 */
-  align-items: center; /* Centering x-axis 168 */
+<!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
+<style lang="scss" scoped>
+@import "@/assets/style/variables.scss";
+.card {
+  max-width: 224px;
+  height: 300px;
+  justify-content: flex-start;
+  align-items: center;
   display: flex;
   flex-direction: column;
   cursor: pointer;
+  border-radius: $border-radius;
+  box-shadow: 8px 8px 5px var(--box-shadow);
+
+  &:hover {
+    border-width: 4px;
+    border-color: var(--preparePageInActiveTabHover);
+    border-style: solid;
+  }
+  &.selected {
+    border-width: 5px;
+    border-color: var(--primary-button);
+    border-style: solid;
+  }
+
+  .card-title {
+    font-size: 22px;
+    font-weight: 500;
+    padding-top: 16px;
+    text-align: center;
+  }
+
+  .card-description {
+    padding: 16px;
+    text-align: center;
+  }
 }
 
-.selectedCard {
-  border-color: var(--preparePageActiveCardSet) !important;
-  border-style: solid;
-  border-radius: var(--buttonShape);
+.light1 {
+  background-image: url("@/assets/preparePage/Fibonacci-LightMode.png");
+  background-size: cover;
 }
 
-.inActiveCard:hover {
-  border-width: large;
-  border-color: var(--preparePageInActiveCardSet);
-  border-style: solid;
-  border-radius: var(--buttonShape);
-}
-
-.light-theme1 {
-  background-image: url("@/assets/preparePage/Fibonacci-LightMode.png") !important;
-  background-size: cover !important;
-  border-radius: var(--buttonShape) !important;
-  box-shadow: 10px 10px 5px #ccc !important;
-}
-
-.light-theme2 {
+.light2 {
   background-image: url("@/assets/preparePage/TShirt-LightMode.png");
   background-size: cover;
-  border-radius: var(--buttonShape);
-  box-shadow: 10px 10px 5px #ccc;
 }
 
-.light-theme3 {
+.light3 {
   background-image: url("@/assets/preparePage/Hour-LightMode.png");
   background-size: cover;
-  border-radius: var(--buttonShape);
-  box-shadow: 10px 10px 5px #ccc;
 }
 
-.light-theme4 {
+.light4 {
   background-image: url("@/assets/preparePage/Numbers-LightMode.png");
   background-size: cover;
-  border-radius: var(--buttonShape);
-  box-shadow: 10px 10px 5px #ccc;
 }
 
-.light-theme5 {
+.light5 {
   background-image: url("@/assets/preparePage/OwnSet-LightMode.png");
   background-size: cover;
-  border-radius: var(--buttonShape);
-  box-shadow: 10px 10px 5px #ccc;
 }
 
-.dark-theme1 {
-  width: 226px;
-  height: 303px;
-  display: block;
-  position: relative;
-}
-
-.dark-theme1::after {
+.dark1 {
   background-image: url("@/assets/preparePage/Fibonacci-DarkMode.png");
   background-size: cover;
-  content: "";
-  opacity: 0.45;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  position: absolute;
-  z-index: -1;
-  border-radius: var(--buttonShape);
+  text-shadow: #000 0 0 3px;
+  -webkit-font-smoothing: antialiased;
 }
 
-.dark-theme2 {
-  width: 226px;
-  height: 303px;
-  display: block;
-  position: relative;
-}
-
-.dark-theme2::after {
+.dark2 {
   background-image: url("@/assets/preparePage/TShirt-DarkMode.png");
   background-size: cover;
-  content: "";
-  opacity: 0.45;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  position: absolute;
-  z-index: -1;
-  border-radius: var(--buttonShape);
+  text-shadow: #000 0 0 3px;
+  -webkit-font-smoothing: antialiased;
 }
 
-.dark-theme3 {
-  width: 226px;
-  height: 303px;
-  display: block;
-  position: relative;
-}
-
-.dark-theme3::after {
+.dark3 {
   background-image: url("@/assets/preparePage/Hour-DarkMode.png");
   background-size: cover;
-  content: "";
-  opacity: 0.45;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  position: absolute;
-  z-index: -1;
-  border-radius: var(--buttonShape);
+  text-shadow: #000 0 0 3px;
+  -webkit-font-smoothing: antialiased;
 }
 
-.dark-theme4 {
-  width: 226px;
-  height: 303px;
-  display: block;
-  position: relative;
-}
-
-.dark-theme4::after {
+.dark4 {
   background-image: url("@/assets/preparePage/Numbers-DarkMode.png");
   background-size: cover;
-  content: "";
-  opacity: 0.45;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  position: absolute;
-  z-index: -1;
-  border-radius: var(--buttonShape);
+  text-shadow: #000 0 0 3px;
+  -webkit-font-smoothing: antialiased;
 }
 
-.dark-theme5 {
-  width: 226px;
-  height: 303px;
-  display: block;
-  position: relative;
-}
-
-.dark-theme5::after {
+.dark5 {
   background-image: url("@/assets/preparePage/OwnSet-DarkMode.png");
   background-size: cover;
-  content: "";
-  opacity: 0.45;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  position: absolute;
-  z-index: -1;
-  border-radius: var(--buttonShape);
-}
-
-#text {
-  font-size: 22px;
-  font-weight: 500;
-  padding-top: 16px;
-  text-align: center;
-}
-
-#cardDescription {
-  padding: 16px;
-  text-align: center;
+  text-shadow: #000 0 0 3px;
+  -webkit-font-smoothing: antialiased;
 }
 
 #popUp {
+  color: var(--text-primary-color);
   background-color: var(--landingPageCardsBackground);
 }
 
-.pills {
-  width: 60px;
-}
-
-.activePills {
-  background-color: var(--preparePageMainColor);
-  color: var(--text-primary-color);
-}
-
-.activePills:hover {
-  background-color: var(--preparePageInActiveTabHover);
-  color: var(--text-primary-color);
-}
-
-.activePills:focus {
-  background-color: var(--preparePageInActiveTabHover) !important;
-  color: var(--text-primary-color);
-}
-
-.inActivePills:focus {
-  background-color: grey !important;
-  color: var(--text-primary-color);
-}
-
-.pillPosition {
+.pill-group {
   margin-left: auto;
   margin-right: auto;
+
+  .pill {
+    width: 4rem;
+
+    .active {
+      background-color: var(--preparePageMainColor);
+      color: var(--text-primary-color);
+    }
+
+    .active:hover {
+      background-color: var(--preparePageInActiveTabHover);
+      color: var(--text-primary-color);
+    }
+
+    .active:focus {
+      background-color: var(--preparePageInActiveTabHover);
+      color: var(--text-primary-color);
+    }
+  }
 }
 </style>

@@ -1,28 +1,34 @@
 <template>
-  <b-navbar toggleable="md" class="top-navigation" fixed="top" sticky>
+  <b-navbar class="top-navigation" type="light" fixed="top" sticky>
     <b-navbar-brand class="top-navigation__title" to="/">
       <b-img src="/img/icons/logo.svg" class="top-navigation__nav-logo" />
       {{ $t("page.landing.productTitle") }}
     </b-navbar-brand>
-    <theme-toggle-component />
-    <b-navbar-nav class="ml-auto">
-      <b-form>
-        <b-button :to="{ name: 'PrepareSessionPage' }" class="startButton px-2 mr-2"
-          >New Session</b-button
-        >
-      </b-form>
-      <b-form>
-        <b-button :to="{ name: 'JoinPage' }" class="joinButton px-2 mr-2">
-          {{ $t("page.landing.meeting.join.buttons.start.label") }}</b-button
-        >
-      </b-form>
-      <b-form class="px-2 mr-2">
-        <a id="gitHubLink" href="https://github.com/Sybit-Education/Diveni" target="_blank">
-          <BIconGithub id="gitHubLogo"></BIconGithub>
-        </a>
-      </b-form>
-      <locale-dropdown />
-    </b-navbar-nav>
+    <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+
+    <b-collapse id="nav-collapse" is-nav>
+      <b-navbar-nav class="ml-auto">
+        <b-nav-form>
+          <b-button :to="{ name: 'PrepareSessionPage' }" variant="primary" class="mr-2">
+            {{ $t("page.landing.meeting.new.buttons.start.label") }}
+          </b-button>
+        </b-nav-form>
+        <b-nav-form>
+          <b-button :to="{ name: 'JoinPage' }" variant="secondary" class="mr-2">
+            {{ $t("page.landing.meeting.join.buttons.start.label") }}
+          </b-button>
+        </b-nav-form>
+        <b-nav-item href="https://github.com/Sybit-Education/Diveni" target="_blank">
+          <BIconGithub class="github-logo py-2"></BIconGithub>
+        </b-nav-item>
+        <b-nav-text>
+          <theme-toggle class="my-2" />
+        </b-nav-text>
+        <b-nav-item>
+          <locale-dropdown />
+        </b-nav-item>
+      </b-navbar-nav>
+    </b-collapse>
   </b-navbar>
 </template>
 
@@ -30,35 +36,36 @@
 import Vue from "vue";
 import LocaleDropdown from "@/components/navigation/LocaleDropdown.vue";
 import { BIconGithub } from "bootstrap-vue";
-import ThemeToggleComponent from "@/components/ThemeToggleComponent.vue";
+import ThemeToggle from "@/components/actions/ThemeToggle.vue";
 
 export default Vue.extend({
   name: "TopNavigationBar",
-  components: { LocaleDropdown, BIconGithub, ThemeToggleComponent },
+  components: { LocaleDropdown, BIconGithub, ThemeToggle },
 });
 </script>
 
-<style>
-/* TOP Navigation Bar */
-
+<!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
+<style lang="scss" scoped>
 .top-navigation {
   background-color: var(--topNavigationBarColor);
-}
-.top-navigation__nav-logo {
-  height: 3rem;
-}
-.top-navigation__title {
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: var(--text-primary-color) !important;
-}
 
-#gitHubLogo {
-  width: 40px;
-  height: 40px;
-}
+  &__nav-logo {
+    height: 3rem;
+  }
+  &__title {
+    font-size: 2.5rem;
+    font-weight: 700;
+  }
 
-#gitHubLink {
-  color: var(--text-primary-color);
+  .github-logo {
+    color: var(--text-primary-color);
+    width: 2.75rem;
+    height: 2.75rem;
+  }
+
+  .btn-secondary:not(:disabled):not(.disabled),
+  .show > .btn-secondary.dropdown-toggle {
+    background-color: var(--blurredColour7);
+  }
 }
 </style>
