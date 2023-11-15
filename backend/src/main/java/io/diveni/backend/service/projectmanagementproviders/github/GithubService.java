@@ -39,7 +39,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-
 @Service
 public class GithubService implements ProjectManagementProviderOAuth2 {
 
@@ -67,7 +66,8 @@ public class GithubService implements ProjectManagementProviderOAuth2 {
     LOGGER.info("    GITHUB_PERSONAL_ACCESS_TOKEN={}", githubToken == null ? "null" : "********");
   }
 
-  public ResponseEntity<String> executeRequest(String url, HttpMethod method, String token, Object body) {
+  public ResponseEntity<String> executeRequest(
+      String url, HttpMethod method, String token, Object body) {
     LOGGER.debug("--> executeRequest()");
     // Create a RestTemplate object
     RestTemplate restTemplate = new RestTemplate();
@@ -83,21 +83,22 @@ public class GithubService implements ProjectManagementProviderOAuth2 {
     return restTemplate.exchange(url, method, request, String.class);
   }
 
-  public void executeRequestForPatch(String url, HttpMethod method, String token, Object body) throws IOException {
+  public void executeRequestForPatch(String url, HttpMethod method, String token, Object body)
+      throws IOException {
     LOGGER.debug("--> executeRequest()");
     CloseableHttpClient httpClient = HttpClients.createDefault();
-    HttpUriRequest request = RequestBuilder.create(method.toString())
-      .setUri(url)
-      .setHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
-      .setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-      .setHeader("Authorization", "Bearer " + token)
-      .setEntity(new StringEntity(body.toString()))
-      .build();
+    HttpUriRequest request =
+        RequestBuilder.create(method.toString())
+            .setUri(url)
+            .setHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
+            .setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+            .setHeader("Authorization", "Bearer " + token)
+            .setEntity(new StringEntity(body.toString()))
+            .build();
     CloseableHttpResponse response = httpClient.execute(request);
     httpClient.close();
     LOGGER.debug("<-- executeRequest()");
   }
-
 
   @Override
   public boolean serviceEnabled() {
@@ -109,18 +110,20 @@ public class GithubService implements ProjectManagementProviderOAuth2 {
     LOGGER.debug("--> getProjects()");
     try {
       List<Project> projects = new ArrayList<>();
-      ResponseEntity<String> response = executeRequest(
-        "https://api.github.com/user",
-        HttpMethod.GET ,
-        accessTokens.get(tokenIdentifier),
-        null);
+      ResponseEntity<String> response =
+          executeRequest(
+              "https://api.github.com/user",
+              HttpMethod.GET,
+              accessTokens.get(tokenIdentifier),
+              null);
       JsonNode node = new ObjectMapper().readTree(response.getBody());
       userNames.put(tokenIdentifier, node.get("login").asText());
-      ResponseEntity<String> repoResponse = executeRequest(
-        node.get("repos_url").asText(),
-        HttpMethod.GET,
-        accessTokens.get(tokenIdentifier),
-        null);
+      ResponseEntity<String> repoResponse =
+          executeRequest(
+              node.get("repos_url").asText(),
+              HttpMethod.GET,
+              accessTokens.get(tokenIdentifier),
+              null);
       for (JsonNode projectNode : new ObjectMapper().readTree(repoResponse.getBody())) {
         projects.add(new Project(projectNode.get("name").asText(), projectNode.get("id").asText()));
         projectNames.put(projectNode.get("id").asText(), projectNode.get("name").asText());
@@ -129,7 +132,8 @@ public class GithubService implements ProjectManagementProviderOAuth2 {
       return projects;
     } catch (Exception e) {
       LOGGER.debug("Error trying to get Projects!");
-      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToRetrieveProjectsErrorMessage + e);
+      throw new ResponseStatusException(
+          HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToRetrieveProjectsErrorMessage + e);
     }
   }
 
@@ -138,16 +142,21 @@ public class GithubService implements ProjectManagementProviderOAuth2 {
     LOGGER.debug("--> getIssues(), projectName={}", projectName);
     List<UserStory> userStories = new ArrayList<>();
     try {
-      ResponseEntity<String> response = executeRequest(
-        "https://api.github.com/repos/" + getCurrentUsername(tokenIdentifier) + "/" + projectName + "/issues",
-        HttpMethod.GET,
-        accessTokens.get(tokenIdentifier),
-        null);
+      ResponseEntity<String> response =
+          executeRequest(
+              "https://api.github.com/repos/"
+                  + getCurrentUsername(tokenIdentifier)
+                  + "/"
+                  + projectName
+                  + "/issues",
+              HttpMethod.GET,
+              accessTokens.get(tokenIdentifier),
+              null);
       for (JsonNode node : new ObjectMapper().readTree(response.getBody())) {
         String estimation = null;
         int endIndex = node.get("body").asText().lastIndexOf("**");
         int startIndex = 0;
-        if (node.get("body").asText().contains("Story Points voted on Diveni.io:")){
+        if (node.get("body").asText().contains("Story Points voted on Diveni.io:")) {
           for (int i = endIndex - 1; node.get("body").asText().charAt(i) != '*'; i--) {
             startIndex = i;
           }
@@ -158,26 +167,28 @@ public class GithubService implements ProjectManagementProviderOAuth2 {
         }
         String description;
         if (node.get("body").asText().contains("Story Points voted on Diveni.io:")) {
-          description = node.get("body").asText().replace("\n Story Points voted on Diveni.io: **" + estimation + "**", "");
+          description =
+              node.get("body")
+                  .asText()
+                  .replace("\n Story Points voted on Diveni.io: **" + estimation + "**", "");
         } else {
           description = node.get("body").asText();
         }
         userStories.add(
-          new UserStory(
-            node.get("number").asText(),
-            node.get("title").asText(),
-            description,
-            estimation,
-            false
-          )
-        );
+            new UserStory(
+                node.get("number").asText(),
+                node.get("title").asText(),
+                description,
+                estimation,
+                false));
       }
       selectedProject.put(accessTokens.get(tokenIdentifier), projectName);
       LOGGER.debug("<-- getIssues()");
       return userStories;
     } catch (Exception e) {
       LOGGER.debug("Error trying to receive the issues!");
-      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToRetrieveProjectsErrorMessage);
+      throw new ResponseStatusException(
+          HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToRetrieveProjectsErrorMessage);
     }
   }
 
@@ -186,44 +197,62 @@ public class GithubService implements ProjectManagementProviderOAuth2 {
     LOGGER.debug("--> updateIssue(), story={}", story.getId());
     Map<String, Object> content = new HashMap<>();
     content.put("title", story.getTitle());
-    content.put("body", story.getDescription() + " Story Points voted on Diveni.io: " + story.getEstimation());
+    content.put(
+        "body",
+        story.getDescription() + " Story Points voted on Diveni.io: " + story.getEstimation());
     String description = story.getDescription();
     if (story.getDescription().contains("Story Points voted on Diveni.io:")) {
-      description = story.getDescription().replace("\n Story Points voted on Diveni.io: **" + story.getEstimation() + "**", "");
+      description =
+          story
+              .getDescription()
+              .replace("\n Story Points voted on Diveni.io: **" + story.getEstimation() + "**", "");
     }
-    content.put("body",  description + "\n Story Points voted on Diveni.io: **" + story.getEstimation() + "**");
+    content.put(
+        "body",
+        description + "\n Story Points voted on Diveni.io: **" + story.getEstimation() + "**");
     try {
       executeRequestForPatch(
-        "https://api.github.com/repos/" + getCurrentUsername(tokenIdentifier) + "/"
-          + selectedProject.get(accessTokens.get(tokenIdentifier)) + "/issues/" + story.getId(),
-        HttpMethod.PATCH,
-        accessTokens.get(tokenIdentifier),
-        new Gson().toJson(content));
+          "https://api.github.com/repos/"
+              + getCurrentUsername(tokenIdentifier)
+              + "/"
+              + selectedProject.get(accessTokens.get(tokenIdentifier))
+              + "/issues/"
+              + story.getId(),
+          HttpMethod.PATCH,
+          accessTokens.get(tokenIdentifier),
+          new Gson().toJson(content));
       LOGGER.debug("<-- updateIssue()");
     } catch (Exception e) {
       LOGGER.debug("Error trying to update the Issue!");
-      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToEditIssueErrorMessage);
+      throw new ResponseStatusException(
+          HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToEditIssueErrorMessage);
     }
   }
 
   @Override
-  public String createIssue(String tokenIdentifier, String projectID, UserStory story){
+  public String createIssue(String tokenIdentifier, String projectID, UserStory story) {
     LOGGER.debug("--> createIssue(), projectID={}, story={}", projectID, story);
     Map<String, Object> content = new HashMap<>();
     content.put("title", story.getTitle());
     content.put("body", story.getDescription());
     try {
-      ResponseEntity<String> response = executeRequest(
-        "https://api.github.com/repos/" + getCurrentUsername(tokenIdentifier) + "/" + projectNames.get(projectID) + "/issues",
-        HttpMethod.POST,
-        accessTokens.get(tokenIdentifier),
-        new Gson().toJson(content));
+      ResponseEntity<String> response =
+          executeRequest(
+              "https://api.github.com/repos/"
+                  + getCurrentUsername(tokenIdentifier)
+                  + "/"
+                  + projectNames.get(projectID)
+                  + "/issues",
+              HttpMethod.POST,
+              accessTokens.get(tokenIdentifier),
+              new Gson().toJson(content));
       JsonNode node = new ObjectMapper().readTree(response.getBody());
       LOGGER.debug("<-- createIssue()");
       return node.path("number").asText();
     } catch (Exception e) {
       LOGGER.debug("Error trying to create an Issue with Github!");
-      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToEditIssueErrorMessage);
+      throw new ResponseStatusException(
+          HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToEditIssueErrorMessage);
     }
   }
 
@@ -234,15 +263,20 @@ public class GithubService implements ProjectManagementProviderOAuth2 {
     content.put("state", "closed");
     try {
       executeRequestForPatch(
-        "https://api.github.com/repos/" + getCurrentUsername(tokenIdentifier) + "/"
-          + selectedProject.get(accessTokens.get(tokenIdentifier)) + "/issues/" + issueID,
-        HttpMethod.PATCH,
-        accessTokens.get(tokenIdentifier),
-        new Gson().toJson(content));
+          "https://api.github.com/repos/"
+              + getCurrentUsername(tokenIdentifier)
+              + "/"
+              + selectedProject.get(accessTokens.get(tokenIdentifier))
+              + "/issues/"
+              + issueID,
+          HttpMethod.PATCH,
+          accessTokens.get(tokenIdentifier),
+          new Gson().toJson(content));
       LOGGER.debug("<-- deleteIssue()");
     } catch (Exception e) {
       LOGGER.debug("Error trying to delete the Issue!");
-      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToDeleteIssueErrorMessage);
+      throw new ResponseStatusException(
+          HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToDeleteIssueErrorMessage);
     }
   }
 

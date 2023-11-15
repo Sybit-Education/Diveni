@@ -23,27 +23,27 @@ public class GithubServiceTest {
   void getProjects() {
     HttpHeaders mockedHeaders = new HttpHeaders();
     mockedHeaders.setContentType(MediaType.APPLICATION_JSON);
-    String repoURL = "{\"login\":\"owner\",\"repos_url\":\"https://api.github.com/users/owner/repos\"}";
+    String repoURL =
+        "{\"login\":\"owner\",\"repos_url\":\"https://api.github.com/users/owner/repos\"}";
 
     String jsonReturnValue =
-      "[{\"id\": 1,\"node_id\":\"R_kgiurheiwhri_6g\",\"name\":\"Diveni1\",\"full_name\":\"user/Diveni1\"}," +
-        "{\"id\": 2,\"node_id\":\"R_kgiwqeheiwhri_6g\",\"name\":\"Diveni2\",\"full_name\":\"user/Diveni2\"}," +
-        "{\"id\": 3,\"node_id\":\"R_kgiurhorwhri_6g\",\"name\":\"Diveni3\",\"full_name\":\"user/Diveni3\"}]";
+        "[{\"id\":"
+            + " 1,\"node_id\":\"R_kgiurheiwhri_6g\",\"name\":\"Diveni1\",\"full_name\":\"user/Diveni1\"},{\"id\":"
+            + " 2,\"node_id\":\"R_kgiwqeheiwhri_6g\",\"name\":\"Diveni2\",\"full_name\":\"user/Diveni2\"},{\"id\":"
+            + " 3,\"node_id\":\"R_kgiurhorwhri_6g\",\"name\":\"Diveni3\",\"full_name\":\"user/Diveni3\"}]";
 
     ResponseEntity<String> mockedRepoReturnValue =
-      new ResponseEntity<>(repoURL, mockedHeaders, HttpStatus.valueOf(200));
+        new ResponseEntity<>(repoURL, mockedHeaders, HttpStatus.valueOf(200));
 
     ResponseEntity<String> mockedReturnValue =
-      new ResponseEntity<>(jsonReturnValue, mockedHeaders, HttpStatus.valueOf(200));
+        new ResponseEntity<>(jsonReturnValue, mockedHeaders, HttpStatus.valueOf(200));
 
     Mockito.doReturn(mockedRepoReturnValue, mockedReturnValue)
-      .when(githubService)
-      .executeRequest(any(), any(), any(), any());
-
+        .when(githubService)
+        .executeRequest(any(), any(), any(), any());
 
     List<Project> projectList = githubService.getProjects("accessToken");
     Assertions.assertEquals(3, projectList.size());
-
 
     Assertions.assertEquals("1", projectList.get(0).getId());
     Assertions.assertEquals("Diveni1", projectList.get(0).getName());
@@ -60,30 +60,30 @@ public class GithubServiceTest {
     HttpHeaders mockedHeaders = new HttpHeaders();
     mockedHeaders.setContentType(MediaType.APPLICATION_JSON);
 
-    String jsonReturnValue = "[{\"url\":\"https://api.github.com/repos/owner/repo/issues/1\"," +
-      "\"repository_url\":\"https://api.github.com/repos/owner/repo\"," +
-      "\"id\": 1932132185," +
-      "\"node_id\":\"I_kwDOG_EiFs525KCB\"," +
-      "\"number\":1," +
-      "\"title\":\"TEST_ISSUE\"," +
-      "\"body\":\"TEST_DESCRIPTION\\n Story Points voted on Diveni.io: **5**\"}," +
-      "{\"url\":\"https://api.github.com/repos/owner/repo/issues/2\"," +
-      "\"repository_url\":\"https://api.github.com/repos/owner/repo\"," +
-      "\"id\": 199321385," +
-      "\"node_id\":\"I_kwDOG_EiFs525KCB\"," +
-      "\"number\":2," +
-      "\"title\":\"TEST_ISSUE_2\"," +
-      "\"body\":\"\"}" +
-      "]";
+    String jsonReturnValue =
+        "[{\"url\":\"https://api.github.com/repos/owner/repo/issues/1\","
+            + "\"repository_url\":\"https://api.github.com/repos/owner/repo\","
+            + "\"id\": 1932132185,"
+            + "\"node_id\":\"I_kwDOG_EiFs525KCB\","
+            + "\"number\":1,"
+            + "\"title\":\"TEST_ISSUE\","
+            + "\"body\":\"TEST_DESCRIPTION\\n Story Points voted on Diveni.io: **5**\"},"
+            + "{\"url\":\"https://api.github.com/repos/owner/repo/issues/2\","
+            + "\"repository_url\":\"https://api.github.com/repos/owner/repo\","
+            + "\"id\": 199321385,"
+            + "\"node_id\":\"I_kwDOG_EiFs525KCB\","
+            + "\"number\":2,"
+            + "\"title\":\"TEST_ISSUE_2\","
+            + "\"body\":\"\"}"
+            + "]";
     ResponseEntity<String> mockedReturnValue =
-      new ResponseEntity<>(jsonReturnValue, mockedHeaders, HttpStatus.valueOf(200));
+        new ResponseEntity<>(jsonReturnValue, mockedHeaders, HttpStatus.valueOf(200));
 
     Mockito.doReturn(mockedReturnValue)
-      .when(githubService)
-      .executeRequest(any(), any(), any(), any());
+        .when(githubService)
+        .executeRequest(any(), any(), any(), any());
 
-    List<UserStory> userStories =
-      githubService.getIssues("accessToken", "Diveni-Issue-Tracker");
+    List<UserStory> userStories = githubService.getIssues("accessToken", "Diveni-Issue-Tracker");
     Assertions.assertEquals(2, userStories.size());
 
     Assertions.assertEquals("1", userStories.get(0).getId());

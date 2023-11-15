@@ -117,10 +117,10 @@ public class ProjectManagementController {
 
   @PostMapping("/github/oauth2/accessToken")
   public ResponseEntity<TokenIdentifier> getGithubOAuth2AccessToken(
-    @RequestHeader("Origin") String origin) {
+      @RequestHeader("Origin") String origin) {
     LOGGER.debug("--> getOAuth2GithubAccessToken() , origin={}", origin);
     ResponseEntity<TokenIdentifier> response =
-            new ResponseEntity<>(githubService.getAccessToken("",origin), HttpStatus.OK);
+        new ResponseEntity<>(githubService.getAccessToken("", origin), HttpStatus.OK);
     LOGGER.debug("<-- getGithubOAuth2AccessToken()");
     return response;
   }
@@ -241,7 +241,7 @@ public class ProjectManagementController {
       return jiraCloudService;
     } else if (azureDevOpsService.containsToken(tokenIdentifier)) {
       return azureDevOpsService;
-    } else if(githubService.containsToken(tokenIdentifier)) {
+    } else if (githubService.containsToken(tokenIdentifier)) {
       return githubService;
     }
     // If a new project management provider should be implemented, it can just be
