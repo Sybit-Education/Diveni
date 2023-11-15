@@ -12,6 +12,7 @@
         <sign-in-with-jira-cloud-button-component v-if="isJiraCloudEnabled" class="my-1" />
         <sign-in-with-jira-server-button-component v-if="isJiraServerEnabled" class="my-1" />
         <sign-in-with-azure-cloud-button-component v-if="isAzureDevOpsEnabled" class="my-1" />
+        <sign-in-with-git-hub-button-component class="my-1"/>
       </li>
       <li>
         {{
@@ -41,6 +42,7 @@ import Vue from "vue";
 import SignInWithJiraCloudButtonComponent from "./SignInWithJiraCloudButtonComponent.vue";
 import SignInWithJiraServerButtonComponent from "./SignInWithJiraServerButtonComponent.vue";
 import SignInWithAzureCloudButtonComponent from "./SignInWithAzureDevOpsButtonComponent.vue";
+import SignInWithGitHubButtonComponent from "@/components/SignInWithGitHubButtonComponent.vue";
 import ProjectSelectionComponent from "./ProjectSelectionComponent.vue";
 import apiService from "@/services/api.service";
 
@@ -50,6 +52,7 @@ export default Vue.extend({
     SignInWithJiraCloudButtonComponent,
     SignInWithJiraServerButtonComponent,
     SignInWithAzureCloudButtonComponent,
+    SignInWithGitHubButtonComponent,
     ProjectSelectionComponent,
   },
 
