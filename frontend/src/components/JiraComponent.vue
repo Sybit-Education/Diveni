@@ -12,7 +12,7 @@
         <sign-in-with-jira-cloud-button-component v-if="isJiraCloudEnabled" class="my-1" />
         <sign-in-with-jira-server-button-component v-if="isJiraServerEnabled" class="my-1" />
         <sign-in-with-azure-cloud-button-component v-if="isAzureDevOpsEnabled" class="my-1" />
-        <sign-in-with-git-hub-button-component class="my-1"/>
+        <sign-in-with-git-hub-button-component v-if="isGithubEnabled" class="my-1"/>
       </li>
       <li>
         {{
@@ -61,6 +61,7 @@ export default Vue.extend({
       isJiraCloudEnabled: false,
       isJiraServerEnabled: false,
       isAzureDevOpsEnabled: false,
+      isGithubEnabled: false,
     };
   },
   computed: {
@@ -89,6 +90,7 @@ export default Vue.extend({
       this.isJiraCloudEnabled = result.isJiraCloudEnabled === "true";
       this.isJiraServerEnabled = result.isJiraServerEnabled === "true";
       this.isAzureDevOpsEnabled = result.isAzureDevOpsEnabled === "true";
+      this.isGithubEnabled = result.isGithubEnabled === "true";
     });
   },
 });

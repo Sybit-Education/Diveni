@@ -102,7 +102,7 @@ public class GithubService implements ProjectManagementProviderOAuth2 {
 
   @Override
   public boolean serviceEnabled() {
-    return true;
+    return serviceEnabled;
   }
 
   @Override
@@ -188,7 +188,7 @@ public class GithubService implements ProjectManagementProviderOAuth2 {
       LOGGER.debug("<-- getIssues()");
       return userStories;
     } catch (Exception e) {
-      LOGGER.debug("Error trying to receive the issues!" + e);
+      LOGGER.debug("Error trying to receive the issues!");
       throw new ResponseStatusException(
           HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToRetrieveProjectsErrorMessage);
     }
