@@ -154,13 +154,15 @@ public class GithubService implements ProjectManagementProviderOAuth2 {
               null);
       for (JsonNode node : new ObjectMapper().readTree(response.getBody())) {
         String estimation = null;
-        int endIndex = node.get("body").asText().lastIndexOf("**");
-        int startIndex = 0;
-        if (node.get("body").asText().contains("Story Points voted on Diveni.io:")) {
+        if (node.get("body").asText().contains("Story Points voted on Diveni.io: **")) {
+          int endIndex = node.get("body").asText().lastIndexOf("**");
+          int startIndex = 0;
           for (int i = endIndex - 1; node.get("body").asText().charAt(i) != '*'; i--) {
             startIndex = i;
           }
-          estimation = node.get("body").asText().substring(startIndex, endIndex);
+          if (startIndex >= 0 && endIndex >= 0) {
+            estimation = node.get("body").asText().substring(startIndex, endIndex);
+          }
           if (estimation.equals("null")) {
             estimation = null;
           }
@@ -186,7 +188,7 @@ public class GithubService implements ProjectManagementProviderOAuth2 {
       LOGGER.debug("<-- getIssues()");
       return userStories;
     } catch (Exception e) {
-      LOGGER.debug("Error trying to receive the issues!");
+      LOGGER.debug("Error trying to receive the issues!" + e);
       throw new ResponseStatusException(
           HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.failedToRetrieveProjectsErrorMessage);
     }
