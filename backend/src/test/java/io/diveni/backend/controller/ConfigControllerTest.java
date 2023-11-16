@@ -52,7 +52,8 @@ public class ConfigControllerTest {
         .andExpect(
             (MockMvcResultMatchers.jsonPath("$.isAzureDevOpsEnabled")
                 .value(Boolean.valueOf(azureDevOpsService.serviceEnabled()).toString())))
-      .andExpect(MockMvcResultMatchers.jsonPath("$.isGithubEnabled")
-        .value(Boolean.valueOf(githubService.serviceEnabled()).toString()));
+        .andExpect(
+            MockMvcResultMatchers.jsonPath("$.isGithubEnabled")
+                .value(Boolean.valueOf(githubService.serviceEnabled()).toString()));
   }
 }
