@@ -121,15 +121,15 @@ public class ProjectManagementController {
 
   @PostMapping("/gitlab/oauth2/authorizationCode")
   public ResponseEntity<TokenIdentifier> getGitlabOAuth2AccessToken(
-          @RequestHeader("Origin") String origin) {
+      @RequestHeader("Origin") String origin) {
     LOGGER.debug("--> getOAuth2AccessToken(), origin={}", origin);
     if (!gitlabService.serviceEnabled()) {
       LOGGER.warn("Gitlab is not configured!");
       throw new ResponseStatusException(
-              HttpStatus.INTERNAL_SERVER_ERROR, PROVIDER_NOT_ENABLED_MESSAGE);
+          HttpStatus.INTERNAL_SERVER_ERROR, PROVIDER_NOT_ENABLED_MESSAGE);
     }
     ResponseEntity<TokenIdentifier> response =
-            new ResponseEntity<>(gitlabService.getAccessToken("", origin), HttpStatus.OK);
+        new ResponseEntity<>(gitlabService.getAccessToken("", origin), HttpStatus.OK);
     LOGGER.debug("<-- getOAuth2AccessToken()");
     return response;
   }
@@ -250,7 +250,7 @@ public class ProjectManagementController {
       return jiraCloudService;
     } else if (azureDevOpsService.containsToken(tokenIdentifier)) {
       return azureDevOpsService;
-    } else if(gitlabService.containsToken(tokenIdentifier)) {
+    } else if (gitlabService.containsToken(tokenIdentifier)) {
       return gitlabService;
     }
     // If a new project management provider should be implemented, it can just be

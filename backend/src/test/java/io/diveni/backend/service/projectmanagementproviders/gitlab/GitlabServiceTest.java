@@ -23,24 +23,23 @@ public class GitlabServiceTest {
   void getProjects() {
     HttpHeaders mockedHeaders = new HttpHeaders();
     mockedHeaders.setContentType(MediaType.APPLICATION_JSON);
-    String repoURL =
-      "{\"id\":\"owner\",\"username\":\"TEST_USERNAME\"}";
+    String repoURL = "{\"id\":\"owner\",\"username\":\"TEST_USERNAME\"}";
 
     String jsonReturnValue =
-      "[{\"id\":"
-        + " 1,\"description\":\"Test_Description\",\"name\":\"Diveni1\",\"path_with_namespace\":\"user/Diveni1\"},{\"id\":"
-        + " 2,\"description\":\"Test_Descriptio2n\",\"name\":\"Diveni2\",\"path_with_namespace\":\"user/Diveni2\"},{\"id\":"
-        + " 3,\"description\":\"null\",\"name\":\"Diveni3\",\"path_with_namespace\":\"user/Diveni3\"}]";
+        "[{\"id\":"
+            + " 1,\"description\":\"Test_Description\",\"name\":\"Diveni1\",\"path_with_namespace\":\"user/Diveni1\"},{\"id\":"
+            + " 2,\"description\":\"Test_Descriptio2n\",\"name\":\"Diveni2\",\"path_with_namespace\":\"user/Diveni2\"},{\"id\":"
+            + " 3,\"description\":\"null\",\"name\":\"Diveni3\",\"path_with_namespace\":\"user/Diveni3\"}]";
 
     ResponseEntity<String> mockedRepoReturnValue =
-      new ResponseEntity<>(repoURL, mockedHeaders, HttpStatus.valueOf(200));
+        new ResponseEntity<>(repoURL, mockedHeaders, HttpStatus.valueOf(200));
 
     ResponseEntity<String> mockedReturnValue =
-      new ResponseEntity<>(jsonReturnValue, mockedHeaders, HttpStatus.valueOf(200));
+        new ResponseEntity<>(jsonReturnValue, mockedHeaders, HttpStatus.valueOf(200));
 
     Mockito.doReturn(mockedRepoReturnValue, mockedReturnValue)
-      .when(gitlabService)
-      .executeRequest(any(), any(), any(), any());
+        .when(gitlabService)
+        .executeRequest(any(), any(), any(), any());
 
     List<Project> projectList = gitlabService.getProjects("accessToken");
     Assertions.assertEquals(3, projectList.size());
@@ -61,35 +60,35 @@ public class GitlabServiceTest {
     mockedHeaders.setContentType(MediaType.APPLICATION_JSON);
 
     String jsonReturnValue =
-      "[{\"web_url\":\"https://gitlab.com/owner/repo/-/issues/1\","
-        + "\"time_stats\":{\"time_estimate\": 18000,"
-        + "\"total_time_spent\": 0, "
-        + "\"human_time_estimate\": \"5h\","
-        + "\"human_total_time_spent\": \"null\""
-        + "},"
-        + "\"id\": 1932132185,"
-        + "\"iid\":1,"
-        + "\"project_id\":13213213213,"
-        + "\"title\":\"TEST_ISSUE\","
-        + "\"description\":\"TEST_DESCRIPTION\"},"
-        + "{\"web_url\":\"https://gitlab.com/owner/repo/-/issues/2\","
-        + "\"time_stats\":{\"time_estimate\": \"null\","
-        + "\"total_time_spent\": 0, "
-        + "\"human_time_estimate\": \"null\","
-        + "\"human_total_time_spent\": \"null\""
-        + "},"
-        + "\"id\": 1932132184,"
-        + "\"iid\": 2,"
-        + "\"project_id\":13213213213,"
-        + "\"title\":\"TEST_ISSUE_2\","
-        + "\"description\":\"\"}"
-        + "]";
+        "[{\"web_url\":\"https://gitlab.com/owner/repo/-/issues/1\","
+            + "\"time_stats\":{\"time_estimate\": 18000,"
+            + "\"total_time_spent\": 0, "
+            + "\"human_time_estimate\": \"5h\","
+            + "\"human_total_time_spent\": \"null\""
+            + "},"
+            + "\"id\": 1932132185,"
+            + "\"iid\":1,"
+            + "\"project_id\":13213213213,"
+            + "\"title\":\"TEST_ISSUE\","
+            + "\"description\":\"TEST_DESCRIPTION\"},"
+            + "{\"web_url\":\"https://gitlab.com/owner/repo/-/issues/2\","
+            + "\"time_stats\":{\"time_estimate\": \"null\","
+            + "\"total_time_spent\": 0, "
+            + "\"human_time_estimate\": \"null\","
+            + "\"human_total_time_spent\": \"null\""
+            + "},"
+            + "\"id\": 1932132184,"
+            + "\"iid\": 2,"
+            + "\"project_id\":13213213213,"
+            + "\"title\":\"TEST_ISSUE_2\","
+            + "\"description\":\"\"}"
+            + "]";
     ResponseEntity<String> mockedReturnValue =
-      new ResponseEntity<>(jsonReturnValue, mockedHeaders, HttpStatus.valueOf(200));
+        new ResponseEntity<>(jsonReturnValue, mockedHeaders, HttpStatus.valueOf(200));
 
     Mockito.doReturn(mockedReturnValue)
-      .when(gitlabService)
-      .executeRequest(any(), any(), any(), any());
+        .when(gitlabService)
+        .executeRequest(any(), any(), any(), any());
 
     List<UserStory> userStories = gitlabService.getIssues("accessToken", "Diveni-Issue-Tracker");
     Assertions.assertEquals(2, userStories.size());
