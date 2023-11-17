@@ -184,4 +184,5 @@ public class AnalyticsControllerTest {
         .andExpect(jsonPath("$.amountOfSessionsCurrently").value(1))
         .andExpect(jsonPath("$.amountOfAttendeesCurrently").value(2));
   }
+  
 }
