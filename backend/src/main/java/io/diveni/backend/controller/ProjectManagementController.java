@@ -15,6 +15,7 @@ import io.diveni.backend.model.VerificationCode;
 import io.diveni.backend.service.DatabaseService;
 import io.diveni.backend.service.projectmanagementproviders.ProjectManagementProvider;
 import io.diveni.backend.service.projectmanagementproviders.azuredevops.AzureDevOpsService;
+import io.diveni.backend.service.projectmanagementproviders.gitlab.GitlabService;
 import io.diveni.backend.service.projectmanagementproviders.jiracloud.JiraCloudService;
 import io.diveni.backend.service.projectmanagementproviders.jiraserver.JiraServerService;
 import org.slf4j.Logger;
@@ -49,6 +50,8 @@ public class ProjectManagementController {
   @Autowired JiraCloudService jiraCloudService;
 
   @Autowired AzureDevOpsService azureDevOpsService;
+
+  @Autowired GitlabService gitlabService;
 
   private final String PROVIDER_NOT_ENABLED_MESSAGE =
       "The selected issue tracker is not enabled. Make sure to set all required parameters.";
@@ -112,6 +115,21 @@ public class ProjectManagementController {
     }
     ResponseEntity<TokenIdentifier> response =
         new ResponseEntity<>(azureDevOpsService.getAccessToken("", origin), HttpStatus.OK);
+    LOGGER.debug("<-- getOAuth2AccessToken()");
+    return response;
+  }
+
+  @PostMapping("/gitlab/oauth2/authorizationCode")
+  public ResponseEntity<TokenIdentifier> getGitlabOAuth2AccessToken(
+          @RequestHeader("Origin") String origin) {
+    LOGGER.debug("--> getOAuth2AccessToken(), origin={}", origin);
+    if (!gitlabService.serviceEnabled()) {
+      LOGGER.warn("Gitlab is not configured!");
+      throw new ResponseStatusException(
+              HttpStatus.INTERNAL_SERVER_ERROR, PROVIDER_NOT_ENABLED_MESSAGE);
+    }
+    ResponseEntity<TokenIdentifier> response =
+            new ResponseEntity<>(gitlabService.getAccessToken("", origin), HttpStatus.OK);
     LOGGER.debug("<-- getOAuth2AccessToken()");
     return response;
   }
@@ -232,6 +250,8 @@ public class ProjectManagementController {
       return jiraCloudService;
     } else if (azureDevOpsService.containsToken(tokenIdentifier)) {
       return azureDevOpsService;
+    } else if(gitlabService.containsToken(tokenIdentifier)) {
+      return gitlabService;
     }
     // If a new project management provider should be implemented, it can just be
     // added here

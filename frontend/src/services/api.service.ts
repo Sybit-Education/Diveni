@@ -55,6 +55,13 @@ class ApiService {
     return response.data;
   }
 
+  public async sendGitlabOauth2AuthorizationCode(): Promise<JiraResponseCodeDto> {
+    const response = await axios.post<JiraResponseCodeDto>(
+        `${constants.backendURL}/issue-tracker/gitlab/oauth2/authorizationCode`
+    );
+    return response.data;
+  }
+
   public async getAllProjects(): Promise<unknown> {
     const response = await axios.get(`${constants.backendURL}/issue-tracker/projects`);
     return response.data;

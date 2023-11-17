@@ -125,6 +125,9 @@ export default new Vuex.Store<StoreState>({
     setTokenId(state, tokenId) {
       state.tokenId = tokenId;
     },
+    clearTokenId(state) {
+      state.tokenId = undefined;
+    },
   },
   actions: {},
   modules: {},
