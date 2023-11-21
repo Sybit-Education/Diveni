@@ -16,7 +16,7 @@
     "@toast-ui/editor-plugin-code-syntax-highlight": "^3.1.0",
     "@toast-ui/vue-editor": "^3.2.3",
     "@types/sockjs-client": "^1.5.4",
-    "axios": "^1.6.0",
+    "axios": "^1.6.2",
     "bootstrap": "^4.6.1",
     "bootstrap-vue": "^2.23.1",
     "canvas-confetti": "^1.9.0",
