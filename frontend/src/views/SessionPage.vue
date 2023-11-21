@@ -429,7 +429,6 @@ export default Vue.extend({
         setTimeout(() => {
           this.registerAdminPrincipalOnBackend();
           this.subscribeWSMemberUpdated();
-          this.requestMemberUpdate();
           this.subscribeOnTimerStart();
           if (this.rejoined === "false") {
             this.subscribeWSNotification();
@@ -437,11 +436,9 @@ export default Vue.extend({
           if (this.startNewSessionOnMountedString === "true") {
             this.sendRestartMessage();
           }
-        }, 300);
-        setTimeout(() => {
-          if (this.members.length === 0) {
+          setTimeout(() => {
             this.requestMemberUpdate();
-          }
+          }, 600);
         }, 300);
       }
     },
