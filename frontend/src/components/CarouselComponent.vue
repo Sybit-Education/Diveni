@@ -47,7 +47,8 @@ export default Vue.extend({
   },
   mounted() {
     setInterval(() => {
-      this.updateValue = (this.updateValue + 0.01) % (this.allItems.length * 10);
+      this.updateValue = (this.updateValue + 0.04) % (this.allItems.length * 17.85);
+
     }, 10);
   },
   methods: {
