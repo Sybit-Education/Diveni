@@ -64,7 +64,7 @@ export default Vue.extend({
         case "Gitlab":
           return "gitlab";
       }
-    }
+    },
   }
 });
 </script>
@@ -80,6 +80,7 @@ export default Vue.extend({
   flex-wrap: nowrap;
   width: auto;
   transform: scale(1);
+  will-change: transform;
 }
 
 .set {
