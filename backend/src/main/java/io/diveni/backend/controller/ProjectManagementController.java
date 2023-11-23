@@ -117,8 +117,7 @@ public class ProjectManagementController {
 
   @PostMapping("/gitlab/oauth2/authorizationCode")
   public ResponseEntity<TokenIdentifier> getGitlabOAuth2AccessToken(
-      @RequestHeader("Origin") String origin,
-      @RequestBody PersonalAccessToken pat) {
+      @RequestHeader("Origin") String origin, @RequestBody PersonalAccessToken pat) {
     LOGGER.debug("--> getOAuth2AccessToken(), origin={}", origin);
     if (!gitlabService.serviceEnabled()) {
       LOGGER.warn("Gitlab is not configured!");
@@ -126,7 +125,8 @@ public class ProjectManagementController {
           HttpStatus.INTERNAL_SERVER_ERROR, PROVIDER_NOT_ENABLED_MESSAGE);
     }
     ResponseEntity<TokenIdentifier> response =
-        new ResponseEntity<>(gitlabService.getAccessToken("", origin, pat.getCode()), HttpStatus.OK);
+        new ResponseEntity<>(
+            gitlabService.getAccessToken("", origin, pat.getCode()), HttpStatus.OK);
     LOGGER.debug("<-- getOAuth2AccessToken()");
     return response;
   }
