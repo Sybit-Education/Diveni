@@ -439,8 +439,8 @@ export default Vue.extend({
             }
             setTimeout(() => {
               this.requestMemberUpdate();
-            }, 600);
-          }, 300);
+            }, 400);
+          }, 800);
         }
       }
     },
