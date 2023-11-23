@@ -429,7 +429,6 @@ export default Vue.extend({
         if (this.webSocketCommunicationEstablished) {
           setTimeout(() => {
             this.registerAdminPrincipalOnBackend();
-            this.subscribeWSMemberUpdated();
             this.subscribeOnTimerStart();
             if (this.rejoined === "false") {
               this.subscribeWSNotification();
@@ -438,9 +437,10 @@ export default Vue.extend({
               this.sendRestartMessage();
             }
             setTimeout(() => {
+              this.subscribeWSMemberUpdated();
               this.requestMemberUpdate();
-            }, 400);
-          }, 800);
+            }, 600);
+          }, 300);
         }
       }
     },
