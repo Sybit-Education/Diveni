@@ -1,8 +1,18 @@
 <template>
   <div class="row">
-    <div class="wrapper" :style="{transform: `translateX(-${updateValue  * 2.5/ items.length}%)` }">
-      <div class="set" v-for="(item, index) in allItems" :key="index">
-        <b-card class="connectorCards" :class="getClass(item)">
+    <div
+      class="wrapper"
+      :style="{transform: `translateX(-${updateValue  * 4/ items.length}%)`}"
+    >
+      <div class="set"
+           v-for="(item, index) in allItems"
+           :key="index"
+           ref="allItems"
+      >
+        <b-card
+          class="connectorCards"
+          :class="getClass(item)"
+        >
           <b-card-title>
             <div>
               <b-img
@@ -10,7 +20,9 @@
                 :class="getClass(item) + 'Pic'"
               />
             </div>
-            <div class="title">
+            <div
+              class="title"
+            >
               {{item.title}}
             </div>
           </b-card-title>
@@ -47,8 +59,12 @@ export default Vue.extend({
   },
   mounted() {
     setInterval(() => {
-      this.updateValue = (this.updateValue + 0.04) % (this.allItems.length * 17.85);
-
+      if (typeof this.$refs.allItems !== 'undefined') {
+        if (this.$refs.allItems[5].getBoundingClientRect().left >= 1 && this.$refs.allItems[5].getBoundingClientRect().left <= 2) {
+          this.updateValue = 0;
+        }
+      }
+      this.updateValue = this.updateValue + 0.04;
     }, 10);
   },
   methods: {
