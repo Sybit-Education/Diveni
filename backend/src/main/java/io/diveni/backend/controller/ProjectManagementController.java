@@ -117,11 +117,11 @@ public class ProjectManagementController {
 
   @PostMapping("/github/oauth2/accessToken")
   public ResponseEntity<TokenIdentifier> getGithubOAuth2AccessToken(
-      @RequestHeader("Origin") String origin,
-      @RequestBody PersonalAccessToken pat) {
+      @RequestHeader("Origin") String origin, @RequestBody PersonalAccessToken pat) {
     LOGGER.debug("--> getOAuth2GithubAccessToken() , origin={}", origin);
     ResponseEntity<TokenIdentifier> response =
-        new ResponseEntity<>(githubService.getAccessToken("", origin, pat.getCode()), HttpStatus.OK);
+        new ResponseEntity<>(
+            githubService.getAccessToken("", origin, pat.getCode()), HttpStatus.OK);
     LOGGER.debug("<-- getGithubOAuth2AccessToken()");
     return response;
   }

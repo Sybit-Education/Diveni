@@ -18,7 +18,6 @@ import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.springframework.beans.factory.annotation.Value;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -51,7 +50,6 @@ public class GithubService implements ProjectManagementProviderOAuth2 {
   @Getter private final Map<String, String> projectNames = new HashMap<>();
 
   @Getter private final Map<String, String> selectedProject = new HashMap<>();
-
 
   private boolean serviceEnabled = false;
 
