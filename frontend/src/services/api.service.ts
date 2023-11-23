@@ -55,9 +55,12 @@ class ApiService {
     return response.data;
   }
 
-  public async sendGithubOauth2AuthorizaionCode(): Promise<JiraResponseCodeDto> {
+  public async sendGithubOauth2AuthorizaionCode(token: string): Promise<JiraResponseCodeDto> {
     const response = await axios.post(
-      `${constants.backendURL}/issue-tracker/github/oauth2/accessToken`
+      `${constants.backendURL}/issue-tracker/github/oauth2/accessToken`,
+      {
+        code: token
+      }
     );
     return response.data;
   }

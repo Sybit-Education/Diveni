@@ -52,18 +52,13 @@ public class GithubService implements ProjectManagementProviderOAuth2 {
 
   @Getter private final Map<String, String> selectedProject = new HashMap<>();
 
-  @Value("${GITHUB_TOKEN:#{null}}")
-  private String githubToken;
 
   private boolean serviceEnabled = false;
 
   @PostConstruct
   public void logConfig() {
-    if (githubToken != null) {
-      serviceEnabled = true;
-    }
+    serviceEnabled = true;
     LOGGER.info("Github Service: (enabled:" + serviceEnabled + ")");
-    LOGGER.info("    GITHUB_PERSONAL_ACCESS_TOKEN={}", githubToken == null ? "null" : "********");
   }
 
   public ResponseEntity<String> executeRequest(
@@ -294,9 +289,13 @@ public class GithubService implements ProjectManagementProviderOAuth2 {
 
   @Override
   public TokenIdentifier getAccessToken(String authorizationCode, String origin) {
+    return null;
+  }
+
+  public TokenIdentifier getAccessToken(String authorizationCode, String origin, String pat) {
     LOGGER.debug("--> getAccessToken(), origin={},", origin);
     val id = Utils.generateRandomID();
-    accessTokens.put(id, this.githubToken);
+    accessTokens.put(id, pat);
     LOGGER.debug("<-- getAccessToken()");
     return new TokenIdentifier(id);
   }

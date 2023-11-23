@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, {AxiosRequestHeaders} from "axios";
 import store from "./store";
 
 const setup = (): void => {
@@ -8,7 +8,7 @@ const setup = (): void => {
       tokenId = localStorage.getItem("tokenId") || undefined;
     }
     if (!config.headers) {
-      config.headers = {};
+      config.headers = {} as AxiosRequestHeaders;
     }
     if (tokenId) {
       config.headers["X-Token-ID"] = tokenId;
