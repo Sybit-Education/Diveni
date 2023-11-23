@@ -436,10 +436,10 @@ export default Vue.extend({
           if (this.startNewSessionOnMountedString === "true") {
             this.sendRestartMessage();
           }
+          setTimeout(() => {
+            this.requestMemberUpdate();
+          }, 600);
         }, 300);
-        setTimeout(() => {
-          this.requestMemberUpdate();
-        }, 500);
       }
     },
     highlightedMembers(highlights) {
