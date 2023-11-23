@@ -27,22 +27,16 @@ public class Statistic {
 
   private final LocalDate creationTime;
 
-
   public Statistic addOverallSessions(int addToOverallSessions) {
     return new Statistic(
-      id,
-      overallSessions + addToOverallSessions,
-      overallAttendees,
-      LocalDate.from(creationTime)
-    );
+        id, overallSessions + addToOverallSessions, overallAttendees, LocalDate.from(creationTime));
   }
 
   public Statistic addOverallAttendees(int addToOverallAttendees) {
     return new Statistic(
-      id,
-      overallSessions,
-      overallAttendees + addToOverallAttendees,
-      LocalDate.from(creationTime)
-    );
+        id,
+        overallSessions,
+        overallAttendees + addToOverallAttendees,
+        LocalDate.from(creationTime));
   }
 }
