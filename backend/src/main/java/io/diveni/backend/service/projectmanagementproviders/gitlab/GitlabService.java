@@ -46,11 +46,8 @@ public class GitlabService implements ProjectManagementProviderOAuth2 {
 
   @PostConstruct
   public void logConfig() {
-    if (gitlabToken != null) {
-      serviceEnabled = true;
-    }
+    serviceEnabled = true;
     LOGGER.info("Gitlab Service: (enabled:" + serviceEnabled + ")");
-    LOGGER.info("    GITLAB_ACCESS_TOKEN={}", gitlabToken == null ? "null" : "********");
   }
 
   @Override
@@ -255,9 +252,13 @@ public class GitlabService implements ProjectManagementProviderOAuth2 {
 
   @Override
   public TokenIdentifier getAccessToken(String authorizationCode, String origin) {
+    return null;
+  }
+
+  public TokenIdentifier getAccessToken(String authorizationCode, String origin, String pat) {
     LOGGER.debug("--> getAccessToken()");
     val id = Utils.generateRandomID();
-    accessTokens.put(id, gitlabToken);
+    accessTokens.put(id, pat);
     LOGGER.debug("<-- getAccessToken()");
     return new TokenIdentifier(id);
   }

@@ -7,11 +7,7 @@ package io.diveni.backend.controller;
 
 import java.util.List;
 
-import io.diveni.backend.model.JiraRequestToken;
-import io.diveni.backend.model.Project;
-import io.diveni.backend.model.TokenIdentifier;
-import io.diveni.backend.model.UserStory;
-import io.diveni.backend.model.VerificationCode;
+import io.diveni.backend.model.*;
 import io.diveni.backend.service.DatabaseService;
 import io.diveni.backend.service.projectmanagementproviders.ProjectManagementProvider;
 import io.diveni.backend.service.projectmanagementproviders.azuredevops.AzureDevOpsService;
@@ -121,7 +117,8 @@ public class ProjectManagementController {
 
   @PostMapping("/gitlab/oauth2/authorizationCode")
   public ResponseEntity<TokenIdentifier> getGitlabOAuth2AccessToken(
-      @RequestHeader("Origin") String origin) {
+      @RequestHeader("Origin") String origin,
+      @RequestBody PersonalAccessToken pat) {
     LOGGER.debug("--> getOAuth2AccessToken(), origin={}", origin);
     if (!gitlabService.serviceEnabled()) {
       LOGGER.warn("Gitlab is not configured!");
@@ -129,7 +126,7 @@ public class ProjectManagementController {
           HttpStatus.INTERNAL_SERVER_ERROR, PROVIDER_NOT_ENABLED_MESSAGE);
     }
     ResponseEntity<TokenIdentifier> response =
-        new ResponseEntity<>(gitlabService.getAccessToken("", origin), HttpStatus.OK);
+        new ResponseEntity<>(gitlabService.getAccessToken("", origin, pat.getCode()), HttpStatus.OK);
     LOGGER.debug("<-- getOAuth2AccessToken()");
     return response;
   }
