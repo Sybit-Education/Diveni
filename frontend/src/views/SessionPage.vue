@@ -430,15 +430,13 @@ export default Vue.extend({
           this.registerAdminPrincipalOnBackend();
           this.subscribeWSMemberUpdated();
           this.subscribeOnTimerStart();
-          if (this.rejoined === "false") {
-            this.subscribeWSNotification();
-          }
+          this.subscribeWSNotification();
           if (this.startNewSessionOnMountedString === "true") {
             this.sendRestartMessage();
           }
           setTimeout(() => {
             this.requestMemberUpdate();
-          }, 600);
+          }, 400);
         }, 300);
       }
     },
@@ -480,10 +478,12 @@ export default Vue.extend({
     window.addEventListener("beforeunload", this.sendUnregisterCommand);
   },
   mounted() {
+    if (this.rejoined === "false") {
+      this.connectToWebSocket();
+    }
     if (this.session_voteSetJson) {
       this.voteSet = JSON.parse(this.session_voteSetJson);
     }
-    this.connectToWebSocket();
     if (this.session_sessionState === Constants.memberUpdateCommandStartVoting) {
       this.planningStart = true;
     } else if (this.session_sessionState === Constants.memberUpdateCommandVotingFinished) {
@@ -573,9 +573,6 @@ export default Vue.extend({
       this.timerCountdownNumber = parseInt(this.session_timerSecondsString, 10);
       //reconnect and reload member
       this.connectToWebSocket();
-      setTimeout(() => {
-        this.subscribeWSNotification();
-      }, 300);
     },
     async onUserStoriesChanged({ us, idx, doRemove }) {
       console.log(`stories: ${us}`);
