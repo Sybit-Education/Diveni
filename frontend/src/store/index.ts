@@ -34,16 +34,20 @@ export default new Vuex.Store<StoreState>({
         // eslint-disable-next-line @typescript-eslint/no-empty-function
         state.stompClient.debug = () => {};
       }
-      state.stompClient.connect(
-        {},
-        () => {
-          state.webSocketConnected = true;
-        },
-        (error) => {
-          console.error(error);
-          state.webSocketConnected = false;
-        }
-      );
+      const connect_callback = function() {
+        console.log("WebSocket Connected");
+        state.webSocketConnected = true;
+      };
+      const error_callback = function(error) {
+        console.error("Error connecting to the WebSocket");
+        console.error(error);
+        state.webSocketConnected = false;
+      };
+      /**
+       * client.connect(headers, connectCallback, errorCallback);
+       * More information here: https://jmesnil.net/stomp-websocket/doc/
+       */
+      state.stompClient.connect({}, connect_callback, error_callback);
     },
     subscribeOnBackendWSMemberUpdates(state) {
       state.stompClient?.subscribe(Constants.webSocketMemberListenRoute, (frame) => {
