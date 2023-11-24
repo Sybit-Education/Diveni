@@ -175,6 +175,7 @@ export default Vue.extend({
       this.$router.push({ name: "PrepareSessionPage" });
     },
     goToSessionPage() {
+      this.disconnectFromBackendWS();
       this.$store.commit("setUserStories", {
         stories: this.sessionWrapper.session.sessionConfig.userStories,
       });
@@ -189,8 +190,12 @@ export default Vue.extend({
           startNewSessionOnMountedString: this.startNewSessionOnMounted.toString(),
           userStoryMode: this.sessionWrapper.session.sessionConfig.userStoryMode,
           hostVoting: this.sessionWrapper.session.hostVoting,
+          rejoined: "false",
         },
       });
+    },
+    disconnectFromBackendWS() {
+      this.$store.commit("disconnectFromBackendWS");
     },
   },
 });

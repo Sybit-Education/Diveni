@@ -49,6 +49,12 @@ export default new Vuex.Store<StoreState>({
        */
       state.stompClient.connect({}, connect_callback, error_callback);
     },
+    disconnectFromBackendWS(state) {
+      state.stompClient?.disconnect(function() {
+        console.log("WebSocket Disconnected!")
+        state.webSocketConnected = false;
+      });
+    },
     subscribeOnBackendWSMemberUpdates(state) {
       state.stompClient?.subscribe(Constants.webSocketMemberListenRoute, (frame) => {
         state.memberUpdates = state.memberUpdates.concat([frame.body]);
