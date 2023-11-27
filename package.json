@@ -26,6 +26,6 @@
     "@mermaid-js/mermaid-mindmap": "^9.3.0",
     "mermaid": "^10.6.1",
     "vitepress": "^1.0.0-rc.29",
-    "vitepress-plugin-mermaid": "^2.0.15"
+    "vitepress-plugin-mermaid": "^2.0.16"
   }
 }
