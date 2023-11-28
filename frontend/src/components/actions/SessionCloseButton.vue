@@ -9,12 +9,13 @@
     </b-button>
     <b-modal
       id="close-session-modal"
+      class="modal-header"
       :title="t('page.session.close.popup')"
       :cancel-title="t('page.session.close.button.cancel')"
       :ok-title="t('page.session.close.button.ok')"
       @ok="closeSession"
     >
-      <p class="my-4 description">
+      <p class="modal-body my-4 description">
         {{ t("page.session.close.description1") }}
       </p>
       <p v-if="userStoryMode !== 'NO_US'" class="description">
@@ -65,9 +66,11 @@ export default defineComponent({
   },
 });
 </script>
-<style>
+
+<!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
+<style lang="scss">
 .description {
-  color: black;
+  color: var(--text-primary-color);
 }
 
 #picture-holderClose {

@@ -10,11 +10,44 @@
           }}
         </h1>
       </b-col>
-      <b-col cols="auto">
-        <copy-session-id-popup v-if="planningStart" class="float-end" :session-id="sessionID" />
+      <b-col>
+        <b-button
+          v-if="!autoReveal && !planningStart"
+          class="mr-3 autoRevealButtons optionButton"
+          variant="outline-dark"
+          @click="
+            autoReveal = true;
+            $event.target.blur();
+          "
+        >
+          <b-icon-eye-slash-fill class="bIcons" />
+          {{ t("page.session.during.estimation.buttons.autoRevealOff") }}
+        </b-button>
+        <b-button
+          v-if="autoReveal && !planningStart"
+          class="mr-3 autoRevealButtons optionButton"
+          variant="outline-dark"
+          @click="
+            autoReveal = false;
+            $event.target.blur();
+          "
+        >
+          <b-icon-eye-fill class="bIcons" />
+          {{ t("page.session.during.estimation.buttons.autoRevealOn") }}
+        </b-button>
       </b-col>
-      <b-col id="sessionCloseCol" cols="auto">
-        <session-close-button :is-planning-start="planningStart" :user-story-mode="userStoryMode" />
+      <b-col cols="auto" class="mr-auto">
+        <copy-session-id-popup
+          v-if="planningStart"
+          class="float-end"
+          :session-id="sessionID"
+        />
+      </b-col>
+      <b-col cols="auto">
+        <session-close-button
+          :is-planning-start="planningStart"
+          :user-story-mode="userStoryMode"
+        />
       </b-col>
     </b-row>
 
@@ -40,11 +73,15 @@
       </b-row>
       <b-row>
         <b-col class="text-center">
-          <session-start-button :host-voting="hostVoting" @clicked="onPlanningStarted" />
+          <session-start-button
+            :members="members"
+            :host-voting="hostVoting"
+            :auto-reveal="autoReveal"
+            @clicked="onPlanningStarted"
+          />
         </b-col>
       </b-row>
     </div>
-
     <div v-else>
       <b-row class="d-flex justify-content-start pb-3">
         <b-col cols="auto" class="mr-auto optionButtonCol">
@@ -69,6 +106,32 @@
           >
             <BIconBarChartFill class="bIcons"></BIconBarChartFill>
             {{ t("page.session.during.estimation.buttons.result") }}
+          </b-button>
+          <b-button
+            v-if="!autoReveal"
+            class="mr-3 optionButton"
+            variant="outline-dark"
+            :disabled="planningStart && !estimateFinished"
+            @click="
+              autoReveal = true;
+              $event.target.blur();
+            "
+          >
+            <b-icon-eye-slash-fill class="bIcons" />
+            {{ t("page.session.during.estimation.buttons.autoRevealOff") }}
+          </b-button>
+          <b-button
+            v-if="autoReveal"
+            class="mr-3 optionButton"
+            variant="outline-dark"
+            :disabled="planningStart && !estimateFinished"
+            @click="
+              autoReveal = false;
+              $event.target.blur();
+            "
+          >
+            <b-icon-eye-fill class="bIcons" />
+            {{ t("page.session.during.estimation.buttons.autoRevealOn") }}
           </b-button>
         </b-col>
         <b-col cols="auto">
@@ -120,7 +183,7 @@
         style="max-height: 500px"
       >
         <session-admin-card
-          v-if="(safedHostVoting && estimateFinished) || hostEstimation !== ''"
+          v-if="(estimateFinished && hostVoting) || hostEstimation !== ''"
           :current-estimation="hostEstimation"
           :estimate-finished="estimateFinished"
           :highlight="highlightedMembers.includes(adminID) || highlightedMembers.length === 0"
@@ -154,7 +217,7 @@
           }"
         />
         <session-admin-card
-          v-if="(safedHostVoting && estimateFinished) || hostEstimation !== ''"
+          v-if="(estimateFinished && hostVoting) || hostEstimation !== ''"
           :current-estimation="hostEstimation"
           :estimate-finished="estimateFinished"
           :highlight="highlightedMembers.includes(adminID) || highlightedMembers.length === 0"
@@ -291,21 +354,6 @@ export default defineComponent({
     BIconBarChartFill,
     SessionAdminCard,
   },
-  // props: {
-  //   adminID: { type: String, required: false, default: undefined },
-  //   sessionID: { type: String, required: false, default: undefined },
-  //   voteSetJson: { type: String, required: false, default: undefined },
-  //   sessionState: { type: String, required: false, default: undefined },
-  //   timerSecondsString: { type: String, required: false, default: undefined },
-  //   hostVoting: { type: String, required: true },
-  //   startNewSessionOnMountedString: {
-  //     type: String,
-  //     required: false,
-  //     default: "false",
-  //   },
-  //   userStoryMode: { type: String, required: false, default: undefined },
-  //   rejoined: { type: String, required: false, default: "true" },
-  // },
   setup() {
     const store = useDiveniStore();
     const toast = useToast();
@@ -323,15 +371,6 @@ export default defineComponent({
       userStoryMode: history.state.userStoryMode,
       hostVoting: history.state.hostVoting as boolean,
       rejoined: history.state.rejoined,
-      //props copy
-      // session_adminID: "" as string | undefined,
-      // session_sessionID: "" as string,
-      // session_voteSetJson: "" as string | undefined,
-      // session_sessionState: "" as string | undefined,
-      // session_timerSecondsString: "" as string | undefined,
-      // session_userStoryMode: "" as string,
-      // session_hostVoting: false,
-      //data
       index: 0,
       stageLabelReady: "Ready",
       stageLabelWaiting: "Waiting room",
@@ -342,7 +381,7 @@ export default defineComponent({
       estimateFinished: false,
       session: {},
       hostEstimation: "",
-      safedHostVoting: false,
+      autoReveal: false,
     };
   },
   computed: {
@@ -383,7 +422,6 @@ export default defineComponent({
         setTimeout(() => {
           this.registerAdminPrincipalOnBackend();
           this.subscribeWSMemberUpdated();
-          this.requestMemberUpdate();
           this.subscribeOnTimerStart();
           if (this.rejoined === "false") {
             this.subscribeWSNotification();
@@ -393,10 +431,8 @@ export default defineComponent({
           }
         }, 300);
         setTimeout(() => {
-          if (this.members.length === 0) {
-            this.requestMemberUpdate();
-          }
-        }, 300);
+          this.requestMemberUpdate();
+        }, 500);
       }
     },
     highlightedMembers(highlights) {
@@ -409,11 +445,10 @@ export default defineComponent({
       }
     },
     membersEstimated() {
-      if (this.membersPending.length === 0 && this.membersEstimated.length > 0) {
-        if (this.safedHostVoting && this.hostEstimation !== "") {
+      if (this.membersPending.length === 0 && this.membersEstimated.length > 0 && this.autoReveal) {
+        if (this.hostVoting && this.hostEstimation !== "") {
           this.estimateFinished = true;
-        }
-        if (!this.safedHostVoting) {
+        } else if (!this.hostVoting) {
           this.estimateFinished = true;
         }
       }
@@ -661,46 +696,50 @@ export default defineComponent({
     },
     sendVotingFinishedMessage() {
       if (!this.estimateFinished) {
+        this.estimateFinished = true;
         const endPoint = Constants.webSocketVotingFinishedRoute;
         this.store.sendViaBackendWS(endPoint);
-        this.estimateFinished = true;
       }
     },
     sendRestartMessage() {
       this.estimateFinished = false;
       this.hostEstimation = "";
-      this.safedHostVoting = this.hostVoting;
       const endPoint = Constants.webSocketRestartPlanningRoute;
-      this.store.sendViaBackendWS(endPoint, this.hostVoting);
+      this.store.sendViaBackendWS(
+        endPoint,
+        JSON.stringify({
+          hostVoting: this.hostVoting,
+          autoReveal: this.autoReveal,
+        })
+      );
     },
     goToLandingPage() {
       this.$router.push({ name: "LandingPage" });
     },
     onPlanningStarted() {
       this.planningStart = true;
-      this.safedHostVoting = this.hostVoting;
     },
     vote(vote: string) {
       this.hostEstimation = vote;
       const endPoint = `${Constants.webSocketVoteRouteAdmin}`;
-      this.store.sendViaBackendWS(endPoint, vote);
+      this.store.sendViaBackendWS(
+        endPoint,
+        JSON.stringify({
+          vote: this.hostEstimation,
+          autoReveal: this.autoReveal,
+        })
+      );
     },
   },
 });
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
+<style lang="scss" scoped>
 .newVotes {
   text-align: center;
   margin-left: auto;
   margin-right: auto;
-}
-
-.hostVotingButtons {
-  position: relative;
-  top: 50%;
-  transform: translateY(-50%);
 }
 
 .optionButtonCol {
@@ -720,14 +759,11 @@ export default defineComponent({
   max-height: 500px;
 }
 
-#sessionCloseCol {
-  min-width: 200px;
-}
-
 .headers {
   display: flex;
   align-items: center;
   min-height: 20vh;
+  margin-right: 130px;
 }
 
 .bIcons {
@@ -749,6 +785,11 @@ export default defineComponent({
 }
 
 .optionButton:focus {
+  background-color: var(--textAreaColourHovered) !important;
+  color: var(--text-primary-color) !important;
+}
+
+.optionButton:disabled {
   background-color: var(--textAreaColourHovered) !important;
   color: var(--text-primary-color) !important;
 }

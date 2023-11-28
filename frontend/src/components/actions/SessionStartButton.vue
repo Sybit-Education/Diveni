@@ -21,6 +21,7 @@ export default defineComponent({
   name: "SessionStartButton",
   props: {
     hostVoting: { type: Boolean, required: true },
+    autoReveal: { type: Boolean, required: false },
   },
   setup() {
     const store = useDiveniStore();
@@ -35,7 +36,13 @@ export default defineComponent({
   methods: {
     sendStartEstimationMessages() {
       const endPoint = Constants.webSocketStartPlanningRoute;
-      this.store.sendViaBackendWS(endPoint, this.hostVoting);
+      this.store.sendViaBackendWS(
+        endPoint,
+        JSON.stringify({
+          hostVoting: this.hostVoting,
+          autoReveal: this.autoReveal,
+        })
+      );
       this.$emit("clicked");
     },
   },

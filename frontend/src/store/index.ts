@@ -24,6 +24,7 @@ export const useDiveniStore = defineStore("diveni-store", {
     selectedUserStoryIndex: null as number | null,
     hostEstimation: undefined as AdminVote | undefined,
     hostVoting: false,
+    autoReveal: false,
   }),
   actions: {
     setMembers(members) {
@@ -49,6 +50,13 @@ export const useDiveniStore = defineStore("diveni-store", {
     subscribeOnBackendWSMemberUpdates() {
       this.stompClient?.subscribe(Constants.webSocketMemberListenRoute, (frame) => {
         this.memberUpdates = this.memberUpdates.concat([frame.body]);
+      });
+    },
+    subscribeOnBackendWSMemberUpdatesWithAutoReveal() {
+      this.stompClient?.subscribe(Constants.webSocketMemberAutoRevealListenRoute, (frame) => {
+        const splittedFrame = frame.body.split(" ");
+        this.autoReveal = splittedFrame[1] === "true";
+        this.memberUpdates = this.memberUpdates.concat([splittedFrame[0]]);
       });
     },
     subscribeOnBackendWSStoriesUpdated() {

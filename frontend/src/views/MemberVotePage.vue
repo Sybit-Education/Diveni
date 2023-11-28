@@ -273,6 +273,9 @@ export default defineComponent({
     isStartVoting(): boolean {
       return this.memberUpdates.at(-1) === Constants.memberUpdateCommandStartVoting;
     },
+    isAutoRevealActive(): boolean {
+      return this.store.autoReveal;
+    },
     votingFinished(): boolean {
       return this.memberUpdates.at(-1) === Constants.memberUpdateCommandVotingFinished;
     },
@@ -394,7 +397,13 @@ export default defineComponent({
     onSendVote({ vote }) {
       this.draggedVote = vote;
       const endPoint = `${Constants.webSocketVoteRoute}`;
-      this.store.sendViaBackendWS(endPoint, vote);
+      this.store.sendViaBackendWS(
+        endPoint,
+        JSON.stringify({
+          vote: vote,
+          autoReveal: this.isAutoRevealActive,
+        })
+      );
     },
     goToJoinPage() {
       this.$router.push({ name: "JoinPage" });
@@ -413,8 +422,8 @@ export default defineComponent({
 });
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
+<style lang="scss" scoped>
 #header {
   color: var(--text-primary-color);
 }

@@ -1,5 +1,5 @@
-import axios from "axios";
 import { useDiveniStore } from "./store";
+import axios, { AxiosRequestHeaders } from "axios";
 
 const setup = (): void => {
   axios.interceptors.request.use((config) => {
@@ -9,7 +9,7 @@ const setup = (): void => {
       tokenId = localStorage.getItem("tokenId") || undefined;
     }
     if (!config.headers) {
-      config.headers = {};
+      config.headers = {} as AxiosRequestHeaders;
     }
     if (tokenId) {
       config.headers["X-Token-ID"] = tokenId;
