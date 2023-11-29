@@ -11,9 +11,8 @@ import VueAxios from "vue-axios";
 import App from "./App.vue";
 import "./registerServiceWorker";
 import router from "./router";
-import { useDiveniStore } from "@/store";
 import setupInterceptors from "./interceptors";
-import { createPinia } from 'pinia';
+import { createPinia } from "pinia";
 
 import { BootstrapVue, IconsPlugin, ModalPlugin } from "bootstrap-vue";
 
@@ -37,7 +36,7 @@ setupInterceptors();
 
 const app = createApp(App);
 
-const pinia = createPinia()
+const pinia = createPinia();
 
 app
   .use(VueAxios, axios)

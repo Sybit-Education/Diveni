@@ -111,14 +111,27 @@
     </h4>
     <b-row class="mt-3">
       <b-col>
-        <b-form-radio-group buttons>
-          <b-form-radio v-model="hostVoting" value="true">
+        <div id="timer-control">
+          <b-button
+            class="btn-sm btn-outline-light"
+            @click="
+              hostVoting = true;
+              $event.target.blur();
+            "
+          >
             {{ t("session.prepare.step.selection.hostVoting.hostVotingOn") }}
-          </b-form-radio>
-          <b-form-radio v-model="hostVoting" value="false">
+          </b-button>
+          <div id="timer-value" class="font-weight-bolder px-2 text-center"></div>
+          <b-button
+            class="btn-sm btn-outline-light"
+            @click="
+              hostVoting = false;
+              $event.target.blur();
+            "
+          >
             {{ t("session.prepare.step.selection.hostVoting.hostVotingOff") }}
-          </b-form-radio>
-        </b-form-radio-group>
+          </b-button>
+        </div>
       </b-col>
     </b-row>
     <h4 class="mt-3">
