@@ -13,6 +13,7 @@ import "./registerServiceWorker";
 import router from "./router";
 import { useDiveniStore } from "@/store";
 import setupInterceptors from "./interceptors";
+import { createPinia } from 'pinia';
 
 import { BootstrapVue, IconsPlugin, ModalPlugin } from "bootstrap-vue";
 
@@ -35,11 +36,14 @@ setupInterceptors();
 // Vue.config.productionTip = false;
 
 const app = createApp(App);
+
+const pinia = createPinia()
+
 app
   .use(VueAxios, axios)
   .use(router)
   .use(BootstrapVue)
-  .use(useDiveniStore)
+  .use(pinia)
   .use(i18n)
   .use(Toast, {})
   .mount("#app");

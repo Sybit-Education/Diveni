@@ -126,58 +126,6 @@
             <b-icon-eye-fill class="bIcons" />
             {{ t("page.session.during.estimation.buttons.autoRevealOn") }}
           </b-button>
-          <b-button
-            v-if="!autoReveal"
-            class="mr-3 optionButton"
-            variant="outline-dark"
-            :disabled="planningStart && !estimateFinished"
-            @click="
-              autoReveal = true;
-              $event.target.blur();
-            "
-          >
-            <b-icon-eye-slash-fill class="bIcons" />
-            {{ t("page.session.during.estimation.buttons.autoRevealOff") }}
-          </b-button>
-          <b-button
-            v-if="autoReveal"
-            class="mr-3 optionButton"
-            variant="outline-dark"
-            :disabled="planningStart && !estimateFinished"
-            @click="
-              autoReveal = false;
-              $event.target.blur();
-            "
-          >
-            <b-icon-eye-fill class="bIcons" />
-            {{ t("page.session.during.estimation.buttons.autoRevealOn") }}
-          </b-button>
-          <b-button
-            v-if="!autoReveal"
-            class="mr-3 optionButton"
-            variant="outline-dark"
-            :disabled="planningStart && !estimateFinished"
-            @click="
-              autoReveal = true;
-              $event.target.blur();
-            "
-          >
-            <b-icon-eye-slash-fill class="bIcons" />
-            {{ $t("page.session.during.estimation.buttons.autoRevealOff") }}
-          </b-button>
-          <b-button
-            v-if="autoReveal"
-            class="mr-3 optionButton"
-            variant="outline-dark"
-            :disabled="planningStart && !estimateFinished"
-            @click="
-              autoReveal = false;
-              $event.target.blur();
-            "
-          >
-            <b-icon-eye-fill class="bIcons" />
-            {{ $t("page.session.during.estimation.buttons.autoRevealOn") }}
-          </b-button>
         </b-col>
         <b-col cols="auto">
           <estimate-timer

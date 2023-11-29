@@ -1,7 +1,7 @@
 import SockJS from "sockjs-client";
 import webstomp, { Client } from "webstomp-client";
 import Constants from "../constants";
-import { createPinia, defineStore } from "pinia";
+import { defineStore } from "pinia";
 import Project from "@/model/Project";
 import UserStory from "@/model/UserStory";
 import { Notification } from "@/model/Notification";
