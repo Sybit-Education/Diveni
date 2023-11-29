@@ -11,7 +11,7 @@ import VueAxios from "vue-axios";
 import App from "./App.vue";
 import "./registerServiceWorker";
 import router from "./router";
-import { store } from "./store";
+import { useDiveniStore } from "@/store";
 import setupInterceptors from "./interceptors";
 
 import { BootstrapVue, IconsPlugin, ModalPlugin } from "bootstrap-vue";
@@ -39,7 +39,7 @@ app
   .use(VueAxios, axios)
   .use(router)
   .use(BootstrapVue)
-  .use(store)
+  .use(useDiveniStore)
   .use(i18n)
   .use(Toast, {})
   .mount("#app");

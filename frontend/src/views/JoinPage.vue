@@ -136,7 +136,7 @@ export default defineComponent({
       this.store.subscribeOnBackendWSMemberUpdates();
     },
     subscribeWSMemberUpdatesWithAutoReveal() {
-      this.$store.commit("subscribeOnBackendWSMemberUpdatesWithAutoReveal");
+      this.store.subscribeOnBackendWSMemberUpdatesWithAutoReveal();
     },
     subscribeWSNotification() {
       this.store.subscribeOnBackendWSNotify();
