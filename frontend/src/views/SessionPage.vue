@@ -37,17 +37,10 @@
         </b-button>
       </b-col>
       <b-col cols="auto" class="mr-auto">
-        <copy-session-id-popup
-          v-if="planningStart"
-          class="float-end"
-          :session-id="sessionID"
-        />
+        <copy-session-id-popup v-if="planningStart" class="float-end" :session-id="sessionID" />
       </b-col>
       <b-col cols="auto">
-        <session-close-button
-          :is-planning-start="planningStart"
-          :user-story-mode="userStoryMode"
-        />
+        <session-close-button :is-planning-start="planningStart" :user-story-mode="userStoryMode" />
       </b-col>
     </b-row>
 

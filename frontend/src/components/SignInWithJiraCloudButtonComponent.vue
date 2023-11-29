@@ -25,16 +25,16 @@ import { useI18n } from "vue-i18n";
 
 export default defineComponent({
   name: "SignInWithJiraCloudButtonComponent",
-  setup() {
-    const { t } = useI18n();
-    return { t };
-  },
   props: {
     disabled: {
       type: Boolean,
       required: false,
       default: false,
     },
+  },
+  setup() {
+    const { t } = useI18n();
+    return { t };
   },
   methods: {
     async redirectToJira() {

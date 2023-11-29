@@ -12,7 +12,7 @@
         <b-icon icon="x" scale="2" />
       </b-button>
     </b-popover>
-    <b-modal :id="`modal${member.memberID}`" v-if="showModal">
+    <b-modal v-if="showModal" :id="`modal${member.memberID}`">
       <template #modal-header>
         <h4>{{ t("page.session.during.modal.title") }}</h4>
       </template>

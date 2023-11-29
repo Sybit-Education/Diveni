@@ -21,6 +21,10 @@ import { useI18n } from "vue-i18n";
 
 export default defineComponent({
   name: "LocaleDropdown",
+  setup() {
+    const { t } = useI18n();
+    return { t };
+  },
   data() {
     return {
       locales: {
@@ -34,10 +38,6 @@ export default defineComponent({
         uk: "українська",
       },
     };
-  },
-  setup() {
-    const { t } = useI18n();
-    return { t };
   },
   methods: {
     setLocale(locale) {

@@ -16,6 +16,12 @@ import { useI18n } from "vue-i18n";
 
 export default defineComponent({
   name: "JiraCallbackPage",
+  setup() {
+    const store = useDiveniStore();
+    const toast = useToast();
+    const { t } = useI18n();
+    return { store, toast, t };
+  },
   created() {
     const urlSearchParams = new URLSearchParams(window.location.search);
     const params = Object.fromEntries(urlSearchParams.entries());
@@ -26,12 +32,6 @@ export default defineComponent({
       return;
     }
     this.verifyCode(params.code);
-  },
-  setup() {
-    const store = useDiveniStore();
-    const toast = useToast();
-    const { t } = useI18n();
-    return { store, toast, t };
   },
   methods: {
     async verifyCode(code: string) {
