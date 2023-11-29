@@ -56,4 +56,5 @@ export default defineComponent({
 });
 </script>
 
-<style scoped></style>
+<!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
+<style lang="scss" scoped></style>

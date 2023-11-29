@@ -39,6 +39,11 @@ body {
   color: var(--text-primary-color);
 }
 
+body {
+  background-color: var(--background-color-primary);
+  color: var(--text-primary-color);
+}
+
 a {
   color: var(--link-color);
 }
@@ -68,14 +73,21 @@ a {
   &:disabled, &.disabled:hover {
     background-color: var(--primary-button);
     border-color: $gray-600;
-  }
-  &:focus {
-    background-color: var(--primary-button-hovered);
-    color: var(--text-primary-color);
-  }
-  &:active {
-    color: var(--text-color-hover) !important;
-  }
+    &:hover {
+      background-color: var(--primary-button-hovered);
+      color: var(--text-color-hover);
+    }
+    &:disabled, &.disabled:hover {
+      background-color: var(--primary-button);
+      border-color: $gray-600;
+    }
+    &:focus {
+        background-color: var(--primary-button-hovered);
+        color: var(--text-primary-color);
+      }
+    &:active {
+      color: var(--text-color-hover) !important;
+    }
 }
 
 .btn-secondary {

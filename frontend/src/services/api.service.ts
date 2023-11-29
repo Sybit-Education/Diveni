@@ -103,8 +103,6 @@ class ApiService {
       .data as {
       amountOfAttendees: number;
       amountOfSessions: number;
-      amountofAttendeesLastMonth: number;
-      amountOfSessionsLastMonth: number;
       amountOfAttendeesCurrently: number;
       amountOfSessionsCurrently: number;
     };

@@ -111,7 +111,8 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
+<!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
+<style lang="scss" scoped>
 #join-card {
   border-radius: 20px;
   vertical-align: middle;

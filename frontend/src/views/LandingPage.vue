@@ -65,8 +65,11 @@
               <b-card-text>
                 You could import your user stories or connect JIRA to syncronize story points.
               </b-card-text>
-
-              <b-card-sub-title> Connecting to Issue-Tracker </b-card-sub-title>
+              <b-card-sub-title>
+                <a href="https://sybit-education.github.io/Diveni/guide" target="_blank">
+                  Connecting to Issue-Tracker</a
+                >
+              </b-card-sub-title>
               <b-card-text>
                 DIVENI could connect to issue trackers like Azure DevOps, JIRA Server and Cloud to
                 show user stories and update the voted results of your planning poker.
@@ -201,10 +204,11 @@ export default defineComponent({
 });
 </script>
 
+<!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
 <style lang="scss">
 .newSessionCard {
   .landingPageCardButton {
-    background-color: var(--primary-button);
+    background-color: var(--primary-button) !important;
     color: var(--text-primary-color);
   }
   .card-footer {
@@ -214,7 +218,7 @@ export default defineComponent({
 
 .joinSessionCard {
   .landingPageCardButton {
-    background-color: var(--secondary-button);
+    background-color: var(--secondary-button) !important;
   }
 
   .card-footer {
@@ -224,7 +228,7 @@ export default defineComponent({
 
 .reconnectSessionCard {
   .landingPageCardButton {
-    background-color: var(--reconnectButton);
+    background-color: var(--reconnectButton) !important;
   }
 
   .card-footer {
@@ -240,15 +244,10 @@ export default defineComponent({
 }
 
 .aboutDiveni {
-  border-radius: 2rem;
-  background-color: var(--landingPageCardsBackground);
-  box-shadow: 0 0 5px 10px var(--landingPageCardsBackground);
-  border: none;
+  box-shadow: 0 0 5px 5px var(--landingPageCardsBackground);
+  border: none !important;
 }
 
-.card-sub-title {
-  color: red;
-}
 .card-title {
   color: var(--text-primary-color);
 }
@@ -272,9 +271,10 @@ export default defineComponent({
 }
 
 .pictureCard {
-  background: transparent;
-  border: none;
+  background: transparent !important;
   align-items: center;
+  box-shadow: none !important;
+  border: none !important;
 }
 
 .landingPagePictures {

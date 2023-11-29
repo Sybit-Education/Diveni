@@ -61,6 +61,7 @@ export default defineComponent({
         console.debug("JoinPage: member connected to websocket");
         this.registerMemberPrincipalOnBackend();
         this.subscribeWSMemberUpdates();
+        this.subscribeWSMemberUpdatesWithAutoReveal();
         this.subscribeWSadminUpdatedUserStories();
         this.subscribeWSStorySelected();
         this.subscribeWSMemberUpdated();
@@ -134,6 +135,9 @@ export default defineComponent({
     subscribeWSMemberUpdates() {
       this.store.subscribeOnBackendWSMemberUpdates();
     },
+    subscribeWSMemberUpdatesWithAutoReveal() {
+      this.$store.commit("subscribeOnBackendWSMemberUpdatesWithAutoReveal");
+    },
     subscribeWSNotification() {
       this.store.subscribeOnBackendWSNotify();
     },
@@ -175,7 +179,9 @@ export default defineComponent({
   },
 });
 </script>
-<style scoped>
+
+<!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
+<style lang="scss" scoped>
 #heading {
   display: flex;
   justify-content: center;

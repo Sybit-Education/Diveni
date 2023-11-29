@@ -138,6 +138,7 @@ export default defineComponent({
         background-color: var(--text-primary-color);
         transition: border-radius 0.1s ease, width 0.1s ease, height 0.1s ease, left 0.1s ease,
         transform 0.1s ease;
+
       }
     }
   }

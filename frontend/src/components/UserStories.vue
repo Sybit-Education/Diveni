@@ -14,7 +14,7 @@
         />
       </b-input-group>
     </div>
-    <b-card-group id="userStoryBlock" class="my-3">
+    <b-card-group id="userStoryBlock" class="mt-2">
       <b-list-group-item
         v-for="(story, index) of userStories"
         id="userStoryRow"
@@ -74,7 +74,7 @@
 
     <b-button
       v-if="userStories.length < 1 && showEditButtons && !filterActive"
-      class="w-100 mb-3"
+      class="w-100 mb-5"
       variant="secondary"
       @click="
         addUserStory();
@@ -95,7 +95,7 @@
 
     <b-button
       v-if="userStories.length > 0 && showEditButtons && !filterActive"
-      class="w-100 mb-3"
+      class="w-100 mb-5"
       variant="secondary"
       @click="
         addUserStory();
@@ -214,6 +214,7 @@ export default defineComponent({
 });
 </script>
 
+<!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
 <style lang="scss" scoped>
 #searchIcon {
   rotate: 90deg;
@@ -257,7 +258,7 @@ export default defineComponent({
 }
 
 #userStoryBlock {
-  max-height: 200px; /*exactly 4 User Stories tall*/
+  max-height: 205px; /*exactly 4 User Stories tall*/
   border-radius: 1rem;
   overflow: scroll;
   -webkit-overflow-scrolling: touch;
@@ -279,5 +280,10 @@ export default defineComponent({
   background-color: var(--secondary-button);
   color: var(--text-primary-color);
   font-size: large;
+}
+
+.btn-secondary:not(:disabled):not(.disabled),
+.show > .btn-secondary.dropdown-toggle {
+  background-color: var(--primary-button) !important;
 }
 </style>

@@ -24,7 +24,9 @@ export default defineComponent({
   },
 });
 </script>
-<style scoped lang="scss">
+
+<!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
+<style lang="scss" scoped>
 .landing-page-card {
   border-radius: 2rem;
   background-color: var(--landingPageCardsBackground);

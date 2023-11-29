@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-button
-      variant="success"
+      variant="primary"
       @click="
         openSignInWithJiraTab();
         openModal();

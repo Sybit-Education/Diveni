@@ -89,32 +89,32 @@ export default defineComponent({
 });
 </script>
 
-<style>
+<style lang="scss">
 .toastui-editor-popup {
   background-color: var(--topNavigationBarColor);
 }
 
 .toastui-editor-defaultUI-toolbar {
-  background-color: #7a777773;
+  background-color: var(--editor-toolbar-switch-bg);
 }
 .toastui-editor-defaultUI-toolbar button {
-  border: none;
+  border: 12px;
   color: var(--text-primary-color);
 }
 
 .toastui-editor-defaultUI .ProseMirror {
-  background-color: #405c6c;
+  background-color: var(--editor-defaultui-container-bg);
 }
 
 .toastui-editor-md-container .toastui-editor-md-preview {
   overflow: auto;
   padding: 0 25px;
   height: 100%;
-  background-color: #405c6c;
+  background-color: var(--editor-defaultui-container-bg);
 }
 
 .toastui-editor-mode-switch {
-  background-color: #405c6c;
+  background-color: var(--editor-toolbar-switch-bg);
 }
 
 .toastui-editor-contents p {
@@ -133,7 +133,7 @@ export default defineComponent({
 }
 
 .lightMode .toastui-editor-mode-switch {
-  background-color: var(--textAreaColour);
+  background-color: var(--editor-toolbar-switch-bg);
 }
 
 .lightMode .toastui-editor-popup {
