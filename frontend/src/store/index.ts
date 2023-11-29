@@ -129,5 +129,3 @@ export const useDiveniStore = defineStore("diveni-store", {
     },
   },
 });
-
-export const store = createPinia();

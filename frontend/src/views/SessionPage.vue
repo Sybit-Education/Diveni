@@ -133,6 +133,32 @@
             <b-icon-eye-fill class="bIcons" />
             {{ t("page.session.during.estimation.buttons.autoRevealOn") }}
           </b-button>
+          <b-button
+            v-if="!autoReveal"
+            class="mr-3 optionButton"
+            variant="outline-dark"
+            :disabled="planningStart && !estimateFinished"
+            @click="
+              autoReveal = true;
+              $event.target.blur();
+            "
+          >
+            <b-icon-eye-slash-fill class="bIcons" />
+            {{ t("page.session.during.estimation.buttons.autoRevealOff") }}
+          </b-button>
+          <b-button
+            v-if="autoReveal"
+            class="mr-3 optionButton"
+            variant="outline-dark"
+            :disabled="planningStart && !estimateFinished"
+            @click="
+              autoReveal = false;
+              $event.target.blur();
+            "
+          >
+            <b-icon-eye-fill class="bIcons" />
+            {{ t("page.session.during.estimation.buttons.autoRevealOn") }}
+          </b-button>
         </b-col>
         <b-col cols="auto">
           <estimate-timer
@@ -429,10 +455,10 @@ export default defineComponent({
           if (this.startNewSessionOnMountedString === "true") {
             this.sendRestartMessage();
           }
+          setTimeout(() => {
+            this.requestMemberUpdate();
+          }, 600);
         }, 300);
-        setTimeout(() => {
-          this.requestMemberUpdate();
-        }, 500);
       }
     },
     highlightedMembers(highlights) {
@@ -455,7 +481,6 @@ export default defineComponent({
     },
   },
   async created() {
-    console.log("history: " + JSON.stringify(history.state));
     this.copyPropsToData();
     this.store.clearStoreWithoutUserStories();
     if (!this.sessionID || !this.adminID) {
@@ -536,7 +561,6 @@ export default defineComponent({
       // }
     },
     assignSessionToData(session) {
-      console.log("history: " + history.state);
       if (Object.keys(session).length !== 0) {
         this.adminID = session.adminID;
         this.sessionID = session.sessionID;

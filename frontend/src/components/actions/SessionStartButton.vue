@@ -13,7 +13,6 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import Constants from "@/constants";
-import Member from "@/model/Member";
 import { useDiveniStore } from "@/store";
 import { useI18n } from "vue-i18n";
 
