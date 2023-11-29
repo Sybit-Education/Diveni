@@ -3,8 +3,10 @@
     <h1>{{ headerText }}</h1>
     <b-card-group deck>
       <b-card class="statsCards">
-        <b-card-title style="text-align: center"
-          >{{ t("page.landing.meeting.analytics.allCreatedSessionsTitle") }}
+        <b-card-title
+          style="text-align: center"
+        >
+          {{ t("page.landing.meeting.analytics.allCreatedSessionsTitle") }}
         </b-card-title>
         <b-card-text>
           <h2 class="numbers">{{ tweenedOverAllSessions.toFixed(0) }}</h2>
