@@ -1,6 +1,7 @@
 <template>
   <div>
     <b-button
+      v-b-modal.modal-verification-code
       :disabled="disabled"
       variant="primary"
       @click="
@@ -96,6 +97,7 @@ export default defineComponent({
       window.open(tokenDto.url, "_blank")?.focus();
     },
     openModal() {
+      console.log("Test ???");
       this.$nextTick(() => {
         this.showVerificationModal = true;
       });
