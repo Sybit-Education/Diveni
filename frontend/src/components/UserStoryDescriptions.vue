@@ -10,6 +10,7 @@
       >
         <div class="list-group list-group-horizontal">
           <b-form-textarea
+            id="titleInputField"
             v-model="userStories[idx].title"
             rows="1"
             max-rows="3"
@@ -166,6 +167,15 @@ export default defineComponent({
 
 <!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
 <style lang="scss" scoped>
+#titleInputField {
+  background: var(--textAreaColour);
+  color: var(--text-primary-color);
+}
+
+#titleInputField::placeholder {
+  color: var(--text-primary-color);
+}
+
 .estimationDescription {
   border: 2px solid var(--estimateButtonBorder);
   border-radius: 13px;

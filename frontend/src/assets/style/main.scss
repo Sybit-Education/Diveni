@@ -63,6 +63,20 @@ a {
   }
 }
 
+.modal-content {
+  background-color: var(--background-color-primary);
+}
+
+.estimationDescription {
+  .btn {
+    color: var(--text-primary-color);
+  }
+}
+
+.navbar-expand {
+  flex-flow: wrap;
+}
+
 .btn-primary {
   background-color: var(--primary-button);
   border-color: $gray-600;

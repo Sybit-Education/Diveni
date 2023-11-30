@@ -126,7 +126,7 @@ export default defineComponent({
   components: {
     LandingPageCard,
     AnalyticsDataComponent,
-    CarouselComponent
+    CarouselComponent,
   },
   setup() {
     const store = useDiveniStore();
@@ -251,10 +251,11 @@ export default defineComponent({
 .aboutDiveni {
   box-shadow: 0 0 5px 5px var(--landingPageCardsBackground);
   border: none !important;
+  background: var(--landingPageCardsBackground) !important;
 }
 
 .card-title {
-  color: var(--text-primary-color);
+  color: var(--text-primary-color) !important;
 }
 
 .parent {

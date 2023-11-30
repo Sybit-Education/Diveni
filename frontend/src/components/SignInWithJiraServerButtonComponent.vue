@@ -97,7 +97,6 @@ export default defineComponent({
       window.open(tokenDto.url, "_blank")?.focus();
     },
     openModal() {
-      console.log("Test ???");
       this.$nextTick(() => {
         this.showVerificationModal = true;
       });

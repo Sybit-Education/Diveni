@@ -220,6 +220,16 @@ export default defineComponent({
   rotate: 90deg;
 }
 
+#search {
+  background: var(--textAreaColour);
+  color: var(--text-primary-color);
+  border-style: solid;
+}
+
+#search::placeholder {
+  color: var(--text-primary-color);
+}
+
 .selectedStory {
   background-color: transparent;
   border: none;
@@ -269,6 +279,10 @@ export default defineComponent({
   color: var(--text-primary-color);
   font-size: large;
   border: none;
+}
+
+#userStoryTitles::placeholder {
+  color: var(--text-primary-color);
 }
 
 #userStoryPicture {

@@ -8,7 +8,11 @@
         id="search"
         v-model="input"
         type="text"
-        :placeholder="t('page.session.before.userStories.placeholder.searchUserStories')"
+        :placeholder="
+          t(
+            'session.prepare.step.selection.mode.description.withIssueTracker.placeholder.searchProjects'
+          )
+        "
         @input="
           showResult = true;
           filterProjects();

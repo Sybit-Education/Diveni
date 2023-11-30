@@ -77,7 +77,7 @@
       <b-img v-else :src="require('@/assets/preparePage/P3D.png')" class="numberPictures" />
       {{ t("session.prepare.step.selection.time.title") }}
     </h4>
-    <div id="timer-control">
+    <div class="settings-control">
       <b-button
         class="btn-sm btn-outline-light"
         @click="
@@ -87,7 +87,7 @@
       >
         -
       </b-button>
-      <div id="timer-value" class="font-weight-bolder px-2 text-center">
+      <div id="setting-value" class="font-weight-bolder px-2 text-center">
         {{ timer == 0 ? "∞" : formatTimer }}
       </div>
       <b-button
@@ -111,7 +111,7 @@
     </h4>
     <b-row class="mt-3">
       <b-col>
-        <div id="timer-control">
+        <div class="settings-control">
           <b-button
             class="btn-sm btn-outline-light"
             @click="
@@ -121,7 +121,13 @@
           >
             {{ t("session.prepare.step.selection.hostVoting.hostVotingOn") }}
           </b-button>
-          <div id="timer-value" class="font-weight-bolder px-2 text-center"></div>
+          <div id="setting-value" class="font-weight-bolder px-2 text-center">
+            {{
+              hostVoting
+                ? t("session.prepare.step.selection.hostVoting.hostVotingOn")
+                : t("session.prepare.step.selection.hostVoting.hostVotingOff")
+            }}
+          </div>
           <b-button
             class="btn-sm btn-outline-light"
             @click="
@@ -384,12 +390,12 @@ export default defineComponent({
   background-color: var(--primary-button) !important;
 }
 
-#timer-control {
+.settings-control {
   display: flex;
   border-radius: $border-radius;
   background-color: var(--preparePageTimerBackground);
   font-size: 1.25rem;
-  width: 9rem;
+  width: 12rem;
   height: 2rem;
   padding: 0;
 
@@ -403,7 +409,7 @@ export default defineComponent({
     }
   }
 
-  #timer-value {
+  .setting-value {
     flex: content;
     width: 5rem;
   }

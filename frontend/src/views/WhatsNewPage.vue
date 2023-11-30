@@ -4,7 +4,7 @@
       <b-container>
         <b-jumbotron header="DIVENI">
           <template #lead>
-            {{ $t("page.landing.news.buttons.info.label") }}
+            {{ t("page.landing.news.buttons.info.label") }}
           </template>
         </b-jumbotron>
       </b-container>
@@ -45,21 +45,29 @@
   </div>
 </template>
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent, ref } from "vue";
 import apiService from "@/services/api.service";
 import { PullRequestDto } from "@/types";
 import Constants from "@/constants";
 import dateUtil from "@/utils/dateUtil";
+import { useI18n } from "vue-i18n";
 
-export default Vue.extend({
+export default defineComponent({
   name: "WhatsNewPage",
-  data() {
+  setup() {
+    const { t } = useI18n();
+    const perPage = ref(Constants.newsPageSize);
+    const currentPage = ref(1);
+    const apiPage = ref(1);
+    const loading = ref(false);
+    const items = ref([] as PullRequestDto[]);
     return {
-      perPage: Constants.newsPageSize,
-      currentPage: 1,
-      apiPage: 1,
-      items: [] as PullRequestDto[],
-      loading: false,
+      t,
+      perPage,
+      currentPage,
+      apiPage,
+      loading,
+      items,
     };
   },
   computed: {

@@ -10,7 +10,7 @@
     <b-popover id="popover" target="popover-link" triggers="hover" placement="top">
       <b-button
         variant="primary"
-        class="mx-1"
+        class="mx-1 my-1"
         @click="
           copyIdToClipboard();
           $event.target.blur();
@@ -19,7 +19,7 @@
         {{ t("page.session.before.copy.id") }}
       </b-button>
       <b-button
-        class="mx-1"
+        class="mx-1 my-1"
         variant="secondary"
         @click="
           copyLinkToClipboard();
@@ -28,18 +28,11 @@
       >
         {{ t("page.session.before.copy.link") }}
       </b-button>
-      <b-button
-        class="mx-1"
-        variant="info"
-        @click="
-          toggleQrModal();
-          $event.target.blur();
-        "
-      >
+      <b-button v-b-modal.qr-modal class="mx-1 my-1" variant="info" @click="$event.target.blur()">
         {{ t("page.session.before.copy.qr") }}
       </b-button>
     </b-popover>
-    <b-modal v-if="showQrModal" id="qr-modal" ok-only>
+    <b-modal id="qr-modal" ok-only>
       <template #modal-header>
         <h3>QR code</h3>
       </template>
@@ -69,7 +62,6 @@ export default defineComponent({
   },
   data: () => ({
     canCopy: false,
-    showQrModal: false,
   }),
   computed: {
     sessionLink(): string {
@@ -93,9 +85,6 @@ export default defineComponent({
       } else {
         this.copyToClipboardAlternative(this.sessionId);
       }
-    },
-    toggleQrModal() {
-      this.showQrModal = !this.showQrModal;
     },
     copyLinkToClipboard() {
       const text = this.sessionLink;
@@ -131,15 +120,15 @@ export default defineComponent({
 </script>
 
 <!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
-<style lang="scss" scoped>
+<style lang="scss">
 .copy-session {
   font-size: 1.75rem;
   color: var(--text-primary-color);
 }
 
 #popover {
-  max-width: 500px;
-  background-color: var(--popUpMenu);
+  max-width: 33vw;
+  background-color: var(--popUpMenu) !important;
 }
 
 #popover-link {

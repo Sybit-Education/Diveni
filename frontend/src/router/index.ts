@@ -56,7 +56,7 @@ const routes = [
     component: () => import("../views/WhatsNewPage.vue"),
   },
   {
-   path: "/:catchAll(.*)",
+    path: "/:catchAll(.*)",
     component: LandingPage,
   },
 ];

@@ -27,13 +27,15 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, ref } from "vue";
+import { defineComponent, ref } from "vue";
 import { useI18n } from "vue-i18n";
+
 export default defineComponent({
+  name: "CarouselComponent",
   setup() {
     const { t } = useI18n();
     const carousel = ref();
-    let updateValue = ref(0);
+    const updateValue = ref(0);
     const items = [
       {
         title: "Jira Server",
@@ -51,24 +53,32 @@ export default defineComponent({
       { title: "Gitlab", description: t("page.landing.meeting.connectors.gitlab.description") },
     ];
 
-    onMounted(() => {
-      setInterval(() => {
-        if (typeof carousel !== "undefined") {
-          const item = carousel[5];
-          if (
-            item &&
-            item.getBoundingClientRect().left >= 1 &&
-            item.getBoundingClientRect().left <= 2
-          ) {
-            updateValue.value = 0;
-          }
-        }
-        updateValue.value = updateValue.value + 0.04;
-      }, 10);
-    });
-    const allItems = computed(() => [...items, ...items]);
+    return { t, carousel, items, updateValue };
+  },
 
-    function getClass(item) {
+  computed: {
+    allItems() {
+      return [...this.items, ...this.items];
+    },
+  },
+
+  mounted() {
+    setInterval(() => {
+      if (typeof this.carousel !== "undefined") {
+        const item = this.carousel[5];
+        if (
+          item &&
+          item.getBoundingClientRect().left >= 1 &&
+          item.getBoundingClientRect().left <= 2
+        ) {
+          this.updateValue = 0;
+        }
+      }
+      this.updateValue = this.updateValue + 0.04;
+    }, 10);
+  },
+  methods: {
+    getClass(item) {
       switch (item.title) {
         case "Jira Server":
           return "jiraServer";
@@ -81,8 +91,7 @@ export default defineComponent({
         case "Gitlab":
           return "gitlab";
       }
-    }
-    return { updateValue, getClass, allItems, items };
+    },
   },
 });
 </script>
