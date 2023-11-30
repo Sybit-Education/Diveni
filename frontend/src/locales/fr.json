@@ -126,6 +126,13 @@
           "lastMonthTitle": "Last Month",
           "activeTitle": "Currently"
         }
+      },
+      "news": {
+        "buttons": {
+          "info": {
+            "label": "What's new"
+          }
+        }
       }
     },
     "join": {
