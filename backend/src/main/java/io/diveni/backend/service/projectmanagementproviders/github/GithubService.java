@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 
 import jakarta.annotation.PostConstruct;
-import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.entity.StringEntity;
