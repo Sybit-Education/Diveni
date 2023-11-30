@@ -58,8 +58,6 @@ For setting up the Github Connector, you need to generate a personal access toke
 6. Give the access token a name
 7. Select the repo scope and you are ready to create the token.
 
-For the last step you just need to add the personal access token to the `GITHUB_TOKEN` field in `backend/.env`.
-
 ## Docker
 
 The infrastructure is divided in several Docker containers:
@@ -146,13 +144,11 @@ services:
 | JIRA_SERVER_RANKNAME | Used for ordering of the issues. Depends on the Jira language and is either RANK or RANG | RANK |
 | AZURE_ORGANIZATION | The name of the organization in Azure | null
 | AZURE_CLIENTPAT | Azure Personal Access Token | null
-| GITHUB_TOKEN | Github Personal Access Token | null
 
 ::: warning Important:
 * In order to use Jira Cloud all parameters with prefix `JIRA_CLOUD_` are required to be set.
 * To use Jira Server all parameters with prefix `JIRA_SERVER_` have to be set.
 * To use Azure DevOps all parameters with prefix `AZURE_` have to be set.
-* To use Github you need to add your personal access token to the `GITHUB_TOKEN` field.
 :::
 
 
@@ -182,7 +178,6 @@ Update Docker Compose to environment variables
       - "JIRA_SERVER_RANKNAME=RANG"
       - "AZURE_ORGANIZATION=organization"
       - "AZURE_CLIENTPAT=[xxx]"
-      - "GITHUB_TOKEN=[xxx]"
 [...]
 ```
 :::
@@ -228,8 +223,6 @@ AZURE_ORGANIZATION=organization
 
 #Azure Personal Access Token
 AZURE_CLIENTPAT=xxx
-
-GITHUB_TOKEN=xxx
 ```
 Copy the configured file to `/backend/.env`
 

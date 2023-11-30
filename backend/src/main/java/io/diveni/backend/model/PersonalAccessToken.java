@@ -8,8 +8,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @EqualsAndHashCode
 @AllArgsConstructor
-@NoArgsConstructor
 public class PersonalAccessToken {
 
-  String code;
+  private final String code;
 }

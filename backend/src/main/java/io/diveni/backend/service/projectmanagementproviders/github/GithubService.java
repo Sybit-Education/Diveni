@@ -79,7 +79,13 @@ public class GithubService implements ProjectManagementProviderOAuth2 {
   public void executeRequestForPatch(String url, HttpMethod method, String token, Object body)
       throws IOException {
     LOGGER.debug("--> executeRequest()");
-    CloseableHttpClient httpClient = HttpClients.createDefault();
+    CloseableHttpClient httpClient;
+    try {
+      httpClient = HttpClients.createDefault();
+    } catch (Exception e) {
+      LOGGER.debug(e.getMessage());
+      throw new IOException();
+    }
     HttpUriRequest request =
         RequestBuilder.create(method.toString())
             .setUri(url)
@@ -88,7 +94,7 @@ public class GithubService implements ProjectManagementProviderOAuth2 {
             .setHeader("Authorization", "Bearer " + token)
             .setEntity(new StringEntity(body.toString()))
             .build();
-    CloseableHttpResponse response = httpClient.execute(request);
+    httpClient.execute(request);
     httpClient.close();
     LOGGER.debug("<-- executeRequest()");
   }
@@ -290,7 +296,7 @@ public class GithubService implements ProjectManagementProviderOAuth2 {
     return null;
   }
 
-  public TokenIdentifier getAccessToken(String authorizationCode, String origin, String pat) {
+  public TokenIdentifier getAccessTokenForGithub(String origin, String pat) {
     LOGGER.debug("--> getAccessToken(), origin={},", origin);
     val id = Utils.generateRandomID();
     accessTokens.put(id, pat);

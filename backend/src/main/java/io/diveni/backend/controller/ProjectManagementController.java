@@ -121,7 +121,7 @@ public class ProjectManagementController {
     LOGGER.debug("--> getOAuth2GithubAccessToken() , origin={}", origin);
     ResponseEntity<TokenIdentifier> response =
         new ResponseEntity<>(
-            githubService.getAccessToken("", origin, pat.getCode()), HttpStatus.OK);
+            githubService.getAccessTokenForGithub(origin, pat.getCode()), HttpStatus.OK);
     LOGGER.debug("<-- getGithubOAuth2AccessToken()");
     return response;
   }
