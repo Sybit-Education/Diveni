@@ -51,7 +51,12 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ "../views/AboutPage.vue"),
   },
   {
-    path: "/:catchAll(.*)",
+    path: "/whats-new",
+    name: "WhatsNewPage",
+    component: () => import("../views/WhatsNewPage.vue"),
+  },
+  {
+   path: "/:catchAll(.*)",
     component: LandingPage,
   },
 ];
