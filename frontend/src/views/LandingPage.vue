@@ -105,6 +105,10 @@
         <a href="https://docs.diveni.io/">documentation</a>.
       </p>
     </b-container>
+    <b-container class="py-3">
+      <h1 class="mt-5">Connectors</h1>
+    </b-container>
+    <CarouselComponent class="py-5"></CarouselComponent>
   </div>
 </template>
 
@@ -114,11 +118,13 @@ import LandingPageCard from "../components/LandingPageCard.vue";
 import Constants from "../constants";
 import Session from "../model/Session";
 import AnalyticsDataComponent from "../components/AnalyticsDataComponent.vue";
+import CarouselComponent from "@/components/CarouselComponent.vue";
 export default Vue.extend({
   name: "LandingPage",
   components: {
     LandingPageCard,
     AnalyticsDataComponent,
+    CarouselComponent
   },
   data() {
     return {
