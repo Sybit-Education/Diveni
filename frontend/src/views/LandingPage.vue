@@ -105,6 +105,10 @@
         <a href="https://docs.diveni.io/">documentation</a>.
       </p>
     </b-container>
+    <b-container class="py-3">
+      <h1 class="mt-5">Connectors</h1>
+    </b-container>
+    <CarouselComponent class="py-5"></CarouselComponent>
   </div>
 </template>
 
@@ -116,12 +120,13 @@ import Session from "../model/Session";
 import AnalyticsDataComponent from "../components/AnalyticsDataComponent.vue";
 import { useDiveniStore } from "@/store";
 import { useI18n } from "vue-i18n";
-
+import CarouselComponent from "@/components/CarouselComponent.vue";
 export default defineComponent({
   name: "LandingPage",
   components: {
     LandingPageCard,
     AnalyticsDataComponent,
+    CarouselComponent
   },
   setup() {
     const store = useDiveniStore();
