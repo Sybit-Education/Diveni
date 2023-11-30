@@ -2,17 +2,10 @@
   <div class="row">
     <div
       class="wrapper"
-      :style="{transform: `translateX(-${updateValue  * 4/ items.length}%)`}"
+      :style="{ transform: `translateX(-${(updateValue * 4) / items.length}%)` }"
     >
-      <div class="set"
-           v-for="(item, index) in allItems"
-           :key="index"
-           ref="carousel"
-      >
-        <b-card
-          class="connectorCards"
-          :class="getClass(item)"
-        >
+      <div v-for="(item, index) in allItems" :key="index" ref="carousel" class="set">
+        <b-card class="connectorCards" :class="getClass(item)">
           <b-card-title>
             <div>
               <b-img
@@ -20,10 +13,8 @@
                 :class="getClass(item) + 'Pic'"
               />
             </div>
-            <div
-              class="title"
-            >
-              {{item.title}}
+            <div class="title">
+              {{ item.title }}
             </div>
           </b-card-title>
           <b-card-text>
@@ -36,45 +27,48 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from "vue";
+import { computed, defineComponent, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
-
 export default defineComponent({
-  name: "CarouselComponent",
   setup() {
     const { t } = useI18n();
     const carousel = ref();
-    const updateValue = ref(0);
-    const items =  [
-      {title : "Jira Server", description: t("page.landing.meeting.connectors.jiraServer.description")},
-      {title : "Jira Cloud", description: t("page.landing.meeting.connectors.jiraCloud.description")},
-      {title: "Azure DevOps", description: t("page.landing.meeting.connectors.azureDevOps.description")},
-      {title : "Github", description: t("page.landing.meeting.connectors.github.description")},
-      {title : "Gitlab", description: t("page.landing.meeting.connectors.gitlab.description")},
+    let updateValue = ref(0);
+    const items = [
+      {
+        title: "Jira Server",
+        description: t("page.landing.meeting.connectors.jiraServer.description"),
+      },
+      {
+        title: "Jira Cloud",
+        description: t("page.landing.meeting.connectors.jiraCloud.description"),
+      },
+      {
+        title: "Azure DevOps",
+        description: t("page.landing.meeting.connectors.azureDevOps.description"),
+      },
+      { title: "Github", description: t("page.landing.meeting.connectors.github.description") },
+      { title: "Gitlab", description: t("page.landing.meeting.connectors.gitlab.description") },
     ];
 
-    return { t , carousel, items, updateValue};
-  },
-
-  mounted() {
+    onMounted(() => {
       setInterval(() => {
-        if (typeof this.carousel !== 'undefined') {
-          const item = this.carousel[5];
-          if (item && item.getBoundingClientRect().left >= 1 && item.getBoundingClientRect().left <= 2) {
-            this.updateValue = 0;
+        if (typeof carousel !== "undefined") {
+          const item = carousel[5];
+          if (
+            item &&
+            item.getBoundingClientRect().left >= 1 &&
+            item.getBoundingClientRect().left <= 2
+          ) {
+            updateValue.value = 0;
           }
         }
-        this.updateValue = this.updateValue + 0.04;
+        updateValue.value = updateValue.value + 0.04;
       }, 10);
-  },
+    });
+    const allItems = computed(() => [...items, ...items]);
 
-  computed: {
-    allItems() {
-      return [...this.items, ...this.items];
-    }
-  },
-  methods: {
-    getClass(item) {
+    function getClass(item) {
       switch (item.title) {
         case "Jira Server":
           return "jiraServer";
@@ -87,8 +81,9 @@ export default defineComponent({
         case "Gitlab":
           return "gitlab";
       }
-    },
-  }
+    }
+    return { updateValue, getClass, allItems, items };
+  },
 });
 </script>
 
@@ -120,7 +115,6 @@ export default defineComponent({
   max-width: 75%;
   border: none !important;
 }
-
 
 .jiraServer {
   background: rgba(0, 82, 204, 1);
@@ -157,7 +151,7 @@ export default defineComponent({
 }
 
 .azureDevOps {
-  background: rgba(137,196,255, 1);
+  background: rgba(137, 196, 255, 1);
   color: white;
 }
 
@@ -189,7 +183,13 @@ export default defineComponent({
 }
 
 .gitlab {
-  background: linear-gradient(90deg, rgba(252, 161, 33, 1) 0%, rgba(252, 109, 38, 1) 35%, rgba(226, 67, 41,1), rgba(169, 137, 245, 1) 100%);
+  background: linear-gradient(
+    90deg,
+    rgba(252, 161, 33, 1) 0%,
+    rgba(252, 109, 38, 1) 35%,
+    rgba(226, 67, 41, 1),
+    rgba(169, 137, 245, 1) 100%
+  );
   color: white;
   border: none;
 }
@@ -206,6 +206,6 @@ export default defineComponent({
 }
 
 .title {
-  color: white
+  color: white;
 }
 </style>
