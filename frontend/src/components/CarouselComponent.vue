@@ -60,7 +60,8 @@ export default Vue.extend({
   mounted() {
     setInterval(() => {
       if (typeof this.$refs.allItems !== 'undefined') {
-        if (this.$refs.allItems[5].getBoundingClientRect().left >= 1 && this.$refs.allItems[5].getBoundingClientRect().left <= 2) {
+        const item = this.$refs.allItems[5];
+        if (item && item.getBoundingClientRect().left >= 1 && item.getBoundingClientRect().left <= 2) {
           this.updateValue = 0;
         }
       }
