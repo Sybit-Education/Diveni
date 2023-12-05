@@ -12,7 +12,7 @@
     "licenses:update": "license-checker --json > ./public/frontend-dependencies.json"
   },
   "dependencies": {
-    "@egjs/vue3-flicking": "^4.11.0",
+    "@egjs/vue3-flicking": "^4.11.1",
     "@toast-ui/editor": "^3.2.2",
     "@toast-ui/editor-plugin-code-syntax-highlight": "^3.1.0",
     "@types/sockjs-client": "^1.5.3",
@@ -20,9 +20,9 @@
     "axios": "^0.27.2",
     "bootstrap": "^4.6.1",
     "bootstrap-vue": "^2.23.1",
-    "canvas-confetti": "^1.9.0",
-    "core-js": "^3.33.2",
-    "gsap": "^3.11.5",
+    "canvas-confetti": "^1.9.2",
+    "core-js": "^3.33.3",
+    "gsap": "^3.12.3",
     "hammerjs": "^2.0.8",
     "papaparse": "^5.4.1",
     "pinia": "^2.1.7",
