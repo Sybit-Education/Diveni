@@ -126,7 +126,7 @@ public class ProjectManagementController {
     }
     ResponseEntity<TokenIdentifier> response =
         new ResponseEntity<>(
-            gitlabService.getAccessToken("", origin, pat.getCode()), HttpStatus.OK);
+            gitlabService.getAccessTokenForGitlab(origin, pat.getCode()), HttpStatus.OK);
     LOGGER.debug("<-- getOAuth2AccessToken()");
     return response;
   }

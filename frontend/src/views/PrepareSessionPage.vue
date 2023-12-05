@@ -211,7 +211,8 @@ export default Vue.extend({
       this.isIssueTrackerEnabled =
         result.isJiraCloudEnabled === "true" ||
         result.isJiraServerEnabled === "true" ||
-        result.isAzureDevOpsEnabled === "true";
+        result.isAzureDevOpsEnabled === "true" ||
+        result.isGitlabEnabled === "true";
     });
     this.$store.commit("setUserStories", { stories: [] });
   },

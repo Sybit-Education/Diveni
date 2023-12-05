@@ -255,8 +255,8 @@ public class GitlabService implements ProjectManagementProviderOAuth2 {
     return null;
   }
 
-  public TokenIdentifier getAccessToken(String authorizationCode, String origin, String pat) {
-    LOGGER.debug("--> getAccessToken()");
+  public TokenIdentifier getAccessTokenForGitlab(String origin, String pat) {
+    LOGGER.debug("--> getAccessToken(), origin={}", origin);
     val id = Utils.generateRandomID();
     accessTokens.put(id, pat);
     LOGGER.debug("<-- getAccessToken()");
