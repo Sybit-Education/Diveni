@@ -11,4 +11,3 @@ public class PersonalAccessToken {
 
   private final String code;
 }
-
