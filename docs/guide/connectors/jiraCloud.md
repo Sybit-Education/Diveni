@@ -16,28 +16,28 @@ You must be an administrator of your JIRA Cloud instance to create an applicatio
 ::: details Set-Up Guide for Application Links
 #### 1. Step
 Go to your JIRA Cloud instance and click on the Settings icon in the top right corner. Then select `Products`.
-![JIRA Cloud Step 1](../img/jira/jira_cloud_step1.png)
+![Jira Cloud Step 1](/img/connector/jira_cloud_step1.png)
 
 #### 2. Step
 On the configuration page click on `Application links` under `INTEGRATIONS` on the left side.
-![JIRA Cloud Step 2](../img/jira/jira_cloud_step2.png)
+![JIRA Cloud Step 2](/img/jira/jira_cloud_step2.png)
 
 #### 3. Step
 Under Application Links, click the `Create link` button to create an application link.
-![JIRA Cloud Step 3](../img/jira/jira_cloud_step3.png)
+![JIRA Cloud Step 3](/img/jira/jira_cloud_step3.png)
 
 #### 4. Step
 A modal should appear to create a link. Make sure to select `Direct application link` and enter either `https://diveni.io` or the URL of
 your self-hosted instance if you do not want to use our official server. After that click on continue.
-![JIRA Cloud Step 4](../img/jira/jira_cloud_step4.png)
+![JIRA Cloud Step 4](/img/jira/jira_cloud_step4.png)
 
 If you get a warning that there was no response from the URL you entered, ignore it. Just click continue again.
-![JIRA Cloud Step 4 Warning](../img/jira/jira_cloud_step4_warning.png)
+![JIRA Cloud Step 4 Warning](/img/jira/jira_cloud_step4_warning.png)
 
 #### 5. Step
 Now a review link modal will pop up. All you have to do is enter `Diveni` as Application name and select `Generic Application` in the
 Application Type dropdown. Finally, make sure you check the `Create incoming link` checkbox and click on continue.
-![JIRA Cloud Step 5](../img/jira/jira_cloud_step5.png)
+![JIRA Cloud Step 5](/img/jira/jira_cloud_step5.png)
 
 #### 6. Step
 The last on your JIRA Cloud instance is to create an incoming link.
@@ -45,7 +45,7 @@ The last on your JIRA Cloud instance is to create an incoming link.
 2. Set `Diveni` as Consumer Name
 3. Enter the following key (or your own public key for self-hosted instances) as Public Key
 4. Click on continue and wait for the application link to be set up
-   ![JIRA Cloud Step 6](../img/jira/jira_cloud_step6.png)
+   ![JIRA Cloud Step 6](/img/jira/jira_cloud_step6.png)
    ::: tip Public Key
    MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC1dCI+Ks75SQKHIpxeefj+K8HE
    hihwn9L/8NAc+A8LDCUSOClL3CDO0H8oVQOvvQwJm8RQDO3TFL+dZfaC4oW6zTkj
@@ -57,20 +57,20 @@ The last on your JIRA Cloud instance is to create an incoming link.
 #### 7. Step
 When using Diveni, you click on `Planning with Issue-Tracker`. Then click on the `Sign in with Jira Cloud` button and a input field will appear.
 Enter the URL of your Atlassian instance. At the end click `Connect`.
-![JIRA Cloud Step 7](../img/jira/jira_cloud_step7.png)
+![JIRA Cloud Step 7](/img/jira/jira_cloud_step7.png)
 
 #### 8. Step
 A new browser tab will open asking you to allow access to your Atlassian instance. Simply click on `Allow`.
-![JIRA Cloud Step 8](../img/jira/jira_cloud_step8.png)
+![JIRA Cloud Step 8](/img/jira/jira_cloud_step8.png)
 
 #### 9. Step
 You will be redirected to a page that says `Access Approved`. From there you have to copy the verification code (marked red in the screenshot).
 Then you can close this browser tab and return to Diveni.
-![JIRA Cloud Step 8](../img/jira/jira_cloud_step9.png)
+![JIRA Cloud Step 9]( /img/jira/jira_cloud_step9.png)
 
 #### 10. Step
 Back at Diveni a modal will appear. There you have to enter the copied verification code into the input field and click `OK`.
-![JIRA Cloud Step 8](../img/jira/jira_cloud_step10.png)
+![JIRA Cloud Step 10](/img/jira/jira_cloud_step10.png)
 :::
 ## Configuration
 #### Available configuration
