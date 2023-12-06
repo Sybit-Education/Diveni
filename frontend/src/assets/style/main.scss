@@ -43,7 +43,6 @@ a {
   color: var(--link-color);
 }
 
-
 .jumbotron {
     background-color: var(--background-color-primary);
     color: var(--text-primary-color);
@@ -63,7 +62,8 @@ a {
     background-color: var(--primary-button);
     border-color: $gray-600;
     &:hover {
-        background-color: var(--primary-button-hovered);
+      background-color: var(--primary-button-hovered);
+      color: var(--text-color-hover);
     }
     &:disabled, &.disabled:hover {
       background-color: var(--primary-button);
@@ -73,13 +73,17 @@ a {
         background-color: var(--primary-button-hovered);
         color: var(--text-primary-color);
       }
+    &:active {
+      color: var(--text-color-hover) !important;
+    }
 }
 
 .btn-secondary {
   background-color: var(--secondary-button);
   border-color: $gray-600;
   &:hover {
-      background-color: var(--secondary-button-hovered);
+    background-color: var(--secondary-button-hovered);
+    color: var(--text-color-hover);
   }
   &:disabled, &.disabled:hover {
     background-color: var(--secondary-button);
@@ -89,30 +93,50 @@ a {
     background-color: var(--secondary-button-hovered);
     color: var(--text-primary-color);
   }
+  &:active {
+    color: var(--text-color-hover) !important;
+  }
 }
-
 
 .btn-secondary:not(:disabled):not(.disabled),
 .show > .btn-secondary.dropdown-toggle {
-  background-color: var(--blurredColour2);
+  background-color: var(--blurredColour8);
 }
 
 .btn-secondary:not(:disabled):not(.disabled):active,
 .btn-secondary:not(:disabled):not(.disabled).active,
 .show > .btn-secondary.dropdown-toggle {
-  background-color: var(--secondary-button);
+  background-color: var(--primary-button);
   border-color: var(--blurredColour2);
   border-width: 3px;
   font-weight: bolder;
 }
 
-.form-control {
-  background-color: var(--textAreaColour);
+.btn {
   color: var(--text-primary-color);
+  box-shadow: none;
+  border: none;
+}
+
+.btn:focus {
+  box-shadow: none;
+  border: none;
+}
+
+.form-control {
+  background-color: var(--preparePageNotSelectedTabBackground);
+  color: var(--text-primary-color);
+  border-width: 2px;
+
+  &:hover {
+    border-color: var(--secondary-button);
+  }
 
   &:focus {
     background-color: var(--textAreaColour);
     color: var(--text-primary-color);
+    border-color: var(--primary-button);
+    box-shadow: none !important;
   }
 
   &::placeholder {
@@ -121,7 +145,7 @@ a {
 }
 
 .card {
-  background-color: var(--background-color-primary);
+  background-color: var(--landingPageCardsBackground);
   .card-subtitle {
     color: var(--text-primary-color);
   }
@@ -130,4 +154,39 @@ a {
 .modal-content {
   background-color: var(--background-color-primary);
   color: var(--text-primary-color);
+}
+
+.modal-body {
+  color: var(--text-primary-color);
+}
+
+/* Hint-Popover */
+.popover-header {
+  background-color: var(--primary-button) !important;
+}
+
+.popover-body {
+  color: var(--text-primary-color) !important;
+}
+
+.selectedTab {
+  background-color: var(--primary-button) !important;
+}
+
+.selectedTextColor {
+  color: var(--text-primary-color) !important;
+}
+
+/* PreparePage - Tab Style */
+.notSelectedTab {
+  background-color: var(--preparePageNotSelectedTabBackground) !important;
+  border-color: var(--preparePageBorderTab) !important;
+}
+
+.notSelectedTab:hover {
+  background-color: var(--preparePageInActiveTabHover) !important;
+}
+
+.notSelectedTextColor {
+  color: var(--text-primary-color) !important;
 }

@@ -43,7 +43,7 @@
           :session-id="session_sessionID"
         />
       </b-col>
-      <b-col id="sessionCloseCol" cols="auto">
+      <b-col cols="auto">
         <session-close-button
           :is-planning-start="planningStart"
           :user-story-mode="session_userStoryMode"
@@ -429,7 +429,6 @@ export default Vue.extend({
         setTimeout(() => {
           this.registerAdminPrincipalOnBackend();
           this.subscribeWSMemberUpdated();
-          this.requestMemberUpdate();
           this.subscribeOnTimerStart();
           if (this.rejoined === "false") {
             this.subscribeWSNotification();
@@ -437,11 +436,9 @@ export default Vue.extend({
           if (this.startNewSessionOnMountedString === "true") {
             this.sendRestartMessage();
           }
-        }, 300);
-        setTimeout(() => {
-          if (this.members.length === 0) {
+          setTimeout(() => {
             this.requestMemberUpdate();
-          }
+          }, 600);
         }, 300);
       }
     },
@@ -754,18 +751,12 @@ export default Vue.extend({
 });
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
+<style lang="scss" scoped>
 .newVotes {
   text-align: center;
   margin-left: auto;
   margin-right: auto;
-}
-
-.hostVotingButtons {
-  position: relative;
-  top: 50%;
-  transform: translateY(-50%);
 }
 
 .optionButtonCol {
@@ -785,14 +776,11 @@ export default Vue.extend({
   max-height: 500px;
 }
 
-#sessionCloseCol {
-  min-width: 200px;
-}
-
 .headers {
   display: flex;
   align-items: center;
   min-height: 20vh;
+  margin-right: 130px;
 }
 
 .bIcons {
