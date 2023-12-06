@@ -16,7 +16,7 @@ You must be an administrator of your JIRA Cloud instance to create an applicatio
 ::: details Set-Up Guide for Application Links
 #### 1. Step
 Go to your JIRA Cloud instance and click on the Settings icon in the top right corner. Then select `Products`.
-![Jira Cloud Step 1](/img/connector/jira_cloud_step1.png)
+![Jira Cloud Step 1](/img/jira/jira_cloud_step1.png)
 
 #### 2. Step
 On the configuration page click on `Application links` under `INTEGRATIONS` on the left side.

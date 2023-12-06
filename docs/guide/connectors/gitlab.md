@@ -13,7 +13,7 @@ You need to have a Gitlab account and a project, which you want to utilise Diven
 3. Step: In the top left corner press on your profile Picture. Then you press on [Edit Profile](https://gitlab.com/-/profile).
 4. Step: Now you press on "[Access Tokens](https://gitlab.com/-/profile/personal_access_tokens)" on the left menubar.
 5. Step: Press on "Add new token"
-6. Step: Give your token a name, so you can recognise it later on.
+6. Step: Give your token a name so that you can reorganize it later.
 7. Step: For the selected Scopes you want to select api.
 8. Step: Press on Create personal access token
 9. Step: That's it. Now you just need to copy the key.

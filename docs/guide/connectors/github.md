@@ -14,7 +14,7 @@ You need to have a Github account and a repository, which you want to utilise Di
 4. Step: Now you scroll down a bit and press on [Developer settings](https://github.com/settings/apps)
 5. Step: Press on "[Personal access tokens](https://github.com/settings/tokens)"
 6. Step: Click on "[Generate new token (classic)](https://github.com/settings/tokens/new)"
-7. Step: Give your token a name so you can recognize it later on.
+7. Step: Give your token a name so that you can reorganize it later.
 8. Step: For the selected Scopes you want to select "repo" and "gist".
 9. Step: Click on "Generate Token"
 10. Step: That's it. Now you just need to copy the key.
