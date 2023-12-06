@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-
 @RestController
 @RequestMapping("/news")
 public class NewsController {
@@ -29,13 +28,15 @@ public class NewsController {
   }
 
   @GetMapping("/pull-requests")
-  public ResponseEntity<PullRequest[]> getPullRequests(@RequestParam(name = STATE_PARAM, defaultValue = "closed") String state,
-                                                       @RequestParam(name = SORT, defaultValue = "created") String sort,
-                                                       @RequestParam(name = SORT_DIRECTION, defaultValue = "asc") String direction,
-                                                       @RequestParam(name = IS_MERGED, defaultValue = "false") Boolean isMerged,
-                                                       @RequestParam(name = PER_PAGE_PARAM, defaultValue = "50") Integer perPage,
-                                                       @RequestParam(name = PAGE_PARAM, defaultValue = "1") Integer page) {
+  public ResponseEntity<PullRequest[]> getPullRequests(
+      @RequestParam(name = STATE_PARAM, defaultValue = "closed") String state,
+      @RequestParam(name = SORT, defaultValue = "created") String sort,
+      @RequestParam(name = SORT_DIRECTION, defaultValue = "asc") String direction,
+      @RequestParam(name = IS_MERGED, defaultValue = "false") Boolean isMerged,
+      @RequestParam(name = PER_PAGE_PARAM, defaultValue = "50") Integer perPage,
+      @RequestParam(name = PAGE_PARAM, defaultValue = "1") Integer page) {
 
-    return new ResponseEntity<>(service.getPullRequests(state,sort,direction, isMerged, perPage, page), HttpStatus.OK);
+    return new ResponseEntity<>(
+        service.getPullRequests(state, sort, direction, isMerged, perPage, page), HttpStatus.OK);
   }
 }

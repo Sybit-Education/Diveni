@@ -42,7 +42,8 @@ public class GithubApiService {
     this.client = client;
   }
 
-  public PullRequest[] getPullRequests(String state, String sort, String direction, boolean isMerged, int perPage, int page) {
+  public PullRequest[] getPullRequests(
+      String state, String sort, String direction, boolean isMerged, int perPage, int page) {
 
     HttpHeaders headers = new HttpHeaders();
     if (authToken != null && !authToken.equals("null")) {
@@ -54,25 +55,30 @@ public class GithubApiService {
 
     if (!VALID_STATES.contains(state)) {
       logger.warn("Bad request: {}", ErrorMessages.noPullRequestsMatchingCriteriaMessage);
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessages.invalidPullRequestStateMessage);
+      throw new ResponseStatusException(
+          HttpStatus.BAD_REQUEST, ErrorMessages.invalidPullRequestStateMessage);
     }
 
     if (perPage > MAX_PER_PAGE) {
       logger.warn("Bad request: {}", ErrorMessages.maxPullRequestsPerPageMessage);
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessages.maxPullRequestsPerPageMessage);
+      throw new ResponseStatusException(
+          HttpStatus.BAD_REQUEST, ErrorMessages.maxPullRequestsPerPageMessage);
     }
 
-    UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(url)
-      .queryParam(STATE_PARAM, state)
-      .queryParam(PAGE_PARAM, page)
-      .queryParam(PER_PAGE_PARAM, perPage)
-      .queryParam(SORT, sort).queryParam(SORT_DIRECTION, direction);
+    UriComponentsBuilder builder =
+        UriComponentsBuilder.fromUriString(url)
+            .queryParam(STATE_PARAM, state)
+            .queryParam(PAGE_PARAM, page)
+            .queryParam(PER_PAGE_PARAM, perPage)
+            .queryParam(SORT, sort)
+            .queryParam(SORT_DIRECTION, direction);
 
     ResponseEntity<PullRequest[]> data;
     try {
       data = client.exchange(builder.toUriString(), HttpMethod.GET, entity, PullRequest[].class);
     } catch (Exception ex) {
-      throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, ErrorMessages.serverLimitReachedMessage);
+      throw new ResponseStatusException(
+          HttpStatus.SERVICE_UNAVAILABLE, ErrorMessages.serverLimitReachedMessage);
     }
     PullRequest[] body = data.getBody();
 
