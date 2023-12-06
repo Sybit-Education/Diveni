@@ -1,18 +1,11 @@
 <template>
-  <div class="row">
+  <div class="row" @mouseenter="stopItems = true" @mouseleave="stopItems = false">
     <div
       class="wrapper"
-      :style="{transform: `translateX(-${updateValue  * 4/ items.length}%)`}"
+      :style="{ transform: `translateX(-${(updateValue * 4) / items.length}%)` }"
     >
-      <div class="set"
-           v-for="(item, index) in allItems"
-           :key="index"
-           ref="allItems"
-      >
-        <b-card
-          class="connectorCards"
-          :class="getClass(item)"
-        >
+      <div v-for="(item, index) in allItems" :key="index" ref="allItems" class="set">
+        <b-card class="connectorCards" :class="getClass(item)" @click="redirectToDoc(item)">
           <b-card-title>
             <div>
               <b-img
@@ -20,10 +13,8 @@
                 :class="getClass(item) + 'Pic'"
               />
             </div>
-            <div
-              class="title"
-            >
-              {{item.title}}
+            <div class="title">
+              {{ item.title }}
             </div>
           </b-card-title>
           <b-card-text>
@@ -40,32 +31,54 @@ import Vue from "vue";
 
 export default Vue.extend({
   name: "CarouselComponent",
-    data() {
-      return {
-        updateValue: 0,
-        items: [
-          {title : "Jira Server", description: this.$t("page.landing.meeting.connectors.jiraServer.description")},
-          {title : "Jira Cloud", description: this.$t("page.landing.meeting.connectors.jiraCloud.description")},
-          {title: "Azure DevOps", description: this.$t("page.landing.meeting.connectors.azureDevOps.description")},
-          {title : "Github", description: this.$t("page.landing.meeting.connectors.github.description")},
-          {title : "Gitlab", description: this.$t("page.landing.meeting.connectors.gitlab.description")},
-        ],
-      }
-    },
+  data() {
+    return {
+      updateValue: 0,
+      stopItems: false,
+      items: [
+        {
+          title: "Jira Server",
+          description: this.$t("page.landing.meeting.connectors.jiraServer.description"),
+        },
+        {
+          title: "Jira Cloud",
+          description: this.$t("page.landing.meeting.connectors.jiraCloud.description"),
+        },
+        {
+          title: "Azure DevOps",
+          description: this.$t("page.landing.meeting.connectors.azureDevOps.description"),
+        },
+        {
+          title: "Github",
+          description: this.$t("page.landing.meeting.connectors.github.description"),
+        },
+        {
+          title: "Gitlab",
+          description: this.$t("page.landing.meeting.connectors.gitlab.description"),
+        },
+      ],
+    };
+  },
   computed: {
     allItems() {
       return [...this.items, ...this.items];
-    }
+    },
   },
   mounted() {
     setInterval(() => {
-      if (typeof this.$refs.allItems !== 'undefined') {
+      if (typeof this.$refs.allItems !== "undefined") {
         const item = this.$refs.allItems[5];
-        if (item && item.getBoundingClientRect().left >= 1 && item.getBoundingClientRect().left <= 2) {
+        if (
+          item &&
+          item.getBoundingClientRect().left >= 1 &&
+          item.getBoundingClientRect().left <= 2
+        ) {
           this.updateValue = 0;
         }
       }
-      this.updateValue = this.updateValue + 0.04;
+      if (!this.stopItems) {
+        this.updateValue = this.updateValue + 0.04;
+      }
     }, 10);
   },
   methods: {
@@ -83,7 +96,26 @@ export default Vue.extend({
           return "gitlab";
       }
     },
-  }
+    redirectToDoc(item) {
+      switch (item.title) {
+        case "Jira Server":
+          window.open("https://docs.diveni.io/Diveni/guide/connectors/jiraServer");
+          return;
+        case "Jira Cloud":
+          window.open("https://docs.diveni.io/Diveni/guide/connectors/jiraCloud");
+          return;
+        case "Azure DevOps":
+          window.open("https://docs.diveni.io/Diveni/guide/connectors/azureDevOps");
+          return;
+        case "Github":
+          window.open("https://docs.diveni.io/Diveni/guide/connectors/github");
+          return;
+        case "Gitlab":
+          window.open("https://docs.diveni.io/Diveni/guide/connectors/gitlab");
+          return;
+      }
+    },
+  },
 });
 </script>
 
@@ -115,7 +147,6 @@ export default Vue.extend({
   max-width: 75%;
   border: none !important;
 }
-
 
 .jiraServer {
   background: rgba(0, 82, 204, 1);
@@ -152,7 +183,7 @@ export default Vue.extend({
 }
 
 .azureDevOps {
-  background: rgba(137,196,255, 1);
+  background: rgba(137, 196, 255, 1);
   color: white;
 }
 
@@ -184,7 +215,13 @@ export default Vue.extend({
 }
 
 .gitlab {
-  background: linear-gradient(90deg, rgba(252, 161, 33, 1) 0%, rgba(252, 109, 38, 1) 35%, rgba(226, 67, 41,1), rgba(169, 137, 245, 1) 100%);
+  background: linear-gradient(
+    90deg,
+    rgba(252, 161, 33, 1) 0%,
+    rgba(252, 109, 38, 1) 35%,
+    rgba(226, 67, 41, 1),
+    rgba(169, 137, 245, 1) 100%
+  );
   color: white;
   border: none;
 }
@@ -201,6 +238,6 @@ export default Vue.extend({
 }
 
 .title {
-  color: white
+  color: white;
 }
 </style>
