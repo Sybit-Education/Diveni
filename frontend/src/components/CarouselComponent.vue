@@ -27,47 +27,46 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent, ref } from "vue";
+import { useI18n } from "vue-i18n";
 
-export default Vue.extend({
+export default defineComponent({
   name: "CarouselComponent",
-  data() {
-    return {
-      updateValue: 0,
-      stopItems: false,
-      items: [
-        {
-          title: "Jira Server",
-          description: this.$t("page.landing.meeting.connectors.jiraServer.description"),
-        },
-        {
-          title: "Jira Cloud",
-          description: this.$t("page.landing.meeting.connectors.jiraCloud.description"),
-        },
-        {
-          title: "Azure DevOps",
-          description: this.$t("page.landing.meeting.connectors.azureDevOps.description"),
-        },
-        {
-          title: "Github",
-          description: this.$t("page.landing.meeting.connectors.github.description"),
-        },
-        {
-          title: "Gitlab",
-          description: this.$t("page.landing.meeting.connectors.gitlab.description"),
-        },
-      ],
-    };
+  setup() {
+    const { t } = useI18n();
+    const carousel = ref();
+    const updateValue = ref(0);
+    const stopItems = false; // maybe let
+    const items = [
+      {
+        title: "Jira Server",
+        description: t("page.landing.meeting.connectors.jiraServer.description"),
+      },
+      {
+        title: "Jira Cloud",
+        description: t("page.landing.meeting.connectors.jiraCloud.description"),
+      },
+      {
+        title: "Azure DevOps",
+        description: t("page.landing.meeting.connectors.azureDevOps.description"),
+      },
+      { title: "Github", description: t("page.landing.meeting.connectors.github.description") },
+      { title: "Gitlab", description: t("page.landing.meeting.connectors.gitlab.description") },
+    ];
+
+    return { t, carousel, items, updateValue, stopItems };
   },
+
   computed: {
     allItems() {
       return [...this.items, ...this.items];
     },
   },
+
   mounted() {
     setInterval(() => {
-      if (typeof this.$refs.allItems !== "undefined") {
-        const item = this.$refs.allItems[5];
+      if (typeof this.carousel !== "undefined") {
+        const item = this.carousel[5];
         if (
           item &&
           item.getBoundingClientRect().left >= 1 &&

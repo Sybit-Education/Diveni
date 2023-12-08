@@ -1,6 +1,6 @@
 <template>
   <b-container id="about-page">
-    <h1>{{ $t("general.about.label") }} Diveni</h1>
+    <h1>{{ t("general.about.label") }} Diveni</h1>
     <p>
       WebApp to do Planning Poker with remote teams using external issue tracker as source of
       stories.
@@ -53,26 +53,31 @@
     <ul>
       <li>
         <a href="/frontend-dependencies.json" target="_blank">
-          {{ $t("general.licenses.frontend") }}
+          {{ t("general.licenses.frontend") }}
         </a>
       </li>
       <li>
         <a href="/backend-dependencies.txt" target="_blank">
-          {{ $t("general.licenses.backend") }}
+          {{ t("general.licenses.backend") }}
         </a>
       </li>
       <li>
         <a href="https://crowdin.com/project/diveni" target="_blank">
-          {{ $t("general.licenses.translations") }}
+          {{ t("general.licenses.translations") }}
         </a>
       </li>
     </ul>
   </b-container>
 </template>
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
+import { useI18n } from "vue-i18n";
 
-export default Vue.extend({
+export default defineComponent({
   name: "AboutPage",
+  setup() {
+    const { t } = useI18n();
+    return { t };
+  },
 });
 </script>

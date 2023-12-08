@@ -9,7 +9,7 @@ interface Session {
 
   sessionState: string;
 
-  hostVoting: string;
+  hostVoting: boolean;
 }
 
 export default Session;
