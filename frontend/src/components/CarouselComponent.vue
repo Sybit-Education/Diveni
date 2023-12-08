@@ -145,6 +145,7 @@ export default defineComponent({
 .connectorCards {
   max-width: 75%;
   border: none !important;
+  cursor: pointer;
 }
 
 .jiraServer {
