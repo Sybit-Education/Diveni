@@ -5,8 +5,8 @@
         <h1>
           {{
             planningStart
-              ? $t("page.session.during.estimation.title")
-              : $t("page.session.before.title")
+              ? t("page.session.during.estimation.title")
+              : t("page.session.before.title")
           }}
         </h1>
       </b-col>
@@ -21,7 +21,7 @@
           "
         >
           <b-icon-eye-slash-fill class="bIcons" />
-          {{ $t("page.session.during.estimation.buttons.autoRevealOff") }}
+          {{ t("page.session.during.estimation.buttons.autoRevealOff") }}
         </b-button>
         <b-button
           v-if="autoReveal && !planningStart"
@@ -33,21 +33,14 @@
           "
         >
           <b-icon-eye-fill class="bIcons" />
-          {{ $t("page.session.during.estimation.buttons.autoRevealOn") }}
+          {{ t("page.session.during.estimation.buttons.autoRevealOn") }}
         </b-button>
       </b-col>
       <b-col cols="auto" class="mr-auto">
-        <copy-session-id-popup
-          v-if="planningStart"
-          class="float-end"
-          :session-id="session_sessionID"
-        />
+        <copy-session-id-popup v-if="planningStart" class="float-end" :session-id="sessionID" />
       </b-col>
       <b-col cols="auto">
-        <session-close-button
-          :is-planning-start="planningStart"
-          :user-story-mode="session_userStoryMode"
-        />
+        <session-close-button :is-planning-start="planningStart" :user-story-mode="userStoryMode" />
       </b-col>
     </b-row>
 
@@ -56,9 +49,9 @@
         <b-img :src="require('@/assets/LoadingCat.gif')" class="catGif" />
       </div>
       <copy-session-id-popup
-        :text-before-session-i-d="$t('page.session.before.text.beforeID')"
-        :session-id="session_sessionID"
-        :text-after-session-i-d="$t('page.session.before.text.afterID')"
+        :text-before-session-i-d="t('page.session.before.text.beforeID')"
+        :session-id="sessionID"
+        :text-after-session-i-d="t('page.session.before.text.afterID')"
         class="copy-popup"
       />
 
@@ -75,7 +68,7 @@
         <b-col class="text-center">
           <session-start-button
             :members="members"
-            :host-voting="session_hostVoting"
+            :host-voting="hostVoting"
             :auto-reveal="autoReveal"
             @clicked="onPlanningStarted"
           />
@@ -94,7 +87,7 @@
             "
           >
             <BIconArrowClockwise class="bIcons"></BIconArrowClockwise>
-            {{ $t("page.session.during.estimation.buttons.new") }}
+            {{ t("page.session.during.estimation.buttons.new") }}
           </b-button>
           <b-button
             class="mr-3 optionButton"
@@ -105,7 +98,7 @@
             "
           >
             <BIconBarChartFill class="bIcons"></BIconBarChartFill>
-            {{ $t("page.session.during.estimation.buttons.result") }}
+            {{ t("page.session.during.estimation.buttons.result") }}
           </b-button>
           <b-button
             v-if="!autoReveal"
@@ -118,7 +111,7 @@
             "
           >
             <b-icon-eye-slash-fill class="bIcons" />
-            {{ $t("page.session.during.estimation.buttons.autoRevealOff") }}
+            {{ t("page.session.during.estimation.buttons.autoRevealOff") }}
           </b-button>
           <b-button
             v-if="autoReveal"
@@ -131,7 +124,7 @@
             "
           >
             <b-icon-eye-fill class="bIcons" />
-            {{ $t("page.session.during.estimation.buttons.autoRevealOn") }}
+            {{ t("page.session.during.estimation.buttons.autoRevealOn") }}
           </b-button>
         </b-col>
         <b-col cols="auto">
@@ -146,7 +139,7 @@
       </b-row>
 
       <h4 v-if="membersPending.length > 0 && !estimateFinished" class="d-inline">
-        {{ $t("page.session.during.estimation.message.waitingFor") }}
+        {{ t("page.session.during.estimation.message.waitingFor") }}
         {{ membersPending.length }} /
         {{ membersPending.length + membersEstimated.length }}
       </h4>
@@ -160,19 +153,19 @@
         />
       </b-row>
       <hr class="my-5 breakingLine" />
-      <h4 v-if="!session_hostVoting">
-        {{ $t("page.session.during.estimation.message.finished") }}
+      <h4 v-if="!hostVoting">
+        {{ t("page.session.during.estimation.message.finished") }}
         {{ membersEstimated.length }} /
         {{ members.length }}
       </h4>
       <h4 v-else>
         <div v-if="hostEstimation == ''">
-          {{ $t("page.session.during.estimation.message.finished") }}
+          {{ t("page.session.during.estimation.message.finished") }}
           {{ membersEstimated.length }} /
           {{ members.length + 1 }}
         </div>
         <div v-else>
-          {{ $t("page.session.during.estimation.message.finished") }}
+          {{ t("page.session.during.estimation.message.finished") }}
           {{ membersEstimated.length + 1 }} /
           {{ members.length + 1 }}
         </div>
@@ -183,7 +176,7 @@
         style="max-height: 500px"
       >
         <session-admin-card
-          v-if="(estimateFinished && session_hostVoting) || hostEstimation !== ''"
+          v-if="(estimateFinished && hostVoting) || hostEstimation !== ''"
           :current-estimation="hostEstimation"
           :estimate-finished="estimateFinished"
           :highlight="highlightedMembers.includes(adminID) || highlightedMembers.length === 0"
@@ -217,13 +210,13 @@
           }"
         />
         <session-admin-card
-          v-if="(estimateFinished && session_hostVoting) || hostEstimation !== ''"
+          v-if="(estimateFinished && hostVoting) || hostEstimation !== ''"
           :current-estimation="hostEstimation"
           :estimate-finished="estimateFinished"
           :highlight="highlightedMembers.includes(adminID) || highlightedMembers.length === 0"
         />
       </b-row>
-      <div v-if="session_hostVoting && estimateFinished === false">
+      <div v-if="hostVoting && !estimateFinished">
         <div v-if="!estimateFinished">
           <hr class="breakingLine" />
           <h4 class="d-inline">Your Estimation</h4>
@@ -242,14 +235,14 @@
         </div>
       </div>
     </div>
-    <b-row v-if="session_userStoryMode !== 'NO_US'" class="mt-4">
+    <b-row v-if="userStoryMode !== 'NO_US'" class="mt-4">
       <b-col>
         <user-story-sum-component />
       </b-col>
     </b-row>
-    <b-row v-if="session_userStoryMode !== 'NO_US'">
+    <b-row v-if="userStoryMode !== 'NO_US'">
       <b-col v-if="!isMobile" cols="7">
-        <div v-if="session_userStoryMode === 'US_JIRA'" class="refreshUserstories">
+        <div v-if="userStoryMode === 'US_JIRA'" class="refreshUserstories">
           <b-button
             class="w-100 mb-3 refreshButton"
             @click="
@@ -257,7 +250,7 @@
               $event.target.blur();
             "
           >
-            {{ $t("page.session.before.refreshStories") }}
+            {{ t("page.session.before.refreshStories") }}
           </b-button>
         </div>
         <user-stories
@@ -271,7 +264,7 @@
         />
       </b-col>
       <b-col v-else cols="12">
-        <div v-if="session_userStoryMode === 'US_JIRA'" class="refreshUserstories">
+        <div v-if="userStoryMode === 'US_JIRA'" class="refreshUserstories">
           <b-button
             class="w-100 mb-3 refreshButton"
             @click="
@@ -279,7 +272,7 @@
               $event.target.blur();
             "
           >
-            {{ $t("page.session.before.refreshStories") }}
+            {{ t("page.session.before.refreshStories") }}
           </b-button>
         </div>
         <user-stories
@@ -318,7 +311,6 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
 import Constants from "../constants";
 import Member from "../model/Member";
 import UserStories from "../components/UserStories.vue";
@@ -329,14 +321,17 @@ import confetti from "canvas-confetti";
 import NotifyHostComponent from "../components/NotifyHostComponent.vue";
 import apiService from "@/services/api.service";
 import UserStorySumComponent from "@/components/UserStorySum.vue";
-import Project from "../model/Project";
 import KickUserWrapper from "@/components/KickUserWrapper.vue";
 import SessionCloseButton from "@/components/actions/SessionCloseButton.vue";
 import SessionStartButton from "@/components/actions/SessionStartButton.vue";
 import { BIconArrowClockwise, BIconBarChartFill } from "bootstrap-vue";
+import { defineComponent } from "vue";
+import { useDiveniStore } from "@/store";
+import { useToast } from "vue-toastification";
+import { useI18n } from "vue-i18n";
 import SessionAdminCard from "@/components/SessionAdminCard.vue";
 
-export default Vue.extend({
+export default defineComponent({
   name: "SessionPage",
   components: {
     SessionStartButton,
@@ -352,32 +347,23 @@ export default Vue.extend({
     BIconBarChartFill,
     SessionAdminCard,
   },
-  props: {
-    adminID: { type: String, required: false, default: undefined },
-    sessionID: { type: String, required: false, default: undefined },
-    voteSetJson: { type: String, required: false, default: undefined },
-    sessionState: { type: String, required: false, default: undefined },
-    timerSecondsString: { type: String, required: false, default: undefined },
-    hostVoting: { type: String, required: true },
-    startNewSessionOnMountedString: {
-      type: String,
-      required: false,
-      default: "false",
-    },
-    userStoryMode: { type: String, required: false, default: undefined },
-    rejoined: { type: String, required: false, default: "true" },
+  setup() {
+    const store = useDiveniStore();
+    const toast = useToast();
+    const { t } = useI18n();
+    return { store, toast, t };
   },
   data() {
     return {
-      //props copy
-      session_adminID: "",
-      session_sessionID: "",
-      session_voteSetJson: "",
-      session_sessionState: "",
-      session_timerSecondsString: "",
-      session_userStoryMode: "",
-      session_hostVoting: false,
-      //data
+      sessionID: history.state.sessionID,
+      adminID: history.state.adminID,
+      voteSetJson: history.state.voteSetJson,
+      sessionState: history.state.sessionState,
+      timerSecondsString: history.state.timerSecondsString,
+      startNewSessionOnMountedString: history.state.startNewSessionOnMountedString,
+      userStoryMode: history.state.userStoryMode,
+      hostVoting: history.state.hostVoting as boolean,
+      rejoined: history.state.rejoined,
       index: 0,
       stageLabelReady: "Ready",
       stageLabelWaiting: "Waiting room",
@@ -392,20 +378,20 @@ export default Vue.extend({
     };
   },
   computed: {
-    selectedProject(): Project {
-      return this.$store.state.selectedProject;
+    selectedProject() {
+      return this.store.selectedProject;
     },
     userStories() {
-      return this.$store.state.userStories;
+      return this.store.userStories;
     },
     members() {
-      return this.$store.state.members;
+      return this.store.members;
     },
     webSocketIsConnected() {
-      return this.$store.state.webSocketConnected;
+      return this.store.webSocketConnected;
     },
     highlightedMembers() {
-      return this.$store.state.highlightedMembers;
+      return this.store.highlightedMembers;
     },
     membersPending(): Member[] {
       return this.members.filter((member: Member) => member.currentEstimation === null);
@@ -414,7 +400,7 @@ export default Vue.extend({
       return this.members.filter((member: Member) => member.currentEstimation !== null);
     },
     timerTimestamp() {
-      return this.$store.state.timerTimestamp ? this.$store.state.timerTimestamp : "";
+      return this.store.timerTimestamp ? this.store.timerTimestamp : "";
     },
     isMobile() {
       return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
@@ -451,11 +437,9 @@ export default Vue.extend({
     },
     membersEstimated() {
       if (this.membersPending.length === 0 && this.membersEstimated.length > 0 && this.autoReveal) {
-        if (this.session_hostVoting && this.hostEstimation !== "") {
-          console.log("HIER?????");
+        if (this.hostVoting && this.hostEstimation !== "") {
           this.estimateFinished = true;
-        } else if (!this.session_hostVoting) {
-          console.log("hier?");
+        } else if (!this.hostVoting) {
           this.estimateFinished = true;
         }
       }
@@ -463,30 +447,30 @@ export default Vue.extend({
   },
   async created() {
     this.copyPropsToData();
-    this.$store.commit("clearStoreWithoutUserStories");
-    if (!this.session_sessionID || !this.session_adminID) {
+    this.store.clearStoreWithoutUserStories();
+    if (!this.sessionID || !this.adminID) {
       //check for cookie
       await this.checkAdminCookie();
       this.assignSessionToData(this.session);
-      if (this.session_sessionID.length === 0) {
+      if (this.sessionID?.length === 0) {
         this.goToLandingPage();
       } else {
         this.handleReload();
       }
     }
-    this.timerCountdownNumber = parseInt(this.session_timerSecondsString, 10);
+    this.timerCountdownNumber = parseInt(this.timerSecondsString ?? "0", 10);
     window.addEventListener("beforeunload", this.sendUnregisterCommand);
   },
   mounted() {
     if (this.rejoined === "false") {
       this.connectToWebSocket();
     }
-    if (this.session_voteSetJson) {
-      this.voteSet = JSON.parse(this.session_voteSetJson);
+    if (this.voteSetJson) {
+      this.voteSet = JSON.parse(this.voteSetJson);
     }
-    if (this.session_sessionState === Constants.memberUpdateCommandStartVoting) {
+    if (this.sessionState === Constants.memberUpdateCommandStartVoting) {
       this.planningStart = true;
-    } else if (this.session_sessionState === Constants.memberUpdateCommandVotingFinished) {
+    } else if (this.sessionState === Constants.memberUpdateCommandVotingFinished) {
       this.planningStart = true;
       console.log("ON MOUNTED");
       this.estimateFinished = true;
@@ -534,43 +518,41 @@ export default Vue.extend({
       }
     },
     copyPropsToData() {
-      if (this.adminID) {
-        this.session_adminID = this.adminID;
-        this.session_sessionID = this.sessionID;
-        this.session_sessionState = this.sessionState;
-        this.session_timerSecondsString = this.timerSecondsString;
-        this.session_voteSetJson = this.voteSetJson;
-        this.session_userStoryMode = this.userStoryMode;
-        this.session_hostVoting = String(this.hostVoting).toLowerCase() === "true";
-      }
+      // if (this.adminID) {
+      //   this.session_adminID = this.adminID;
+      //   this.session_sessionID = this.sessionID;
+      //   this.session_sessionState = this.sessionState;
+      //   this.session_timerSecondsString = this.timerSecondsString;
+      //   this.session_voteSetJson = this.voteSetJson;
+      //   this.session_userStoryMode = this.userStoryMode;
+      //   this.session_hostVoting = String(this.hostVoting).toLowerCase() === "true";
+      // }
     },
     assignSessionToData(session) {
       if (Object.keys(session).length !== 0) {
-        this.session_adminID = session.adminID;
-        this.session_sessionID = session.sessionID;
-        this.session_sessionState = session.sessionState;
-        this.session_timerSecondsString = session.sessionConfig.timerSeconds.toString();
-        this.session_voteSetJson = JSON.stringify(session.sessionConfig.set);
-        this.session_userStoryMode = session.sessionConfig.userStoryMode;
-        this.session_hostVoting = String(session.hostVoting).toLowerCase() === "true";
-        this.$store.commit("setUserStories", {
-          stories: session.sessionConfig.userStories,
-        });
-        this.voteSet = JSON.parse(this.session_voteSetJson);
+        this.adminID = session.adminID;
+        this.sessionID = session.sessionID;
+        this.sessionState = session.sessionState;
+        this.timerSecondsString = session.sessionConfig.timerSeconds.toString();
+        this.voteSetJson = JSON.stringify(session.sessionConfig.set);
+        this.userStoryMode = session.sessionConfig.userStoryMode;
+        this.hostVoting = String(session.hostVoting).toLowerCase() === "true";
+
+        this.store.setUserStories({ stories: session.sessionConfig.userStories });
+        this.voteSet = JSON.parse(this.voteSetJson);
       }
     },
     handleReload() {
       if (
-        this.session_sessionState === Constants.memberUpdateCommandStartVoting ||
-        this.session_sessionState === Constants.memberUpdateCommandVotingFinished
+        this.sessionState === Constants.memberUpdateCommandStartVoting ||
+        this.sessionState === Constants.memberUpdateCommandVotingFinished
       ) {
         this.planningStart = true;
       }
-      if (this.session_sessionState === Constants.memberUpdateCommandVotingFinished) {
-        console.log("ON HANDLE RELOAD");
+      if (this.sessionState === Constants.memberUpdateCommandVotingFinished) {
         this.estimateFinished = true;
       }
-      this.timerCountdownNumber = parseInt(this.session_timerSecondsString, 10);
+      this.timerCountdownNumber = parseInt(this.timerSecondsString ?? "0", 10);
       //reconnect and reload member
       this.connectToWebSocket();
     },
@@ -580,7 +562,7 @@ export default Vue.extend({
       console.log(`doRemove: ${doRemove}`);
       console.log(`Syncing ${us[idx]}`);
       //Jira sync
-      if (this.session_userStoryMode === "US_JIRA") {
+      if (this.userStoryMode === "US_JIRA") {
         let response;
         if (doRemove) {
           if (us[idx].id === null) {
@@ -592,7 +574,7 @@ export default Vue.extend({
           doRemove = false;
         } else {
           console.log(`ID: ${us[idx].id}`);
-          if (us[idx].id === null) {
+          if (us[idx].id === null && this.selectedProject?.id) {
             response = await apiService.createUserStory(
               JSON.stringify(us[idx]),
               this.selectedProject.id
@@ -610,41 +592,35 @@ export default Vue.extend({
           }
         }
         if (response.status === 200) {
-          this.$toast.success(
-            this.$t("session.notification.messages.issueTrackerSynchronizeSuccess")
+          this.toast.success(
+            this.t("session.notification.messages.issueTrackerSynchronizeSuccess")
           );
         } else if (response === 204) {
-          this.$toast.info(this.$t("session.notification.messages.issueTrackerNothingChanged"));
+          this.toast.info(this.t("session.notification.messages.issueTrackerNothingChanged"));
         } else {
-          this.$toast.error(this.$t("session.notification.messages.issueTrackerSynchronizeFailed"));
+          this.toast.error(this.t("session.notification.messages.issueTrackerSynchronizeFailed"));
         }
       }
       // WS send
       if (doRemove) {
         us.splice(idx, 1);
       }
-      this.$store.commit("setUserStories", { stories: us });
+      this.store.setUserStories({ stories: us });
       if (this.webSocketIsConnected) {
         const endPoint = `${Constants.webSocketAdminUpdatedUserStoriesRoute}`;
-        this.$store.commit("sendViaBackendWS", {
-          endPoint,
-          data: JSON.stringify(us),
-        });
+        this.store.sendViaBackendWS(endPoint, JSON.stringify(us));
       }
     },
     async refreshUserStories() {
-      const response = await apiService.getUserStoriesFromProject(this.selectedProject.name);
-      this.$store.commit("setUserStories", { stories: response });
+      const response = await apiService.getUserStoriesFromProject(this.selectedProject?.name);
+      this.store.setUserStories({ stories: response });
       if (this.webSocketIsConnected) {
         const endPoint = `${Constants.webSocketAdminUpdatedUserStoriesRoute}`;
-        this.$store.commit("sendViaBackendWS", {
-          endPoint,
-          data: JSON.stringify(response),
-        });
+        this.store.sendViaBackendWS(endPoint, JSON.stringify(response));
       }
     },
     async onSynchronizeJira({ story, doRemove }) {
-      if (this.session_userStoryMode === "US_JIRA") {
+      if (this.userStoryMode === "US_JIRA") {
         let response;
         if (doRemove) {
           response = await apiService.deleteUserStory(story.id);
@@ -653,79 +629,78 @@ export default Vue.extend({
           if (story.id === null) {
             response = await apiService.createUserStory(
               JSON.stringify(story),
-              this.selectedProject.id
+              this.selectedProject?.id
             );
             if (response.status === 200) {
               const updatedStories = this.userStories.map(
                 (s) => s.title === story.title && s.description === story.description
               );
-              this.$store.commit("setUserStories", updatedStories);
+              this.store.setUserStories({ stories: updatedStories });
             }
           } else {
             response = await apiService.updateUserStory(JSON.stringify(story));
           }
         }
         if (response.status === 200) {
-          this.$toast.success(
-            this.$t("session.notification.messages.issueTrackerSynchronizeSuccess")
+          this.toast.success(
+            this.t("session.notification.messages.issueTrackerSynchronizeSuccess")
           );
         } else {
-          this.$toast.error(this.$t("session.notification.messages.issueTrackerSynchronizeFailed"));
+          this.toast.error(this.t("session.notification.messages.issueTrackerSynchronizeFailed"));
         }
       }
     },
     onSelectedStory($event) {
       if (this.planningStart) {
         const endPoint = Constants.webSocketAdminSelectedUserStoryRoute;
-        this.$store.commit("sendViaBackendWS", { endPoint, data: $event });
+        this.store.sendViaBackendWS(endPoint, $event);
       }
       this.index = $event;
     },
     connectToWebSocket() {
-      const url = `${Constants.backendURL}/connect?sessionID=${this.session_sessionID}&adminID=${this.session_adminID}`;
-      this.$store.commit("connectToBackendWS", url);
+      const url = `${Constants.backendURL}/connect?sessionID=${this.sessionID}&adminID=${this.adminID}`;
+      this.store.connectToBackendWS(url);
     },
     registerAdminPrincipalOnBackend() {
       const endPoint = Constants.webSocketRegisterAdminUserRoute;
-      this.$store.commit("sendViaBackendWS", { endPoint });
+      this.store.sendViaBackendWS(endPoint);
     },
     subscribeWSMemberUpdated() {
-      this.$store.commit("subscribeOnBackendWSAdminUpdate");
+      this.store.subscribeOnBackendWSAdminUpdate();
     },
     subscribeOnTimerStart() {
-      this.$store.commit("subscribeOnBackendWSTimerStart");
+      this.store.subscribeOnBackendWSTimerStart();
     },
     requestMemberUpdate() {
       const endPoint = Constants.webSocketGetMemberUpdateRoute;
-      this.$store.commit("sendViaBackendWS", { endPoint });
+      this.store.sendViaBackendWS(endPoint);
     },
     subscribeWSNotification() {
-      this.$store.commit("subscribeOnBackendWSNotify");
+      this.store.subscribeOnBackendWSNotify();
     },
     sendUnregisterCommand() {
       const endPoint = `${Constants.webSocketUnregisterRoute}`;
-      this.$store.commit("sendViaBackendWS", { endPoint, data: null });
-      this.$store.commit("clearStore");
+      this.store.sendViaBackendWS(endPoint, null);
+      this.store.clearStore();
     },
     sendVotingFinishedMessage() {
       if (!this.estimateFinished) {
-        console.log("SENDVOTINGFINISHEDMESSAGE");
         this.estimateFinished = true;
-        const endPoint = `${Constants.webSocketVotingFinishedRoute}`;
-        this.$store.commit("sendViaBackendWS", { endPoint });
+        const endPoint = Constants.webSocketVotingFinishedRoute;
+        this.store.sendViaBackendWS(endPoint);
       }
     },
     sendRestartMessage() {
       this.estimateFinished = false;
       this.hostEstimation = "";
       const endPoint = Constants.webSocketRestartPlanningRoute;
-      this.$store.commit("sendViaBackendWS", {
+      this.store.sendViaBackendWS(
         endPoint,
-        data: JSON.stringify({
-          hostVoting: this.session_hostVoting,
+        JSON.stringify({
+          hostVoting: this.hostVoting,
           autoReveal: this.autoReveal,
-        }),
-      });
+        })
+      );
     },
     goToLandingPage() {
       this.$router.push({ name: "LandingPage" });
@@ -736,13 +711,13 @@ export default Vue.extend({
     vote(vote: string) {
       this.hostEstimation = vote;
       const endPoint = `${Constants.webSocketVoteRouteAdmin}`;
-      this.$store.commit("sendViaBackendWS", {
+      this.store.sendViaBackendWS(
         endPoint,
-        data: JSON.stringify({
+        JSON.stringify({
           vote: this.hostEstimation,
           autoReveal: this.autoReveal,
-        }),
-      });
+        })
+      );
     },
   },
 });

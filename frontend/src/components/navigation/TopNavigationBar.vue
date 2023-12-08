@@ -2,7 +2,7 @@
   <b-navbar class="top-navigation" type="light" fixed="top" sticky>
     <b-navbar-brand class="top-navigation__title" to="/">
       <b-img src="/img/icons/logo.svg" class="top-navigation__nav-logo" />
-      {{ $t("page.landing.productTitle") }}
+      {{ t("page.landing.productTitle") }}
     </b-navbar-brand>
     <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
@@ -10,12 +10,12 @@
       <b-navbar-nav class="ml-auto">
         <b-nav-form>
           <b-button :to="{ name: 'PrepareSessionPage' }" variant="primary" class="mr-2">
-            {{ $t("page.landing.meeting.new.buttons.start.label") }}
+            {{ t("page.landing.meeting.new.buttons.start.label") }}
           </b-button>
         </b-nav-form>
         <b-nav-form>
           <b-button :to="{ name: 'JoinPage' }" variant="secondary" class="mr-2">
-            {{ $t("page.landing.meeting.join.buttons.start.label") }}
+            {{ t("page.landing.meeting.join.buttons.start.label") }}
           </b-button>
         </b-nav-form>
         <b-nav-item href="https://github.com/Sybit-Education/Diveni" target="_blank">
@@ -33,14 +33,19 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
+import { useI18n } from "vue-i18n";
 import LocaleDropdown from "@/components/navigation/LocaleDropdown.vue";
 import { BIconGithub } from "bootstrap-vue";
 import ThemeToggle from "@/components/actions/ThemeToggle.vue";
 
-export default Vue.extend({
+export default defineComponent({
   name: "TopNavigationBar",
   components: { LocaleDropdown, BIconGithub, ThemeToggle },
+  setup() {
+    const { t } = useI18n();
+    return { t };
+  },
 });
 </script>
 
