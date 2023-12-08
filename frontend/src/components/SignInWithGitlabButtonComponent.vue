@@ -8,7 +8,7 @@
      "
     >
       {{
-        $t(
+        t(
           "session.prepare.step.selection.mode.description.withIssueTracker.buttons.signInWithGitlab.label"
         )
       }}
@@ -37,9 +37,12 @@
 
 <script lang="ts">
 import apiService from "@/services/api.service";
-import Vue from "vue";
+import {defineComponent} from "vue";
+import {useDiveniStore} from "@/store";
+import {useToast} from "vue-toastification";
+import {useI18n} from "vue-i18n";
 
-export default Vue.extend({
+export default defineComponent({
   name: "SignInWithGitlabButtonComponent",
   props: {
     disabled: {
@@ -47,6 +50,12 @@ export default Vue.extend({
       required: false,
       default: false,
     }
+  },
+  setup() {
+    const store = useDiveniStore();
+    const toast = useToast();
+    const { t } = useI18n();
+    return { store, toast, t };
   },
   data() {
     return {
@@ -59,16 +68,16 @@ export default Vue.extend({
       try {
         const response = await apiService.sendGitlabOauth2AuthorizationCode(this.patToken);
         localStorage.setItem("tokenId", response.tokenId);
-        this.$store.commit("setTokenId", response.tokenId);
+        this.store.setTokenId(response.tokenId);
       } catch (e) {
         this.showToast(e);
       }
     },
     showToast(error) {
       if (error.message == "failed to retrieve access token") {
-        this.$toast.error(this.$t("session.notification.messages.issueTrackerCredentials"));
+        this.toast.error(this.t("session.notification.messages.issueTrackerCredentials"));
       } else {
-        this.$toast.error(this.$t("session.notification.messages.issueTrackerLoginFailed"));
+        this.toast.error(this.t("session.notification.messages.issueTrackerLoginFailed"));
       }
       console.error(error);
     },
