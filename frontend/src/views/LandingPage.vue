@@ -140,6 +140,7 @@ export default defineComponent({
     };
   },
   created() {
+    this.disconnectFromBackendWS();
     this.checkAdminCookie();
   },
   methods: {
@@ -188,7 +189,6 @@ export default defineComponent({
       this.$router.push({ name: "PrepareSessionPage" });
     },
     goToSessionPage() {
-      this.disconnectFromBackendWS();
       this.store.setUserStories({
         stories: this.sessionWrapper.session.sessionConfig.userStories,
       });
