@@ -33,11 +33,9 @@ public class NewsControllerTest {
   @Value("${vsc.github.api.pr.get}")
   private String url;
 
-  @Autowired
-  private MockMvc mockMvc;
+  @Autowired private MockMvc mockMvc;
 
-  @MockBean
-  private RestTemplate client;
+  @MockBean private RestTemplate client;
 
   @Test
   public void getPRs_InvalidState_returnsException() throws Exception {
@@ -46,10 +44,11 @@ public class NewsControllerTest {
     requestBuilder.param(NewsController.STATE_PARAM, invalidState);
     requestBuilder.param(NewsController.PAGE_PARAM, "1");
     requestBuilder.param(NewsController.PER_PAGE_PARAM, "1");
-    this.mockMvc.perform(requestBuilder)
-      .andDo(print())
-      .andExpect(status().isBadRequest())
-      .andExpect(status().reason(ErrorMessages.invalidPullRequestStateMessage));
+    this.mockMvc
+        .perform(requestBuilder)
+        .andDo(print())
+        .andExpect(status().isBadRequest())
+        .andExpect(status().reason(ErrorMessages.invalidPullRequestStateMessage));
   }
 
   @Test
@@ -58,54 +57,56 @@ public class NewsControllerTest {
     requestBuilder.param(NewsController.STATE_PARAM, "closed");
     requestBuilder.param(NewsController.PAGE_PARAM, "1");
     requestBuilder.param(NewsController.PER_PAGE_PARAM, "5000");
-    this.mockMvc.perform(requestBuilder)
-      .andDo(print())
-      .andExpect(status().isBadRequest())
-      .andExpect(status().reason(ErrorMessages.maxPullRequestsPerPageMessage));
+    this.mockMvc
+        .perform(requestBuilder)
+        .andDo(print())
+        .andExpect(status().isBadRequest())
+        .andExpect(status().reason(ErrorMessages.maxPullRequestsPerPageMessage));
   }
-
 
   @Test
   public void getPRs_Valid_returnsPrs() throws Exception {
-    PullRequest[] data = new PullRequest[]{
-      new PullRequest(403, "test2.com", "test2", LocalDateTime.now(), LocalDateTime.now(), "user"),
-      new PullRequest(404, "test.com", "test",  LocalDateTime.now(), LocalDateTime.now(), "user")
-    };
+    PullRequest[] data =
+        new PullRequest[] {
+          new PullRequest(
+              403, "test2.com", "test2", LocalDateTime.now(), LocalDateTime.now(), "user"),
+          new PullRequest(404, "test.com", "test", LocalDateTime.now(), LocalDateTime.now(), "user")
+        };
 
     when(client.exchange(contains(url), eq(HttpMethod.GET), any(), eq(PullRequest[].class)))
-      .thenReturn(ResponseEntity.ok(data.clone()));
+        .thenReturn(ResponseEntity.ok(data.clone()));
 
     MockHttpServletRequestBuilder requestBuilder = get(path);
     requestBuilder.param(NewsController.STATE_PARAM, "closed");
     requestBuilder.param(NewsController.PAGE_PARAM, "1");
     requestBuilder.param(NewsController.PER_PAGE_PARAM, "10");
 
-    this.mockMvc.perform(requestBuilder)
-      .andDo(print())
-      .andExpect(status().isOk())
-      .andExpect(jsonPath("$.length()")
-        .value(Matchers.is(2)))
-      .andExpect(jsonPath("$[0].number").value(data[0].getNumber()))
-      .andExpect(jsonPath("$[0]['html_url']").value(data[0].getHtmlUrl()))
-      .andExpect(jsonPath("$[0]['title']").value(data[0].getTitle()))
-      .andExpect(jsonPath("$[0]['user_type']").value(data[0].getUserType()));
-
+    this.mockMvc
+        .perform(requestBuilder)
+        .andDo(print())
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.length()").value(Matchers.is(2)))
+        .andExpect(jsonPath("$[0].number").value(data[0].getNumber()))
+        .andExpect(jsonPath("$[0]['html_url']").value(data[0].getHtmlUrl()))
+        .andExpect(jsonPath("$[0]['title']").value(data[0].getTitle()))
+        .andExpect(jsonPath("$[0]['user_type']").value(data[0].getUserType()));
   }
 
   @Test
   public void getPRs_Valid_returnsServiceUnavailable() throws Exception {
 
     when(client.exchange(contains(url), eq(HttpMethod.GET), any(), eq(PullRequest[].class)))
-      .thenThrow(new RestClientException("Some error"));
+        .thenThrow(new RestClientException("Some error"));
 
     MockHttpServletRequestBuilder requestBuilder = get(path);
     requestBuilder.param(NewsController.STATE_PARAM, "closed");
     requestBuilder.param(NewsController.PAGE_PARAM, "1");
     requestBuilder.param(NewsController.PER_PAGE_PARAM, "10");
 
-    this.mockMvc.perform(requestBuilder)
-      .andDo(print())
-      .andExpect(status().isServiceUnavailable())
-      .andExpect(status().reason(ErrorMessages.serverLimitReachedMessage));
+    this.mockMvc
+        .perform(requestBuilder)
+        .andDo(print())
+        .andExpect(status().isServiceUnavailable())
+        .andExpect(status().reason(ErrorMessages.serverLimitReachedMessage));
   }
 }
