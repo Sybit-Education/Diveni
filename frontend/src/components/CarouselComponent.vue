@@ -2,17 +2,10 @@
   <div class="row">
     <div
       class="wrapper"
-      :style="{transform: `translateX(-${updateValue  * 4/ items.length}%)`}"
+      :style="{ transform: `translateX(-${(updateValue * 4) / items.length}%)` }"
     >
-      <div class="set"
-           v-for="(item, index) in allItems"
-           :key="index"
-           ref="allItems"
-      >
-        <b-card
-          class="connectorCards"
-          :class="getClass(item)"
-        >
+      <div v-for="(item, index) in allItems" :key="index" ref="carousel" class="set">
+        <b-card class="connectorCards" :class="getClass(item)">
           <b-card-title>
             <div>
               <b-img
@@ -20,10 +13,8 @@
                 :class="getClass(item) + 'Pic'"
               />
             </div>
-            <div
-              class="title"
-            >
-              {{item.title}}
+            <div class="title">
+              {{ item.title }}
             </div>
           </b-card-title>
           <b-card-text>
@@ -36,32 +27,50 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent, ref } from "vue";
+import { useI18n } from "vue-i18n";
 
-export default Vue.extend({
+export default defineComponent({
   name: "CarouselComponent",
-    data() {
-      return {
-        updateValue: 0,
-        items: [
-          {title : "Jira Server", description: this.$t("page.landing.meeting.connectors.jiraServer.description")},
-          {title : "Jira Cloud", description: this.$t("page.landing.meeting.connectors.jiraCloud.description")},
-          {title: "Azure DevOps", description: this.$t("page.landing.meeting.connectors.azureDevOps.description")},
-          {title : "Github", description: this.$t("page.landing.meeting.connectors.github.description")},
-          {title : "Gitlab", description: this.$t("page.landing.meeting.connectors.gitlab.description")},
-        ],
-      }
-    },
+  setup() {
+    const { t } = useI18n();
+    const carousel = ref();
+    const updateValue = ref(0);
+    const items = [
+      {
+        title: "Jira Server",
+        description: t("page.landing.meeting.connectors.jiraServer.description"),
+      },
+      {
+        title: "Jira Cloud",
+        description: t("page.landing.meeting.connectors.jiraCloud.description"),
+      },
+      {
+        title: "Azure DevOps",
+        description: t("page.landing.meeting.connectors.azureDevOps.description"),
+      },
+      { title: "Github", description: t("page.landing.meeting.connectors.github.description") },
+      { title: "Gitlab", description: t("page.landing.meeting.connectors.gitlab.description") },
+    ];
+
+    return { t, carousel, items, updateValue };
+  },
+
   computed: {
     allItems() {
       return [...this.items, ...this.items];
-    }
+    },
   },
+
   mounted() {
     setInterval(() => {
-      if (typeof this.$refs.allItems !== 'undefined') {
-        const item = this.$refs.allItems[5];
-        if (item && item.getBoundingClientRect().left >= 1 && item.getBoundingClientRect().left <= 2) {
+      if (typeof this.carousel !== "undefined") {
+        const item = this.carousel[5];
+        if (
+          item &&
+          item.getBoundingClientRect().left >= 1 &&
+          item.getBoundingClientRect().left <= 2
+        ) {
           this.updateValue = 0;
         }
       }
@@ -83,7 +92,7 @@ export default Vue.extend({
           return "gitlab";
       }
     },
-  }
+  },
 });
 </script>
 
@@ -115,7 +124,6 @@ export default Vue.extend({
   max-width: 75%;
   border: none !important;
 }
-
 
 .jiraServer {
   background: rgba(0, 82, 204, 1);
@@ -152,7 +160,7 @@ export default Vue.extend({
 }
 
 .azureDevOps {
-  background: rgba(137,196,255, 1);
+  background: rgba(137, 196, 255, 1);
   color: white;
 }
 
@@ -184,7 +192,13 @@ export default Vue.extend({
 }
 
 .gitlab {
-  background: linear-gradient(90deg, rgba(252, 161, 33, 1) 0%, rgba(252, 109, 38, 1) 35%, rgba(226, 67, 41,1), rgba(169, 137, 245, 1) 100%);
+  background: linear-gradient(
+    90deg,
+    rgba(252, 161, 33, 1) 0%,
+    rgba(252, 109, 38, 1) 35%,
+    rgba(226, 67, 41, 1),
+    rgba(169, 137, 245, 1) 100%
+  );
   color: white;
   border: none;
 }
@@ -201,6 +215,6 @@ export default Vue.extend({
 }
 
 .title {
-  color: white
+  color: white;
 }
 </style>
