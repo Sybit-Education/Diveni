@@ -198,13 +198,17 @@ public class WebSocketService {
 
   public void sendMembersAdminVote(Session session) {
     LOGGER.debug("--> sendMembersAdminVote(), sessionID={}", session.getSessionID());
-    getSessionPrincipals(session.getSessionID())
+    if (session.getHostEstimation() != null) {
+      getSessionPrincipals(session.getSessionID())
         .memberPrincipals()
         .forEach(
-            member ->
-                simpMessagingTemplate.convertAndSendToUser(
-                    member.getMemberID(), ADMIN_UPDATED_ESTIMATION, session.getHostEstimation()));
-    LOGGER.debug("<-- sendMembersAdminVote()");
+          member ->
+            simpMessagingTemplate.convertAndSendToUser(
+              member.getMemberID(), ADMIN_UPDATED_ESTIMATION, session.getHostEstimation()));
+      LOGGER.debug("<-- sendMembersAdminVote()");
+    } else {
+      LOGGER.debug("<-- sendMembersAdminVote(), Host estimation is null");
+    }
   }
 
   public void sendSessionStateToMembers(Session session) {

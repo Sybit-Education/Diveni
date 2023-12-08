@@ -116,7 +116,7 @@ public class Session {
 
     Optional<String> maxEstimation;
     Optional<String> minEstimation;
-    if (!this.hostVoting || this.hostEstimation.getHostEstimation().equals("")) {
+    if (!this.hostVoting || this.hostEstimation == null || this.hostEstimation.getHostEstimation().equals("")) {
       maxEstimation = getFilteredEstimationStream(this.members).max(estimationByIndex(filteredSet));
     } else {
       Stream<String> filteredEstimationsMember = getFilteredEstimationStream(this.members);
@@ -125,7 +125,7 @@ public class Session {
               filteredEstimationsMember, Stream.of(this.hostEstimation.getHostEstimation()));
       maxEstimation = allEstimations.max(estimationByIndex(filteredSet));
     }
-    if (!this.hostVoting || this.hostEstimation.getHostEstimation().equals("")) {
+    if (!this.hostVoting || this.hostEstimation == null || this.hostEstimation.getHostEstimation().equals("")) {
       minEstimation = getFilteredEstimationStream(this.members).min(estimationByIndex(filteredSet));
     } else {
       Stream<String> filteredEstimationsMember = getFilteredEstimationStream(this.members);
