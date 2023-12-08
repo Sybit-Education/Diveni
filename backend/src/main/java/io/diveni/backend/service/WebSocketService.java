@@ -206,8 +206,10 @@ public class WebSocketService {
                 simpMessagingTemplate.convertAndSendToUser(
                     member.getMemberID(),
                     ADMIN_UPDATED_ESTIMATION,
-                    session.getHostEstimation() != null ? session.getHostEstimation() : new AdminVote("")));
-      LOGGER.debug("<-- sendMembersAdminVote()");
+                    session.getHostEstimation() != null
+                        ? session.getHostEstimation()
+                        : new AdminVote("")));
+    LOGGER.debug("<-- sendMembersAdminVote()");
   }
 
   public void sendSessionStateToMembers(Session session) {
