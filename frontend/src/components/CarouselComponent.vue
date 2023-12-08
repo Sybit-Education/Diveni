@@ -98,19 +98,19 @@ export default defineComponent({
     redirectToDoc(item) {
       switch (item.title) {
         case "Jira Server":
-          window.open("https://docs.diveni.io/Diveni/guide/connectors/jiraServer");
+          window.open("https://sybit-education.github.io/Diveni/guide/connectors/jiraServer");
           return;
         case "Jira Cloud":
-          window.open("https://docs.diveni.io/Diveni/guide/connectors/jiraCloud");
+          window.open("https://sybit-education.github.io/Diveni/guide/connectors/jiraCloud");
           return;
         case "Azure DevOps":
-          window.open("https://docs.diveni.io/Diveni/guide/connectors/azureDevOps");
+          window.open("https://sybit-education.github.io/Diveni/guide/connectors/azureDevOps");
           return;
         case "Github":
-          window.open("https://docs.diveni.io/Diveni/guide/connectors/github");
+          window.open("https://sybit-education.github.io/Diveni/guide/connectors/github");
           return;
         case "Gitlab":
-          window.open("https://docs.diveni.io/Diveni/guide/connectors/gitlab");
+          window.open("https://sybit-education.github.io/Diveni/guide/connectors/gitlab");
           return;
       }
     },
