@@ -9,7 +9,7 @@
       "
     >
       {{
-        $t(
+        t(
           "session.prepare.step.selection.mode.description.withIssueTracker.buttons.signInWithJiraCloud.label"
         )
       }}
@@ -18,11 +18,12 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
 import { v4 as uuidv4 } from "uuid";
 import apiService from "@/services/api.service";
+import { useI18n } from "vue-i18n";
 
-export default Vue.extend({
+export default defineComponent({
   name: "SignInWithJiraCloudButtonComponent",
   props: {
     disabled: {
@@ -30,6 +31,10 @@ export default Vue.extend({
       required: false,
       default: false,
     },
+  },
+  setup() {
+    const { t } = useI18n();
+    return { t };
   },
   methods: {
     async redirectToJira() {

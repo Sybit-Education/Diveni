@@ -8,24 +8,24 @@
     <b-container class="my-5">
       <b-card-group deck class="justify-content-center">
         <landing-page-card
-          :title="$t('page.landing.meeting.new.title')"
-          :description="$t('page.landing.meeting.new.description')"
-          :button-text="$t('page.landing.meeting.new.buttons.start.label')"
+          :title="t('page.landing.meeting.new.title')"
+          :description="t('page.landing.meeting.new.description')"
+          :button-text="t('page.landing.meeting.new.buttons.start.label')"
           :on-click="goToPrepareSessionPage"
           class="newSessionCard"
         />
         <landing-page-card
-          :title="$t('page.landing.meeting.join.title')"
-          :description="$t('page.landing.meeting.join.description')"
-          :button-text="$t('page.landing.meeting.join.buttons.start.label')"
+          :title="t('page.landing.meeting.join.title')"
+          :description="t('page.landing.meeting.join.description')"
+          :button-text="t('page.landing.meeting.join.buttons.start.label')"
           :on-click="goToJoinPage"
           class="joinSessionCard"
         />
         <landing-page-card
           v-if="sessionWrapper.session"
-          :title="$t('page.landing.meeting.reconnect.title')"
-          :description="$t('page.landing.meeting.reconnect.description')"
-          :button-text="$t('page.landing.meeting.reconnect.buttons.start.label')"
+          :title="t('page.landing.meeting.reconnect.title')"
+          :description="t('page.landing.meeting.reconnect.description')"
+          :button-text="t('page.landing.meeting.reconnect.buttons.start.label')"
           :on-click="goToSessionPage"
           class="reconnectSessionCard"
         />
@@ -105,20 +105,33 @@
         <a href="https://docs.diveni.io/">documentation</a>.
       </p>
     </b-container>
+    <b-container class="py-3">
+      <h1 class="mt-5">Connectors</h1>
+    </b-container>
+    <CarouselComponent class="py-5"></CarouselComponent>
   </div>
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
 import LandingPageCard from "../components/LandingPageCard.vue";
 import Constants from "../constants";
 import Session from "../model/Session";
 import AnalyticsDataComponent from "../components/AnalyticsDataComponent.vue";
-export default Vue.extend({
+import { useDiveniStore } from "@/store";
+import { useI18n } from "vue-i18n";
+import CarouselComponent from "@/components/CarouselComponent.vue";
+export default defineComponent({
   name: "LandingPage",
   components: {
     LandingPageCard,
     AnalyticsDataComponent,
+    CarouselComponent,
+  },
+  setup() {
+    const store = useDiveniStore();
+    const { t } = useI18n();
+    return { store, t };
   },
   data() {
     return {
@@ -159,7 +172,7 @@ export default Vue.extend({
             };
             sessionState: string;
             members: Array<string>;
-            hostVoting: string;
+            hostVoting: boolean;
           };
           this.sessionWrapper = { session };
         } catch (e) {
@@ -175,12 +188,12 @@ export default Vue.extend({
       this.$router.push({ name: "PrepareSessionPage" });
     },
     goToSessionPage() {
-      this.$store.commit("setUserStories", {
+      this.store.setUserStories({
         stories: this.sessionWrapper.session.sessionConfig.userStories,
       });
       this.$router.push({
         name: "SessionPage",
-        params: {
+        state: {
           sessionID: this.sessionWrapper.session.sessionID,
           adminID: this.sessionWrapper.session.adminID,
           voteSetJson: JSON.stringify(this.sessionWrapper.session.sessionConfig.set),
@@ -238,10 +251,11 @@ export default Vue.extend({
 .aboutDiveni {
   box-shadow: 0 0 5px 5px var(--landingPageCardsBackground);
   border: none !important;
+  background: var(--landingPageCardsBackground) !important;
 }
 
 .card-title {
-  color: var(--text-primary-color);
+  color: var(--text-primary-color) !important;
 }
 
 .parent {

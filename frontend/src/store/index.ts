@@ -1,134 +1,134 @@
-import { StoreState } from "@/types";
 import SockJS from "sockjs-client";
-import Vue from "vue";
-import Vuex from "vuex";
-import webstomp from "webstomp-client";
+import webstomp, { Client } from "webstomp-client";
 import Constants from "../constants";
+import { defineStore } from "pinia";
+import Project from "@/model/Project";
+import UserStory from "@/model/UserStory";
+import { Notification } from "@/model/Notification";
+import Member from "@/model/Member";
+import AdminVote from "@/model/AdminVote";
 
-Vue.use(Vuex);
-export default new Vuex.Store<StoreState>({
-  state: {
-    stompClient: undefined,
+export const useDiveniStore = defineStore("diveni-store", {
+  state: () => ({
+    stompClient: undefined as Client | undefined,
     webSocketConnected: false,
-    memberUpdates: [],
-    userStories: [],
-    members: [],
-    notifications: [],
+    memberUpdates: [] as string[],
+    userStories: [] as UserStory[],
+    members: [] as Member[],
+    notifications: [] as Notification[],
     highlightedMembers: [],
-    timerTimestamp: undefined,
+    timerTimestamp: undefined as string | undefined,
     tokenId: undefined,
     projects: [],
-    selectedProject: undefined,
+    selectedProject: undefined as Project | undefined,
+    selectedUserStoryIndex: null as number | null,
+    hostEstimation: undefined as AdminVote | undefined,
     hostVoting: false,
-    hostEstimation: undefined,
-    selectedUserStoryIndex: undefined,
     autoReveal: false,
-  },
-  mutations: {
-    setMembers(state, members) {
-      state.members = members;
+  }),
+  actions: {
+    setMembers(members) {
+      this.members = members;
     },
-    connectToBackendWS(state, url) {
-      state.stompClient = webstomp.over(new SockJS(url));
+    connectToBackendWS(url) {
+      this.stompClient = webstomp.over(new SockJS(url));
       if (process.env.NODE_ENV === "production") {
         // eslint-disable-next-line @typescript-eslint/no-empty-function
-        state.stompClient.debug = () => {};
+        this.stompClient.debug = () => {};
       }
-      state.stompClient.connect(
+      this.stompClient.connect(
         {},
         () => {
-          state.webSocketConnected = true;
+          this.webSocketConnected = true;
         },
         (error) => {
           console.error(error);
-          state.webSocketConnected = false;
+          this.webSocketConnected = false;
         }
       );
     },
-    subscribeOnBackendWSMemberUpdates(state) {
-      state.stompClient?.subscribe(Constants.webSocketMemberListenRoute, (frame) => {
-        state.memberUpdates = state.memberUpdates.concat([frame.body]);
+    subscribeOnBackendWSMemberUpdates() {
+      this.stompClient?.subscribe(Constants.webSocketMemberListenRoute, (frame) => {
+        this.memberUpdates = this.memberUpdates.concat([frame.body]);
       });
     },
-    subscribeOnBackendWSMemberUpdatesWithAutoReveal(state) {
-      state.stompClient?.subscribe(Constants.webSocketMemberAutoRevealListenRoute, (frame) => {
+    subscribeOnBackendWSMemberUpdatesWithAutoReveal() {
+      this.stompClient?.subscribe(Constants.webSocketMemberAutoRevealListenRoute, (frame) => {
         const splittedFrame = frame.body.split(" ");
-        state.autoReveal = splittedFrame[1] === "true";
-        state.memberUpdates = state.memberUpdates.concat([splittedFrame[0]]);
+        this.autoReveal = splittedFrame[1] === "true";
+        this.memberUpdates = this.memberUpdates.concat([splittedFrame[0]]);
       });
     },
-    subscribeOnBackendWSStoriesUpdated(state) {
-      state.stompClient?.subscribe(Constants.webSocketMemberListenUserStoriesRoute, (frame) => {
-        state.userStories = JSON.parse(frame.body);
+    subscribeOnBackendWSStoriesUpdated() {
+      this.stompClient?.subscribe(Constants.webSocketMemberListenUserStoriesRoute, (frame) => {
+        this.userStories = JSON.parse(frame.body);
       });
     },
-    subscribeOnBackendWSStorySelected(state) {
-      state.stompClient?.subscribe(Constants.webSocketSelectedUserStoryRoute, (frame) => {
-        state.selectedUserStoryIndex = +frame.body;
+    subscribeOnBackendWSStorySelected() {
+      this.stompClient?.subscribe(Constants.webSocketSelectedUserStoryRoute, (frame) => {
+        this.selectedUserStoryIndex = +frame.body;
       });
     },
-    subscribeOnBackendWSAdminUpdate(state) {
-      state.stompClient?.subscribe(Constants.webSocketMembersUpdatedRoute, (frame) => {
+    subscribeOnBackendWSAdminUpdate() {
+      this.stompClient?.subscribe(Constants.webSocketMembersUpdatedRoute, (frame) => {
         console.log(`web socket admin receive update: message ${frame}`);
-        state.members = JSON.parse(frame.body).members;
-        state.highlightedMembers = JSON.parse(frame.body).highlightedMembers;
+        this.members = JSON.parse(frame.body).members;
+        this.highlightedMembers = JSON.parse(frame.body).highlightedMembers;
       });
     },
-    subscribeOnBackendWSHostVoting(state) {
-      state.stompClient?.subscribe(Constants.webSocketMemberListenHostVotingRoute, (frame) => {
-        state.hostVoting = JSON.parse(frame.body);
+    subscribeOnBackendWSHostVoting() {
+      this.stompClient?.subscribe(Constants.webSocketMemberListenHostVotingRoute, (frame) => {
+        this.hostVoting = JSON.parse(frame.body);
       });
     },
-    subscribeOnBackendWSHostEstimation(state) {
-      state.stompClient?.subscribe(Constants.webSocketMembersUpdatedHostEstimation, (frame) => {
-        state.hostEstimation = JSON.parse(frame.body);
+    subscribeOnBackendWSHostEstimation() {
+      this.stompClient?.subscribe(Constants.webSocketMembersUpdatedHostEstimation, (frame) => {
+        this.hostEstimation = JSON.parse(frame.body);
       });
     },
-    subscribeOnBackendWSTimerStart(state) {
-      state.stompClient?.subscribe(Constants.webSocketTimerStartRoute, (frame) => {
+    subscribeOnBackendWSTimerStart() {
+      this.stompClient?.subscribe(Constants.webSocketTimerStartRoute, (frame) => {
         console.log(`Got timer start ${frame.body}`);
-        state.timerTimestamp = frame.body;
+        this.timerTimestamp = frame.body;
       });
     },
-    subscribeOnBackendWSNotify(state) {
-      state.stompClient?.subscribe(Constants.websocketNotification, (frame) => {
-        state.notifications = state.notifications.concat([JSON.parse(frame.body)]);
+    subscribeOnBackendWSNotify() {
+      this.stompClient?.subscribe(Constants.websocketNotification, (frame) => {
+        this.notifications = this.notifications.concat([JSON.parse(frame.body)]);
       });
     },
-    sendViaBackendWS(state, { endPoint, data }) {
-      state.stompClient?.send(endPoint, data);
+    sendViaBackendWS(endPoint, data: any = {}) {
+      this.stompClient?.send(endPoint, data);
     },
-    clearStore(state) {
-      state.members = [];
-      state.userStories = [];
-      state.memberUpdates = [];
-      state.notifications = [];
-      state.webSocketConnected = false;
-      state.stompClient = undefined;
+    clearStore() {
+      this.members = [];
+      this.userStories = [];
+      this.memberUpdates = [];
+      this.notifications = [];
+      this.webSocketConnected = false;
+      this.stompClient = undefined;
     },
-    clearStoreWithoutUserStories(state) {
-      state.members = [];
-      state.memberUpdates = [];
-      state.notifications = [];
-      state.webSocketConnected = false;
-      state.stompClient = undefined;
+    clearStoreWithoutUserStories() {
+      this.members = [];
+      this.memberUpdates = [];
+      this.notifications = [];
+      this.webSocketConnected = false;
+      this.stompClient = undefined;
     },
-    setSelectedProject(state, project) {
-      state.selectedProject = project;
+    setSelectedProject(project) {
+      this.selectedProject = project;
     },
-    setProjects(state, projects) {
-      state.projects = projects;
+    setProjects(projects) {
+      this.projects = projects;
     },
-    setUserStories(state, { stories }) {
-      state.userStories = stories;
+    setUserStories({ stories }) {
+      this.userStories = stories;
     },
-    setTokenId(state, tokenId) {
-      state.tokenId = tokenId;
+    setTokenId(tokenId) {
+      this.tokenId = tokenId;
     },
     clearTokenId(state) {
       state.tokenId = undefined;
     },
   },
-  actions: {},
-  modules: {},
 });
