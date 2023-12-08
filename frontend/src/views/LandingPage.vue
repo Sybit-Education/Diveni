@@ -140,6 +140,7 @@ export default defineComponent({
     };
   },
   created() {
+    this.disconnectFromBackendWS();
     this.checkAdminCookie();
   },
   methods: {
@@ -202,8 +203,12 @@ export default defineComponent({
           startNewSessionOnMountedString: this.startNewSessionOnMounted.toString(),
           userStoryMode: this.sessionWrapper.session.sessionConfig.userStoryMode,
           hostVoting: this.sessionWrapper.session.hostVoting,
+          rejoined: "false",
         },
       });
+    },
+    disconnectFromBackendWS() {
+      this.store.disconnectFromBackendWS();
     },
   },
 });
