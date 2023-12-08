@@ -6,7 +6,6 @@
 package io.diveni.backend.service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -200,7 +199,6 @@ public class WebSocketService {
 
   public void sendMembersAdminVote(Session session) {
     LOGGER.debug("--> sendMembersAdminVote(), sessionID={}", session.getSessionID());
-    AdminVote adminVote = Optional.ofNullable(session.getHostEstimation()).orElse(new AdminVote(""));
     getSessionPrincipals(session.getSessionID())
         .memberPrincipals()
         .forEach(
@@ -208,7 +206,7 @@ public class WebSocketService {
                 simpMessagingTemplate.convertAndSendToUser(
                     member.getMemberID(),
                     ADMIN_UPDATED_ESTIMATION,
-                    adminVote));
+                    session.getHostEstimation() != null ? session.getHostEstimation() : new AdminVote("")));
       LOGGER.debug("<-- sendMembersAdminVote()");
   }
 
