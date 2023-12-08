@@ -13,7 +13,6 @@ import jakarta.annotation.PostConstruct;
 import lombok.val;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -40,9 +39,6 @@ public class GitlabService implements ProjectManagementProviderOAuth2 {
   private final Map<String, String> projectIDs = new HashMap<>();
 
   private final Map<String, String> projectIDTokenID = new HashMap<>();
-
-  @Value("${GITLAB_TOKEN:#{null}}")
-  private String gitlabToken;
 
   @PostConstruct
   public void logConfig() {
