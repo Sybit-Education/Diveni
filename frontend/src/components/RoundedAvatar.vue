@@ -4,10 +4,7 @@
     :style="`background-color: ${member.hexColor}`"
   >
     <div :id="'avatar' + member.name" class="text-center">
-      <b-img
-        :src="require(`@/assets/${member.avatarAnimal.toLowerCase()}.png`)"
-        class="rounded-avatar__image"
-      />
+      <b-img :src="require(`@/assets/${avatar}.png`)" class="rounded-avatar__image" />
       <div v-if="showName" class="rounded-avatar__label">
         {{ member.name }}
       </div>
@@ -16,20 +13,30 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent, PropType } from "vue";
+import Member from "@/model/Member";
+import Constants from "@/constants";
 
-export default Vue.extend({
+export default defineComponent({
   name: "RoundedAvatar",
   props: {
-    member: { type: Object, required: true },
+    member: { type: Object as PropType<Member>, required: true },
     showName: { type: Boolean, default: true },
     admin: { type: Boolean, default: true },
+  },
+  computed: {
+    avatar() {
+      if (this.member.avatarAnimalAssetName === undefined) {
+        return Constants.getRandomAvatarAnimalAssetName();
+      }
+      return this.member?.avatarAnimalAssetName?.toLowerCase() ?? "fish";
+    },
   },
 });
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
+<style lang="scss" scoped>
 .rounded-avatar {
   padding: 8px;
   display: flex;

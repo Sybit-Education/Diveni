@@ -12,9 +12,9 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
 
-export default Vue.extend({
+export default defineComponent({
   name: "LandingPageCard",
   props: {
     title: { type: String, required: true },
@@ -24,7 +24,9 @@ export default Vue.extend({
   },
 });
 </script>
-<style scoped lang="scss">
+
+<!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
+<style lang="scss" scoped>
 .landing-page-card {
   border-radius: 2rem;
   background-color: var(--landingPageCardsBackground);

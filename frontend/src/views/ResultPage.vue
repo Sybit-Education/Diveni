@@ -1,10 +1,10 @@
 <template>
   <b-container id="result-page">
     <h1 class="mx-2 centerItems">
-      {{ $t("page.results.title") }}
+      {{ t("page.results.title") }}
     </h1>
     <div v-if="userStories.length === 0" class="text-center">
-      {{ $t("page.results.noUserStories") }}
+      {{ t("page.results.noUserStories") }}
     </div>
     <b-list-group v-else id="results">
       <b-list-group-item
@@ -25,10 +25,10 @@
           :disabled="userStories.length === 0"
           @click="downloadUserStoriesAsCSV()"
         >
-          {{ $t("page.results.button.download") }}
+          {{ t("page.results.button.download") }}
         </b-button>
         <b-button id="goBackHomeButton" class="mx-2" @click="goHome()">
-          {{ $t("page.results.button.home") }}
+          {{ t("page.results.button.home") }}
         </b-button>
       </b-col>
     </b-row>
@@ -36,15 +36,22 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
 import papaparse from "papaparse";
+import { useDiveniStore } from "@/store";
+import { useI18n } from "vue-i18n";
 
-export default Vue.extend({
+export default defineComponent({
   name: "SessionPage",
   components: {},
+  setup() {
+    const store = useDiveniStore();
+    const { t } = useI18n();
+    return { store, t };
+  },
   computed: {
     userStories() {
-      return this.$store.state.userStories;
+      return this.store.userStories;
     },
   },
   methods: {
@@ -63,16 +70,16 @@ export default Vue.extend({
       URL.revokeObjectURL(link.href);
     },
     goHome() {
-      this.$store.commit("setUserStories", { stories: [] });
-      this.$store.commit("clearStore");
+      this.store.setUserStories({ stories: [] });
+      this.store.clearStore();
       this.$router.push({ name: "LandingPage" });
     },
   },
 });
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
+<style lang="scss" scoped>
 .centerItems {
   display: flex;
   justify-content: center;

@@ -21,9 +21,9 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
 
-export default Vue.extend({
+export default defineComponent({
   name: "SessionAdminCard",
   props: {
     currentEstimation: { type: String, required: true },
@@ -33,8 +33,8 @@ export default Vue.extend({
 });
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
+<style lang="scss" scoped>
 .fs-3-rem {
   font-size: 4rem;
 }

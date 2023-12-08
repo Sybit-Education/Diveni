@@ -10,7 +10,7 @@
         <rounded-avatar
           :member="{
             hexColor: 'transparent',
-            avatarAnimal: animalAssetName,
+            avatarAnimalAssetName: animalAssetName,
             name: '',
           }"
           :show-name="false"
@@ -18,19 +18,19 @@
       </b-row>
       <b-row class="mt-2">
         <b-col class="inputText">
-          <h6>{{ $t("page.join.input.name") }}</h6>
+          <h6>{{ t("page.join.input.name") }}</h6>
           <b-form-input ref="name" v-model="name" class="mt-3 inputFields" type="text" />
         </b-col>
       </b-row>
       <b-row class="mt-4">
         <b-col cols="12" :md="'10'" class="inputText">
-          <h6>{{ $t("page.join.input.code") }}</h6>
+          <h6>{{ t("page.join.input.code") }}</h6>
           <b-form-input v-model="sessionID" class="mt-3 inputFields" type="text" />
         </b-col>
       </b-row>
       <b-row>
         <b-col class="mt-2 mt-md-0 inputText" cols="12" md="9">
-          <h6>{{ $t("page.join.input.password") }}</h6>
+          <h6>{{ t("page.join.input.password") }}</h6>
           <b-form-input
             v-model="password"
             class="mt-3 inputFields"
@@ -56,11 +56,12 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
 import JoinCommand from "../model/JoinCommand";
 import RoundedAvatar from "./RoundedAvatar.vue";
+import { useI18n } from "vue-i18n";
 
-export default Vue.extend({
+export default defineComponent({
   name: "JoinPageCard",
   components: {
     RoundedAvatar,
@@ -70,6 +71,10 @@ export default Vue.extend({
     animalAssetName: { type: String, required: true },
     buttonText: { type: String, required: true },
     sessionIdFromUrl: { type: String, required: true },
+  },
+  setup() {
+    const { t } = useI18n();
+    return { t };
   },
   data() {
     return {
@@ -106,7 +111,8 @@ export default Vue.extend({
 });
 </script>
 
-<style scoped>
+<!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
+<style lang="scss" scoped>
 #join-card {
   border-radius: 20px;
   vertical-align: middle;

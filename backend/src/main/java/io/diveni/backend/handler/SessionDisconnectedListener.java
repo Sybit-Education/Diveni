@@ -25,7 +25,9 @@ public class SessionDisconnectedListener implements ApplicationListener<SessionD
     LOGGER.debug("--> onApplicationEvent()");
     var principal = event.getUser();
     if (principal instanceof MemberPrincipal) {
-      controller.removeMember(principal);
+      if (controller.isMemberInSession(principal)) {
+        controller.removeMember(principal);
+      }
     }
     LOGGER.debug("<-- onApplicationEvent()");
   }

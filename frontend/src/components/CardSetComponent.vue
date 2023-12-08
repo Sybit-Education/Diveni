@@ -16,18 +16,18 @@
           <div v-if="item.values.length === 0">
             <span id="createSetHint">
               <b-icon-info-circle class="mt-3 me-1" />{{
-                $t("session.prepare.step.selection.cardSet.sets.ownSet.hint.label")
+                t("session.prepare.step.selection.cardSet.sets.ownSet.hint.label")
               }}</span
             >
             <b-popover id="popUp" target="createSetHint" triggers="hover" placement="top">
               <template #title>
-                {{ $t("session.prepare.step.selection.cardSet.sets.ownSet.hint.label") }}
+                {{ t("session.prepare.step.selection.cardSet.sets.ownSet.hint.label") }}
               </template>
               <p>
-                {{ $t("session.prepare.step.selection.cardSet.sets.ownSet.hint.description") }}
+                {{ t("session.prepare.step.selection.cardSet.sets.ownSet.hint.description") }}
               </p>
               <p>
-                {{ $t("session.prepare.step.selection.cardSet.sets.ownSet.hint.example") }}
+                {{ t("session.prepare.step.selection.cardSet.sets.ownSet.hint.example") }}
               </p>
             </b-popover>
           </div>
@@ -54,7 +54,7 @@
         <b-col sm="6">
           <b-form-input
             v-model="createSetInput"
-            :placeholder="$t('session.prepare.step.selection.cardSet.sets.ownSet.hint.example')"
+            :placeholder="t('session.prepare.step.selection.cardSet.sets.ownSet.hint.example')"
           ></b-form-input>
         </b-col>
         <b-col sm="6">
@@ -74,12 +74,17 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
+import { useI18n } from "vue-i18n";
 
-export default Vue.extend({
+export default defineComponent({
   name: "CardSetComponent",
   props: {
     userStoryMode: { type: String, required: true },
+  },
+  setup() {
+    const { t } = useI18n();
+    return { t };
   },
   data() {
     return {
@@ -93,15 +98,15 @@ export default Vue.extend({
       createSetInput: "",
       allCardSets: [
         {
-          name: this.$t("session.prepare.step.selection.cardSet.sets.fibonacci.label"),
-          description: this.$t("session.prepare.step.selection.cardSet.sets.fibonacci.description"),
+          name: this.t("session.prepare.step.selection.cardSet.sets.fibonacci.label"),
+          description: this.t("session.prepare.step.selection.cardSet.sets.fibonacci.description"),
           values: ["1", "2", "3", "5", "8", "13", "21", "34", "55", "?"],
           activeValues: ["1", "2", "3", "5", "8", "13", "21"],
           position: 1,
         },
         {
-          name: this.$t("session.prepare.step.selection.cardSet.sets.tShirtSizes.label"),
-          description: this.$t(
+          name: this.t("session.prepare.step.selection.cardSet.sets.tShirtSizes.label"),
+          description: this.t(
             "session.prepare.step.selection.cardSet.sets.tShirtSizes.description"
           ),
           values: ["XXS", "XS", "S", "M", "L", "XL", "XXL", "XXXL", "?"],
@@ -109,22 +114,22 @@ export default Vue.extend({
           position: 2,
         },
         {
-          name: this.$t("session.prepare.step.selection.cardSet.sets.hours.label"),
-          description: this.$t("session.prepare.step.selection.cardSet.sets.hours.description"),
+          name: this.t("session.prepare.step.selection.cardSet.sets.hours.label"),
+          description: this.t("session.prepare.step.selection.cardSet.sets.hours.description"),
           values: ["1", "2", "3", "4", "5", "6", "8", "10", "12", "16", "?"],
           activeValues: ["1", "2", "3", "4", "5", "6", "8", "10", "12", "16"],
           position: 3,
         },
         {
-          name: this.$t("session.prepare.step.selection.cardSet.sets.numbers.label"),
-          description: this.$t("session.prepare.step.selection.cardSet.sets.numbers.description"),
+          name: this.t("session.prepare.step.selection.cardSet.sets.numbers.label"),
+          description: this.t("session.prepare.step.selection.cardSet.sets.numbers.description"),
           values: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "?"],
           activeValues: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
           position: 4,
         },
         {
-          name: this.$t("session.prepare.step.selection.cardSet.sets.ownSet.label"),
-          description: this.$t("session.prepare.step.selection.cardSet.sets.ownSet.description"),
+          name: this.t("session.prepare.step.selection.cardSet.sets.ownSet.label"),
+          description: this.t("session.prepare.step.selection.cardSet.sets.ownSet.description"),
           values: [],
           activeValues: [],
           position: 5,
@@ -132,22 +137,22 @@ export default Vue.extend({
       ],
       allCardSetsWithJiraMode: [
         {
-          name: this.$t("session.prepare.step.selection.cardSet.sets.fibonacci.label"),
-          description: this.$t("session.prepare.step.selection.cardSet.sets.fibonacci.description"),
+          name: this.t("session.prepare.step.selection.cardSet.sets.fibonacci.label"),
+          description: this.t("session.prepare.step.selection.cardSet.sets.fibonacci.description"),
           values: ["1", "2", "3", "5", "8", "13", "21", "34", "55", "?"],
           activeValues: ["1", "2", "3", "5", "8", "13", "21"],
           position: 1,
         },
         {
-          name: this.$t("session.prepare.step.selection.cardSet.sets.hours.label"),
-          description: this.$t("session.prepare.step.selection.cardSet.sets.hours.description"),
+          name: this.t("session.prepare.step.selection.cardSet.sets.hours.label"),
+          description: this.t("session.prepare.step.selection.cardSet.sets.hours.description"),
           values: ["1", "2", "3", "4", "5", "6", "8", "10", "12", "16", "?"],
           activeValues: ["1", "2", "3", "4", "5", "6", "8", "10", "12", "16"],
           position: 2,
         },
         {
-          name: this.$t("session.prepare.step.selection.cardSet.sets.numbers.label"),
-          description: this.$t("session.prepare.step.selection.cardSet.sets.numbers.description"),
+          name: this.t("session.prepare.step.selection.cardSet.sets.numbers.label"),
+          description: this.t("session.prepare.step.selection.cardSet.sets.numbers.description"),
           values: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "?"],
           activeValues: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
           position: 3,
@@ -223,6 +228,7 @@ export default Vue.extend({
 });
 </script>
 
+<!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
 <style lang="scss" scoped>
 @import "@/assets/style/variables.scss";
 .card {
@@ -234,15 +240,15 @@ export default Vue.extend({
   flex-direction: column;
   cursor: pointer;
   border-radius: $border-radius;
-  box-shadow: 10px 10px 5px var(--accent-color);
+  box-shadow: 8px 8px 5px var(--box-shadow);
 
   &:hover {
-    border-width: 3px;
-    border-color: var(--preparePageInActiveCardSet);
+    border-width: 4px;
+    border-color: var(--preparePageInActiveTabHover);
     border-style: solid;
   }
   &.selected {
-    border-width: 3px;
+    border-width: 5px;
     border-color: var(--primary-button);
     border-style: solid;
   }
@@ -288,29 +294,40 @@ export default Vue.extend({
 .dark1 {
   background-image: url("@/assets/preparePage/Fibonacci-DarkMode.png");
   background-size: cover;
+  text-shadow: #000 0 0 3px;
+  -webkit-font-smoothing: antialiased;
 }
 
 .dark2 {
   background-image: url("@/assets/preparePage/TShirt-DarkMode.png");
   background-size: cover;
+  text-shadow: #000 0 0 3px;
+  -webkit-font-smoothing: antialiased;
 }
 
 .dark3 {
   background-image: url("@/assets/preparePage/Hour-DarkMode.png");
   background-size: cover;
+  text-shadow: #000 0 0 3px;
+  -webkit-font-smoothing: antialiased;
 }
 
 .dark4 {
   background-image: url("@/assets/preparePage/Numbers-DarkMode.png");
   background-size: cover;
+  text-shadow: #000 0 0 3px;
+  -webkit-font-smoothing: antialiased;
 }
 
 .dark5 {
   background-image: url("@/assets/preparePage/OwnSet-DarkMode.png");
   background-size: cover;
+  text-shadow: #000 0 0 3px;
+  -webkit-font-smoothing: antialiased;
 }
 
 #popUp {
+  color: var(--text-primary-color);
   background-color: var(--landingPageCardsBackground);
 }
 

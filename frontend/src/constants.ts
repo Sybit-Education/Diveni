@@ -58,6 +58,10 @@ class Constants {
 
   memberUpdateCloseSession = "SESSION_CLOSED";
 
+  newsPageSize = 9;
+
+  botUserType = "Bot";
+
   // eslint-disable-next-line class-methods-use-this
   public joinSessionRoute(sessionID: string) {
     return `/sessions/${sessionID}/join`;

@@ -1,53 +1,75 @@
 <template>
   <div>
-    <autocomplete
-      v-model="selected"
-      :items="getProjectNames"
-      :placeholder="
-        $t(
-          'session.prepare.step.selection.mode.description.withIssueTracker.placeholder.searchProjects'
-        )
-      "
-      @input="getUserStories"
-    />
+    <b-input-group>
+      <b-input-group-prepend>
+        <b-input-group-text><BIconSearch id="searchIcon"></BIconSearch></b-input-group-text>
+      </b-input-group-prepend>
+      <b-input
+        id="search"
+        v-model="input"
+        type="text"
+        :placeholder="
+          t(
+            'session.prepare.step.selection.mode.description.withIssueTracker.placeholder.searchProjects'
+          )
+        "
+        @input="
+          showResult = true;
+          filterProjects();
+        "
+        @click="
+          showResult = true;
+          filterProjects();
+        "
+        @blur="input === '' ? (showResult = false) : (showResult = true)"
+      />
+    </b-input-group>
+    <ul v-if="showResult" class="vue-autocomplete-input-tag-items">
+      <li
+        v-for="name in projectNamesList"
+        :key="name"
+        class="vue-autocomplete-input-tag-item"
+        @click="selectProject(name)"
+      >
+        {{ name }}
+      </li>
+    </ul>
 
     <div class="mt-3">
-      {{ $t("session.prepare.step.selection.mode.description.withIssueTracker.selectedProject") }}
+      {{ t("session.prepare.step.selection.mode.description.withIssueTracker.selectedProject") }}
       <strong>{{ aCorrectProject ? selected : "-" }}</strong>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
 import apiService from "@/services/api.service";
 import Project from "../model/Project";
-import autocomplete from "vue2-autocomplete-input-tag";
+import { useDiveniStore } from "@/store";
+import { useI18n } from "vue-i18n";
 
-export default Vue.extend({
+export default defineComponent({
   name: "ProjectSelectionComponent",
 
-  components: {
-    autocomplete,
+  setup() {
+    const store = useDiveniStore();
+    const { t } = useI18n();
+    return { store, t };
   },
-
   data() {
     return {
-      selected: null,
+      selected: "",
       projectArray: [] as Array<Project>,
+      projectNamesList: [] as Array<string>,
       input: "",
       aCorrectProject: false,
+      showResult: false,
     };
   },
   computed: {
     projects(): Array<Project> {
-      return this.$store.state.projects;
-    },
-
-    getProjectNames(): Array<string> {
-      let projectNames;
-      projectNames = this.projects.map((p) => p.name);
-      return projectNames;
+      return this.store.projects;
     },
   },
 
@@ -58,17 +80,45 @@ export default Vue.extend({
       if (selectedProject) {
         this.aCorrectProject = true;
         console.log(`Selected: ${selectedProject}`);
-        this.$store.commit("setSelectedProject", selectedProject);
+        this.store.setSelectedProject(selectedProject);
         console.log(`Selected Project: ${this.selected}`);
         const response = await apiService.getUserStoriesFromProject(this.selected);
-        this.$store.commit("setUserStories", { stories: response });
+        this.store.setUserStories({ stories: response });
       }
+      this.showResult = false;
+    },
+    filterProjects: function () {
+      if (this.input === "") {
+        this.projectNamesList = this.getProjectNames();
+        return;
+      }
+      if (this.input !== "") {
+        let filteredProjects: string[] = [];
+        this.getProjectNames().forEach((name) => {
+          if (name.toLowerCase().includes(this.input.toLowerCase())) {
+            filteredProjects.push(name);
+          }
+        });
+        this.projectNamesList = filteredProjects;
+      }
+    },
+    getProjectNames(): Array<string> {
+      return this.projects.map((p) => p.name);
+    },
+    selectProject(name: string) {
+      this.projects.forEach((project) => {
+        if (project.name === name) {
+          this.selected = project.name;
+        }
+      });
+      this.input = this.selected;
+      this.getUserStories();
     },
   },
 });
 </script>
 
-<style>
+<style lang="scss">
 input {
   width: 100%;
   border: 1px solid #ccc;
@@ -79,7 +129,7 @@ input {
   box-sizing: border-box;
   font-size: 14px;
 }
-.vue2-autocomplete-input-tag-items {
+.vue-autocomplete-input-tag-items {
   border: 1px solid #ccc;
   max-height: 200px;
   margin-top: 8px;
@@ -88,7 +138,7 @@ input {
   border-radius: 8px;
   overflow: auto;
 }
-.vue2-autocomplete-input-tag-item {
+.vue-autocomplete-input-tag-item {
   padding: 6px 16px;
   color: #4a4a4a;
   max-width: 100%;
@@ -96,7 +146,7 @@ input {
   text-align: left;
   font-size: 14px;
 }
-.vue2-autocomplete-input-tag-item:hover {
+.vue-autocomplete-input-tag-item:hover {
   background-color: #e8e8e8;
 }
 </style>

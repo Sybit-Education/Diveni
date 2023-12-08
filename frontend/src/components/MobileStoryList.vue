@@ -20,7 +20,7 @@
           :style="{
             'background-color': index === number ? 'RGB(202, 202, 202)' : 'white',
           }"
-          :placeholder="$t('page.session.before.userStories.placeholder.userStoryTitle')"
+          :placeholder="t('page.session.before.userStories.placeholder.userStoryTitle')"
         />
         <div>
           <div
@@ -52,16 +52,21 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
+import { useI18n } from "vue-i18n";
 
-export default Vue.extend({
+export default defineComponent({
   name: "MobileStoryList",
   props: {
     cardSet: { type: Array, required: true },
     initialStories: { type: Array, required: true },
     showEstimations: { type: Boolean, required: true },
     showEditButtons: { type: Boolean, required: false, default: true },
-    hostSelectedStoryIndex: { type: Number, required: false, default: null },
+    hostSelectedStoryIndex: { type: Number, required: false, default: undefined },
+  },
+  setup() {
+    const { t } = useI18n();
+    return { t };
   },
   data() {
     return {
@@ -113,7 +118,8 @@ export default Vue.extend({
 });
 </script>
 
-<style scoped>
+<!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
+<style lang="scss" scoped>
 .list-group-item.active {
   background-color: white !important;
   border-width: 3px;
