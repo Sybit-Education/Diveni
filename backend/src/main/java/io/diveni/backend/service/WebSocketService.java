@@ -6,10 +6,12 @@
 package io.diveni.backend.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import io.diveni.backend.model.AdminVote;
 import io.diveni.backend.model.MemberUpdate;
 import io.diveni.backend.model.Session;
 import io.diveni.backend.model.notification.Notification;
@@ -198,17 +200,16 @@ public class WebSocketService {
 
   public void sendMembersAdminVote(Session session) {
     LOGGER.debug("--> sendMembersAdminVote(), sessionID={}", session.getSessionID());
-    if (session.getHostEstimation() != null) {
-      getSessionPrincipals(session.getSessionID())
+    AdminVote adminVote = Optional.ofNullable(session.getHostEstimation()).orElse(new AdminVote(""));
+    getSessionPrincipals(session.getSessionID())
         .memberPrincipals()
         .forEach(
-          member ->
-            simpMessagingTemplate.convertAndSendToUser(
-              member.getMemberID(), ADMIN_UPDATED_ESTIMATION, session.getHostEstimation()));
+            member ->
+                simpMessagingTemplate.convertAndSendToUser(
+                    member.getMemberID(),
+                    ADMIN_UPDATED_ESTIMATION,
+                    adminVote));
       LOGGER.debug("<-- sendMembersAdminVote()");
-    } else {
-      LOGGER.debug("<-- sendMembersAdminVote(), Host estimation is null");
-    }
   }
 
   public void sendSessionStateToMembers(Session session) {
