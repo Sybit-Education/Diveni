@@ -252,7 +252,7 @@ export default defineComponent({
       }
     },
     async sendCreateSessionRequest() {
-      sessionStorage.clear();
+      window.sessionStorage.removeItem("diveni-store");
       const url = Constants.backendURL + Constants.createSessionRoute;
       const sessionConfig = {
         set: this.selectedCardSetOptions,
