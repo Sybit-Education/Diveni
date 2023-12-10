@@ -4,6 +4,7 @@
   Copyright (C) 2022 AUME-Team 21/22, HTWG Konstanz
 */
 import Vue, { createApp } from "@vue/compat";
+import { watch } from "vue";
 
 import axios from "axios";
 import VueAxios from "vue-axios";
@@ -48,3 +49,10 @@ app
   .use(i18n)
   .use(Toast, {})
   .mount("#app");
+
+watch(pinia.state, (state) => {
+    // persist the whole state to the session storage whenever it changes
+    sessionStorage.setItem("diveni-store", JSON.stringify(state["diveni-store"]))
+  },
+  { deep: true }
+)
