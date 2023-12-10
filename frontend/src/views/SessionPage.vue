@@ -475,9 +475,11 @@ export default defineComponent({
       console.log("ON MOUNTED");
       this.estimateFinished = true;
     }
-    this.refreshUserStories();
+    if (this.userStoryMode === "US_JIRA") {
+      this.refreshUserStories();
+    }
   },
-  destroyed() {
+  unmounted() {
     window.removeEventListener("beforeunload", this.sendUnregisterCommand);
   },
   methods: {
