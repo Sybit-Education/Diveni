@@ -475,6 +475,7 @@ export default defineComponent({
       console.log("ON MOUNTED");
       this.estimateFinished = true;
     }
+    this.refreshUserStories();
   },
   destroyed() {
     window.removeEventListener("beforeunload", this.sendUnregisterCommand);
