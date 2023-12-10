@@ -13,6 +13,7 @@ import "./registerServiceWorker";
 import router from "./router";
 import setupInterceptors from "./interceptors";
 import { createPinia } from "pinia";
+import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
 
 import { BootstrapVue, IconsPlugin, ModalPlugin } from "bootstrap-vue";
 
@@ -37,6 +38,7 @@ setupInterceptors();
 const app = createApp(App);
 
 const pinia = createPinia();
+pinia.use(piniaPluginPersistedstate);
 
 app
   .use(VueAxios, axios)
