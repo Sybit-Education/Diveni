@@ -50,9 +50,11 @@ app
   .use(Toast, {})
   .mount("#app");
 
-watch(pinia.state, (state) => {
+watch(
+  pinia.state,
+  (state) => {
     // persist the whole state to the session storage whenever it changes
-    sessionStorage.setItem("diveni-store", JSON.stringify(state["diveni-store"]))
+    sessionStorage.setItem("diveni-store", JSON.stringify(state["diveni-store"]));
   },
   { deep: true }
-)
+);

@@ -26,7 +26,7 @@ export const useDiveniStore = defineStore("diveni-store", {
       hostEstimation: undefined as AdminVote | undefined,
       hostVoting: false,
       autoReveal: false,
-    }
+    };
   },
   persist: {
     storage: sessionStorage, //Storage where we store our "store-state"
@@ -58,7 +58,7 @@ export const useDiveniStore = defineStore("diveni-store", {
     },
     disconnectFromBackendWS() {
       this.stompClient?.disconnect(() => {
-        console.log("WebSocket Disconnected!")
+        console.log("WebSocket Disconnected!");
         this.webSocketConnected = false;
       });
     },
