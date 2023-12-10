@@ -252,6 +252,7 @@ export default defineComponent({
       }
     },
     async sendCreateSessionRequest() {
+      sessionStorage.clear();
       const url = Constants.backendURL + Constants.createSessionRoute;
       const sessionConfig = {
         set: this.selectedCardSetOptions,
