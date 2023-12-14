@@ -39,7 +39,7 @@ onMounted(() => {
     initialValue: props.initialValue ?? "",
     previewStyle: "vertical",
     events: {
-      change: () => emit("update:modelValue", e.getMarkdown()),
+      blur: () => emit("update:modelValue", e.getMarkdown()),
     },
   });
 });
