@@ -115,12 +115,13 @@ export default defineComponent({
       return this.projects.map((p) => p.name);
     },
     selectProject(name: string) {
-      const project = this.projects.find((p) => p.name === name);
-      if (project) {
-        this.selected = project.name;
-        this.input = this.selected;
-        this.getUserStories();
-      }
+      this.projects.forEach((project) => {
+        if (project.name === name) {
+          this.selected = project.name;
+        }
+      });
+      this.input = this.selected;
+      this.getUserStories();
     },
   },
 });
