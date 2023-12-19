@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import io.diveni.backend.model.AdminVote;
 import io.diveni.backend.model.MemberUpdate;
 import io.diveni.backend.model.Session;
 import io.diveni.backend.model.notification.Notification;
@@ -203,7 +204,11 @@ public class WebSocketService {
         .forEach(
             member ->
                 simpMessagingTemplate.convertAndSendToUser(
-                    member.getMemberID(), ADMIN_UPDATED_ESTIMATION, session.getHostEstimation()));
+                    member.getMemberID(),
+                    ADMIN_UPDATED_ESTIMATION,
+                    session.getHostEstimation() != null
+                        ? session.getHostEstimation()
+                        : new AdminVote("")));
     LOGGER.debug("<-- sendMembersAdminVote()");
   }
 

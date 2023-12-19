@@ -33,5 +33,4 @@ public class PullRequest {
   private void unpackNestedProperty(Map<String, String> map) {
     userType = map.get("type");
   }
-
 }
