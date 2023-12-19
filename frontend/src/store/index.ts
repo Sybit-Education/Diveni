@@ -53,7 +53,7 @@ export const useDiveniStore = defineStore("diveni-store", {
     },
     disconnectFromBackendWS() {
       this.stompClient?.disconnect(() => {
-        console.log("WebSocket Disconnected!")
+        console.log("WebSocket Disconnected!");
         this.webSocketConnected = false;
       });
     },
