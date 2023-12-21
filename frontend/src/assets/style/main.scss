@@ -140,28 +140,13 @@ a {
   }
 }
 
-//.btn-secondary:not(:disabled):not(.disabled),
-//.show > .btn-secondary.dropdown-toggle {
-//  background-color: var(--blurredColour8);
-//}
-//
-//.btn-secondary:not(:disabled):not(.disabled):active,
-//.btn-secondary:not(:disabled):not(.disabled).active,
-//.show > .btn-secondary.dropdown-toggle {
-//  background-color: var(--primary-button);
-//  border-color: var(--blurredColour2);
-//  border-width: 3px;
-//}
-
 .btn {
   color: var(--text-primary-color);
   box-shadow: none !important;
-  //border: none;
 }
 
 .btn:focus {
   box-shadow: none !important;
-  //border: none;
 }
 
 .form-control {

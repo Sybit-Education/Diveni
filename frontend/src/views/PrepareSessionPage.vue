@@ -79,6 +79,7 @@
     </h4>
     <div class="settings-control">
       <b-button
+        variant="primary"
         class="btn-sm btn-outline-light"
         @click="
           setTimerDown();
@@ -91,6 +92,7 @@
         {{ timer == 0 ? "∞" : formatTimer }}
       </div>
       <b-button
+        variant="primary"
         class="btn-sm btn-outline-light"
         @click="
           setTimerUp();
@@ -113,6 +115,7 @@
       <b-col>
         <div class="settings-control">
           <b-button
+            variant="primary"
             class="btn-sm btn-outline-light"
             @click="
               hostVoting = true;
@@ -129,6 +132,7 @@
             }}
           </div>
           <b-button
+            variant="primary"
             class="btn-sm btn-outline-light"
             @click="
               hostVoting = false;
