@@ -25,12 +25,13 @@ $border-radius-sm: 1rem !default;
   --element-size: 6rem;
   --link-color: #2d5ea1;
   --box-shadow: #cacaca;
+  --btn-border-color: rgb(185, 185, 185);
 
   /*Landing Page*/
   --primary-button: #946234e0;
   --primary-button-hovered: #9c5b1d;
   --secondary-button: #658462;
-  --secondary-button-hovered: #3ea134;
+  --secondary-button-hovered: #3f7c3c;
   --reconnectButton: #822e1c;
   --reconnectButtonHovered: #9e2e15;
   --pictureGradientEnd: rgba(19, 44, 20, 0.5);
@@ -83,12 +84,13 @@ $border-radius-sm: 1rem !default;
   --text-color-hover: #000000;
   --link-color: #4c93f3;
   --box-shadow: rgba(137, 152, 187, 0.4);
+  --btn-border-color: rgb(100, 100, 100);
 
   /*Landing Page*/
   --primary-button: #13276d;
-  --primary-button-hovered: #13266dc9;
+  --primary-button-hovered: #0f2fa2;
   --secondary-button: #42104b;
-  --secondary-button-hovered: #8A1A9F;
+  --secondary-button-hovered: #631975;
   --reconnectButton: #822e1c;
   --reconnectButtonHovered: #9e2e15;
   --landingPageCardsBackground: #525252;
