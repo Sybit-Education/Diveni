@@ -341,6 +341,7 @@ export default defineComponent({
     &:not(.active) {
       background-color: var(--preparePageNotSelectedTabBackground) !important;
       color: var(--text-primary-color) !important;
+      border-color: var(--btn-border-color) !important;
 
       &:hover {
         color: var(--text-color-hover) !important;
@@ -350,6 +351,7 @@ export default defineComponent({
     &.active {
       background-color: var(--preparePageMainColor) !important;
       color: var(--text-primary-color) !important;
+      border-color: var(--btn-border-color) !important;
 
       &:hover {
         background-color: var(--preparePageInActiveTabHover);
