@@ -379,17 +379,6 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import "@/assets/style/_variables.scss";
 
-.btn-secondary:not(:disabled):not(.disabled),
-.show > .btn-secondary.dropdown-toggle {
-  background-color: var(--preparePageTimerBackground);
-}
-
-.btn-secondary:not(:disabled):not(.disabled):active,
-.btn-secondary:not(:disabled):not(.disabled).active,
-.show > .btn-secondary.dropdown-toggle {
-  background-color: var(--primary-button) !important;
-}
-
 .settings-control {
   display: flex;
   border-radius: $border-radius;
