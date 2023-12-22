@@ -126,7 +126,8 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
+<!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
+<style lang="scss" scoped>
 .teaser {
   background: linear-gradient(var(--background-color-primary), var(--pictureGradientEnd)),
     url("~@/assets/img/diveni-background.png");
@@ -138,10 +139,25 @@ export default defineComponent({
   background-color: var(--landingPageCardsBackground);
 }
 
-.customPagination /deep/ li > button,
-.customPagination /deep/ li > span {
+.customPagination :deep(li) > button,
+.customPagination :deep(li) > span {
   background-color: var(--landingPageCardsBackground) !important;
   color: var(--text-primary-color) !important;
   border-color: var(--text-primary-color) !important;
+}
+
+.customPagination :deep(li) > button:hover,
+.customPagination :deep(li) > span:hover {
+  background-color: var(--preparePageInActiveTabHover) !important;
+}
+
+.customPagination :deep(li.active) > button,
+.customPagination :deep(li.active) > span,
+.customPagination :deep(li) > button:focus,
+.customPagination :deep(li) > span:focus,
+.customPagination :deep(li) > button:active,
+.customPagination :deep(li) > span:active {
+  background-color: var(--primary-button) !important;
+  box-shadow: none !important;
 }
 </style>
