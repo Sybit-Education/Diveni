@@ -223,6 +223,7 @@
         </div>
         <div v-if="!estimateFinished" class="newVotes m-1">
           <b-button
+            variant="primary"
             v-for="item in voteSet"
             :key="item"
             class="activePills m-1"
@@ -731,6 +732,21 @@ export default defineComponent({
   margin-right: auto;
 }
 
+.activePills {
+  &:not(.active) {
+    background-color: var(--preparePageNotSelectedTabBackground) !important;
+    color: var(--text-primary-color) !important;
+
+    &:hover {
+      color: var(--text-color-hover) !important;
+    }
+
+    &:focus {
+      background-color: var(--primary-button) !important;
+    }
+  }
+}
+
 .optionButtonCol {
   margin-top: auto;
   margin-bottom: auto;
@@ -808,18 +824,4 @@ export default defineComponent({
   height: 180px;
 }
 
-.activePills {
-  background-color: var(--preparePageMainColor);
-  color: var(--text-primary-color);
-}
-
-.activePills:hover {
-  background-color: var(--preparePageInActiveTabHover);
-  color: var(--text-primary-color);
-}
-
-.activePills:focus {
-  background-color: var(--preparePageInActiveTabHover) !important;
-  color: var(--text-primary-color);
-}
 </style>
