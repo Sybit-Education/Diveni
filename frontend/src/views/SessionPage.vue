@@ -681,7 +681,7 @@ export default defineComponent({
     },
     sendUnregisterCommand() {
       const endPoint = `${Constants.webSocketUnregisterRoute}`;
-      this.store.sendViaBackendWS(endPoint, null);
+      this.store.sendViaBackendWS(endPoint);
       this.store.clearStore();
     },
     sendVotingFinishedMessage() {
