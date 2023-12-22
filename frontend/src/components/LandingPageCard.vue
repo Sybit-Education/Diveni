@@ -21,7 +21,7 @@ export default defineComponent({
     description: { type: String, required: true },
     buttonText: { type: String, required: true },
     onClick: { type: Function, required: true },
-    buttonVariant: { type: String, required: false, default: "primary"},
+    buttonVariant: { type: String, required: false, default: "primary" },
   },
 });
 </script>
