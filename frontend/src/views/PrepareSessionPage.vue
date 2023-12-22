@@ -4,7 +4,7 @@
       {{ t("session.prepare.title") }}
     </h1>
 
-    <h4 class="mt-3">
+    <h4 class="mt-2">
       <b-img
         v-if="theme === 'light'"
         :src="require('@/assets/preparePage/P1.png')"
@@ -54,7 +54,7 @@
         <jira-component class="mt-2" />
       </b-tab>
     </b-tabs>
-    <h4 class="mt-4">
+    <h4 class="mt-5">
       <b-img
         v-if="theme === 'light'"
         :src="require('@/assets/preparePage/P2.png')"
@@ -64,11 +64,11 @@
       {{ t("session.prepare.step.selection.cardSet.title") }}
     </h4>
     <card-set-component
-      class="mt-3"
+      class="mt-2"
       :user-story-mode="userStoryMode"
       @selectedCardSetOptions="setCardSetOptions"
     />
-    <h4 class="mt-3">
+    <h4 class="mt-4">
       <b-img
         v-if="theme === 'light'"
         :src="require('@/assets/preparePage/P3.png')"
@@ -88,7 +88,7 @@
       >
         -
       </b-button>
-      <div id="setting-value" class="font-weight-bolder px-2 text-center">
+      <div id="setting-value" class="font-weight-bolder px-3 text-center">
         {{ timer == 0 ? "∞" : formatTimer }}
       </div>
       <b-button
@@ -102,7 +102,7 @@
         +
       </b-button>
     </div>
-    <h4 class="mt-3">
+    <h4 class="mt-5">
       <b-img
         v-if="theme === 'light'"
         :src="require('@/assets/preparePage/P4.png')"
@@ -111,7 +111,7 @@
       <b-img v-else :src="require('@/assets/preparePage/P4D.png')" class="numberPictures" />
       {{ t("session.prepare.step.selection.hostVoting.title") }}
     </h4>
-    <b-row class="mt-3">
+    <b-row class="mt-2">
       <b-col>
         <div class="settings-control">
           <b-button
@@ -124,7 +124,7 @@
           >
             {{ t("session.prepare.step.selection.hostVoting.hostVotingOn") }}
           </b-button>
-          <div id="setting-value" class="font-weight-bolder px-2 text-center">
+          <div id="setting-value" class="font-weight-bolder px-3 text-center">
             {{
               hostVoting
                 ? t("session.prepare.step.selection.hostVoting.hostVotingOn")
@@ -144,10 +144,10 @@
         </div>
       </b-col>
     </b-row>
-    <h4 class="mt-3">
+    <h4 class="mt-5">
       {{ t("session.prepare.step.selection.password.title") }}
     </h4>
-    <b-row class="mt-3">
+    <b-row class="mt-2">
       <b-col>
         <b-form-input
           id="input-password"
@@ -158,7 +158,7 @@
     </b-row>
     <b-button
       variant="primary"
-      class="my-5"
+      class="mt-5 mb-2"
       :disabled="buttonDisabled()"
       @click="sendCreateSessionRequest"
     >
