@@ -54,7 +54,7 @@
         <jira-component class="mt-2" />
       </b-tab>
     </b-tabs>
-    <h4 class="mt-5">
+    <h4 class="mt-4">
       <b-img
         v-if="theme === 'light'"
         :src="require('@/assets/preparePage/P2.png')"
