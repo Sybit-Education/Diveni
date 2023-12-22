@@ -100,7 +100,7 @@ export default defineComponent({
         return;
       }
       if (this.input !== "") {
-        let filteredProjects: string[] = [];
+        const filteredProjects: string[] = [];
         this.getProjectNames().forEach((name) => {
           if (name.toLowerCase().includes(this.input.toLowerCase())) {
             filteredProjects.push(name);

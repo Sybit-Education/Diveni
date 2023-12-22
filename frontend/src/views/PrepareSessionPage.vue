@@ -349,12 +349,12 @@ export default defineComponent({
         header: true,
         delimiter: ";",
         complete: (file: { data }) => {
-          let stories: UserStory[] = [];
+          const stories: UserStory[] = [];
 
           file.data.forEach((story) => {
-            let title = story.title ? story.title : story.Title;
-            let description = story.description ? story.description : story.Description;
-            let estimation = story.estimation ? story.estimation : story.Estimation;
+            const title = story.title ? story.title : story.Title;
+            const description = story.description ? story.description : story.Description;
+            const estimation = story.estimation ? story.estimation : story.Estimation;
 
             stories.push({
               id: null,

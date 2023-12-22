@@ -171,7 +171,7 @@ export default defineComponent({
       }
       this.userStories = this.savedStories;
       if (this.input !== "") {
-        let filteredUserStories: UserStory[] = [];
+        const filteredUserStories: UserStory[] = [];
         this.userStories.forEach((userStory) => {
           if (userStory.title.toLowerCase().includes(this.input.toLowerCase())) {
             filteredUserStories.push(userStory);

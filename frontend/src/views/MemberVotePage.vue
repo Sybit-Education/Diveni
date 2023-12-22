@@ -373,7 +373,7 @@ export default defineComponent({
       if (this.highlightedMembers.length === 0) {
         return true;
       }
-      let highlightedMap = new Map<string, boolean>();
+      const highlightedMap = new Map<string, boolean>();
       this.highlightedMembers.forEach((highlightedMemberID) => {
         let isMemberID = false;
         this.members.forEach((member) => {
@@ -383,7 +383,7 @@ export default defineComponent({
         });
         highlightedMap.set(highlightedMemberID, isMemberID);
       });
-      for (let value of highlightedMap.values()) {
+      for (const value of highlightedMap.values()) {
         if (value === false) {
           return true;
         }
