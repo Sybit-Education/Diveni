@@ -157,7 +157,8 @@
       </b-col>
     </b-row>
     <b-button
-      class="my-5 startingButton"
+      variant="primary"
+      class="my-5"
       :disabled="buttonDisabled()"
       @click="sendCreateSessionRequest"
     >
@@ -406,30 +407,6 @@ export default defineComponent({
     flex: content;
     width: 5rem;
   }
-}
-
-.startingButton {
-  background-color: var(--primary-button) !important;
-  color: var(--text-primary-color);
-}
-
-.startingButton:hover {
-  background-color: var(--primary-button-hovered);
-  color: var(--text-primary-color);
-}
-
-.startingButton:disabled {
-  color: var(--text-primary-color);
-}
-
-.startingButton:disabled:hover {
-  background-color: grey;
-  color: var(--text-primary-color);
-}
-
-.startingButton:focus {
-  background-color: var(--primary-button-hovered) !important;
-  color: var(--text-primary-color);
 }
 
 .numberPictures {

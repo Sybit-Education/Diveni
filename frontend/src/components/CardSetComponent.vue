@@ -341,7 +341,7 @@ export default defineComponent({
     &:not(.active) {
       background-color: var(--preparePageNotSelectedTabBackground) !important;
       color: var(--text-primary-color) !important;
-      border-color: var(--btn-border-color) !important;
+      border: transparent !important;
 
       &:hover {
         color: var(--text-color-hover) !important;
