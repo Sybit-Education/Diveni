@@ -223,9 +223,9 @@
         </div>
         <div v-if="!estimateFinished" class="newVotes m-1">
           <b-button
-            variant="primary"
             v-for="item in voteSet"
             :key="item"
+            variant="primary"
             class="activePills m-1"
             pill
             style="width: 60px"
