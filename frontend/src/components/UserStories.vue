@@ -220,48 +220,6 @@ export default defineComponent({
   rotate: 90deg;
 }
 
-#search {
-  background: var(--textAreaColour);
-  color: var(--text-primary-color);
-  border-style: solid;
-}
-
-#search::placeholder {
-  color: var(--text-primary-color);
-}
-
-.selectedStory {
-  background-color: transparent;
-  border: none;
-}
-
-.selectedStory:hover {
-  background-color: transparent !important;
-  border: none;
-}
-
-.selectedStory:focus {
-  background-color: transparent !important;
-  border: none;
-  outline: none;
-  box-shadow: none;
-}
-
-.outlineColorStory {
-  background-color: transparent;
-  border: none;
-}
-
-.outlineColorStory:hover {
-  background-color: transparent;
-  border: none;
-}
-
-.outlineColorStory:focus {
-  background-color: transparent !important;
-  border: none;
-}
-
 #userStoryRow {
   background-color: var(--textAreaColour);
   color: var(--text-primary-color);
@@ -279,10 +237,6 @@ export default defineComponent({
   color: var(--text-primary-color);
   font-size: large;
   border: none;
-}
-
-#userStoryTitles::placeholder {
-  color: var(--text-primary-color);
 }
 
 #userStoryPicture {
