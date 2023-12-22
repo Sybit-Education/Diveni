@@ -119,8 +119,8 @@ export default defineComponent({
 <!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
 <style lang="scss" scoped>
 .statsCards {
-  border-radius: 0.5rem;
-  background-color: rgba(200, 200, 200, 0.5);
+  border-radius: 2rem;
+  background-color: var(--blurBackGroundColor);
 }
 .numbers {
   text-align: center;

@@ -30,5 +30,6 @@ export default defineComponent({
 <style lang="scss" scoped>
 .landing-page-card {
   border-radius: 2rem;
+  background-color: var(--blurBackGroundColor);
 }
 </style>
