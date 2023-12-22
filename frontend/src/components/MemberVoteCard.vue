@@ -117,7 +117,7 @@ export default defineComponent({
 
 .text {
   font-size: 5rem;
-  font-weight: 500;
+  font-weight: 600;
   color: black;
 }
 </style>
