@@ -233,6 +233,9 @@
                   "signInWithAzureDevOps": {
                     "label": "Увійдіть через Azure DevOps"
                   },
+                  "signInWithGithub": {
+                    "label": "Sign in with Github"
+                  },
                   "selectProject": {
                     "label": "Виберіть ваш jira проєкт"
                   },
