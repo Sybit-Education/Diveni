@@ -823,5 +823,4 @@ export default defineComponent({
   width: 240px;
   height: 180px;
 }
-
 </style>

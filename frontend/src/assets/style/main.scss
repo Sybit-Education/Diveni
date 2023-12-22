@@ -60,16 +60,11 @@ a {
   }
 }
 
-.estimationDescription {
-  .btn {
-    color: var(--text-primary-color);
-  }
-}
-
 .navbar-expand {
   flex-flow: wrap;
 }
 
+/* Buttons */
 .btn {
   color: var(--text-primary-color);
   box-shadow: none !important;
@@ -150,9 +145,11 @@ a {
   }
 }
 
+/* Form-controls */
 .form-control {
   background-color: var(--preparePageNotSelectedTabBackground);
   border-width: 2px;
+  color: var(--text-primary-color);
 
   &:hover {
     border-color: var(--secondary-button);
@@ -161,11 +158,12 @@ a {
   &:focus {
     background-color: var(--textAreaColour);
     border-color: var(--primary-button);
+    color: var(--text-primary-color);
     box-shadow: none !important;
   }
 
   &::placeholder {
-    color: var(--text-primary-color);
+    color: grey;
   }
 }
 
@@ -177,6 +175,7 @@ a {
   }
 }
 
+/* Modal */
 .modal-content {
   background-color: var(--background-color-primary);
   color: var(--text-primary-color);
@@ -199,6 +198,7 @@ a {
   color: var(--text-primary-color) !important;
 }
 
+/* PreparePage - Tab Style */
 .selectedTab {
   background-color: var(--primary-button) !important;
   border-color: var(--preparePageBorderTab) !important;
@@ -208,7 +208,6 @@ a {
   color: var(--text-primary-color) !important;
 }
 
-/* PreparePage - Tab Style */
 .notSelectedTab {
   background-color: var(--preparePageNotSelectedTabBackground) !important;
   border-color: var(--preparePageBorderTab) !important;
