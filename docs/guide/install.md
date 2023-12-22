@@ -46,6 +46,18 @@ For setting up the Azure DevOps Connector, you have to generate a personal acces
 
 Afterwards you have to enter the used organisation in `AZURE_ORGANIZATION` and the personal access token in `AZURE_CLIENTPAT` in `backend/.env`.
 
+### Github Connector
+
+For setting up the Github Connector, you need to generate a personal access token. <br>
+#### How to create a personal access token
+1. Click on your profile picture in the top right corner
+2. Go to the settings menu
+3. Scroll a bit down to find the developer settings menu on the right
+4. Click on Personal access tokens -> Tokens(classic)
+5. Press on generate new token. Select classic as well.
+6. Give the access token a name
+7. Select the repo scope and you are ready to create the token.
+
 
 ### Gitlab Connector
 
@@ -225,7 +237,6 @@ AZURE_ORGANIZATION=organization
 
 #Azure Personal Access Token
 AZURE_CLIENTPAT=xxx
-
 ```
 Copy the configured file to `/backend/.env`
 

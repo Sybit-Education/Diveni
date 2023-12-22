@@ -30,7 +30,7 @@ export default defineComponent({
   },
   methods: {
     showToast(message) {
-      if (message) {
+      if (!message) {
         return;
       }
       if (message.type === "ADMIN_LEFT") {

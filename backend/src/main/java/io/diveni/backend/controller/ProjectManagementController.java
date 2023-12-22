@@ -11,6 +11,7 @@ import io.diveni.backend.model.*;
 import io.diveni.backend.service.DatabaseService;
 import io.diveni.backend.service.projectmanagementproviders.ProjectManagementProvider;
 import io.diveni.backend.service.projectmanagementproviders.azuredevops.AzureDevOpsService;
+import io.diveni.backend.service.projectmanagementproviders.github.GithubService;
 import io.diveni.backend.service.projectmanagementproviders.gitlab.GitlabService;
 import io.diveni.backend.service.projectmanagementproviders.jiracloud.JiraCloudService;
 import io.diveni.backend.service.projectmanagementproviders.jiraserver.JiraServerService;
@@ -46,6 +47,8 @@ public class ProjectManagementController {
   @Autowired JiraCloudService jiraCloudService;
 
   @Autowired AzureDevOpsService azureDevOpsService;
+
+  @Autowired GithubService githubService;
 
   @Autowired GitlabService gitlabService;
 
@@ -112,6 +115,17 @@ public class ProjectManagementController {
     ResponseEntity<TokenIdentifier> response =
         new ResponseEntity<>(azureDevOpsService.getAccessToken("", origin), HttpStatus.OK);
     LOGGER.debug("<-- getOAuth2AccessToken()");
+    return response;
+  }
+
+  @PostMapping("/github/oauth2/accessToken")
+  public ResponseEntity<TokenIdentifier> getGithubOAuth2AccessToken(
+      @RequestHeader("Origin") String origin, @RequestBody PersonalAccessToken pat) {
+    LOGGER.debug("--> getOAuth2GithubAccessToken() , origin={}", origin);
+    ResponseEntity<TokenIdentifier> response =
+        new ResponseEntity<>(
+            githubService.getAccessTokenForGithub(origin, pat.getCode()), HttpStatus.OK);
+    LOGGER.debug("<-- getGithubOAuth2AccessToken()");
     return response;
   }
 
@@ -247,6 +261,8 @@ public class ProjectManagementController {
       return jiraCloudService;
     } else if (azureDevOpsService.containsToken(tokenIdentifier)) {
       return azureDevOpsService;
+    } else if (githubService.containsToken(tokenIdentifier)) {
+      return githubService;
     } else if (gitlabService.containsToken(tokenIdentifier)) {
       return gitlabService;
     }

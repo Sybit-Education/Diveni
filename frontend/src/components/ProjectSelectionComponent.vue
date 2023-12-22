@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div ref="projectSelectionRef">
     <b-input-group>
       <b-input-group-prepend>
         <b-input-group-text><BIconSearch id="searchIcon"></BIconSearch></b-input-group-text>
@@ -14,14 +14,12 @@
           )
         "
         @input="
+          filterProjects();
+        "
+        @focus="
           showResult = true;
           filterProjects();
         "
-        @click="
-          showResult = true;
-          filterProjects();
-        "
-        @blur="input === '' ? (showResult = false) : (showResult = true)"
       />
     </b-input-group>
     <ul v-if="showResult" class="vue-autocomplete-input-tag-items">
@@ -72,16 +70,27 @@ export default defineComponent({
       return this.store.projects;
     },
   },
-
+  mounted() {
+    document.addEventListener("click", this.handleGlobalClick);
+  },
+  beforeUnmount() {
+    document.removeEventListener("click", this.handleGlobalClick);
+  },
   methods: {
+    handleGlobalClick(event: MouseEvent) {
+      const isOutsideComponent = !(this.$refs.projectSelectionRef as HTMLElement).contains(
+        event.target as Node
+      );
+      if (isOutsideComponent) {
+        this.showResult = false;
+      }
+    },
     async getUserStories() {
       this.aCorrectProject = false;
       const selectedProject = this.projects.find((p) => p.name === this.selected);
       if (selectedProject) {
         this.aCorrectProject = true;
-        console.log(`Selected: ${selectedProject}`);
         this.store.setSelectedProject(selectedProject);
-        console.log(`Selected Project: ${this.selected}`);
         const response = await apiService.getUserStoriesFromProject(this.selected);
         this.store.setUserStories({ stories: response });
       }

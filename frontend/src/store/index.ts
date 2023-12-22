@@ -36,16 +36,26 @@ export const useDiveniStore = defineStore("diveni-store", {
         // eslint-disable-next-line @typescript-eslint/no-empty-function
         this.stompClient.debug = () => {};
       }
-      this.stompClient.connect(
-        {},
-        () => {
-          this.webSocketConnected = true;
-        },
-        (error) => {
-          console.error(error);
-          this.webSocketConnected = false;
-        }
-      );
+      const connect_callback = () => {
+        console.log("WebSocket Connected");
+        this.webSocketConnected = true;
+      };
+      const error_callback = (error) => {
+        console.error("Error connecting to the WebSocket");
+        console.error(error);
+        this.webSocketConnected = false;
+      };
+      /**
+       * client.connect(headers, connectCallback, errorCallback);
+       * More information here: https://jmesnil.net/stomp-websocket/doc/
+       */
+      this.stompClient.connect({}, connect_callback, error_callback);
+    },
+    disconnectFromBackendWS() {
+      this.stompClient?.disconnect(() => {
+        console.log("WebSocket Disconnected!")
+        this.webSocketConnected = false;
+      });
     },
     subscribeOnBackendWSMemberUpdates() {
       this.stompClient?.subscribe(Constants.webSocketMemberListenRoute, (frame) => {

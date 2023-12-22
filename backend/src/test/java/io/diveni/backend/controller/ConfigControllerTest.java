@@ -1,6 +1,7 @@
 package io.diveni.backend.controller;
 
 import io.diveni.backend.service.projectmanagementproviders.azuredevops.AzureDevOpsService;
+import io.diveni.backend.service.projectmanagementproviders.github.GithubService;
 import io.diveni.backend.service.projectmanagementproviders.jiracloud.JiraCloudService;
 import io.diveni.backend.service.projectmanagementproviders.jiraserver.JiraServerService;
 import org.junit.jupiter.api.Test;
@@ -23,6 +24,8 @@ public class ConfigControllerTest {
   @Autowired private JiraCloudService jiraCloudService;
 
   @Autowired private AzureDevOpsService azureDevOpsService;
+
+  @Autowired private GithubService githubService;
 
   @Test
   public void getLocale_returnsDE() throws Exception {
@@ -48,6 +51,9 @@ public class ConfigControllerTest {
                 .value(jiraCloudService.getJiraCloudAuthorizeUrl()))
         .andExpect(
             (MockMvcResultMatchers.jsonPath("$.isAzureDevOpsEnabled")
-                .value(Boolean.valueOf(azureDevOpsService.serviceEnabled()).toString())));
+                .value(Boolean.valueOf(azureDevOpsService.serviceEnabled()).toString())))
+        .andExpect(
+            MockMvcResultMatchers.jsonPath("$.isGithubEnabled")
+                .value(Boolean.valueOf(githubService.serviceEnabled()).toString()));
   }
 }

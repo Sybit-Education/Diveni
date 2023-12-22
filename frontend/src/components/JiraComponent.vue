@@ -10,6 +10,7 @@
         <sign-in-with-jira-cloud-button-component v-if="isJiraCloudEnabled" class="my-1" />
         <sign-in-with-jira-server-button-component v-if="isJiraServerEnabled" class="my-1" />
         <sign-in-with-azure-cloud-button-component v-if="isAzureDevOpsEnabled" class="my-1" />
+        <sign-in-with-git-hub-button-component v-if="isGithubEnabled" class="my-1"/>
         <sign-in-with-gitlab-button-component v-if="isGitlabEnabled" class="my-1" />
       </li>
       <li>
@@ -34,6 +35,7 @@ import { defineComponent } from "vue";
 import SignInWithJiraCloudButtonComponent from "./SignInWithJiraCloudButtonComponent.vue";
 import SignInWithJiraServerButtonComponent from "./SignInWithJiraServerButtonComponent.vue";
 import SignInWithAzureCloudButtonComponent from "./SignInWithAzureDevOpsButtonComponent.vue";
+import SignInWithGitHubButtonComponent from "@/components/SignInWithGitHubButtonComponent.vue";
 import SignInWithGitlabButtonComponent from "@/components/SignInWithGitlabButtonComponent.vue";
 import ProjectSelectionComponent from "./ProjectSelectionComponent.vue";
 import apiService from "@/services/api.service";
@@ -44,11 +46,12 @@ import { useI18n } from "vue-i18n";
 export default defineComponent({
   name: "JiraComponent",
   components: {
-      SignInWithGitlabButtonComponent,
-      SignInWithJiraCloudButtonComponent,
-      SignInWithJiraServerButtonComponent,
-      SignInWithAzureCloudButtonComponent,
-      ProjectSelectionComponent,
+    SignInWithJiraCloudButtonComponent,
+    SignInWithJiraServerButtonComponent,
+    SignInWithAzureCloudButtonComponent,
+    SignInWithGitHubButtonComponent,
+    SignInWithGitlabButtonComponent,
+    ProjectSelectionComponent,
   },
   setup() {
     const store = useDiveniStore();
@@ -61,6 +64,7 @@ export default defineComponent({
       isJiraCloudEnabled: false,
       isJiraServerEnabled: false,
       isAzureDevOpsEnabled: false,
+      isGithubEnabled: false,
       isGitlabEnabled: false,
     };
   },
@@ -90,6 +94,7 @@ export default defineComponent({
       this.isJiraCloudEnabled = result.isJiraCloudEnabled === "true";
       this.isJiraServerEnabled = result.isJiraServerEnabled === "true";
       this.isAzureDevOpsEnabled = result.isAzureDevOpsEnabled === "true";
+      this.isGithubEnabled = result.isGithubEnabled === "true";
       this.isGitlabEnabled = result.isGitlabEnabled === "true";
     });
   },
