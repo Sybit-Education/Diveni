@@ -70,6 +70,15 @@ a {
   flex-flow: wrap;
 }
 
+.btn {
+  color: var(--text-primary-color);
+  box-shadow: none !important;
+}
+
+.btn:focus {
+  box-shadow: none !important;
+}
+
 .btn-primary {
   background-color: var(--primary-button) !important;
   border-width: 2px;
@@ -90,6 +99,7 @@ a {
   }
 
   &:disabled, &.disabled:hover {
+    color: var(--text-primary-color);
     background-color: var(--primary-button);
     border-color: var(--btn-border-color);
 
@@ -124,6 +134,7 @@ a {
   }
 
   &:disabled, &.disabled:hover {
+    color: var(--text-primary-color);
     background-color: var(--secondary-button);
     border-color: var(--btn-border-color);
 
@@ -136,15 +147,6 @@ a {
       background-color: var(--secondary-button-hovered);
     }
   }
-}
-
-.btn {
-  color: var(--text-primary-color);
-  box-shadow: none !important;
-}
-
-.btn:focus {
-  box-shadow: none !important;
 }
 
 .form-control {
@@ -200,6 +202,7 @@ a {
 
 .selectedTab {
   background-color: var(--primary-button) !important;
+  border-color: var(--preparePageBorderTab) !important;
 }
 
 .selectedTextColor {
@@ -214,6 +217,7 @@ a {
 
 .notSelectedTab:hover {
   background-color: var(--preparePageInActiveTabHover) !important;
+  color: var(--text-color-hover) !important;
 }
 
 .notSelectedTextColor {

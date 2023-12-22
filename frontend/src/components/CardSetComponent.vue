@@ -345,6 +345,7 @@ export default defineComponent({
 
       &:hover {
         color: var(--text-color-hover) !important;
+        background-color: var(--preparePageInActiveTabHover) !important;
       }
     }
 
