@@ -214,7 +214,6 @@ import { defineComponent } from "vue";
 import { useDiveniStore } from "@/store";
 import { useToast } from "vue-toastification";
 import { useI18n } from "vue-i18n";
-import AdminVote from "@/model/AdminVote";
 
 export default defineComponent({
   name: "MemberVotePage",
@@ -338,7 +337,7 @@ export default defineComponent({
         this.safedHostEstimation = this.hostEstimation?.hostEstimation;
       }
     },
-    notifications(notifications) {
+    notifications() {
       const lastNotification = this.notifications.at(-1);
       if (
         lastNotification &&
