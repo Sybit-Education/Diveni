@@ -54,7 +54,7 @@
           readonly
           size="sm"
           :placeholder="t('page.session.before.userStories.placeholder.userStoryTitle')"
-          @blur="publishChanges"
+          @blur="publishChanges(index, false)"
         />
 
         <b-badge id="badge" class="p-2">
