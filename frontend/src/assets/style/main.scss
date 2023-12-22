@@ -73,6 +73,9 @@ a {
 .btn {
   color: var(--text-primary-color);
   box-shadow: none !important;
+  &:hover {
+    color: var(--text-color-hover);
+  }
 }
 
 .btn:focus {
@@ -86,7 +89,6 @@ a {
 
   &:hover {
     background-color: var(--primary-button-hovered) !important;
-    color: var(--text-color-hover);
     border-color: var(--btn-border-color);
   }
 
@@ -121,7 +123,6 @@ a {
 
   &:hover {
     background-color: var(--secondary-button-hovered) !important;
-    color: var(--text-color-hover);
     border-color: var(--btn-border-color);
   }
 
@@ -151,7 +152,6 @@ a {
 
 .form-control {
   background-color: var(--preparePageNotSelectedTabBackground);
-  color: var(--text-primary-color);
   border-width: 2px;
 
   &:hover {
@@ -160,7 +160,6 @@ a {
 
   &:focus {
     background-color: var(--textAreaColour);
-    color: var(--text-primary-color);
     border-color: var(--primary-button);
     box-shadow: none !important;
   }
