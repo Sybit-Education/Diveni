@@ -233,6 +233,9 @@
                   "signInWithAzureDevOps": {
                     "label": "Connectez-vous avec Azure DevOps"
                   },
+                  "signInWithGithub": {
+                    "label": "Sign in with Github"
+                  },
                   "selectProject": {
                     "label": "Se connecter avec le serveur Jira"
                   },
