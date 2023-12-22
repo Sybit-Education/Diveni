@@ -138,10 +138,6 @@ export default defineComponent({
   background-color: var(--landingPageCardsBackground);
 }
 
-.jumbotron {
-  background-color: rgba(255, 255, 255, 0.5);
-}
-
 .customPagination /deep/ li > button,
 .customPagination /deep/ li > span {
   background-color: var(--landingPageCardsBackground) !important;
