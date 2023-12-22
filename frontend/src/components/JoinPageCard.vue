@@ -29,7 +29,7 @@
         </b-col>
       </b-row>
       <b-row>
-        <b-col class="mt-2 mt-md-0 inputText" cols="12" md="9">
+        <b-col class="mt-4 inputText" cols="12" md="9">
           <h6>{{ t("page.join.input.password") }}</h6>
           <b-form-input
             v-model="password"
