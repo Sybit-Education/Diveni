@@ -59,7 +59,7 @@ class ApiService {
     const response = await axios.post(
       `${constants.backendURL}/issue-tracker/github/oauth2/accessToken`,
       {
-        code: token
+        code: token,
       }
     );
     return response.data;
