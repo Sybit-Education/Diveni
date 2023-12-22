@@ -4,7 +4,7 @@
       class="wrapper"
       :style="{ transform: `translateX(-${(updateValue * 4) / items.length}%)` }"
     >
-      <div v-for="(item, index) in allItems" :key="index" ref="allItems" class="set">
+      <div v-for="(item, index) in allItems" :key="index" ref="carousel" class="set">
         <b-card class="connectorCards" :class="getClass(item)" @click="redirectToDoc(item)">
           <b-card-title>
             <div>
