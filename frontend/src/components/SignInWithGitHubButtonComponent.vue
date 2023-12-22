@@ -18,7 +18,9 @@
         </b-input>
       </div>
       <div class="inline-div">
-        <b-button variant="primary" @click="getAccessToken()"> Sign in </b-button>
+        <b-button variant="primary" :disabled="patToken === ''" @click="getAccessToken()"
+          >Sign in
+        </b-button>
       </div>
     </div>
   </div>
@@ -79,7 +81,13 @@ export default defineComponent({
 .inline-div {
   display: inline-block;
 }
+
 .input-div {
   margin-right: 0.5vw;
+}
+
+.patInputField {
+  width: 100%;
+  margin-right: 5em;
 }
 </style>
