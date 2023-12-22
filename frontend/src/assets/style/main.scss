@@ -93,6 +93,7 @@ a {
 
   &:focus {
     border-color: var(--btn-border-color) !important;
+    color: var(--text-color-hover) !important;
   }
 
   &:disabled, &.disabled:hover {
@@ -127,6 +128,7 @@ a {
 
   &:focus {
     border-color: var(--btn-border-color) !important;
+    color: var(--text-color-hover) !important;
   }
 
   &:disabled, &.disabled:hover {
