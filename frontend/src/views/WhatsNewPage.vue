@@ -87,7 +87,7 @@ export default defineComponent({
     this.fetchData(this.apiPage);
   },
   methods: {
-    parseDate(data: string | any[]) {
+    parseDate(data: PullRequestDto[]) {
       for (let i = 0; i < data.length; i++) {
         data[i].updated_at = dateUtil.convertDate(data[i].updated_at);
       }
