@@ -133,7 +133,7 @@
             :pause-timer="estimateFinished"
             :duration="timerCountdownNumber"
             :voting-started="planningStart"
-            @timerFinished="sendVotingFinishedMessage"
+            @timer-finished="sendVotingFinishedMessage"
           />
         </b-col>
       </b-row>
@@ -259,8 +259,8 @@
           :initial-stories="userStories"
           :show-edit-buttons="true"
           :select-story="true"
-          @userStoriesChanged="onUserStoriesChanged"
-          @selectedStory="onSelectedStory($event)"
+          @user-stories-changed="onUserStoriesChanged"
+          @selected-story="onSelectedStory($event)"
         />
       </b-col>
       <b-col v-else cols="12">
@@ -281,8 +281,8 @@
           :initial-stories="userStories"
           :show-edit-buttons="true"
           :select-story="true"
-          @userStoriesChanged="onUserStoriesChanged"
-          @selectedStory="onSelectedStory($event)"
+          @user-stories-changed="onUserStoriesChanged"
+          @selected-story="onSelectedStory($event)"
         />
       </b-col>
     </b-row>
@@ -293,7 +293,7 @@
           :initial-stories="userStories"
           :edit-description="true"
           :index="index"
-          @userStoriesChanged="onUserStoriesChanged"
+          @user-stories-changed="onUserStoriesChanged"
         />
       </b-col>
       <b-col v-else cols="12">
@@ -302,7 +302,7 @@
           :initial-stories="userStories"
           :edit-description="true"
           :index="index"
-          @userStoriesChanged="onUserStoriesChanged"
+          @user-stories-changed="onUserStoriesChanged"
         />
       </b-col>
     </b-row>
@@ -476,7 +476,7 @@ export default defineComponent({
       this.estimateFinished = true;
     }
   },
-  destroyed() {
+  unmounted() {
     window.removeEventListener("beforeunload", this.sendUnregisterCommand);
   },
   methods: {

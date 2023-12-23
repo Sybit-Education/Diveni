@@ -58,7 +58,7 @@ export default defineComponent({
       }
     }
   },
-  beforeDestroy() {
+  beforeUnmount() {
     clearInterval(this.intervalHandler);
   },
   methods: {

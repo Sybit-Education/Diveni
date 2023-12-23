@@ -47,7 +47,7 @@
             class="my-2"
             :disabled="!editDescription"
             :placeholder="t('page.session.before.userStories.placeholder.userStoryDescription')"
-            @textValueChanged="(event) => valueChanged(idx, event)"
+            @text-value-changed="(event) => valueChanged(idx, event)"
           />
         </div>
         <div v-if="!editDescription">

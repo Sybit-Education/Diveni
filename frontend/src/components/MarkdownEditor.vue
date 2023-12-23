@@ -10,7 +10,7 @@
       initial-edit-type="wysiwyg"
       preview-style="vertical"
       :class="theme === 'light' ? 'lightMode' : 'darkMode'"
-      @update:modelValue="$emit('textValueChanged', { markdown: $event })"
+      @update:model-value="$emit('textValueChanged', { markdown: $event })"
     />
   </div>
 </template>
