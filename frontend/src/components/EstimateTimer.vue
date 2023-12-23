@@ -19,7 +19,7 @@ export default defineComponent({
     member: { type: String, required: false, default: "" },
     votingStarted: { type: Boolean, required: true },
   },
-  emits: ["timerFinished"],
+  emits: ["timer-finished"],
   data() {
     return {
       timerCount: 0,
@@ -89,7 +89,7 @@ export default defineComponent({
             this.localClockTimer();
           }
         } else {
-          this.$emit("timerFinished");
+          this.$emit("timer-finished");
           clearInterval(this.intervalHandler);
         }
       }, 100);
@@ -108,7 +108,7 @@ export default defineComponent({
           if (this.timerCount > 0) {
             this.timerCount = this.timerCount - 1;
           } else {
-            this.$emit("timerFinished");
+            this.$emit("timer-finished");
             clearInterval(this.intervalHandler);
           }
         }, 1000);

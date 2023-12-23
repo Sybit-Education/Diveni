@@ -88,7 +88,7 @@ export default defineComponent({
     showEstimations: { type: Boolean, required: false },
     showEditButtons: { type: Boolean, required: false, default: true },
   },
-  emits: ["userStoriesChanged"],
+  emits: ["user-stories-changed"],
   setup() {
     const { t } = useI18n();
     return { t };
@@ -157,7 +157,7 @@ export default defineComponent({
       });
     },
     publishChanges(idx) {
-      this.$emit("userStoriesChanged", { us: this.userStories, idx: idx, doRemove: false });
+      this.$emit("user-stories-changed", { us: this.userStories, idx: idx, doRemove: false });
     },
     // synchronizeJira(idx) {
     //   this.$emit("synchronizeJira", { story: this.userStories[idx], doRemove: false });
