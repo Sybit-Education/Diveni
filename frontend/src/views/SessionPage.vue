@@ -404,7 +404,7 @@ export default defineComponent({
     },
     isMobile() {
       return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-        navigator.userAgent
+        navigator.userAgent,
       );
     },
   },
@@ -577,13 +577,13 @@ export default defineComponent({
           if (us[idx].id === null && this.selectedProject?.id) {
             response = await apiService.createUserStory(
               JSON.stringify(us[idx]),
-              this.selectedProject.id
+              this.selectedProject.id,
             );
             if (response.status === 200) {
               us = this.userStories.map((s) =>
                 s.title === us[idx].title && s.description === us[idx].description
                   ? { ...s, id: response.data }
-                  : s
+                  : s,
               );
               console.log(`assigned id: ${us[idx].id}`);
             }
@@ -593,7 +593,7 @@ export default defineComponent({
         }
         if (response.status === 200) {
           this.toast.success(
-            this.t("session.notification.messages.issueTrackerSynchronizeSuccess")
+            this.t("session.notification.messages.issueTrackerSynchronizeSuccess"),
           );
         } else if (response === 204) {
           this.toast.info(this.t("session.notification.messages.issueTrackerNothingChanged"));
@@ -629,11 +629,11 @@ export default defineComponent({
           if (story.id === null) {
             response = await apiService.createUserStory(
               JSON.stringify(story),
-              this.selectedProject?.id
+              this.selectedProject?.id,
             );
             if (response.status === 200) {
               const updatedStories = this.userStories.map(
-                (s) => s.title === story.title && s.description === story.description
+                (s) => s.title === story.title && s.description === story.description,
               );
               this.store.setUserStories({ stories: updatedStories });
             }
@@ -643,7 +643,7 @@ export default defineComponent({
         }
         if (response.status === 200) {
           this.toast.success(
-            this.t("session.notification.messages.issueTrackerSynchronizeSuccess")
+            this.t("session.notification.messages.issueTrackerSynchronizeSuccess"),
           );
         } else {
           this.toast.error(this.t("session.notification.messages.issueTrackerSynchronizeFailed"));
@@ -699,7 +699,7 @@ export default defineComponent({
         JSON.stringify({
           hostVoting: this.hostVoting,
           autoReveal: this.autoReveal,
-        })
+        }),
       );
     },
     goToLandingPage() {
@@ -716,7 +716,7 @@ export default defineComponent({
         JSON.stringify({
           vote: this.hostEstimation,
           autoReveal: this.autoReveal,
-        })
+        }),
       );
     },
   },

@@ -80,7 +80,7 @@ export default defineComponent({
           },
           (err) => {
             console.error("Could not copy text: ", err);
-          }
+          },
         );
       } else {
         this.copyToClipboardAlternative(this.sessionId);
@@ -95,7 +95,7 @@ export default defineComponent({
           },
           (err) => {
             console.error("Could not copy text: ", err);
-          }
+          },
         );
       } else {
         this.copyToClipboardAlternative(text);

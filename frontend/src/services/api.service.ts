@@ -5,35 +5,35 @@ import axios, { AxiosResponse } from "axios";
 class ApiService {
   public async getIssueTrackerConfig(): Promise<Record<string, string>> {
     const response = await axios.get<Record<string, string>>(
-      `${constants.backendURL}/config/issueTracker`
+      `${constants.backendURL}/config/issueTracker`,
     );
     return response.data;
   }
 
   public async getLocaleConfig(): Promise<Record<string, string>> {
     const response = await axios.get<Record<string, string>>(
-      `${constants.backendURL}/config/locale`
+      `${constants.backendURL}/config/locale`,
     );
     return response.data;
   }
 
   public async getJiraOauth1RequestToken(): Promise<JiraRequestTokenDto> {
     const response = await axios.get<JiraRequestTokenDto>(
-      `${constants.backendURL}/issue-tracker/jira/oauth1/requestToken`
+      `${constants.backendURL}/issue-tracker/jira/oauth1/requestToken`,
     );
     return response.data;
   }
 
   public async sendJiraOauth1VerificationCode(
     code: string,
-    token: string
+    token: string,
   ): Promise<JiraResponseCodeDto> {
     const response = await axios.post<JiraResponseCodeDto>(
       `${constants.backendURL}/issue-tracker/jira/oauth1/verificationCode`,
       {
         code,
         token,
-      }
+      },
     );
     return response.data;
   }
@@ -43,14 +43,14 @@ class ApiService {
       `${constants.backendURL}/issue-tracker/jira/oauth2/authorizationCode`,
       {
         code,
-      }
+      },
     );
     return response.data;
   }
 
   public async sendAzureOauth2AuthorizationCode(): Promise<JiraResponseCodeDto> {
     const response = await axios.post<JiraResponseCodeDto>(
-      `${constants.backendURL}/issue-tracker/azure/oauth2/authorizationCode`
+      `${constants.backendURL}/issue-tracker/azure/oauth2/authorizationCode`,
     );
     return response.data;
   }
@@ -59,8 +59,8 @@ class ApiService {
     const response = await axios.post(
       `${constants.backendURL}/issue-tracker/github/oauth2/accessToken`,
       {
-        code: token
-      }
+        code: token,
+      },
     );
     return response.data;
   }
@@ -72,7 +72,7 @@ class ApiService {
 
   public async getUserStoriesFromProject(project): Promise<unknown> {
     const response = await axios.get(
-      `${constants.backendURL}/issue-tracker/projects/${project}/issues`
+      `${constants.backendURL}/issue-tracker/projects/${project}/issues`,
     );
     return response.data;
   }
@@ -94,7 +94,7 @@ class ApiService {
         headers: {
           "Content-Type": "application/json",
         },
-      }
+      },
     );
     return response;
   }
@@ -125,7 +125,7 @@ class ApiService {
     direction,
     isMerged,
     page,
-    pageSize
+    pageSize,
   ): Promise<PullRequestDto[]> {
     const queryParams = {
       state: state,

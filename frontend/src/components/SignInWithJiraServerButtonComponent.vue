@@ -12,7 +12,7 @@
     >
       {{
         t(
-          "session.prepare.step.selection.mode.description.withIssueTracker.buttons.signInWithJiraServer.label"
+          "session.prepare.step.selection.mode.description.withIssueTracker.buttons.signInWithJiraServer.label",
         )
       }}
     </b-button>
@@ -43,7 +43,7 @@
             required
             :placeholder="
               t(
-                'session.prepare.step.selection.mode.description.withIssueTracker.inputs.verificationCode.placeholder'
+                'session.prepare.step.selection.mode.description.withIssueTracker.inputs.verificationCode.placeholder',
               )
             "
             :state="verificationCodeState"
@@ -87,7 +87,9 @@ export default defineComponent({
   },
   methods: {
     checkFormValidity() {
-      const valid = (this.$refs.form as HTMLElement & { checkValidity: () => boolean }).checkValidity();
+      const valid = (
+        this.$refs.form as HTMLElement & { checkValidity: () => boolean }
+      ).checkValidity();
       this.verificationCodeState = valid;
       return valid;
     },
@@ -117,7 +119,7 @@ export default defineComponent({
       try {
         const response = await apiService.sendJiraOauth1VerificationCode(
           this.verificationCode,
-          this.token
+          this.token,
         );
         localStorage.setItem("tokenId", response.tokenId);
         this.store.setTokenId(response.tokenId);

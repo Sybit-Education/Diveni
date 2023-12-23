@@ -362,13 +362,13 @@ export default defineComponent({
           this.store.setUserStories({ stories: stories });
           this.toast.success(
             this.t(
-              "session.prepare.step.selection.mode.description.withUS.toastSuccessNotification"
-            )
+              "session.prepare.step.selection.mode.description.withUS.toastSuccessNotification",
+            ),
           );
         },
         error: () => {
           this.toast.error(
-            this.t("session.prepare.step.selection.mode.description.withUS.toastErrorNotification")
+            this.t("session.prepare.step.selection.mode.description.withUS.toastErrorNotification"),
           );
         },
       });

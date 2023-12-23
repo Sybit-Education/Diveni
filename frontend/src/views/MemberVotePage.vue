@@ -260,7 +260,7 @@ export default defineComponent({
   computed: {
     isMobile() {
       return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-        navigator.userAgent
+        navigator.userAgent,
       );
     },
     userStories() {
@@ -401,7 +401,7 @@ export default defineComponent({
         JSON.stringify({
           vote: vote,
           autoReveal: this.isAutoRevealActive,
-        })
+        }),
       );
     },
     goToJoinPage() {

@@ -82,6 +82,7 @@ export default defineComponent({
   props: {
     userStoryMode: { type: String, required: true },
   },
+  emits: ["selectedCardSetOptions"],
   setup() {
     const { t } = useI18n();
     return { t };
@@ -107,7 +108,7 @@ export default defineComponent({
         {
           name: this.t("session.prepare.step.selection.cardSet.sets.tShirtSizes.label"),
           description: this.t(
-            "session.prepare.step.selection.cardSet.sets.tShirtSizes.description"
+            "session.prepare.step.selection.cardSet.sets.tShirtSizes.description",
           ),
           values: ["XXS", "XS", "S", "M", "L", "XL", "XXL", "XXXL", "?"],
           activeValues: ["XS", "S", "M", "L", "XL"],
@@ -193,12 +194,12 @@ export default defineComponent({
     onCardSetNumberSelected(number) {
       if (this.selectedCardSet.activeValues.includes(number)) {
         this.selectedCardSet.activeValues = this.selectedCardSet.activeValues.filter(
-          (num) => num !== number
+          (num) => num !== number,
         );
       } else {
         const newActiveValues = [...this.selectedCardSet.activeValues, number];
         this.selectedCardSet.activeValues = this.selectedCardSet.values.filter((num) =>
-          newActiveValues.includes(num)
+          newActiveValues.includes(num),
         );
       }
       this.emitChanges();

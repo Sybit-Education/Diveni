@@ -54,6 +54,7 @@ export default defineComponent({
       default: "",
     },
   },
+  emits: ["textValueChanged"],
   data() {
     return {
       text: "",

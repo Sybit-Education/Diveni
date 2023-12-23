@@ -122,6 +122,7 @@ export default defineComponent({
     showEditButtons: { type: Boolean, required: false, default: true },
     hostSelectedStoryIndex: { type: Number, required: false, default: null },
   },
+  emits: ["selectedStory", "userStoriesChanged"],
   setup() {
     const { t } = useI18n();
     return { t };

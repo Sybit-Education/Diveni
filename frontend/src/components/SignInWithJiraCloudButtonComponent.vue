@@ -10,7 +10,7 @@
     >
       {{
         t(
-          "session.prepare.step.selection.mode.description.withIssueTracker.buttons.signInWithJiraCloud.label"
+          "session.prepare.step.selection.mode.description.withIssueTracker.buttons.signInWithJiraCloud.label",
         )
       }}
     </b-button>

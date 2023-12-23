@@ -104,7 +104,7 @@ export default defineComponent({
           "desc",
           true,
           page,
-          100
+          100,
         );
         data = data.filter((e) => e.user_type !== Constants.botUserType);
         this.parseDate(data);

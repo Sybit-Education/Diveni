@@ -9,7 +9,7 @@
     >
       {{
         t(
-          "session.prepare.step.selection.mode.description.withIssueTracker.buttons.signInWithJira.label"
+          "session.prepare.step.selection.mode.description.withIssueTracker.buttons.signInWithJira.label",
         )
       }}
     </b-button>
@@ -39,7 +39,7 @@
             required
             :placeholder="
               t(
-                'session.prepare.step.selection.mode.description.withIssueTracker.inputs.verificationCode.placeholder'
+                'session.prepare.step.selection.mode.description.withIssueTracker.inputs.verificationCode.placeholder',
               )
             "
             :state="verificationCodeState"
@@ -71,7 +71,9 @@ export default defineComponent({
   },
   methods: {
     checkFormValidity() {
-      const valid = (this.$refs.form as HTMLElement & { checkValidity: () => boolean }).checkValidity();
+      const valid = (
+        this.$refs.form as HTMLElement & { checkValidity: () => boolean }
+      ).checkValidity();
       this.verificationCodeState = valid;
       return valid;
     },
