@@ -82,7 +82,7 @@ export default defineComponent({
   props: {
     userStoryMode: { type: String, required: true },
   },
-  emits: ["selectedCardSetOptions"],
+  emits: ["selected-card-set-options"],
   setup() {
     const { t } = useI18n();
     return { t };
@@ -167,10 +167,10 @@ export default defineComponent({
         const currentValues = [...new Set(newVal.split(";"))] as string[];
         currentValues.pop();
         this.selectedCardSet.activeValues = currentValues;
-        this.$emit("selectedCardSetOptions", this.selectedCardSet.activeValues);
+        this.$emit("selected-card-set-options", this.selectedCardSet.activeValues);
       } else if (newVal.length == 0) {
         this.selectedCardSet.activeValues = [];
-        this.$emit("selectedCardSetOptions", this.selectedCardSet.activeValues);
+        this.$emit("selected-card-set-options", this.selectedCardSet.activeValues);
       }
     },
   },
@@ -189,7 +189,7 @@ export default defineComponent({
       this.emitChanges();
     },
     emitChanges() {
-      this.$emit("selectedCardSetOptions", this.selectedCardSet.activeValues);
+      this.$emit("selected-card-set-options", this.selectedCardSet.activeValues);
     },
     onCardSetNumberSelected(number) {
       if (this.selectedCardSet.activeValues.includes(number)) {

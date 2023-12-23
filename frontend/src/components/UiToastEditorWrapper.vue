@@ -11,7 +11,7 @@ const props = defineProps({
   initialValue: { type: String, default: "", required: false },
   height: { type: String, default: "500px", required: false },
 });
-const emit = defineEmits(["update:modelValue"]);
+const emit = defineEmits(["update:model-value"]);
 const editor = ref();
 const i18n = useI18n();
 onMounted(() => {
@@ -39,7 +39,7 @@ onMounted(() => {
     initialValue: props.initialValue ?? "",
     previewStyle: "vertical",
     events: {
-      blur: () => emit("update:modelValue", e.getMarkdown()),
+      blur: () => emit("update:model-value", e.getMarkdown()),
     },
   });
 });

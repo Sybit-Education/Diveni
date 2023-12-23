@@ -9,7 +9,7 @@ import { useI18n } from "vue-i18n";
 
 export default defineComponent({
   name: "NotifyMemberComponent",
-  emits: ["hostLeft", "hostJoined"],
+  emits: ["host-left", "host-joined"],
   setup() {
     const store = useDiveniStore();
     const toast = useToast();
@@ -37,10 +37,10 @@ export default defineComponent({
       if (message.type === "ADMIN_LEFT") {
         const hostLeft = this.t("session.notification.messages.hostLeft");
         this.toast.warning(hostLeft);
-        this.$emit("hostLeft");
+        this.$emit("host-left");
       } else if (message.type === "ADMIN_JOINED") {
         this.toast.info(this.t("session.notification.messages.hostJoined"));
-        this.$emit("hostJoined");
+        this.$emit("host-joined");
       }
     },
   },

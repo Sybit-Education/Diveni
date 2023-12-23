@@ -122,7 +122,7 @@ export default defineComponent({
     showEditButtons: { type: Boolean, required: false, default: true },
     hostSelectedStoryIndex: { type: Number, required: false, default: null },
   },
-  emits: ["selectedStory", "userStoriesChanged"],
+  emits: ["selected-story", "user-stories-changed"],
   setup() {
     const { t } = useI18n();
     return { t };
@@ -144,7 +144,7 @@ export default defineComponent({
     },
     hostSelectedStoryIndex() {
       this.selectedStoryIndex = this.hostSelectedStoryIndex;
-      this.$emit("selectedStory", this.selectedStoryIndex);
+      this.$emit("selected-story", this.selectedStoryIndex);
     },
   },
   mounted() {
@@ -153,7 +153,7 @@ export default defineComponent({
   methods: {
     setUserStoryAsActive(index) {
       this.selectedStoryIndex = index;
-      this.$emit("selectedStory", index);
+      this.$emit("selected-story", index);
     },
     addUserStory() {
       const story: UserStory = {
@@ -197,7 +197,7 @@ export default defineComponent({
       this.publishChanges(index, true);
     },
     publishChanges(index, remove) {
-      this.$emit("userStoriesChanged", { us: this.userStories, idx: index, doRemove: remove });
+      this.$emit("user-stories-changed", { us: this.userStories, idx: index, doRemove: remove });
     },
     markUserStory(index) {
       const stories = this.userStories.map((s) => ({

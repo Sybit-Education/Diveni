@@ -42,7 +42,7 @@ export default defineComponent({
     isMobile: { type: Boolean, required: true },
     disabled: { type: Boolean, default: false },
   },
-  emits: ["sentVote"],
+  emits: ["sent-vote"],
   data() {
     return {
       position: 0,
@@ -93,7 +93,7 @@ export default defineComponent({
           startVelocity: 50,
           spread: 100,
         });
-        this.$emit("sentVote", {
+        this.$emit("sent-vote", {
           vote: this.voteOption,
         });
       }
