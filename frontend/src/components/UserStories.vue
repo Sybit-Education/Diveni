@@ -28,6 +28,7 @@
       >
         <b-button
           v-if="showEditButtons"
+          variant="primary"
           :class="story.isActive ? 'selectedStory' : 'outlineColorStory'"
           size="sm"
           @click="
@@ -75,7 +76,7 @@
     <b-button
       v-if="userStories.length < 1 && showEditButtons && !filterActive"
       class="w-100 mb-5"
-      variant="secondary"
+      variant="primary"
       @click="
         addUserStory();
         $event.target.blur();
