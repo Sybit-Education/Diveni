@@ -96,7 +96,7 @@
     <b-button
       v-if="userStories.length > 0 && showEditButtons && !filterActive"
       class="w-100 mb-5"
-      variant="secondary"
+      variant="primary"
       @click="
         addUserStory();
         $event.target.blur();
@@ -248,10 +248,5 @@ export default defineComponent({
   background-color: var(--secondary-button);
   color: var(--text-primary-color);
   font-size: large;
-}
-
-.btn-secondary:not(:disabled):not(.disabled),
-.show > .btn-secondary.dropdown-toggle {
-  background-color: var(--primary-button) !important;
 }
 </style>
