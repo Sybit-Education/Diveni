@@ -1,5 +1,5 @@
 <template>
-  <b-container id="result-page">
+  <b-container>
     <h1 class="mx-2 centerItems">
       {{ t("page.results.title") }}
     </h1>
@@ -13,7 +13,7 @@
         class="text-center stories"
       >
         {{ story.title ? story.title : "No title ..." }}
-        <b-button class="mx-2 estimationButtons" pill>
+        <b-button class="mx-2" pill>
           {{ story.estimation ? story.estimation : "?" }}
         </b-button>
       </b-list-group-item>
@@ -21,13 +21,13 @@
     <b-row class="text-center centerItems">
       <b-col>
         <b-button
-          id="downloadButton"
+          variant="primary"
           :disabled="userStories.length === 0"
           @click="downloadUserStoriesAsCSV()"
         >
           {{ t("page.results.button.download") }}
         </b-button>
-        <b-button id="goBackHomeButton" class="mx-2" @click="goHome()">
+        <b-button variant="primary" class="mx-2" @click="goHome()">
           {{ t("page.results.button.home") }}
         </b-button>
       </b-col>
@@ -88,49 +88,15 @@ export default defineComponent({
   min-height: 10vh;
 }
 
-.estimationButtons {
-  background-color: var(--primary-button);
-  color: var(--text-primary-color);
-}
-
-.estimationButtons:hover {
-  background-color: var(--primary-button-hovered);
-  color: var(--text-primary-color);
-}
-
-.estimationButtons:focus {
-  background-color: var(--primary-button-hovered) !important;
-  color: var(--text-primary-color);
-}
-.estimationButtons:active {
-  background-color: var(--primary-button-hovered) !important;
-}
-
-#downloadButton {
-  background-color: var(--primary-button);
-  color: var(--text-primary-color);
-}
-
-#downloadButton:hover {
-  background-color: var(--primary-button-hovered);
-  color: var(--text-primary-color);
-}
-
-#goBackHomeButton {
-  background-color: var(--secondary-button);
-  color: var(--text-primary-color);
-}
-
-#goBackHomeButton:hover {
-  background-color: var(--secondary-button-hovered);
-  color: var(--text-primary-color);
-}
-
 #results {
   border-radius: var(--element-size);
 }
 
+.list-group-item {
+  background-color: var(--preparePageNotSelectedTabBackground);
+}
+
 .stories {
-  color: black;
+  color: var(--text-primary-color);
 }
 </style>
