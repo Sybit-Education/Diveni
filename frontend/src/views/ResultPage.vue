@@ -99,4 +99,8 @@ export default defineComponent({
 .stories {
   color: var(--text-primary-color);
 }
+
+.btn-secondary {
+  pointer-events: none;
+}
 </style>
