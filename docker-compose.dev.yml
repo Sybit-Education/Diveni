@@ -5,7 +5,7 @@ services:
     image: mongo:latest
     container_name: diveni_database
     volumes:
-      - /mongo/data:/data/db
+      - mongo-volume:/data/db
     restart: unless-stopped
 
   backend:
@@ -38,3 +38,6 @@ services:
     restart: unless-stopped
     ports:
       - "80:80"
+
+volumes:
+  mongo-volume:
