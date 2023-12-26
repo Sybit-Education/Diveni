@@ -2,8 +2,10 @@ version: "3"
 
 services:
   database:
-    image: mongo:4
+    image: mongo:latest
     container_name: diveni_database
+    volumes:
+      - /mongo/data:/data/db
     restart: unless-stopped
 
   backend:
