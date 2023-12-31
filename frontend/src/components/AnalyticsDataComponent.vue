@@ -97,9 +97,9 @@ export default defineComponent({
   methods: {
     async getAllDiveniData() {
       this.loaded = false;
-      let response = apiService.getAllDiveniData();
-      let allData = await response.then(function (result) {
-        let returnArray: Array<number> = [];
+      const response = apiService.getAllDiveniData();
+      const allData = await response.then(function (result) {
+        const returnArray: Array<number> = [];
         returnArray.push(result.amountOfSessions);
         returnArray.push(result.amountOfAttendees);
         returnArray.push(result.amountOfSessionsCurrently);

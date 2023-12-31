@@ -10,12 +10,10 @@
         type="text"
         :placeholder="
           t(
-            'session.prepare.step.selection.mode.description.withIssueTracker.placeholder.searchProjects'
+            'session.prepare.step.selection.mode.description.withIssueTracker.placeholder.searchProjects',
           )
         "
-        @input="
-          filterProjects();
-        "
+        @input="filterProjects()"
         @focus="
           showResult = true;
           filterProjects();
@@ -79,7 +77,7 @@ export default defineComponent({
   methods: {
     handleGlobalClick(event: MouseEvent) {
       const isOutsideComponent = !(this.$refs.projectSelectionRef as HTMLElement).contains(
-        event.target as Node
+        event.target as Node,
       );
       if (isOutsideComponent) {
         this.showResult = false;
@@ -102,7 +100,7 @@ export default defineComponent({
         return;
       }
       if (this.input !== "") {
-        let filteredProjects: string[] = [];
+        const filteredProjects: string[] = [];
         this.getProjectNames().forEach((name) => {
           if (name.toLowerCase().includes(this.input.toLowerCase())) {
             filteredProjects.push(name);

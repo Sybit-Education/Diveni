@@ -42,6 +42,7 @@ export default defineComponent({
     isMobile: { type: Boolean, required: true },
     disabled: { type: Boolean, default: false },
   },
+  emits: ["sent-vote"],
   data() {
     return {
       position: 0,
@@ -61,7 +62,7 @@ export default defineComponent({
     const threshold = maxUpPos / 2;
 
     if (typeof Hammer !== "undefined" && this.isMobile) {
-      const ref = this.$refs.swippable as any;
+      const ref = this.$refs.swippable as HTMLElement;
       const hammer = new Hammer(ref);
 
       hammer.get("swipe").set({ direction: Hammer.DIRECTION_UP });
@@ -92,7 +93,7 @@ export default defineComponent({
           startVelocity: 50,
           spread: 100,
         });
-        this.$emit("sentVote", {
+        this.$emit("sent-vote", {
           vote: this.voteOption,
         });
       }

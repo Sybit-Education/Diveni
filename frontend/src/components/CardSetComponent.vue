@@ -82,6 +82,7 @@ export default defineComponent({
   props: {
     userStoryMode: { type: String, required: true },
   },
+  emits: ["selected-card-set-options"],
   setup() {
     const { t } = useI18n();
     return { t };
@@ -107,7 +108,7 @@ export default defineComponent({
         {
           name: this.t("session.prepare.step.selection.cardSet.sets.tShirtSizes.label"),
           description: this.t(
-            "session.prepare.step.selection.cardSet.sets.tShirtSizes.description"
+            "session.prepare.step.selection.cardSet.sets.tShirtSizes.description",
           ),
           values: ["XXS", "XS", "S", "M", "L", "XL", "XXL", "XXXL", "?"],
           activeValues: ["XS", "S", "M", "L", "XL"],
@@ -166,10 +167,10 @@ export default defineComponent({
         const currentValues = [...new Set(newVal.split(";"))] as string[];
         currentValues.pop();
         this.selectedCardSet.activeValues = currentValues;
-        this.$emit("selectedCardSetOptions", this.selectedCardSet.activeValues);
+        this.$emit("selected-card-set-options", this.selectedCardSet.activeValues);
       } else if (newVal.length == 0) {
         this.selectedCardSet.activeValues = [];
-        this.$emit("selectedCardSetOptions", this.selectedCardSet.activeValues);
+        this.$emit("selected-card-set-options", this.selectedCardSet.activeValues);
       }
     },
   },
@@ -188,17 +189,17 @@ export default defineComponent({
       this.emitChanges();
     },
     emitChanges() {
-      this.$emit("selectedCardSetOptions", this.selectedCardSet.activeValues);
+      this.$emit("selected-card-set-options", this.selectedCardSet.activeValues);
     },
     onCardSetNumberSelected(number) {
       if (this.selectedCardSet.activeValues.includes(number)) {
         this.selectedCardSet.activeValues = this.selectedCardSet.activeValues.filter(
-          (num) => num !== number
+          (num) => num !== number,
         );
       } else {
         const newActiveValues = [...this.selectedCardSet.activeValues, number];
         this.selectedCardSet.activeValues = this.selectedCardSet.values.filter((num) =>
-          newActiveValues.includes(num)
+          newActiveValues.includes(num),
         );
       }
       this.emitChanges();

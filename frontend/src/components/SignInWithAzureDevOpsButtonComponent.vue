@@ -10,7 +10,7 @@
     >
       {{
         t(
-          "session.prepare.step.selection.mode.description.withIssueTracker.buttons.signInWithAzureDevOps.label"
+          "session.prepare.step.selection.mode.description.withIssueTracker.buttons.signInWithAzureDevOps.label",
         )
       }}
     </b-button>

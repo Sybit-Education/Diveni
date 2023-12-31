@@ -64,7 +64,7 @@
               :dragged="voteOption === draggedVote"
               :is-mobile="true"
               :disabled="pauseSession"
-              @sentVote="onSendVote"
+              @sent-vote="onSendVote"
             />
           </flicking>
         </div>
@@ -83,7 +83,7 @@
                 :dragged="voteOption === draggedVote"
                 :is-mobile="false"
                 :disabled="pauseSession"
-                @sentVote="onSendVote"
+                @sent-vote="onSendVote"
               />
             </div>
           </b-col>
@@ -163,7 +163,7 @@
               :initial-stories="userStories"
               :show-edit-buttons="false"
               :host-selected-story-index="hostSelectedStoryIndex"
-              @selectedStory="onSelectedStory($event)"
+              @selected-story="onSelectedStory($event)"
             />
           </div>
         </b-col>
@@ -184,11 +184,11 @@
             :initial-stories="userStories"
             :show-edit-buttons="false"
             :host-selected-story-index="hostSelectedStoryIndex"
-            @selectedStory="onSelectedStory($event)"
+            @selected-story="onSelectedStory($event)"
           />
         </div>
       </b-col>
-      <notify-member-component @hostLeft="reactOnHostLeave" @hostJoined="reactOnHostJoin" />
+      <notify-member-component @host-left="reactOnHostLeave" @host-joined="reactOnHostJoin" />
     </b-overlay>
   </b-container>
 </template>
@@ -214,7 +214,6 @@ import { defineComponent } from "vue";
 import { useDiveniStore } from "@/store";
 import { useToast } from "vue-toastification";
 import { useI18n } from "vue-i18n";
-import AdminVote from "@/model/AdminVote";
 
 export default defineComponent({
   name: "MemberVotePage",
@@ -261,7 +260,7 @@ export default defineComponent({
   computed: {
     isMobile() {
       return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-        navigator.userAgent
+        navigator.userAgent,
       );
     },
     userStories() {
@@ -338,7 +337,7 @@ export default defineComponent({
         this.safedHostEstimation = this.hostEstimation?.hostEstimation;
       }
     },
-    notifications(notifications) {
+    notifications() {
       const lastNotification = this.notifications.at(-1);
       if (
         lastNotification &&
@@ -374,7 +373,7 @@ export default defineComponent({
       if (this.highlightedMembers.length === 0) {
         return true;
       }
-      let highlightedMap = new Map<string, boolean>();
+      const highlightedMap = new Map<string, boolean>();
       this.highlightedMembers.forEach((highlightedMemberID) => {
         let isMemberID = false;
         this.members.forEach((member) => {
@@ -384,7 +383,7 @@ export default defineComponent({
         });
         highlightedMap.set(highlightedMemberID, isMemberID);
       });
-      for (let value of highlightedMap.values()) {
+      for (const value of highlightedMap.values()) {
         if (value === false) {
           return true;
         }
@@ -402,7 +401,7 @@ export default defineComponent({
         JSON.stringify({
           vote: vote,
           autoReveal: this.isAutoRevealActive,
-        })
+        }),
       );
     },
     goToJoinPage() {

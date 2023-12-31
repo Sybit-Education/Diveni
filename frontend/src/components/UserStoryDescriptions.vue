@@ -47,7 +47,7 @@
             class="my-2"
             :disabled="!editDescription"
             :placeholder="t('page.session.before.userStories.placeholder.userStoryDescription')"
-            @textValueChanged="(event) => valueChanged(idx, event)"
+            @text-value-changed="(event) => valueChanged(idx, event)"
           />
         </div>
         <div v-if="!editDescription">
@@ -88,6 +88,7 @@ export default defineComponent({
     showEstimations: { type: Boolean, required: false },
     showEditButtons: { type: Boolean, required: false, default: true },
   },
+  emits: ["user-stories-changed"],
   setup() {
     const { t } = useI18n();
     return { t };
@@ -156,7 +157,7 @@ export default defineComponent({
       });
     },
     publishChanges(idx) {
-      this.$emit("userStoriesChanged", { us: this.userStories, idx: idx, doRemove: false });
+      this.$emit("user-stories-changed", { us: this.userStories, idx: idx, doRemove: false });
     },
     // synchronizeJira(idx) {
     //   this.$emit("synchronizeJira", { story: this.userStories[idx], doRemove: false });

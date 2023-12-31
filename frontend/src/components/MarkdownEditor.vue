@@ -10,7 +10,7 @@
       initial-edit-type="wysiwyg"
       preview-style="vertical"
       :class="theme === 'light' ? 'lightMode' : 'darkMode'"
-      @update:modelValue="$emit('textValueChanged', { markdown: $event })"
+      @update:model-value="$emit('text-value-changed', { markdown: $event })"
     />
   </div>
 </template>
@@ -54,6 +54,7 @@ export default defineComponent({
       default: "",
     },
   },
+  emits: ["text-value-changed"],
   data() {
     return {
       text: "",

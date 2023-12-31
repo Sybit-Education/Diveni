@@ -27,7 +27,6 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { useToast } from "vue-toastification";
 import { useI18n } from "vue-i18n";
 
 export default defineComponent({
@@ -40,6 +39,7 @@ export default defineComponent({
     showEstimations: { type: Boolean, required: false },
     showEditButtons: { type: Boolean, required: false, default: true },
   },
+  emits: ["user-stories-changed"],
   setup() {
     const { t } = useI18n();
     return { t };
@@ -114,7 +114,7 @@ export default defineComponent({
       this.editEnabled = !this.editEnabled;
     },
     publishChanges() {
-      this.$emit("userStoriesChanged", this.userStories);
+      this.$emit("user-stories-changed", this.userStories);
     },
     toggleSideBar() {
       this.sideBarOpen = !this.sideBarOpen;

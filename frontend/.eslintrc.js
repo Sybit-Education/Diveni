@@ -3,17 +3,25 @@ module.exports = {
   env: {
     node: true,
   },
-  extends: [
-    "plugin:vue/recommended",
-    "eslint:recommended",
-    "@vue/typescript/recommended",
-    "@vue/prettier",
-    "@vue/prettier/@typescript-eslint",
-  ],
+  parser: "vue-eslint-parser",
   parserOptions: {
+    parser: "@typescript-eslint/parser",
     ecmaVersion: 2020,
   },
+  extends: [
+    "plugin:vue/vue3-recommended",
+    "eslint:recommended",
+    "@vue/typescript/recommended",
+    "prettier",
+  ],
+  plugins: ["@typescript-eslint", "prettier"],
   rules: {
+    "prettier/prettier": [
+      "error",
+      {
+        endOfLine: "auto",
+      },
+    ],
     "no-console": "off",
     "no-debugger": "off",
     noImplicitAny: 0,
