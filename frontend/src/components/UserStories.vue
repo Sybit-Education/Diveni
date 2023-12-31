@@ -241,8 +241,8 @@ export default defineComponent({
 }
 
 #userStoryPicture {
-  height: 30px;
-  width: 30px;
+  height: 25px;
+  width: 25px;
 }
 
 #badge {
