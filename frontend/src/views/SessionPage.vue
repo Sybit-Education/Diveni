@@ -243,17 +243,6 @@
     </b-row>
     <b-row v-if="userStoryMode !== 'NO_US'">
       <b-col v-if="!isMobile" cols="7">
-        <div v-if="userStoryMode === 'US_JIRA'" class="refreshUserstories">
-          <b-button
-            class="w-100 mb-3 refreshButton"
-            @click="
-              refreshUserStories();
-              $event.target.blur();
-            "
-          >
-            {{ t("page.session.before.refreshStories") }}
-          </b-button>
-        </div>
         <user-stories
           :card-set="voteSet"
           :show-estimations="planningStart"
@@ -263,19 +252,20 @@
           @userStoriesChanged="onUserStoriesChanged"
           @selectedStory="onSelectedStory($event)"
         />
+        <div v-if="userStoryMode === 'US_JIRA'" class="refreshUserstories">
+          <b-button
+            variant="primary"
+            class="w-100 mb-3"
+            @click="
+              refreshUserStories();
+              $event.target.blur();
+            "
+          >
+            {{ t("page.session.before.refreshStories") }}
+          </b-button>
+        </div>
       </b-col>
       <b-col v-else cols="12">
-        <div v-if="userStoryMode === 'US_JIRA'" class="refreshUserstories">
-          <b-button
-            class="w-100 mb-3 refreshButton"
-            @click="
-              refreshUserStories();
-              $event.target.blur();
-            "
-          >
-            {{ t("page.session.before.refreshStories") }}
-          </b-button>
-        </div>
         <user-stories
           :card-set="voteSet"
           :show-estimations="planningStart"
@@ -285,6 +275,18 @@
           @userStoriesChanged="onUserStoriesChanged"
           @selectedStory="onSelectedStory($event)"
         />
+        <div v-if="userStoryMode === 'US_JIRA'" class="refreshUserstories">
+          <b-button
+            variant="primary"
+            class="w-100 mb-3"
+            @click="
+              refreshUserStories();
+              $event.target.blur();
+            "
+          >
+            {{ t("page.session.before.refreshStories") }}
+          </b-button>
+        </div>
       </b-col>
     </b-row>
     <b-row>
@@ -778,8 +780,6 @@ export default defineComponent({
 
 .optionButton {
   background-color: var(--textAreaColour);
-  color: var(--text-primary-color);
-  border-color: black;
   display: inline-flex;
   align-items: center;
 }
@@ -796,22 +796,6 @@ export default defineComponent({
 
 .optionButton:disabled {
   background-color: var(--textAreaColourHovered) !important;
-  color: var(--text-primary-color) !important;
-}
-
-.refreshButton {
-  border-radius: var(--element-size);
-  color: var(--text-primary-color);
-  background-color: var(--secondary-button);
-}
-
-.refreshButton:hover {
-  color: var(--text-primary-color);
-  background-color: var(--secondary-button-hovered);
-}
-
-.refreshButton:focus {
-  background-color: var(--secondary-button-hovered) !important;
   color: var(--text-primary-color) !important;
 }
 

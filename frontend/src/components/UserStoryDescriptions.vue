@@ -8,9 +8,8 @@
         class="border-0 description-box"
         variant="outline-secondary"
       >
-        <div class="list-group list-group-horizontal">
+        <div class="list-group list-group-horizontal mt-5">
           <b-form-textarea
-            id="titleInputField"
             v-model="userStories[idx].title"
             rows="1"
             max-rows="3"

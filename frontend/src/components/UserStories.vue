@@ -75,7 +75,7 @@
 
     <b-button
       v-if="userStories.length < 1 && showEditButtons && !filterActive"
-      class="w-100 mb-5"
+      class="w-100 mb-1"
       variant="primary"
       @click="
         addUserStory();
@@ -96,7 +96,7 @@
 
     <b-button
       v-if="userStories.length > 0 && showEditButtons && !filterActive"
-      class="w-100 mb-5"
+      class="w-100 mb-1"
       variant="primary"
       @click="
         addUserStory();
