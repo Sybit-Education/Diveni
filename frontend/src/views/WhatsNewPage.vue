@@ -147,6 +147,5 @@ export default defineComponent({
 
 .customPagination :deep(li.active) > button {
   background-color: var(--primary-button) !important;
-  box-shadow: none !important;
 }
 </style>
