@@ -22,12 +22,11 @@
         </b-pagination>
       </div>
       <div class="row" style="justify-content: center">
-        <div v-if="loading" align="center" class="col-12 my-5">
+        <div v-if="loading" class="col-12 my-5 text-center">
           <b-spinner label="Loading..."></b-spinner>
         </div>
         <b-card-group v-for="card in paginatedData" :key="card.number" deck class="my-3 col-md-4">
           <b-card
-            class="pr-card"
             align="center"
             border-variant="secondary"
             :header="`${card.updated_at}`"
@@ -135,10 +134,6 @@ export default defineComponent({
   background-repeat: no-repeat;
 }
 
-.pr-card {
-  background-color: var(--landingPageCardsBackground);
-}
-
 .customPagination :deep(li) > button,
 .customPagination :deep(li) > span {
   background-color: var(--landingPageCardsBackground) !important;
@@ -146,17 +141,11 @@ export default defineComponent({
   border-color: var(--text-primary-color) !important;
 }
 
-.customPagination :deep(li) > button:hover,
-.customPagination :deep(li) > span:hover {
+.customPagination :deep(li) > button:hover {
   background-color: var(--preparePageInActiveTabHover) !important;
 }
 
-.customPagination :deep(li.active) > button,
-.customPagination :deep(li.active) > span,
-.customPagination :deep(li) > button:focus,
-.customPagination :deep(li) > span:focus,
-.customPagination :deep(li) > button:active,
-.customPagination :deep(li) > span:active {
+.customPagination :deep(li.active) > button {
   background-color: var(--primary-button) !important;
   box-shadow: none !important;
 }
