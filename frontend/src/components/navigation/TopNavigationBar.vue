@@ -1,7 +1,7 @@
 <template>
   <b-navbar class="top-navigation" type="light" fixed="top" sticky>
     <b-navbar-brand class="top-navigation__title" to="/">
-      <b-img src="/img/icons/logo.svg" class="top-navigation__nav-logo" />
+      <b-img src="/img/icons/logo.svg" width="48" height="48" alt="Diveni Logo" />
       {{ t("page.landing.productTitle") }}
     </b-navbar-brand>
     <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
@@ -54,9 +54,6 @@ export default defineComponent({
 .top-navigation {
   background-color: var(--topNavigationBarColor);
 
-  &__nav-logo {
-    height: 3rem;
-  }
   &__title {
     font-size: 2.5rem;
     font-weight: 700;
