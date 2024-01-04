@@ -31,20 +31,21 @@ public class GitlabServiceTest {
             + " 2,\"description\":\"Test_Descriptio2n\",\"name\":\"Diveni2\",\"path_with_namespace\":\"user/Diveni2\"},{\"id\":"
             + " 3,\"description\":\"null\",\"name\":\"Diveni3\",\"path_with_namespace\":\"user/Diveni3\"}]";
 
-    String jsonGroupReturn = "[\n" +
-      "    {\n" +
-      "        \"id\": 1,\n" +
-      "        \"web_url\": \"https://gitlab.com/groups/testGroup\",\n" +
-      "        \"name\": \"testGroup\",\n" +
-      "        \"path\": \"testGroup\",\n" +
-      "        \"description\": \"\",\n" +
-      "        \"visibility\": \"public\"}]";
+    String jsonGroupReturn =
+        "[\n"
+            + "    {\n"
+            + "        \"id\": 1,\n"
+            + "        \"web_url\": \"https://gitlab.com/groups/testGroup\",\n"
+            + "        \"name\": \"testGroup\",\n"
+            + "        \"path\": \"testGroup\",\n"
+            + "        \"description\": \"\",\n"
+            + "        \"visibility\": \"public\"}]";
 
     String jsonReturnValueGroups =
-      "[{\"id\":"
-        + " 5,\"description\":\"Test_Description\",\"name\":\"Diveni1\",\"path_with_namespace\":\"user/Diveni1\"},{\"id\":"
-        + " 6,\"description\":\"Test_Descriptio2n\",\"name\":\"Diveni2\",\"path_with_namespace\":\"user/Diveni2\"},{\"id\":"
-        + " 8,\"description\":\"null\",\"name\":\"Diveni3\",\"path_with_namespace\":\"user/Diveni3\"}]";
+        "[{\"id\":"
+            + " 5,\"description\":\"Test_Description\",\"name\":\"Diveni1\",\"path_with_namespace\":\"user/Diveni1\"},{\"id\":"
+            + " 6,\"description\":\"Test_Descriptio2n\",\"name\":\"Diveni2\",\"path_with_namespace\":\"user/Diveni2\"},{\"id\":"
+            + " 8,\"description\":\"null\",\"name\":\"Diveni3\",\"path_with_namespace\":\"user/Diveni3\"}]";
 
     ResponseEntity<String> mockedRepoReturnValue =
         new ResponseEntity<>(repoURL, mockedHeaders, HttpStatus.valueOf(200));
@@ -53,12 +54,16 @@ public class GitlabServiceTest {
         new ResponseEntity<>(jsonReturnValue, mockedHeaders, HttpStatus.valueOf(200));
 
     ResponseEntity<String> mockedRepoReturnValueForGroups =
-      new ResponseEntity<>(jsonGroupReturn, mockedHeaders, HttpStatus.valueOf(200));
+        new ResponseEntity<>(jsonGroupReturn, mockedHeaders, HttpStatus.valueOf(200));
 
     ResponseEntity<String> mockedReturnValueForGroups =
-      new ResponseEntity<>(jsonReturnValueGroups, mockedHeaders, HttpStatus.valueOf(200));
+        new ResponseEntity<>(jsonReturnValueGroups, mockedHeaders, HttpStatus.valueOf(200));
 
-    Mockito.doReturn(mockedRepoReturnValue, mockedReturnValue, mockedRepoReturnValueForGroups, mockedReturnValueForGroups)
+    Mockito.doReturn(
+            mockedRepoReturnValue,
+            mockedReturnValue,
+            mockedRepoReturnValueForGroups,
+            mockedReturnValueForGroups)
         .when(gitlabService)
         .executeRequest(any(), any(), any(), any());
 
