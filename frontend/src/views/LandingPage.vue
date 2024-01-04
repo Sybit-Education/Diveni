@@ -305,6 +305,6 @@ export default defineComponent({
 
 .landingPagePictures {
   width: 100%;
-  aspect-ratio: 1 / 1;
+  height: auto;
 }
 </style>
