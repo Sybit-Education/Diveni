@@ -98,16 +98,18 @@ public class GitlabService implements ProjectManagementProviderOAuth2 {
 
       // get Projects of a group
       ResponseEntity<String> responseGroups =
-        executeRequest("https://gitlab.com/api/v4/groups",
-          HttpMethod.GET,
-          accessTokens.get(tokenIdentifier), null);
+          executeRequest(
+              "https://gitlab.com/api/v4/groups",
+              HttpMethod.GET,
+              accessTokens.get(tokenIdentifier),
+              null);
       for (JsonNode groupProject : new ObjectMapper().readTree(responseGroups.getBody())) {
         ResponseEntity<String> responseGroupRepo =
-          executeRequest(
-            "https://gitlab.com/api/v4/groups/" + groupProject.get("id").asText() + "/projects",
-            HttpMethod.GET,
-            accessTokens.get(tokenIdentifier),
-            null);
+            executeRequest(
+                "https://gitlab.com/api/v4/groups/" + groupProject.get("id").asText() + "/projects",
+                HttpMethod.GET,
+                accessTokens.get(tokenIdentifier),
+                null);
         for (JsonNode jsonNode : new ObjectMapper().readTree(responseGroupRepo.getBody())) {
           projects.add(new Project(jsonNode.get("name").asText(), jsonNode.get("id").asText()));
           projectIDs.put(jsonNode.get("name").asText(), jsonNode.get("id").asText());
