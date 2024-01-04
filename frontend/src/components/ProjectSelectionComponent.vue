@@ -13,9 +13,7 @@
             'session.prepare.step.selection.mode.description.withIssueTracker.placeholder.searchProjects'
           )
         "
-        @input="
-          filterProjects();
-        "
+        @input="filterProjects()"
         @focus="
           showResult = true;
           filterProjects();

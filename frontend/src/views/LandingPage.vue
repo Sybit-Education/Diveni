@@ -40,12 +40,24 @@
           <b-card-group deck class="py-5">
             <b-card class="pictureCard">
               <b-card-text>
-                <b-img :src="require(`@/assets/SetUpSession.png`)" class="landingPagePictures" />
+                <b-img
+                  :src="require(`@/assets/SetUpSession.png`)"
+                  class="landingPagePictures"
+                  width="255"
+                  height="255"
+                  alt="Set Up Session Picture"
+                />
               </b-card-text>
             </b-card>
             <b-card class="pictureCard">
               <b-card-text>
-                <b-img :src="require(`@/assets/InviteYourTeam.png`)" class="landingPagePictures" />
+                <b-img
+                  :src="require(`@/assets/InviteYourTeam.png`)"
+                  class="landingPagePictures"
+                  width="255"
+                  height="255"
+                  alt="Invite Your Team Picture"
+                />
               </b-card-text>
             </b-card>
             <b-card class="pictureCard">
@@ -53,6 +65,9 @@
                 <b-img
                   :src="require(`@/assets/EstimateUserStories.png`)"
                   class="landingPagePictures"
+                  width="255"
+                  height="255"
+                  alt="Estimate User Stories Picture"
                 />
               </b-card-text>
             </b-card>
@@ -289,7 +304,7 @@ export default defineComponent({
 }
 
 .landingPagePictures {
-  height: 250px;
-  width: 250px;
+  width: 100%;
+  aspect-ratio: 1 / 1;
 }
 </style>
