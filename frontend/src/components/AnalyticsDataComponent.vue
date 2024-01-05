@@ -1,6 +1,6 @@
 <template>
   <b-container>
-    <h1>{{ headerText }}</h1>
+    <h1 class="text-center">{{ headerText }} <b-icon-bar-chart /></h1>
     <b-card-group deck>
       <b-card class="statsCards">
         <b-card-title style="text-align: center">
@@ -119,7 +119,7 @@ export default defineComponent({
 <!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
 <style lang="scss" scoped>
 .statsCards {
-  border-radius: 0.5rem;
+  border-radius: 2rem;
   background-color: rgba(200, 200, 200, 0.5);
 }
 .numbers {

@@ -1,10 +1,27 @@
 <template>
   <div id="landing-page">
-    <b-container fluid class="teaser">
-      <b-container>
-        <b-jumbotron header="DIVENI" lead="Instant free and easy remote Planning Poker" />
-      </b-container>
-    </b-container>
+    <div class="d-flex align-items-center d-inline-block">
+      <div class="ml-5">
+        <h1 class="display-1 text-left">DIVENI</h1>
+        <h1 class="display-4 text-left">The Planning-Poker App</h1>
+        <p class="diveniDescription">
+          Streamline your agile estimation with out user-friendly, free tool, ideal for Scrum teams.
+          It enhances remote collaboration, making agile planning simple and efficient. Start now
+          and transform your team's productivity!
+        </p>
+      </div>
+      <div class="styleContainer mr-3">
+        <div class="d-flex align-items-center d-inline-block">
+          <div class="purpleSquare"></div>
+          <div class="greenSquare"></div>
+        </div>
+        <b-icon-question-lg id="questionMark" />
+        <div class="d-flex align-items-center d-inline-block">
+          <div class="redSquare"></div>
+          <div class="brownSquare"></div>
+        </div>
+      </div>
+    </div>
     <b-container class="my-5">
       <b-card-group deck class="justify-content-center">
         <landing-page-card
@@ -32,32 +49,17 @@
       </b-card-group>
     </b-container>
     <AnalyticsDataComponent ref="dataComponent"> </AnalyticsDataComponent>
-    <b-container class="py-5">
-      <div class="parent py-5 px-5">
-        <div class="background py-5"></div>
-        <div class="text">
-          <h1>Remote Planning Poker using DIVENI</h1>
+    <b-container>
+      <div class="parent pb-md-5 px-5">
+        <div class="py-5"></div>
+        <div>
+          <h1 class="text-center">How DIVENI works <b-icon-gear-wide /></h1>
           <b-card-group deck class="py-5">
             <b-card class="pictureCard">
               <b-card-text>
                 <b-img :src="require(`@/assets/SetUpSession.png`)" class="landingPagePictures" />
               </b-card-text>
             </b-card>
-            <b-card class="pictureCard">
-              <b-card-text>
-                <b-img :src="require(`@/assets/InviteYourTeam.png`)" class="landingPagePictures" />
-              </b-card-text>
-            </b-card>
-            <b-card class="pictureCard">
-              <b-card-text>
-                <b-img
-                  :src="require(`@/assets/EstimateUserStories.png`)"
-                  class="landingPagePictures"
-                />
-              </b-card-text>
-            </b-card>
-          </b-card-group>
-          <b-card-group deck>
             <b-card class="aboutDiveni" title="Set up Session">
               <b-card-text>
                 Create a planning session and select your prefered voting set.
@@ -75,6 +77,8 @@
                 show user stories and update the voted results of your planning poker.
               </b-card-text>
             </b-card>
+          </b-card-group>
+          <b-card-group>
             <b-card class="aboutDiveni" title="Invite your Team">
               <b-card-text> Invite your team using QR-Code, invite link or code. </b-card-text>
               <b-card-text>
@@ -83,6 +87,21 @@
               <b-card-text>
                 If everybody is in the session, you could start estimation. Having defined a time
                 limit this will be used as limit for voting time.
+              </b-card-text>
+            </b-card>
+            <b-card class="pictureCard">
+              <b-card-text>
+                <b-img :src="require(`@/assets/InviteYourTeam.png`)" class="landingPagePictures" />
+              </b-card-text>
+            </b-card>
+          </b-card-group>
+          <b-card-group>
+            <b-card class="pictureCard">
+              <b-card-text>
+                <b-img
+                  :src="require(`@/assets/EstimateUserStories.png`)"
+                  class="landingPagePictures"
+                />
               </b-card-text>
             </b-card>
             <b-card class="aboutDiveni" title="Estimate User Stories">
@@ -98,15 +117,17 @@
           </b-card-group>
         </div>
       </div>
-      <h1 class="mt-5">About DIVENI</h1>
-      <p>DIVENI was initially developed by students of HTWG Constance and is open source now.</p>
-      <p>
+      <h1 class="mt-5 text-center pt-md-5">About DIVENI</h1>
+      <p class="text-center">
+        DIVENI was initially developed by students of HTWG Constance and is open source now.
+      </p>
+      <p class="text-center">
         More information could be found in the
         <a href="https://docs.diveni.io/">documentation</a>.
       </p>
     </b-container>
     <b-container class="py-3">
-      <h1 class="mt-5">Connectors</h1>
+      <h1 class="mt-5 text-center">Connectors</h1>
     </b-container>
     <CarouselComponent class="py-5"></CarouselComponent>
   </div>
@@ -254,9 +275,11 @@ export default defineComponent({
 }
 
 .aboutDiveni {
-  box-shadow: 0 0 5px 5px var(--landingPageCardsBackground);
-  border: none !important;
-  background: var(--landingPageCardsBackground) !important;
+  background: transparent !important;
+  border-style: none !important;
+  height: 300px;
+  font-size: large;
+  overflow: auto;
 }
 
 .card-title {
@@ -269,18 +292,6 @@ export default defineComponent({
   width: 100%;
 }
 
-.background {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: var(--blurBackGroundColor);
-  filter: blur(10px);
-  z-index: 0;
-  border-radius: 1rem;
-}
-
 .pictureCard {
   background: transparent !important;
   align-items: center;
@@ -289,7 +300,86 @@ export default defineComponent({
 }
 
 .landingPagePictures {
-  height: 250px;
-  width: 250px;
+  height: 270px;
+  width: 270px;
+}
+
+@media screen and (min-width: 1000px) {
+  .styleContainer {
+    position: absolute;
+    min-height: 20rem;
+    min-width: 10rem;
+    right: 10%;
+  }
+  .purpleSquare {
+    background-color: #8a17b2;
+    position: relative;
+    height: 10rem;
+    width: 7rem;
+    margin-right: 0.75rem;
+    margin-bottom: 0.75rem;
+    border-radius: 0.5rem;
+  }
+  .greenSquare {
+    background-color: #09816b;
+    position: relative;
+    height: 10rem;
+    width: 7rem;
+    margin-left: 0.75rem;
+    margin-bottom: 0.75rem;
+    border-radius: 0.5rem;
+  }
+  .redSquare {
+    background-color: #791c59;
+    position: relative;
+    height: 10rem;
+    width: 7rem;
+    margin-right: 0.75rem;
+    margin-top: 0.75rem;
+    border-radius: 0.5rem;
+  }
+  .brownSquare {
+    background-color: #601616;
+    position: relative;
+    height: 10rem;
+    width: 7rem;
+    margin-left: 0.75rem;
+    margin-top: 0.75rem;
+    border-radius: 0.5rem;
+  }
+  #questionMark {
+    position: absolute;
+    height: 10rem;
+    width: 10rem;
+    top: 5rem;
+    right: 2.25rem;
+    z-index: 1;
+    visibility: visible;
+  }
+}
+.diveniDescription {
+  font-size: 1.25rem;
+  max-height: 25rem;
+  overflow: auto;
+  width: 35%;
+}
+
+@media screen and (min-width: 0px) and (max-width: 999px) {
+  .styleContainer {
+  }
+  .purpleSquare {
+  }
+  .greenSquare {
+  }
+  .redSquare {
+  }
+  .brownSquare {
+  }
+  #questionMark {
+    visibility: hidden;
+  }
+  .diveniDescription {
+    width: 100% !important;
+  }
 }
 </style>
