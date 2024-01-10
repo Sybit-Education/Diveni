@@ -10,16 +10,21 @@
     >
     <hr />
     <b-dropdown-item href="https://crowdin.com/project/diveni">
-      {{ $t("general.licenses.translations") }}
+      {{ t("general.licenses.translations") }}
     </b-dropdown-item>
   </b-nav-item-dropdown>
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
+import { useI18n } from "vue-i18n";
 
-export default Vue.extend({
+export default defineComponent({
   name: "LocaleDropdown",
+  setup() {
+    const { t } = useI18n();
+    return { t };
+  },
   data() {
     return {
       locales: {
@@ -35,7 +40,7 @@ export default Vue.extend({
     };
   },
   methods: {
-    setLocale(locale: string) {
+    setLocale(locale) {
       this.$i18n.locale = locale;
       localStorage.setItem("locale", locale);
     },

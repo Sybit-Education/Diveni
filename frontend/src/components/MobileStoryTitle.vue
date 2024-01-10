@@ -16,7 +16,7 @@
             :disabled="true"
             class="border"
             size="lg"
-            :placeholder="$t('page.session.before.userStories.placeholder.userStoryTitle')"
+            :placeholder="t('page.session.before.userStories.placeholder.userStoryTitle')"
             @blur="publishChanges"
           />
         </div>
@@ -26,9 +26,10 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
+import { useI18n } from "vue-i18n";
 
-export default Vue.extend({
+export default defineComponent({
   name: "MobileStoryTitle",
   props: {
     index: { type: Number, required: true },
@@ -37,6 +38,10 @@ export default Vue.extend({
     editDescription: { type: Boolean, required: true, default: false },
     showEstimations: { type: Boolean, required: false },
     showEditButtons: { type: Boolean, required: false, default: true },
+  },
+  setup() {
+    const { t } = useI18n();
+    return { t };
   },
   data() {
     return {

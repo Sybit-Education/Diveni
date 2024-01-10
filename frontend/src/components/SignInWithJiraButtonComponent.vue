@@ -35,7 +35,7 @@
                     v-model="jiraUrl"
                     required
                     :placeholder="
-                      $t(
+                      t(
                         'session.prepare.step.selection.mode.description.withIssueTracker.inputs.jiraUrl.placeholder'
                       )
                     "
@@ -54,7 +54,7 @@
     <div v-if="enableJiraServer">
       <b-button class="button" @click="openSignInWithJira('server')">
         {{
-          $t(
+          t(
             "session.prepare.step.selection.mode.description.withIssueTracker.buttons.signInWithJiraServer.label"
           )
         }}
@@ -70,7 +70,7 @@
     >
       <p id="description">
         {{
-          $t("session.prepare.step.selection.mode.description.withIssueTracker.dialog.description")
+          t("session.prepare.step.selection.mode.description.withIssueTracker.dialog.description")
         }}
       </p>
       <form ref="form" @submit.stop.prevent="handleSubmit">
@@ -85,7 +85,7 @@
             v-model="verificationCode"
             required
             :placeholder="
-              $t(
+              t(
                 'session.prepare.step.selection.mode.description.withIssueTracker.inputs.verificationCode.placeholder'
               )
             "
@@ -98,12 +98,16 @@
 </template>
 
 <script lang="ts">
-// eslint-disable-next-line
-import Vue from "vue";
+import { defineComponent } from "vue";
 import apiService from "@/services/api.service";
+import { useI18n } from "vue-i18n";
 
-export default Vue.extend({
+export default defineComponent({
   name: "SignInWithJiraButtonComponent",
+  setup() {
+    const { t } = useI18n();
+    return { t };
+  },
   props: {
     enableJiraCloud: {
       type: Boolean,
@@ -125,11 +129,14 @@ export default Vue.extend({
       token: "",
       verificationCode: "",
       verificationCodeState: false,
+      showVerificationModal: false,
     };
   },
   methods: {
     checkFormValidity() {
-      const valid = (this.$refs.form as Vue & { checkValidity: () => boolean }).checkValidity();
+      const valid = (
+        this.$refs.form as HTMLElement & { checkValidity: () => boolean }
+      ).checkValidity();
       this.verificationCodeState = valid;
       return valid;
     },
@@ -159,7 +166,7 @@ export default Vue.extend({
     },
     openModal() {
       this.$nextTick(() => {
-        this.$bvModal.show("modal-verification-code");
+        this.showVerificationModal = true;
       });
     },
     resetModal() {
@@ -186,7 +193,7 @@ export default Vue.extend({
         this.showToast(e);
       }
       this.$nextTick(() => {
-        this.$bvModal.hide("modal-verification-code");
+        this.showVerificationModal = false;
       });
     },
     showToast(error) {

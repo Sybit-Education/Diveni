@@ -8,16 +8,13 @@ package io.diveni.backend.controller;
 import java.util.List;
 import java.util.Optional;
 
-import io.diveni.backend.model.JiraRequestToken;
-import io.diveni.backend.model.Project;
-import io.diveni.backend.model.TokenIdentifier;
-import io.diveni.backend.model.UserStory;
-import io.diveni.backend.model.VerificationCode;
+import io.diveni.backend.model.*;
 import io.diveni.backend.service.DatabaseService;
 import io.diveni.backend.service.projectmanagementproviders.ProjectManagementProvider;
 import io.diveni.backend.service.projectmanagementproviders.azuredevops.AzureDevOpsService;
 import io.diveni.backend.service.projectmanagementproviders.jira.cloud.JiraCloudService;
 import io.diveni.backend.service.projectmanagementproviders.jira.server.JiraServerService;
+import io.diveni.backend.service.projectmanagementproviders.github.GithubService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +47,8 @@ public class ProjectManagementController {
   @Autowired JiraCloudService jiraCloudService;
 
   @Autowired AzureDevOpsService azureDevOpsService;
+
+  @Autowired GithubService githubService;
 
   private final String PROVIDER_NOT_ENABLED_MESSAGE =
       "The selected issue tracker is not enabled. Make sure to set all required parameters.";
@@ -132,6 +131,17 @@ public class ProjectManagementController {
     ResponseEntity<TokenIdentifier> response =
         new ResponseEntity<>(azureDevOpsService.getAccessToken("", origin), HttpStatus.OK);
     LOGGER.debug("<-- getOAuth2AccessToken()");
+    return response;
+  }
+
+  @PostMapping("/github/oauth2/accessToken")
+  public ResponseEntity<TokenIdentifier> getGithubOAuth2AccessToken(
+      @RequestHeader("Origin") String origin, @RequestBody PersonalAccessToken pat) {
+    LOGGER.debug("--> getOAuth2GithubAccessToken() , origin={}", origin);
+    ResponseEntity<TokenIdentifier> response =
+        new ResponseEntity<>(
+            githubService.getAccessTokenForGithub(origin, pat.getCode()), HttpStatus.OK);
+    LOGGER.debug("<-- getGithubOAuth2AccessToken()");
     return response;
   }
 
@@ -251,6 +261,8 @@ public class ProjectManagementController {
       return jiraCloudService;
     } else if (azureDevOpsService.containsToken(tokenIdentifier)) {
       return azureDevOpsService;
+    } else if (githubService.containsToken(tokenIdentifier)) {
+      return githubService;
     }
     // If a new project management provider should be implemented, it can just be
     // added here

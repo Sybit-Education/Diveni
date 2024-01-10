@@ -10,7 +10,7 @@
       initial-edit-type="wysiwyg"
       preview-style="vertical"
       :class="theme === 'light' ? 'lightMode' : 'darkMode'"
-      @blur="getTextValueFromEditor"
+      @update:modelValue="$emit('textValueChanged', { markdown: $event })"
     />
   </div>
 </template>
@@ -22,14 +22,14 @@ import "@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin
 
 import "@toast-ui/editor/dist/i18n/de-de";
 
-import Vue from "vue";
-import { Editor } from "@toast-ui/vue-editor";
+import { defineComponent } from "vue";
 import codeSyntaxHighlight from "@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin-code-syntax-highlight-all";
+import UiToastEditorWrapper from "@/components/UiToastEditorWrapper.vue";
 
-export default Vue.extend({
+export default defineComponent({
   name: "MarkdownEditor",
   components: {
-    editor: Editor,
+    editor: UiToastEditorWrapper,
   },
   model: {
     prop: "markdown",
@@ -46,7 +46,8 @@ export default Vue.extend({
     },
     markdown: {
       type: String,
-      default: null,
+      required: false,
+      default: "",
     },
     placeholder: {
       type: String,
@@ -84,15 +85,6 @@ export default Vue.extend({
       const customEvent = event as CustomEvent;
       this.theme = customEvent.detail.storage;
     });
-  },
-  methods: {
-    getTextValueFromEditor() {
-      if (this.$refs.toastuiEditor) {
-        const editor = this.$refs.toastuiEditor as Editor;
-        const editorText = editor.invoke("getMarkdown");
-        this.$emit("textValueChanged", { markdown: editorText });
-      }
-    },
   },
 });
 </script>

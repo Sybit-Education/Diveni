@@ -20,12 +20,12 @@
   "dependencies": {
     "medium-zoom": "^1.1.0",
     "vitepress-plugin-back-to-top": "^1.0.1",
-    "vitepress-plugin-search": "^1.0.4-alpha.20"
+    "vitepress-plugin-search": "^1.0.4-alpha.22"
   },
   "devDependencies": {
     "@mermaid-js/mermaid-mindmap": "^9.3.0",
     "mermaid": "^10.6.1",
-    "vitepress": "^1.0.0-rc.31",
+    "vitepress": "^1.0.0-rc.34",
     "vitepress-plugin-mermaid": "^2.0.16"
   }
 }
