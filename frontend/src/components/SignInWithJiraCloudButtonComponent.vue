@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-button
-      id="button"
+      variant="primary"
       :disabled="disabled"
       @click="
         redirectToJira();
@@ -49,14 +49,4 @@ export default defineComponent({
 </script>
 
 <!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
-<style lang="scss" scoped>
-#button {
-  background-color: var(--preparePageMainColor);
-  color: var(--text-primary-color);
-}
-
-#button:hover {
-  background-color: var(--primary-button-hovered);
-  color: var(--text-primary-color);
-}
-</style>
+<style lang="scss" scoped></style>

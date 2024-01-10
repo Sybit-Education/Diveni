@@ -28,6 +28,7 @@
       >
         <b-button
           v-if="showEditButtons"
+          variant="primary"
           :class="story.isActive ? 'selectedStory' : 'outlineColorStory'"
           size="sm"
           @click="
@@ -74,8 +75,8 @@
 
     <b-button
       v-if="userStories.length < 1 && showEditButtons && !filterActive"
-      class="w-100 mb-5"
-      variant="secondary"
+      class="w-100 mb-1"
+      variant="primary"
       @click="
         addUserStory();
         $event.target.blur();
@@ -95,8 +96,8 @@
 
     <b-button
       v-if="userStories.length > 0 && showEditButtons && !filterActive"
-      class="w-100 mb-5"
-      variant="secondary"
+      class="w-100 mb-1"
+      variant="primary"
       @click="
         addUserStory();
         $event.target.blur();
@@ -171,7 +172,7 @@ export default defineComponent({
       }
       this.userStories = this.savedStories;
       if (this.input !== "") {
-        let filteredUserStories: UserStory[] = [];
+        const filteredUserStories: UserStory[] = [];
         this.userStories.forEach((userStory) => {
           if (userStory.title.toLowerCase().includes(this.input.toLowerCase())) {
             filteredUserStories.push(userStory);
@@ -220,48 +221,6 @@ export default defineComponent({
   rotate: 90deg;
 }
 
-#search {
-  background: var(--textAreaColour);
-  color: var(--text-primary-color);
-  border-style: solid;
-}
-
-#search::placeholder {
-  color: var(--text-primary-color);
-}
-
-.selectedStory {
-  background-color: transparent;
-  border: none;
-}
-
-.selectedStory:hover {
-  background-color: transparent !important;
-  border: none;
-}
-
-.selectedStory:focus {
-  background-color: transparent !important;
-  border: none;
-  outline: none;
-  box-shadow: none;
-}
-
-.outlineColorStory {
-  background-color: transparent;
-  border: none;
-}
-
-.outlineColorStory:hover {
-  background-color: transparent;
-  border: none;
-}
-
-.outlineColorStory:focus {
-  background-color: transparent !important;
-  border: none;
-}
-
 #userStoryRow {
   background-color: var(--textAreaColour);
   color: var(--text-primary-color);
@@ -281,23 +240,14 @@ export default defineComponent({
   border: none;
 }
 
-#userStoryTitles::placeholder {
-  color: var(--text-primary-color);
-}
-
 #userStoryPicture {
-  height: 30px;
-  width: 30px;
+  height: 25px;
+  width: 25px;
 }
 
 #badge {
   background-color: var(--secondary-button);
   color: var(--text-primary-color);
   font-size: large;
-}
-
-.btn-secondary:not(:disabled):not(.disabled),
-.show > .btn-secondary.dropdown-toggle {
-  background-color: var(--primary-button) !important;
 }
 </style>

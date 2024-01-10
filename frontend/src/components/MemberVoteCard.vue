@@ -61,7 +61,7 @@ export default defineComponent({
     const threshold = maxUpPos / 2;
 
     if (typeof Hammer !== "undefined" && this.isMobile) {
-      const ref = this.$refs.swippable as any;
+      const ref = this.$refs.swippable as HTMLElement;
       const hammer = new Hammer(ref);
 
       hammer.get("swipe").set({ direction: Hammer.DIRECTION_UP });
@@ -117,7 +117,7 @@ export default defineComponent({
 
 .text {
   font-size: 5rem;
-  font-weight: 500;
+  font-weight: 600;
   color: black;
 }
 </style>

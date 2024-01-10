@@ -13,9 +13,7 @@
             'session.prepare.step.selection.mode.description.withIssueTracker.placeholder.searchProjects'
           )
         "
-        @input="
-          filterProjects();
-        "
+        @input="filterProjects()"
         @focus="
           showResult = true;
           filterProjects();
@@ -102,7 +100,7 @@ export default defineComponent({
         return;
       }
       if (this.input !== "") {
-        let filteredProjects: string[] = [];
+        const filteredProjects: string[] = [];
         this.getProjectNames().forEach((name) => {
           if (name.toLowerCase().includes(this.input.toLowerCase())) {
             filteredProjects.push(name);
@@ -128,34 +126,29 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-input {
-  width: 100%;
-  border: 1px solid #ccc;
-  color: #666;
-  border-radius: 10px;
-  outline: none;
-  padding: 9px 14px;
-  box-sizing: border-box;
-  font-size: 14px;
-}
 .vue-autocomplete-input-tag-items {
   border: 1px solid #ccc;
   max-height: 200px;
   margin-top: 8px;
   width: 100%;
-  background-color: white;
+  background-color: var(--preparePageNotSelectedTabBackground);
   border-radius: 8px;
   overflow: auto;
+
+  &:hover {
+    background-color: var(--preparePageInActiveTabHover);
+  }
 }
+
 .vue-autocomplete-input-tag-item {
   padding: 6px 16px;
-  color: #4a4a4a;
   max-width: 100%;
   cursor: pointer;
   text-align: left;
-  font-size: 14px;
+  font-size: 16px;
 }
+
 .vue-autocomplete-input-tag-item:hover {
-  background-color: #e8e8e8;
+  background-color: var(--preparePageInActiveTabHover);
 }
 </style>
