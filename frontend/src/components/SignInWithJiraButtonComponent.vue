@@ -61,6 +61,7 @@
       </b-button>
     </div>
     <b-modal
+      v-model="showVerificationModal"
       id="modal-verification-code"
       ref="modal"
       title="Verification code"
@@ -98,15 +99,19 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import {defineComponent, VueElement} from "vue";
 import apiService from "@/services/api.service";
 import { useI18n } from "vue-i18n";
+import {useToast} from "vue-toastification";
+import { useDiveniStore } from "@/store";
 
 export default defineComponent({
   name: "SignInWithJiraButtonComponent",
   setup() {
     const { t } = useI18n();
-    return { t };
+    const toast = useToast();
+    const store = useDiveniStore();
+    return { t, toast, store };
   },
   props: {
     enableJiraCloud: {
@@ -142,7 +147,7 @@ export default defineComponent({
     },
     handleJiraUrlSubmit() {
       const valid = (
-        this.$refs.jiraUrlForm as Vue & { checkValidity: () => boolean }
+        this.$refs.jiraUrlForm as VueElement & { checkValidity: () => boolean }
       ).checkValidity();
       this.jiraUrlState = valid;
       if (valid) {
@@ -188,7 +193,7 @@ export default defineComponent({
             ? await apiService.sendJiraCloudVerificationCode(this.verificationCode, this.token)
             : await apiService.sendJiraServerVerificationCode(this.verificationCode, this.token);
         localStorage.setItem("tokenId", response.tokenId);
-        this.$store.commit("setTokenId", response.tokenId);
+        this.store.setTokenId(response.tokenId);
       } catch (e) {
         this.showToast(e);
       }
@@ -198,11 +203,11 @@ export default defineComponent({
     },
     showToast(error) {
       if (error.response.status === 428) {
-        this.$toast.error(this.$t("session.notification.messages.jiraCloudRequestTokenFailed"));
+        this.toast.error(this.$t("session.notification.messages.jiraCloudRequestTokenFailed"));
       } else if (error.response.data.message === "failed to retrieve access token") {
-        this.$toast.error(this.$t("session.notification.messages.issueTrackerCredentials"));
+        this.toast.error(this.$t("session.notification.messages.issueTrackerCredentials"));
       } else {
-        this.$toast.error(this.$t("session.notification.messages.issueTrackerLoginFailed"));
+        this.toast.error(this.$t("session.notification.messages.issueTrackerLoginFailed"));
       }
       console.error(error);
     },
@@ -216,10 +221,6 @@ export default defineComponent({
 }
 .button {
   background-color: var(--preparePageMainColor);
-  color: var(--text-primary-color);
-}
-.button:hover {
-  background-color: var(--startButtonHovered);
   color: var(--text-primary-color);
 }
 </style>
