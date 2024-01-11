@@ -11,6 +11,7 @@
               <b-img
                 :src="require(`@/assets/${getClass(item).toLowerCase()}.png`)"
                 :class="getClass(item) + 'Pic'"
+                alt="Connector Picture"
               />
             </div>
             <div class="title">
