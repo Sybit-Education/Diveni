@@ -6,9 +6,10 @@
       :active="$i18n.locale === key ? true : false"
       class="text-light"
       @click="setLocale(key)"
-      >{{ locale }}</b-dropdown-item
     >
-    <hr />
+      {{ locale }}
+    </b-dropdown-item>
+    <b-dropdown-divider></b-dropdown-divider>
     <b-dropdown-item href="https://crowdin.com/project/diveni">
       {{ t("general.licenses.translations") }}
     </b-dropdown-item>
