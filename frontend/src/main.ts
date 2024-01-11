@@ -24,13 +24,11 @@ import "@egjs/vue3-flicking/dist/flicking.css";
 import Toast from "vue-toastification";
 import "vue-toastification/dist/index.css";
 import i18n from "@/i18n";
-import VueMeta from "vue-meta";
 
 Vue.use(IconsPlugin);
 Vue.use(VueFlicking);
 Vue.use(ModalPlugin);
 Vue.use(BootstrapVue);
-Vue.use(VueMeta);
 
 setupInterceptors();
 
