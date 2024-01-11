@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-button id="button" :disabled="disabled" @click="clicked = !clicked">
+    <b-button variant="primary" :disabled="disabled" @click="clicked = !clicked">
       {{
         t(
           "session.prepare.step.selection.mode.description.withIssueTracker.buttons.signInWithGithub.label"
@@ -18,7 +18,9 @@
         </b-input>
       </div>
       <div class="inline-div">
-        <b-button @click="getAccessToken()"> Sign in </b-button>
+        <b-button variant="primary" :disabled="patToken === ''" @click="getAccessToken()"
+          >Sign in
+        </b-button>
       </div>
     </div>
   </div>
@@ -74,23 +76,16 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
-#button {
-  background-color: var(--preparePageMainColor);
-  color: var(--text-primary-color);
-}
-
-#button:hover {
-  background-color: var(--primary-button-hovered);
-  color: var(--text-primary-color);
-}
-
+<!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
+<style lang="scss" scoped>
 .inline-div {
   display: inline-block;
 }
+
 .input-div {
   margin-right: 0.5vw;
 }
+
 .patInputField {
   width: 100%;
   margin-right: 5em;

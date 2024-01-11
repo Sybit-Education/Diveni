@@ -214,7 +214,6 @@ import { defineComponent } from "vue";
 import { useDiveniStore } from "@/store";
 import { useToast } from "vue-toastification";
 import { useI18n } from "vue-i18n";
-import AdminVote from "@/model/AdminVote";
 
 export default defineComponent({
   name: "MemberVotePage",
@@ -338,7 +337,7 @@ export default defineComponent({
         this.safedHostEstimation = this.hostEstimation?.hostEstimation;
       }
     },
-    notifications(notifications) {
+    notifications() {
       const lastNotification = this.notifications.at(-1);
       if (
         lastNotification &&
@@ -374,7 +373,7 @@ export default defineComponent({
       if (this.highlightedMembers.length === 0) {
         return true;
       }
-      let highlightedMap = new Map<string, boolean>();
+      const highlightedMap = new Map<string, boolean>();
       this.highlightedMembers.forEach((highlightedMemberID) => {
         let isMemberID = false;
         this.members.forEach((member) => {
@@ -384,7 +383,7 @@ export default defineComponent({
         });
         highlightedMap.set(highlightedMemberID, isMemberID);
       });
-      for (let value of highlightedMap.values()) {
+      for (const value of highlightedMap.values()) {
         if (value === false) {
           return true;
         }
