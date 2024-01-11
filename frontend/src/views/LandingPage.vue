@@ -42,7 +42,7 @@
           <b-card-group deck class="py-5">
             <b-card class="pictureCard">
               <b-card-text>
-                <b-img
+                <b-img-lazy
                   :src="require(`@/assets/SetUpSession.png`)"
                   class="landingPagePictures"
                   width="255"
@@ -53,7 +53,7 @@
             </b-card>
             <b-card class="pictureCard">
               <b-card-text>
-                <b-img
+                <b-img-lazy
                   :src="require(`@/assets/InviteYourTeam.png`)"
                   class="landingPagePictures"
                   width="255"
@@ -64,7 +64,7 @@
             </b-card>
             <b-card class="pictureCard">
               <b-card-text>
-                <b-img
+                <b-img-lazy
                   :src="require(`@/assets/EstimateUserStories.png`)"
                   class="landingPagePictures"
                   width="255"
