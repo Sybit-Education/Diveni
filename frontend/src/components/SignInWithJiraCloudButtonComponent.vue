@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-button
-      id="button"
+      variant="primary"
       :disabled="disabled"
       @click="
         redirectToJira();
@@ -9,7 +9,7 @@
       "
     >
       {{
-        $t(
+        t(
           "session.prepare.step.selection.mode.description.withIssueTracker.buttons.signInWithJiraCloud.label"
         )
       }}
@@ -18,11 +18,12 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
 import { v4 as uuidv4 } from "uuid";
 import apiService from "@/services/api.service";
+import { useI18n } from "vue-i18n";
 
-export default Vue.extend({
+export default defineComponent({
   name: "SignInWithJiraCloudButtonComponent",
   props: {
     disabled: {
@@ -30,6 +31,10 @@ export default Vue.extend({
       required: false,
       default: false,
     },
+  },
+  setup() {
+    const { t } = useI18n();
+    return { t };
   },
   methods: {
     async redirectToJira() {
@@ -44,14 +49,4 @@ export default Vue.extend({
 </script>
 
 <!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
-<style lang="scss" scoped>
-#button {
-  background-color: var(--preparePageMainColor);
-  color: var(--text-primary-color);
-}
-
-#button:hover {
-  background-color: var(--primary-button-hovered);
-  color: var(--text-primary-color);
-}
-</style>
+<style lang="scss" scoped></style>

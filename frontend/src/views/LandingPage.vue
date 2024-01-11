@@ -8,24 +8,26 @@
     <b-container class="my-5">
       <b-card-group deck class="justify-content-center">
         <landing-page-card
-          :title="$t('page.landing.meeting.new.title')"
-          :description="$t('page.landing.meeting.new.description')"
-          :button-text="$t('page.landing.meeting.new.buttons.start.label')"
+          :title="t('page.landing.meeting.new.title')"
+          :description="t('page.landing.meeting.new.description')"
+          :button-text="t('page.landing.meeting.new.buttons.start.label')"
           :on-click="goToPrepareSessionPage"
+          button-variant="primary"
           class="newSessionCard"
         />
         <landing-page-card
-          :title="$t('page.landing.meeting.join.title')"
-          :description="$t('page.landing.meeting.join.description')"
-          :button-text="$t('page.landing.meeting.join.buttons.start.label')"
+          :title="t('page.landing.meeting.join.title')"
+          :description="t('page.landing.meeting.join.description')"
+          :button-text="t('page.landing.meeting.join.buttons.start.label')"
           :on-click="goToJoinPage"
+          button-variant="secondary"
           class="joinSessionCard"
         />
         <landing-page-card
           v-if="sessionWrapper.session"
-          :title="$t('page.landing.meeting.reconnect.title')"
-          :description="$t('page.landing.meeting.reconnect.description')"
-          :button-text="$t('page.landing.meeting.reconnect.buttons.start.label')"
+          :title="t('page.landing.meeting.reconnect.title')"
+          :description="t('page.landing.meeting.reconnect.description')"
+          :button-text="t('page.landing.meeting.reconnect.buttons.start.label')"
           :on-click="goToSessionPage"
           class="reconnectSessionCard"
         />
@@ -105,20 +107,33 @@
         <a href="https://docs.diveni.io/">documentation</a>.
       </p>
     </b-container>
+    <b-container class="py-3">
+      <h1 class="mt-5">Connectors</h1>
+    </b-container>
+    <CarouselComponent class="py-5"></CarouselComponent>
   </div>
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
 import LandingPageCard from "../components/LandingPageCard.vue";
 import Constants from "../constants";
 import Session from "../model/Session";
 import AnalyticsDataComponent from "../components/AnalyticsDataComponent.vue";
-export default Vue.extend({
+import { useDiveniStore } from "@/store";
+import { useI18n } from "vue-i18n";
+import CarouselComponent from "@/components/CarouselComponent.vue";
+export default defineComponent({
   name: "LandingPage",
   components: {
     LandingPageCard,
     AnalyticsDataComponent,
+    CarouselComponent,
+  },
+  setup() {
+    const store = useDiveniStore();
+    const { t } = useI18n();
+    return { store, t };
   },
   data() {
     return {
@@ -127,6 +142,7 @@ export default Vue.extend({
     };
   },
   created() {
+    this.disconnectFromBackendWS();
     this.checkAdminCookie();
   },
   methods: {
@@ -159,7 +175,7 @@ export default Vue.extend({
             };
             sessionState: string;
             members: Array<string>;
-            hostVoting: string;
+            hostVoting: boolean;
           };
           this.sessionWrapper = { session };
         } catch (e) {
@@ -175,12 +191,12 @@ export default Vue.extend({
       this.$router.push({ name: "PrepareSessionPage" });
     },
     goToSessionPage() {
-      this.$store.commit("setUserStories", {
+      this.store.setUserStories({
         stories: this.sessionWrapper.session.sessionConfig.userStories,
       });
       this.$router.push({
         name: "SessionPage",
-        params: {
+        state: {
           sessionID: this.sessionWrapper.session.sessionID,
           adminID: this.sessionWrapper.session.adminID,
           voteSetJson: JSON.stringify(this.sessionWrapper.session.sessionConfig.set),
@@ -189,8 +205,12 @@ export default Vue.extend({
           startNewSessionOnMountedString: this.startNewSessionOnMounted.toString(),
           userStoryMode: this.sessionWrapper.session.sessionConfig.userStoryMode,
           hostVoting: this.sessionWrapper.session.hostVoting,
+          rejoined: "false",
         },
       });
+    },
+    disconnectFromBackendWS() {
+      this.store.disconnectFromBackendWS();
     },
   },
 });
@@ -199,20 +219,12 @@ export default Vue.extend({
 <!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
 <style lang="scss">
 .newSessionCard {
-  .landingPageCardButton {
-    background-color: var(--primary-button) !important;
-    color: var(--text-primary-color);
-  }
   .card-footer {
     background-color: #52173100; /* So the Footer does not overflow */
   }
 }
 
 .joinSessionCard {
-  .landingPageCardButton {
-    background-color: var(--secondary-button) !important;
-  }
-
   .card-footer {
     background-color: #52173100; /* So the Footer does not overflow */
   }
@@ -221,8 +233,10 @@ export default Vue.extend({
 .reconnectSessionCard {
   .landingPageCardButton {
     background-color: var(--reconnectButton) !important;
+    &:hover {
+      background-color: var(--reconnectButtonHovered) !important;
+    }
   }
-
   .card-footer {
     background-color: #52173100; /* So the Footer does not overflow */
   }
@@ -238,10 +252,11 @@ export default Vue.extend({
 .aboutDiveni {
   box-shadow: 0 0 5px 5px var(--landingPageCardsBackground);
   border: none !important;
+  background: var(--landingPageCardsBackground) !important;
 }
 
 .card-title {
-  color: var(--text-primary-color);
+  color: var(--text-primary-color) !important;
 }
 
 .parent {

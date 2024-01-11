@@ -10,22 +10,29 @@
       @click="leaveSession"
     >
       <b-icon-x />
-      {{ $t("page.vote.button.leave.label") }}
+      {{ t("page.vote.button.leave.label") }}
     </b-button>
   </div>
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
 import Constants from "../../constants";
+import { useDiveniStore } from "@/store";
+import { useI18n } from "vue-i18n";
 
-export default Vue.extend({
+export default defineComponent({
   name: "SessionLeaveButton",
+  setup() {
+    const store = useDiveniStore();
+    const { t } = useI18n();
+    return { store, t };
+  },
   methods: {
     leaveSession() {
       const endPoint = `${Constants.webSocketUnregisterRoute}`;
-      this.$store.commit("sendViaBackendWS", { endPoint, data: null });
-      this.$store.commit("clearStore");
+      this.store.sendViaBackendWS(endPoint);
+      this.store.clearStore();
       window.localStorage.removeItem("memberCookie");
       this.$router.push({ name: "LandingPage" });
     },

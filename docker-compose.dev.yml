@@ -2,8 +2,10 @@ version: "3"
 
 services:
   database:
-    image: mongo:4
+    image: mongo:latest
     container_name: diveni_database
+    volumes:
+      - mongo-volume:/data/db
     restart: unless-stopped
 
   backend:
@@ -36,3 +38,6 @@ services:
     restart: unless-stopped
     ports:
       - "80:80"
+
+volumes:
+  mongo-volume:

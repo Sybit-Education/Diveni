@@ -4,7 +4,7 @@
       {{ description }}
     </b-card-text>
     <template #footer>
-      <b-button class="landingPageCardButton" @click="onClick">
+      <b-button :variant="buttonVariant" class="landingPageCardButton" @click="onClick">
         {{ buttonText }}
       </b-button>
     </template>
@@ -12,15 +12,16 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
 
-export default Vue.extend({
+export default defineComponent({
   name: "LandingPageCard",
   props: {
     title: { type: String, required: true },
     description: { type: String, required: true },
     buttonText: { type: String, required: true },
     onClick: { type: Function, required: true },
+    buttonVariant: { type: String, required: false, default: "primary" },
   },
 });
 </script>
@@ -29,6 +30,6 @@ export default Vue.extend({
 <style lang="scss" scoped>
 .landing-page-card {
   border-radius: 2rem;
-  background-color: var(--landingPageCardsBackground);
+  background-color: var(--blurBackGroundColor);
 }
 </style>

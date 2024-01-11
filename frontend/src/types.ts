@@ -42,3 +42,12 @@ export interface JiraRequestTokenDto {
   token: string;
   url: string;
 }
+
+export interface PullRequestDto {
+  number: number;
+  html_url: string;
+  title: string;
+  merged_at: string;
+  user_type: string;
+  updated_at: string;
+}

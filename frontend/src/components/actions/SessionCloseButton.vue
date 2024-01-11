@@ -5,31 +5,33 @@
     </div>
     <b-button v-b-modal.close-session-modal variant="danger" class="button">
       <b-icon-x />
-      {{ $t("page.session.during.estimation.buttons.finish") }}
+      {{ t("page.session.during.estimation.buttons.finish") }}
     </b-button>
     <b-modal
       id="close-session-modal"
       class="modal-header"
-      :title="$t('page.session.close.popup')"
-      :cancel-title="$t('page.session.close.button.cancel')"
-      :ok-title="$t('page.session.close.button.ok')"
+      :title="t('page.session.close.popup')"
+      :cancel-title="t('page.session.close.button.cancel')"
+      :ok-title="t('page.session.close.button.ok')"
       @ok="closeSession"
     >
       <p class="modal-body my-4 description">
-        {{ $t("page.session.close.description1") }}
+        {{ t("page.session.close.description1") }}
       </p>
       <p v-if="userStoryMode !== 'NO_US'" class="description">
-        {{ $t("page.session.close.description2") }}
+        {{ t("page.session.close.description2") }}
       </p>
     </b-modal>
   </div>
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
 import Constants from "@/constants";
+import { useDiveniStore } from "@/store";
+import { useI18n } from "vue-i18n";
 
-export default Vue.extend({
+export default defineComponent({
   name: "SessionCloseButton",
   props: {
     isPlanningStart: {
@@ -41,6 +43,11 @@ export default Vue.extend({
       required: true,
     },
   },
+  setup() {
+    const store = useDiveniStore();
+    const { t } = useI18n();
+    return { store, t };
+  },
   methods: {
     closeSession() {
       this.sendCloseSessionCommand();
@@ -48,13 +55,13 @@ export default Vue.extend({
       if (this.userStoryMode !== "NO_US") {
         this.$router.push({ name: "ResultPage" });
       } else {
-        this.$store.commit("clearStore");
+        this.store.clearStore();
         this.$router.push({ name: "LandingPage" });
       }
     },
     sendCloseSessionCommand() {
       const endPoint = `${Constants.webSocketCloseSessionRoute}`;
-      this.$store.commit("sendViaBackendWS", { endPoint });
+      this.store.sendViaBackendWS(endPoint);
     },
   },
 });
@@ -62,10 +69,6 @@ export default Vue.extend({
 
 <!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
 <style lang="scss">
-.description {
-  color: var(--text-primary-color);
-}
-
 #picture-holderClose {
   width: auto;
   height: 90px;
@@ -74,7 +77,6 @@ export default Vue.extend({
 #pandaPictureClose {
   position: absolute;
   left: 65%;
-  height: 15%;
   height: 30px;
   user-select: none;
 }
@@ -113,7 +115,7 @@ export default Vue.extend({
   position: absolute !important;
   text-align: left;
   max-height: 40px;
-  bottom: 0px;
+  bottom: 0;
   white-space: nowrap;
 }
 </style>

@@ -298,7 +298,9 @@ public class WebsocketController {
     LOGGER.debug("--> isMemberInSession()");
     if (principal instanceof MemberPrincipal) {
       LOGGER.debug("<-- isMemberInSession()");
-      return databaseService.getSessionByMemberID(((MemberPrincipal) principal).getMemberID()).isPresent();
+      return databaseService
+          .getSessionByMemberID(((MemberPrincipal) principal).getMemberID())
+          .isPresent();
     }
     LOGGER.debug("<-- isMemberInSession(). principal is NOT instanceof MemberPrincipal");
     return false;

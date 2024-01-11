@@ -4,7 +4,7 @@
     <b-card-group deck>
       <b-card class="statsCards">
         <b-card-title style="text-align: center">
-          {{ $t("page.landing.meeting.analytics.allCreatedSessionsTitle") }}
+          {{ t("page.landing.meeting.analytics.allCreatedSessionsTitle") }}
         </b-card-title>
         <b-card-text>
           <h2 class="numbers">{{ tweenedOverAllSessions.toFixed(0) }}</h2>
@@ -20,7 +20,7 @@
       </b-card>
       <b-card class="statsCards">
         <b-card-title style="text-align: center">
-          {{ $t("page.landing.meeting.analytics.activeTitle") }}
+          {{ t("page.landing.meeting.analytics.activeTitle") }}
         </b-card-title>
         <b-card-text>
           <h2 class="numbers">
@@ -43,11 +43,16 @@
   </b-container>
 </template>
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
 import gsap from "gsap";
 import apiService from "@/services/api.service";
-export default Vue.extend({
+import { useI18n } from "vue-i18n";
+export default defineComponent({
   name: "AnalyticsDataComponent",
+  setup() {
+    const { t } = useI18n();
+    return { t };
+  },
   data() {
     return {
       loaded: false,
@@ -63,13 +68,13 @@ export default Vue.extend({
   },
   computed: {
     headerText() {
-      return this.$t("page.landing.meeting.analytics.title");
+      return this.t("page.landing.meeting.analytics.title");
     },
     allSessions() {
-      return this.$t("page.landing.meeting.analytics.sessionText");
+      return this.t("page.landing.meeting.analytics.sessionText");
     },
     allAttendees() {
-      return this.$t("page.landing.meeting.analytics.attendeesText");
+      return this.t("page.landing.meeting.analytics.attendeesText");
     },
   },
   watch: {
@@ -92,9 +97,9 @@ export default Vue.extend({
   methods: {
     async getAllDiveniData() {
       this.loaded = false;
-      let response = apiService.getAllDiveniData();
-      let allData = await response.then(function (result) {
-        let returnArray: Array<number> = [];
+      const response = apiService.getAllDiveniData();
+      const allData = await response.then(function (result) {
+        const returnArray: Array<number> = [];
         returnArray.push(result.amountOfSessions);
         returnArray.push(result.amountOfAttendees);
         returnArray.push(result.amountOfSessionsCurrently);
@@ -114,8 +119,8 @@ export default Vue.extend({
 <!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
 <style lang="scss" scoped>
 .statsCards {
-  border-radius: 0.5rem;
-  background-color: rgba(200, 200, 200, 0.5);
+  border-radius: 2rem;
+  background-color: var(--blurBackGroundColor);
 }
 .numbers {
   text-align: center;

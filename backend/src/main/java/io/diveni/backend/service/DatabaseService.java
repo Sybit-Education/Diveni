@@ -28,15 +28,14 @@ public class DatabaseService {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(DatabaseService.class);
 
-  //Sets the database entry identifier in our 'statistics' table.
-  //Only modify if you want to create a new database entry!!!
-  //Variable can be further extracted
-  private final String statEntryIdentifier = "STAT_V1";
+  // Sets the database entry identifier in our 'statistics' table.
+  // Only modify if you want to create a new database entry!!!
+  // Variable can be further extracted
+  private static final String STAT_ENTRY_IDENTIFIER = "STAT_V1";
 
   @Autowired SessionRepository sessionRepo;
 
   @Autowired StatisticRepository statisticRepo;
-
 
   public Optional<Session> getSessionByID(String sessionID) {
     LOGGER.debug("getSessionByID()");
@@ -66,38 +65,41 @@ public class DatabaseService {
   @Transactional
   public void deleteSession(Session session) {
     LOGGER.debug("--> deleteSession()");
-    Statistic statistic = getOrCreateStatistic();
-    statistic.incrementOverallSessions().addOverallAttendees(session.getMembers().size());
-    statisticRepo.save(statistic);
+    statisticRepo.save(
+        getOrCreateStatistic()
+            .addOverallSessions(1)
+            .addOverallAttendees(session.getMembers().size()));
     sessionRepo.delete(session);
     LOGGER.debug("<-- deleteSession()");
   }
 
-  public void addRemovedMember()  {
+  public void addRemovedMember() {
     LOGGER.debug("--> addRemovedMember()");
-    Statistic statistic = getOrCreateStatistic();
-    statistic.incrementOverallAttendees();
-    statisticRepo.save(statistic);
+    statisticRepo.save(getOrCreateStatistic().addOverallAttendees(1));
     LOGGER.debug("<-- addRemovedMember()");
   }
 
   public Integer getRemovedMember() {
     LOGGER.debug("getRemovedMember()");
-    return statisticRepo.findById(statEntryIdentifier)
-      .map(Statistic::getOverallAttendees)
-      .orElse(0);
+    return statisticRepo
+        .findById(STAT_ENTRY_IDENTIFIER)
+        .map(Statistic::getOverallAttendees)
+        .orElse(0);
   }
 
   public Integer getDeletedSessions() {
     LOGGER.debug("getDeletedSessions()");
-    return statisticRepo.findById(statEntryIdentifier)
-      .map(Statistic::getOverallSessions)
-      .orElse(0);
+    return statisticRepo
+        .findById(STAT_ENTRY_IDENTIFIER)
+        .map(Statistic::getOverallSessions)
+        .orElse(0);
   }
 
   private Statistic getOrCreateStatistic() {
     LOGGER.debug("getOrCreateStatistic()");
-    return statisticRepo.findById(statEntryIdentifier)
-      .orElseGet(() -> statisticRepo.save(new Statistic(statEntryIdentifier, 0, 0, LocalDate.now())));
+    return statisticRepo
+        .findById(STAT_ENTRY_IDENTIFIER)
+        .orElseGet(
+            () -> statisticRepo.save(new Statistic(STAT_ENTRY_IDENTIFIER, 0, 0, LocalDate.now())));
   }
 }

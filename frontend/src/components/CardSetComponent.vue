@@ -16,18 +16,18 @@
           <div v-if="item.values.length === 0">
             <span id="createSetHint">
               <b-icon-info-circle class="mt-3 me-1" />{{
-                $t("session.prepare.step.selection.cardSet.sets.ownSet.hint.label")
+                t("session.prepare.step.selection.cardSet.sets.ownSet.hint.label")
               }}</span
             >
             <b-popover id="popUp" target="createSetHint" triggers="hover" placement="top">
               <template #title>
-                {{ $t("session.prepare.step.selection.cardSet.sets.ownSet.hint.label") }}
+                {{ t("session.prepare.step.selection.cardSet.sets.ownSet.hint.label") }}
               </template>
               <p>
-                {{ $t("session.prepare.step.selection.cardSet.sets.ownSet.hint.description") }}
+                {{ t("session.prepare.step.selection.cardSet.sets.ownSet.hint.description") }}
               </p>
               <p>
-                {{ $t("session.prepare.step.selection.cardSet.sets.ownSet.hint.example") }}
+                {{ t("session.prepare.step.selection.cardSet.sets.ownSet.hint.example") }}
               </p>
             </b-popover>
           </div>
@@ -54,7 +54,7 @@
         <b-col sm="6">
           <b-form-input
             v-model="createSetInput"
-            :placeholder="$t('session.prepare.step.selection.cardSet.sets.ownSet.hint.example')"
+            :placeholder="t('session.prepare.step.selection.cardSet.sets.ownSet.hint.example')"
           ></b-form-input>
         </b-col>
         <b-col sm="6">
@@ -74,12 +74,17 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
+import { useI18n } from "vue-i18n";
 
-export default Vue.extend({
+export default defineComponent({
   name: "CardSetComponent",
   props: {
     userStoryMode: { type: String, required: true },
+  },
+  setup() {
+    const { t } = useI18n();
+    return { t };
   },
   data() {
     return {
@@ -93,15 +98,15 @@ export default Vue.extend({
       createSetInput: "",
       allCardSets: [
         {
-          name: this.$t("session.prepare.step.selection.cardSet.sets.fibonacci.label"),
-          description: this.$t("session.prepare.step.selection.cardSet.sets.fibonacci.description"),
+          name: this.t("session.prepare.step.selection.cardSet.sets.fibonacci.label"),
+          description: this.t("session.prepare.step.selection.cardSet.sets.fibonacci.description"),
           values: ["1", "2", "3", "5", "8", "13", "21", "34", "55", "?"],
           activeValues: ["1", "2", "3", "5", "8", "13", "21"],
           position: 1,
         },
         {
-          name: this.$t("session.prepare.step.selection.cardSet.sets.tShirtSizes.label"),
-          description: this.$t(
+          name: this.t("session.prepare.step.selection.cardSet.sets.tShirtSizes.label"),
+          description: this.t(
             "session.prepare.step.selection.cardSet.sets.tShirtSizes.description"
           ),
           values: ["XXS", "XS", "S", "M", "L", "XL", "XXL", "XXXL", "?"],
@@ -109,22 +114,22 @@ export default Vue.extend({
           position: 2,
         },
         {
-          name: this.$t("session.prepare.step.selection.cardSet.sets.hours.label"),
-          description: this.$t("session.prepare.step.selection.cardSet.sets.hours.description"),
+          name: this.t("session.prepare.step.selection.cardSet.sets.hours.label"),
+          description: this.t("session.prepare.step.selection.cardSet.sets.hours.description"),
           values: ["1", "2", "3", "4", "5", "6", "8", "10", "12", "16", "?"],
           activeValues: ["1", "2", "3", "4", "5", "6", "8", "10", "12", "16"],
           position: 3,
         },
         {
-          name: this.$t("session.prepare.step.selection.cardSet.sets.numbers.label"),
-          description: this.$t("session.prepare.step.selection.cardSet.sets.numbers.description"),
+          name: this.t("session.prepare.step.selection.cardSet.sets.numbers.label"),
+          description: this.t("session.prepare.step.selection.cardSet.sets.numbers.description"),
           values: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "?"],
           activeValues: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
           position: 4,
         },
         {
-          name: this.$t("session.prepare.step.selection.cardSet.sets.ownSet.label"),
-          description: this.$t("session.prepare.step.selection.cardSet.sets.ownSet.description"),
+          name: this.t("session.prepare.step.selection.cardSet.sets.ownSet.label"),
+          description: this.t("session.prepare.step.selection.cardSet.sets.ownSet.description"),
           values: [],
           activeValues: [],
           position: 5,
@@ -132,22 +137,22 @@ export default Vue.extend({
       ],
       allCardSetsWithJiraMode: [
         {
-          name: this.$t("session.prepare.step.selection.cardSet.sets.fibonacci.label"),
-          description: this.$t("session.prepare.step.selection.cardSet.sets.fibonacci.description"),
+          name: this.t("session.prepare.step.selection.cardSet.sets.fibonacci.label"),
+          description: this.t("session.prepare.step.selection.cardSet.sets.fibonacci.description"),
           values: ["1", "2", "3", "5", "8", "13", "21", "34", "55", "?"],
           activeValues: ["1", "2", "3", "5", "8", "13", "21"],
           position: 1,
         },
         {
-          name: this.$t("session.prepare.step.selection.cardSet.sets.hours.label"),
-          description: this.$t("session.prepare.step.selection.cardSet.sets.hours.description"),
+          name: this.t("session.prepare.step.selection.cardSet.sets.hours.label"),
+          description: this.t("session.prepare.step.selection.cardSet.sets.hours.description"),
           values: ["1", "2", "3", "4", "5", "6", "8", "10", "12", "16", "?"],
           activeValues: ["1", "2", "3", "4", "5", "6", "8", "10", "12", "16"],
           position: 2,
         },
         {
-          name: this.$t("session.prepare.step.selection.cardSet.sets.numbers.label"),
-          description: this.$t("session.prepare.step.selection.cardSet.sets.numbers.description"),
+          name: this.t("session.prepare.step.selection.cardSet.sets.numbers.label"),
+          description: this.t("session.prepare.step.selection.cardSet.sets.numbers.description"),
           values: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "?"],
           activeValues: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
           position: 3,
@@ -331,21 +336,28 @@ export default Vue.extend({
   margin-right: auto;
 
   .pill {
-    width: 4rem;
+    width: 5rem;
 
-    .active {
-      background-color: var(--preparePageMainColor);
-      color: var(--text-primary-color);
+    &:not(.active) {
+      background-color: var(--preparePageNotSelectedTabBackground) !important;
+      color: var(--text-primary-color) !important;
+      border: transparent !important;
+
+      &:hover {
+        color: var(--text-color-hover) !important;
+        background-color: var(--preparePageInActiveTabHover) !important;
+      }
     }
 
-    .active:hover {
-      background-color: var(--preparePageInActiveTabHover);
-      color: var(--text-primary-color);
-    }
+    &.active {
+      background-color: var(--preparePageMainColor) !important;
+      color: var(--text-primary-color) !important;
+      border-color: var(--btn-border-color) !important;
 
-    .active:focus {
-      background-color: var(--preparePageInActiveTabHover);
-      color: var(--text-primary-color);
+      &:hover {
+        background-color: var(--preparePageInActiveTabHover);
+        color: var(--text-color-hover) !important;
+      }
     }
   }
 }
