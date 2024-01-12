@@ -1,5 +1,10 @@
 <template>
   <div id="landing-page">
+    <b-container fluid class="teaser">
+      <b-container>
+        <b-jumbotron header="DIVENI" lead="Instant free and easy remote Planning Poker" />
+      </b-container>
+    </b-container>
     <b-container class="my-5">
       <b-card-group deck class="justify-content-center">
         <landing-page-card
@@ -250,6 +255,13 @@ export default defineComponent({
   .card-footer {
     background-color: #52173100; /* So the Footer does not overflow */
   }
+}
+
+.teaser {
+  background: linear-gradient(var(--background-color-primary), var(--pictureGradientEnd)),
+  url("~@/assets/img/diveni-background.png");
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
 .aboutDiveni {
