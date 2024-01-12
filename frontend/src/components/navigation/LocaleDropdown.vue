@@ -1,21 +1,23 @@
 <template>
-  <b-nav-item-dropdown :text="locales[$i18n.locale]" right>
-    <ul style="list-style-type: disc">
-      <b-dropdown-item
-        v-for="(locale, key) in locales"
-        :key="key"
-        :active="$i18n.locale === key ? true : false"
-        class="text-light"
-        @click="setLocale(key)"
-      >
-        {{ locale }}
+  <ul style="list-style-type: none; padding: 0">
+    <b-nav-item-dropdown :text="locales[$i18n.locale]" right>
+      <ul style="list-style-type: disc">
+        <b-dropdown-item
+          v-for="(locale, key) in locales"
+          :key="key"
+          :active="$i18n.locale === key ? true : false"
+          class="text-light"
+          @click="setLocale(key)"
+        >
+          {{ locale }}
+        </b-dropdown-item>
+      </ul>
+      <b-dropdown-divider></b-dropdown-divider>
+      <b-dropdown-item href="https://crowdin.com/project/diveni">
+        {{ t("general.licenses.translations") }}
       </b-dropdown-item>
-    </ul>
-    <b-dropdown-divider></b-dropdown-divider>
-    <b-dropdown-item href="https://crowdin.com/project/diveni">
-      {{ t("general.licenses.translations") }}
-    </b-dropdown-item>
-  </b-nav-item-dropdown>
+    </b-nav-item-dropdown>
+  </ul>
 </template>
 
 <script lang="ts">
