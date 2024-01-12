@@ -45,14 +45,14 @@ export default defineComponent({
         {
           name: "twitter:title",
           content: "Diveni - Instant free and easy remote Planning Poker",
-          vmid: "og:title",
+          vmid: "twitter:title",
         },
         {
           name: "twitter:description",
           content:
             "This is a free, user-friendly Planning Poker App. Ideal for your Scrum team. You can connect it to Jira, Github, Gitlab & Azure DevOps." +
             "After connecting you can create, update or delete issues and plan your next sprint with your team.",
-          vmid: "og:description",
+          vmid: "twitter:description",
         },
       ],
   },
