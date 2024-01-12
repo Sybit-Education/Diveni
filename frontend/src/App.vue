@@ -27,6 +27,35 @@ export default defineComponent({
   mounted() {
     document.title = "DIVENI";
   },
+  metaInfo: {
+    title: "Diveni - Instant free and easy remote Planning Poker",
+    meta: [
+      {
+        property: "og:title",
+        content: "Diveni - Instant free and easy remote Planning Poker",
+        vmid: "og:title",
+      },
+      {
+        property: "og:description",
+        content:
+          "This is a free, user-friendly Planning Poker App. Ideal for your Scrum team. You can connect it to Jira, Github, Gitlab & Azure DevOps." +
+          "After connecting you can create, update or delete issues and plan your next sprint with your team.",
+        vmid: "og:description",
+      },
+      {
+        name: "twitter:title",
+        content: "Diveni - Instant free and easy remote Planning Poker",
+        vmid: "twitter:title",
+      },
+      {
+        name: "twitter:description",
+        content:
+          "This is a free, user-friendly Planning Poker App. Ideal for your Scrum team. You can connect it to Jira, Github, Gitlab & Azure DevOps." +
+          "After connecting you can create, update or delete issues and plan your next sprint with your team.",
+        vmid: "twitter:description",
+      },
+    ],
+  },
 });
 </script>
 <style lang="scss">
