@@ -39,7 +39,7 @@
         <div class="background py-5"></div>
         <div class="text">
           <h1>Remote Planning Poker using DIVENI</h1>
-          <b-card-group deck class="py-5">
+          <b-card-group deck class="py-2">
             <b-card class="pictureCard">
               <b-card-text>
                 <b-img-lazy
