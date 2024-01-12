@@ -1,14 +1,16 @@
 <template>
   <b-nav-item-dropdown :text="locales[$i18n.locale]" right>
-    <b-dropdown-item
-      v-for="(locale, key) in locales"
-      :key="key"
-      :active="$i18n.locale === key ? true : false"
-      class="text-light"
-      @click="setLocale(key)"
-    >
-      {{ locale }}
-    </b-dropdown-item>
+    <ul style="list-style-type: disc">
+      <b-dropdown-item
+        v-for="(locale, key) in locales"
+        :key="key"
+        :active="$i18n.locale === key ? true : false"
+        class="text-light"
+        @click="setLocale(key)"
+      >
+        {{ locale }}
+      </b-dropdown-item>
+    </ul>
     <b-dropdown-divider></b-dropdown-divider>
     <b-dropdown-item href="https://crowdin.com/project/diveni">
       {{ t("general.licenses.translations") }}
