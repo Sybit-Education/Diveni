@@ -1,8 +1,5 @@
 <template>
   <div id="landing-page">
-    <b-container>
-      <b-jumbotron header="DIVENI" lead="Instant free and easy remote Planning Poker" />
-    </b-container>
     <b-container class="my-5">
       <b-card-group deck class="justify-content-center">
         <landing-page-card
