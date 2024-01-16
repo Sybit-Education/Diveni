@@ -34,7 +34,6 @@
     "vue": "^3.4.3",
     "vue-axios": "^3.5.2",
     "vue-i18n": "^9.8.0",
-    "vue-meta": "^2.4.0",
     "vue-router": "^4.2.5",
     "vue-toastification": "^2.0.0-rc.5",
     "webstomp-client": "^1.2.6"
