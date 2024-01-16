@@ -12,7 +12,7 @@
     "licenses:update": "license-checker --json > ./public/frontend-dependencies.json"
   },
   "dependencies": {
-    "@egjs/vue3-flicking": "^4.11.1",
+    "@egjs/vue3-flicking": "^4.11.2",
     "@toast-ui/editor": "^3.2.2",
     "@toast-ui/editor-plugin-code-syntax-highlight": "^3.1.0",
     "@types/sockjs-client": "^1.5.4",
