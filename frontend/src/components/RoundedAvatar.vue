@@ -2,7 +2,7 @@
   <div
     class="rounded-avatar rounded-circle"
     :style="`background-color: ${member.hexColor}`"
-    :class="this.mobile ? 'smallAvatar' : 'bigAvatar'"
+    :class="mobile ? 'smallAvatar' : 'bigAvatar'"
   >
     <div :id="'avatar' + member.name" class="text-center">
       <b-img :src="require(`@/assets/${avatar}.png`)" class="rounded-avatar__image" />
