@@ -111,6 +111,7 @@
       <h1 class="mt-5">Connectors</h1>
     </b-container>
     <CarouselComponent class="py-5"></CarouselComponent>
+    <DownloadPWAModal/>
   </div>
 </template>
 
@@ -123,9 +124,11 @@ import AnalyticsDataComponent from "../components/AnalyticsDataComponent.vue";
 import { useDiveniStore } from "@/store";
 import { useI18n } from "vue-i18n";
 import CarouselComponent from "@/components/CarouselComponent.vue";
+import DownloadPWAModal from "@/components/DownloadPWAModal.vue";
 export default defineComponent({
   name: "LandingPage",
   components: {
+    DownloadPWAModal,
     LandingPageCard,
     AnalyticsDataComponent,
     CarouselComponent,
