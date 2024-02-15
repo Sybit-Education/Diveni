@@ -67,7 +67,6 @@
       <b-row>
         <b-col class="text-center">
           <session-start-button
-            :members="members"
             :host-voting="hostVoting"
             :auto-reveal="autoReveal"
             @clicked="onPlanningStarted"
@@ -76,7 +75,7 @@
       </b-row>
     </div>
     <div v-else>
-      <b-row class="d-flex justify-content-start pb-3">
+            <b-row class="d-flex justify-content-start pb-3">
         <b-col cols="auto" class="mr-auto optionButtonCol">
           <b-button
             class="mr-3 optionButton"
