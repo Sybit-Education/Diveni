@@ -55,7 +55,9 @@
           "buttons": {
             "new": "Neu",
             "result": "Ergebnisse anzeigen",
-            "finish": "Sitzung beenden"
+            "finish": "Sitzung beenden",
+            "autoRevealOn": "Auto reveal on",
+            "autoRevealOff": "Auto reveal off"
           }
         },
         "modal": {
@@ -123,6 +125,30 @@
           "attendeesText": "Teilnehmer",
           "lastMonthTitle": "Letzter Monat",
           "activeTitle": "Momentan"
+        },
+        "connectors": {
+          "jiraServer": {
+            "description": "You can connect Diveni to your Jira Server. For more information check out our Documentation"
+          },
+          "jiraCloud": {
+            "description": "You can connect Diveni to your Jira Cloud. For more information check out our Documentation"
+          },
+          "azureDevOps": {
+            "description": "You can connect Diveni to your Azure Dev Ops organziation. You just need to get yourself a Personal Access Token and add it to the backend"
+          },
+          "github": {
+            "description": "You can create a connection to your github profile via a Personal Access Token. Just click on log in and paste your personal access token into the input field"
+          },
+          "gitlab": {
+            "description": "You can create a connection to your gitlab profile via a Personal Access Token. Just click on log in and paste your personal access token into the input field"
+          }
+        }
+      },
+      "news": {
+        "buttons": {
+          "info": {
+            "label": "What's new"
+          }
         }
       }
     },
@@ -206,6 +232,9 @@
                   },
                   "signInWithAzureDevOps": {
                     "label": "Mit Azure DevOps anmelden"
+                  },
+                  "signInWithGithub": {
+                    "label": "Sign in with Github"
                   },
                   "selectProject": {
                     "label": "Wählen Sie ihr Jira-Projekt aus"
