@@ -26,10 +26,10 @@ export default defineComponent({
   },
   computed: {
     avatar() {
-      if (this.member.avatarAnimalAssetName === undefined) {
+      if (this.member.avatarAnimal === undefined) {
         return Constants.getRandomAvatarAnimalAssetName();
       }
-      return this.member?.avatarAnimalAssetName?.toLowerCase() ?? "fish";
+      return this.member?.avatarAnimal?.toLowerCase() ?? "fish";
     },
   },
 });

@@ -2,7 +2,7 @@ interface Member {
   memberID: string;
   name: string;
   hexColor: string;
-  avatarAnimalAssetName: string;
+  avatarAnimal: string;
   currentEstimation: string | null;
 }
 
