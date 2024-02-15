@@ -75,7 +75,7 @@
       </b-row>
     </div>
     <div v-else>
-            <b-row class="d-flex justify-content-start pb-3">
+      <b-row class="d-flex justify-content-start pb-3">
         <b-col cols="auto" class="mr-auto optionButtonCol">
           <b-button
             class="mr-3 optionButton"
