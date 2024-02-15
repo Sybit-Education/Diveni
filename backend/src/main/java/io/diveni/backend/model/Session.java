@@ -118,7 +118,7 @@ public class Session {
     Optional<String> minEstimation;
     if (!this.hostVoting
         || this.hostEstimation == null
-        || this.hostEstimation.getHostEstimation().equals("")) {
+        || this.hostEstimation.getHostEstimation().isEmpty()) {
       maxEstimation = getFilteredEstimationStream(this.members).max(estimationByIndex(filteredSet));
     } else {
       Stream<String> filteredEstimationsMember = getFilteredEstimationStream(this.members);
@@ -129,7 +129,7 @@ public class Session {
     }
     if (!this.hostVoting
         || this.hostEstimation == null
-        || this.hostEstimation.getHostEstimation().equals("")) {
+        || this.hostEstimation.getHostEstimation().isEmpty()) {
       minEstimation = getFilteredEstimationStream(this.members).min(estimationByIndex(filteredSet));
     } else {
       Stream<String> filteredEstimationsMember = getFilteredEstimationStream(this.members);
@@ -173,10 +173,10 @@ public class Session {
                         .anyMatch((member) -> member.getMemberID().equals(entry.getKey())))
             .collect(Collectors.toList());
 
-    if (hostVoting == true) {
-      if (maxEstimation.get().equals(this.hostEstimation.getHostEstimation())) {
-        maxOptions.add(new AbstractMap.SimpleEntry<String, Integer>(this.adminID, 0));
-      }
+    if (hostVoting
+        && this.hostEstimation != null
+        && (maxEstimation.get().equals(this.hostEstimation.getHostEstimation()))) {
+      maxOptions.add(new AbstractMap.SimpleEntry<>(this.adminID, 0));
     }
 
     val maxMemberID =
@@ -198,10 +198,10 @@ public class Session {
                         .anyMatch((member) -> member.getMemberID().equals(entry.getKey())))
             .collect(Collectors.toList());
 
-    if (hostVoting == true) {
-      if (minEstimation.get().equals(this.hostEstimation.getHostEstimation())) {
-        minOptions.add(new AbstractMap.SimpleEntry<String, Integer>(this.adminID, 0));
-      }
+    if (hostVoting
+        && this.hostEstimation != null
+        && (minEstimation.get().equals(this.hostEstimation.getHostEstimation()))) {
+      minOptions.add(new AbstractMap.SimpleEntry<>(this.adminID, 0));
     }
 
     val minMemberID =

@@ -12,6 +12,7 @@
           :description="t('page.landing.meeting.new.description')"
           :button-text="t('page.landing.meeting.new.buttons.start.label')"
           :on-click="goToPrepareSessionPage"
+          button-variant="primary"
           class="newSessionCard"
         />
         <landing-page-card
@@ -19,6 +20,7 @@
           :description="t('page.landing.meeting.join.description')"
           :button-text="t('page.landing.meeting.join.buttons.start.label')"
           :on-click="goToJoinPage"
+          button-variant="secondary"
           class="joinSessionCard"
         />
         <landing-page-card
@@ -217,20 +219,12 @@ export default defineComponent({
 <!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
 <style lang="scss">
 .newSessionCard {
-  .landingPageCardButton {
-    background-color: var(--primary-button) !important;
-    color: var(--text-primary-color);
-  }
   .card-footer {
     background-color: #52173100; /* So the Footer does not overflow */
   }
 }
 
 .joinSessionCard {
-  .landingPageCardButton {
-    background-color: var(--secondary-button) !important;
-  }
-
   .card-footer {
     background-color: #52173100; /* So the Footer does not overflow */
   }
@@ -239,8 +233,10 @@ export default defineComponent({
 .reconnectSessionCard {
   .landingPageCardButton {
     background-color: var(--reconnectButton) !important;
+    &:hover {
+      background-color: var(--reconnectButtonHovered) !important;
+    }
   }
-
   .card-footer {
     background-color: #52173100; /* So the Footer does not overflow */
   }

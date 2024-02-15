@@ -29,7 +29,7 @@
         </b-col>
       </b-row>
       <b-row>
-        <b-col class="mt-2 mt-md-0 inputText" cols="12" md="9">
+        <b-col class="mt-4 inputText" cols="12" md="9">
           <h6>{{ t("page.join.input.password") }}</h6>
           <b-form-input
             v-model="password"
@@ -124,32 +124,21 @@ h6 {
 }
 
 .startingButton {
-  background-color: var(--primary-button);
-  color: var(--text-primary-color);
-  min-height: 75px;
-  min-width: 75px;
+  min-height: 95px;
+  min-width: 95px;
   margin-top: 16%;
   font-size: xx-large;
   white-space: nowrap;
 }
 
-.startingButton:hover {
-  background-color: var(--primary-button-hovered);
-  color: var(--text-primary-color);
-}
-
-.startingButton:focus {
-  background-color: var(--primary-button-hovered) !important;
-  color: var(--text-primary-color);
-}
-
-.startingButton:hover:disabled {
-  background-color: grey;
-  color: var(--text-primary-color);
-}
-
 .inputText {
   color: black;
+}
+
+.form-control {
+  &::placeholder {
+    color: black !important;
+  }
 }
 
 #startButtonCol {

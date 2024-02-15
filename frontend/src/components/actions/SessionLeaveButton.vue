@@ -31,7 +31,7 @@ export default defineComponent({
   methods: {
     leaveSession() {
       const endPoint = `${Constants.webSocketUnregisterRoute}`;
-      this.store.sendViaBackendWS(endPoint, null);
+      this.store.sendViaBackendWS(endPoint);
       this.store.clearStore();
       window.localStorage.removeItem("memberCookie");
       this.$router.push({ name: "LandingPage" });

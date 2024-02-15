@@ -71,7 +71,9 @@ export default defineComponent({
   },
   methods: {
     checkFormValidity() {
-      const valid = (this.$refs.form as any & { checkValidity: () => boolean }).checkValidity();
+      const valid = (
+        this.$refs.form as HTMLElement & { checkValidity: () => boolean }
+      ).checkValidity();
       this.verificationCodeState = valid;
       return valid;
     },

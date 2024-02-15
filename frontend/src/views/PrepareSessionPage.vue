@@ -4,7 +4,7 @@
       {{ t("session.prepare.title") }}
     </h1>
 
-    <h4 class="mt-3">
+    <h4 class="mt-2">
       <b-img
         v-if="theme === 'light'"
         :src="require('@/assets/preparePage/P1.png')"
@@ -64,11 +64,11 @@
       {{ t("session.prepare.step.selection.cardSet.title") }}
     </h4>
     <card-set-component
-      class="mt-3"
+      class="mt-2"
       :user-story-mode="userStoryMode"
       @selectedCardSetOptions="setCardSetOptions"
     />
-    <h4 class="mt-3">
+    <h4 class="mt-4">
       <b-img
         v-if="theme === 'light'"
         :src="require('@/assets/preparePage/P3.png')"
@@ -79,6 +79,7 @@
     </h4>
     <div class="settings-control">
       <b-button
+        variant="primary"
         class="btn-sm btn-outline-light"
         @click="
           setTimerDown();
@@ -87,10 +88,11 @@
       >
         -
       </b-button>
-      <div id="setting-value" class="font-weight-bolder px-2 text-center">
+      <div id="setting-value" class="font-weight-bolder px-3 text-center">
         {{ timer == 0 ? "∞" : formatTimer }}
       </div>
       <b-button
+        variant="primary"
         class="btn-sm btn-outline-light"
         @click="
           setTimerUp();
@@ -100,7 +102,7 @@
         +
       </b-button>
     </div>
-    <h4 class="mt-3">
+    <h4 class="mt-5">
       <b-img
         v-if="theme === 'light'"
         :src="require('@/assets/preparePage/P4.png')"
@@ -109,10 +111,11 @@
       <b-img v-else :src="require('@/assets/preparePage/P4D.png')" class="numberPictures" />
       {{ t("session.prepare.step.selection.hostVoting.title") }}
     </h4>
-    <b-row class="mt-3">
+    <b-row class="mt-2">
       <b-col>
         <div class="settings-control">
           <b-button
+            variant="primary"
             class="btn-sm btn-outline-light"
             @click="
               hostVoting = true;
@@ -121,7 +124,7 @@
           >
             {{ t("session.prepare.step.selection.hostVoting.hostVotingOn") }}
           </b-button>
-          <div id="setting-value" class="font-weight-bolder px-2 text-center">
+          <div id="setting-value" class="font-weight-bolder px-3 text-center">
             {{
               hostVoting
                 ? t("session.prepare.step.selection.hostVoting.hostVotingOn")
@@ -129,6 +132,7 @@
             }}
           </div>
           <b-button
+            variant="primary"
             class="btn-sm btn-outline-light"
             @click="
               hostVoting = false;
@@ -140,10 +144,10 @@
         </div>
       </b-col>
     </b-row>
-    <h4 class="mt-3">
+    <h4 class="mt-5">
       {{ t("session.prepare.step.selection.password.title") }}
     </h4>
-    <b-row class="mt-3">
+    <b-row class="mt-2">
       <b-col>
         <b-form-input
           id="input-password"
@@ -153,7 +157,8 @@
       </b-col>
     </b-row>
     <b-button
-      class="my-5 startingButton"
+      variant="primary"
+      class="mt-5 mb-2"
       :disabled="buttonDisabled()"
       @click="sendCreateSessionRequest"
     >
@@ -345,12 +350,12 @@ export default defineComponent({
         header: true,
         delimiter: ";",
         complete: (file: { data }) => {
-          let stories: UserStory[] = [];
+          const stories: UserStory[] = [];
 
           file.data.forEach((story) => {
-            let title = story.title ? story.title : story.Title;
-            let description = story.description ? story.description : story.Description;
-            let estimation = story.estimation ? story.estimation : story.Estimation;
+            const title = story.title ? story.title : story.Title;
+            const description = story.description ? story.description : story.Description;
+            const estimation = story.estimation ? story.estimation : story.Estimation;
 
             stories.push({
               id: null,
@@ -381,17 +386,6 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import "@/assets/style/_variables.scss";
 
-.btn-secondary:not(:disabled):not(.disabled),
-.show > .btn-secondary.dropdown-toggle {
-  background-color: var(--preparePageTimerBackground);
-}
-
-.btn-secondary:not(:disabled):not(.disabled):active,
-.btn-secondary:not(:disabled):not(.disabled).active,
-.show > .btn-secondary.dropdown-toggle {
-  background-color: var(--primary-button) !important;
-}
-
 .settings-control {
   display: flex;
   border-radius: $border-radius;
@@ -415,30 +409,6 @@ export default defineComponent({
     flex: content;
     width: 5rem;
   }
-}
-
-.startingButton {
-  background-color: var(--primary-button) !important;
-  color: var(--text-primary-color);
-}
-
-.startingButton:hover {
-  background-color: var(--primary-button-hovered);
-  color: var(--text-primary-color);
-}
-
-.startingButton:disabled {
-  color: var(--text-primary-color);
-}
-
-.startingButton:disabled:hover {
-  background-color: grey;
-  color: var(--text-primary-color);
-}
-
-.startingButton:focus {
-  background-color: var(--primary-button-hovered) !important;
-  color: var(--text-primary-color);
 }
 
 .numberPictures {

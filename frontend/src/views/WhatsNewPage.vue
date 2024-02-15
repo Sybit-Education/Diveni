@@ -22,12 +22,11 @@
         </b-pagination>
       </div>
       <div class="row" style="justify-content: center">
-        <div v-if="loading" align="center" class="col-12 my-5">
+        <div v-if="loading" class="col-12 my-5 text-center">
           <b-spinner label="Loading..."></b-spinner>
         </div>
         <b-card-group v-for="card in paginatedData" :key="card.number" deck class="my-3 col-md-4">
           <b-card
-            class="pr-card"
             align="center"
             border-variant="secondary"
             :header="`${card.updated_at}`"
@@ -87,9 +86,9 @@ export default defineComponent({
     this.fetchData(this.apiPage);
   },
   methods: {
-    parseDate(data: string | any[]) {
-      for (let i = 0; i < data.length; i++) {
-        data[i].updated_at = dateUtil.convertDate(data[i].updated_at);
+    parseDate(data: PullRequestDto[]) {
+      for (const element of data) {
+        element.updated_at = dateUtil.convertDate(element.updated_at);
       }
     },
     async fetchData(page: number) {
@@ -126,7 +125,8 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
+<!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
+<style lang="scss" scoped>
 .teaser {
   background: linear-gradient(var(--background-color-primary), var(--pictureGradientEnd)),
     url("~@/assets/img/diveni-background.png");
@@ -134,18 +134,18 @@ export default defineComponent({
   background-repeat: no-repeat;
 }
 
-.pr-card {
-  background-color: var(--landingPageCardsBackground);
-}
-
-.jumbotron {
-  background-color: rgba(255, 255, 255, 0.5);
-}
-
-.customPagination /deep/ li > button,
-.customPagination /deep/ li > span {
+.customPagination :deep(li) > button,
+.customPagination :deep(li) > span {
   background-color: var(--landingPageCardsBackground) !important;
   color: var(--text-primary-color) !important;
   border-color: var(--text-primary-color) !important;
+}
+
+.customPagination :deep(li) > button:hover {
+  background-color: var(--preparePageInActiveTabHover) !important;
+}
+
+.customPagination :deep(li.active) > button {
+  background-color: var(--primary-button) !important;
 }
 </style>
