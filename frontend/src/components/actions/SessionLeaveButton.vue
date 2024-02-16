@@ -1,5 +1,8 @@
 <template>
-  <div class="img-holderLeave mt-5">
+  <div
+    class="img-holderLeave"
+    :class="isMobile ? '' : 'mt-5'"
+  >
     <div id="picture-holderLeave">
       <b-img id="pandaPictureLeave" :src="require('@/assets/LeaveButton.png')" />
     </div>
@@ -27,6 +30,9 @@ export default defineComponent({
     const store = useDiveniStore();
     const { t } = useI18n();
     return { store, t };
+  },
+  props: {
+    isMobile: { type: Boolean, default: false },
   },
   methods: {
     leaveSession() {
