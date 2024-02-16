@@ -133,7 +133,8 @@ public class GitlabService implements ProjectManagementProviderOAuth2 {
     try {
       ResponseEntity<String> response =
           executeRequest(
-              this.gitlabAPIString + "projects/"
+              this.gitlabAPIString
+                  + "projects/"
                   + projectIDs.get(projectName)
                   + "/issues?state=opened",
               HttpMethod.GET,
@@ -172,7 +173,8 @@ public class GitlabService implements ProjectManagementProviderOAuth2 {
     content.put("description", story.getDescription());
     try {
       executeRequest(
-          this.gitlabAPIString + "projects/"
+          this.gitlabAPIString
+              + "projects/"
               + projectIDTokenID.get(tokenIdentifier)
               + "/issues/"
               + story.getId(),
@@ -196,7 +198,8 @@ public class GitlabService implements ProjectManagementProviderOAuth2 {
     content.put("duration", story.getEstimation() + "h");
     try {
       executeRequest(
-          this.gitlabAPIString + "projects/"
+          this.gitlabAPIString
+              + "projects/"
               + projectIDTokenID.get(tokenIdentifier)
               + "/issues/"
               + story.getId()
@@ -243,7 +246,8 @@ public class GitlabService implements ProjectManagementProviderOAuth2 {
     content.put("state_event", "close");
     try {
       executeRequest(
-          this.gitlabAPIString + "projects/"
+          this.gitlabAPIString
+              + "projects/"
               + projectIDTokenID.get(tokenIdentifier)
               + "/issues/"
               + issueID,
