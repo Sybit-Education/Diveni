@@ -10,7 +10,7 @@
         <rounded-avatar
           :member="{
             hexColor: 'transparent',
-            avatarAnimalAssetName: animalAssetName,
+            avatarAnimal: animalAssetName,
             name: '',
           }"
           :show-name="false"

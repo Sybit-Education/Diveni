@@ -67,7 +67,6 @@
       <b-row>
         <b-col class="text-center">
           <session-start-button
-            :members="members"
             :host-voting="hostVoting"
             :auto-reveal="autoReveal"
             @clicked="onPlanningStarted"

@@ -295,7 +295,7 @@ export default defineComponent({
         memberID: "",
         name: this.name,
         hexColor: this.hexColor,
-        avatarAnimalAssetName: this.avatarAnimalAssetName,
+        avatarAnimal: this.avatarAnimalAssetName,
         currentEstimation: "",
       } as Member;
     },
