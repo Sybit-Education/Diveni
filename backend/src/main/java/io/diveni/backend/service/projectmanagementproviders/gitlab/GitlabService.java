@@ -40,6 +40,8 @@ public class GitlabService implements ProjectManagementProviderOAuth2 {
 
   private final Map<String, String> projectIDTokenID = new HashMap<>();
 
+  private final String gitlabAPIString = "https://gitlab.com/api/v4/";
+
   @PostConstruct
   public void logConfig() {
     serviceEnabled = true;
@@ -75,7 +77,7 @@ public class GitlabService implements ProjectManagementProviderOAuth2 {
     try {
       ResponseEntity<String> responseUser =
           executeRequest(
-              "https://gitlab.com/api/v4/user",
+              this.gitlabAPIString + "user",
               HttpMethod.GET,
               accessTokens.get(tokenIdentifier),
               null);
@@ -86,7 +88,7 @@ public class GitlabService implements ProjectManagementProviderOAuth2 {
 
       ResponseEntity<String> response =
           executeRequest(
-              "https://gitlab.com/api/v4/users/" + userName + "/projects",
+              this.gitlabAPIString + "users/" + userName + "/projects",
               HttpMethod.GET,
               accessTokens.get(tokenIdentifier),
               null);
@@ -99,14 +101,14 @@ public class GitlabService implements ProjectManagementProviderOAuth2 {
       // get Projects of a group
       ResponseEntity<String> responseGroups =
           executeRequest(
-              "https://gitlab.com/api/v4/groups",
+              this.gitlabAPIString + "groups",
               HttpMethod.GET,
               accessTokens.get(tokenIdentifier),
               null);
       for (JsonNode groupProject : new ObjectMapper().readTree(responseGroups.getBody())) {
         ResponseEntity<String> responseGroupRepo =
             executeRequest(
-                "https://gitlab.com/api/v4/groups/" + groupProject.get("id").asText() + "/projects",
+                this.gitlabAPIString + "groups/" + groupProject.get("id").asText() + "/projects",
                 HttpMethod.GET,
                 accessTokens.get(tokenIdentifier),
                 null);
@@ -131,7 +133,7 @@ public class GitlabService implements ProjectManagementProviderOAuth2 {
     try {
       ResponseEntity<String> response =
           executeRequest(
-              "https://gitlab.com/api/v4/projects/"
+              this.gitlabAPIString + "projects/"
                   + projectIDs.get(projectName)
                   + "/issues?state=opened",
               HttpMethod.GET,
@@ -170,7 +172,7 @@ public class GitlabService implements ProjectManagementProviderOAuth2 {
     content.put("description", story.getDescription());
     try {
       executeRequest(
-          "https://gitlab.com/api/v4/projects/"
+          this.gitlabAPIString + "projects/"
               + projectIDTokenID.get(tokenIdentifier)
               + "/issues/"
               + story.getId(),
@@ -194,7 +196,7 @@ public class GitlabService implements ProjectManagementProviderOAuth2 {
     content.put("duration", story.getEstimation() + "h");
     try {
       executeRequest(
-          "https://gitlab.com/api/v4/projects/"
+          this.gitlabAPIString + "projects/"
               + projectIDTokenID.get(tokenIdentifier)
               + "/issues/"
               + story.getId()
@@ -220,7 +222,7 @@ public class GitlabService implements ProjectManagementProviderOAuth2 {
     try {
       ResponseEntity<String> response =
           executeRequest(
-              "https://gitlab.com/api/v4/projects/" + projectID + "/issues",
+              this.gitlabAPIString + "projects/" + projectID + "/issues",
               HttpMethod.POST,
               accessTokens.get(tokenIdentifier),
               new Gson().toJson(content));
@@ -241,7 +243,7 @@ public class GitlabService implements ProjectManagementProviderOAuth2 {
     content.put("state_event", "close");
     try {
       executeRequest(
-          "https://gitlab.com/api/v4/projects/"
+          this.gitlabAPIString + "projects/"
               + projectIDTokenID.get(tokenIdentifier)
               + "/issues/"
               + issueID,
