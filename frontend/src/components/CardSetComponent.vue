@@ -240,7 +240,7 @@ export default defineComponent({
       return `${this.getCardActiveClass(item)} ${this.getPictureClass(item)}`;
     },
     getCardActiveClass(item) {
-      return this.selectedCardSet.position === item.position? "selected" : "";
+      return this.selectedCardSet.position === item.position ? "selected" : "";
     },
     getPictureClass(item) {
       if (this.userStoryMode !== this.jiraTag) {
