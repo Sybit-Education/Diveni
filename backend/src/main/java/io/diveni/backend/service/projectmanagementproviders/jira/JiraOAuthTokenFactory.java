@@ -3,11 +3,11 @@
   Diveni - The Planing-Poker App
   Copyright (C) 2022 Diveni Team, AUME-Team 21/22, HTWG Konstanz
 */
-package io.diveni.backend.service.projectmanagementproviders.jiraserver;
+package io.diveni.backend.service.projectmanagementproviders.jira;
 
 import com.google.api.client.auth.oauth.OAuthRsaSigner;
 import com.google.api.client.http.apache.ApacheHttpTransport;
-import com.google.api.client.util.Base64;
+import com.google.common.io.BaseEncoding;
 
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
@@ -21,7 +21,7 @@ public class JiraOAuthTokenFactory {
 
   public JiraOAuthTokenFactory(String jiraBaseUrl) {
     this.accessTokenUrl = jiraBaseUrl + "/plugins/servlet/oauth/access-token";
-    requestTokenUrl = jiraBaseUrl + "/plugins/servlet/oauth/request-token";
+    this.requestTokenUrl = jiraBaseUrl + "/plugins/servlet/oauth/request-token";
   }
 
   /**
@@ -30,7 +30,7 @@ public class JiraOAuthTokenFactory {
    *
    * @param tmpToken request token
    * @param secret secret (verification code provided by JIRA after request token authorization)
-   * @param consumerKey consumer ey
+   * @param consumerKey consumer key
    * @param privateKey private key in PKCS8 format
    * @return JiraOAuthGetAccessToken request
    * @throws NoSuchAlgorithmException
@@ -53,7 +53,7 @@ public class JiraOAuthTokenFactory {
    * setting consumer and private keys.
    *
    * @param tmpToken request token
-   * @param consumerKey consumer ey
+   * @param consumerKey consumer key
    * @param privateKey private key in PKCS8 format
    * @return JiraOAuthGetAccessToken request
    * @throws NoSuchAlgorithmException
@@ -114,7 +114,7 @@ public class JiraOAuthTokenFactory {
    */
   private PrivateKey getPrivateKey(String privateKey)
       throws NoSuchAlgorithmException, InvalidKeySpecException {
-    byte[] privateBytes = Base64.decodeBase64(privateKey);
+    byte[] privateBytes = BaseEncoding.base64().decode(privateKey);
     PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(privateBytes);
     KeyFactory kf = KeyFactory.getInstance("RSA");
     return kf.generatePrivate(keySpec);

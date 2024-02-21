@@ -193,6 +193,9 @@
                   "description": "Zostanie otwarta nowa karta, udziel dostępu do tej aplikacji w tej karcie i wprowadź tutaj kod weryfikacyjny."
                 },
                 "inputs": {
+                  "jiraUrl": {
+                    "placeholder": "JIRA URL"
+                  },
                   "verificationCode": {
                     "placeholder": "Kod weryfikacyjny"
                   }
@@ -216,6 +219,10 @@
                 },
                 "placeholder": {
                   "searchProjects": "Wyszukaj projekt..."
+                },
+                "popover": {
+                  "first": "To use JIRA Cloud make sure to set up an application link before. See our user guide at ",
+                  "second": " for instructions on how to do this."
                 }
               }
             }
@@ -290,6 +297,7 @@
         "memberRemoved": "Zostałeś usunięty z sesji przez hosta",
         "issueTrackerCredentials": "Nieprawidłowe dane logowania",
         "issueTrackerLoginFailed": "Logowanie nie powiodło się",
+        "jiraCloudRequestTokenFailed": "Failed to authorize to JIRA Cloud! Make sure the application link is set up correctly!",
         "issueTrackerSynchronizeSuccess": "Zsynchronizowano zmiany z Issue-Trackerem",
         "issueTrackerNothingChanged": "No changes were made",
         "issueTrackerSynchronizeFailed": "Nie udało się zsynchronizować zmian z Issue-Trackerem",

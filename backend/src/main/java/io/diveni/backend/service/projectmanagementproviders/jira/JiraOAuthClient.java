@@ -3,9 +3,8 @@
   Diveni - The Planing-Poker App
   Copyright (C) 2022 Diveni Team, AUME-Team 21/22, HTWG Konstanz
 */
-package io.diveni.backend.service.projectmanagementproviders.jiraserver;
+package io.diveni.backend.service.projectmanagementproviders.jira;
 
-import com.google.api.client.auth.oauth.OAuthAuthorizeTemporaryTokenUrl;
 import com.google.api.client.auth.oauth.OAuthCredentialsResponse;
 import com.google.api.client.auth.oauth.OAuthParameters;
 
@@ -17,39 +16,14 @@ public class JiraOAuthClient {
 
   public final String jiraBaseUrl;
   private final JiraOAuthTokenFactory oAuthGetAccessTokenFactory;
-  private final String authorizationUrl;
 
   public JiraOAuthClient(String jiraBaseUrl) throws Exception {
     this.jiraBaseUrl = jiraBaseUrl;
     this.oAuthGetAccessTokenFactory = new JiraOAuthTokenFactory(this.jiraBaseUrl);
-    authorizationUrl = jiraBaseUrl + "/plugins/servlet/oauth/authorize";
   }
 
   /**
-   * Gets temporary request token and creates url to authorize it
-   *
-   * @param consumerKey consumer key
-   * @param privateKey private key in PKCS8 format
-   * @return request token value
-   * @throws NoSuchAlgorithmException
-   * @throws InvalidKeySpecException
-   * @throws IOException
-   */
-  public String getAndAuthorizeTemporaryToken(String consumerKey, String privateKey)
-      throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
-    JiraOAuthGetTemporaryToken temporaryToken =
-        oAuthGetAccessTokenFactory.getTemporaryToken(consumerKey, privateKey);
-    OAuthCredentialsResponse response = temporaryToken.execute();
-
-    OAuthAuthorizeTemporaryTokenUrl authorizationURL =
-        new OAuthAuthorizeTemporaryTokenUrl(authorizationUrl);
-    authorizationURL.temporaryToken = response.token;
-
-    return response.token;
-  }
-
-  /**
-   * Gets acces token from JIRA
+   * Gets access token from JIRA
    *
    * @param tmpToken temporary request token
    * @param secret secret (verification code provided by JIRA after request token authorization)

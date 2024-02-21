@@ -1,19 +1,67 @@
 <template>
   <div>
-    <b-button
-      variant="primary"
-      @click="
-        openSignInWithJiraTab();
-        openModal();
-      "
-    >
-      {{
-        t(
-          "session.prepare.step.selection.mode.description.withIssueTracker.buttons.signInWithJira.label"
-        )
-      }}
-    </b-button>
+    <div v-if="enableJiraCloud">
+      <b-button
+        class="my-1 button"
+        @click="showJiraCloudCollapse = !showJiraCloudCollapse"
+      >
+        {{
+          $t(
+            "session.prepare.step.selection.mode.description.withIssueTracker.buttons.signInWithJiraCloud.label"
+          )
+        }}
+      </b-button>
+      <b-button id="jira-cloud-help" variant="outline-secondary" class="my-1 ml-2">
+        <b-icon-question-circle />
+      </b-button>
+      <b-popover target="jira-cloud-help" title="How to use JIRA Cloud" triggers="focus">
+        {{ $t("session.prepare.step.selection.mode.description.withIssueTracker.popover.first") }}
+        <a href="https://docs.diveni.io" target="_blank" rel="noopener noreferrer">Docs</a>
+        {{ $t("session.prepare.step.selection.mode.description.withIssueTracker.popover.second") }}
+      </b-popover>
+      <b-collapse id="collapse-cloud" v-model="showJiraCloudCollapse">
+        <form ref="jiraUrlForm" @submit.stop.prevent="handleJiraUrlSubmit">
+          <b-form-group
+            label="Your JIRA URL (ex: example.atlassian.net)"
+            label-for="input-jira-url"
+            invalid-feedback="JIRA Url is required"
+            :state="jiraUrlState"
+          >
+            <b-row>
+              <b-col md="6">
+                <b-input-group>
+                  <b-form-input
+                    id="input-jira-url"
+                    v-model="jiraUrl"
+                    required
+                    :placeholder="
+                      t(
+                        'session.prepare.step.selection.mode.description.withIssueTracker.inputs.jiraUrl.placeholder'
+                      )
+                    "
+                    :state="jiraUrlState"
+                  />
+                  <b-input-group-append>
+                    <b-button class="button" @click="handleJiraUrlSubmit">Connect</b-button>
+                  </b-input-group-append>
+                </b-input-group>
+              </b-col>
+            </b-row>
+          </b-form-group>
+        </form>
+      </b-collapse>
+    </div>
+    <div v-if="enableJiraServer">
+      <b-button class="button" @click="openSignInWithJira('server')">
+        {{
+          t(
+            "session.prepare.step.selection.mode.description.withIssueTracker.buttons.signInWithJiraServer.label"
+          )
+        }}
+      </b-button>
+    </div>
     <b-modal
+      v-model="showVerificationModal"
       id="modal-verification-code"
       ref="modal"
       title="Verification code"
@@ -21,7 +69,7 @@
       @hidden="resetModal"
       @ok="handleOk"
     >
-      <p>
+      <p id="description">
         {{
           t("session.prepare.step.selection.mode.description.withIssueTracker.dialog.description")
         }}
@@ -51,18 +99,38 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import {defineComponent, VueElement} from "vue";
 import apiService from "@/services/api.service";
 import { useI18n } from "vue-i18n";
+import {useToast} from "vue-toastification";
+import { useDiveniStore } from "@/store";
 
 export default defineComponent({
   name: "SignInWithJiraButtonComponent",
   setup() {
     const { t } = useI18n();
-    return { t };
+    const toast = useToast();
+    const store = useDiveniStore();
+    return { t, toast, store };
+  },
+  props: {
+    enableJiraCloud: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    enableJiraServer: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
   },
   data() {
     return {
+      showJiraCloudCollapse: false,
+      selectedIssueTracker: "cloud",
+      jiraUrl: "",
+      jiraUrlState: false,
       token: "",
       verificationCode: "",
       verificationCodeState: false,
@@ -77,10 +145,29 @@ export default defineComponent({
       this.verificationCodeState = valid;
       return valid;
     },
-    async openSignInWithJiraTab() {
-      const tokenDto = await apiService.getJiraOauth1RequestToken();
-      this.token = tokenDto.token;
-      window.open(tokenDto.url, "_blank")?.focus();
+    handleJiraUrlSubmit() {
+      const valid = (
+        this.$refs.jiraUrlForm as VueElement & { checkValidity: () => boolean }
+      ).checkValidity();
+      this.jiraUrlState = valid;
+      if (valid) {
+        this.openSignInWithJira("cloud");
+        this.showJiraCloudCollapse = false;
+      }
+    },
+    async openSignInWithJira(type) {
+      this.selectedIssueTracker = type;
+      try {
+        const tokenDto =
+          this.selectedIssueTracker === "cloud"
+            ? await apiService.getJiraCloudRequestToken(this.jiraUrl)
+            : await apiService.getJiraServerRequestToken();
+        this.token = tokenDto.token;
+        window.open(tokenDto.url, "_blank")?.focus();
+        this.openModal();
+      } catch (e) {
+        this.showToast(e);
+      }
     },
     openModal() {
       this.$nextTick(() => {
@@ -100,11 +187,40 @@ export default defineComponent({
       if (!valid) {
         return;
       }
-      await apiService.sendJiraOauth1VerificationCode(this.verificationCode, this.token);
+      try {
+        const response =
+          this.selectedIssueTracker === "cloud"
+            ? await apiService.sendJiraCloudVerificationCode(this.verificationCode, this.token)
+            : await apiService.sendJiraServerVerificationCode(this.verificationCode, this.token);
+        localStorage.setItem("tokenId", response.tokenId);
+        this.store.setTokenId(response.tokenId);
+      } catch (e) {
+        this.showToast(e);
+      }
       this.$nextTick(() => {
         this.showVerificationModal = false;
       });
     },
+    showToast(error) {
+      if (error.response.status === 428) {
+        this.toast.error(this.$t("session.notification.messages.jiraCloudRequestTokenFailed"));
+      } else if (error.response.data.message === "failed to retrieve access token") {
+        this.toast.error(this.$t("session.notification.messages.issueTrackerCredentials"));
+      } else {
+        this.toast.error(this.$t("session.notification.messages.issueTrackerLoginFailed"));
+      }
+      console.error(error);
+    },
   },
 });
 </script>
+
+<style scoped>
+#description {
+  color: black;
+}
+.button {
+  background-color: var(--preparePageMainColor);
+  color: var(--text-primary-color);
+}
+</style>

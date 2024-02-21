@@ -3,16 +3,16 @@
   Diveni - The Planing-Poker App
   Copyright (C) 2022 Diveni Team, AUME-Team 21/22, HTWG Konstanz
 */
-package io.diveni.backend.service.projectmanagementproviders.jiraserver;
+package io.diveni.backend.service.projectmanagementproviders.jira;
 
-import com.google.api.client.auth.oauth.OAuthGetAccessToken;
+import com.google.api.client.auth.oauth.OAuthGetTemporaryToken;
 
-public class JiraOAuthGetAccessToken extends OAuthGetAccessToken {
+public class JiraOAuthGetTemporaryToken extends OAuthGetTemporaryToken {
 
   /**
    * @param authorizationServerUrl encoded authorization server URL
    */
-  public JiraOAuthGetAccessToken(String authorizationServerUrl) {
+  public JiraOAuthGetTemporaryToken(String authorizationServerUrl) {
     super(authorizationServerUrl);
     this.usePost = true;
   }

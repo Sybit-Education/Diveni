@@ -2,8 +2,8 @@ package io.diveni.backend.controller;
 
 import io.diveni.backend.service.projectmanagementproviders.azuredevops.AzureDevOpsService;
 import io.diveni.backend.service.projectmanagementproviders.github.GithubService;
-import io.diveni.backend.service.projectmanagementproviders.jiracloud.JiraCloudService;
-import io.diveni.backend.service.projectmanagementproviders.jiraserver.JiraServerService;
+import io.diveni.backend.service.projectmanagementproviders.jira.cloud.JiraCloudService;
+import io.diveni.backend.service.projectmanagementproviders.jira.server.JiraServerService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -38,7 +38,7 @@ public class ConfigControllerTest {
   @Test
   public void getIssueTrackerConfig_returnsConfig() throws Exception {
     this.mockMvc
-        .perform(get("/config/issueTracker"))
+        .perform(get("/config/issue-tracker"))
         .andExpect(MockMvcResultMatchers.status().isOk())
         .andExpect(
             MockMvcResultMatchers.jsonPath("$.isJiraServerEnabled")
@@ -46,9 +46,6 @@ public class ConfigControllerTest {
         .andExpect(
             MockMvcResultMatchers.jsonPath("$.isJiraCloudEnabled")
                 .value(Boolean.valueOf(jiraCloudService.serviceEnabled()).toString()))
-        .andExpect(
-            MockMvcResultMatchers.jsonPath("$.jiraCloudAuthorizeUrl")
-                .value(jiraCloudService.getJiraCloudAuthorizeUrl()))
         .andExpect(
             (MockMvcResultMatchers.jsonPath("$.isAzureDevOpsEnabled")
                 .value(Boolean.valueOf(azureDevOpsService.serviceEnabled()).toString())))
