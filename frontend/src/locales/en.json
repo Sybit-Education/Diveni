@@ -239,6 +239,9 @@
                   "signInWithGithub": {
                     "label": "Sign in with Github"
                   },
+                  "signInWithGitlab": {
+                    "label": "Sign in with Gitlab"
+                  },
                   "selectProject": {
                     "label": "Select your jira project"
                   },

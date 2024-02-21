@@ -245,7 +245,8 @@ export default defineComponent({
         result.isJiraCloudEnabled === "true" ||
         result.isJiraServerEnabled === "true" ||
         result.isAzureDevOpsEnabled === "true" ||
-        result.isGithubEnabled === "true";
+        result.isGithubEnabled === "true" ||
+        result.isGitlabEnabled === "true";
     });
     this.store.setUserStories({ stories: [] });
   },

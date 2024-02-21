@@ -16,6 +16,7 @@
           v-if="isAzureDevOpsEnabled"
           class="my-1" />
         <sign-in-with-git-hub-button-component v-if="isGithubEnabled" class="my-1" />
+        <sign-in-with-gitlab-button-component v-if="isGitlabEnabled" class="my-1" />
       </li>
       <li>
         {{ t("session.prepare.step.selection.mode.description.withIssueTracker.descriptionLine2") }}
@@ -39,6 +40,7 @@ import { defineComponent } from "vue";
 import SignInWithJiraButtonComponent from "./SignInWithJiraButtonComponent.vue";
 import SignInWithAzureCloudButtonComponent from "./SignInWithAzureDevOpsButtonComponent.vue";
 import SignInWithGitHubButtonComponent from "@/components/SignInWithGitHubButtonComponent.vue";
+import SignInWithGitlabButtonComponent from "@/components/SignInWithGitlabButtonComponent.vue";
 import ProjectSelectionComponent from "./ProjectSelectionComponent.vue";
 import apiService from "@/services/api.service";
 import { useDiveniStore } from "@/store";
@@ -51,6 +53,7 @@ export default defineComponent({
     SignInWithJiraButtonComponent,
     SignInWithAzureCloudButtonComponent,
     SignInWithGitHubButtonComponent,
+    SignInWithGitlabButtonComponent,
     ProjectSelectionComponent,
   },
   setup() {
@@ -65,6 +68,7 @@ export default defineComponent({
       isJiraServerEnabled: false,
       isAzureDevOpsEnabled: false,
       isGithubEnabled: false,
+      isGitlabEnabled: false,
     };
   },
   computed: {
@@ -78,14 +82,14 @@ export default defineComponent({
   watch: {
     getTokenId: {
       handler(newVal) {
-        if (newVal) {
+        if (typeof newVal !== "undefined") {
           apiService.getAllProjects().then((pr) => {
             this.store.setProjects(pr);
           });
           this.toast.success("Logged in");
         }
       },
-      immediate: true,
+      immediate: false,
     },
   },
   mounted() {
@@ -94,6 +98,7 @@ export default defineComponent({
       this.isJiraServerEnabled = result.isJiraServerEnabled === "true";
       this.isAzureDevOpsEnabled = result.isAzureDevOpsEnabled === "true";
       this.isGithubEnabled = result.isGithubEnabled === "true";
+      this.isGitlabEnabled = result.isGitlabEnabled === "true";
     });
   },
 });
