@@ -18,6 +18,8 @@ class Constants {
 
   webSocketCloseSessionRoute = "/ws/closeSession";
 
+  webSocketMemberListenHostVotingRoute = "/users/updates/hostVoting";
+
   webSocketGetMemberUpdateRoute = "/ws/memberUpdate";
 
   webSocketMembersUpdatedRoute = "/users/updates/membersUpdated";
@@ -29,6 +31,10 @@ class Constants {
   webSocketRestartPlanningRoute = "/ws/restart";
 
   webSocketVoteRoute = "/ws/vote";
+
+  webSocketVoteRouteAdmin = "/ws/vote/admin";
+
+  webSocketMembersUpdatedHostEstimation = "/users/updates/hostEstimation";
 
   webSocketAdminUpdatedUserStoriesRoute = "/ws/adminUpdatedUserStories";
 
@@ -42,6 +48,8 @@ class Constants {
 
   webSocketMemberListenRoute = "/users/updates/member";
 
+  webSocketMemberAutoRevealListenRoute = "/users/updates/member/autoreveal";
+
   websocketNotification = "/users/updates/notifications";
 
   memberUpdateCommandStartVoting = "START_VOTING";
@@ -49,6 +57,10 @@ class Constants {
   memberUpdateCommandVotingFinished = "VOTING_FINISHED";
 
   memberUpdateCloseSession = "SESSION_CLOSED";
+
+  newsPageSize = 9;
+
+  botUserType = "Bot";
 
   // eslint-disable-next-line class-methods-use-this
   public joinSessionRoute(sessionID: string) {

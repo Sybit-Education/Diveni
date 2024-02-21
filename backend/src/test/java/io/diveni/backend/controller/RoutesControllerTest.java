@@ -111,7 +111,9 @@ public class RoutesControllerTest {
             null,
             null,
             null,
-            LocalDate.of(2000, 12, 12)));
+            LocalDate.of(2000, 12, 12),
+            false,
+            null));
 
     // @formatter:off
     var memberAsJson =
@@ -155,7 +157,9 @@ public class RoutesControllerTest {
             null,
             null,
             null,
-            LocalDate.of(2000, 12, 12)));
+            LocalDate.of(2000, 12, 12),
+            false,
+            null));
 
     // @formatter:off
     var memberAsJson =
@@ -202,7 +206,9 @@ public class RoutesControllerTest {
             null,
             null,
             null,
-            LocalDate.of(2000, 12, 12)));
+            LocalDate.of(2000, 12, 12),
+            false,
+            null));
     // @formatter:off
     var memberAsJson =
         "{"
@@ -249,7 +255,9 @@ public class RoutesControllerTest {
             null,
             null,
             null,
-            LocalDate.of(2000, 12, 12)));
+            LocalDate.of(2000, 12, 12),
+            false,
+            null));
 
     // @formatter:off
     var memberAsJson =
@@ -294,7 +302,9 @@ public class RoutesControllerTest {
             null,
             null,
             null,
-            LocalDate.of(2000, 12, 12)));
+            LocalDate.of(2000, 12, 12),
+            false,
+            null));
 
     // @formatter:off
     var memberAsJson =
@@ -335,7 +345,9 @@ public class RoutesControllerTest {
             null,
             null,
             null,
-            LocalDate.of(2000, 12, 12)));
+            LocalDate.of(2000, 12, 12),
+            false,
+            null));
 
     // @formatter:off
     var memberAsJson =
@@ -376,7 +388,9 @@ public class RoutesControllerTest {
             null,
             null,
             null,
-            LocalDate.of(2000, 12, 12)));
+            LocalDate.of(2000, 12, 12),
+            false,
+            null));
 
     // @formatter:off
     var memberAsJson =
@@ -444,7 +458,9 @@ public class RoutesControllerTest {
             null,
             null,
             null,
-            LocalDate.of(2000, 12, 12)));
+            LocalDate.of(2000, 12, 12),
+            false,
+            null));
 
     // @formatter:off
     var memberAsJson =
@@ -494,7 +510,9 @@ public class RoutesControllerTest {
             null,
             null,
             null,
-            LocalDate.of(2000, 12, 12)));
+            LocalDate.of(2000, 12, 12),
+            false,
+            null));
     this.mockMvc
         .perform(get("/sessions/{sessionID}", sessionUUID))
         .andExpect(status().isOk())
@@ -519,7 +537,9 @@ public class RoutesControllerTest {
             null,
             null,
             null,
-            LocalDate.of(2000, 12, 12)));
+            LocalDate.of(2000, 12, 12),
+            false,
+            null));
 
     this.mockMvc
         .perform(get("/sessions/{sessionID}", UUID.randomUUID()))

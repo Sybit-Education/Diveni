@@ -8,19 +8,20 @@
         class="border-0 description-box"
         variant="outline-secondary"
       >
-        <div class="list-group list-group-horizontal">
+        <div class="list-group list-group-horizontal mt-5">
           <b-form-textarea
             v-model="userStories[idx].title"
             rows="1"
             max-rows="3"
             :disabled="!editDescription"
             size="lg"
-            :placeholder="$t('page.session.before.userStories.placeholder.userStoryTitle')"
+            :placeholder="t('page.session.before.userStories.placeholder.userStoryTitle')"
             @blur="publishChanges(idx)"
           />
           <b-dropdown
             v-show="editDescription"
-            class="mx-3 estimationDescription"
+            variant="none"
+            class="px-3 ml-5 estimationDescription"
             :text="(userStories[idx].estimation ? userStories[idx].estimation : '?') + '    '"
           >
             <b-dropdown-item
@@ -42,9 +43,9 @@
           <markdown-editor
             id="textarea-auto-height"
             v-model="userStories[idx].description"
-            class="mt-1 my-5"
+            class="my-2"
             :disabled="!editDescription"
-            :placeholder="$t('page.session.before.userStories.placeholder.userStoryDescription')"
+            :placeholder="t('page.session.before.userStories.placeholder.userStoryDescription')"
             @textValueChanged="(event) => valueChanged(idx, event)"
           />
         </div>
@@ -52,6 +53,7 @@
           <b-form-textarea
             id="textarea-auto-height-plaintext"
             class="py-2 description-text-area"
+            :disabled="!editDescription"
             plaintext
             :value="userStories[idx].description"
             rows="15"
@@ -63,17 +65,18 @@
         v-if="userStories.length <= index && userStories.length"
         class="text-center rounded p-3 m-2"
       >
-        <b-card class="border-0" :title="$t('page.session.before.userStories.text')" />
+        <b-card class="border-0" :title="t('page.session.before.userStories.text')" />
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
 import MarkdownEditor from "@/components/MarkdownEditor.vue";
+import { useI18n } from "vue-i18n";
 
-export default Vue.extend({
+export default defineComponent({
   name: "UserStoryDescriptions",
   components: { MarkdownEditor },
   props: {
@@ -83,6 +86,10 @@ export default Vue.extend({
     editDescription: { type: Boolean, required: true, default: false },
     showEstimations: { type: Boolean, required: false },
     showEditButtons: { type: Boolean, required: false, default: true },
+  },
+  setup() {
+    const { t } = useI18n();
+    return { t };
   },
   data() {
     return {
@@ -152,36 +159,41 @@ export default Vue.extend({
 });
 </script>
 
-<style scoped>
+<!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
+<style lang="scss" scoped>
+.estimationDescription {
+  border: 2px solid var(--estimateButtonBorder);
+  border-radius: 13px;
+  background-color: var(--secondary-button) !important;
+}
+
+.estimationDescription:hover {
+  border: 2px solid var(--estimateButtonBorder);
+  border-radius: 13px;
+  background-color: var(--secondary-button-hovered) !important;
+}
+
 .description-box {
   background: transparent;
   padding: 0;
 }
 /* The side navigation menu */
+.form-control-lg {
+  border-color: var(--estimateButtonBorder) !important;
+}
+
+.form-control-lg:disabled {
+  background-color: var(--blurredColour8) !important;
+  border-radius: 13px;
+  border: none;
+}
 
 .description-text-area {
+  padding-left: 7px;
   color: var(--text-primary-color);
-}
-
-.form-control {
-  background-color: var(--textAreaColour);
-  color: var(--text-primary-color);
-  border: none;
-}
-
-.form-control:disabled {
-  background-color: var(--textAreaColour);
-  color: var(--text-primary-color);
-  border: none;
-}
-
-.form-control:focus {
-  background-color: var(--textAreaColour);
-  color: var(--text-primary-color);
-}
-
-.form-control::placeholder {
-  color: var(--text-primary-color);
+  background-color: var(--blurredColour8);
+  border-radius: 13px;
+  box-shadow: none !important;
 }
 
 .sidenav {

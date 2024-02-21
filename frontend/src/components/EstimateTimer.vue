@@ -8,9 +8,9 @@
 
 <script lang="ts">
 import constants from "@/constants";
-import Vue from "vue";
+import { defineComponent } from "vue";
 
-export default Vue.extend({
+export default defineComponent({
   name: "EstimateTimer",
   props: {
     startTimestamp: { type: String, required: true },
@@ -78,7 +78,7 @@ export default Vue.extend({
       if (this.duration === 0) {
         return;
       }
-      this.intervalHandler = setInterval(() => {
+      this.intervalHandler = window.setInterval(() => {
         if (this.timerCount > 0) {
           const startTime = new Date(this.startTimestamp).getTime();
           const currentTime = new Date().getTime();
@@ -103,7 +103,7 @@ export default Vue.extend({
           })
         ).data;
         this.timerCount = Math.ceil(this.duration - response / 1000);
-        this.intervalHandler = setInterval(() => {
+        this.intervalHandler = window.setInterval(() => {
           if (this.timerCount > 0) {
             this.timerCount = this.timerCount - 1;
           } else {
@@ -117,7 +117,8 @@ export default Vue.extend({
 });
 </script>
 
-<style scoped>
+<!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
+<style lang="scss" scoped>
 .estimate-timer {
   font-size: 1.5rem;
   font-weight: 700;

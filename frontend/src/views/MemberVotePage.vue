@@ -4,15 +4,13 @@
       <template #overlay>
         <b-spinner class="me-2" />
         <span class="overlayText">
-          {{ $t("page.vote.hostLeft") }}
+          {{ t("page.vote.hostLeft") }}
         </span>
       </template>
-
-      <b-row class="headers">
+      <b-row v-if="!isMobile" class="headers">
         <b-col>
-          <h1>{{ $t("page.vote.title") }}</h1>
+          <h1>{{ t("page.vote.title") }}</h1>
         </b-col>
-
         <b-col cols="auto">
           <session-leave-button />
           <estimate-timer
@@ -26,47 +24,44 @@
           />
         </b-col>
       </b-row>
+      <b-row v-else class="headers mb-2">
+        <b-col class="align-self-end">
+          <rounded-avatar :member="getMember" :admin="false" :mobile="true"/>
+          <h1>{{ t("page.vote.title") }}</h1>
+        </b-col>
+        <b-col>
+          <session-leave-button :is-mobile="true"/>
+          <estimate-timer
+            v-if="timerTimestamp"
+            class="mt-3"
+            :start-timestamp="timerTimestamp"
+            :pause-timer="estimateFinished || pauseSession"
+            :duration="timerCountdownNumber"
+            :member="memberID"
+            :voting-started="isStartVoting"
+          />
+        </b-col>
+      </b-row>
       <b-row>
-        <b-col cols="auto" class="memberIcon">
+        <b-col v-if="!isMobile" cols="auto" class="memberIcon">
           <rounded-avatar :member="getMember" :admin="false" />
         </b-col>
       </b-row>
-      <b-row v-if="isMobile">
-        <mobile-story-title
-          v-if="userStoryMode !== 'NO_US'"
-          :card-set="voteSet"
-          :index="index"
-          :initial-stories="userStories"
-          :edit-description="false"
-        />
-      </b-row>
       <b-row v-if="isStartVoting">
-        <div v-if="isMobile">
-          <flicking
-            id="flicking"
-            :options="{
-              renderOnlyVisible: false,
-              horizontal: true,
-              align: 'center',
-              bound: false,
-              defaultIndex: 0,
-              deceleration: 0.0005,
-            }"
-          >
+        <div v-if="isMobile" class="centerCards d-flex justify-content-center flex-wrap text-center">
             <member-vote-card
               v-for="(voteOption, idx) in voteSet"
               :key="voteOption"
               :ref="`memberCard${voteOption}`"
-              class="flicking-panel mx-2"
+              class="m-2"
               :vote-option="voteOption"
               :index="idx"
-              :hex-color="hexColor"
+              :hex-color="hexColor ?? ''"
               :dragged="voteOption === draggedVote"
               :is-mobile="true"
               :disabled="pauseSession"
               @sentVote="onSendVote"
             />
-          </flicking>
         </div>
         <b-row v-else class="centerCards d-flex justify-content-between flex-wrap text-center">
           <b-col>
@@ -76,10 +71,10 @@
                 :key="voteOption"
                 :ref="`memberCard${voteOption}`"
                 style="display: inline-block"
-                class="flicking-panel m-2"
+                class="m-2"
                 :vote-option="voteOption"
                 :index="idx"
-                :hex-color="hexColor"
+                :hex-color="hexColor ?? ''"
                 :dragged="voteOption === draggedVote"
                 :is-mobile="false"
                 :disabled="pauseSession"
@@ -91,13 +86,41 @@
       </b-row>
       <b-row v-if="!isStartVoting && !votingFinished" class="my-5">
         <h3 id="header">
-          {{ $t("page.vote.waiting") }}
-          <sub><b-icon-three-dots animation="fade" font-scale="1" /></sub>
+          {{ t("page.vote.waiting") }}
+          <sub>
+            <b-icon-three-dots animation="fade" font-scale="1" />
+          </sub>
         </h3>
       </b-row>
       <b-row
-        v-if="votingFinished"
-        class="d-flex justify-content-center flex-wrap overflow-auto"
+        v-if="votingFinished && isAdminHighlighted()"
+        class="my-1 d-flex justify-content-center flex-wrap overflow-auto"
+        style="max-height: 500px"
+      >
+        <div v-if="hostEstimation !== undefined">
+          <div v-if="hostVoting && hostEstimation.hostEstimation !== null">
+            <session-admin-card
+              v-if="hostEstimation.hostEstimation !== null"
+              :current-estimation="hostEstimation.hostEstimation"
+              :estimate-finished="votingFinished"
+              :highlight="isAdminHighlighted()"
+            />
+          </div>
+        </div>
+        <session-member-card
+          v-for="member of members"
+          :key="member.memberID"
+          :member="member"
+          :props="{
+            estimateFinished: votingFinished,
+            highlight:
+              highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0,
+          }"
+        />
+      </b-row>
+      <b-row
+        v-if="votingFinished && isAdminHighlighted() === false"
+        class="my-1 d-flex justify-content-center flex-wrap overflow-auto"
         style="max-height: 500px"
       >
         <session-member-card
@@ -110,6 +133,16 @@
               highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0,
           }"
         />
+        <div v-if="hostEstimation !== undefined">
+          <div v-if="hostVoting && hostEstimation.hostEstimation !== null">
+            <session-admin-card
+              v-if="hostEstimation.hostEstimation !== null"
+              :current-estimation="hostEstimation.hostEstimation"
+              :estimate-finished="votingFinished"
+              :highlight="isAdminHighlighted()"
+            />
+          </div>
+        </div>
       </b-row>
       <b-row v-if="userStoryMode !== 'NO_US'" class="mt-5">
         <b-col md="6">
@@ -139,8 +172,8 @@
         </b-col>
       </b-row>
       <b-col v-if="userStoryMode !== 'NO_US' && isMobile" class="mt-2">
-        <div class="overflow-auto">
-          <mobile-story-list
+        <div class="overflow-auto pb-3">
+          <user-stories
             :card-set="voteSet"
             :show-estimations="true"
             :initial-stories="userStories"
@@ -157,7 +190,6 @@
 
 <script lang="ts">
 // eslint-disable-next-line
-import Vue from "vue";
 import RoundedAvatar from "../components/RoundedAvatar.vue";
 import MemberVoteCard from "../components/MemberVoteCard.vue";
 import Constants from "../constants";
@@ -168,12 +200,15 @@ import Member from "../model/Member";
 import confetti from "canvas-confetti";
 import UserStories from "../components/UserStories.vue";
 import UserStoryDescriptions from "../components/UserStoryDescriptions.vue";
-import MobileStoryList from "../components/MobileStoryList.vue";
-import MobileStoryTitle from "../components/MobileStoryTitle.vue";
 import UserStorySumComponent from "@/components/UserStorySum.vue";
 import SessionLeaveButton from "@/components/actions/SessionLeaveButton.vue";
+import SessionAdminCard from "@/components/SessionAdminCard.vue";
+import { defineComponent } from "vue";
+import { useDiveniStore } from "@/store";
+import { useToast } from "vue-toastification";
+import { useI18n } from "vue-i18n";
 
-export default Vue.extend({
+export default defineComponent({
   name: "MemberVotePage",
   components: {
     SessionLeaveButton,
@@ -181,32 +216,36 @@ export default Vue.extend({
     MemberVoteCard,
     EstimateTimer,
     SessionMemberCard,
+    SessionAdminCard,
     NotifyMemberComponent,
     UserStories,
     UserStoryDescriptions,
-    MobileStoryList,
-    MobileStoryTitle,
     UserStorySumComponent,
   },
-  props: {
-    memberID: { type: String, default: undefined },
-    name: { type: String, default: undefined },
-    hexColor: { type: String, default: undefined },
-    avatarAnimalAssetName: { type: String, default: undefined },
-    voteSetJson: { type: String, default: undefined },
-    timerSecondsString: { type: String, default: undefined },
-    userStoryMode: { type: String, default: undefined },
+  setup() {
+    const store = useDiveniStore();
+    const toast = useToast();
+    const { t } = useI18n();
+    return { store, toast, t };
   },
   data() {
     return {
       index: 0,
-      hostSelectedStoryIndex: null,
+      hostSelectedStoryIndex: undefined,
       draggedVote: null,
       voteSet: [] as string[],
       timerCountdownNumber: 0,
       triggerTimer: 0,
       estimateFinished: false,
       pauseSession: false,
+      memberID: history.state.memberID,
+      name: history.state.name,
+      hexColor: history.state.hexColor,
+      avatarAnimalAssetName: history.state.avatarAnimalAssetName,
+      voteSetJson: history.state.voteSetJson,
+      timerSecondsString: history.state.timerSecondsString,
+      userStoryMode: history.state.userStoryMode,
+      safedHostEstimation: undefined as string | undefined,
     };
   },
   computed: {
@@ -216,41 +255,52 @@ export default Vue.extend({
       );
     },
     userStories() {
-      return this.$store.state.userStories;
+      return this.store.userStories;
     },
     memberUpdates() {
-      return this.$store.state.memberUpdates;
+      return this.store.memberUpdates;
     },
     isStartVoting(): boolean {
       return this.memberUpdates.at(-1) === Constants.memberUpdateCommandStartVoting;
+    },
+    isAutoRevealActive(): boolean {
+      return this.store.autoReveal;
     },
     votingFinished(): boolean {
       return this.memberUpdates.at(-1) === Constants.memberUpdateCommandVotingFinished;
     },
     members() {
-      return this.$store.state.members;
+      return this.store.members;
     },
     membersEstimated(): Member[] {
       return this.members.filter((member: Member) => member.currentEstimation !== null);
     },
     highlightedMembers() {
-      return this.$store.state.highlightedMembers;
+      return this.store.highlightedMembers;
     },
     timerTimestamp() {
-      return this.$store.state.timerTimestamp ? this.$store.state.timerTimestamp : "";
+      return this.store.timerTimestamp ? this.store.timerTimestamp : "";
     },
     notifications() {
-      return this.$store.state.notifications;
+      return this.store.notifications;
+    },
+    hostVoting(): boolean {
+      return this.store.hostVoting;
+    },
+    hostEstimation() {
+      return this.store.hostEstimation;
     },
     getMember() {
       return {
+        memberID: "",
+        name: this.name,
         hexColor: this.hexColor,
         avatarAnimal: this.avatarAnimalAssetName,
-        name: this.name,
-      };
+        currentEstimation: "",
+      } as Member;
     },
     selectedUserStoryIndex() {
-      return this.$store.state.selectedUserStoryIndex;
+      return this.store.selectedUserStoryIndex;
     },
   },
   watch: {
@@ -258,6 +308,7 @@ export default Vue.extend({
       if (updates.at(-1) === Constants.memberUpdateCommandStartVoting) {
         this.draggedVote = null;
         this.estimateFinished = false;
+        this.safedHostEstimation = undefined;
         this.triggerTimer = (this.triggerTimer + 1) % 5;
       } else if (updates.at(-1) === Constants.memberUpdateCommandVotingFinished) {
         this.estimateFinished = true;
@@ -273,13 +324,18 @@ export default Vue.extend({
           spread: 100,
         });
       }
+      if (this.hostVoting) {
+        this.safedHostEstimation = this.hostEstimation?.hostEstimation;
+      }
     },
-    notifications(notifications) {
+    notifications() {
+      const lastNotification = this.notifications.at(-1);
       if (
-        notifications.at(-1).type === "MEMBER_LEFT" &&
-        notifications.at(-1).payload.memberID === this.memberID
+        lastNotification &&
+        lastNotification?.type === "MEMBER_LEFT" &&
+        lastNotification?.payload.memberID === this.memberID
       ) {
-        this.$toast.error(this.$t("session.notification.messages.memberRemoved"));
+        this.toast.error(this.t("session.notification.messages.memberRemoved"));
         this.leaveMeeting();
       }
     },
@@ -288,7 +344,9 @@ export default Vue.extend({
     },
   },
   created() {
-    this.timerCountdownNumber = JSON.parse(this.timerSecondsString);
+    if (this.timerSecondsString !== undefined) {
+      this.timerCountdownNumber = Number.parseInt(this.timerSecondsString);
+    }
   },
   mounted() {
     if (
@@ -299,16 +357,43 @@ export default Vue.extend({
     ) {
       this.goToJoinPage();
     }
-    this.voteSet = JSON.parse(this.voteSetJson);
+    this.voteSet = JSON.parse(this.voteSetJson ?? "{}");
   },
   methods: {
+    isAdminHighlighted() {
+      if (this.highlightedMembers.length === 0) {
+        return true;
+      }
+      const highlightedMap = new Map<string, boolean>();
+      this.highlightedMembers.forEach((highlightedMemberID) => {
+        let isMemberID = false;
+        this.members.forEach((member) => {
+          if (member.memberID === highlightedMemberID) {
+            isMemberID = true;
+          }
+        });
+        highlightedMap.set(highlightedMemberID, isMemberID);
+      });
+      for (const value of highlightedMap.values()) {
+        if (value === false) {
+          return true;
+        }
+      }
+      return false;
+    },
     onSelectedStory($event) {
       this.index = $event;
     },
     onSendVote({ vote }) {
       this.draggedVote = vote;
       const endPoint = `${Constants.webSocketVoteRoute}`;
-      this.$store.commit("sendViaBackendWS", { endPoint, data: vote });
+      this.store.sendViaBackendWS(
+        endPoint,
+        JSON.stringify({
+          vote: vote,
+          autoReveal: this.isAutoRevealActive,
+        })
+      );
     },
     goToJoinPage() {
       this.$router.push({ name: "JoinPage" });
@@ -327,8 +412,8 @@ export default Vue.extend({
 });
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
+<style lang="scss" scoped>
 #header {
   color: var(--text-primary-color);
 }

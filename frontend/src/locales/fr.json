@@ -10,7 +10,8 @@
       "frontend": "Licences (Frontend)",
       "backend": "Licences (Backend)",
       "translations": "Améliorer la traduction"
-    }
+    },
+    "feedback": "Feedback"
   },
   "page": {
     "session": {
@@ -251,6 +252,11 @@
           },
           "time": {
             "title": "Ajuster le temps par estimation"
+          },
+          "hostVoting": {
+            "title": "Should the host vote as well",
+            "hostVotingOn": "Yes",
+            "hostVotingOff": "No"
           },
           "password": {
             "title": "Choisissez un mot de passe si nécessaire",

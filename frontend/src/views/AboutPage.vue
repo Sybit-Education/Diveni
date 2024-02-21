@@ -1,6 +1,6 @@
 <template>
   <b-container id="about-page">
-    <h1>{{ $t("general.about.label") }} Diveni</h1>
+    <h1>{{ t("general.about.label") }} Diveni</h1>
     <p>
       WebApp to do Planning Poker with remote teams using external issue tracker as source of
       stories.
@@ -9,31 +9,23 @@
     <h2 class="header">Open Source & Contribution</h2>
     <p>
       Diveni is open source and published under
-      <a
-        href="https://github.com/Sybit-Education/Diveni/blob/main/LICENSE"
-        target="_blank"
-        class="links"
+      <a href="https://github.com/Sybit-Education/Diveni/blob/main/LICENSE" target="_blank"
         >GNU Affero General Public License v3.0</a
       >.
     </p>
     <p>
       Contributions are welcome on our public repository at
-      <a href="https://github.com/Sybit-Education/Diveni" target="_blank" class="links">GitHub</a>:
+      <a href="https://github.com/Sybit-Education/Diveni" target="_blank">GitHub</a>:
     </p>
     <ul>
       <li>
-        <a href="https://github.com/Sybit-Education/Diveni/" target="_blank" class="links">Code</a>
+        <a href="https://github.com/Sybit-Education/Diveni/" target="_blank">Code</a>
       </li>
       <li>
-        <a href="https://github.com/Sybit-Education/Diveni/issues" target="_blank" class="links"
-          >Issues</a
-        >
+        <a href="https://github.com/Sybit-Education/Diveni/issues" target="_blank">Issues</a>
       </li>
       <li>
-        <a
-          href="https://github.com/Sybit-Education/Diveni/discussions"
-          target="_blank"
-          class="links"
+        <a href="https://github.com/Sybit-Education/Diveni/discussions" target="_blank"
           >Discussions</a
         >
       </li>
@@ -53,47 +45,39 @@
     <h2 class="header">License</h2>
     <p>
       Diveni is licensed under
-      <a
-        href="https://github.com/Sybit-Education/Diveni/blob/main/LICENSE"
-        target="_blank"
-        class="links"
+      <a href="https://github.com/Sybit-Education/Diveni/blob/main/LICENSE" target="_blank"
         >AGPL-3.0 license</a
       >.
     </p>
     <h2 class="header">Used Libraries & Licenses</h2>
     <ul>
       <li>
-        <a href="/frontend-dependencies.json" target="_blank" class="links">
-          {{ $t("general.licenses.frontend") }}
+        <a href="/frontend-dependencies.json" target="_blank">
+          {{ t("general.licenses.frontend") }}
         </a>
       </li>
       <li>
-        <a href="/backend-dependencies.txt" target="_blank" class="links">
-          {{ $t("general.licenses.backend") }}
+        <a href="/backend-dependencies.txt" target="_blank">
+          {{ t("general.licenses.backend") }}
         </a>
       </li>
       <li>
-        <a href="https://crowdin.com/project/diveni" target="_blank" class="links">
-          {{ $t("general.licenses.translations") }}
+        <a href="https://crowdin.com/project/diveni" target="_blank">
+          {{ t("general.licenses.translations") }}
         </a>
       </li>
     </ul>
   </b-container>
 </template>
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
+import { useI18n } from "vue-i18n";
 
-export default Vue.extend({
+export default defineComponent({
   name: "AboutPage",
+  setup() {
+    const { t } = useI18n();
+    return { t };
+  },
 });
 </script>
-
-<style scoped>
-.links {
-  color: var(--linkColor);
-}
-
-.header {
-  color: var(--text-primary-color);
-}
-</style>

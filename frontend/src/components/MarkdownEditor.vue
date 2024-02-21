@@ -9,8 +9,8 @@
       :placeholder="placeholder"
       initial-edit-type="wysiwyg"
       preview-style="vertical"
-      :class="theme === 'light-theme' ? 'lightMode' : 'DarkMode'"
-      @blur="getTextValueFromEditor"
+      :class="theme === 'light' ? 'lightMode' : 'darkMode'"
+      @update:modelValue="$emit('textValueChanged', { markdown: $event })"
     />
   </div>
 </template>
@@ -22,14 +22,14 @@ import "@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin
 
 import "@toast-ui/editor/dist/i18n/de-de";
 
-import Vue from "vue";
-import { Editor } from "@toast-ui/vue-editor";
+import { defineComponent } from "vue";
 import codeSyntaxHighlight from "@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin-code-syntax-highlight-all";
+import UiToastEditorWrapper from "@/components/UiToastEditorWrapper.vue";
 
-export default Vue.extend({
+export default defineComponent({
   name: "MarkdownEditor",
   components: {
-    editor: Editor,
+    editor: UiToastEditorWrapper,
   },
   model: {
     prop: "markdown",
@@ -46,7 +46,8 @@ export default Vue.extend({
     },
     markdown: {
       type: String,
-      default: null,
+      required: false,
+      default: "",
     },
     placeholder: {
       type: String,
@@ -85,44 +86,35 @@ export default Vue.extend({
       this.theme = customEvent.detail.storage;
     });
   },
-  methods: {
-    getTextValueFromEditor() {
-      if (this.$refs.toastuiEditor) {
-        const editor = this.$refs.toastuiEditor as Editor;
-        const editorText = editor.invoke("getMarkdown");
-        this.$emit("textValueChanged", { markdown: editorText });
-      }
-    },
-  },
 });
 </script>
 
-<style>
+<style lang="scss">
 .toastui-editor-popup {
   background-color: var(--topNavigationBarColor);
 }
 
 .toastui-editor-defaultUI-toolbar {
-  background-color: #7a777773;
+  background-color: var(--editor-toolbar-switch-bg);
 }
 .toastui-editor-defaultUI-toolbar button {
-  border: none;
+  border: 12px;
   color: var(--text-primary-color);
 }
 
 .toastui-editor-defaultUI .ProseMirror {
-  background-color: #405c6c;
+  background-color: var(--editor-defaultui-container-bg);
 }
 
 .toastui-editor-md-container .toastui-editor-md-preview {
   overflow: auto;
   padding: 0 25px;
   height: 100%;
-  background-color: #405c6c;
+  background-color: var(--editor-defaultui-container-bg);
 }
 
 .toastui-editor-mode-switch {
-  background-color: #405c6c;
+  background-color: var(--editor-toolbar-switch-bg);
 }
 
 .toastui-editor-contents p {
@@ -141,7 +133,7 @@ export default Vue.extend({
 }
 
 .lightMode .toastui-editor-mode-switch {
-  background-color: var(--textAreaColour);
+  background-color: var(--editor-toolbar-switch-bg);
 }
 
 .lightMode .toastui-editor-popup {

@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Diveni - Instant free and easy remote Planning Poker" />
+    <meta name="twitter:description" content="This is a free, user-friendly Planning Poker App. You can connect it to Jira, Github, Gitlab & Azure DevOps. You can create, update or delete issues and plan your sprint with your team." />
+    <meta name="twitter:image" content="https://diveni.io/img/diveniLogo.3a200645.png" />
+    <meta property="og:title" content="Diveni - Instant free and easy remote Planning Poker" />
+    <meta property="og:description" content="This is a free, user-friendly Planning Poker App. Ideal for your Scrum team. You can connect it to Jira, Github, Gitlab & Azure DevOps. After connecting you can create, update or delete issues and plan your next sprint with your team." />
+    <meta property="og:image" content="<%= require('@/assets/diveniLogo.png') %>"/>
     <base href="/" />
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -11,6 +18,15 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@latest/css/materialdesignicons.min.css" />
     <link rel="stylesheet" href="https://unpkg.com/@egjs/flicking@4.0.0/dist/flicking.css" />
   </head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-0WQ6KGZ6TL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-0WQ6KGZ6TL');
+  </script>
   <body>
     <noscript>
       <strong>We're sorry but Diveni.io doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>

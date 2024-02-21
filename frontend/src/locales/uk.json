@@ -10,7 +10,8 @@
       "frontend": "Ліцензії (інтерфейсу)",
       "backend": "Ліцензії (серверні)",
       "translations": "Покращення перекладу"
-    }
+    },
+    "feedback": "Feedback"
   },
   "page": {
     "session": {
@@ -251,6 +252,11 @@
           },
           "time": {
             "title": "Відрегулюйте час за оцінку"
+          },
+          "hostVoting": {
+            "title": "Should the host vote as well",
+            "hostVotingOn": "Yes",
+            "hostVotingOff": "No"
           },
           "password": {
             "title": "Виберіть пароль, якщо необхідно",

@@ -16,14 +16,15 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent, PropType } from "vue";
 import RoundedAvatar from "@/components/RoundedAvatar.vue";
+import Member from "@/model/Member";
 
-export default Vue.extend({
+export default defineComponent({
   name: "SessionMemberCard",
   components: { RoundedAvatar },
   props: {
-    member: { type: Object, required: true },
+    member: { type: Object as PropType<Member>, required: true },
     props: {
       type: Object,
       required: false,
@@ -33,8 +34,8 @@ export default Vue.extend({
 });
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
+<style lang="scss" scoped>
 .fs-3-rem {
   font-size: 4rem;
   color: black;

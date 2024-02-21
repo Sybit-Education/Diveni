@@ -3,18 +3,18 @@
     <div v-if="userStories.length > 0 || filterActive" class="w-100 d-flex justify-content-left">
       <b-input-group>
         <b-input-group-prepend>
-          <BIconSearch id="searchIcon"></BIconSearch>
+          <b-input-group-text><BIconSearch id="searchIcon"></BIconSearch></b-input-group-text>
         </b-input-group-prepend>
         <b-input
           id="search"
           v-model="input"
           type="text"
-          :placeholder="$t('page.session.before.userStories.placeholder.searchUserStories')"
+          :placeholder="t('page.session.before.userStories.placeholder.searchUserStories')"
           @input="swapPriority"
         />
       </b-input-group>
     </div>
-    <b-card-group id="userStoryBlock" class="my-3">
+    <b-card-group id="userStoryBlock" class="mt-2">
       <b-list-group-item
         v-for="(story, index) of userStories"
         id="userStoryRow"
@@ -28,6 +28,7 @@
       >
         <b-button
           v-if="showEditButtons"
+          variant="primary"
           :class="story.isActive ? 'selectedStory' : 'outlineColorStory'"
           size="sm"
           @click="
@@ -53,8 +54,8 @@
           class="mx-1 w-100 shadow-none"
           readonly
           size="sm"
-          :placeholder="$t('page.session.before.userStories.placeholder.userStoryTitle')"
-          @blur="publishChanges"
+          :placeholder="t('page.session.before.userStories.placeholder.userStoryTitle')"
+          @blur="publishChanges(index, false)"
         />
 
         <b-badge id="badge" class="p-2">
@@ -74,14 +75,15 @@
 
     <b-button
       v-if="userStories.length < 1 && showEditButtons && !filterActive"
-      class="w-100 mb-3 addButton"
+      class="w-100 mb-1"
+      variant="primary"
       @click="
         addUserStory();
         $event.target.blur();
       "
     >
       <b-icon-plus />
-      {{ $t("page.session.before.userStories.button.addFirstUserStory") }}
+      {{ t("page.session.before.userStories.button.addFirstUserStory") }}
     </b-button>
 
     <b-alert
@@ -89,27 +91,30 @@
       show
       variant="warning"
     >
-      {{ $t("page.session.before.userStories.filter.noStoryFound") }}
+      {{ t("page.session.before.userStories.filter.noStoryFound") }}
     </b-alert>
 
     <b-button
       v-if="userStories.length > 0 && showEditButtons && !filterActive"
-      class="w-100 mb-3 addButton"
+      class="w-100 mb-1"
+      variant="primary"
       @click="
         addUserStory();
         $event.target.blur();
       "
     >
       <b-icon-plus />
-      {{ $t("page.session.before.userStories.button.addUserStory") }}
+      {{ t("page.session.before.userStories.button.addUserStory") }}
     </b-button>
   </div>
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
 import UserStory from "../model/UserStory";
-export default Vue.extend({
+import { useI18n } from "vue-i18n";
+
+export default defineComponent({
   name: "UserStories",
   props: {
     cardSet: { type: Array, required: true },
@@ -117,6 +122,10 @@ export default Vue.extend({
     showEstimations: { type: Boolean, required: true },
     showEditButtons: { type: Boolean, required: false, default: true },
     hostSelectedStoryIndex: { type: Number, required: false, default: null },
+  },
+  setup() {
+    const { t } = useI18n();
+    return { t };
   },
   data() {
     return {
@@ -163,7 +172,7 @@ export default Vue.extend({
       }
       this.userStories = this.savedStories;
       if (this.input !== "") {
-        let filteredUserStories: UserStory[] = [];
+        const filteredUserStories: UserStory[] = [];
         this.userStories.forEach((userStory) => {
           if (userStory.title.toLowerCase().includes(this.input.toLowerCase())) {
             filteredUserStories.push(userStory);
@@ -206,84 +215,10 @@ export default Vue.extend({
 });
 </script>
 
-<style scoped>
-#search {
-  border-radius: var(--element-size);
-  padding-left: 45px;
-  border-color: black;
-  overflow: auto;
-  z-index: 1;
-}
-
+<!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
+<style lang="scss" scoped>
 #searchIcon {
-  position: absolute;
-  z-index: 2;
-  font-size: 25px;
-  top: 20%;
-  left: 1.5%;
   rotate: 90deg;
-}
-
-.addButton {
-  background-color: var(--joinButton);
-  color: var(--text-primary-color);
-  border-radius: var(--element-size);
-}
-
-.addButton:hover {
-  background-color: var(--joinButtonHovered);
-  color: var(--text-primary-color);
-}
-
-.addButton:focus {
-  background-color: var(--joinButtonHovered);
-  color: var(--text-primary-color);
-}
-
-.selectedStory {
-  background-color: transparent;
-  border: none;
-}
-
-.selectedStory:hover {
-  background-color: transparent !important;
-  border: none;
-}
-
-.selectedStory:focus {
-  background-color: transparent !important;
-  border: none;
-  outline: none;
-  box-shadow: none;
-}
-
-.outlineColorStory {
-  background-color: transparent;
-  border: none;
-}
-
-.outlineColorStory:hover {
-  background-color: transparent;
-  border: none;
-}
-
-.outlineColorStory:focus {
-  background-color: transparent !important;
-  border: none;
-}
-
-.form-control {
-  background-color: var(--textAreaColour);
-  color: var(--text-primary-color);
-}
-
-.form-control:focus {
-  background-color: var(--textAreaColour);
-  color: var(--text-primary-color);
-}
-
-.form-control::placeholder {
-  color: var(--text-primary-color);
 }
 
 #userStoryRow {
@@ -292,7 +227,7 @@ export default Vue.extend({
 }
 
 #userStoryBlock {
-  max-height: 200px; /*exactly 4 User Stories tall*/
+  max-height: 205px; /*exactly 4 User Stories tall*/
   border-radius: 1rem;
   overflow: scroll;
   -webkit-overflow-scrolling: touch;
@@ -304,13 +239,14 @@ export default Vue.extend({
   font-size: large;
   border: none;
 }
+
 #userStoryPicture {
-  height: 30px;
-  width: 30px;
+  height: 25px;
+  width: 25px;
 }
 
 #badge {
-  background-color: var(--joinButton);
+  background-color: var(--secondary-button);
   color: var(--text-primary-color);
   font-size: large;
 }

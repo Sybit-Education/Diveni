@@ -1,10 +1,10 @@
 <template>
-  <b-container id="result-page">
+  <b-container>
     <h1 class="mx-2 centerItems">
-      {{ $t("page.results.title") }}
+      {{ t("page.results.title") }}
     </h1>
     <div v-if="userStories.length === 0" class="text-center">
-      {{ $t("page.results.noUserStories") }}
+      {{ t("page.results.noUserStories") }}
     </div>
     <b-list-group v-else id="results">
       <b-list-group-item
@@ -13,7 +13,7 @@
         class="text-center stories"
       >
         {{ story.title ? story.title : "No title ..." }}
-        <b-button class="mx-2 estimationButtons" pill>
+        <b-button class="mx-2" pill>
           {{ story.estimation ? story.estimation : "?" }}
         </b-button>
       </b-list-group-item>
@@ -21,14 +21,14 @@
     <b-row class="text-center centerItems">
       <b-col>
         <b-button
-          id="downloadButton"
+          variant="primary"
           :disabled="userStories.length === 0"
           @click="downloadUserStoriesAsCSV()"
         >
-          {{ $t("page.results.button.download") }}
+          {{ t("page.results.button.download") }}
         </b-button>
-        <b-button id="goBackHomeButton" class="mx-2" @click="goHome()">
-          {{ $t("page.results.button.home") }}
+        <b-button variant="primary" class="mx-2" @click="goHome()">
+          {{ t("page.results.button.home") }}
         </b-button>
       </b-col>
     </b-row>
@@ -36,15 +36,22 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
 import papaparse from "papaparse";
+import { useDiveniStore } from "@/store";
+import { useI18n } from "vue-i18n";
 
-export default Vue.extend({
+export default defineComponent({
   name: "SessionPage",
   components: {},
+  setup() {
+    const store = useDiveniStore();
+    const { t } = useI18n();
+    return { store, t };
+  },
   computed: {
     userStories() {
-      return this.$store.state.userStories;
+      return this.store.userStories;
     },
   },
   methods: {
@@ -63,16 +70,16 @@ export default Vue.extend({
       URL.revokeObjectURL(link.href);
     },
     goHome() {
-      this.$store.commit("setUserStories", { stories: [] });
-      this.$store.commit("clearStore");
+      this.store.setUserStories({ stories: [] });
+      this.store.clearStore();
       this.$router.push({ name: "LandingPage" });
     },
   },
 });
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
+<style lang="scss" scoped>
 .centerItems {
   display: flex;
   justify-content: center;
@@ -81,52 +88,19 @@ export default Vue.extend({
   min-height: 10vh;
 }
 
-.estimationButtons {
-  background-color: var(--startButton);
-  color: var(--text-primary-color);
-}
-
-.estimationButtons:hover {
-  background-color: var(--startButtonHovered);
-  color: var(--text-primary-color);
-}
-
-.estimationButtons:focus {
-  background-color: var(--startButtonHovered) !important;
-  color: var(--text-primary-color);
-}
-.estimationButtons:active {
-  background-color: var(--startButtonHovered) !important;
-}
-
-#downloadButton {
-  background-color: var(--startButton);
-  border-radius: var(--buttonShape);
-  color: var(--text-primary-color);
-}
-
-#downloadButton:hover {
-  background-color: var(--startButtonHovered);
-  border-radius: var(--buttonShape);
-  color: var(--text-primary-color);
-}
-
-#goBackHomeButton {
-  background-color: var(--joinButton);
-  border-radius: var(--buttonShape);
-  color: var(--text-primary-color);
-}
-
-#goBackHomeButton:hover {
-  background-color: var(--joinButtonHovered);
-  color: var(--text-primary-color);
-}
-
 #results {
   border-radius: var(--element-size);
 }
 
+.list-group-item {
+  background-color: var(--preparePageNotSelectedTabBackground);
+}
+
 .stories {
-  color: black;
+  color: var(--text-primary-color);
+}
+
+.btn-secondary {
+  pointer-events: none;
 }
 </style>

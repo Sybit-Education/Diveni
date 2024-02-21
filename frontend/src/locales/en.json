@@ -10,7 +10,8 @@
       "frontend": "Licenses (Frontend)",
       "backend": "Licenses (Backend)",
       "translations": "Improve translation"
-    }
+    },
+    "feedback": "Feedback"
   },
   "page": {
     "session": {
@@ -54,7 +55,9 @@
           "buttons": {
             "new": "New",
             "result": "Show result",
-            "finish": "Finish session"
+            "finish": "Finish session",
+            "autoRevealOn": "Auto reveal on",
+            "autoRevealOff": "Auto reveal off"
           }
         },
         "modal": {
@@ -122,6 +125,30 @@
           "attendeesText": "Attendees",
           "lastMonthTitle": "Last Month",
           "activeTitle": "Currently"
+        },
+        "connectors": {
+          "jiraServer": {
+            "description": "You can connect Diveni to your Jira Server. For more information check out our Documentation"
+          },
+          "jiraCloud": {
+            "description": "You can connect Diveni to your Jira Cloud. For more information check out our Documentation"
+          },
+          "azureDevOps": {
+            "description": "You can connect Diveni to your Azure Dev Ops organziation. You just need to get yourself a Personal Access Token and add it to the backend"
+          },
+          "github": {
+            "description": "You can create a connection to your github profile via a Personal Access Token. Just click on log in and paste your personal access token into the input field"
+          },
+          "gitlab": {
+            "description": "You can create a connection to your gitlab profile via a Personal Access Token. Just click on log in and paste your personal access token into the input field"
+          }
+        }
+      },
+      "news": {
+        "buttons": {
+          "info": {
+            "label": "What's new"
+          }
         }
       }
     },
@@ -206,6 +233,12 @@
                   "signInWithAzureDevOps": {
                     "label": "Sign in with Azure DevOps"
                   },
+                  "signInWithGithub": {
+                    "label": "Sign in with Github"
+                  },
+                  "signInWithGitlab": {
+                    "label": "Sign in with Gitlab"
+                  },
                   "selectProject": {
                     "label": "Select your jira project"
                   },
@@ -251,6 +284,11 @@
           },
           "time": {
             "title": "Adjust the time per estimation"
+          },
+          "hostVoting": {
+            "title": "Should the host vote as well",
+            "hostVotingOn": "Yes",
+            "hostVotingOff": "No"
           },
           "password": {
             "title": "Choose a password if needed",

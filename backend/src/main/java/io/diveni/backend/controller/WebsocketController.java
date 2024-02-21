@@ -19,6 +19,7 @@ import io.diveni.backend.model.notification.Notification;
 import io.diveni.backend.model.notification.NotificationType;
 import io.diveni.backend.service.DatabaseService;
 import io.diveni.backend.service.WebSocketService;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,6 +74,10 @@ public class WebsocketController {
       webSocketService.sendTimerStartMessageToUser(
           session, session.getTimerTimestamp(), principal.getMemberID());
     }
+    webSocketService.sendUpdatedHostVotingToMember(session, principal.getMemberID());
+    if (session.getHostVoting() && session.getSessionState().equals(SessionState.VOTING_FINISHED)) {
+      webSocketService.sendMembersAdminVote(session);
+    }
     webSocketService.sendNotification(
         session,
         new Notification(
@@ -96,7 +101,7 @@ public class WebsocketController {
           new Notification(
               NotificationType.MEMBER_LEFT,
               new MemberPayload(((MemberPrincipal) principal).getMemberID())));
-      boolean votingCompleted = checkIfAllMembersVoted(session.getMembers());
+      boolean votingCompleted = checkIfAllMembersVoted(session.getMembers(), session);
       if (votingCompleted) {
         votingFinished(
             new AdminPrincipal(
@@ -133,8 +138,6 @@ public class WebsocketController {
         ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID());
     webSocketService.sendSessionStateToMembers(
         session.updateSessionState(SessionState.SESSION_CLOSED));
-    webSocketService.getSessionPrincipals(session.getSessionID()).memberPrincipals().stream()
-        .forEach(memberP -> removeMember(memberP));
     webSocketService.removeSession(session);
     databaseService.deleteSession(session);
     LOGGER.debug("<-- closeSession()");
@@ -150,15 +153,20 @@ public class WebsocketController {
   }
 
   @MessageMapping("/startVoting")
-  public void startEstimation(AdminPrincipal principal) {
+  public void startEstimation(AdminPrincipal principal, @Payload String message) {
     LOGGER.debug("--> startEstimation()");
+    JSONObject jsonObject = new JSONObject(message);
+    boolean stateOfHostVoting = jsonObject.getBoolean("hostVoting");
+    boolean autoReveal = jsonObject.getBoolean("autoReveal");
     val session =
         ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID())
             .updateSessionState(SessionState.START_VOTING)
             .resetCurrentHighlights()
+            .setHostVoting(stateOfHostVoting)
             .setTimerTimestamp(Utils.getTimestampISO8601(new Date()));
     databaseService.saveSession(session);
-    webSocketService.sendSessionStateToMembers(session);
+    webSocketService.sendMembersHostVoting(session);
+    webSocketService.sendSessionStateToMembersWithAutoReveal(session, autoReveal);
     webSocketService.sendTimerStartMessage(session, session.getTimerTimestamp());
     LOGGER.debug("<-- startEstimation()");
   }
@@ -172,46 +180,83 @@ public class WebsocketController {
             .selectHighlightedMembers()
             .resetTimerTimestamp();
     databaseService.saveSession(session);
+    if (session.getHostVoting()) {
+      webSocketService.sendMembersAdminVote(session);
+    }
     webSocketService.sendMembersUpdate(session);
     webSocketService.sendSessionStateToMembers(session);
     LOGGER.debug("<-- votingFinished()");
   }
 
+  @MessageMapping("/vote/admin")
+  public synchronized void processVoteAdmin(
+      @Payload String message, AdminPrincipal admin) { // add Payload
+    LOGGER.debug("--> processVoteAdmin()");
+    JSONObject jsonObject = new JSONObject(message);
+    String vote = jsonObject.getString("vote");
+    boolean autoReveal = jsonObject.getBoolean("autoReveal");
+    val session =
+        ControllerUtils.getSessionOrThrowResponse(databaseService, admin.getSessionID())
+            .setHostEstimation(vote);
+    databaseService.saveSession(session);
+    if (autoReveal) {
+      if (checkIfAllMembersVoted(session.getMembers(), session)) {
+        votingFinished(new AdminPrincipal(admin.getSessionID(), admin.getAdminID()));
+      }
+    }
+    LOGGER.debug("<-- processVoteAdmin()");
+  }
+
   @MessageMapping("/vote")
-  public synchronized void processVote(@Payload String vote, MemberPrincipal member) {
+  public synchronized void processVote(@Payload String message, MemberPrincipal member) {
     LOGGER.debug("--> processVote()");
+    JSONObject jsonObject = new JSONObject(message);
+    String vote = jsonObject.getString("vote");
+    boolean autoReveal = jsonObject.getBoolean("autoReveal");
     val session =
         ControllerUtils.getSessionByMemberIDOrThrowResponse(databaseService, member.getMemberID())
             .updateEstimation(member.getMemberID(), vote);
     webSocketService.sendMembersUpdate(session);
     databaseService.saveSession(session);
 
-    boolean votingCompleted = checkIfAllMembersVoted(session.getMembers());
-    if (votingCompleted) {
-      votingFinished(
-          new AdminPrincipal(
-              member.getSessionID(),
-              databaseService.getSessionByID(member.getSessionID()).get().getAdminID()));
+    if (autoReveal) {
+      if (checkIfAllMembersVoted(session.getMembers(), session)) {
+        votingFinished(
+            new AdminPrincipal(
+                member.getSessionID(),
+                databaseService.getSessionByID(member.getSessionID()).get().getAdminID()));
+      }
     }
     LOGGER.debug("<-- processVote()");
   }
 
-  private boolean checkIfAllMembersVoted(List<Member> members) {
-    return members.stream().filter(m -> m.getCurrentEstimation() == null).count() == 0;
+  private boolean checkIfAllMembersVoted(List<Member> members, Session session) {
+    if (session.getHostVoting() == false) {
+      return members.stream().filter(m -> m.getCurrentEstimation() == null).count() == 0;
+    }
+    return members.stream().filter(m -> m.getCurrentEstimation() == null).count() == 0
+        && null != session.getHostEstimation()
+        && !"".equals(session.getHostEstimation().getHostEstimation());
   }
 
   @MessageMapping("/restart")
-  public synchronized void restartVote(AdminPrincipal principal) {
+  public synchronized void restartVote(AdminPrincipal principal, @Payload String message) {
     LOGGER.debug("--> restartVote()");
+    JSONObject jsonObject = new JSONObject(message);
+    boolean stateOfHostVoting = jsonObject.getBoolean("hostVoting");
+    boolean autoReveal = jsonObject.getBoolean("autoReveal");
     val session =
         ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID())
             .updateSessionState(SessionState.START_VOTING)
             .resetEstimations()
+            .setHostVoting(stateOfHostVoting)
             .setTimerTimestamp(Utils.getTimestampISO8601(new Date()));
     databaseService.saveSession(session);
     webSocketService.sendMembersUpdate(session);
-    webSocketService.sendSessionStateToMembers(session);
+    webSocketService.sendMembersHostVoting(session);
+    webSocketService.sendSessionStateToMembersWithAutoReveal(session, autoReveal);
     webSocketService.sendTimerStartMessage(session, session.getTimerTimestamp());
+    webSocketService.sendMembersAdminVote(session);
     LOGGER.debug("<-- restartVote()");
   }
 
@@ -247,5 +292,17 @@ public class WebsocketController {
     long timeDifference = currentDate.getTime() - startDate.getTime();
     LOGGER.debug("<-- get-timer-value() + " + timeDifference);
     return new ResponseEntity<>(timeDifference, HttpStatus.OK);
+  }
+
+  public boolean isMemberInSession(Principal principal) {
+    LOGGER.debug("--> isMemberInSession()");
+    if (principal instanceof MemberPrincipal) {
+      LOGGER.debug("<-- isMemberInSession()");
+      return databaseService
+          .getSessionByMemberID(((MemberPrincipal) principal).getMemberID())
+          .isPresent();
+    }
+    LOGGER.debug("<-- isMemberInSession(). principal is NOT instanceof MemberPrincipal");
+    return false;
   }
 }
