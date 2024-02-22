@@ -1,10 +1,10 @@
 
 plugins {
-    id 'org.springframework.boot' version '3.2.0'
+    id 'org.springframework.boot' version '3.2.2'
     id 'io.spring.dependency-management' version '1.1.4'
     id 'java'
     id 'jacoco'
-    id "io.freefair.lombok" version "8.4"
+    id "io.freefair.lombok" version "8.6"
 }
 
 configurations {
@@ -23,7 +23,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
-    implementation 'com.google.oauth-client:google-oauth-client:1.34.1'
+    implementation 'com.google.oauth-client:google-oauth-client:1.35.0'
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0'
     implementation 'com.google.api-client:google-api-client-gson:1.35.2'
     implementation 'com.google.code.gson:gson:2.10.1'
@@ -32,7 +32,7 @@ dependencies {
     implementation 'org.json:json:20230227'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo.spring31x:4.10.0'
+    testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo.spring31x:4.11.0'
 }
 
 group = 'io.diveni'

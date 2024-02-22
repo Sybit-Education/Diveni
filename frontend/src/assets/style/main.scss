@@ -1,5 +1,4 @@
 @import "_variables.scss";
-
 @import "bootstrap/scss/bootstrap";
 @import "bootstrap-vue/src/index.scss";
 
@@ -9,6 +8,7 @@
   scrollbar-color: #888 rgba(0, 0, 0, 0) !important;
   scrollbar-width: thin !important;
 }
+
 /*scrollbar - chrome */
 ::-webkit-scrollbar {
   width: 10px;
@@ -25,6 +25,7 @@
   background: #888;
   border-radius: 5px;
 }
+
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
@@ -32,11 +33,6 @@
 
 ::-webkit-scrollbar-corner {
   background: rgba(0, 0, 0, 0);
-}
-
-body {
-  background-color: var(--background-color-primary);
-  color: var(--text-primary-color);
 }
 
 body {
@@ -58,17 +54,8 @@ a {
 .dropdown-menu {
   background-color: var(--topNavigationBarColor);
   border-color: var(--text-primary-color);
+
   .dropdown-item {
-    color: var(--text-primary-color);
-  }
-}
-
-.modal-content {
-  background-color: var(--background-color-primary);
-}
-
-.estimationDescription {
-  .btn {
     color: var(--text-primary-color);
   }
 }
@@ -77,154 +64,161 @@ a {
   flex-flow: wrap;
 }
 
+/* Buttons */
+.btn {
+  color: var(--text-primary-color);
+  box-shadow: none !important;
+  &:hover {
+    color: var(--text-color-hover);
+  }
+}
+
+.btn:focus {
+  box-shadow: none !important;
+}
+
 .btn-primary {
-  background-color: var(--primary-button);
-  border-color: $gray-600;
+  background-color: var(--primary-button) !important;
+  border-width: 2px;
+  border-color: var(--btn-border-color);
 
   &:hover {
-    background-color: var(--primary-button-hovered);
-    color: var(--text-color-hover);
+    background-color: var(--primary-button-hovered) !important;
+    border-color: var(--btn-border-color);
+  }
+
+  &:active {
+    border-color: var(--btn-border-color) !important;
+  }
+
+  &:focus {
+    border-color: var(--btn-border-color) !important;
+    color: var(--text-color-hover) !important;
   }
 
   &:disabled, &.disabled:hover {
+    color: var(--text-primary-color);
     background-color: var(--primary-button);
-    border-color: $gray-600;
+    border-color: var(--btn-border-color);
 
     &:hover {
       background-color: var(--primary-button-hovered);
       color: var(--text-color-hover);
     }
 
-    &:disabled, &.disabled:hover {
-      background-color: var(--primary-button);
-      border-color: $gray-600;
-    }
-
     &:focus {
       background-color: var(--primary-button-hovered);
-      color: var(--text-primary-color);
-    }
-
-    &:active {
-      color: var(--text-color-hover) !important;
     }
   }
+}
 
-  .btn-secondary {
+.btn-secondary {
+  background-color: var(--secondary-button) !important;
+  border-width: 2px;
+  border-color: var(--btn-border-color);
+
+  &:hover {
+    background-color: var(--secondary-button-hovered) !important;
+    border-color: var(--btn-border-color);
+  }
+
+  &:active {
+    border-color: var(--btn-border-color) !important;
+  }
+
+  &:focus {
+    border-color: var(--btn-border-color) !important;
+    color: var(--text-color-hover) !important;
+  }
+
+  &:disabled, &.disabled:hover {
+    color: var(--text-primary-color);
     background-color: var(--secondary-button);
-    border-color: $gray-600;
+    border-color: var(--btn-border-color);
 
     &:hover {
       background-color: var(--secondary-button-hovered);
       color: var(--text-color-hover);
     }
 
-    &:disabled, &.disabled:hover {
-      background-color: var(--secondary-button);
-      border-color: $gray-600;
-    }
-
     &:focus {
       background-color: var(--secondary-button-hovered);
-      color: var(--text-primary-color);
-    }
-
-    &:active {
-      color: var(--text-color-hover) !important;
     }
   }
+}
 
-  .btn-secondary:not(:disabled):not(.disabled),
-  .show > .btn-secondary.dropdown-toggle {
-    background-color: var(--blurredColour8);
+/* Form-controls */
+.form-control {
+  background-color: var(--preparePageNotSelectedTabBackground);
+  border-width: 2px;
+  color: var(--text-primary-color);
+
+  &:hover {
+    border-color: var(--secondary-button);
   }
 
-  .btn-secondary:not(:disabled):not(.disabled):active,
-  .btn-secondary:not(:disabled):not(.disabled).active,
-  .show > .btn-secondary.dropdown-toggle {
-    background-color: var(--primary-button);
-    border-color: var(--blurredColour2);
-    border-width: 3px;
-    font-weight: bolder;
-  }
-
-  .btn {
+  &:focus {
+    background-color: var(--textAreaColour);
+    border-color: var(--primary-button);
     color: var(--text-primary-color);
-    box-shadow: none;
-    border: none;
+    box-shadow: none !important;
   }
 
-  .btn:focus {
-    box-shadow: none;
-    border: none;
+  &::placeholder {
+    color: grey;
   }
+}
 
-  .form-control {
-    background-color: var(--preparePageNotSelectedTabBackground);
-    color: var(--text-primary-color);
-    border-width: 2px;
+.card {
+  background-color: var(--landingPageCardsBackground);
 
-    &:hover {
-      border-color: var(--secondary-button);
-    }
-
-    &:focus {
-      background-color: var(--textAreaColour);
-      color: var(--text-primary-color);
-      border-color: var(--primary-button);
-      box-shadow: none !important;
-    }
-
-    &::placeholder {
-      color: var(--text-primary-color);
-    }
-  }
-
-  .card {
-    background-color: var(--landingPageCardsBackground);
-
-    .card-subtitle {
-      color: var(--text-primary-color);
-    }
-  }
-
-  .modal-content {
-    background-color: var(--background-color-primary);
+  .card-subtitle {
     color: var(--text-primary-color);
   }
+}
 
-  .modal-body {
-    color: var(--text-primary-color);
-  }
+/* Modal */
+.modal-content {
+  background-color: var(--background-color-primary);
+  color: var(--text-primary-color);
+}
 
-  /* Hint-Popover */
-  .popover-header {
-    background-color: var(--primary-button) !important;
-  }
+.modal-body {
+  color: var(--text-primary-color);
+}
 
-  .popover-body {
-    color: var(--text-primary-color) !important;
-  }
+/* Hint-Popover */
+.popover {
+  background-color: var(--background-color-primary);
+}
 
-  .selectedTab {
-    background-color: var(--primary-button) !important;
-  }
+.popover-header {
+  background-color: var(--primary-button) !important;
+}
 
-  .selectedTextColor {
-    color: var(--text-primary-color) !important;
-  }
+.popover-body {
+  color: var(--text-primary-color) !important;
+}
 
-  /* PreparePage - Tab Style */
-  .notSelectedTab {
-    background-color: var(--preparePageNotSelectedTabBackground) !important;
-    border-color: var(--preparePageBorderTab) !important;
-  }
+/* PreparePage - Tab Style */
+.selectedTab {
+  background-color: var(--primary-button) !important;
+  border-color: var(--preparePageBorderTab) !important;
+}
 
-  .notSelectedTab:hover {
-    background-color: var(--preparePageInActiveTabHover) !important;
-  }
+.selectedTextColor {
+  color: var(--text-primary-color) !important;
+}
 
-  .notSelectedTextColor {
-    color: var(--text-primary-color) !important;
-  }
+.notSelectedTab {
+  background-color: var(--preparePageNotSelectedTabBackground) !important;
+  border-color: var(--preparePageBorderTab) !important;
+}
+
+.notSelectedTab:hover {
+  background-color: var(--preparePageInActiveTabHover) !important;
+}
+
+.notSelectedTextColor {
+  color: var(--text-primary-color) !important;
 }

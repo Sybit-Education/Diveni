@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div ref="projectSelectionRef">
     <b-input-group>
       <b-input-group-prepend>
         <b-input-group-text><BIconSearch id="searchIcon"></BIconSearch></b-input-group-text>
@@ -13,15 +13,11 @@
             'session.prepare.step.selection.mode.description.withIssueTracker.placeholder.searchProjects'
           )
         "
-        @input="
+        @input="filterProjects()"
+        @focus="
           showResult = true;
           filterProjects();
         "
-        @click="
-          showResult = true;
-          filterProjects();
-        "
-        @blur="input === '' ? (showResult = false) : (showResult = true)"
       />
     </b-input-group>
     <ul v-if="showResult" class="vue-autocomplete-input-tag-items">
@@ -72,16 +68,27 @@ export default defineComponent({
       return this.store.projects;
     },
   },
-
+  mounted() {
+    document.addEventListener("click", this.handleGlobalClick);
+  },
+  beforeUnmount() {
+    document.removeEventListener("click", this.handleGlobalClick);
+  },
   methods: {
+    handleGlobalClick(event: MouseEvent) {
+      const isOutsideComponent = !(this.$refs.projectSelectionRef as HTMLElement).contains(
+        event.target as Node
+      );
+      if (isOutsideComponent) {
+        this.showResult = false;
+      }
+    },
     async getUserStories() {
       this.aCorrectProject = false;
       const selectedProject = this.projects.find((p) => p.name === this.selected);
       if (selectedProject) {
         this.aCorrectProject = true;
-        console.log(`Selected: ${selectedProject}`);
         this.store.setSelectedProject(selectedProject);
-        console.log(`Selected Project: ${this.selected}`);
         const response = await apiService.getUserStoriesFromProject(this.selected);
         this.store.setUserStories({ stories: response });
       }
@@ -93,7 +100,7 @@ export default defineComponent({
         return;
       }
       if (this.input !== "") {
-        let filteredProjects: string[] = [];
+        const filteredProjects: string[] = [];
         this.getProjectNames().forEach((name) => {
           if (name.toLowerCase().includes(this.input.toLowerCase())) {
             filteredProjects.push(name);
@@ -119,34 +126,29 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-input {
-  width: 100%;
-  border: 1px solid #ccc;
-  color: #666;
-  border-radius: 10px;
-  outline: none;
-  padding: 9px 14px;
-  box-sizing: border-box;
-  font-size: 14px;
-}
 .vue-autocomplete-input-tag-items {
   border: 1px solid #ccc;
   max-height: 200px;
   margin-top: 8px;
   width: 100%;
-  background-color: white;
+  background-color: var(--preparePageNotSelectedTabBackground);
   border-radius: 8px;
   overflow: auto;
+
+  &:hover {
+    background-color: var(--preparePageInActiveTabHover);
+  }
 }
+
 .vue-autocomplete-input-tag-item {
   padding: 6px 16px;
-  color: #4a4a4a;
   max-width: 100%;
   cursor: pointer;
   text-align: left;
-  font-size: 14px;
+  font-size: 16px;
 }
+
 .vue-autocomplete-input-tag-item:hover {
-  background-color: #e8e8e8;
+  background-color: var(--preparePageInActiveTabHover);
 }
 </style>

@@ -31,6 +31,7 @@ public class DatabaseService {
   // Sets the database entry identifier in our 'statistics' table.
   // Only modify if you want to create a new database entry!!!
   // Variable can be further extracted
+
   private static final String STAT_ENTRY_IDENTIFIER = "STAT_V1";
 
   @Autowired SessionRepository sessionRepo;

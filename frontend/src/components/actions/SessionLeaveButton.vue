@@ -1,5 +1,8 @@
 <template>
-  <div class="img-holderLeave mt-5">
+  <div
+    class="img-holderLeave"
+    :class="isMobile ? '' : 'mt-5'"
+  >
     <div id="picture-holderLeave">
       <b-img id="pandaPictureLeave" :src="require('@/assets/LeaveButton.png')" />
     </div>
@@ -28,10 +31,13 @@ export default defineComponent({
     const { t } = useI18n();
     return { store, t };
   },
+  props: {
+    isMobile: { type: Boolean, default: false },
+  },
   methods: {
     leaveSession() {
       const endPoint = `${Constants.webSocketUnregisterRoute}`;
-      this.store.sendViaBackendWS(endPoint, null);
+      this.store.sendViaBackendWS(endPoint);
       this.store.clearStore();
       window.localStorage.removeItem("memberCookie");
       this.$router.push({ name: "LandingPage" });

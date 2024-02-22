@@ -67,7 +67,6 @@
       <b-row>
         <b-col class="text-center">
           <session-start-button
-            :members="members"
             :host-voting="hostVoting"
             :auto-reveal="autoReveal"
             @clicked="onPlanningStarted"
@@ -225,6 +224,7 @@
           <b-button
             v-for="item in voteSet"
             :key="item"
+            variant="primary"
             class="activePills m-1"
             pill
             style="width: 60px"
@@ -242,17 +242,6 @@
     </b-row>
     <b-row v-if="userStoryMode !== 'NO_US'">
       <b-col v-if="!isMobile" cols="7">
-        <div v-if="userStoryMode === 'US_JIRA'" class="refreshUserstories">
-          <b-button
-            class="w-100 mb-3 refreshButton"
-            @click="
-              refreshUserStories();
-              $event.target.blur();
-            "
-          >
-            {{ t("page.session.before.refreshStories") }}
-          </b-button>
-        </div>
         <user-stories
           :card-set="voteSet"
           :show-estimations="planningStart"
@@ -262,19 +251,20 @@
           @userStoriesChanged="onUserStoriesChanged"
           @selectedStory="onSelectedStory($event)"
         />
+        <div v-if="userStoryMode === 'US_JIRA'" class="refreshUserstories">
+          <b-button
+            variant="primary"
+            class="w-100 mb-3"
+            @click="
+              refreshUserStories();
+              $event.target.blur();
+            "
+          >
+            {{ t("page.session.before.refreshStories") }}
+          </b-button>
+        </div>
       </b-col>
       <b-col v-else cols="12">
-        <div v-if="userStoryMode === 'US_JIRA'" class="refreshUserstories">
-          <b-button
-            class="w-100 mb-3 refreshButton"
-            @click="
-              refreshUserStories();
-              $event.target.blur();
-            "
-          >
-            {{ t("page.session.before.refreshStories") }}
-          </b-button>
-        </div>
         <user-stories
           :card-set="voteSet"
           :show-estimations="planningStart"
@@ -284,6 +274,18 @@
           @userStoriesChanged="onUserStoriesChanged"
           @selectedStory="onSelectedStory($event)"
         />
+        <div v-if="userStoryMode === 'US_JIRA'" class="refreshUserstories">
+          <b-button
+            variant="primary"
+            class="w-100 mb-3"
+            @click="
+              refreshUserStories();
+              $event.target.blur();
+            "
+          >
+            {{ t("page.session.before.refreshStories") }}
+          </b-button>
+        </div>
       </b-col>
     </b-row>
     <b-row>
@@ -683,7 +685,7 @@ export default defineComponent({
     },
     sendUnregisterCommand() {
       const endPoint = `${Constants.webSocketUnregisterRoute}`;
-      this.store.sendViaBackendWS(endPoint, null);
+      this.store.sendViaBackendWS(endPoint);
       this.store.clearStore();
     },
     sendVotingFinishedMessage() {
@@ -734,6 +736,21 @@ export default defineComponent({
   margin-right: auto;
 }
 
+.activePills {
+  &:not(.active) {
+    background-color: var(--preparePageNotSelectedTabBackground) !important;
+    color: var(--text-primary-color) !important;
+
+    &:hover {
+      color: var(--text-color-hover) !important;
+    }
+
+    &:focus {
+      background-color: var(--primary-button) !important;
+    }
+  }
+}
+
 .optionButtonCol {
   margin-top: auto;
   margin-bottom: auto;
@@ -765,8 +782,6 @@ export default defineComponent({
 
 .optionButton {
   background-color: var(--textAreaColour);
-  color: var(--text-primary-color);
-  border-color: black;
   display: inline-flex;
   align-items: center;
 }
@@ -786,22 +801,6 @@ export default defineComponent({
   color: var(--text-primary-color) !important;
 }
 
-.refreshButton {
-  border-radius: var(--element-size);
-  color: var(--text-primary-color);
-  background-color: var(--secondary-button);
-}
-
-.refreshButton:hover {
-  color: var(--text-primary-color);
-  background-color: var(--secondary-button-hovered);
-}
-
-.refreshButton:focus {
-  background-color: var(--secondary-button-hovered) !important;
-  color: var(--text-primary-color) !important;
-}
-
 #catGifDiv {
   text-align: center;
 }
@@ -809,20 +808,5 @@ export default defineComponent({
 .catGif {
   width: 240px;
   height: 180px;
-}
-
-.activePills {
-  background-color: var(--preparePageMainColor);
-  color: var(--text-primary-color);
-}
-
-.activePills:hover {
-  background-color: var(--preparePageInActiveTabHover);
-  color: var(--text-primary-color);
-}
-
-.activePills:focus {
-  background-color: var(--preparePageInActiveTabHover) !important;
-  color: var(--text-primary-color);
 }
 </style>

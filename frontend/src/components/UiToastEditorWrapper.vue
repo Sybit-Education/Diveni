@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, defineProps, defineEmits } from "vue";
+import { onMounted, ref } from "vue";
 import Editor from "@toast-ui/editor";
 import "@toast-ui/editor/dist/toastui-editor.css";
 import codeSyntaxHighlight from "@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin-code-syntax-highlight-all";
@@ -39,7 +39,7 @@ onMounted(() => {
     initialValue: props.initialValue ?? "",
     previewStyle: "vertical",
     events: {
-      change: () => emit("update:modelValue", e.getMarkdown()),
+      blur: () => emit("update:modelValue", e.getMarkdown()),
     },
   });
 });

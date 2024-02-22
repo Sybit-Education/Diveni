@@ -112,7 +112,7 @@ export const useDiveniStore = defineStore("diveni-store", {
         this.notifications = this.notifications.concat([JSON.parse(frame.body)]);
       });
     },
-    sendViaBackendWS(endPoint, data: any = {}) {
+    sendViaBackendWS(endPoint: string, data?: string | undefined) {
       this.stompClient?.send(endPoint, data);
     },
     clearStore() {
@@ -141,6 +141,9 @@ export const useDiveniStore = defineStore("diveni-store", {
     },
     setTokenId(tokenId) {
       this.tokenId = tokenId;
+    },
+    clearTokenId(state) {
+      state.tokenId = undefined;
     },
   },
 });
