@@ -461,7 +461,7 @@ export default defineComponent({
       }
     }
     this.timerCountdownNumber = parseInt(this.timerSecondsString ?? "0", 10);
-    window.addEventListener("pagehide", this.sendUnregisterCommand);
+    window.addEventListener("beforeunload", this.sendUnregisterCommand);
   },
   mounted() {
     if (this.rejoined === "false") {
@@ -479,7 +479,7 @@ export default defineComponent({
     }
   },
   destroyed() {
-    window.removeEventListener("pagehide", this.sendUnregisterCommand);
+    window.removeEventListener("beforeunload", this.sendUnregisterCommand);
   },
   methods: {
     async checkAdminCookie() {
