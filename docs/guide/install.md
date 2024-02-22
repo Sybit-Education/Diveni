@@ -58,6 +58,20 @@ For setting up the Github Connector, you need to generate a personal access toke
 6. Give the access token a name
 7. Select the repo scope and you are ready to create the token.
 
+
+### Gitlab Connector
+
+For setting up the Gitlab Connector, you need to generate a personal access token. <br>
+#### How to create a personal access token
+1. Click on your profile picture in the top left corner
+2. Click on "Edit profile"
+3. Click on Access Tokens on the left menu bar
+4. Click on "Add new Token"
+5. Give the access token a name & an expiration date of your choice
+6. For the scopes select "api"
+7. Press on "Create personal access token"
+
+
 ## Docker
 
 The infrastructure is divided in several Docker containers:

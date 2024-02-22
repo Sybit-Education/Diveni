@@ -137,5 +137,8 @@ export const useDiveniStore = defineStore("diveni-store", {
     setTokenId(tokenId) {
       this.tokenId = tokenId;
     },
+    clearTokenId(state) {
+      state.tokenId = undefined;
+    },
   },
 });

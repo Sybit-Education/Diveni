@@ -7,12 +7,10 @@
           {{ t("page.vote.hostLeft") }}
         </span>
       </template>
-
-      <b-row class="headers">
+      <b-row v-if="!isMobile" class="headers">
         <b-col>
           <h1>{{ t("page.vote.title") }}</h1>
         </b-col>
-
         <b-col cols="auto">
           <session-leave-button />
           <estimate-timer
@@ -26,38 +24,36 @@
           />
         </b-col>
       </b-row>
+      <b-row v-else class="headers mb-2">
+        <b-col class="align-self-end">
+          <rounded-avatar :member="getMember" :admin="false" :mobile="true"/>
+          <h1>{{ t("page.vote.title") }}</h1>
+        </b-col>
+        <b-col>
+          <session-leave-button :is-mobile="true"/>
+          <estimate-timer
+            v-if="timerTimestamp"
+            class="mt-3"
+            :start-timestamp="timerTimestamp"
+            :pause-timer="estimateFinished || pauseSession"
+            :duration="timerCountdownNumber"
+            :member="memberID"
+            :voting-started="isStartVoting"
+          />
+        </b-col>
+      </b-row>
       <b-row>
-        <b-col cols="auto" class="memberIcon">
+        <b-col v-if="!isMobile" cols="auto" class="memberIcon">
           <rounded-avatar :member="getMember" :admin="false" />
         </b-col>
       </b-row>
-      <b-row v-if="isMobile">
-        <mobile-story-title
-          v-if="userStoryMode !== 'NO_US'"
-          :card-set="voteSet"
-          :index="index"
-          :initial-stories="userStories"
-          :edit-description="false"
-        />
-      </b-row>
       <b-row v-if="isStartVoting">
-        <div v-if="isMobile">
-          <flicking
-            id="flicking"
-            :options="{
-              renderOnlyVisible: false,
-              horizontal: true,
-              align: 'center',
-              bound: false,
-              defaultIndex: 0,
-              deceleration: 0.0005,
-            }"
-          >
+        <div v-if="isMobile" class="centerCards d-flex justify-content-center flex-wrap text-center">
             <member-vote-card
               v-for="(voteOption, idx) in voteSet"
               :key="voteOption"
               :ref="`memberCard${voteOption}`"
-              class="flicking-panel mx-2"
+              class="m-2"
               :vote-option="voteOption"
               :index="idx"
               :hex-color="hexColor ?? ''"
@@ -66,7 +62,6 @@
               :disabled="pauseSession"
               @sentVote="onSendVote"
             />
-          </flicking>
         </div>
         <b-row v-else class="centerCards d-flex justify-content-between flex-wrap text-center">
           <b-col>
@@ -76,7 +71,7 @@
                 :key="voteOption"
                 :ref="`memberCard${voteOption}`"
                 style="display: inline-block"
-                class="flicking-panel m-2"
+                class="m-2"
                 :vote-option="voteOption"
                 :index="idx"
                 :hex-color="hexColor ?? ''"
@@ -177,8 +172,8 @@
         </b-col>
       </b-row>
       <b-col v-if="userStoryMode !== 'NO_US' && isMobile" class="mt-2">
-        <div class="overflow-auto">
-          <mobile-story-list
+        <div class="overflow-auto pb-3">
+          <user-stories
             :card-set="voteSet"
             :show-estimations="true"
             :initial-stories="userStories"
@@ -205,8 +200,6 @@ import Member from "../model/Member";
 import confetti from "canvas-confetti";
 import UserStories from "../components/UserStories.vue";
 import UserStoryDescriptions from "../components/UserStoryDescriptions.vue";
-import MobileStoryList from "../components/MobileStoryList.vue";
-import MobileStoryTitle from "../components/MobileStoryTitle.vue";
 import UserStorySumComponent from "@/components/UserStorySum.vue";
 import SessionLeaveButton from "@/components/actions/SessionLeaveButton.vue";
 import SessionAdminCard from "@/components/SessionAdminCard.vue";
@@ -227,8 +220,6 @@ export default defineComponent({
     NotifyMemberComponent,
     UserStories,
     UserStoryDescriptions,
-    MobileStoryList,
-    MobileStoryTitle,
     UserStorySumComponent,
   },
   setup() {
@@ -304,7 +295,7 @@ export default defineComponent({
         memberID: "",
         name: this.name,
         hexColor: this.hexColor,
-        avatarAnimalAssetName: this.avatarAnimalAssetName,
+        avatarAnimal: this.avatarAnimalAssetName,
         currentEstimation: "",
       } as Member;
     },
