@@ -45,7 +45,7 @@
                 <b-img-lazy
                   :src="require(`@/assets/SetUpSession.png`)"
                   width="300"
-                  height="275"
+                  height="265"
                   alt="Set Up Session Picture"
                 />
               </b-card-text>
@@ -84,7 +84,7 @@
                 <b-img-lazy
                   :src="require(`@/assets/InviteYourTeam.png`)"
                   width="300"
-                  height="275"
+                  height="265"
                   alt="Invite Your Team Picture"
                 />
               </b-card-text>
@@ -96,7 +96,7 @@
                 <b-img-lazy
                   :src="require(`@/assets/EstimateUserStories.png`)"
                   width="300"
-                  height="275"
+                  height="265"
                   alt="Estimate User Stories Picture"
                 />
               </b-card-text>
