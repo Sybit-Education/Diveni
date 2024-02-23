@@ -1,27 +1,10 @@
 <template>
   <div id="landing-page">
-    <div class="d-flex align-items-center d-inline-block">
-      <div class="ml-5">
-        <h1 class="display-1 text-left">DIVENI</h1>
-        <h1 class="display-4 text-left">The Planning-Poker App</h1>
-        <p class="diveniDescription">
-          Streamline your agile estimation with out user-friendly, free tool, ideal for Scrum teams.
-          It enhances remote collaboration, making agile planning simple and efficient. Start now
-          and transform your team's productivity!
-        </p>
-      </div>
-      <div class="styleContainer mr-3">
-        <div class="d-flex align-items-center d-inline-block">
-          <div class="purpleSquare"></div>
-          <div class="greenSquare"></div>
-        </div>
-        <b-icon-question-lg id="questionMark" />
-        <div class="d-flex align-items-center d-inline-block">
-          <div class="redSquare"></div>
-          <div class="brownSquare"></div>
-        </div>
-      </div>
-    </div>
+    <b-container fluid class="teaser">
+      <b-container>
+        <b-jumbotron header="DIVENI" lead="Instant free and easy remote Planning Poker" />
+      </b-container>
+    </b-container>  
     <b-container class="my-5">
       <b-card-group deck class="justify-content-center">
         <landing-page-card
@@ -304,59 +287,6 @@ export default defineComponent({
   width: 270px;
 }
 
-@media screen and (min-width: 1000px) {
-  .styleContainer {
-    position: absolute;
-    min-height: 20rem;
-    min-width: 10rem;
-    right: 10%;
-  }
-  .purpleSquare {
-    background-color: #8a17b2;
-    position: relative;
-    height: 10rem;
-    width: 7rem;
-    margin-right: 0.75rem;
-    margin-bottom: 0.75rem;
-    border-radius: 0.5rem;
-  }
-  .greenSquare {
-    background-color: #09816b;
-    position: relative;
-    height: 10rem;
-    width: 7rem;
-    margin-left: 0.75rem;
-    margin-bottom: 0.75rem;
-    border-radius: 0.5rem;
-  }
-  .redSquare {
-    background-color: #791c59;
-    position: relative;
-    height: 10rem;
-    width: 7rem;
-    margin-right: 0.75rem;
-    margin-top: 0.75rem;
-    border-radius: 0.5rem;
-  }
-  .brownSquare {
-    background-color: #601616;
-    position: relative;
-    height: 10rem;
-    width: 7rem;
-    margin-left: 0.75rem;
-    margin-top: 0.75rem;
-    border-radius: 0.5rem;
-  }
-  #questionMark {
-    position: absolute;
-    height: 10rem;
-    width: 10rem;
-    top: 5rem;
-    right: 2.25rem;
-    z-index: 1;
-    visibility: visible;
-  }
-}
 .diveniDescription {
   font-size: 1.25rem;
   max-height: 25rem;
@@ -364,22 +294,4 @@ export default defineComponent({
   width: 35%;
 }
 
-@media screen and (min-width: 0px) and (max-width: 999px) {
-  .styleContainer {
-  }
-  .purpleSquare {
-  }
-  .greenSquare {
-  }
-  .redSquare {
-  }
-  .brownSquare {
-  }
-  #questionMark {
-    visibility: hidden;
-  }
-  .diveniDescription {
-    width: 100% !important;
-  }
-}
 </style>
