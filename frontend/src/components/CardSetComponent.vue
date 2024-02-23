@@ -336,21 +336,28 @@ export default defineComponent({
   margin-right: auto;
 
   .pill {
-    width: 4rem;
+    width: 5rem;
 
-    .active {
-      background-color: var(--preparePageMainColor);
-      color: var(--text-primary-color);
+    &:not(.active) {
+      background-color: var(--preparePageNotSelectedTabBackground) !important;
+      color: var(--text-primary-color) !important;
+      border: transparent !important;
+
+      &:hover {
+        color: var(--text-color-hover) !important;
+        background-color: var(--preparePageInActiveTabHover) !important;
+      }
     }
 
-    .active:hover {
-      background-color: var(--preparePageInActiveTabHover);
-      color: var(--text-primary-color);
-    }
+    &.active {
+      background-color: var(--preparePageMainColor) !important;
+      color: var(--text-primary-color) !important;
+      border-color: var(--btn-border-color) !important;
 
-    .active:focus {
-      background-color: var(--preparePageInActiveTabHover);
-      color: var(--text-primary-color);
+      &:hover {
+        background-color: var(--preparePageInActiveTabHover);
+        color: var(--text-color-hover) !important;
+      }
     }
   }
 }

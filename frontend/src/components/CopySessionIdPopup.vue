@@ -132,7 +132,7 @@ export default defineComponent({
 }
 
 #popover-link {
-  color: var(--linkColor);
+  color: var(--link-color);
 }
 
 .qr-code {

@@ -150,7 +150,8 @@
             "label": "What's new"
           }
         }
-      }
+      },
+      "install": "Do you want to install Diveni on your Device?"
     },
     "join": {
       "title": "Join the session",
@@ -235,6 +236,9 @@
                   },
                   "signInWithGithub": {
                     "label": "Sign in with Github"
+                  },
+                  "signInWithGitlab": {
+                    "label": "Sign in with Gitlab"
                   },
                   "selectProject": {
                     "label": "Select your jira project"

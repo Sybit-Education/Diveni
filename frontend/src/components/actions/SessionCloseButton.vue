@@ -69,10 +69,6 @@ export default defineComponent({
 
 <!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
 <style lang="scss">
-.description {
-  color: var(--text-primary-color);
-}
-
 #picture-holderClose {
   width: auto;
   height: 90px;
@@ -81,7 +77,6 @@ export default defineComponent({
 #pandaPictureClose {
   position: absolute;
   left: 65%;
-  height: 15%;
   height: 30px;
   user-select: none;
 }
@@ -120,7 +115,7 @@ export default defineComponent({
   position: absolute !important;
   text-align: left;
   max-height: 40px;
-  bottom: 0px;
+  bottom: 0;
   white-space: nowrap;
 }
 </style>

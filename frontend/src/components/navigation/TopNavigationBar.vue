@@ -67,10 +67,5 @@ export default defineComponent({
     width: 2.75rem;
     height: 2.75rem;
   }
-
-  .btn-secondary:not(:disabled):not(.disabled),
-  .show > .btn-secondary.dropdown-toggle {
-    background-color: var(--blurredColour7);
-  }
 }
 </style>

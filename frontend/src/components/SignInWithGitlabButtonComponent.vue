@@ -1,9 +1,15 @@
 <template>
   <div>
-    <b-button variant="primary" :disabled="disabled" @click="clicked = !clicked">
+    <b-button
+      variant="primary"
+      :disabled="disabled"
+      @click="
+       clicked = !clicked
+     "
+    >
       {{
         t(
-          "session.prepare.step.selection.mode.description.withIssueTracker.buttons.signInWithGithub.label"
+          "session.prepare.step.selection.mode.description.withIssueTracker.buttons.signInWithGitlab.label"
         )
       }}
     </b-button>
@@ -24,40 +30,41 @@
       </div>
     </div>
   </div>
+
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
 import apiService from "@/services/api.service";
-import { useI18n } from "vue-i18n";
-import { useToast } from "vue-toastification";
-import { useDiveniStore } from "@/store";
+import {defineComponent} from "vue";
+import {useDiveniStore} from "@/store";
+import {useToast} from "vue-toastification";
+import {useI18n} from "vue-i18n";
 
 export default defineComponent({
-  name: "SignInWithGitHubButtonComponent",
+  name: "SignInWithGitlabButtonComponent",
   props: {
     disabled: {
       type: Boolean,
       required: false,
       default: false,
-    },
+    }
   },
   setup() {
-    const { t } = useI18n();
-    const toast = useToast();
     const store = useDiveniStore();
-    return { t, store, toast };
+    const toast = useToast();
+    const { t } = useI18n();
+    return { store, toast, t };
   },
   data() {
     return {
       clicked: false,
-      patToken: "",
-    };
+      patToken: ""
+    }
   },
   methods: {
     async getAccessToken() {
       try {
-        const response = await apiService.sendGithubOauth2AuthorizaionCode(this.patToken);
+        const response = await apiService.sendGitlabOauth2AuthorizationCode(this.patToken);
         localStorage.setItem("tokenId", response.tokenId);
         this.store.setTokenId(response.tokenId);
       } catch (e) {
@@ -74,10 +81,10 @@ export default defineComponent({
     },
   },
 });
+
 </script>
 
-<!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
-<style lang="scss" scoped>
+<style scoped>
 .inline-div {
   display: inline-block;
 }
