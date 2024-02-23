@@ -150,7 +150,8 @@
             "label": "What's new"
           }
         }
-      }
+      },
+      "install": "Do you want to install Diveni on your Device?"
     },
     "join": {
       "title": "Join the session",
