@@ -4,7 +4,7 @@
       <b-container>
         <b-jumbotron header="DIVENI" lead="Instant free and easy remote Planning Poker" />
       </b-container>
-    </b-container>  
+    </b-container>
     <b-container class="my-5">
       <b-card-group deck class="justify-content-center">
         <landing-page-card
@@ -42,7 +42,12 @@
           <b-card-group deck class="py-5">
             <b-card class="pictureCard">
               <b-card-text>
-                <b-img :src="require(`@/assets/SetUpSession.png`)" class="landingPagePictures" />
+                <b-img-lazy
+                  :src="require(`@/assets/SetUpSession.png`)"
+                  width="300"
+                  height="265"
+                  alt="Set Up Session Picture"
+                />
               </b-card-text>
             </b-card>
             <b-card class="aboutDiveni" title="Set up Session">
@@ -76,16 +81,23 @@
             </b-card>
             <b-card class="pictureCard">
               <b-card-text>
-                <b-img :src="require(`@/assets/InviteYourTeam.png`)" class="landingPagePictures" />
+                <b-img-lazy
+                  :src="require(`@/assets/InviteYourTeam.png`)"
+                  width="300"
+                  height="265"
+                  alt="Invite Your Team Picture"
+                />
               </b-card-text>
             </b-card>
           </b-card-group>
           <b-card-group>
             <b-card class="pictureCard">
               <b-card-text>
-                <b-img
+                <b-img-lazy
                   :src="require(`@/assets/EstimateUserStories.png`)"
-                  class="landingPagePictures"
+                  width="300"
+                  height="265"
+                  alt="Estimate User Stories Picture"
                 />
               </b-card-text>
             </b-card>
@@ -279,11 +291,6 @@ export default defineComponent({
   align-items: center;
   box-shadow: none !important;
   border: none !important;
-}
-
-.landingPagePictures {
-  height: 270px;
-  width: 270px;
 }
 
 .diveniDescription {

@@ -8,9 +8,10 @@
         <b-card class="connectorCards" :class="getClass(item)" @click="redirectToDoc(item)">
           <b-card-title>
             <div>
-              <b-img
+              <b-img-lazy
                 :src="require(`@/assets/${getClass(item).toLowerCase()}.png`)"
                 :class="getClass(item) + 'Pic'"
+                alt="Connector Picture"
               />
             </div>
             <div class="title">
