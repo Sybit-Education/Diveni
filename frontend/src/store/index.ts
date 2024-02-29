@@ -29,7 +29,7 @@ export const useDiveniStore = defineStore("diveni-store", {
     };
   },
   persist: {
-    storage: sessionStorage, //Storage where we store our "store-state"
+    storage: localStorage, //Storage where we store our "store-state"
   },
   actions: {
     setMembers(members) {

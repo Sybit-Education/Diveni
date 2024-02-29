@@ -53,8 +53,8 @@ app
 watch(
   pinia.state,
   (state) => {
-    // persist the whole state to the session storage whenever it changes
-    sessionStorage.setItem("diveni-store", JSON.stringify(state["diveni-store"]));
+    // persist the whole state to the local storage whenever it changes
+    localStorage.setItem("diveni-store", JSON.stringify(state["diveni-store"]));
   },
   { deep: true }
 );
