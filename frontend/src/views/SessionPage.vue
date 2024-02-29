@@ -485,8 +485,11 @@ export default defineComponent({
       console.log("ON MOUNTED");
       this.estimateFinished = true;
     }
+    if (this.userStoryMode === "US_JIRA") {
+      this.refreshUserStories();
+    }
   },
-  destroyed() {
+  unmounted() {
     window.removeEventListener("beforeunload", this.sendUnregisterCommand);
   },
   methods: {
@@ -691,7 +694,7 @@ export default defineComponent({
     sendUnregisterCommand() {
       const endPoint = `${Constants.webSocketUnregisterRoute}`;
       this.store.sendViaBackendWS(endPoint);
-      this.store.clearStore();
+      this.store.clearStoreWithoutUserStories();
     },
     sendVotingFinishedMessage() {
       if (!this.estimateFinished) {
