@@ -122,6 +122,7 @@ export const useDiveniStore = defineStore("diveni-store", {
       this.notifications = [];
       this.webSocketConnected = false;
       this.stompClient = undefined;
+      this.selectedUserStoryIndex = null;
     },
     clearStoreWithoutUserStories() {
       this.members = [];
@@ -138,6 +139,9 @@ export const useDiveniStore = defineStore("diveni-store", {
     },
     setUserStories({ stories }) {
       this.userStories = stories;
+    },
+    setUserStoryIndex(idx) {
+      this.selectedUserStoryIndex = idx;
     },
     setTokenId(tokenId) {
       this.tokenId = tokenId;

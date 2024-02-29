@@ -55,7 +55,7 @@
           readonly
           size="sm"
           :placeholder="t('page.session.before.userStories.placeholder.userStoryTitle')"
-          @blur="publishChanges(index, false)"
+          @click="publishChanges(index, false)"
         />
 
         <b-badge id="badge" class="p-2">
@@ -111,6 +111,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import { useDiveniStore } from "@/store";
 import UserStory from "../model/UserStory";
 import { useI18n } from "vue-i18n";
 
@@ -124,8 +125,9 @@ export default defineComponent({
     hostSelectedStoryIndex: { type: Number, required: false, default: null },
   },
   setup() {
+    const store = useDiveniStore();
     const { t } = useI18n();
-    return { t };
+    return { store, t };
   },
   data() {
     return {
@@ -149,6 +151,7 @@ export default defineComponent({
   },
   mounted() {
     this.userStories = this.initialStories as Array<UserStory>;
+    this.selectedStoryIndex = this.store.selectedUserStoryIndex;
   },
   methods: {
     setUserStoryAsActive(index) {
@@ -197,6 +200,7 @@ export default defineComponent({
       this.publishChanges(index, true);
     },
     publishChanges(index, remove) {
+      this.store.setUserStoryIndex(index);
       this.$emit("userStoriesChanged", { us: this.userStories, idx: index, doRemove: remove });
     },
     markUserStory(index) {
