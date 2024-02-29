@@ -258,8 +258,13 @@ export default defineComponent({
         return ["notSelectedTab", "notSelectedTextColor"];
       }
     },
-    async sendCreateSessionRequest() {
+    sendUnregisterCommand() {
+      const endPoint = `${Constants.webSocketUnregisterRoute}`;
+      this.store.sendViaBackendWS(endPoint);
       this.store.clearStore();
+    },
+    async sendCreateSessionRequest() {
+      this.sendUnregisterCommand();
       const url = Constants.backendURL + Constants.createSessionRoute;
       const sessionConfig = {
         set: this.selectedCardSetOptions,

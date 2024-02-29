@@ -469,7 +469,6 @@ export default defineComponent({
       }
     }
     this.timerCountdownNumber = parseInt(this.timerSecondsString ?? "0", 10);
-    window.addEventListener("beforeunload", this.sendUnregisterCommand);
   },
   mounted() {
     if (this.rejoined === "false") {
@@ -488,9 +487,6 @@ export default defineComponent({
     if (this.userStoryMode === "US_JIRA") {
       this.refreshUserStories();
     }
-  },
-  unmounted() {
-    window.removeEventListener("beforeunload", this.sendUnregisterCommand);
   },
   methods: {
     async checkAdminCookie() {
@@ -690,11 +686,6 @@ export default defineComponent({
     },
     subscribeWSNotification() {
       this.store.subscribeOnBackendWSNotify();
-    },
-    sendUnregisterCommand() {
-      const endPoint = `${Constants.webSocketUnregisterRoute}`;
-      this.store.sendViaBackendWS(endPoint);
-      this.store.clearStore();
     },
     sendVotingFinishedMessage() {
       if (!this.estimateFinished) {
