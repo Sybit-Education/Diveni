@@ -24,11 +24,8 @@
         </b-input>
       </div>
       <div class="inline-div">
-        <b-button
-          variant="primary"
-          @click="getAccessToken()"
-        >
-          Sign in
+        <b-button variant="primary" :disabled="patToken === ''" @click="getAccessToken()"
+          >Sign in
         </b-button>
       </div>
     </div>

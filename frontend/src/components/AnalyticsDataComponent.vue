@@ -1,6 +1,6 @@
 <template>
   <b-container>
-    <h1>{{ headerText }}</h1>
+    <h1 class="text-center">{{ headerText }} <b-icon-bar-chart /></h1>
     <b-card-group deck>
       <b-card class="statsCards">
         <b-card-title style="text-align: center">

@@ -1,10 +1,10 @@
 ---
 tags:
-- architecture
-- frontend
-- backend
-- REST
-- WebSocket
+  - architecture
+  - frontend
+  - backend
+  - REST
+  - WebSocket
 ---
 
 # Software Architecture
@@ -85,6 +85,7 @@ frontend
 | CardSetComponent                     | Card set selection in page "PrepareSession"                                                                                                                                                                                                                    |
 | CopySessionIdPopup                   | Link including a popup with the functionalities: copy code or link to clipboard                                                                                                                                                                                |
 | EstimateTimer                        | Displays the timer and has the logic for the countdown                                                                                                                                                                                                         |
+| DownloadPWAModal                     | Modal to ask mobile users to download the app                                                                                                                                                                                                                  |
 | JiraComponent                        | Component for the "Planning with Jira" tab.                                                                                                                                                                                                                    |
 | JoinPageCard                         | Card for joining a Session in page "JoinPage"                                                                                                                                                                                                                  |
 | LandingPageCard                      | Cards for "New Session"/"Join Session"/"Reconnect to Session" in page "LandingPage"                                                                                                                                                                            |
@@ -143,7 +144,7 @@ backend
 |---------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | WebSocketConfig                 | Configurations (e.g. prefixes, CORS) for Websockets                                                                                                                        |
 | -----------                     |                                                                                                                                                                            |
-| ConfigController                | REST Controller for project configuration                                                                                                                                      |
+| ConfigController                | REST Controller for project configuration                                                                                                                                  |
 | ControllerUtils                 | Helper functions for all controllers                                                                                                                                       |
 | ErrorMessages                   | All error messages which can be thrown in exceptions                                                                                                                       |
 | ProjectManagementController     | REST Controller for project management software (e.g. Jira)                                                                                                                |

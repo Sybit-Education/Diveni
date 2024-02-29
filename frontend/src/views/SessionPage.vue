@@ -55,11 +55,14 @@
         class="copy-popup"
       />
 
-      <b-row class="d-flex justify-content-center overflow-auto kick-user">
+      <b-row
+        class="d-flex justify-content-center overflow-auto kick-user"
+        :class="isMobile ? 'avatar-maxHeight' : ''"
+      >
         <kick-user-wrapper
           v-for="member of members"
           :key="member.memberID"
-          class="m-4"
+          :class="isMobile ? 'm-4' : 'spaceBetweenAvatar'"
           child="RoundedAvatar"
           :member="member"
         />
@@ -142,11 +145,16 @@
         {{ membersPending.length }} /
         {{ membersPending.length + membersEstimated.length }}
       </h4>
-      <b-row v-if="!estimateFinished" class="my-2 d-flex justify-content-center flex-wrap">
+
+      <b-row
+        v-if="!estimateFinished"
+        class="d-flex justify-content-center overflow-auto"
+        :class="isMobile ? 'avatar-maxHeight' : ''"
+      >
         <kick-user-wrapper
           v-for="member of membersPending"
           :key="member.memberID"
-          class="mx-2"
+          :class="isMobile ? 'm-4' : 'spaceBetweenAvatar'"
           child="RoundedAvatar"
           :member="member"
         />
@@ -730,6 +738,16 @@ export default defineComponent({
 
 <!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
 <style lang="scss" scoped>
+
+.spaceBetweenAvatar {
+  margin-right: 2em;
+  margin-left: 2em;
+}
+
+.avatar-maxHeight {
+  max-height: 500px;
+}
+
 .newVotes {
   text-align: center;
   margin-left: auto;
