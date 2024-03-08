@@ -1,10 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
 import LandingPage from "../views/LandingPage.vue";
-import JoinPage from "../views/JoinPage.vue";
-import SessionPage from "../views/SessionPage.vue";
-import MemberVotePage from "../views/MemberVotePage.vue";
-import PrepareSessionPage from "../views/PrepareSessionPage.vue";
-import ResultPage from "../views/ResultPage.vue";
 
 const routes = [
   {
@@ -16,29 +11,29 @@ const routes = [
     path: "/session",
     name: "SessionPage",
     props: true,
-    component: SessionPage,
+    component: () => import(/* webpackChunkName: "session" */ "../views/SessionPage.vue"),
   },
   {
     path: "/result",
     name: "ResultPage",
     props: true,
-    component: ResultPage,
+    component: () => import(/* webpackChunkName: "result" */ "../views/ResultPage.vue"),
   },
   {
     path: "/join",
     name: "JoinPage",
-    component: JoinPage,
+    component: () => import(/* webpackChunkName: "join" */ "../views/JoinPage.vue"),
   },
   {
     path: "/vote",
     name: "MemberVotePage",
     props: true,
-    component: MemberVotePage,
+    component: () => import(/* webpackChunkName: "vote" */ "../views/MemberVotePage.vue"),
   },
   {
     path: "/prepare",
     name: "PrepareSessionPage",
-    component: PrepareSessionPage,
+    component: () => import(/* webpackChunkName: "prepare" */ "../views/PrepareSessionPage.vue"),
   },
   {
     path: "/jiraCallback",
@@ -53,7 +48,7 @@ const routes = [
   {
     path: "/whats-new",
     name: "WhatsNewPage",
-    component: () => import("../views/WhatsNewPage.vue"),
+    component: () => import(/* webpackChunkName: "whats-new" */ "../views/WhatsNewPage.vue"),
   },
   {
     path: "/:catchAll(.*)",
