@@ -1,4 +1,4 @@
-version: "3"
+version: "3.4"
 
 services:
   database:
@@ -7,6 +7,12 @@ services:
     volumes:
       - mongo-volume:/data/db
     restart: unless-stopped
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/diveni --quiet
+      interval: 60s
+      timeout: 30s
+      retries: 3
+      start_period: 30s
 
   backend:
     depends_on:
