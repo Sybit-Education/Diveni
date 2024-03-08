@@ -26,7 +26,7 @@ services:
     env_file:
       - ./backend/.env
     healthcheck:
-      test: "curl --fail --silent localhost:9090/actuator/health | grep UP || exit 1"
+      test: curl --fail --silent localhost:9090/actuator/health | grep UP || exit 1
       interval: 60s
       timeout: 30s
       retries: 3
@@ -51,7 +51,7 @@ services:
     ports:
       - "80:80"
     healthcheck:
-      test: curl --fail http://localhost:80/health || exit 1
+      test: curl --fail http://localhost:80/health | grep UP || exit 1
       interval: 60s
       timeout: 30s
       retries: 3
