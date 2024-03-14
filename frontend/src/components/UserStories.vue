@@ -14,7 +14,7 @@
         />
       </b-input-group>
     </div>
-    <b-card-group id="userStoryBlock" class="mt-2">
+    <b-card-group id="userStoryBlock" class="my-2 overflow-auto">
       <b-list-group-item
         v-for="(story, index) of userStories"
         id="userStoryRow"

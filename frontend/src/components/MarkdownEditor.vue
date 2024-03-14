@@ -110,6 +110,21 @@ export default defineComponent({
 
 .toastui-editor-defaultUI .ProseMirror {
   background-color: var(--editor-defaultui-container-bg);
+  font-size: 18px;
+}
+
+.toastui-editor-contents ul > li::before {
+  height: 9px;
+  width: 9px;
+  margin-left: -16px;
+}
+
+.toastui-editor-contents ul > li::before, .toastui-editor-contents ol > li::before {
+  top: 4px;
+}
+
+.toastui-editor-contents h5 {
+  color: var(--text-primary-color);
 }
 
 .toastui-editor-md-container .toastui-editor-md-preview {

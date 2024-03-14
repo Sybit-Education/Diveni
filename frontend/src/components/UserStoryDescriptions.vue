@@ -11,6 +11,7 @@
         <div class="list-group list-group-horizontal">
           <b-form-textarea
             v-model="userStories[idx].title"
+            class="overflow-auto"
             rows="1"
             max-rows="3"
             :disabled="!editDescription"
@@ -63,14 +64,15 @@
           />
         </div>
         <div v-if="!editDescription">
-          <b-form-textarea
-            id="textarea-auto-height-plaintext"
-            class="py-2 description-text-area"
-            :disabled="!editDescription"
-            plaintext
-            :value="userStories[idx].description"
-            rows="15"
-            size="m"
+          <markdown-editor
+            id="textarea-auto-height"
+            v-model="userStories[idx].description"
+            :key="userStories[idx].description"
+            class="my-2 noneClickable"
+            :placeholder="t('page.session.before.userStories.placeholder.userStoryDescription')"
+            :markdown="'test'"
+            @textValueChanged="(event) => valueChanged(idx, event)"
+            @improveDescription="sendGPTDescription"
           />
         </div>
       </b-list-group-item>
@@ -250,6 +252,10 @@ export default defineComponent({
   background-color: var(--blurredColour8);
   border-radius: 13px;
   box-shadow: none !important;
+}
+
+.noneClickable {
+  pointer-events: none;
 }
 
 .sidenav {

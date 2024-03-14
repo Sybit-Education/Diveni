@@ -46,8 +46,8 @@ async def improve_description(original_user_story: UserStory):
     print(data)
     description = data.get("description", "")
     acceptance_criteria = data.get("acceptance_criteria", [])
-    description = description + "\n Acceptance Criteria: \n"
+    description = description + "\n ##### Acceptance Criteria: \n"
     acceptance_criteria = ["* " + criteria + "\n" for criteria in acceptance_criteria]
-    print(type(acceptance_criteria))
+    print(description)
     print("gpt_service: <-- improve_description()")
     return Description_Response(description, acceptance_criteria)

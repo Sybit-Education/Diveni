@@ -150,8 +150,10 @@
         </b-col>
       </b-row>
       <b-row v-if="userStoryMode !== 'NO_US' && !isMobile">
-        <b-col class="mt-2">
-          <div class="overflow-auto" style="height: 700px">
+        <b-col
+          cols="4"
+          class="mt-2">
+          <div class="overflow-auto" style="max-height: 700px">
             <user-stories
               :card-set="voteSet"
               :show-estimations="true"
@@ -162,7 +164,9 @@
             />
           </div>
         </b-col>
-        <b-col class="mt-2">
+        <b-col
+          cols="8"
+          class="mt-2">
           <user-story-descriptions
             :card-set="voteSet"
             :index="index"

@@ -173,8 +173,6 @@ class ApiService {
       estimation: userStory.estimation,
       isActive: userStory.isActive,
     });
-    console.log("--> " + JSON.stringify(response.data))
-
     return {
       description: response.data.improved_description,
       acceptance_criteria: response.data.improved_acceptance_criteria,
