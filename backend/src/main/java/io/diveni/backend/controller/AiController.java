@@ -16,8 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AiController {
   private static final Logger LOGGER = LoggerFactory.getLogger(AiController.class);
 
-  @Autowired
-  AiService aiService;
+  @Autowired AiService aiService;
 
   @PostMapping("/improve-title")
   public ResponseEntity<String> improveTitle(@RequestBody UserStory userStory) {
