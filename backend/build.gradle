@@ -30,6 +30,7 @@ dependencies {
     implementation 'org.springdoc:springdoc-openapi-ui:1.7.0'
     implementation 'org.apache.httpcomponents:httpclient:4.5.14'
     implementation 'org.json:json:20230227'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo.spring31x:4.11.0'
