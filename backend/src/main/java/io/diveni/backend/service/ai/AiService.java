@@ -27,8 +27,7 @@ public class AiService {
     LOGGER.info("Url to Server is: " + aiUrl);
   }
 
-  public ResponseEntity<String> executeRequest(
-    String url, HttpMethod method, Object body) {
+  public ResponseEntity<String> executeRequest(String url, HttpMethod method, Object body) {
     LOGGER.debug("--> executeRequest()");
     // Create a RestTemplate object
     RestTemplate restTemplate = new RestTemplate();
@@ -45,7 +44,8 @@ public class AiService {
     LOGGER.debug("--> improveTitle()");
     Map<String, String> content = new HashMap<>();
     content.put("name", userStory.getTitle());
-    ResponseEntity<String> response = executeRequest(aiUrl +  "/improve-title", HttpMethod.POST, new Gson().toJson(content));
+    ResponseEntity<String> response =
+        executeRequest(aiUrl + "/improve-title", HttpMethod.POST, new Gson().toJson(content));
     LOGGER.debug("<-- improveTitle()");
     return response;
   }
@@ -55,9 +55,9 @@ public class AiService {
     Map<String, String> content = new HashMap<>();
     content.put("title", userStory.getTitle());
     content.put("description", userStory.getDescription());
-    ResponseEntity<String> response = executeRequest(aiUrl + "/improve-description", HttpMethod.POST, new Gson().toJson(content));
+    ResponseEntity<String> response =
+        executeRequest(aiUrl + "/improve-description", HttpMethod.POST, new Gson().toJson(content));
     LOGGER.debug("<-- improveDescription()");
     return response;
   }
-
 }
