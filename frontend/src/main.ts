@@ -16,6 +16,7 @@ import "./assets/style/main.scss";
 import Toast from "vue-toastification";
 import "vue-toastification/dist/index.css";
 import i18n from "@/i18n";
+import vueDebounce from 'vue-debounce'
 
 Vue.use(IconsPlugin);
 Vue.use(ModalPlugin);
@@ -28,6 +29,8 @@ setupInterceptors();
 const app = createApp(App);
 
 const pinia = createPinia();
+
+app.directive('debounce', vueDebounce({lock:true}))
 
 app
   .use(VueAxios, axios)

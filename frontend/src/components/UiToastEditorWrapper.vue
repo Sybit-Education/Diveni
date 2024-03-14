@@ -1,3 +1,11 @@
+<template>
+  <div>
+    <div
+      ref="editor"
+      v-debounce:5s="() => emit('updateDescription', { description: markdownText})"/>
+  </div>
+</template>
+
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import Editor from "@toast-ui/editor";
@@ -14,6 +22,12 @@ const props = defineProps({
 const emit = defineEmits(["update:modelValue"]);
 const editor = ref();
 const i18n = useI18n();
+let markdownText = "";
+
+function test(text) {
+  markdownText = text;
+}
+
 onMounted(() => {
   const e = new Editor({
     autofocus: false,
@@ -40,13 +54,8 @@ onMounted(() => {
     previewStyle: "vertical",
     events: {
       blur: () => emit("update:modelValue", e.getMarkdown()),
+      change: () => test(e.getMarkdown())
     },
   });
 });
 </script>
-
-<template>
-  <div>
-    <div ref="editor" />
-  </div>
-</template>

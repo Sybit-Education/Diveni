@@ -11,6 +11,7 @@
       preview-style="vertical"
       :class="theme === 'light' ? 'lightMode' : 'darkMode'"
       @update:modelValue="$emit('textValueChanged', { markdown: $event })"
+      @updateDescription="emitMarkdownText"
     />
   </div>
 </template>
@@ -56,7 +57,6 @@ export default defineComponent({
   },
   data() {
     return {
-      text: "",
       editorOptions: {
         autofocus: false,
         height: "auto",
@@ -85,6 +85,12 @@ export default defineComponent({
       const customEvent = event as CustomEvent;
       this.theme = customEvent.detail.storage;
     });
+  },
+  methods: {
+    emitMarkdownText({description}) {
+      console.log("Markdown: " + description);
+      this.$emit("improveDescription", {description: description});
+    }
   },
 });
 </script>

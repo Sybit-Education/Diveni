@@ -1,6 +1,7 @@
 import constants from "@/constants";
 import { JiraRequestTokenDto, JiraResponseCodeDto, PullRequestDto } from "@/types";
 import axios, { AxiosResponse } from "axios";
+import UserStory from "@/model/UserStory";
 
 class ApiService {
   public async getIssueTrackerConfig(): Promise<Record<string, string>> {
@@ -67,9 +68,9 @@ class ApiService {
 
   public async sendGitlabOauth2AuthorizationCode(patToken: string): Promise<JiraResponseCodeDto> {
     const response = await axios.post<JiraResponseCodeDto>(
-        `${constants.backendURL}/issue-tracker/gitlab/oauth2/authorizationCode`,
+      `${constants.backendURL}/issue-tracker/gitlab/oauth2/authorizationCode`,
       {
-        code: patToken
+        code: patToken,
       }
     );
     return response.data;
@@ -152,6 +153,32 @@ class ApiService {
       params: queryParams,
     });
     return response.data;
+  }
+
+  public async improveTitle(userStory: UserStory) {
+    const response = await axios.post(`${constants.backendURL}/ai/improve-title`, {
+      id: userStory.id,
+      title: userStory.title,
+      description: userStory.description,
+      estimation: userStory.estimation,
+      isActive: userStory.isActive,
+    });
+    return response;
+  }
+  public async improveDescription(userStory: UserStory, description: string) {
+    const response = await axios.post(`${constants.backendURL}/ai/improve-description`, {
+      id: userStory.id,
+      title: userStory.title,
+      description: description,
+      estimation: userStory.estimation,
+      isActive: userStory.isActive,
+    });
+    console.log("--> " + JSON.stringify(response.data))
+
+    return {
+      description: response.data.improved_description,
+      acceptance_criteria: response.data.improved_acceptance_criteria,
+    };
   }
 }
 

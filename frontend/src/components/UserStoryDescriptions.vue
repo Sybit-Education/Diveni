@@ -8,7 +8,7 @@
         class="border-0 description-box"
         variant="outline-secondary"
       >
-        <div class="list-group list-group-horizontal mt-5">
+        <div class="list-group list-group-horizontal">
           <b-form-textarea
             v-model="userStories[idx].title"
             rows="1"
@@ -16,8 +16,10 @@
             :disabled="!editDescription"
             size="lg"
             :placeholder="t('page.session.before.userStories.placeholder.userStoryTitle')"
+            v-debounce:3s="improveTitle"
             @blur="publishChanges(idx)"
-          />
+          >
+          </b-form-textarea>
           <b-dropdown
             v-show="editDescription"
             variant="none"
@@ -40,13 +42,24 @@
           </b-dropdown>
         </div>
         <div>
+          <b-badge
+            v-if="gptDescriptionResponse"
+            variant="info"
+            class="animated-badge"
+            @click="openModal"
+          >
+            Suggestion <b-badge variant="light">1</b-badge>
+          </b-badge>
           <markdown-editor
             id="textarea-auto-height"
             v-model="userStories[idx].description"
+            :key="userStories[idx].description"
             class="my-2"
             :disabled="!editDescription"
             :placeholder="t('page.session.before.userStories.placeholder.userStoryDescription')"
+            :markdown="'test'"
             @textValueChanged="(event) => valueChanged(idx, event)"
+            @improveDescription="sendGPTDescription"
           />
         </div>
         <div v-if="!editDescription">
@@ -86,6 +99,7 @@ export default defineComponent({
     editDescription: { type: Boolean, required: true, default: false },
     showEstimations: { type: Boolean, required: false },
     showEditButtons: { type: Boolean, required: false, default: true },
+    gptDescriptionResponse: { type: Boolean, required: true },
   },
   setup() {
     const { t } = useI18n();
@@ -160,12 +174,49 @@ export default defineComponent({
     // synchronizeJira(idx) {
     //   this.$emit("synchronizeJira", { story: this.userStories[idx], doRemove: false });
     // },
+    improveTitle() {
+      console.log("GPT will be improving your User Story Title");
+      this.$emit("improveTitle", { userStory: this.userStories[this.index] });
+    },
+    sendGPTDescription({description}) {
+      console.log("GPT will be improving your User Story Description ", description);
+      this.$emit("improveDescription", { userStory: this.userStories[this.index], description: description})
+    },
+    openModal() {
+      this.$emit("openDescriptionModal");
+    }
   },
 });
 </script>
 
 <!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
 <style lang="scss" scoped>
+.animated-badge {
+  animation: Shake 3s linear infinite; /* Increased duration to account for the pause */
+  cursor: pointer;
+}
+
+@keyframes Shake {
+  0% {
+    transform: rotate(5deg);
+  }
+
+  25% {
+    transform: rotate(-6deg);
+  }
+
+  50% {
+    transform: rotate(5deg);
+  }
+
+  75% {
+    transform: rotate(-6deg);
+  }
+
+  100% {
+    transform: rotate(5deg);
+  }
+}
 .estimationDescription {
   border: 2px solid var(--estimateButtonBorder);
   border-radius: 13px;

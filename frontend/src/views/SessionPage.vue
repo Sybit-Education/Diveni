@@ -296,23 +296,64 @@
         </div>
       </b-col>
     </b-row>
+    <GptModal
+      v-if="showGPTModal"
+      :suggestion-title="alternateTitle"
+      :suggestion-description="alternateDescription"
+      :mode="gptMode"
+      @acceptSuggestionTitle="acceptSuggestionTitle"
+      @acceptSuggestionDescription="acceptSuggestionDescription"
+      @hideModal="closeModal"
+    />
     <b-row>
-      <b-col v-if="!isMobile" cols="10">
-        <user-story-descriptions
-          :card-set="voteSet"
-          :initial-stories="userStories"
-          :edit-description="true"
-          :index="index"
-          @userStoriesChanged="onUserStoriesChanged"
-        />
+      <b-col
+        v-if="!isMobile"
+        class="mt-5"
+        cols="10"
+      >
+          <b-badge
+            v-if="gptTitleResponse"
+            variant="info"
+            class="animated-badge"
+            @click="showGPTModal = true; gptMode = 'improveTitle'"
+          >
+            Suggestion <b-badge variant="light">1</b-badge>
+          </b-badge>
+          <user-story-descriptions
+            :card-set="voteSet"
+            :initial-stories="userStories"
+            :edit-description="true"
+            :index="index"
+            :gpt-description-response="gptDescriptionResponse"
+            @userStoriesChanged="onUserStoriesChanged"
+            @improveTitle="improveTitle"
+            @improveDescription="improveDescription"
+            @openDescriptionModal="showDescriptionModal"
+          />
       </b-col>
-      <b-col v-else cols="12">
+      <b-col
+        v-else
+        class="mt-5"
+        cols="12"
+      >
+        <b-badge
+          v-if="gptTitleResponse"
+          variant="info"
+          class="animated-badge"
+          @click="showGPTModal = true; gptMode = 'improveTitle'"
+        >
+          Suggestion <b-badge variant="light">1</b-badge>
+        </b-badge>
         <user-story-descriptions
           :card-set="voteSet"
           :initial-stories="userStories"
           :edit-description="true"
           :index="index"
+          :gpt-description-response="gptDescriptionResponse"
           @userStoriesChanged="onUserStoriesChanged"
+          @improveTitle="improveTitle"
+          @improveDescription="improveDescription"
+          @openDescriptionModal="showDescriptionModal"
         />
       </b-col>
     </b-row>
@@ -340,10 +381,12 @@ import { useDiveniStore } from "@/store";
 import { useToast } from "vue-toastification";
 import { useI18n } from "vue-i18n";
 import SessionAdminCard from "@/components/SessionAdminCard.vue";
+import GptModal from "@/components/GptModal.vue";
 
 export default defineComponent({
   name: "SessionPage",
   components: {
+    GptModal,
     SessionStartButton,
     SessionCloseButton,
     KickUserWrapper,
@@ -385,6 +428,18 @@ export default defineComponent({
       session: {},
       hostEstimation: "",
       autoReveal: false,
+
+      //generell needed for GPT usage
+      showGPTModal: false,
+      gptMode: "",
+      // needed for title + anti spam
+      savedUserStoryTitle: "",
+      gptTitleResponse: false,
+      alternateTitle: "",
+      //needed for description + anti spam
+      gptDescriptionResponse: false,
+      alternateDescription: "",
+      savedUserStoryDescription: "",
     };
   },
   computed: {
@@ -729,12 +784,99 @@ export default defineComponent({
         })
       );
     },
+    async improveTitle({ userStory }) {
+      const trimmedStoryTitle = userStory.title.trim();
+      if (trimmedStoryTitle.length > 0) {
+        if (this.savedUserStoryTitle.length === 0) {
+          this.savedUserStoryTitle = trimmedStoryTitle;
+          const response = await apiService.improveTitle(userStory);
+          this.alternateTitle = response.data.improvedTitle;
+          this.gptTitleResponse = true;
+         // console.log("First Time! " + response);
+        } else if (this.savedUserStoryTitle !== trimmedStoryTitle) {
+          const response = await apiService.improveTitle(userStory);
+          this.alternateTitle = response.data.improvedTitle;
+          this.gptTitleResponse = true;
+        } // its the same title, so we do not need to send another request
+      }
+    },
+    acceptSuggestionTitle() {
+      this.userStories[this.index].title = this.alternateTitle;
+      this.onUserStoriesChanged({us: this.userStories, idx: this.index, doRemove: false});
+    },
+    async improveDescription({ userStory, description }) {
+      console.log("Improve Description Session Page: ", description);
+      const trimmedStoryDescription = description.trim();
+      if (trimmedStoryDescription.length > 0) {
+        if (this.savedUserStoryDescription.length === 0) {
+          this.savedUserStoryDescription = trimmedStoryDescription;
+          const response = await apiService.improveDescription(userStory, trimmedStoryDescription);
+          this.alternateDescription = response.description +  response.acceptance_criteria.toString().replaceAll(",", "");
+          this.gptDescriptionResponse = true;
+        } else if (this.savedUserStoryDescription !== trimmedStoryDescription) {
+          const response = await apiService.improveDescription(userStory, trimmedStoryDescription);
+          //this.alternateDescription = response.data.improved_description +  response.data.improved_acceptance_criteria;
+          this.alternateDescription = response.description +  response.acceptance_criteria.toString().replaceAll(",", "");
+          this.gptDescriptionResponse = true;
+        } // its the same title, so we do not need to send another request
+      }
+    },
+    showDescriptionModal() {
+      this.showGPTModal = true;
+      this.gptMode = "improveDescription";
+    },
+    acceptSuggestionDescription() {
+      console.log("Accepting Description");
+      this.userStories[this.index].description = this.alternateDescription;
+      this.onUserStoriesChanged({us: this.userStories, idx: this.index, doRemove: false});
+    },
+    closeModal() {
+      console.log("CLOSING MODAL: " + this.gptMode);
+      this.showGPTModal = false;
+      switch (this.gptMode) {
+        case 'improveTitle': {
+          this.gptTitleResponse = false;
+          break;
+        }
+        case 'improveDescription':{
+          this.gptDescriptionResponse = false;
+          break;
+        }
+      }
+    }
   },
 });
 </script>
 
 <!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
 <style lang="scss" scoped>
+
+.animated-badge {
+  animation: Shake 3s linear infinite; /* Increased duration to account for the pause */
+  cursor: pointer;
+}
+
+@keyframes Shake {
+  0% {
+    transform: rotate(5deg);
+  }
+
+  25% {
+    transform: rotate(-6deg);
+  }
+
+  50% {
+    transform: rotate(5deg);
+  }
+
+  75% {
+    transform: rotate(-6deg);
+  }
+
+  100% {
+    transform: rotate(5deg);
+  }
+}
 
 .spaceBetweenAvatar {
   margin-right: 2em;
