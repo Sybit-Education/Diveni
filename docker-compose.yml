@@ -1,4 +1,4 @@
-version: "3"
+version: "3.4"
 
 services:
   database:
@@ -7,6 +7,12 @@ services:
     volumes:
       - mongo-volume:/data/db
     restart: unless-stopped
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/diveni --quiet
+      interval: 60s
+      timeout: 30s
+      retries: 3
+      start_period: 30s
 
   backend:
     image: ghcr.io/sybit-education/diveni-backend:latest
@@ -18,6 +24,12 @@ services:
       - "SPRING_PROFILES_ACTIVE=prod"
     env_file:
       - ./backend/.env
+    healthcheck:
+      test: curl --fail http://backend:9090/actuator/health | grep UP || exit 1
+      interval: 60s
+      timeout: 30s
+      retries: 3
+      start_period: 30s
 
   frontend:
     image: ghcr.io/sybit-education/diveni-frontend:latest
@@ -25,6 +37,12 @@ services:
       - backend
     container_name: diveni_frontend
     restart: unless-stopped
+    healthcheck:
+      test: curl --fail http://frontend:80 || exit 1
+      interval: 60s
+      timeout: 30s
+      retries: 3
+      start_period: 30s
 
   proxy:
     image: ghcr.io/sybit-education/diveni-proxy:latest
@@ -36,6 +54,12 @@ services:
     restart: unless-stopped
     ports:
       - "80:80"
+    healthcheck:
+      test: curl --fail http://localhost:80/health | grep UP || exit 1
+      interval: 60s
+      timeout: 30s
+      retries: 3
+      start_period: 30s
 
 volumes:
   mongo-volume:

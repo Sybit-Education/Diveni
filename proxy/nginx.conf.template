@@ -51,4 +51,11 @@ server {
     location = /404.html {
         internal;
     }
+
+    # Proxy Container HealthCheck
+    location = /health {
+        access_log off;
+        add_header 'Content-Type' 'application/json';
+        return 200 '{"status":"UP"}';
+    }
 }
