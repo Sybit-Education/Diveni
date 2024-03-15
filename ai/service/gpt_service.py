@@ -25,7 +25,7 @@ async def improve_title(original_title: str):
         model=model_id,
         prompt=prompt_input,
         max_tokens=30,
-        temperature=0.2
+        temperature=0.8
     )
     response = find_between(completion.choices[0].text, '"', '"')
     print("gpt_service: <-- improve_title()")

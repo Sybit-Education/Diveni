@@ -26,11 +26,11 @@
       </b-row>
       <b-row v-else class="headers mb-2">
         <b-col class="align-self-end">
-          <rounded-avatar :member="getMember" :admin="false" :mobile="true"/>
+          <rounded-avatar :member="getMember" :admin="false" :mobile="true" />
           <h1>{{ t("page.vote.title") }}</h1>
         </b-col>
         <b-col>
-          <session-leave-button :is-mobile="true"/>
+          <session-leave-button :is-mobile="true" />
           <estimate-timer
             v-if="timerTimestamp"
             class="mt-3"
@@ -48,20 +48,23 @@
         </b-col>
       </b-row>
       <b-row v-if="isStartVoting">
-        <div v-if="isMobile" class="centerCards d-flex justify-content-center flex-wrap text-center">
-            <member-vote-card
-              v-for="(voteOption, idx) in voteSet"
-              :key="voteOption"
-              :ref="`memberCard${voteOption}`"
-              class="m-2"
-              :vote-option="voteOption"
-              :index="idx"
-              :hex-color="hexColor ?? ''"
-              :dragged="voteOption === draggedVote"
-              :is-mobile="true"
-              :disabled="pauseSession"
-              @sentVote="onSendVote"
-            />
+        <div
+          v-if="isMobile"
+          class="centerCards d-flex justify-content-center flex-wrap text-center"
+        >
+          <member-vote-card
+            v-for="(voteOption, idx) in voteSet"
+            :key="voteOption"
+            :ref="`memberCard${voteOption}`"
+            class="m-2"
+            :vote-option="voteOption"
+            :index="idx"
+            :hex-color="hexColor ?? ''"
+            :dragged="voteOption === draggedVote"
+            :is-mobile="true"
+            :disabled="pauseSession"
+            @sentVote="onSendVote"
+          />
         </div>
         <b-row v-else class="centerCards d-flex justify-content-between flex-wrap text-center">
           <b-col>
@@ -150,9 +153,7 @@
         </b-col>
       </b-row>
       <b-row v-if="userStoryMode !== 'NO_US' && !isMobile">
-        <b-col
-          cols="4"
-          class="mt-2">
+        <b-col cols="4" class="mt-2">
           <div class="overflow-auto" style="max-height: 700px">
             <user-stories
               :card-set="voteSet"
@@ -164,11 +165,14 @@
             />
           </div>
         </b-col>
-        <b-col
-          cols="8"
-          class="mt-2">
-          <user-story-descriptions
+        <b-col cols="8" class="mt-2">
+          <user-story-title
+            :host="false"
+            :initial-stories="userStories"
             :card-set="voteSet"
+            :index="index"
+          />
+          <user-story-descriptions
             :index="index"
             :initial-stories="userStories"
             :edit-description="false"
@@ -211,10 +215,12 @@ import { defineComponent } from "vue";
 import { useDiveniStore } from "@/store";
 import { useToast } from "vue-toastification";
 import { useI18n } from "vue-i18n";
+import UserStoryTitle from "@/components/UserStoryTitle.vue";
 
 export default defineComponent({
   name: "MemberVotePage",
   components: {
+    UserStoryTitle,
     SessionLeaveButton,
     RoundedAvatar,
     MemberVoteCard,

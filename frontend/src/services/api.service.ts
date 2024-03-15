@@ -165,7 +165,19 @@ class ApiService {
     });
     return response;
   }
+
+  public async retryImproveTitle(userStory: UserStory, oldTitle: string) {
+    const response = await axios.post(`${constants.backendURL}/ai/improve-title`, {
+      id: userStory.id,
+      title: oldTitle,
+      description: userStory.description,
+      estimation: userStory.estimation,
+      isActive: userStory.isActive,
+    });
+    return response;
+  }
   public async improveDescription(userStory: UserStory, description: string) {
+    /*
     const response = await axios.post(`${constants.backendURL}/ai/improve-description`, {
       id: userStory.id,
       title: userStory.title,
@@ -176,6 +188,13 @@ class ApiService {
     return {
       description: response.data.improved_description,
       acceptance_criteria: response.data.improved_acceptance_criteria,
+    };
+     */
+    return {
+      description:
+        "As a User i want a very cool Feature for my Website which should look really awesome \n ##### Acceptance Criteria: \n",
+      acceptance_criteria:
+        "* It should work \n * It should look good \n * It should improve the quality of our product \n * It needs to be tested \n * One more Point im Missing",
     };
   }
 }

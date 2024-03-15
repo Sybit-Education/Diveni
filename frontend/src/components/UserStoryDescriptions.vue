@@ -1,87 +1,51 @@
 <template>
   <div class="user-story-descriptions">
-    <div class="list">
-      <b-list-group-item
-        v-for="(story, idx) of userStories"
-        v-show="idx === index"
-        :key="story.id"
-        class="border-0 description-box"
-        variant="outline-secondary"
-      >
-        <div class="list-group list-group-horizontal">
-          <b-form-textarea
-            v-model="userStories[idx].title"
-            class="overflow-auto"
-            rows="1"
-            max-rows="3"
-            :disabled="!editDescription"
-            size="lg"
-            :placeholder="t('page.session.before.userStories.placeholder.userStoryTitle')"
-            v-debounce:3s="improveTitle"
-            @blur="publishChanges(idx)"
-          >
-          </b-form-textarea>
-          <b-dropdown
-            v-show="editDescription"
-            variant="none"
-            class="px-3 ml-5 estimationDescription"
-            :text="(userStories[idx].estimation ? userStories[idx].estimation : '?') + '    '"
-          >
-            <b-dropdown-item
-              v-for="num in filteredCardSet"
-              :key="num"
-              :disabled="!editDescription"
-              :value="num"
-              @click="
-                userStories[idx].estimation = num;
-                publishChanges(idx);
-                $event.target.blur();
-              "
-            >
-              {{ num }}
-            </b-dropdown-item>
-          </b-dropdown>
-        </div>
-        <div>
-          <b-badge
-            v-if="gptDescriptionResponse"
-            variant="info"
-            class="animated-badge"
-            @click="openModal"
-          >
-            Suggestion <b-badge variant="light">1</b-badge>
-          </b-badge>
-          <markdown-editor
-            id="textarea-auto-height"
-            v-model="userStories[idx].description"
-            :key="userStories[idx].description"
-            class="my-2"
-            :disabled="!editDescription"
-            :placeholder="t('page.session.before.userStories.placeholder.userStoryDescription')"
-            :markdown="'test'"
-            @textValueChanged="(event) => valueChanged(idx, event)"
-            @improveDescription="sendGPTDescription"
-          />
-        </div>
-        <div v-if="!editDescription">
-          <markdown-editor
-            id="textarea-auto-height"
-            v-model="userStories[idx].description"
-            :key="userStories[idx].description"
-            class="my-2 noneClickable"
-            :placeholder="t('page.session.before.userStories.placeholder.userStoryDescription')"
-            :markdown="'test'"
-            @textValueChanged="(event) => valueChanged(idx, event)"
-            @improveDescription="sendGPTDescription"
-          />
-        </div>
-      </b-list-group-item>
-      <div
-        v-if="userStories.length <= index && userStories.length"
-        class="text-center rounded p-3 m-2"
-      >
-        <b-card class="border-0" :title="t('page.session.before.userStories.text')" />
+    <b-list-group-item
+      v-for="(story, idx) of userStories"
+      v-show="idx === index"
+      :key="story.id"
+      class="border-0 description-box"
+      variant="outline-secondary"
+    >
+      <div>
+        <b-badge
+          v-if="gptDescriptionResponse"
+          variant="info"
+          class="animated-badge"
+          @click="openModal"
+        >
+          Suggestion <b-badge variant="light">1</b-badge>
+        </b-badge>
+        <markdown-editor
+          id="textarea-auto-height"
+          :key="userStories[idx].description"
+          v-model="userStories[idx].description"
+          class="my-2"
+          :disabled="!editDescription"
+          :placeholder="t('page.session.before.userStories.placeholder.userStoryDescription')"
+          :markdown="'test'"
+          @textValueChanged="(event) => valueChanged(idx, event)"
+          @improveDescription="sendGPTDescription"
+        />
       </div>
+      <div v-if="!editDescription">
+        <markdown-editor
+          id="textarea-auto-height"
+          :key="userStories[idx].description"
+          v-model="userStories[idx].description"
+          class="my-2 noneClickable"
+          :placeholder="t('page.session.before.userStories.placeholder.userStoryDescription')"
+          :markdown="'test'"
+          @textValueChanged="(event) => valueChanged(idx, event)"
+          @improveDescription="sendGPTDescription"
+        />
+      </div>
+    </b-list-group-item>
+    <div
+      v-if="userStories.length <= index && userStories.length"
+      class="text-center rounded p-3 m-2"
+    >
+      <b-card class="border-0" :title="t('page.session.before.userStories.text')" />
     </div>
   </div>
 </template>
@@ -96,12 +60,9 @@ export default defineComponent({
   components: { MarkdownEditor },
   props: {
     index: { type: Number, required: true },
-    cardSet: { type: Array, required: true },
     initialStories: { type: Array, required: true },
     editDescription: { type: Boolean, required: true, default: false },
-    showEstimations: { type: Boolean, required: false },
-    showEditButtons: { type: Boolean, required: false, default: true },
-    gptDescriptionResponse: { type: Boolean, required: true },
+    gptDescriptionResponse: { type: Boolean, required: false, default: false },
   },
   setup() {
     const { t } = useI18n();
@@ -109,7 +70,6 @@ export default defineComponent({
   },
   data() {
     return {
-      sideBarOpen: false,
       userStories: [] as Array<{
         id: string | null;
         title: string;
@@ -117,12 +77,12 @@ export default defineComponent({
         estimation: string | null;
         isActive: boolean;
       }>,
+      showImproveTitleButton: false,
+      savedTitle: "",
+      oldTitleHolder: "",
+      requestedUserStoryID: "" as string | null,
+      acceptedUserStoriesID: [] as Array<string | null>,
     };
-  },
-  computed: {
-    filteredCardSet(): Array<unknown> {
-      return this.cardSet.filter((card) => card !== "?");
-    },
   },
   watch: {
     initialStories() {
@@ -149,44 +109,19 @@ export default defineComponent({
       this.userStories[idx].description = markdown;
       this.publishChanges(idx);
     },
-    setUserStoryAsActive(index) {
-      const stories = this.userStories.map((s) => ({
-        id: s.id,
-        title: s.title,
-        description: s.description,
-        estimation: s.estimation,
-        isActive: false,
-      }));
-      stories[index].isActive = true;
-      this.userStories = stories;
-      this.publishChanges(index);
-    },
-    addUserStory() {
-      this.userStories.push({
-        id: null,
-        title: "",
-        description: "",
-        estimation: null,
-        isActive: false,
-      });
-    },
     publishChanges(idx) {
       this.$emit("userStoriesChanged", { us: this.userStories, idx: idx, doRemove: false });
     },
-    // synchronizeJira(idx) {
-    //   this.$emit("synchronizeJira", { story: this.userStories[idx], doRemove: false });
-    // },
-    improveTitle() {
-      console.log("GPT will be improving your User Story Title");
-      this.$emit("improveTitle", { userStory: this.userStories[this.index] });
-    },
-    sendGPTDescription({description}) {
+    sendGPTDescription({ description }) {
       console.log("GPT will be improving your User Story Description ", description);
-      this.$emit("improveDescription", { userStory: this.userStories[this.index], description: description})
+      this.$emit("improveDescription", {
+        userStory: this.userStories[this.index],
+        description: description,
+      });
     },
     openModal() {
       this.$emit("openDescriptionModal");
-    }
+    },
   },
 });
 </script>
@@ -218,17 +153,6 @@ export default defineComponent({
   100% {
     transform: rotate(5deg);
   }
-}
-.estimationDescription {
-  border: 2px solid var(--estimateButtonBorder);
-  border-radius: 13px;
-  background-color: var(--secondary-button) !important;
-}
-
-.estimationDescription:hover {
-  border: 2px solid var(--estimateButtonBorder);
-  border-radius: 13px;
-  background-color: var(--secondary-button-hovered) !important;
 }
 
 .description-box {

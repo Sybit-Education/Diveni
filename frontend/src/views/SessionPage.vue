@@ -256,6 +256,7 @@
           :initial-stories="userStories"
           :show-edit-buttons="true"
           :select-story="true"
+          :story-mode="userStoryMode"
           @userStoriesChanged="onUserStoriesChanged"
           @selectedStory="onSelectedStory($event)"
         />
@@ -279,6 +280,7 @@
           :initial-stories="userStories"
           :show-edit-buttons="true"
           :select-story="true"
+          :story-mode="userStoryMode"
           @userStoriesChanged="onUserStoriesChanged"
           @selectedStory="onSelectedStory($event)"
         />
@@ -306,52 +308,52 @@
       @hideModal="closeModal"
     />
     <b-row>
-      <b-col
-        v-if="!isMobile"
-        class="mt-5"
-        cols="10"
-      >
-          <b-badge
-            v-if="gptTitleResponse"
-            variant="info"
-            class="animated-badge"
-            @click="showGPTModal = true; gptMode = 'improveTitle'"
-          >
-            Suggestion <b-badge variant="light">1</b-badge>
-          </b-badge>
-          <user-story-descriptions
-            :card-set="voteSet"
-            :initial-stories="userStories"
-            :edit-description="true"
-            :index="index"
-            :gpt-description-response="gptDescriptionResponse"
-            @userStoriesChanged="onUserStoriesChanged"
-            @improveTitle="improveTitle"
-            @improveDescription="improveDescription"
-            @openDescriptionModal="showDescriptionModal"
-          />
-      </b-col>
-      <b-col
-        v-else
-        class="mt-5"
-        cols="12"
-      >
-        <b-badge
-          v-if="gptTitleResponse"
-          variant="info"
-          class="animated-badge"
-          @click="showGPTModal = true; gptMode = 'improveTitle'"
-        >
-          Suggestion <b-badge variant="light">1</b-badge>
-        </b-badge>
-        <user-story-descriptions
+      <b-col v-if="!isMobile" class="mt-5" cols="10">
+        <user-story-title
+          :alternate-title="alternateTitle"
+          :display-ai-option="gptTitleResponse"
+          :host="true"
+          :initial-stories="userStories"
           :card-set="voteSet"
+          :index="index"
+          @userStoriesChanged="onUserStoriesChanged"
+          @improveTitle="improveTitle"
+          @acceptTitle="acceptSuggestionTitle"
+          @adjustTitle="adjustOriginalTitle"
+          @retryTitle="retryImproveTitle"
+          @deleteTitle="deleteTitle"
+        />
+        <user-story-descriptions
           :initial-stories="userStories"
           :edit-description="true"
           :index="index"
           :gpt-description-response="gptDescriptionResponse"
           @userStoriesChanged="onUserStoriesChanged"
+          @improveDescription="improveDescription"
+          @openDescriptionModal="showDescriptionModal"
+        />
+      </b-col>
+      <b-col v-else class="mt-5" cols="12">
+        <user-story-title
+          alternate-title="alternateTitle"
+          display-ai-option="gptTitleResponse"
+          host="true"
+          initial-stories="userStories"
+          card-set="voteSet"
+          index="index"
+          @userStoriesChanged="onUserStoriesChanged"
           @improveTitle="improveTitle"
+          @acceptTitle="acceptSuggestionTitle"
+          @adjustTitle="adjustOriginalTitle"
+          @retryTitle="retryImproveTitle"
+          @deleteTitle="deleteTitle"
+        />
+        <user-story-descriptions
+          :initial-stories="userStories"
+          :edit-description="true"
+          :index="index"
+          :gpt-description-response="gptDescriptionResponse"
+          @userStoriesChanged="onUserStoriesChanged"
           @improveDescription="improveDescription"
           @openDescriptionModal="showDescriptionModal"
         />
@@ -382,10 +384,12 @@ import { useToast } from "vue-toastification";
 import { useI18n } from "vue-i18n";
 import SessionAdminCard from "@/components/SessionAdminCard.vue";
 import GptModal from "@/components/GptModal.vue";
+import UserStoryTitle from "@/components/UserStoryTitle.vue";
 
 export default defineComponent({
   name: "SessionPage",
   components: {
+    UserStoryTitle,
     GptModal,
     SessionStartButton,
     SessionCloseButton,
@@ -433,7 +437,6 @@ export default defineComponent({
       showGPTModal: false,
       gptMode: "",
       // needed for title + anti spam
-      savedUserStoryTitle: "",
       gptTitleResponse: false,
       alternateTitle: "",
       //needed for description + anti spam
@@ -787,22 +790,39 @@ export default defineComponent({
     async improveTitle({ userStory }) {
       const trimmedStoryTitle = userStory.title.trim();
       if (trimmedStoryTitle.length > 0) {
-        if (this.savedUserStoryTitle.length === 0) {
-          this.savedUserStoryTitle = trimmedStoryTitle;
-          const response = await apiService.improveTitle(userStory);
-          this.alternateTitle = response.data.improvedTitle;
-          this.gptTitleResponse = true;
-         // console.log("First Time! " + response);
-        } else if (this.savedUserStoryTitle !== trimmedStoryTitle) {
-          const response = await apiService.improveTitle(userStory);
-          this.alternateTitle = response.data.improvedTitle;
-          this.gptTitleResponse = true;
-        } // its the same title, so we do not need to send another request
+        const response = await apiService.improveTitle(userStory);
+        this.alternateTitle = response.data.improvedTitle;
+        this.gptTitleResponse = true;
       }
     },
-    acceptSuggestionTitle() {
-      this.userStories[this.index].title = this.alternateTitle;
-      this.onUserStoriesChanged({us: this.userStories, idx: this.index, doRemove: false});
+    acceptSuggestionTitle({ id }) {
+      this.userStories
+        .filter((us) => {
+          us.id !== id;
+        })
+        .map((us) => {
+          us.title = this.alternateTitle;
+        });
+      this.gptTitleResponse = false;
+      this.alternateTitle = "";
+      this.onUserStoriesChanged({ us: this.userStories, idx: this.index, doRemove: false });
+    },
+    adjustOriginalTitle() {
+      this.alternateTitle = "";
+      this.gptTitleResponse = false;
+    },
+    async retryImproveTitle({ id, originalTitle }) {
+      this.gptTitleResponse = false;
+      const userstory = this.userStories.find((us) => us.id === id);
+      if (userstory) {
+        const response = await apiService.retryImproveTitle(userstory, originalTitle);
+        this.alternateTitle = response.data.improvedTitle;
+        this.gptTitleResponse = true;
+      }
+    },
+    deleteTitle() {
+      this.alternateTitle = "";
+      this.gptTitleResponse = false;
     },
     async improveDescription({ userStory, description }) {
       console.log("Improve Description Session Page: ", description);
@@ -811,12 +831,14 @@ export default defineComponent({
         if (this.savedUserStoryDescription.length === 0) {
           this.savedUserStoryDescription = trimmedStoryDescription;
           const response = await apiService.improveDescription(userStory, trimmedStoryDescription);
-          this.alternateDescription = response.description +  response.acceptance_criteria.toString().replaceAll(",", "");
+          this.alternateDescription =
+            response.description + response.acceptance_criteria.toString().replaceAll(",", "");
           this.gptDescriptionResponse = true;
         } else if (this.savedUserStoryDescription !== trimmedStoryDescription) {
           const response = await apiService.improveDescription(userStory, trimmedStoryDescription);
           //this.alternateDescription = response.data.improved_description +  response.data.improved_acceptance_criteria;
-          this.alternateDescription = response.description +  response.acceptance_criteria.toString().replaceAll(",", "");
+          this.alternateDescription =
+            response.description + response.acceptance_criteria.toString().replaceAll(",", "");
           this.gptDescriptionResponse = true;
         } // its the same title, so we do not need to send another request
       }
@@ -828,29 +850,28 @@ export default defineComponent({
     acceptSuggestionDescription() {
       console.log("Accepting Description");
       this.userStories[this.index].description = this.alternateDescription;
-      this.onUserStoriesChanged({us: this.userStories, idx: this.index, doRemove: false});
+      this.onUserStoriesChanged({ us: this.userStories, idx: this.index, doRemove: false });
     },
     closeModal() {
       console.log("CLOSING MODAL: " + this.gptMode);
       this.showGPTModal = false;
       switch (this.gptMode) {
-        case 'improveTitle': {
+        case "improveTitle": {
           this.gptTitleResponse = false;
           break;
         }
-        case 'improveDescription':{
+        case "improveDescription": {
           this.gptDescriptionResponse = false;
           break;
         }
       }
-    }
+    },
   },
 });
 </script>
 
 <!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
 <style lang="scss" scoped>
-
 .animated-badge {
   animation: Shake 3s linear infinite; /* Increased duration to account for the pause */
   cursor: pointer;

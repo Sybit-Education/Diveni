@@ -122,6 +122,7 @@ export default defineComponent({
     showEstimations: { type: Boolean, required: true },
     showEditButtons: { type: Boolean, required: false, default: true },
     hostSelectedStoryIndex: { type: Number, required: false, default: null },
+    storyMode: { type: String, required: false, default: null },
   },
   setup() {
     const { t } = useI18n();
@@ -157,7 +158,7 @@ export default defineComponent({
     },
     addUserStory() {
       const story: UserStory = {
-        id: null,
+        id: this.storyMode === "US_JIRA" ? null : Math.floor(Math.random() * 2000000),
         title: "",
         description: "",
         estimation: null,
