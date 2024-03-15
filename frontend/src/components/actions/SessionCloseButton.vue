@@ -94,28 +94,4 @@ export default defineComponent({
   white-space: nowrap;
   max-height: 40px;
 }
-
-#picture-holderLeave {
-  width: 147px;
-  height: 65px;
-}
-
-#pandaPictureLeave {
-  position: absolute;
-  left: 60%;
-  height: 30px;
-  user-select: none;
-}
-
-.img-holderLeave {
-  position: relative;
-}
-
-.img-holderLeave .button {
-  position: absolute !important;
-  text-align: left;
-  max-height: 40px;
-  bottom: 0;
-  white-space: nowrap;
-}
 </style>

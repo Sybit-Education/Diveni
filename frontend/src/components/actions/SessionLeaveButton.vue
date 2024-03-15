@@ -45,3 +45,30 @@ export default defineComponent({
   },
 });
 </script>
+
+<!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
+<style lang="scss">
+#picture-holderLeave {
+  width: 147px;
+  height: 65px;
+}
+
+#pandaPictureLeave {
+  position: absolute;
+  left: 60%;
+  height: 30px;
+  user-select: none;
+}
+
+.img-holderLeave {
+  position: relative;
+}
+
+.img-holderLeave .button {
+  position: absolute !important;
+  text-align: left;
+  max-height: 40px;
+  bottom: 0;
+  white-space: nowrap;
+}
+</style>
