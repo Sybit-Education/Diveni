@@ -1,5 +1,5 @@
 <template>
-  <div class="markdown-editor">
+  <div class="markdown-editor position-relative">
     <editor
       v-if="!disabled"
       ref="toastuiEditor"
@@ -13,6 +13,35 @@
       @update:modelValue="$emit('textValueChanged', { markdown: $event })"
       @updateDescription="emitMarkdownText"
     />
+    <b-button
+      id="submitAIDescription"
+    >
+      <b-icon-stars id="aiStars" />
+    </b-button>
+    <b-popover
+      id='aiPopOver'
+      :show.sync="show"
+      target="submitAIDescription"
+      triggers="focus"
+      placement="right"
+    >
+      <template #default>
+        <div id="popoverBody">
+          <b-button
+            class="my-1 aiDescriptionButtons"
+            @click="console.log('Rechtschreibung'); show = !show;"
+          >
+            <b-icon-pencil/> Grammatic check
+          </b-button>
+          <b-button
+            class="my-1 aiDescriptionButtons"
+            @click="console.log('Improve Description'); show = !show"
+          >
+            <b-icon-lightbulb/> Improve Description
+          </b-button>
+        </div>
+      </template>
+    </b-popover>
   </div>
 </template>
 
@@ -78,6 +107,7 @@ export default defineComponent({
         plugins: [codeSyntaxHighlight],
       },
       theme: localStorage.getItem("user-theme"),
+      show: false,
     };
   },
   mounted() {
@@ -109,8 +139,9 @@ export default defineComponent({
 }
 
 .toastui-editor-defaultUI .ProseMirror {
-  background-color: var(--editor-defaultui-container-bg);
+  background-color: var(--text-field);
   font-size: 18px;
+  padding: 18px 60px 18px 25px;
 }
 
 .toastui-editor-contents ul > li::before {
@@ -129,9 +160,10 @@ export default defineComponent({
 
 .toastui-editor-md-container .toastui-editor-md-preview {
   overflow: auto;
-  padding: 0 25px;
+  overflow-wrap: break-word;
+  padding: 0 60px 0 25px;
   height: 100%;
-  background-color: var(--editor-defaultui-container-bg);
+  background-color: var(--text-field); /* var(--editor-defaultui-container-bg) */
 }
 
 .toastui-editor-mode-switch {
@@ -142,15 +174,11 @@ export default defineComponent({
   color: var(--text-primary-color) !important;
 }
 
-.lightMode .toastui-editor-defaultUI .ProseMirror {
-  background-color: var(--textAreaColour);
-}
 
 .lightMode .toastui-editor-md-container .toastui-editor-md-preview {
   overflow: auto;
   padding: 0 25px;
   height: 100%;
-  background-color: var(--textAreaColour);
 }
 
 .lightMode .toastui-editor-mode-switch {
@@ -164,5 +192,64 @@ export default defineComponent({
 .ProseMirror {
   height: 100%;
   color: var(--text-primary-color) !important;
+  z-index: 0;
 }
+/*AI FEATURE*/
+
+.aiDescriptionButtons {
+  border-style: solid !important;
+  border-color: transparent !important;
+  border-width: thin !important;
+  background-color: transparent !important;
+  color: black !important;
+
+  &:hover {
+    border-style: dashed !important;
+    border-color: black !important;
+  }
+  &:active {
+    border-style: dashed !important;
+    border-color: black !important;
+    background-color: transparent !important;
+    color: black !important;
+  }
+}
+
+#aiPopOver{
+  background-color: white;
+}
+
+#popoverBody {
+  display: inline-grid;
+}
+
+.test {
+  display: inline-grid !important;
+}
+
+#aiStars {
+  height: 2em;
+  width: 2em;
+}
+
+#submitAIDescription {
+  position: absolute;
+  right: 1vw;
+  top: 81%;
+  color: var(--ai-stars) !important;
+  background-color: transparent !important;
+  border-style: none;
+  animation: showUp 1s;
+  z-index: 2;
+}
+
+@keyframes showUp {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 </style>

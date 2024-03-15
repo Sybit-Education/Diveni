@@ -2,7 +2,7 @@
   <div>
     <div
       ref="editor"
-      v-debounce:5s="() => emit('updateDescription', { description: markdownText})"/>
+      v-debounce:1s="() => emit('updateDescription', { description: markdownText})"/>
   </div>
 </template>
 

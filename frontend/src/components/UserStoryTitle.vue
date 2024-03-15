@@ -216,6 +216,7 @@ export default defineComponent({
   background-color: white;
   border-radius: 0.5em;
   display: inline-flex;
+  animation: showUp 1s;
 }
 
 #aiStars {
@@ -226,13 +227,13 @@ export default defineComponent({
 #titleInputField {
   width: 100%;
   padding: 1em;
-  padding-right: 80px;
+  padding-right: 3em;
   border: 0;
   background-color: var(--text-field) !important;
 }
 #submitAI {
   position: absolute;
-  right: 1em;
+  right: 0.75em;
   bottom: 0;
   color: var(--ai-stars) !important;
   background-color: transparent !important;

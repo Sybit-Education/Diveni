@@ -308,7 +308,7 @@
       @hideModal="closeModal"
     />
     <b-row>
-      <b-col v-if="!isMobile" class="mt-5" cols="10">
+      <b-col v-if="!isMobile" class="my-5" cols="10">
         <user-story-title
           :alternate-title="alternateTitle"
           :display-ai-option="gptTitleResponse"
@@ -333,14 +333,14 @@
           @openDescriptionModal="showDescriptionModal"
         />
       </b-col>
-      <b-col v-else class="mt-5" cols="12">
+      <b-col v-else class="my-5" cols="12">
         <user-story-title
-          alternate-title="alternateTitle"
-          display-ai-option="gptTitleResponse"
-          host="true"
-          initial-stories="userStories"
-          card-set="voteSet"
-          index="index"
+          :alternate-title="alternateTitle"
+          :display-ai-option="gptTitleResponse"
+          :host="true"
+          :initial-stories="userStories"
+          :card-set="voteSet"
+          :index="index"
           @userStoriesChanged="onUserStoriesChanged"
           @improveTitle="improveTitle"
           @acceptTitle="acceptSuggestionTitle"
