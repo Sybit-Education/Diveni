@@ -23,13 +23,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class AiControllerTest {
 
-  @Autowired
-  private MockMvc mockMvc;
+  @Autowired private MockMvc mockMvc;
 
-  @MockBean
-  private AiService service;
+  @MockBean private AiService service;
 
-  private final String improvedDescription = "As a User i want a homepage. \n ##### Acceptance Criteria: \n";
+  private final String improvedDescription =
+      "As a User i want a homepage. \n ##### Acceptance Criteria: \n";
 
   private final String improvedAcceptanceCriteria = "* pictures \n, * navigation bar\n";
 
@@ -37,33 +36,44 @@ public class AiControllerTest {
   public void setUp() {
     UserStory userStory = new UserStory("1", "TEST", "TEST", "3", true);
 
-    Mockito.when(service.improveTitle(userStory)).thenReturn(new ResponseEntity<>("'improvedTitle': 'TEST'", HttpStatus.OK));
-    Mockito.when(service.improveDescription(userStory)).thenReturn(new ResponseEntity<>("{ 'improved_description': '" + improvedDescription + "', 'improved_acceptance_criteria': '" + improvedAcceptanceCriteria +"'}", HttpStatus.OK));
+    Mockito.when(service.improveTitle(userStory))
+        .thenReturn(new ResponseEntity<>("'improvedTitle': 'TEST'", HttpStatus.OK));
+    Mockito.when(service.improveDescription(userStory))
+        .thenReturn(
+            new ResponseEntity<>(
+                "{ 'improved_description': '"
+                    + improvedDescription
+                    + "', 'improved_acceptance_criteria': '"
+                    + improvedAcceptanceCriteria
+                    + "'}",
+                HttpStatus.OK));
   }
-
 
   @Test
   public void getTitle_valid_statusOKandContainsTitle() throws Exception {
     UserStory userStory = new UserStory("1", "TEST", "TEST", "3", true);
 
     this.mockMvc
-      .perform(post("/ai/improve-title")
-      .contentType(MediaType.APPLICATION_JSON)
-      .content(new Gson().toJson(userStory)))
-      .andExpect(status().isOk())
-      .andExpect(content().string(containsString("improvedTitle")));
+        .perform(
+            post("/ai/improve-title")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new Gson().toJson(userStory)))
+        .andExpect(status().isOk())
+        .andExpect(content().string(containsString("improvedTitle")));
   }
 
   @Test
-  public void getDescription_valid_statusOKandContainsDescriptionAndAcceptanceCriteria() throws Exception {
+  public void getDescription_valid_statusOKandContainsDescriptionAndAcceptanceCriteria()
+      throws Exception {
     UserStory userStory = new UserStory("1", "TEST", "TEST", "3", true);
 
     this.mockMvc
-      .perform(post("/ai/improve-description")
-        .contentType(MediaType.APPLICATION_JSON)
-        .content(new Gson().toJson(userStory)))
-      .andExpect(status().isOk())
-      .andExpect(content().string(containsString("'improved_description'")))
-      .andExpect(content().string(containsString("'improved_acceptance_criteria'")));
+        .perform(
+            post("/ai/improve-description")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new Gson().toJson(userStory)))
+        .andExpect(status().isOk())
+        .andExpect(content().string(containsString("'improved_description'")))
+        .andExpect(content().string(containsString("'improved_acceptance_criteria'")));
   }
 }
