@@ -197,18 +197,16 @@ export default defineComponent({
 }
 
 .aiOptionButtons {
-  border-style: solid;
-  border-width: thin;
-  border-color: transparent;
+  border: none !important;
   border-radius: 0 !important;
   background-color: transparent !important;
   color: black !important;
+  transition: color 0.3s linear !important;
 
   &:hover {
     background-color: transparent !important;
-    border-style: dashed;
-    border-color: black;
-    border-width: thin;
+    color: var(--ai-stars) !important;
+    border-radius: 1em !important;
   }
 }
 

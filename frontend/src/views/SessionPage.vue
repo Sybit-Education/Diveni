@@ -300,11 +300,11 @@
     </b-row>
     <GptModal
       v-if="showGPTModal"
-      :suggestion-title="alternateTitle"
       :suggestion-description="alternateDescription"
-      :mode="gptMode"
-      @acceptSuggestionTitle="acceptSuggestionTitle"
+      :gpt-mode="descriptionMode"
+      :retry-repaint="updateComponent"
       @acceptSuggestionDescription="acceptSuggestionDescription"
+      @retry="retrySuggestionDescription"
       @hideModal="closeModal"
     />
     <b-row>
@@ -328,9 +328,10 @@
           :edit-description="true"
           :index="index"
           :gpt-description-response="gptDescriptionResponse"
+          :update-component="updateComponent"
+          :accepted-stories="acceptedStoriesDescription"
           @userStoriesChanged="onUserStoriesChanged"
-          @improveDescription="improveDescription"
-          @openDescriptionModal="showDescriptionModal"
+          @sendGPTDescriptionRequest="improveDescription"
         />
       </b-col>
       <b-col v-else class="my-5" cols="12">
@@ -353,9 +354,9 @@
           :edit-description="true"
           :index="index"
           :gpt-description-response="gptDescriptionResponse"
+          :update-component="updateComponent"
           @userStoriesChanged="onUserStoriesChanged"
-          @improveDescription="improveDescription"
-          @openDescriptionModal="showDescriptionModal"
+          @sendGPTDescriptionRequest="improveDescription"
         />
       </b-col>
     </b-row>
@@ -442,7 +443,12 @@ export default defineComponent({
       //needed for description + anti spam
       gptDescriptionResponse: false,
       alternateDescription: "",
-      savedUserStoryDescription: "",
+      descriptionMode: "",
+      updateComponent: false,
+      acceptedStoriesDescription: [] as Array<{
+        storyID: number | null,
+        issueType: string,
+      }>,
     };
   },
   computed: {
@@ -824,47 +830,36 @@ export default defineComponent({
       this.alternateTitle = "";
       this.gptTitleResponse = false;
     },
-    async improveDescription({ userStory, description }) {
-      console.log("Improve Description Session Page: ", description);
-      const trimmedStoryDescription = description.trim();
-      if (trimmedStoryDescription.length > 0) {
-        if (this.savedUserStoryDescription.length === 0) {
-          this.savedUserStoryDescription = trimmedStoryDescription;
-          const response = await apiService.improveDescription(userStory, trimmedStoryDescription);
-          this.alternateDescription =
-            response.description + response.acceptance_criteria.toString().replaceAll(",", "");
-          this.gptDescriptionResponse = true;
-        } else if (this.savedUserStoryDescription !== trimmedStoryDescription) {
-          const response = await apiService.improveDescription(userStory, trimmedStoryDescription);
-          //this.alternateDescription = response.data.improved_description +  response.data.improved_acceptance_criteria;
-          this.alternateDescription =
-            response.description + response.acceptance_criteria.toString().replaceAll(",", "");
-          this.gptDescriptionResponse = true;
-        } // its the same title, so we do not need to send another request
+    async improveDescription({ userStory, description, issue }) {
+      if (issue === 'improveDescription') {
+        const response = await apiService.improveDescription(userStory, description);
+        this.alternateDescription =
+          response.description + response.acceptance_criteria.toString().replaceAll(",", "");
+      } else {
+        const response = await apiService.grammarCheck(userStory, description);
+        this.alternateDescription = response.description;
       }
-    },
-    showDescriptionModal() {
+      this.descriptionMode = issue;
+      this.gptDescriptionResponse = true;
       this.showGPTModal = true;
-      this.gptMode = "improveDescription";
     },
-    acceptSuggestionDescription() {
-      console.log("Accepting Description");
-      this.userStories[this.index].description = this.alternateDescription;
+    acceptSuggestionDescription({ description, originalText }) {
+      if (originalText) {
+        this.userStories[this.index].description = this.alternateDescription;
+      } else {
+        this.userStories[this.index].description = description;
+      }
       this.onUserStoriesChanged({ us: this.userStories, idx: this.index, doRemove: false });
+      this.updateComponent = !this.updateComponent;
+      this.acceptedStoriesDescription.push({ storyID: this.userStories[this.index].id, issueType: this.descriptionMode})
+    },
+    async retrySuggestionDescription() {
+      await this.improveDescription({userStory: this.userStories[this.index],description: this.userStories[this.index].description, issue: this. descriptionMode});
+      this.updateComponent = !this.updateComponent;
     },
     closeModal() {
-      console.log("CLOSING MODAL: " + this.gptMode);
       this.showGPTModal = false;
-      switch (this.gptMode) {
-        case "improveTitle": {
-          this.gptTitleResponse = false;
-          break;
-        }
-        case "improveDescription": {
-          this.gptDescriptionResponse = false;
-          break;
-        }
-      }
+      this.gptDescriptionResponse = false;
     },
   },
 });

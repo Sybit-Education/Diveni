@@ -11,37 +11,41 @@
       preview-style="vertical"
       :class="theme === 'light' ? 'lightMode' : 'darkMode'"
       @update:modelValue="$emit('textValueChanged', { markdown: $event })"
-      @updateDescription="emitMarkdownText"
+      @stillTyping="aiButtonVisible = false"
+      @stoppedTyping="showAiButton"
     />
     <b-button
       id="submitAIDescription"
+      v-show="aiButtonVisible && currentText !== ''"
+      @click="showPopOver = !showPopOver;"
     >
       <b-icon-stars id="aiStars" />
     </b-button>
-    <b-popover
+
+    <div
+      v-if="showPopOver"
       id='aiPopOver'
-      :show.sync="show"
-      target="submitAIDescription"
-      triggers="focus"
-      placement="right"
     >
-      <template #default>
-        <div id="popoverBody">
-          <b-button
-            class="my-1 aiDescriptionButtons"
-            @click="console.log('Rechtschreibung'); show = !show;"
-          >
-            <b-icon-pencil/> Grammatic check
-          </b-button>
-          <b-button
-            class="my-1 aiDescriptionButtons"
-            @click="console.log('Improve Description'); show = !show"
-          >
-            <b-icon-lightbulb/> Improve Description
-          </b-button>
-        </div>
-      </template>
-    </b-popover>
+      <div id="popoverBody">
+        <b-button
+          v-if="foundGrammar"
+          class="my-1 aiDescriptionButtons"
+          @click="aiButtonClicked('grammar')"
+        >
+          <b-icon-pencil/> Grammar check
+        </b-button>
+        <b-button
+          v-if="foundDescription"
+          class="my-1 aiDescriptionButtons"
+          @click="aiButtonClicked('improveDescription')"
+        >
+          <b-icon-lightbulb/> Improve Description
+        </b-button>
+      </div>
+    </div>
+    <div
+      v-if="showPopOver"
+      class="triangle-down"/>
   </div>
 </template>
 
@@ -52,9 +56,10 @@ import "@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin
 
 import "@toast-ui/editor/dist/i18n/de-de";
 
-import { defineComponent } from "vue";
+import {customRef, defineComponent} from "vue";
 import codeSyntaxHighlight from "@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin-code-syntax-highlight-all";
 import UiToastEditorWrapper from "@/components/UiToastEditorWrapper.vue";
+import { PropType } from "vue";
 
 export default defineComponent({
   name: "MarkdownEditor",
@@ -83,6 +88,16 @@ export default defineComponent({
       type: String,
       default: "",
     },
+    currentStoryID: {
+      type: [Number, null] as PropType<number | null>,
+      required: false,
+      default: null
+    },
+    acceptedStories: {
+      type: Array<{ storyID: number | null, issueType: string }>,
+      required: false,
+      default: []
+    },
   },
   data() {
     return {
@@ -107,7 +122,11 @@ export default defineComponent({
         plugins: [codeSyntaxHighlight],
       },
       theme: localStorage.getItem("user-theme"),
-      show: false,
+      showPopOver: false,
+      aiButtonVisible: false,
+      currentText: "",
+      foundDescription: false,
+      foundGrammar: false,
     };
   },
   mounted() {
@@ -117,9 +136,19 @@ export default defineComponent({
     });
   },
   methods: {
-    emitMarkdownText({description}) {
-      console.log("Markdown: " + description);
-      this.$emit("improveDescription", {description: description});
+    customRef,
+    showAiButton({description}) {
+      if (description.trim().length > 0) { // hier vielleicht eher überprüfen ob String Text oder Zahlen beinhaltet
+        this.currentText = description;
+        this.foundDescription = !this.acceptedStories.find(us => us.storyID === this.currentStoryID && us.issueType === 'improveDescription');
+        this.foundGrammar = !this.acceptedStories.find(us => us.storyID === this.currentStoryID && us.issueType === 'grammar');
+        this.aiButtonVisible = this.foundDescription || this.foundGrammar;
+      }
+    },
+    aiButtonClicked(issue) {
+      this.showPopOver = false;
+      this.aiButtonVisible = false;
+      this.$emit("sendGPTDescriptionRequest", {description: this.currentText, issue: issue});
     }
   },
 });
@@ -172,6 +201,7 @@ export default defineComponent({
 
 .toastui-editor-contents p {
   color: var(--text-primary-color) !important;
+  font-size: large;
 }
 
 
@@ -197,34 +227,40 @@ export default defineComponent({
 /*AI FEATURE*/
 
 .aiDescriptionButtons {
-  border-style: solid !important;
-  border-color: transparent !important;
-  border-width: thin !important;
+  border: none !important;
+  border-radius: 0 !important;
   background-color: transparent !important;
   color: black !important;
+  transition: color 0.3s linear !important;
 
   &:hover {
-    border-style: dashed !important;
-    border-color: black !important;
-  }
-  &:active {
-    border-style: dashed !important;
-    border-color: black !important;
     background-color: transparent !important;
-    color: black !important;
+    color: var(--ai-stars) !important;
+    border-radius: 1em !important;
   }
 }
 
 #aiPopOver{
   background-color: white;
+  position: absolute;
+  border: 3px solid black;
+  right: 2.5em;
+  bottom: 6.5em;
+}
+
+.triangle-down {
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 10px solid black;
+  position: absolute;
+  right: 2.45em;
+  bottom: 5.9em;
 }
 
 #popoverBody {
   display: inline-grid;
-}
-
-.test {
-  display: inline-grid !important;
 }
 
 #aiStars {
@@ -240,7 +276,7 @@ export default defineComponent({
   background-color: transparent !important;
   border-style: none;
   animation: showUp 1s;
-  z-index: 2;
+  z-index: 2000;
 }
 
 @keyframes showUp {

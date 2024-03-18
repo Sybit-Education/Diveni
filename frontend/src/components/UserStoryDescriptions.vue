@@ -8,36 +8,28 @@
       variant="outline-secondary"
     >
       <div>
-        <b-badge
-          v-if="gptDescriptionResponse"
-          variant="info"
-          class="animated-badge"
-          @click="openModal"
-        >
-          Suggestion <b-badge variant="light">1</b-badge>
-        </b-badge>
         <markdown-editor
           id="textarea-auto-height"
-          :key="userStories[idx].description"
           v-model="userStories[idx].description"
           class="my-2"
           :disabled="!editDescription"
           :placeholder="t('page.session.before.userStories.placeholder.userStoryDescription')"
-          :markdown="'test'"
+          :accepted-stories="acceptedStories"
+          :current-story-i-d="userStories[idx].id"
+          :key="updateComponent"
           @textValueChanged="(event) => valueChanged(idx, event)"
-          @improveDescription="sendGPTDescription"
+          @sendGPTDescriptionRequest="sendGPTDescriptionRequest"
         />
       </div>
       <div v-if="!editDescription">
         <markdown-editor
           id="textarea-auto-height"
-          :key="userStories[idx].description"
           v-model="userStories[idx].description"
           class="my-2 noneClickable"
           :placeholder="t('page.session.before.userStories.placeholder.userStoryDescription')"
-          :markdown="'test'"
+          :key="updateComponent"
           @textValueChanged="(event) => valueChanged(idx, event)"
-          @improveDescription="sendGPTDescription"
+          @sendGPTDescriptionRequest="sendGPTDescriptionRequest"
         />
       </div>
     </b-list-group-item>
@@ -63,6 +55,8 @@ export default defineComponent({
     initialStories: { type: Array, required: true },
     editDescription: { type: Boolean, required: true, default: false },
     gptDescriptionResponse: { type: Boolean, required: false, default: false },
+    updateComponent: { type: Boolean, required: false, default: false },
+    acceptedStories: { type: Array<{ storyID: number | null, issueType: string }>, required: false, default: []}
   },
   setup() {
     const { t } = useI18n();
@@ -71,23 +65,18 @@ export default defineComponent({
   data() {
     return {
       userStories: [] as Array<{
-        id: string | null;
+        id: number | null;
         title: string;
         description: string;
         estimation: string | null;
         isActive: boolean;
       }>,
-      showImproveTitleButton: false,
-      savedTitle: "",
-      oldTitleHolder: "",
-      requestedUserStoryID: "" as string | null,
-      acceptedUserStoriesID: [] as Array<string | null>,
     };
   },
   watch: {
     initialStories() {
       this.userStories = this.initialStories as Array<{
-        id: string | null;
+        id: number | null;
         title: string;
         description: string;
         estimation: string | null;
@@ -97,7 +86,7 @@ export default defineComponent({
   },
   created() {
     this.userStories = this.initialStories as Array<{
-      id: string | null;
+      id: number | null;
       title: string;
       description: string;
       estimation: string | null;
@@ -112,15 +101,12 @@ export default defineComponent({
     publishChanges(idx) {
       this.$emit("userStoriesChanged", { us: this.userStories, idx: idx, doRemove: false });
     },
-    sendGPTDescription({ description }) {
-      console.log("GPT will be improving your User Story Description ", description);
-      this.$emit("improveDescription", {
+    sendGPTDescriptionRequest({ description, issue }) {
+      this.$emit("sendGPTDescriptionRequest", {
         userStory: this.userStories[this.index],
         description: description,
+        issue: issue
       });
-    },
-    openModal() {
-      this.$emit("openDescriptionModal");
     },
   },
 });
