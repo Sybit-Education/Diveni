@@ -33,6 +33,11 @@
           >
             <b-icon-stars id="aiStars" />
           </b-button>
+          <b-spinner
+            v-if="showSpinner && !displayAiOption"
+          >
+
+          </b-spinner>
           <div v-if="displayAiOption" id="aiOptions" class="text-center mt-1">
             <b-button id="acceptAIOption" class="m-1" @click="acceptGptTitle">
               <b-icon-check2 />
@@ -110,6 +115,7 @@ export default defineComponent({
       oldTitleHolder: "",
       requestedUserStoryID: "" as string | null,
       acceptedUserStoriesID: [] as Array<string | null>,
+      showSpinner: false,
     };
   },
   watch: {
@@ -154,11 +160,13 @@ export default defineComponent({
       }
     },
     sendGptTitle() {
+      this.showSpinner = true;
       this.showImproveTitleButton = false;
       this.requestedUserStoryID = this.userStories[this.index].id;
       this.$emit("improveTitle", { userStory: this.userStories[this.index] });
     },
     acceptGptTitle() {
+      this.showSpinner = false;
       this.savedTitle = "";
       this.oldTitleHolder = "";
       this.showImproveTitleButton = false;
@@ -166,11 +174,13 @@ export default defineComponent({
       this.$emit("acceptTitle", { userStory: this.requestedUserStoryID });
     },
     adjustTitle() {
+      this.showSpinner = false;
       this.userStories[this.index].title = this.oldTitleHolder;
       this.showImproveTitleButton = false;
       this.$emit("adjustTitle");
     },
     retryTitle() {
+      this.showSpinner = true;
       this.showImproveTitleButton = false;
       this.$emit("retryTitle", {
         id: this.requestedUserStoryID,
@@ -178,6 +188,7 @@ export default defineComponent({
       });
     },
     deleteTitle() {
+      this.showSpinner = false;
       this.oldTitleHolder = "";
       this.showImproveTitleButton = false;
       this.userStories

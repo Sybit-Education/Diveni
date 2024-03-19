@@ -27,17 +27,15 @@ public class AiControllerTest {
 
   @MockBean private AiService service;
 
-  private final String improvedDescription =
-      "As a User i want a homepage. \n ##### Acceptance Criteria: \n";
-
-  private final String improvedAcceptanceCriteria = "* pictures \n, * navigation bar\n";
-
   @BeforeEach
   public void setUp() {
     UserStory userStory = new UserStory("1", "TEST", "TEST", "3", true);
-
+    // improve Title
     Mockito.when(service.improveTitle(userStory))
         .thenReturn(new ResponseEntity<>("'improvedTitle': 'TEST'", HttpStatus.OK));
+    // improve Description
+    String improvedAcceptanceCriteria = "* pictures \n, * navigation bar\n";
+    String improvedDescription = "As a User i want a homepage. \n ##### Acceptance Criteria: \n";
     Mockito.when(service.improveDescription(userStory))
         .thenReturn(
             new ResponseEntity<>(
@@ -47,10 +45,14 @@ public class AiControllerTest {
                     + improvedAcceptanceCriteria
                     + "'}",
                 HttpStatus.OK));
+    // grammar check
+    String correctedDescription = "As a backend developer, I want to establish websocket communication between the server and client," +
+      " so that real-time data can be transmitted and received.";
+    Mockito.when(service.grammarCheck(userStory)).thenReturn(new ResponseEntity<>("{ 'improved_description': '" + correctedDescription + "'}", HttpStatus.OK));
   }
 
   @Test
-  public void getTitle_valid_statusOKandContainsTitle() throws Exception {
+  public void getTitle_valid_statusOKAndContainsTitle() throws Exception {
     UserStory userStory = new UserStory("1", "TEST", "TEST", "3", true);
 
     this.mockMvc
@@ -63,7 +65,7 @@ public class AiControllerTest {
   }
 
   @Test
-  public void getDescription_valid_statusOKandContainsDescriptionAndAcceptanceCriteria()
+  public void getDescription_valid_statusOKAndContainsDescriptionAndAcceptanceCriteria()
       throws Exception {
     UserStory userStory = new UserStory("1", "TEST", "TEST", "3", true);
 
@@ -75,5 +77,19 @@ public class AiControllerTest {
         .andExpect(status().isOk())
         .andExpect(content().string(containsString("'improved_description'")))
         .andExpect(content().string(containsString("'improved_acceptance_criteria'")));
+  }
+
+  @Test
+  public void grammarCheck_valid_statusOKAndContainsDescription()
+    throws Exception {
+    UserStory userStory = new UserStory("1", "TEST", "TEST", "3", true);
+
+    this.mockMvc
+      .perform(
+        post("/ai/grammar-check")
+          .contentType(MediaType.APPLICATION_JSON)
+          .content(new Gson().toJson(userStory)))
+      .andExpect(status().isOk())
+      .andExpect(content().string(containsString("'improved_description'")));
   }
 }

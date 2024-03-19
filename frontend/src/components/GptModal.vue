@@ -15,7 +15,14 @@
       <div
         id="b-modal-body"
       >
+        <b-spinner
+          v-if="showSpinner"
+          variant="primary"
+          class="position-absolute centerSpinner"
+        />
         <UiToastEditorWrapper
+          v-if="!showSpinner"
+          style="color: greenyellow !important;"
           :key="repaint"
           :initial-value="suggestionDescription"
           :none-clickable="!clickable"
@@ -69,9 +76,9 @@ export default defineComponent({
       showOtherOptionButtons: true,
       editText: "",
       repaint: false,
+      showSpinner: false,
     }
   },
-
   props: {
     suggestionDescription: { type: String, required: true},
     gptMode: { type: String, required: true },
@@ -79,6 +86,7 @@ export default defineComponent({
   },
   watch: {
     retryRepaint() {
+      this.showSpinner = false;
       this.repaint = !this.repaint;
     }
   },
@@ -97,6 +105,7 @@ export default defineComponent({
     },
     retryDescription() {
       console.log("RETRY");
+      this.showSpinner = true;
       this.$emit("retry");
     },
     deleteDescription() {
@@ -122,13 +131,22 @@ export default defineComponent({
 
 <style lang="scss">
 
+.centerSpinner {
+  left: 0;
+  right: 0%;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  z-index: 3;
+}
+
 #b-modal-body {
-  max-height: 500px;
+  height: 500px;
   overflow: auto;
 }
 
 .modal-content {
-  background-color: white !important;
+  background-color: var(--b-modal-background) !important;
   color: black !important;
 }
 
@@ -136,6 +154,7 @@ export default defineComponent({
   text-align: center !important;
   display: block !important;
   font-size: x-large !important;
+  color: var(--text-primary-color)
 }
 
 .modal-body {
@@ -157,8 +176,6 @@ export default defineComponent({
   border: none !important;
   border-radius: 0 !important;
   background-color: transparent !important;
-  color: black !important;
-
   transition: color 0.3s linear !important;
 
   &:hover {
@@ -169,7 +186,7 @@ export default defineComponent({
 }
 
 #aiOptions {
-  background-color: white;
+  background-color: var(--b-modal-background);
   border-radius: 0.5em;
   display: inline-flex;
   animation: showUp 1s;

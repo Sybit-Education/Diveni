@@ -184,15 +184,15 @@ class ApiService {
       estimation: userStory.estimation,
       isActive: userStory.isActive,
     });
-
     return {
       description: response.data.improved_description,
       acceptance_criteria: response.data.improved_acceptance_criteria,
     };
+
   }
   public async grammarCheck(userStory: UserStory, description: string) {
 
-    const response = await axios.post(`${constants.backendURL}/ai/improve-description`, {
+    const response = await axios.post(`${constants.backendURL}/ai/grammar-check`, {
       id: userStory.id,
       title: userStory.title,
       description: description,

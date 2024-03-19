@@ -200,7 +200,7 @@ export default defineComponent({
 }
 
 .toastui-editor-contents p {
-  color: var(--text-primary-color) !important;
+  color: var(--text-primary-color);
   font-size: large;
 }
 

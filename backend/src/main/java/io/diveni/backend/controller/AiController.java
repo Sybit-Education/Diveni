@@ -33,4 +33,12 @@ public class AiController {
     LOGGER.debug("<-- improveDescription()");
     return response;
   }
+
+  @PostMapping("/grammar-check")
+  public ResponseEntity<String> grammarCheck(@RequestBody UserStory userStory) {
+    LOGGER.debug("--> grammarCheck(), userStory={}", userStory);
+    ResponseEntity<String> response = aiService.grammarCheck(userStory);
+    LOGGER.debug("<-- grammarCheck()");
+    return response;
+  }
 }

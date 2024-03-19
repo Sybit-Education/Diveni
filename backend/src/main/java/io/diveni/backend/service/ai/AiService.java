@@ -60,4 +60,16 @@ public class AiService {
     LOGGER.debug("<-- improveDescription()");
     return response;
   }
+
+  public ResponseEntity<String> grammarCheck(UserStory userStory) {
+    LOGGER.debug("--> grammarCheck()");
+    Map<String, String> content = new HashMap<>();
+    content.put("title", userStory.getTitle());
+    content.put("description", userStory.getDescription());
+    ResponseEntity<String> response =
+      executeRequest(aiUrl + "/grammar-check", HttpMethod.POST, new Gson().toJson(content));
+    LOGGER.debug("<-- grammarCheck()");
+    return response;
+  }
 }
+

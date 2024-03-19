@@ -298,6 +298,11 @@
         </div>
       </b-col>
     </b-row>
+    <b-spinner
+      v-if="showSpinner"
+      variant="primary"
+      class="position-absolute centerSpinner"
+      />
     <GptModal
       v-if="showGPTModal"
       :suggestion-description="alternateDescription"
@@ -449,6 +454,7 @@ export default defineComponent({
         storyID: number | null,
         issueType: string,
       }>,
+      showSpinner: false,
     };
   },
   computed: {
@@ -831,6 +837,7 @@ export default defineComponent({
       this.gptTitleResponse = false;
     },
     async improveDescription({ userStory, description, issue }) {
+      this.showSpinner = true;
       if (issue === 'improveDescription') {
         const response = await apiService.improveDescription(userStory, description);
         this.alternateDescription =
@@ -841,6 +848,7 @@ export default defineComponent({
       }
       this.descriptionMode = issue;
       this.gptDescriptionResponse = true;
+      this.showSpinner = false;
       this.showGPTModal = true;
     },
     acceptSuggestionDescription({ description, originalText }) {
@@ -867,31 +875,13 @@ export default defineComponent({
 
 <!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
 <style lang="scss" scoped>
-.animated-badge {
-  animation: Shake 3s linear infinite; /* Increased duration to account for the pause */
-  cursor: pointer;
-}
-
-@keyframes Shake {
-  0% {
-    transform: rotate(5deg);
-  }
-
-  25% {
-    transform: rotate(-6deg);
-  }
-
-  50% {
-    transform: rotate(5deg);
-  }
-
-  75% {
-    transform: rotate(-6deg);
-  }
-
-  100% {
-    transform: rotate(5deg);
-  }
+.centerSpinner {
+  left: 0;
+  right: 10%;
+  top: 57%;
+  bottom: 0;
+  margin: auto;
+  z-index: 3;
 }
 
 .spaceBetweenAvatar {
