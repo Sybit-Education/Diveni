@@ -46,9 +46,13 @@ public class AiControllerTest {
                     + "'}",
                 HttpStatus.OK));
     // grammar check
-    String correctedDescription = "As a backend developer, I want to establish websocket communication between the server and client," +
-      " so that real-time data can be transmitted and received.";
-    Mockito.when(service.grammarCheck(userStory)).thenReturn(new ResponseEntity<>("{ 'improved_description': '" + correctedDescription + "'}", HttpStatus.OK));
+    String correctedDescription =
+        "As a backend developer, I want to establish websocket communication between the server and"
+            + " client, so that real-time data can be transmitted and received.";
+    Mockito.when(service.grammarCheck(userStory))
+        .thenReturn(
+            new ResponseEntity<>(
+                "{ 'improved_description': '" + correctedDescription + "'}", HttpStatus.OK));
   }
 
   @Test
@@ -80,16 +84,15 @@ public class AiControllerTest {
   }
 
   @Test
-  public void grammarCheck_valid_statusOKAndContainsDescription()
-    throws Exception {
+  public void grammarCheck_valid_statusOKAndContainsDescription() throws Exception {
     UserStory userStory = new UserStory("1", "TEST", "TEST", "3", true);
 
     this.mockMvc
-      .perform(
-        post("/ai/grammar-check")
-          .contentType(MediaType.APPLICATION_JSON)
-          .content(new Gson().toJson(userStory)))
-      .andExpect(status().isOk())
-      .andExpect(content().string(containsString("'improved_description'")));
+        .perform(
+            post("/ai/grammar-check")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new Gson().toJson(userStory)))
+        .andExpect(status().isOk())
+        .andExpect(content().string(containsString("'improved_description'")));
   }
 }

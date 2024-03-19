@@ -67,9 +67,8 @@ public class AiService {
     content.put("title", userStory.getTitle());
     content.put("description", userStory.getDescription());
     ResponseEntity<String> response =
-      executeRequest(aiUrl + "/grammar-check", HttpMethod.POST, new Gson().toJson(content));
+        executeRequest(aiUrl + "/grammar-check", HttpMethod.POST, new Gson().toJson(content));
     LOGGER.debug("<-- grammarCheck()");
     return response;
   }
 }
-
