@@ -117,12 +117,12 @@ a {
 }
 
 .btn-secondary {
-  background-color: var(--secondary-button) !important;
+  background-color: var(--secondary-button);
   border-width: 2px;
   border-color: var(--btn-border-color);
 
   &:hover {
-    background-color: var(--secondary-button-hovered) !important;
+    background-color: var(--secondary-button-hovered);
     border-color: var(--btn-border-color);
   }
 

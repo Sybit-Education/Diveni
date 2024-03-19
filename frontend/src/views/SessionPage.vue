@@ -256,6 +256,7 @@
           :initial-stories="userStories"
           :show-edit-buttons="true"
           :select-story="true"
+          :story-mode="userStoryMode"
           @userStoriesChanged="onUserStoriesChanged"
           @selectedStory="onSelectedStory($event)"
         />
@@ -279,6 +280,7 @@
           :initial-stories="userStories"
           :show-edit-buttons="true"
           :select-story="true"
+          :story-mode="userStoryMode"
           @userStoriesChanged="onUserStoriesChanged"
           @selectedStory="onSelectedStory($event)"
         />
@@ -296,23 +298,70 @@
         </div>
       </b-col>
     </b-row>
+    <b-spinner
+      v-if="showSpinner"
+      variant="primary"
+      class="position-absolute centerSpinner"
+      />
+    <GptModal
+      v-if="showGPTModal"
+      :suggestion-description="alternateDescription"
+      :gpt-mode="descriptionMode"
+      :retry-repaint="updateComponent"
+      @acceptSuggestionDescription="acceptSuggestionDescription"
+      @retry="retrySuggestionDescription"
+      @hideModal="closeModal"
+    />
     <b-row>
-      <b-col v-if="!isMobile" cols="10">
-        <user-story-descriptions
+      <b-col v-if="!isMobile" class="my-5" cols="10">
+        <user-story-title
+          :alternate-title="alternateTitle"
+          :display-ai-option="gptTitleResponse"
+          :host="true"
+          :initial-stories="userStories"
           :card-set="voteSet"
+          :index="index"
+          @userStoriesChanged="onUserStoriesChanged"
+          @improveTitle="improveTitle"
+          @acceptTitle="acceptSuggestionTitle"
+          @adjustTitle="adjustOriginalTitle"
+          @retryTitle="retryImproveTitle"
+          @deleteTitle="deleteTitle"
+        />
+        <user-story-descriptions
           :initial-stories="userStories"
           :edit-description="true"
           :index="index"
+          :gpt-description-response="gptDescriptionResponse"
+          :update-component="updateComponent"
+          :accepted-stories="acceptedStoriesDescription"
           @userStoriesChanged="onUserStoriesChanged"
+          @sendGPTDescriptionRequest="improveDescription"
         />
       </b-col>
-      <b-col v-else cols="12">
-        <user-story-descriptions
+      <b-col v-else class="my-5" cols="12">
+        <user-story-title
+          :alternate-title="alternateTitle"
+          :display-ai-option="gptTitleResponse"
+          :host="true"
+          :initial-stories="userStories"
           :card-set="voteSet"
+          :index="index"
+          @userStoriesChanged="onUserStoriesChanged"
+          @improveTitle="improveTitle"
+          @acceptTitle="acceptSuggestionTitle"
+          @adjustTitle="adjustOriginalTitle"
+          @retryTitle="retryImproveTitle"
+          @deleteTitle="deleteTitle"
+        />
+        <user-story-descriptions
           :initial-stories="userStories"
           :edit-description="true"
           :index="index"
+          :gpt-description-response="gptDescriptionResponse"
+          :update-component="updateComponent"
           @userStoriesChanged="onUserStoriesChanged"
+          @sendGPTDescriptionRequest="improveDescription"
         />
       </b-col>
     </b-row>
@@ -340,10 +389,14 @@ import { useDiveniStore } from "@/store";
 import { useToast } from "vue-toastification";
 import { useI18n } from "vue-i18n";
 import SessionAdminCard from "@/components/SessionAdminCard.vue";
+import GptModal from "@/components/GptModal.vue";
+import UserStoryTitle from "@/components/UserStoryTitle.vue";
 
 export default defineComponent({
   name: "SessionPage",
   components: {
+    UserStoryTitle,
+    GptModal,
     SessionStartButton,
     SessionCloseButton,
     KickUserWrapper,
@@ -385,6 +438,23 @@ export default defineComponent({
       session: {},
       hostEstimation: "",
       autoReveal: false,
+
+      //generell needed for GPT usage
+      showGPTModal: false,
+      gptMode: "",
+      // needed for title + anti spam
+      gptTitleResponse: false,
+      alternateTitle: "",
+      //needed for description + anti spam
+      gptDescriptionResponse: false,
+      alternateDescription: "",
+      descriptionMode: "",
+      updateComponent: false,
+      acceptedStoriesDescription: [] as Array<{
+        storyID: number | null,
+        issueType: string,
+      }>,
+      showSpinner: false,
     };
   },
   computed: {
@@ -729,12 +799,90 @@ export default defineComponent({
         })
       );
     },
+    async improveTitle({ userStory }) {
+      const trimmedStoryTitle = userStory.title.trim();
+      if (trimmedStoryTitle.length > 0) {
+        const response = await apiService.improveTitle(userStory);
+        this.alternateTitle = response.data.improvedTitle;
+        this.gptTitleResponse = true;
+      }
+    },
+    acceptSuggestionTitle({ id }) {
+      this.userStories
+        .filter((us) => {
+          us.id !== id;
+        })
+        .map((us) => {
+          us.title = this.alternateTitle;
+        });
+      this.gptTitleResponse = false;
+      this.alternateTitle = "";
+      this.onUserStoriesChanged({ us: this.userStories, idx: this.index, doRemove: false });
+    },
+    adjustOriginalTitle() {
+      this.alternateTitle = "";
+      this.gptTitleResponse = false;
+    },
+    async retryImproveTitle({ id, originalTitle }) {
+      this.gptTitleResponse = false;
+      const userstory = this.userStories.find((us) => us.id === id);
+      if (userstory) {
+        const response = await apiService.retryImproveTitle(userstory, originalTitle);
+        this.alternateTitle = response.data.improvedTitle;
+        this.gptTitleResponse = true;
+      }
+    },
+    deleteTitle() {
+      this.alternateTitle = "";
+      this.gptTitleResponse = false;
+    },
+    async improveDescription({ userStory, description, issue }) {
+      this.showSpinner = true;
+      if (issue === 'improveDescription') {
+        const response = await apiService.improveDescription(userStory, description);
+        this.alternateDescription =
+          response.description + response.acceptance_criteria.toString().replaceAll(",", "");
+      } else {
+        const response = await apiService.grammarCheck(userStory, description);
+        this.alternateDescription = response.description;
+      }
+      this.descriptionMode = issue;
+      this.gptDescriptionResponse = true;
+      this.showSpinner = false;
+      this.showGPTModal = true;
+    },
+    acceptSuggestionDescription({ description, originalText }) {
+      if (originalText) {
+        this.userStories[this.index].description = this.alternateDescription;
+      } else {
+        this.userStories[this.index].description = description;
+      }
+      this.onUserStoriesChanged({ us: this.userStories, idx: this.index, doRemove: false });
+      this.updateComponent = !this.updateComponent;
+      this.acceptedStoriesDescription.push({ storyID: this.userStories[this.index].id, issueType: this.descriptionMode})
+    },
+    async retrySuggestionDescription() {
+      await this.improveDescription({userStory: this.userStories[this.index],description: this.userStories[this.index].description, issue: this. descriptionMode});
+      this.updateComponent = !this.updateComponent;
+    },
+    closeModal() {
+      this.showGPTModal = false;
+      this.gptDescriptionResponse = false;
+    },
   },
 });
 </script>
 
 <!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
 <style lang="scss" scoped>
+.centerSpinner {
+  left: 0;
+  right: 10%;
+  top: 57%;
+  bottom: 0;
+  margin: auto;
+  z-index: 3;
+}
 
 .spaceBetweenAvatar {
   margin-right: 2em;
