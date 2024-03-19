@@ -10,6 +10,12 @@ python = "^3.11"
 fastapi = "^0.110.0"
 uvicorn = "^0.28.0"
 openai = "^1.13.3"
+pytest = "^8.1.1"
+mock = "^5.1.0"
+
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.1.1"
 
 
 [build-system]

@@ -4,11 +4,12 @@ from dto.user_story import UserStory
 from dto.description_response import Description_Response
 import json
 
-API_KEY = os.environ.get('api_key')
 
-model_id = 'gpt-3.5-turbo-instruct'
-
-client = OpenAI(api_key=API_KEY)
+def setUp():
+    API_KEY = os.environ.get('api_key')
+    model_id = 'gpt-3.5-turbo-instruct'
+    client = OpenAI(api_key=API_KEY)
+    return client, model_id
 
 
 def find_between(s, first, last):
@@ -22,6 +23,7 @@ def find_between(s, first, last):
 
 async def improve_title(original_title: str):
     print("gpt_service: --> improve_title()")
+    client, model_id = setUp()
     prompt_input = "Improve the title of this issue: " + original_title
     completion = client.completions.create(
         model=model_id,
@@ -33,9 +35,12 @@ async def improve_title(original_title: str):
     print("gpt_service: <-- improve_title()")
     return response
 
+
 async def improve_description(original_user_story: UserStory):
     print("gpt_service: --> improve_description()")
-    prompt_input = "Send JSON with 'description' & 'acceptance_criteria' (acceptance_criteria should be a list & description needs improvement) for this user story description: " + original_user_story.description
+    client, model_id = setUp()
+    prompt_input = ("Send JSON with 'description' & 'acceptance_criteria' (acceptance_criteria should be a list & description needs "
+                    "improvement) for this user story description: ") + original_user_story.description
     print(prompt_input)
     completion = client.completions.create(
         model=model_id,
@@ -54,6 +59,7 @@ async def improve_description(original_user_story: UserStory):
 
 async def grammar_check(original_user_story: UserStory):
     print("gpt_service: --> grammar_check()")
+    client, model_id = setUp()
     prompt_input = ("Fix grammar & syntax mistakes, but do not add new elements. Send it back as a JSON with 'description' and "
                     "'acceptance_criteria' (list) field."
                     "If the text does not mention acceptance criteria, leave the field blank. This is the text: ") + original_user_story.description
