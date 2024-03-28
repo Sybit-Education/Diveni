@@ -418,11 +418,6 @@ export default defineComponent({
   color: var(--text-primary-color);
 }
 
-#flicking {
-  /* overflow:visible;  Add when fix is clear how to stay responsiv*/
-  width: 100%;
-}
-
 .overlayText {
   font-size: 2em;
   margin: 0.67em 0;
