@@ -12,17 +12,25 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, Ref } from "vue";
 import { useI18n } from "vue-i18n";
+
+interface BeforeInstallPromptEvent extends Event {
+  prompt(): void;
+  userChoice: Promise<{
+    outcome: "accepted" | "dismissed";
+    platform: string;
+  }>;
+}
 
 export default defineComponent({
   name: "DownloadPWAModal",
   setup() {
-    const deferredPrompt: any = ref();
+    const deferredPrompt: Ref<BeforeInstallPromptEvent | null> = ref(null);
     const checkIfNotInstalled = false;
     window.addEventListener("beforeinstallprompt", (e) => {
       e.preventDefault();
-      deferredPrompt.value = e;
+      deferredPrompt.value = e as BeforeInstallPromptEvent;
     });
 
     window.addEventListener("appinstalled", () => {
@@ -53,7 +61,7 @@ export default defineComponent({
       console.log("Installing...");
       if (this.deferredPrompt) {
         this.deferredPrompt.prompt();
-        this.deferredPrompt.userChoice.then((choiceResult: any) => {
+        this.deferredPrompt.userChoice.then((choiceResult) => {
           if (choiceResult.outcome === "accepted") {
             console.log("User accepted the Diveni prompt");
           } else {
