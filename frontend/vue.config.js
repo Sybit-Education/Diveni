@@ -1,15 +1,10 @@
 module.exports = {
   pwa: {
-    manifestOptions: {
-      icons: [],
-    },
-    iconPaths: {
-      favicon32: "./favicon.ico",
-      favicon16: "./favicon.ico",
-      appleTouchIcon: "./icons/apple-touch-icon.png",
-      maskIcon: "./favicon.ico",
-      msTileImage: "./favicon.ico",
-    },
+    name: 'Diveni',
+    themeColor: '#8cc04d',
+    msTileColor: '#000000',
+    appleMobileWebAppCapable: 'yes',
+    appleMobileWebAppStatusBarStyle: 'black',
   },
   configureWebpack: {
     optimization: {

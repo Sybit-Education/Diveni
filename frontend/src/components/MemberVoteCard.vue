@@ -3,17 +3,17 @@
     <div v-if="isMobile" :key="dragged">
       <div
         ref="swippable"
-        class="flicking-panel swipe-card"
+        class="swipe-card-mobile"
         :style="[swipeableCardBackgroundColor, { marginBottom: position }]"
       >
-        <div class="text" @click="onCardClicked()">
+        <div class="text-mobile" @click="onCardClicked()">
           {{ dragged ? "💪" : voteOption }}
         </div>
       </div>
     </div>
     <div v-else>
       <div
-        class="flicking-panel swipe-card"
+        class="swipe-card"
         :style="swipeableCardBackgroundColor"
         @click="onCardClicked()"
       >
@@ -110,13 +110,27 @@ export default defineComponent({
   align-items: center; /* Centering x-axis */
   border-radius: 5%;
   display: flex;
-  flex-direction: column;
   cursor: pointer;
-  margin-bottom: 5%;
 }
 
 .text {
   font-size: 5rem;
+  font-weight: 600;
+  color: black;
+}
+
+.swipe-card-mobile {
+  width: 22vw;
+  height: 15vh;
+  justify-content: center; /* Centering y-axis */
+  align-items: center; /* Centering x-axis */
+  border-radius: 5%;
+  display: flex;
+  cursor: pointer;
+}
+
+.text-mobile {
+  font-size: 4rem;
   font-weight: 600;
   color: black;
 }

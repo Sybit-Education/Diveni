@@ -44,6 +44,10 @@ a {
   color: var(--link-color);
 }
 
+::marker {
+  color: var(--text-primary-color);
+}
+
 .jumbotron {
   background-color: var(--background-color-primary);
   color: var(--text-primary-color);

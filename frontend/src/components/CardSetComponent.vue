@@ -1,9 +1,10 @@
 <template>
   <div>
-    <b-row class="d-flex justify-content-around">
+    <b-row :class="isMobile ? 'd-flex justify-content-center' : 'd-flex justify-content-around'">
       <b-col
         v-for="item of userStoryMode === jiraTag ? allCardSetsWithJiraMode : allCardSets"
         :key="item.position"
+        :cols="isMobile ? '3' : ''"
         class="card m-2"
         :class="getClasses(item)"
         @click="onCardSetSelected(item)"
@@ -143,6 +144,13 @@ export default defineComponent({
       ],
     };
   },
+  computed: {
+    isMobile() {
+      return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent
+      );
+    },
+  },
   watch: {
     createSetInput(newVal) {
       if (newVal.length > 1 && newVal.slice(-1) === ";") {
@@ -266,7 +274,7 @@ export default defineComponent({
 @import "@/assets/style/variables.scss";
 .card {
   max-width: 224px;
-  height: 300px;
+  min-height: 300px;
   justify-content: flex-start;
   align-items: center;
   display: flex;
