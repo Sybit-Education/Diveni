@@ -7,10 +7,15 @@
     <ul>
       <li>
         {{ t("session.prepare.step.selection.mode.description.withIssueTracker.descriptionLine1") }}
-        <sign-in-with-jira-cloud-button-component v-if="isJiraCloudEnabled" class="my-1" />
-        <sign-in-with-jira-server-button-component v-if="isJiraServerEnabled" class="my-1" />
-        <sign-in-with-azure-cloud-button-component v-if="isAzureDevOpsEnabled" class="my-1" />
-        <sign-in-with-git-hub-button-component v-if="isGithubEnabled" class="my-1"/>
+        <sign-in-with-jira-button-component
+          v-if="isJiraCloudEnabled || isJiraServerEnabled"
+          :enable-jira-cloud="isJiraCloudEnabled"
+          :enable-jira-server="isJiraServerEnabled"
+          class="my-1" />
+        <sign-in-with-azure-cloud-button-component
+          v-if="isAzureDevOpsEnabled"
+          class="my-1" />
+        <sign-in-with-git-hub-button-component v-if="isGithubEnabled" class="my-1" />
         <sign-in-with-gitlab-button-component v-if="isGitlabEnabled" class="my-1" />
       </li>
       <li>
@@ -32,8 +37,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import SignInWithJiraCloudButtonComponent from "./SignInWithJiraCloudButtonComponent.vue";
-import SignInWithJiraServerButtonComponent from "./SignInWithJiraServerButtonComponent.vue";
+import SignInWithJiraButtonComponent from "./SignInWithJiraButtonComponent.vue";
 import SignInWithAzureCloudButtonComponent from "./SignInWithAzureDevOpsButtonComponent.vue";
 import SignInWithGitHubButtonComponent from "@/components/SignInWithGitHubButtonComponent.vue";
 import SignInWithGitlabButtonComponent from "@/components/SignInWithGitlabButtonComponent.vue";
@@ -44,10 +48,9 @@ import { useToast } from "vue-toastification";
 import { useI18n } from "vue-i18n";
 
 export default defineComponent({
-  name: "JiraComponent",
+  name: "IssueTrackerComponent",
   components: {
-    SignInWithJiraCloudButtonComponent,
-    SignInWithJiraServerButtonComponent,
+    SignInWithJiraButtonComponent,
     SignInWithAzureCloudButtonComponent,
     SignInWithGitHubButtonComponent,
     SignInWithGitlabButtonComponent,

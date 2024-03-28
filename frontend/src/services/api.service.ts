@@ -5,7 +5,7 @@ import axios, { AxiosResponse } from "axios";
 class ApiService {
   public async getIssueTrackerConfig(): Promise<Record<string, string>> {
     const response = await axios.get<Record<string, string>>(
-      `${constants.backendURL}/config/issueTracker`
+      `${constants.backendURL}/config/issue-tracker`
     );
     return response.data;
   }
@@ -17,19 +17,19 @@ class ApiService {
     return response.data;
   }
 
-  public async getJiraOauth1RequestToken(): Promise<JiraRequestTokenDto> {
+  public async getJiraServerRequestToken(): Promise<JiraRequestTokenDto> {
     const response = await axios.get<JiraRequestTokenDto>(
-      `${constants.backendURL}/issue-tracker/jira/oauth1/requestToken`
+      `${constants.backendURL}/issue-tracker/jira/server/request-token`
     );
     return response.data;
   }
 
-  public async sendJiraOauth1VerificationCode(
+  public async sendJiraServerVerificationCode(
     code: string,
     token: string
   ): Promise<JiraResponseCodeDto> {
     const response = await axios.post<JiraResponseCodeDto>(
-      `${constants.backendURL}/issue-tracker/jira/oauth1/verificationCode`,
+      `${constants.backendURL}/issue-tracker/jira/server/verification-code`,
       {
         code,
         token,
@@ -38,11 +38,22 @@ class ApiService {
     return response.data;
   }
 
-  public async sendJiraOauth2AuthorizationCode(code: string): Promise<JiraResponseCodeDto> {
+  public async getJiraCloudRequestToken(jiraBaseUrl: string): Promise<JiraRequestTokenDto> {
+    const response = await axios.post<JiraRequestTokenDto>(
+      `${constants.backendURL}/issue-tracker/jira/cloud/request-token?jira-url=${jiraBaseUrl}`
+    );
+    return response.data;
+  }
+
+  public async sendJiraCloudVerificationCode(
+    code: string,
+    token: string
+  ): Promise<JiraResponseCodeDto> {
     const response = await axios.post<JiraResponseCodeDto>(
-      `${constants.backendURL}/issue-tracker/jira/oauth2/authorizationCode`,
+      `${constants.backendURL}/issue-tracker/jira/cloud/verification-code`,
       {
         code,
+        token,
       }
     );
     return response.data;
@@ -50,7 +61,7 @@ class ApiService {
 
   public async sendAzureOauth2AuthorizationCode(): Promise<JiraResponseCodeDto> {
     const response = await axios.post<JiraResponseCodeDto>(
-      `${constants.backendURL}/issue-tracker/azure/oauth2/authorizationCode`
+      `${constants.backendURL}/issue-tracker/azure/cloud/authorization-code`
     );
     return response.data;
   }

@@ -51,7 +51,7 @@
         :title="t('session.prepare.step.selection.mode.description.withIssueTracker.tab.label')"
         :title-link-class="linkClass(2)"
       >
-        <jira-component class="mt-2" />
+        <issue-tracker-component class="mt-2" />
       </b-tab>
     </b-tabs>
     <h4 class="mt-4">
@@ -173,7 +173,7 @@ import Session from "../model/Session";
 import Constants from "../constants";
 import CardSetComponent from "../components/CardSetComponent.vue";
 import UserStoryComponent from "../components/UserStoryComponent.vue";
-import JiraComponent from "../components/JiraComponent.vue";
+import IssueTrackerComponent from "../components/IssueTrackerComponent.vue";
 import StoryPointsComponent from "@/components/StoryPointsComponent.vue";
 import UserStory from "@/model/UserStory";
 import papaparse from "papaparse";
@@ -187,7 +187,7 @@ export default defineComponent({
   components: {
     CardSetComponent,
     UserStoryComponent,
-    JiraComponent,
+    IssueTrackerComponent,
     StoryPointsComponent,
   },
   setup() {

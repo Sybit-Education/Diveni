@@ -193,6 +193,9 @@
                   "description": "Uma nova aba será aberta imediatamente, por favor, conceda acesso a este aplicativo nesta aba e insira o código de verificação aqui."
                 },
                 "inputs": {
+                  "jiraUrl": {
+                    "placeholder": "JIRA URL"
+                  },
                   "verificationCode": {
                     "placeholder": "Código de verificação"
                   }
@@ -216,6 +219,10 @@
                 },
                 "placeholder": {
                   "searchProjects": "Pesquisar projectos..."
+                },
+                "popover": {
+                  "first": "To use JIRA Cloud make sure to set up an application link before. See our user guide at ",
+                  "second": " for instructions on how to do this."
                 }
               }
             }
@@ -290,6 +297,7 @@
         "memberRemoved": "Você foi removido da sessão pelo host",
         "issueTrackerCredentials": "Credenciais erradas",
         "issueTrackerLoginFailed": "Falha no login",
+        "jiraCloudRequestTokenFailed": "Failed to authorize to JIRA Cloud! Make sure the application link is set up correctly!",
         "issueTrackerSynchronizeSuccess": "Alterações sincronizadas com Issue-Tracker",
         "issueTrackerNothingChanged": "No changes were made",
         "issueTrackerSynchronizeFailed": "Falha ao sincronizar as mudanças com o Issue-Tracker",

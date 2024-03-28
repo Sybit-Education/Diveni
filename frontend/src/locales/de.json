@@ -193,6 +193,9 @@
                   "description": "Es öffnet sich gleich ein neuer Tab. Bitte gewähre dieser Anwendung in diesem Tab den Zugriff und trage den Verifizierungscode hier ein."
                 },
                 "inputs": {
+                  "jiraUrl": {
+                    "placeholder": "JIRA URL"
+                  },
                   "verificationCode": {
                     "placeholder": "Verifizierungscode"
                   }
@@ -216,6 +219,10 @@
                 },
                 "placeholder": {
                   "searchProjects": "Projekte durchsuchen..."
+                },
+                "popover": {
+                  "first": "Um JIRA Cloud zu nutzen musst du vorher einen Application Link erstellen. Eine Anleitung dazu findest du bei ",
+                  "second": " unter der User Guide"
                 }
               }
             }
@@ -290,6 +297,7 @@
         "memberRemoved": "Du wurdest vom Host aus der Sitzung entfernt",
         "issueTrackerCredentials": "Falsche Login-Daten",
         "issueTrackerLoginFailed": "Login fehlgeschlagen",
+        "jiraCloudRequestTokenFailed": "Autorisierung zu JIRA Cloud fehlgeschlagen! Stelle sicher, dass der Application Link korrekt eingerichtet ist!",
         "issueTrackerSynchronizeSuccess": "Synchronisierte Änderungen mit Issue-Tracker",
         "issueTrackerNothingChanged": "Es wurden keine Änderungen vorgenommen",
         "issueTrackerSynchronizeFailed": "Fehler beim Synchronisieren der Änderungen mit Issue-Tracker",
