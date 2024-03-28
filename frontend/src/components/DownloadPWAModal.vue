@@ -7,13 +7,13 @@
     @ok="install()"
     @hide="closeModal()"
   >
-    {{t('page.landing.install')}}
+    {{ t("page.landing.install") }}
   </b-modal>
 </template>
 
 <script lang="ts">
-import {defineComponent, ref} from "vue";
-import {useI18n} from "vue-i18n";
+import { defineComponent, ref } from "vue";
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
   name: "DownloadPWAModal",
@@ -29,7 +29,7 @@ export default defineComponent({
       deferredPrompt.value = null;
     });
     const { t } = useI18n();
-    return {deferredPrompt, checkIfNotInstalled, t};
+    return { deferredPrompt, checkIfNotInstalled, t };
   },
   computed: {
     isMobile() {
@@ -40,22 +40,24 @@ export default defineComponent({
   },
   created() {
     const isInStandaloneMode = () =>
-      (window.matchMedia('(display-mode: standalone)').matches) || document.referrer.includes('android-app://');
-    this.checkIfNotInstalled = this.isMobile && !isInStandaloneMode() && !localStorage.getItem('downloadPWA');
+      window.matchMedia("(display-mode: standalone)").matches ||
+      document.referrer.includes("android-app://");
+    this.checkIfNotInstalled =
+      this.isMobile && !isInStandaloneMode() && !localStorage.getItem("downloadPWA");
   },
   methods: {
     closeModal() {
-      localStorage.setItem('downloadPWA', 'true');
+      localStorage.setItem("downloadPWA", "true");
     },
     async install() {
       console.log("Installing...");
       if (this.deferredPrompt) {
         this.deferredPrompt.prompt();
         this.deferredPrompt.userChoice.then((choiceResult: any) => {
-          if (choiceResult.outcome === 'accepted') {
-            console.log('User accepted the Diveni prompt');
+          if (choiceResult.outcome === "accepted") {
+            console.log("User accepted the Diveni prompt");
           } else {
-            console.log('User dismissed the Diveni prompt');
+            console.log("User dismissed the Diveni prompt");
           }
           this.deferredPrompt = null;
         });

@@ -1,10 +1,10 @@
 module.exports = {
   pwa: {
-    name: 'Diveni',
-    themeColor: '#8cc04d',
-    msTileColor: '#000000',
-    appleMobileWebAppCapable: 'yes',
-    appleMobileWebAppStatusBarStyle: 'black',
+    name: "Diveni",
+    themeColor: "#8cc04d",
+    msTileColor: "#000000",
+    appleMobileWebAppCapable: "yes",
+    appleMobileWebAppStatusBarStyle: "black",
   },
   configureWebpack: {
     optimization: {

@@ -735,7 +735,6 @@ export default defineComponent({
 
 <!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
 <style lang="scss" scoped>
-
 .spaceBetweenAvatar {
   margin-right: 2em;
   margin-left: 2em;
