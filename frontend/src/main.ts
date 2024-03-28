@@ -3,7 +3,7 @@
   Diveni - The Planing-Poker App
   Copyright (C) 2022 AUME-Team 21/22, HTWG Konstanz
 */
-import Vue, { createApp } from "vue";
+import Vue, { createApp, watch } from "vue";
 import axios from "axios";
 import VueAxios from "vue-axios";
 import App from "./App.vue";
