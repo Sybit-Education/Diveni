@@ -34,32 +34,22 @@
       </b-card-group>
     </b-container>
     <AnalyticsDataComponent ref="dataComponent"> </AnalyticsDataComponent>
-    <b-container class="py-5">
-      <div class="parent py-5 px-5">
-        <div class="background py-5"></div>
-        <div class="text">
-          <h1>Remote Planning Poker using DIVENI</h1>
+    <b-container>
+      <div class="parent pb-md-5 px-5">
+        <div class="py-5"></div>
+        <div>
+          <h1 class="text-center">How DIVENI works <b-icon-gear-wide /></h1>
           <b-card-group deck class="py-5">
             <b-card class="pictureCard">
               <b-card-text>
-                <b-img :src="require(`@/assets/SetUpSession.png`)" class="landingPagePictures" />
-              </b-card-text>
-            </b-card>
-            <b-card class="pictureCard">
-              <b-card-text>
-                <b-img :src="require(`@/assets/InviteYourTeam.png`)" class="landingPagePictures" />
-              </b-card-text>
-            </b-card>
-            <b-card class="pictureCard">
-              <b-card-text>
-                <b-img
-                  :src="require(`@/assets/EstimateUserStories.png`)"
-                  class="landingPagePictures"
+                <b-img-lazy
+                  :src="require(`@/assets/SetUpSession.png`)"
+                  width="300"
+                  height="265"
+                  alt="Set Up Session Picture"
                 />
               </b-card-text>
             </b-card>
-          </b-card-group>
-          <b-card-group deck>
             <b-card class="aboutDiveni" title="Set up Session">
               <b-card-text>
                 Create a planning session and select your prefered voting set.
@@ -77,6 +67,8 @@
                 show user stories and update the voted results of your planning poker.
               </b-card-text>
             </b-card>
+          </b-card-group>
+          <b-card-group>
             <b-card class="aboutDiveni" title="Invite your Team">
               <b-card-text> Invite your team using QR-Code, invite link or code. </b-card-text>
               <b-card-text>
@@ -85,6 +77,28 @@
               <b-card-text>
                 If everybody is in the session, you could start estimation. Having defined a time
                 limit this will be used as limit for voting time.
+              </b-card-text>
+            </b-card>
+            <b-card class="pictureCard">
+              <b-card-text>
+                <b-img-lazy
+                  :src="require(`@/assets/InviteYourTeam.png`)"
+                  width="300"
+                  height="265"
+                  alt="Invite Your Team Picture"
+                />
+              </b-card-text>
+            </b-card>
+          </b-card-group>
+          <b-card-group>
+            <b-card class="pictureCard">
+              <b-card-text>
+                <b-img-lazy
+                  :src="require(`@/assets/EstimateUserStories.png`)"
+                  width="300"
+                  height="265"
+                  alt="Estimate User Stories Picture"
+                />
               </b-card-text>
             </b-card>
             <b-card class="aboutDiveni" title="Estimate User Stories">
@@ -100,17 +114,20 @@
           </b-card-group>
         </div>
       </div>
-      <h1 class="mt-5">About DIVENI</h1>
-      <p>DIVENI was initially developed by students of HTWG Constance and is open source now.</p>
-      <p>
+      <h1 class="mt-5 text-center pt-md-5">About DIVENI</h1>
+      <p class="text-center">
+        DIVENI was initially developed by students of HTWG Constance and is open source now.
+      </p>
+      <p class="text-center">
         More information could be found in the
         <a href="https://docs.diveni.io/">documentation</a>.
       </p>
     </b-container>
     <b-container class="py-3">
-      <h1 class="mt-5">Connectors</h1>
+      <h1 class="mt-5 text-center">Connectors</h1>
     </b-container>
     <CarouselComponent class="py-5"></CarouselComponent>
+    <DownloadPWAModal/>
   </div>
 </template>
 
@@ -123,9 +140,11 @@ import AnalyticsDataComponent from "../components/AnalyticsDataComponent.vue";
 import { useDiveniStore } from "@/store";
 import { useI18n } from "vue-i18n";
 import CarouselComponent from "@/components/CarouselComponent.vue";
+import DownloadPWAModal from "@/components/DownloadPWAModal.vue";
 export default defineComponent({
   name: "LandingPage",
   components: {
+    DownloadPWAModal,
     LandingPageCard,
     AnalyticsDataComponent,
     CarouselComponent,
@@ -250,9 +269,11 @@ export default defineComponent({
 }
 
 .aboutDiveni {
-  box-shadow: 0 0 5px 5px var(--landingPageCardsBackground);
-  border: none !important;
-  background: var(--landingPageCardsBackground) !important;
+  background: transparent !important;
+  border-style: none !important;
+  height: 300px;
+  font-size: large;
+  overflow: auto;
 }
 
 .card-title {
@@ -265,18 +286,6 @@ export default defineComponent({
   width: 100%;
 }
 
-.background {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: var(--blurBackGroundColor);
-  filter: blur(10px);
-  z-index: 0;
-  border-radius: 1rem;
-}
-
 .pictureCard {
   background: transparent !important;
   align-items: center;
@@ -284,8 +293,11 @@ export default defineComponent({
   border: none !important;
 }
 
-.landingPagePictures {
-  height: 250px;
-  width: 250px;
+.diveniDescription {
+  font-size: 1.25rem;
+  max-height: 25rem;
+  overflow: auto;
+  width: 35%;
 }
+
 </style>

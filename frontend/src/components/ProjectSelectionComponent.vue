@@ -134,10 +134,6 @@ export default defineComponent({
   background-color: var(--preparePageNotSelectedTabBackground);
   border-radius: 8px;
   overflow: auto;
-
-  &:hover {
-    background-color: var(--preparePageInActiveTabHover);
-  }
 }
 
 .vue-autocomplete-input-tag-item {

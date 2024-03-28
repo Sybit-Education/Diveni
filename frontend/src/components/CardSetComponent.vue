@@ -1,18 +1,19 @@
 <template>
   <div>
-    <b-row class="d-flex justify-content-around">
+    <b-row :class="isMobile ? 'd-flex justify-content-center' : 'd-flex justify-content-around'">
       <b-col
         v-for="item of userStoryMode === jiraTag ? allCardSetsWithJiraMode : allCardSets"
         :key="item.position"
+        :cols="isMobile ? '3' : ''"
         class="card m-2"
         :class="getClasses(item)"
         @click="onCardSetSelected(item)"
       >
         <div class="card-title">
-          {{ item.name }}
+          {{ getTitle(item.position, userStoryMode !== jiraTag) }}
         </div>
         <div class="card-description">
-          {{ item.description }}
+          {{ getDescription(item.position, userStoryMode !== jiraTag) }}
           <div v-if="item.values.length === 0">
             <span id="createSetHint">
               <b-icon-info-circle class="mt-3 me-1" />{{
@@ -94,42 +95,31 @@ export default defineComponent({
         name: "",
         values: [],
         activeValues: [] as string[],
+        position: 0,
       },
       createSetInput: "",
       allCardSets: [
         {
-          name: this.t("session.prepare.step.selection.cardSet.sets.fibonacci.label"),
-          description: this.t("session.prepare.step.selection.cardSet.sets.fibonacci.description"),
-          values: ["1", "2", "3", "5", "8", "13", "21", "34", "55"],
+          values: ["1", "2", "3", "5", "8", "13", "21", "34", "55", "?"],
           activeValues: ["1", "2", "3", "5", "8", "13", "21"],
           position: 1,
         },
         {
-          name: this.t("session.prepare.step.selection.cardSet.sets.tShirtSizes.label"),
-          description: this.t(
-            "session.prepare.step.selection.cardSet.sets.tShirtSizes.description"
-          ),
-          values: ["XXS", "XS", "S", "M", "L", "XL", "XXL", "XXXL"],
+          values: ["XXS", "XS", "S", "M", "L", "XL", "XXL", "XXXL", "?"],
           activeValues: ["XS", "S", "M", "L", "XL"],
           position: 2,
         },
         {
-          name: this.t("session.prepare.step.selection.cardSet.sets.hours.label"),
-          description: this.t("session.prepare.step.selection.cardSet.sets.hours.description"),
-          values: ["1", "2", "3", "4", "5", "6", "8", "10", "12", "16"],
+          values: ["1", "2", "3", "4", "5", "6", "8", "10", "12", "16", "?"],
           activeValues: ["1", "2", "3", "4", "5", "6", "8", "10", "12", "16"],
           position: 3,
         },
         {
-          name: this.t("session.prepare.step.selection.cardSet.sets.numbers.label"),
-          description: this.t("session.prepare.step.selection.cardSet.sets.numbers.description"),
-          values: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
+          values: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "?"],
           activeValues: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
           position: 4,
         },
         {
-          name: this.t("session.prepare.step.selection.cardSet.sets.ownSet.label"),
-          description: this.t("session.prepare.step.selection.cardSet.sets.ownSet.description"),
           values: [],
           activeValues: [],
           position: 5,
@@ -137,28 +127,29 @@ export default defineComponent({
       ],
       allCardSetsWithJiraMode: [
         {
-          name: this.t("session.prepare.step.selection.cardSet.sets.fibonacci.label"),
-          description: this.t("session.prepare.step.selection.cardSet.sets.fibonacci.description"),
-          values: ["1", "2", "3", "5", "8", "13", "21", "34", "55"],
+          values: ["1", "2", "3", "5", "8", "13", "21", "34", "55", "?"],
           activeValues: ["1", "2", "3", "5", "8", "13", "21"],
           position: 1,
         },
         {
-          name: this.t("session.prepare.step.selection.cardSet.sets.hours.label"),
-          description: this.t("session.prepare.step.selection.cardSet.sets.hours.description"),
-          values: ["1", "2", "3", "4", "5", "6", "8", "10", "12", "16"],
+          values: ["1", "2", "3", "4", "5", "6", "8", "10", "12", "16", "?"],
           activeValues: ["1", "2", "3", "4", "5", "6", "8", "10", "12", "16"],
           position: 2,
         },
         {
-          name: this.t("session.prepare.step.selection.cardSet.sets.numbers.label"),
-          description: this.t("session.prepare.step.selection.cardSet.sets.numbers.description"),
-          values: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
+          values: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "?"],
           activeValues: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
           position: 3,
         },
       ],
     };
+  },
+  computed: {
+    isMobile() {
+      return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent
+      );
+    },
   },
   watch: {
     createSetInput(newVal) {
@@ -180,6 +171,56 @@ export default defineComponent({
     });
   },
   methods: {
+    getTitle(pos, mode) {
+      if (mode) {
+        switch (pos) {
+          case 1:
+            return this.t("session.prepare.step.selection.cardSet.sets.fibonacci.label");
+          case 2:
+            return this.t("session.prepare.step.selection.cardSet.sets.tShirtSizes.label");
+          case 3:
+            return this.t("session.prepare.step.selection.cardSet.sets.hours.label");
+          case 4:
+            return this.t("session.prepare.step.selection.cardSet.sets.numbers.label");
+          case 5:
+            return this.t("session.prepare.step.selection.cardSet.sets.ownSet.label");
+        }
+      } else {
+        switch (pos) {
+          case 1:
+            return this.t("session.prepare.step.selection.cardSet.sets.fibonacci.label");
+          case 2:
+            return this.t("session.prepare.step.selection.cardSet.sets.hours.label");
+          case 3:
+            return this.t("session.prepare.step.selection.cardSet.sets.numbers.label");
+        }
+      }
+    },
+    getDescription(pos, mode) {
+      if (mode) {
+        switch (pos) {
+          case 1:
+            return this.t("session.prepare.step.selection.cardSet.sets.fibonacci.description");
+          case 2:
+            return this.t("session.prepare.step.selection.cardSet.sets.tShirtSizes.description");
+          case 3:
+            return this.t("session.prepare.step.selection.cardSet.sets.hours.description");
+          case 4:
+            return this.t("session.prepare.step.selection.cardSet.sets.numbers.description");
+          case 5:
+            return this.t("session.prepare.step.selection.cardSet.sets.ownSet.description");
+        }
+      } else {
+        switch (pos) {
+          case 1:
+            return this.t("session.prepare.step.selection.cardSet.sets.fibonacci.description");
+          case 2:
+            return this.t("session.prepare.step.selection.cardSet.sets.hours.description");
+          case 3:
+            return this.t("session.prepare.step.selection.cardSet.sets.numbers.description");
+        }
+      }
+    },
     isActiveCardSetNumber(num) {
       return this.selectedCardSet.activeValues.includes(num) ? "active" : "outline-secondary";
     },
@@ -207,7 +248,7 @@ export default defineComponent({
       return `${this.getCardActiveClass(item)} ${this.getPictureClass(item)}`;
     },
     getCardActiveClass(item) {
-      return this.selectedCardSet.name === item.name ? "selected" : "";
+      return this.selectedCardSet.position === item.position ? "selected" : "";
     },
     getPictureClass(item) {
       if (this.userStoryMode !== this.jiraTag) {
@@ -233,7 +274,7 @@ export default defineComponent({
 @import "@/assets/style/variables.scss";
 .card {
   max-width: 224px;
-  height: 300px;
+  min-height: 300px;
   justify-content: flex-start;
   align-items: center;
   display: flex;
