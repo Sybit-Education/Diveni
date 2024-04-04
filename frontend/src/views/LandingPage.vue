@@ -127,7 +127,7 @@
       <h1 class="mt-5 text-center">Connectors</h1>
     </b-container>
     <CarouselComponent class="py-5"></CarouselComponent>
-    <DownloadPWAModal/>
+    <DownloadPWAModal />
   </div>
 </template>
 
@@ -299,5 +299,4 @@ export default defineComponent({
   overflow: auto;
   width: 35%;
 }
-
 </style>
