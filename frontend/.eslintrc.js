@@ -20,5 +20,11 @@ module.exports = {
     noImplicitAny: 0,
     allowJs: 0,
     "@typescript-eslint/no-non-null-assertion": 0,
+    "prettier/prettier": [
+      "error",
+      {
+        endOfLine: "auto",
+      },
+    ],
   },
 };
