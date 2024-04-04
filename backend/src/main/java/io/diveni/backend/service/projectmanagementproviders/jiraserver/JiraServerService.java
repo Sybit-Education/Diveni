@@ -6,25 +6,25 @@
 package io.diveni.backend.service.projectmanagementproviders.jiraserver;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.google.api.client.http.*;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.api.client.auth.oauth.OAuthAuthorizeTemporaryTokenUrl;
 import com.google.api.client.auth.oauth.OAuthParameters;
-import com.google.api.client.http.GenericUrl;
-import com.google.api.client.http.HttpContent;
-import com.google.api.client.http.HttpRequest;
-import com.google.api.client.http.HttpRequestFactory;
-import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.http.json.JsonHttpContent;
 import com.google.api.client.json.gson.GsonFactory;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import io.diveni.backend.Utils;
 import io.diveni.backend.model.JiraRequestToken;
 import io.diveni.backend.model.Project;
@@ -250,7 +250,11 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
     fields.put("description", story.getDescription());
     if (story.getEstimation() != null) {
       try {
-        fields.put(ESTIMATION_FIELD, Double.parseDouble(story.getEstimation()));
+        if (story.getEstimation().equals("?")) {
+          fields.put(ESTIMATION_FIELD, null);
+        } else {
+          fields.put(ESTIMATION_FIELD, Double.parseDouble(story.getEstimation()));
+        }
       } catch (NumberFormatException e) {
         LOGGER.error("Failed to parse estimation into double!");
         throw new ResponseStatusException(
@@ -259,6 +263,14 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
     }
     content.put("fields", fields);
     try {
+
+      GsonBuilder builder = new GsonBuilder();
+      builder.serializeNulls();
+      Gson gson = builder.create();
+      HttpContent httpContent =
+          new ByteArrayContent(
+              "application/json", gson.toJson(content).getBytes(StandardCharsets.UTF_8));
+
       JiraOAuthClient jiraOAuthClient = new JiraOAuthClient(JIRA_HOME);
       OAuthParameters parameters =
           jiraOAuthClient.getParameters(
@@ -268,7 +280,7 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
               parameters,
               new GenericUrl(getJiraUrl() + "/issue/" + story.getId()),
               "PUT",
-              new JsonHttpContent(GsonFactory.getDefaultInstance(), content));
+              httpContent);
 
       LOGGER.debug("<-- updateIssue() {}", response.parseAsString());
     } catch (Exception e) {

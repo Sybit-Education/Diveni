@@ -456,7 +456,6 @@ export default defineComponent({
     },
   },
   async created() {
-    this.copyPropsToData();
     this.store.clearStoreWithoutUserStories();
     if (!this.sessionID || !this.adminID) {
       //check for cookie
@@ -477,6 +476,7 @@ export default defineComponent({
     }
     if (this.voteSetJson) {
       this.voteSet = JSON.parse(this.voteSetJson);
+      this.voteSet = ["?"].concat(this.voteSet);
     }
     if (this.sessionState === Constants.memberUpdateCommandStartVoting) {
       this.planningStart = true;
@@ -526,17 +526,6 @@ export default defineComponent({
           window.localStorage.removeItem("adminCookie");
         }
       }
-    },
-    copyPropsToData() {
-      // if (this.adminID) {
-      //   this.session_adminID = this.adminID;
-      //   this.session_sessionID = this.sessionID;
-      //   this.session_sessionState = this.sessionState;
-      //   this.session_timerSecondsString = this.timerSecondsString;
-      //   this.session_voteSetJson = this.voteSetJson;
-      //   this.session_userStoryMode = this.userStoryMode;
-      //   this.session_hostVoting = String(this.hostVoting).toLowerCase() === "true";
-      // }
     },
     assignSessionToData(session) {
       if (Object.keys(session).length !== 0) {

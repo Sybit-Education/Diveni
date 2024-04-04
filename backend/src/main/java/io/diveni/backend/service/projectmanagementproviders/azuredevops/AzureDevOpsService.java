@@ -208,9 +208,14 @@ public class AzureDevOpsService implements ProjectManagementProviderOAuth2 {
     if (story.getEstimation() != null) {
       try {
         Map<String, Object> updateEstimation = new HashMap<>();
-        updateEstimation.put("op", "replace");
-        updateEstimation.put("path", fieldPrefix + API_FIELD_ESTIMATION);
-        updateEstimation.put("value", Double.parseDouble(story.getEstimation()));
+        if (story.getEstimation().equals("?")) {
+          updateEstimation.put("op", "remove");
+          updateEstimation.put("path", fieldPrefix + API_FIELD_ESTIMATION);
+        } else {
+          updateEstimation.put("op", "replace");
+          updateEstimation.put("path", fieldPrefix + API_FIELD_ESTIMATION);
+          updateEstimation.put("value", Double.parseDouble(story.getEstimation()));
+        }
         content.add(updateEstimation);
       } catch (NumberFormatException e) {
         LOGGER.error("Failed to parse estimation into double!");

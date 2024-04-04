@@ -25,7 +25,7 @@
             :text="(userStories[idx].estimation ? userStories[idx].estimation : '?') + '    '"
           >
             <b-dropdown-item
-              v-for="num in filteredCardSet"
+              v-for="num in cardSet"
               :key="num"
               :disabled="!editDescription"
               :value="num"
@@ -102,11 +102,6 @@ export default defineComponent({
         isActive: boolean;
       }>,
     };
-  },
-  computed: {
-    filteredCardSet(): Array<unknown> {
-      return this.cardSet.filter((card) => card !== "?");
-    },
   },
   watch: {
     initialStories() {
