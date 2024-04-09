@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="img-holderLeave"
-    :class="isMobile ? '' : 'mt-5'"
-  >
+  <div class="img-holderLeave" :class="isMobile ? '' : 'mt-5'">
     <div id="picture-holderLeave">
       <b-img id="pandaPictureLeave" :src="require('@/assets/LeaveButton.png')" />
     </div>
@@ -26,13 +23,13 @@ import { useI18n } from "vue-i18n";
 
 export default defineComponent({
   name: "SessionLeaveButton",
+  props: {
+    isMobile: { type: Boolean, default: false },
+  },
   setup() {
     const store = useDiveniStore();
     const { t } = useI18n();
     return { store, t };
-  },
-  props: {
-    isMobile: { type: Boolean, default: false },
   },
   methods: {
     leaveSession() {
