@@ -38,7 +38,15 @@ public class AiController {
   @PostMapping("/grammar-check")
   public ResponseEntity<String> grammarCheck(@RequestBody GptConfidentalData data) {
     LOGGER.debug("--> grammarCheck(), userStory={}", data);
-    ResponseEntity<String> response = aiService.grammarCheck(new UserStory(data.getId(), data.getTitle(), data.getDescription(), data.getEstimation(), data.getIsActive()), data.getConfidentalData());
+    ResponseEntity<String> response =
+        aiService.grammarCheck(
+            new UserStory(
+                data.getId(),
+                data.getTitle(),
+                data.getDescription(),
+                data.getEstimation(),
+                data.getIsActive()),
+            data.getConfidentalData());
     LOGGER.debug("<-- grammarCheck()");
     return response;
   }
