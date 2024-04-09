@@ -1,5 +1,6 @@
 package io.diveni.backend.controller;
 
+import io.diveni.backend.dto.GptConfidentalData;
 import io.diveni.backend.model.UserStory;
 import io.diveni.backend.service.ai.AiService;
 import org.slf4j.Logger;
@@ -35,9 +36,9 @@ public class AiController {
   }
 
   @PostMapping("/grammar-check")
-  public ResponseEntity<String> grammarCheck(@RequestBody UserStory userStory) {
-    LOGGER.debug("--> grammarCheck(), userStory={}", userStory);
-    ResponseEntity<String> response = aiService.grammarCheck(userStory);
+  public ResponseEntity<String> grammarCheck(@RequestBody GptConfidentalData data) {
+    LOGGER.debug("--> grammarCheck(), userStory={}", data);
+    ResponseEntity<String> response = aiService.grammarCheck(new UserStory(data.getId(), data.getTitle(), data.getDescription(), data.getEstimation(), data.getIsActive()), data.getConfidentalData());
     LOGGER.debug("<-- grammarCheck()");
     return response;
   }

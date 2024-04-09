@@ -4,6 +4,7 @@
       ref="editor"
       v-debounce:1s="() => emit('stoppedTyping', { description: markdownText})"
     />
+    <div ref="viewer"/>
   </div>
 </template>
 
@@ -24,6 +25,7 @@ const props = defineProps({
 });
 const emit = defineEmits(["update:modelValue", "stillTyping",'stoppedTyping']);
 const editor = ref();
+const viewer = ref();
 const i18n = useI18n();
 let markdownText = "";
 
@@ -34,8 +36,8 @@ function getMarkdownText(text: string) {
 
 onMounted(() => {
   if (props.noneClickable) {
-    const viewer = Editor.factory({
-      el: editor.value,
+    const v = Editor.factory({
+      el: viewer.value,
       viewer: true,
       minHeight: '200px',
       initialValue: props.initialValue ?? ""

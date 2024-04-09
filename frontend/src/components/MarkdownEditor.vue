@@ -46,6 +46,54 @@
     <div
       v-if="showPopOver"
       class="triangle-down"/>
+    <div
+      id="privacyModal"
+    >
+      <b-modal
+        v-model="showModal"
+        centered
+        hide-header-close
+      >
+        <template>
+          <div class="text-center">
+            Mark confidential information
+          </div>
+        </template>
+        <div>
+          <UiToastEditorWrapper
+            :initial-value="currentText"
+            :none-clickable="true"
+          />
+          <div class="d-flex justify-content-end">
+            <b-form-input
+              v-model="inputData"
+              placeholder="Type in confidental words"
+            />
+            <b-button
+              @click="addWordToList()"
+            >Add</b-button>
+          </div>
+          <div
+            v-if="confidentalWords.length > 0"
+            class="text-center"
+          >
+            {{confidentalWords}}
+          </div>
+        </div>
+        <template #modal-footer >
+          <div id="aiOptions" class="text-center mt-1">
+            <b-button id="acceptAIOption" class="m-1" @click="submitIssue">
+              <b-icon-check2 />
+              Ok
+            </b-button>
+            <b-button class="aiOptionButtons m-1" @click="hideModal(); $event.target.blur();">
+              <b-icon-x-square/>
+              Cancel
+            </b-button>
+          </div>
+        </template>
+      </b-modal>
+    </div>
   </div>
 </template>
 
@@ -64,6 +112,7 @@ import { PropType } from "vue";
 export default defineComponent({
   name: "MarkdownEditor",
   components: {
+    UiToastEditorWrapper,
     editor: UiToastEditorWrapper,
   },
   model: {
@@ -127,6 +176,10 @@ export default defineComponent({
       currentText: "",
       foundDescription: false,
       foundGrammar: false,
+      showModal: false,
+      currentIssue: "",
+      inputData: "",
+      confidentalWords: [] as Array<string>,
     };
   },
   mounted() {
@@ -148,7 +201,26 @@ export default defineComponent({
     aiButtonClicked(issue) {
       this.showPopOver = false;
       this.aiButtonVisible = false;
-      this.$emit("sendGPTDescriptionRequest", {description: this.currentText, issue: issue});
+      this.showModal = true;
+      this.currentIssue = issue;
+    },
+    addWordToList() {
+      if (!this.confidentalWords.includes(this.inputData)) {
+        this.confidentalWords.push(this.inputData);
+      } else {
+        const index = this.confidentalWords.indexOf(this.inputData, 0);
+        if (index > -1) {
+          this.confidentalWords.splice(index, 1);
+        }
+      }
+      this.inputData = "";
+    },
+    submitIssue() {
+      this.$emit("sendGPTDescriptionRequest", {description: this.currentText, issue: this.currentIssue, confidentalData: this.confidentalWords});
+      this.hideModal();
+    },
+    hideModal() {
+      this.showModal = false;
     }
   },
 });

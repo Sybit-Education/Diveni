@@ -22,7 +22,6 @@
         />
         <UiToastEditorWrapper
           v-if="!showSpinner"
-          style="color: greenyellow !important;"
           :key="repaint"
           :initial-value="suggestionDescription"
           :none-clickable="!clickable"

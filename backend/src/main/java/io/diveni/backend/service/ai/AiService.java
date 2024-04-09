@@ -61,11 +61,12 @@ public class AiService {
     return response;
   }
 
-  public ResponseEntity<String> grammarCheck(UserStory userStory) {
+  public ResponseEntity<String> grammarCheck(UserStory userStory, List<String> confidentalData) {
     LOGGER.debug("--> grammarCheck()");
-    Map<String, String> content = new HashMap<>();
+    Map<String, Object> content = new HashMap<>();
     content.put("title", userStory.getTitle());
     content.put("description", userStory.getDescription());
+    content.put("confidentalData", confidentalData);
     ResponseEntity<String> response =
         executeRequest(aiUrl + "/grammar-check", HttpMethod.POST, new Gson().toJson(content));
     LOGGER.debug("<-- grammarCheck()");

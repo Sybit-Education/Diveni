@@ -23,8 +23,8 @@ async def improve_description(description: UserStory):
 
 
 @app.post("/grammar-check")
-async def grammar_check(description: UserStory):
-    print("gpt_controller: --> grammar_check(), description={", description, "}")
-    response = await service.grammar_check(description)
+async def grammar_check(data: UserStory):
+    print("gpt_controller: --> grammar_check(), description={", data, "}")
+    response = await service.grammar_check(data)
     print("gpt_controller: <-- grammar_check()")
     return {"improved_description": response}

@@ -176,13 +176,14 @@ class ApiService {
     });
     return response;
   }
-  public async improveDescription(userStory: UserStory, description: string) {
+  public async improveDescription(userStory: UserStory, description: string, confidentalData: Array<string>) {
     const response = await axios.post(`${constants.backendURL}/ai/improve-description`, {
       id: userStory.id,
       title: userStory.title,
       description: description,
       estimation: userStory.estimation,
       isActive: userStory.isActive,
+      confidentalData: confidentalData,
     });
     return {
       description: response.data.improved_description,
@@ -190,15 +191,17 @@ class ApiService {
     };
 
   }
-  public async grammarCheck(userStory: UserStory, description: string) {
+  public async grammarCheck(userStory: UserStory, description: string, confidentalData: Array<string>) {
 
     const response = await axios.post(`${constants.backendURL}/ai/grammar-check`, {
-      id: userStory.id,
-      title: userStory.title,
-      description: description,
-      estimation: userStory.estimation,
-      isActive: userStory.isActive,
-    });
+        id: userStory.id,
+        title: userStory.title,
+        description: description,
+        estimation: userStory.estimation,
+        isActive: userStory.isActive,
+        confidentalData: confidentalData,
+      }
+    );
     return {
       description: response.data.improved_description,
       acceptance_criteria: response.data.improved_acceptance_criteria,

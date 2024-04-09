@@ -455,6 +455,7 @@ export default defineComponent({
         issueType: string,
       }>,
       showSpinner: false,
+      confidentalData: [] as Array<string>,
     };
   },
   computed: {
@@ -836,14 +837,15 @@ export default defineComponent({
       this.alternateTitle = "";
       this.gptTitleResponse = false;
     },
-    async improveDescription({ userStory, description, issue }) {
+    async improveDescription({ userStory, description, issue, confidentalData }) {
+      this.confidentalData = confidentalData;
       this.showSpinner = true;
       if (issue === 'improveDescription') {
-        const response = await apiService.improveDescription(userStory, description);
+        const response = await apiService.improveDescription(userStory, description, this.confidentalData);
         this.alternateDescription =
           response.description + response.acceptance_criteria.toString().replaceAll(",", "");
       } else {
-        const response = await apiService.grammarCheck(userStory, description);
+        const response = await apiService.grammarCheck(userStory, description, this.confidentalData);
         this.alternateDescription = response.description;
       }
       this.descriptionMode = issue;
@@ -862,7 +864,7 @@ export default defineComponent({
       this.acceptedStoriesDescription.push({ storyID: this.userStories[this.index].id, issueType: this.descriptionMode})
     },
     async retrySuggestionDescription() {
-      await this.improveDescription({userStory: this.userStories[this.index],description: this.userStories[this.index].description, issue: this. descriptionMode});
+      await this.improveDescription({userStory: this.userStories[this.index],description: this.userStories[this.index].description, issue: this. descriptionMode, confidentalData: this.confidentalData});
       this.updateComponent = !this.updateComponent;
     },
     closeModal() {

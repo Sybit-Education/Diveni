@@ -1,4 +1,5 @@
 import os
+import re
 from openai import OpenAI
 from dto.user_story import UserStory
 from dto.description_response import Description_Response
@@ -10,6 +11,30 @@ def setUp():
     model_id = 'gpt-3.5-turbo-instruct'
     client = OpenAI(api_key=API_KEY)
     return client, model_id
+
+def readFile(filename):
+    filehandle = open(filename)
+    names = filehandle.read().splitlines()
+    filehandle.close()
+    return names
+
+def replaceConfidentalData(data: str, confidental_list):
+    fileDir = os.path.dirname(os.path.realpath('__file__'))
+    filename = os.path.join(fileDir, '../ai/resource/names.txt')
+    filename = os.path.abspath(os.path.realpath(filename))
+    names = readFile(filename)
+    replacedWords = {}
+    for x in range(len(confidental_list)):
+        replacedData = re.compile(confidental_list[x], re.IGNORECASE)
+        data = replacedData.sub(names[x], data)
+        replacedWords[confidental_list[x]] = names[x]
+    return replacedWords, data
+
+def replaceConfidentalDataToOriginal(data, map: dict):
+    for key, value in map.items():
+        replacedData = re.compile(value, re.IGNORECASE)
+        data = replacedData.sub(key, data)
+    return data
 
 
 def find_between(s, first, last):
@@ -59,10 +84,12 @@ async def improve_description(original_user_story: UserStory):
 
 async def grammar_check(original_user_story: UserStory):
     print("gpt_service: --> grammar_check()")
+    swappedData, new_description = replaceConfidentalData(original_user_story.description, original_user_story.confidentalData)
+    print(original_user_story.description)
     client, model_id = setUp()
     prompt_input = ("Fix grammar & syntax mistakes, but do not add new elements. Send it back as a JSON with 'description' and "
                     "'acceptance_criteria' (list) field."
-                    "If the text does not mention acceptance criteria, leave the field blank. This is the text: ") + original_user_story.description
+                    "If the text does not mention acceptance criteria, leave the field blank. This is the text: ") + new_description
     completion = client.completions.create(
         model=model_id,
         prompt=prompt_input,
@@ -79,5 +106,6 @@ async def grammar_check(original_user_story: UserStory):
             criterias = criterias + '* ' + criteria + "\n"
         if criterias != "":
             description = description + "\n Acceptance Criteria: \n" + criterias
+    description = replaceConfidentalDataToOriginal(description, swappedData)
     print("gpt_service: <-- grammar_check()")
     return description

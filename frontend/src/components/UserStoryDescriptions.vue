@@ -49,7 +49,7 @@ import { useI18n } from "vue-i18n";
 
 export default defineComponent({
   name: "UserStoryDescriptions",
-  components: { MarkdownEditor },
+  components: {MarkdownEditor },
   props: {
     index: { type: Number, required: true },
     initialStories: { type: Array, required: true },
@@ -101,11 +101,12 @@ export default defineComponent({
     publishChanges(idx) {
       this.$emit("userStoriesChanged", { us: this.userStories, idx: idx, doRemove: false });
     },
-    sendGPTDescriptionRequest({ description, issue }) {
+    sendGPTDescriptionRequest({ description, issue, confidentalData }) {
       this.$emit("sendGPTDescriptionRequest", {
         userStory: this.userStories[this.index],
         description: description,
-        issue: issue
+        issue: issue,
+        confidentalData: confidentalData,
       });
     },
   },
