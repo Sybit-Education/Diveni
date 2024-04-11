@@ -34,6 +34,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -104,12 +105,12 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
       GenericUrl jiraUrl,
       String requestMethod,
       HttpContent content,
-      String contentType)
+      MediaType contentType)
       throws IOException {
     HttpRequestFactory requestFactory = new NetHttpTransport().createRequestFactory(parameters);
     HttpRequest request = requestFactory.buildRequest(requestMethod, jiraUrl, content);
     if (contentType != null) {
-      request.getHeaders().setContentType(contentType);
+      request.getHeaders().setContentType(contentType.toString());
     }
     return request.execute();
   }
@@ -334,7 +335,7 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
               new GenericUrl(getJiraUrl() + "/issue/" + issueID),
               "DELETE",
               null,
-              "application/json");
+              MediaType.APPLICATION_JSON);
 
       LOGGER.debug("<-- deleteIssue() {}", response.parseAsString());
     } catch (Exception e) {
