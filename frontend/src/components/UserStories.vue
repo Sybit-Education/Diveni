@@ -55,7 +55,6 @@
           readonly
           size="sm"
           :placeholder="t('page.session.before.userStories.placeholder.userStoryTitle')"
-          @blur="publishChanges(index, false)"
         />
 
         <b-badge id="badge" class="p-2">
@@ -155,10 +154,11 @@ export default defineComponent({
     setUserStoryAsActive(index) {
       this.selectedStoryIndex = index;
       this.$emit("selectedStory", index);
+      this.publishChanges(index, false);
     },
     addUserStory() {
       const story: UserStory = {
-        id: this.storyMode === "US_JIRA" ? null : Math.floor(Math.random() * 2000000),
+        id: this.storyMode === "US_JIRA" ? null : Math.floor(Math.random() * 2000000).toString(),
         title: "",
         description: "",
         estimation: null,
@@ -182,23 +182,22 @@ export default defineComponent({
         if (filteredUserStories.length > 0) {
           this.filterActive = true;
           this.userStories = filteredUserStories;
-          this.publishChanges(null, false);
         } else {
           this.filterActive = true;
           this.userStories = [];
-          this.publishChanges(null, false);
         }
       } else {
         this.filterActive = false;
         this.userStories = this.savedStories;
-        this.publishChanges(null, false);
       }
     },
     deleteStory(index) {
       this.publishChanges(index, true);
     },
     publishChanges(index, remove) {
-      this.$emit("userStoriesChanged", { us: this.userStories, idx: index, doRemove: remove });
+      if (this.userStories[index].title !== "") {
+        this.$emit("userStoriesChanged", { us: this.userStories, idx: index, doRemove: remove });
+      }
     },
     markUserStory(index) {
       const stories = this.userStories.map((s) => ({

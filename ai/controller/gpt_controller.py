@@ -15,9 +15,9 @@ async def root(title: Title):
 
 
 @app.post("/improve-description")
-async def improve_description(description: UserStory):
-    print("gpt_controller: --> improve_description(), description={", description, "}")
-    response = await service.improve_description(description)
+async def improve_description(data: UserStory):
+    print("gpt_controller: --> improve_description(), description={", data, "}")
+    response = await service.improve_description(data)
     print("gpt_controller: <-- improve_description()")
     return {"improved_description": response.description, "improved_acceptance_criteria": response.acceptance_criteria}
 

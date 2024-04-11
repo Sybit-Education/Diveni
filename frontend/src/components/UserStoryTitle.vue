@@ -18,7 +18,7 @@
             size="lg"
             :disabled="!host"
             :placeholder="t('page.session.before.userStories.placeholder.userStoryTitle')"
-            @blur="publishChanges(idx)"
+
           />
           <b-button
             v-if="
@@ -146,7 +146,9 @@ export default defineComponent({
   },
   methods: {
     publishChanges(idx) {
-      this.$emit("userStoriesChanged", { us: this.userStories, idx: idx, doRemove: false });
+      if (this.userStories[idx].title !== '') {
+        this.$emit("userStoriesChanged", { us: this.userStories, idx: idx, doRemove: false });
+      }
     },
     showGptButtonTitle() {
       if (

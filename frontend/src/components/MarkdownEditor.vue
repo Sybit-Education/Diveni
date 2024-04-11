@@ -74,10 +74,31 @@
             >Add</b-button>
           </div>
           <div
-            v-if="confidentalWords.length > 0"
             class="text-center"
           >
-            {{confidentalWords}}
+            <div
+              v-for="(data, index) in confidentalWords"
+              :key="data"
+              class="d-inline-block"
+            >
+              <div
+                id="confidental-words"
+                class="mx-2"
+                @mouseover="hover = index"
+                @mouseleave="hover = null"
+              >
+                  {{data}}
+
+                <b-button
+                  variant="outline-danger"
+                  class="border-0"
+                  size="sm"
+                  @click="confidentalWords.splice(index, 1);"
+                >
+                <b-icon-trash />
+              </b-button>
+              </div>
+            </div>
           </div>
         </div>
         <template #modal-footer >
@@ -138,7 +159,7 @@ export default defineComponent({
       default: "",
     },
     currentStoryID: {
-      type: [Number, null] as PropType<number | null>,
+      type: [String, null] as PropType<string | null>,
       required: false,
       default: null
     },
@@ -180,6 +201,7 @@ export default defineComponent({
       currentIssue: "",
       inputData: "",
       confidentalWords: [] as Array<string>,
+      hover: null,
     };
   },
   mounted() {
@@ -205,13 +227,12 @@ export default defineComponent({
       this.currentIssue = issue;
     },
     addWordToList() {
-      if (!this.confidentalWords.includes(this.inputData)) {
+      const selection = window.getSelection()
+      if (!this.confidentalWords.includes(this.inputData) && this.inputData !== '') {
         this.confidentalWords.push(this.inputData);
-      } else {
-        const index = this.confidentalWords.indexOf(this.inputData, 0);
-        if (index > -1) {
-          this.confidentalWords.splice(index, 1);
-        }
+      }
+      if (selection !== null && selection.toString() !== '' && !this.confidentalWords.includes(selection.toString())) {
+        this.confidentalWords.push(selection.toString());
       }
       this.inputData = "";
     },

@@ -7,6 +7,8 @@ import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.*;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
@@ -25,11 +27,11 @@ public class AiServiceTest {
     ResponseEntity<String> mockedResponse =
         new ResponseEntity<>(jsonReturnValue, mockedHeaders, HttpStatusCode.valueOf(200));
 
-    when(aiService.improveDescription(new UserStory("1", "TEST", "TEST", "3", true)))
+    when(aiService.improveDescription(new UserStory("1", "TEST", "TEST", "3", true) , List.of("test")))
         .thenReturn(mockedResponse);
 
     ResponseEntity<String> returnResponse =
-        aiService.improveDescription(new UserStory("1", "TEST", "TEST", "3", true));
+        aiService.improveDescription(new UserStory("1", "TEST", "TEST", "3", true) , List.of("test"));
 
     assertEquals("{'improvedTitle' : 'test'}", returnResponse.getBody());
   }
@@ -47,11 +49,11 @@ public class AiServiceTest {
     ResponseEntity<String> mockedResponse =
         new ResponseEntity<>(jsonReturnValue, mockedHeaders, HttpStatusCode.valueOf(200));
 
-    when(aiService.improveDescription(new UserStory("1", "TEST", "TEST", "3", true)))
+    when(aiService.improveDescription(new UserStory("1", "TEST", "TEST", "3", true), List.of("test")))
         .thenReturn(mockedResponse);
 
     ResponseEntity<String> returnResponse =
-        aiService.improveDescription(new UserStory("1", "TEST", "TEST", "3", true));
+        aiService.improveDescription(new UserStory("1", "TEST", "TEST", "3", true), List.of("test"));
 
     assertEquals(
         "{'improved_description' : 'test', 'improved_acceptance_criteria' : '* TEST \n"

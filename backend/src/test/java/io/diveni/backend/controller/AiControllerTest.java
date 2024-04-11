@@ -39,7 +39,7 @@ public class AiControllerTest {
     // improve Description
     String improvedAcceptanceCriteria = "* pictures \n, * navigation bar\n";
     String improvedDescription = "As a User i want a homepage. \n ##### Acceptance Criteria: \n";
-    Mockito.when(service.improveDescription(userStory))
+    Mockito.when(service.improveDescription(userStory, List.of("test")))
         .thenReturn(
             new ResponseEntity<>(
                 "{ 'improved_description': '"
@@ -74,13 +74,13 @@ public class AiControllerTest {
   @Test
   public void getDescription_valid_statusOKAndContainsDescriptionAndAcceptanceCriteria()
       throws Exception {
-    UserStory userStory = new UserStory("1", "TEST", "TEST", "3", true);
+    GptConfidentalData data = new GptConfidentalData("1", "TEST", "TEST", "3", true, List.of("test"));
 
     this.mockMvc
         .perform(
             post("/ai/improve-description")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(new Gson().toJson(userStory)))
+                .content(new Gson().toJson(data)))
         .andExpect(status().isOk())
         .andExpect(content().string(containsString("'improved_description'")))
         .andExpect(content().string(containsString("'improved_acceptance_criteria'")));

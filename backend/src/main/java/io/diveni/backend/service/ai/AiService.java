@@ -50,11 +50,12 @@ public class AiService {
     return response;
   }
 
-  public ResponseEntity<String> improveDescription(UserStory userStory) {
+  public ResponseEntity<String> improveDescription(UserStory userStory, List<String> confidentalData) {
     LOGGER.debug("--> improveDescription()");
-    Map<String, String> content = new HashMap<>();
+    Map<String, Object> content = new HashMap<>();
     content.put("title", userStory.getTitle());
     content.put("description", userStory.getDescription());
+    content.put("confidentalData", confidentalData);
     ResponseEntity<String> response =
         executeRequest(aiUrl + "/improve-description", HttpMethod.POST, new Gson().toJson(content));
     LOGGER.debug("<-- improveDescription()");

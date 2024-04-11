@@ -2,4 +2,4 @@ from pydantic import BaseModel
 class UserStory(BaseModel):
     title: str
     description: str
-    confidentalData: list
+    confidental_data: list

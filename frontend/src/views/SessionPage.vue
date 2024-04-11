@@ -335,6 +335,7 @@
           :gpt-description-response="gptDescriptionResponse"
           :update-component="updateComponent"
           :accepted-stories="acceptedStoriesDescription"
+          :isJiraSelected="isJiraSelected"
           @userStoriesChanged="onUserStoriesChanged"
           @sendGPTDescriptionRequest="improveDescription"
         />
@@ -360,6 +361,7 @@
           :index="index"
           :gpt-description-response="gptDescriptionResponse"
           :update-component="updateComponent"
+          :isJiraSelected="isJiraSelected"
           @userStoriesChanged="onUserStoriesChanged"
           @sendGPTDescriptionRequest="improveDescription"
         />
@@ -391,6 +393,7 @@ import { useI18n } from "vue-i18n";
 import SessionAdminCard from "@/components/SessionAdminCard.vue";
 import GptModal from "@/components/GptModal.vue";
 import UserStoryTitle from "@/components/UserStoryTitle.vue";
+import j2m from "jira2md";
 
 export default defineComponent({
   name: "SessionPage",
@@ -438,7 +441,8 @@ export default defineComponent({
       session: {},
       hostEstimation: "",
       autoReveal: false,
-
+      //needed for jira converter
+      isJiraSelected: history.state.isJiraSelected as boolean,
       //generell needed for GPT usage
       showGPTModal: false,
       gptMode: "",
@@ -451,10 +455,11 @@ export default defineComponent({
       descriptionMode: "",
       updateComponent: false,
       acceptedStoriesDescription: [] as Array<{
-        storyID: number | null,
+        storyID: string | null,
         issueType: string,
       }>,
       showSpinner: false,
+      // needed for privacy feature
       confidentalData: [] as Array<string>,
     };
   },
@@ -527,7 +532,6 @@ export default defineComponent({
     },
   },
   async created() {
-    this.copyPropsToData();
     this.store.clearStoreWithoutUserStories();
     if (!this.sessionID || !this.adminID) {
       //check for cookie
@@ -598,17 +602,6 @@ export default defineComponent({
         }
       }
     },
-    copyPropsToData() {
-      // if (this.adminID) {
-      //   this.session_adminID = this.adminID;
-      //   this.session_sessionID = this.sessionID;
-      //   this.session_sessionState = this.sessionState;
-      //   this.session_timerSecondsString = this.timerSecondsString;
-      //   this.session_voteSetJson = this.voteSetJson;
-      //   this.session_userStoryMode = this.userStoryMode;
-      //   this.session_hostVoting = String(this.hostVoting).toLowerCase() === "true";
-      // }
-    },
     assignSessionToData(session) {
       if (Object.keys(session).length !== 0) {
         this.adminID = session.adminID;
@@ -669,6 +662,9 @@ export default defineComponent({
               console.log(`assigned id: ${us[idx].id}`);
             }
           } else {
+            if (this.isJiraSelected && us[idx].description) {
+              us[idx].description = j2m.to_jira(us[idx].description);
+            }
             response = await apiService.updateUserStory(JSON.stringify(us[idx]));
           }
         }
@@ -688,6 +684,9 @@ export default defineComponent({
       }
       this.store.setUserStories({ stories: us });
       if (this.webSocketIsConnected) {
+        if (this.isJiraSelected && us[idx].description) {
+          us[idx].description = j2m.to_jira(us[idx].description);
+        }
         const endPoint = `${Constants.webSocketAdminUpdatedUserStoriesRoute}`;
         this.store.sendViaBackendWS(endPoint, JSON.stringify(us));
       }
@@ -698,37 +697,6 @@ export default defineComponent({
       if (this.webSocketIsConnected) {
         const endPoint = `${Constants.webSocketAdminUpdatedUserStoriesRoute}`;
         this.store.sendViaBackendWS(endPoint, JSON.stringify(response));
-      }
-    },
-    async onSynchronizeJira({ story, doRemove }) {
-      if (this.userStoryMode === "US_JIRA") {
-        let response;
-        if (doRemove) {
-          response = await apiService.deleteUserStory(story.id);
-        } else {
-          console.log(`ID: ${story.id}`);
-          if (story.id === null) {
-            response = await apiService.createUserStory(
-              JSON.stringify(story),
-              this.selectedProject?.id
-            );
-            if (response.status === 200) {
-              const updatedStories = this.userStories.map(
-                (s) => s.title === story.title && s.description === story.description
-              );
-              this.store.setUserStories({ stories: updatedStories });
-            }
-          } else {
-            response = await apiService.updateUserStory(JSON.stringify(story));
-          }
-        }
-        if (response.status === 200) {
-          this.toast.success(
-            this.t("session.notification.messages.issueTrackerSynchronizeSuccess")
-          );
-        } else {
-          this.toast.error(this.t("session.notification.messages.issueTrackerSynchronizeFailed"));
-        }
       }
     },
     onSelectedStory($event) {
