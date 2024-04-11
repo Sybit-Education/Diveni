@@ -100,8 +100,12 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
    * @throws IOException
    */
   private static HttpResponse getResponseFromUrl(
-    OAuthParameters parameters, GenericUrl jiraUrl, String requestMethod,
-    HttpContent content, String contentType) throws IOException {
+      OAuthParameters parameters,
+      GenericUrl jiraUrl,
+      String requestMethod,
+      HttpContent content,
+      String contentType)
+      throws IOException {
     HttpRequestFactory requestFactory = new NetHttpTransport().createRequestFactory(parameters);
     HttpRequest request = requestFactory.buildRequest(requestMethod, jiraUrl, content);
     if (contentType != null) {
@@ -166,7 +170,8 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
       OAuthParameters parameters =
           jiraOAuthClient.getParameters(accessToken, CONSUMER_KEY, PRIVATE_KEY);
       HttpResponse response =
-          getResponseFromUrl(parameters, new GenericUrl(getJiraUrl() + "/project"), "GET", null, null);
+          getResponseFromUrl(
+              parameters, new GenericUrl(getJiraUrl() + "/project"), "GET", null, null);
       ObjectNode[] node =
           new ObjectMapper().readValue(response.parseAsString(), ObjectNode[].class);
 
@@ -208,7 +213,8 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
                       + ESTIMATION_FIELD
                       + "&maxResults=1000"),
               "GET",
-              null, null);
+              null,
+              null);
       // The reply from the Jira API is no correct JSON, therefore [ and ] have to be
       // added
       val json = "[" + response.parseAsString() + "]";
@@ -271,7 +277,8 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
               parameters,
               new GenericUrl(getJiraUrl() + "/issue/" + story.getId()),
               "PUT",
-              new JsonHttpContent(GsonFactory.getDefaultInstance(), content), null);
+              new JsonHttpContent(GsonFactory.getDefaultInstance(), content),
+              null);
 
       LOGGER.debug("<-- updateIssue() {}", response.parseAsString());
     } catch (Exception e) {
@@ -300,7 +307,8 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
               parameters,
               new GenericUrl(getJiraUrl() + "/issue"),
               "POST",
-              new JsonHttpContent(GsonFactory.getDefaultInstance(), content), null);
+              new JsonHttpContent(GsonFactory.getDefaultInstance(), content),
+              null);
 
       JsonNode node = new ObjectMapper().readTree(response.parseAsString());
       LOGGER.debug("<-- createIssue()");
@@ -324,9 +332,9 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
           getResponseFromUrl(
               parameters,
               new GenericUrl(getJiraUrl() + "/issue/" + issueID),
-            "DELETE",
-            null,
-            "application/json");
+              "DELETE",
+              null,
+              "application/json");
 
       LOGGER.debug("<-- deleteIssue() {}", response.parseAsString());
     } catch (Exception e) {
@@ -346,7 +354,11 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
               accessTokens.get(tokenIdentifier), CONSUMER_KEY, PRIVATE_KEY);
       HttpResponse response =
           getResponseFromUrl(
-              parameters, new GenericUrl(JIRA_HOME + "/rest/auth/latest/session"), "GET", null, null);
+              parameters,
+              new GenericUrl(JIRA_HOME + "/rest/auth/latest/session"),
+              "GET",
+              null,
+              null);
       String res = response.parseAsString();
       JsonNode node = new ObjectMapper().readTree(res);
       LOGGER.debug("<-- getCurrentUsername()");
