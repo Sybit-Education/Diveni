@@ -74,7 +74,8 @@ public class AiControllerTest {
   @Test
   public void getDescription_valid_statusOKAndContainsDescriptionAndAcceptanceCriteria()
       throws Exception {
-    GptConfidentalData data = new GptConfidentalData("1", "TEST", "TEST", "3", true, List.of("test"));
+    GptConfidentalData data =
+        new GptConfidentalData("1", "TEST", "TEST", "3", true, List.of("test"));
 
     this.mockMvc
         .perform(

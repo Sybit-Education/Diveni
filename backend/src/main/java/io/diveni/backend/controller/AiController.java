@@ -30,7 +30,15 @@ public class AiController {
   @PostMapping("/improve-description")
   public ResponseEntity<String> improveDescription(@RequestBody GptConfidentalData data) {
     LOGGER.debug("--> improveDescription(), userStory={}", data);
-    ResponseEntity<String> response = aiService.improveDescription(new UserStory(data.getId(), data.getTitle(), data.getDescription(), data.getEstimation(), data.getIsActive()), data.getConfidentalData());
+    ResponseEntity<String> response =
+        aiService.improveDescription(
+            new UserStory(
+                data.getId(),
+                data.getTitle(),
+                data.getDescription(),
+                data.getEstimation(),
+                data.getIsActive()),
+            data.getConfidentalData());
     LOGGER.debug("<-- improveDescription()");
     return response;
   }

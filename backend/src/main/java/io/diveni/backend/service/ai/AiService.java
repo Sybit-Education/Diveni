@@ -50,7 +50,8 @@ public class AiService {
     return response;
   }
 
-  public ResponseEntity<String> improveDescription(UserStory userStory, List<String> confidentalData) {
+  public ResponseEntity<String> improveDescription(
+      UserStory userStory, List<String> confidentalData) {
     LOGGER.debug("--> improveDescription()");
     Map<String, Object> content = new HashMap<>();
     content.put("title", userStory.getTitle());
