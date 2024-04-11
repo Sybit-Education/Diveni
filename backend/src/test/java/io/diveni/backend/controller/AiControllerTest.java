@@ -88,7 +88,8 @@ public class AiControllerTest {
 
   @Test
   public void grammarCheck_valid_statusOKAndContainsDescription() throws Exception {
-    GptConfidentalData data = new GptConfidentalData("1", "TEST", "TEST", "3", true, List.of("test"));
+    GptConfidentalData data =
+        new GptConfidentalData("1", "TEST", "TEST", "3", true, List.of("test"));
 
     this.mockMvc
         .perform(
