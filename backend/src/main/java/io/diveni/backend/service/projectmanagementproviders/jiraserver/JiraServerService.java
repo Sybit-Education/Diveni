@@ -34,6 +34,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -100,10 +101,17 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
    * @throws IOException
    */
   private static HttpResponse getResponseFromUrl(
-      OAuthParameters parameters, GenericUrl jiraUrl, String requestMethod, HttpContent content)
+      OAuthParameters parameters,
+      GenericUrl jiraUrl,
+      String requestMethod,
+      HttpContent content,
+      MediaType contentType)
       throws IOException {
     HttpRequestFactory requestFactory = new NetHttpTransport().createRequestFactory(parameters);
     HttpRequest request = requestFactory.buildRequest(requestMethod, jiraUrl, content);
+    if (contentType != null) {
+      request.getHeaders().setContentType(contentType.toString());
+    }
     return request.execute();
   }
 
@@ -163,7 +171,8 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
       OAuthParameters parameters =
           jiraOAuthClient.getParameters(accessToken, CONSUMER_KEY, PRIVATE_KEY);
       HttpResponse response =
-          getResponseFromUrl(parameters, new GenericUrl(getJiraUrl() + "/project"), "GET", null);
+          getResponseFromUrl(
+              parameters, new GenericUrl(getJiraUrl() + "/project"), "GET", null, null);
       ObjectNode[] node =
           new ObjectMapper().readValue(response.parseAsString(), ObjectNode[].class);
 
@@ -205,6 +214,7 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
                       + ESTIMATION_FIELD
                       + "&maxResults=1000"),
               "GET",
+              null,
               null);
       // The reply from the Jira API is no correct JSON, therefore [ and ] have to be
       // added
@@ -268,7 +278,8 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
               parameters,
               new GenericUrl(getJiraUrl() + "/issue/" + story.getId()),
               "PUT",
-              new JsonHttpContent(GsonFactory.getDefaultInstance(), content));
+              new JsonHttpContent(GsonFactory.getDefaultInstance(), content),
+              null);
 
       LOGGER.debug("<-- updateIssue() {}", response.parseAsString());
     } catch (Exception e) {
@@ -297,7 +308,8 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
               parameters,
               new GenericUrl(getJiraUrl() + "/issue"),
               "POST",
-              new JsonHttpContent(GsonFactory.getDefaultInstance(), content));
+              new JsonHttpContent(GsonFactory.getDefaultInstance(), content),
+              null);
 
       JsonNode node = new ObjectMapper().readTree(response.parseAsString());
       LOGGER.debug("<-- createIssue()");
@@ -319,7 +331,11 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
               accessTokens.get(tokenIdentifier), CONSUMER_KEY, PRIVATE_KEY);
       HttpResponse response =
           getResponseFromUrl(
-              parameters, new GenericUrl(getJiraUrl() + "/issue/" + issueID), "DELETE", null);
+              parameters,
+              new GenericUrl(getJiraUrl() + "/issue/" + issueID),
+              "DELETE",
+              null,
+              MediaType.APPLICATION_JSON);
 
       LOGGER.debug("<-- deleteIssue() {}", response.parseAsString());
     } catch (Exception e) {
@@ -339,7 +355,11 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
               accessTokens.get(tokenIdentifier), CONSUMER_KEY, PRIVATE_KEY);
       HttpResponse response =
           getResponseFromUrl(
-              parameters, new GenericUrl(JIRA_HOME + "/rest/auth/latest/session"), "GET", null);
+              parameters,
+              new GenericUrl(JIRA_HOME + "/rest/auth/latest/session"),
+              "GET",
+              null,
+              null);
       String res = response.parseAsString();
       JsonNode node = new ObjectMapper().readTree(res);
       LOGGER.debug("<-- getCurrentUsername()");
