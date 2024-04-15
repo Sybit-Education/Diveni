@@ -33,11 +33,9 @@ public class AiServiceTest {
     JSONObject testObject = new JSONObject(content);
     GptConfidentialData data = new GptConfidentialData("1", "TEST", "TEST", "3", true, testObject);
 
-    when(aiService.improveDescription(data))
-        .thenReturn(mockedResponse);
+    when(aiService.improveDescription(data)).thenReturn(mockedResponse);
 
-    ResponseEntity<String> returnResponse =
-        aiService.improveDescription(data);
+    ResponseEntity<String> returnResponse = aiService.improveDescription(data);
 
     assertEquals("{'improvedTitle' : 'test'}", returnResponse.getBody());
   }
@@ -60,11 +58,9 @@ public class AiServiceTest {
     JSONObject testObject = new JSONObject(content);
     GptConfidentialData data = new GptConfidentialData("1", "TEST", "TEST", "3", true, testObject);
 
-    when(aiService.improveDescription(data))
-        .thenReturn(mockedResponse);
+    when(aiService.improveDescription(data)).thenReturn(mockedResponse);
 
-    ResponseEntity<String> returnResponse =
-        aiService.improveDescription(data);
+    ResponseEntity<String> returnResponse = aiService.improveDescription(data);
 
     assertEquals(
         "{'improved_description' : 'test', 'improved_acceptance_criteria' : '* TEST \n"

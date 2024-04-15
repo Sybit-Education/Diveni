@@ -83,8 +83,7 @@ public class AiControllerTest {
     Map<String, String> content = new HashMap<>();
     content.put("test-company", "company");
     JSONObject testObject = new JSONObject(content);
-    GptConfidentialData data =
-        new GptConfidentialData("1", "TEST", "TEST", "3", true, testObject);
+    GptConfidentialData data = new GptConfidentialData("1", "TEST", "TEST", "3", true, testObject);
 
     this.mockMvc
         .perform(
@@ -101,8 +100,7 @@ public class AiControllerTest {
     Map<String, String> content = new HashMap<>();
     content.put("test-company", "company");
     JSONObject testObject = new JSONObject(content);
-    GptConfidentialData data =
-        new GptConfidentialData("1", "TEST", "TEST", "3", true, testObject);
+    GptConfidentialData data = new GptConfidentialData("1", "TEST", "TEST", "3", true, testObject);
 
     this.mockMvc
         .perform(

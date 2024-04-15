@@ -29,8 +29,7 @@ public class AiController {
   @PostMapping("/improve-description")
   public ResponseEntity<String> improveDescription(@RequestBody GptConfidentialData data) {
     LOGGER.debug("--> improveDescription(), userStory={}", data);
-    ResponseEntity<String> response =
-        aiService.improveDescription(data);
+    ResponseEntity<String> response = aiService.improveDescription(data);
     LOGGER.debug("<-- improveDescription()");
     return response;
   }
@@ -38,8 +37,7 @@ public class AiController {
   @PostMapping("/grammar-check")
   public ResponseEntity<String> grammarCheck(@RequestBody GptConfidentialData data) {
     LOGGER.debug("--> grammarCheck(), userStory={}", data);
-    ResponseEntity<String> response =
-        aiService.grammarCheck(data);
+    ResponseEntity<String> response = aiService.grammarCheck(data);
     LOGGER.debug("<-- grammarCheck()");
     return response;
   }
