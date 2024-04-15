@@ -46,75 +46,12 @@
     <div
       v-if="showPopOver"
       class="triangle-down"/>
-    <div
-      id="privacyModal"
-    >
-      <b-modal
-        v-model="showModal"
-        centered
-        hide-header-close
-      >
-        <template>
-          <div class="text-center">
-            Mark confidential information
-          </div>
-        </template>
-        <div>
-          <UiToastEditorWrapper
-            :initial-value="currentText"
-            :none-clickable="true"
-          />
-          <div class="d-flex justify-content-end">
-            <b-form-input
-              v-model="inputData"
-              placeholder="Type in confidental words"
-            />
-            <b-button
-              @click="addWordToList()"
-            >Add</b-button>
-          </div>
-          <div
-            class="text-center"
-          >
-            <div
-              v-for="(data, index) in confidentalWords"
-              :key="data"
-              class="d-inline-block"
-            >
-              <div
-                id="confidental-words"
-                class="mx-2"
-                @mouseover="hover = index"
-                @mouseleave="hover = null"
-              >
-                  {{data}}
-
-                <b-button
-                  variant="outline-danger"
-                  class="border-0"
-                  size="sm"
-                  @click="confidentalWords.splice(index, 1);"
-                >
-                <b-icon-trash />
-              </b-button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <template #modal-footer >
-          <div id="aiOptions" class="text-center mt-1">
-            <b-button id="acceptAIOption" class="m-1" @click="submitIssue">
-              <b-icon-check2 />
-              Ok
-            </b-button>
-            <b-button class="aiOptionButtons m-1" @click="hideModal(); $event.target.blur();">
-              <b-icon-x-square/>
-              Cancel
-            </b-button>
-          </div>
-        </template>
-      </b-modal>
-    </div>
+    <PrivacyModal
+      v-if="showModal"
+      :current-text="currentText"
+      @sendGPTRequest="redirectSubmit"
+      @resetShowModal="showModal = false"
+    />
   </div>
 </template>
 
@@ -129,11 +66,12 @@ import {customRef, defineComponent} from "vue";
 import codeSyntaxHighlight from "@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin-code-syntax-highlight-all";
 import UiToastEditorWrapper from "@/components/UiToastEditorWrapper.vue";
 import { PropType } from "vue";
+import PrivacyModal from "@/components/PrivacyModal.vue";
 
 export default defineComponent({
   name: "MarkdownEditor",
   components: {
-    UiToastEditorWrapper,
+    PrivacyModal,
     editor: UiToastEditorWrapper,
   },
   model: {
@@ -199,9 +137,6 @@ export default defineComponent({
       foundGrammar: false,
       showModal: false,
       currentIssue: "",
-      inputData: "",
-      confidentalWords: [] as Array<string>,
-      hover: null,
     };
   },
   mounted() {
@@ -226,23 +161,10 @@ export default defineComponent({
       this.showModal = true;
       this.currentIssue = issue;
     },
-    addWordToList() {
-      const selection = window.getSelection()
-      if (!this.confidentalWords.includes(this.inputData) && this.inputData !== '') {
-        this.confidentalWords.push(this.inputData);
-      }
-      if (selection !== null && selection.toString() !== '' && !this.confidentalWords.includes(selection.toString())) {
-        this.confidentalWords.push(selection.toString());
-      }
-      this.inputData = "";
-    },
-    submitIssue() {
-      this.$emit("sendGPTDescriptionRequest", {description: this.currentText, issue: this.currentIssue, confidentalData: this.confidentalWords});
-      this.hideModal();
-    },
-    hideModal() {
+    redirectSubmit({description, confidentialData}) {
+      this.$emit("sendGPTDescriptionRequest", {description: description, issue: this.currentIssue, confidentialData: confidentialData });
       this.showModal = false;
-    }
+    },
   },
 });
 </script>

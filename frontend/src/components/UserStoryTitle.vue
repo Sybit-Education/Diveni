@@ -29,7 +29,7 @@
               userStories[idx].title !== ''
             "
             id="submitAI"
-            @click="sendGptTitle"
+            @click="showModal = true"
           >
             <b-icon-stars id="aiStars" />
           </b-button>
@@ -80,17 +80,25 @@
         </b-dropdown>
       </div>
     </b-list-group-item>
+    <privacy-modal
+      v-if="showModal"
+      :current-text="userStories[index].title"
+      @sendGPTRequest="sendGptTitle"
+      @resetShowModal="showModal = false"
+    />
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
 import {useI18n} from "vue-i18n";
+import PrivacyModal from "@/components/PrivacyModal.vue";
 export default defineComponent({
   name: "UserStoryTitle",
+  components: {PrivacyModal},
   props: {
     index: { type: Number, required: true},
-    cardSet: { type: Array, required: true },
+    cardSet: { type: Array, required: false },
     initialStories: { type: Array, required: true },
     host: { type: Boolean, required: true, default: false},
     displayAiOption: { type: Boolean, required: false, default: false },
@@ -116,6 +124,8 @@ export default defineComponent({
       requestedUserStoryID: "" as string | null,
       acceptedUserStoriesID: [] as Array<string | null>,
       showSpinner: false,
+      showModal: false,
+      confidentialInformation: {} as Map<string,string>
     };
   },
   watch: {
@@ -143,6 +153,7 @@ export default defineComponent({
       estimation: string | null;
       isActive: boolean;
     }>;
+    this.confidentialInformation = new Map();
   },
   methods: {
     publishChanges(idx) {
@@ -161,11 +172,13 @@ export default defineComponent({
         this.savedTitle = this.userStories[this.index].title;
       }
     },
-    sendGptTitle() {
+    sendGptTitle({text, confidentialData}) {
+      this.confidentialInformation = confidentialData;
       this.showSpinner = true;
       this.showImproveTitleButton = false;
       this.requestedUserStoryID = this.userStories[this.index].id;
-      this.$emit("improveTitle", { userStory: this.userStories[this.index] });
+      this.showModal = false;
+      this.$emit("improveTitle", { userStory: this.userStories[this.index], confidentialInformation: confidentialData });
     },
     acceptGptTitle() {
       this.showSpinner = false;
@@ -186,7 +199,8 @@ export default defineComponent({
       this.showImproveTitleButton = false;
       this.$emit("retryTitle", {
         id: this.requestedUserStoryID,
-        originalTitle: this.oldTitleHolder,
+        originalTitle: this.savedTitle,
+        confidentialData: this.confidentialInformation,
       });
     },
     deleteTitle() {

@@ -1,13 +1,15 @@
 package io.diveni.backend.service.ai;
 
-import io.diveni.backend.model.UserStory;
+import io.diveni.backend.dto.GptConfidentialData;
+import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.*;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
@@ -26,14 +28,16 @@ public class AiServiceTest {
 
     ResponseEntity<String> mockedResponse =
         new ResponseEntity<>(jsonReturnValue, mockedHeaders, HttpStatusCode.valueOf(200));
+    Map<String, String> content = new HashMap<>();
+    content.put("test-company", "company");
+    JSONObject testObject = new JSONObject(content);
+    GptConfidentialData data = new GptConfidentialData("1", "TEST", "TEST", "3", true, testObject);
 
-    when(aiService.improveDescription(
-            new UserStory("1", "TEST", "TEST", "3", true), List.of("test")))
+    when(aiService.improveDescription(data))
         .thenReturn(mockedResponse);
 
     ResponseEntity<String> returnResponse =
-        aiService.improveDescription(
-            new UserStory("1", "TEST", "TEST", "3", true), List.of("test"));
+        aiService.improveDescription(data);
 
     assertEquals("{'improvedTitle' : 'test'}", returnResponse.getBody());
   }
@@ -51,13 +55,16 @@ public class AiServiceTest {
     ResponseEntity<String> mockedResponse =
         new ResponseEntity<>(jsonReturnValue, mockedHeaders, HttpStatusCode.valueOf(200));
 
-    when(aiService.improveDescription(
-            new UserStory("1", "TEST", "TEST", "3", true), List.of("test")))
+    Map<String, String> content = new HashMap<>();
+    content.put("test-company", "company");
+    JSONObject testObject = new JSONObject(content);
+    GptConfidentialData data = new GptConfidentialData("1", "TEST", "TEST", "3", true, testObject);
+
+    when(aiService.improveDescription(data))
         .thenReturn(mockedResponse);
 
     ResponseEntity<String> returnResponse =
-        aiService.improveDescription(
-            new UserStory("1", "TEST", "TEST", "3", true), List.of("test"));
+        aiService.improveDescription(data);
 
     assertEquals(
         "{'improved_description' : 'test', 'improved_acceptance_criteria' : '* TEST \n"

@@ -3,13 +3,12 @@ package io.diveni.backend.dto;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-
-import java.util.List;
+import org.json.JSONObject;
 
 @EqualsAndHashCode
 @RequiredArgsConstructor
 @Getter
-public class GptConfidentalData {
+public class GptConfidentialData {
   final String id;
 
   final String title;
@@ -20,5 +19,5 @@ public class GptConfidentalData {
 
   final Boolean isActive;
 
-  final List<String> confidentalData;
+  final JSONObject confidentialData;
 }

@@ -1,7 +1,7 @@
 package io.diveni.backend.service.ai;
 
 import com.google.gson.Gson;
-import io.diveni.backend.model.UserStory;
+import io.diveni.backend.dto.GptConfidentialData;
 import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,35 +40,36 @@ public class AiService {
     return restTemplate.exchange(url, method, request, String.class);
   }
 
-  public ResponseEntity<String> improveTitle(UserStory userStory) {
+  public ResponseEntity<String> improveTitle(GptConfidentialData data) {
     LOGGER.debug("--> improveTitle()");
-    Map<String, String> content = new HashMap<>();
-    content.put("name", userStory.getTitle());
+    Map<String, Object> content = new HashMap<>();
+    content.put("name", data.getTitle());
+    content.put("confidential_data", data.getConfidentialData().toMap());
     ResponseEntity<String> response =
         executeRequest(aiUrl + "/improve-title", HttpMethod.POST, new Gson().toJson(content));
     LOGGER.debug("<-- improveTitle()");
     return response;
   }
 
-  public ResponseEntity<String> improveDescription(
-      UserStory userStory, List<String> confidentalData) {
+  public ResponseEntity<String> improveDescription(GptConfidentialData data) {
     LOGGER.debug("--> improveDescription()");
     Map<String, Object> content = new HashMap<>();
-    content.put("title", userStory.getTitle());
-    content.put("description", userStory.getDescription());
-    content.put("confidentalData", confidentalData);
+    content.put("title", data.getTitle());
+    content.put("description", data.getDescription());
+    content.put("confidential_data", data.getConfidentialData().toMap());
+    LOGGER.debug(new Gson().toJson(content));
     ResponseEntity<String> response =
         executeRequest(aiUrl + "/improve-description", HttpMethod.POST, new Gson().toJson(content));
     LOGGER.debug("<-- improveDescription()");
     return response;
   }
 
-  public ResponseEntity<String> grammarCheck(UserStory userStory, List<String> confidentalData) {
+  public ResponseEntity<String> grammarCheck(GptConfidentialData data) {
     LOGGER.debug("--> grammarCheck()");
     Map<String, Object> content = new HashMap<>();
-    content.put("title", userStory.getTitle());
-    content.put("description", userStory.getDescription());
-    content.put("confidentalData", confidentalData);
+    content.put("title", data.getTitle());
+    content.put("description", data.getDescription());
+    content.put("confidential_data", data.getConfidentialData().toMap());
     ResponseEntity<String> response =
         executeRequest(aiUrl + "/grammar-check", HttpMethod.POST, new Gson().toJson(content));
     LOGGER.debug("<-- grammarCheck()");

@@ -1,7 +1,6 @@
 package io.diveni.backend.controller;
 
-import io.diveni.backend.dto.GptConfidentalData;
-import io.diveni.backend.model.UserStory;
+import io.diveni.backend.dto.GptConfidentialData;
 import io.diveni.backend.service.ai.AiService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,41 +19,27 @@ public class AiController {
   @Autowired AiService aiService;
 
   @PostMapping("/improve-title")
-  public ResponseEntity<String> improveTitle(@RequestBody UserStory userStory) {
-    LOGGER.debug("--> improveTitle(), userstory={}", userStory);
-    ResponseEntity<String> response = aiService.improveTitle(userStory);
+  public ResponseEntity<String> improveTitle(@RequestBody GptConfidentialData data) {
+    LOGGER.debug("--> improveTitle(), userstory={}", data);
+    ResponseEntity<String> response = aiService.improveTitle(data);
     LOGGER.debug("<-- improveTitle()");
     return response;
   }
 
   @PostMapping("/improve-description")
-  public ResponseEntity<String> improveDescription(@RequestBody GptConfidentalData data) {
+  public ResponseEntity<String> improveDescription(@RequestBody GptConfidentialData data) {
     LOGGER.debug("--> improveDescription(), userStory={}", data);
     ResponseEntity<String> response =
-        aiService.improveDescription(
-            new UserStory(
-                data.getId(),
-                data.getTitle(),
-                data.getDescription(),
-                data.getEstimation(),
-                data.getIsActive()),
-            data.getConfidentalData());
+        aiService.improveDescription(data);
     LOGGER.debug("<-- improveDescription()");
     return response;
   }
 
   @PostMapping("/grammar-check")
-  public ResponseEntity<String> grammarCheck(@RequestBody GptConfidentalData data) {
+  public ResponseEntity<String> grammarCheck(@RequestBody GptConfidentialData data) {
     LOGGER.debug("--> grammarCheck(), userStory={}", data);
     ResponseEntity<String> response =
-        aiService.grammarCheck(
-            new UserStory(
-                data.getId(),
-                data.getTitle(),
-                data.getDescription(),
-                data.getEstimation(),
-                data.getIsActive()),
-            data.getConfidentalData());
+        aiService.grammarCheck(data);
     LOGGER.debug("<-- grammarCheck()");
     return response;
   }

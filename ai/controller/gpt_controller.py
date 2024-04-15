@@ -9,7 +9,7 @@ app = FastAPI()
 @app.post("/improve-title")
 async def root(title: Title):
     print("gpt_controller: --> improve_title(), title={", title.name, "}")
-    response = await service.improve_title(title.name)
+    response = await service.improve_title(title.name, title.confidential_data)
     print("gpt_controller: <-- improve_title()")
     return {"improvedTitle": response}
 

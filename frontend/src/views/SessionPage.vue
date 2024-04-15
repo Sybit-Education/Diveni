@@ -460,7 +460,7 @@ export default defineComponent({
       }>,
       showSpinner: false,
       // needed for privacy feature
-      confidentalData: [] as Array<string>,
+      confidentialData: {} as Map<string, string>,
     };
   },
   computed: {
@@ -768,10 +768,10 @@ export default defineComponent({
         })
       );
     },
-    async improveTitle({ userStory }) {
+    async improveTitle({ userStory, confidentialInformation }) {
       const trimmedStoryTitle = userStory.title.trim();
       if (trimmedStoryTitle.length > 0) {
-        const response = await apiService.improveTitle(userStory);
+        const response = await apiService.improveTitle(userStory, confidentialInformation);
         this.alternateTitle = response.data.improvedTitle;
         this.gptTitleResponse = true;
       }
@@ -792,11 +792,11 @@ export default defineComponent({
       this.alternateTitle = "";
       this.gptTitleResponse = false;
     },
-    async retryImproveTitle({ id, originalTitle }) {
+    async retryImproveTitle({ id, originalTitle, confidentialData }) {
       this.gptTitleResponse = false;
       const userstory = this.userStories.find((us) => us.id === id);
       if (userstory) {
-        const response = await apiService.retryImproveTitle(userstory, originalTitle);
+        const response = await apiService.retryImproveTitle(userstory, originalTitle, confidentialData);
         this.alternateTitle = response.data.improvedTitle;
         this.gptTitleResponse = true;
       }
@@ -805,15 +805,15 @@ export default defineComponent({
       this.alternateTitle = "";
       this.gptTitleResponse = false;
     },
-    async improveDescription({ userStory, description, issue, confidentalData }) {
-      this.confidentalData = confidentalData;
+    async improveDescription({ userStory, description, issue, confidentialData }) {
+      this.confidentialData = confidentialData;
       this.showSpinner = true;
       if (issue === 'improveDescription') {
-        const response = await apiService.improveDescription(userStory, description, this.confidentalData);
+        const response = await apiService.improveDescription(userStory, description, this.confidentialData);
         this.alternateDescription =
           response.description + response.acceptance_criteria.toString().replaceAll(",", "");
       } else {
-        const response = await apiService.grammarCheck(userStory, description, this.confidentalData);
+        const response = await apiService.grammarCheck(userStory, description, this.confidentialData);
         this.alternateDescription = response.description;
       }
       this.descriptionMode = issue;
@@ -832,7 +832,7 @@ export default defineComponent({
       this.acceptedStoriesDescription.push({ storyID: this.userStories[this.index].id, issueType: this.descriptionMode})
     },
     async retrySuggestionDescription() {
-      await this.improveDescription({userStory: this.userStories[this.index],description: this.userStories[this.index].description, issue: this. descriptionMode, confidentalData: this.confidentalData});
+      await this.improveDescription({userStory: this.userStories[this.index],description: this.userStories[this.index].description, issue: this. descriptionMode, confidentialData: this.confidentialData});
       this.updateComponent = !this.updateComponent;
     },
     closeModal() {

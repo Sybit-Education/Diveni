@@ -1,9 +1,9 @@
 package io.diveni.backend.controller;
 
 import com.google.gson.Gson;
-import io.diveni.backend.dto.GptConfidentalData;
-import io.diveni.backend.model.UserStory;
+import io.diveni.backend.dto.GptConfidentialData;
 import io.diveni.backend.service.ai.AiService;
+import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -16,7 +16,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -32,14 +33,17 @@ public class AiControllerTest {
 
   @BeforeEach
   public void setUp() {
-    UserStory userStory = new UserStory("1", "TEST", "TEST", "3", true);
+    Map<String, String> content = new HashMap<>();
+    content.put("test-company", "company");
+    JSONObject testObject = new JSONObject(content);
+    GptConfidentialData data = new GptConfidentialData("1", "TEST", "TEST", "3", true, testObject);
     // improve Title
-    Mockito.when(service.improveTitle(userStory))
+    Mockito.when(service.improveTitle(Mockito.any(GptConfidentialData.class)))
         .thenReturn(new ResponseEntity<>("'improvedTitle': 'TEST'", HttpStatus.OK));
     // improve Description
     String improvedAcceptanceCriteria = "* pictures \n, * navigation bar\n";
     String improvedDescription = "As a User i want a homepage. \n ##### Acceptance Criteria: \n";
-    Mockito.when(service.improveDescription(userStory, List.of("test")))
+    Mockito.when(service.improveDescription(Mockito.any(GptConfidentialData.class)))
         .thenReturn(
             new ResponseEntity<>(
                 "{ 'improved_description': '"
@@ -52,7 +56,7 @@ public class AiControllerTest {
     String correctedDescription =
         "As a backend developer, I want to establish websocket communication between the server and"
             + " client, so that real-time data can be transmitted and received.";
-    Mockito.when(service.grammarCheck(userStory, List.of("test")))
+    Mockito.when(service.grammarCheck(Mockito.any(GptConfidentialData.class)))
         .thenReturn(
             new ResponseEntity<>(
                 "{ 'improved_description': '" + correctedDescription + "'}", HttpStatus.OK));
@@ -60,13 +64,15 @@ public class AiControllerTest {
 
   @Test
   public void getTitle_valid_statusOKAndContainsTitle() throws Exception {
-    UserStory userStory = new UserStory("1", "TEST", "TEST", "3", true);
-
+    Map<String, String> content = new HashMap<>();
+    content.put("test-company", "company");
+    JSONObject testObject = new JSONObject(content);
+    GptConfidentialData data = new GptConfidentialData("1", "TEST", "TEST", "3", true, testObject);
     this.mockMvc
         .perform(
             post("/ai/improve-title")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(new Gson().toJson(userStory)))
+                .content(new Gson().toJson(data)))
         .andExpect(status().isOk())
         .andExpect(content().string(containsString("improvedTitle")));
   }
@@ -74,8 +80,11 @@ public class AiControllerTest {
   @Test
   public void getDescription_valid_statusOKAndContainsDescriptionAndAcceptanceCriteria()
       throws Exception {
-    GptConfidentalData data =
-        new GptConfidentalData("1", "TEST", "TEST", "3", true, List.of("test"));
+    Map<String, String> content = new HashMap<>();
+    content.put("test-company", "company");
+    JSONObject testObject = new JSONObject(content);
+    GptConfidentialData data =
+        new GptConfidentialData("1", "TEST", "TEST", "3", true, testObject);
 
     this.mockMvc
         .perform(
@@ -89,8 +98,11 @@ public class AiControllerTest {
 
   @Test
   public void grammarCheck_valid_statusOKAndContainsDescription() throws Exception {
-    GptConfidentalData data =
-        new GptConfidentalData("1", "TEST", "TEST", "3", true, List.of("test"));
+    Map<String, String> content = new HashMap<>();
+    content.put("test-company", "company");
+    JSONObject testObject = new JSONObject(content);
+    GptConfidentialData data =
+        new GptConfidentialData("1", "TEST", "TEST", "3", true, testObject);
 
     this.mockMvc
         .perform(

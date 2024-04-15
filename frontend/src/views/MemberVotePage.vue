@@ -176,6 +176,7 @@
             :index="index"
             :initial-stories="userStories"
             :edit-description="false"
+            :key="userStories[index].description"
           />
         </b-col>
       </b-row>

@@ -1,6 +1,6 @@
 import constants from "@/constants";
-import { JiraRequestTokenDto, JiraResponseCodeDto, PullRequestDto } from "@/types";
-import axios, { AxiosResponse } from "axios";
+import {JiraRequestTokenDto, JiraResponseCodeDto, PullRequestDto} from "@/types";
+import axios, {AxiosResponse} from "axios";
 import UserStory from "@/model/UserStory";
 
 class ApiService {
@@ -155,35 +155,47 @@ class ApiService {
     return response.data;
   }
 
-  public async improveTitle(userStory: UserStory) {
-    const response = await axios.post(`${constants.backendURL}/ai/improve-title`, {
+  public async improveTitle(userStory: UserStory, confidentialData: Map<string,string>) {
+    return await axios.post(`${constants.backendURL}/ai/improve-title`, {
       id: userStory.id,
       title: userStory.title,
       description: userStory.description,
       estimation: userStory.estimation,
       isActive: userStory.isActive,
+      confidentialData: JSON.stringify(
+        Array.from(confidentialData.entries()).reduce((o, [key, value]) => {
+          o[key] = value;
+          return o;
+        }, {})),
     });
-    return response;
   }
 
-  public async retryImproveTitle(userStory: UserStory, oldTitle: string) {
-    const response = await axios.post(`${constants.backendURL}/ai/improve-title`, {
+  public async retryImproveTitle(userStory: UserStory, oldTitle: string, confidentialData: Map<string,string>) {
+    return await axios.post(`${constants.backendURL}/ai/improve-title`, {
       id: userStory.id,
       title: oldTitle,
       description: userStory.description,
       estimation: userStory.estimation,
       isActive: userStory.isActive,
+      confidentialData: JSON.stringify(
+        Array.from(confidentialData.entries()).reduce((o, [key, value]) => {
+          o[key] = value;
+          return o;
+        }, {})),
     });
-    return response;
   }
-  public async improveDescription(userStory: UserStory, description: string, confidentalData: Array<string>) {
+  public async improveDescription(userStory: UserStory, description: string, confidentialData: Map<string,string>) {
     const response = await axios.post(`${constants.backendURL}/ai/improve-description`, {
       id: userStory.id,
       title: userStory.title,
       description: description,
       estimation: userStory.estimation,
       isActive: userStory.isActive,
-      confidentalData: confidentalData,
+      confidentialData: JSON.stringify(
+        Array.from(confidentialData.entries()).reduce((o, [key, value]) => {
+        o[key] = value;
+        return o;
+      }, {})),
     });
     return {
       description: response.data.improved_description,
@@ -191,15 +203,18 @@ class ApiService {
     };
 
   }
-  public async grammarCheck(userStory: UserStory, description: string, confidentalData: Array<string>) {
-
+  public async grammarCheck(userStory: UserStory, description: string, confidentialData: Map<string,string>) {
     const response = await axios.post(`${constants.backendURL}/ai/grammar-check`, {
         id: userStory.id,
         title: userStory.title,
         description: description,
         estimation: userStory.estimation,
         isActive: userStory.isActive,
-        confidentalData: confidentalData,
+        confidentialData: JSON.stringify(
+          Array.from(confidentialData.entries()).reduce((o, [key, value]) => {
+          o[key] = value;
+          return o;
+        }, {})),
       }
     );
     return {

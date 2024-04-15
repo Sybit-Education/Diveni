@@ -101,12 +101,12 @@ export default defineComponent({
     publishChanges(idx) {
       this.$emit("userStoriesChanged", { us: this.userStories, idx: idx, doRemove: false });
     },
-    sendGPTDescriptionRequest({ description, issue, confidentalData }) {
+    sendGPTDescriptionRequest({ description, issue, confidentialData }) {
       this.$emit("sendGPTDescriptionRequest", {
         userStory: this.userStories[this.index],
         description: description,
         issue: issue,
-        confidentalData: confidentalData,
+        confidentialData: confidentialData,
       });
     },
   },
