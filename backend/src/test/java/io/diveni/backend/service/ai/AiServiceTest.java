@@ -31,7 +31,8 @@ public class AiServiceTest {
     Map<String, String> content = new HashMap<>();
     content.put("test-company", "company");
     JSONObject testObject = new JSONObject(content);
-    GptConfidentialData data = new GptConfidentialData("1", "TEST", "TEST", "3", true, testObject, "english");
+    GptConfidentialData data =
+        new GptConfidentialData("1", "TEST", "TEST", "3", true, testObject, "english");
 
     when(aiService.improveDescription(data)).thenReturn(mockedResponse);
 
@@ -56,7 +57,8 @@ public class AiServiceTest {
     Map<String, String> content = new HashMap<>();
     content.put("test-company", "company");
     JSONObject testObject = new JSONObject(content);
-    GptConfidentialData data = new GptConfidentialData("1", "TEST", "TEST", "3", true, testObject, "english");
+    GptConfidentialData data =
+        new GptConfidentialData("1", "TEST", "TEST", "3", true, testObject, "english");
 
     when(aiService.improveDescription(data)).thenReturn(mockedResponse);
 
