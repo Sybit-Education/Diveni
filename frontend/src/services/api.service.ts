@@ -224,6 +224,24 @@ class ApiService {
       acceptance_criteria: response.data.improved_acceptance_criteria,
     };
   }
+
+  public async estimateUserStory(userStory: UserStory, confidentialData: Map<string,string>, voteSet: string[]) {
+    const response = await axios.post(`${constants.backendURL}/ai/estimate-user-story`, {
+      id: userStory.id,
+      title: userStory.title,
+      description: userStory.description,
+      estimation: userStory.estimation,
+      isActive: userStory.isActive,
+      confidentialData: JSON.stringify(
+        Array.from(confidentialData.entries()).reduce((o, [key, value]) => {
+          o[key] = value;
+          return o;
+        }, {})),
+      voteSet: voteSet,
+    })
+    console.log("reponse " + response.data.estimation);
+    return response.data.estimation;
+  }
 }
 
 export default new ApiService();

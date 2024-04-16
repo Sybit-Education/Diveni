@@ -2,6 +2,7 @@ from fastapi import FastAPI
 import service.gpt_service as service
 from dto.user_story import UserStory
 from dto.title import Title
+from dto.estimation_data import Estimation_data
 
 app = FastAPI()
 
@@ -28,3 +29,10 @@ async def grammar_check(data: UserStory):
     response = await service.grammar_check(data)
     print("gpt_controller: <-- grammar_check()")
     return {"improved_description": response}
+
+@app.post("/estimate-user-story")
+async def estimate_user_story(data: Estimation_data):
+    print("gpt_controller: --> estimate_user_story(), data={" , data , "}")
+    response = await service.estimate_user_story(data)
+    print("gpt_controller: <-- estimate_user_story()")
+    return {"estimation": response}

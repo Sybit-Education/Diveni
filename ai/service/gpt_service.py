@@ -4,6 +4,7 @@ import re
 from openai import OpenAI
 from dto.user_story import UserStory
 from dto.description_response import Description_Response
+from dto.estimation_data import Estimation_data
 import json
 
 prompt_title = ("Task: Improve the title of this issue in its language: Create a homepage for information research"
@@ -58,6 +59,70 @@ prompt_grammar = (
     "Solution: {\"description\" : \"As a developer, I want to create a backend service with a REST API so that I can easily manage and manipulate data from the database.\"\n"
     "\"acceptance_criteria\" : []}\n"
     "Task: Send a JSON with \"description\" & \"acceptance_criteria\" and fix grammar & syntax mistakes, but do not add new elements, for this markdown-text: ")
+
+prompt_fibo = (
+               "Task: Send a JSON with \"estimation\" and estimate the effort for this user story: Title: filter numbers out of the input field "
+               "\nDescription: The existing Backend Service should filter numbers out of the input, since the system crashes with numbers.\n"
+               "Valid Options are: ['1','2','3','5','8','13','21']\n"
+               "Answer: {\"estimation\": \"2\"}\n"
+               "Task: Send a JSON with \"estimation\" and estimate the effort for this user story: Title: Create a webapp like amazon "
+               "\nDescription: Our Company should have a web application like amazon, but better\n"
+               "## Acceptance Criteria: \n"
+               "* robust and fast backend with java \n"
+               "* good looking design \n"
+               "* nosql database should be implemented \n"
+               "Valid Options are: ['1','2','3','5','8','13','21']\n"
+               "Answer: {\"estimation\": \"21\"}\n"
+               "Task: Send a JSON with \"estimation\" and estimate the effort for this user story: Title:"
+)
+
+prompt_shirt = (
+    "Task: Send a JSON with \"estimation\" and estimate the effort for this user story: Title: filter numbers out of the input field "
+    "\nDescription: The existing Backend Service should filter numbers out of the input, since the system crashes with numbers.\n"
+    "Valid Options are: ['XS','S','M','L','XL']\n"
+    "Answer: {\"estimation\": \"S\"}\n"
+    "Task: Send a JSON with \"estimation\" and estimate the effort for this user story: Title: Create a webapp like amazon "
+    "\nDescription: Our Company should have a web application like amazon, but better\n"
+    "## Acceptance Criteria: \n"
+    "* robust and fast backend with java \n"
+    "* good looking design \n"
+    "* nosql database should be implemented \n"
+    "Valid Options are: ['XS','S','M','L','XL']\n"
+    "Answer: {\"estimation\": \"XL\"}\n"
+    "Task: Send a JSON with \"estimation\" and estimate the effort for this user story: Title:"
+)
+
+prompt_hour = (
+    "Task: Send a JSON with \"estimation\" and estimate the effort for this user story: Title: filter numbers out of the input field "
+    "\nDescription: The existing Backend Service should filter numbers out of the input, since the system crashes with numbers.\n"
+    "Valid Options are: ['1','2','3','4','5','6','8','10','12','16']\n"
+    "Answer: {\"estimation\": \"2\"}\n"
+    "Task: Send a JSON with \"estimation\" and estimate the effort for this user story: Title: Create a webapp like amazon "
+    "\nDescription: Our Company should have a web application like amazon, but better\n"
+    "## Acceptance Criteria: \n"
+    "* robust and fast backend with java \n"
+    "* good looking design \n"
+    "* nosql database should be implemented \n"
+    "Valid Options are: ['1','2','3','4','5','6','8','10','12','16']\n"
+    "Answer: {\"estimation\": \"16\"}\n"
+    "Task: Send a JSON with \"estimation\" and estimate the effort for this user story: Title:"
+)
+
+prompt_number = (
+    "Task: Send a JSON with \"estimation\" and estimate the effort for this user story: Title: filter numbers out of the input field "
+    "\nDescription: The existing Backend Service should filter numbers out of the input, since the system crashes with numbers.\n"
+    "Valid Options are: ['1','2','3','4','5','6','7','8','9','10']\n"
+    "Answer: {\"estimation\": \"2\"}\n"
+    "Task: Send a JSON with \"estimation\" and estimate the effort for this user story: Title: Create a webapp like amazon "
+    "\nDescription: Our Company should have a web application like amazon, but better\n"
+    "## Acceptance Criteria: \n"
+    "* robust and fast backend with java \n"
+    "* good looking design \n"
+    "* nosql database should be implemented \n"
+    "Valid Options are: ['1','2','3','4','5','6','7','8','9','10']\n"
+    "Answer: {\"estimation\": \"10\"}\n"
+    "Task: Send a JSON with \"estimation\" and estimate the effort for this user story: Title:"
+)
 
 
 def setUp():
@@ -204,3 +269,36 @@ async def grammar_check(original_user_story: UserStory):
     description = replace_confidential_data_to_original(description, swappedData)
     print("gpt_service: <-- grammar_check()")
     return description
+
+async def estimate_user_story(original_data: Estimation_data):
+    print("gpt_service: --> estimate_user_story()")
+    client, model_id = setUp()
+    swappedDataTitle, new_title = replace_confidential_data(original_data.title, original_data.confidential_data)
+    swappedDataDescription, new_description = replace_confidential_data(original_data.description, original_data.confidential_data)
+    if original_data.voteSet == ['1', '2', '3', '5', '8', '13', '21']:
+        prompt = prompt_fibo + new_title + "\n Description: " + new_description + "\n Valid Options are: " + str(original_data.voteSet)
+    elif original_data.voteSet == ['XS','S','M','L','XL']:
+        prompt = prompt_shirt + new_title + "\n Description: " + new_description + "\n Valid Options are: " + str(original_data.voteSet)
+    elif original_data.voteSet == ['1','2','3','4','5','6','8','10','12','16']:
+        prompt = prompt_hour + new_title + "\n Description: " + new_description + "\n Valid Options are: " + str(original_data.voteSet)
+    elif original_data.voteSet == ['1','2','3','4','5','6','7','8','9','10']:
+        prompt = prompt_number + new_title + "\n Description: " + new_description + "\n Valid Options are: " + str(original_data.voteSet)
+    else:
+        prompt = ("Task: Send a JSON with \"estimation\" and estimate the effort for this user story: Title: " + new_title + "\n "
+                  "Description: " + new_description + "\n Valid Options are: " + str(original_data.voteSet))
+    print(prompt)
+    completion = client.completions.create(
+        model=model_id,
+        prompt=prompt,
+        max_tokens=250,
+        temperature=0
+    )
+    print(completion.choices[0].text)
+    output = completion.choices[0].text
+    start_brace = output.find('{')
+    end_brace = output.rfind('}')
+    json_ready_string = output[start_brace: end_brace + 1]
+    data = json.loads(json_ready_string, strict=False)
+    estimation = data.get("estimation", "")
+    print("gpt_service: <-- estimate_user_story()")
+    return estimation

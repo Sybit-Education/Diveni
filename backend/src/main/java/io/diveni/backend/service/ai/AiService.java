@@ -76,4 +76,17 @@ public class AiService {
     LOGGER.debug("<-- grammarCheck()");
     return response;
   }
+
+  public ResponseEntity<String> estimateUserStory(GptConfidentialData data) {
+    LOGGER.debug("--> estimateUserStory()");
+    Map<String, Object> content = new HashMap<>();
+    content.put("title", data.getTitle());
+    content.put("description", data.getDescription());
+    content.put("confidential_data", data.getConfidentialData().toMap());
+    content.put("voteSet", data.getVoteSet());
+    ResponseEntity<String> response =
+      executeRequest(aiUrl + "/estimate-user-story", HttpMethod.POST, new Gson().toJson(content));
+    LOGGER.debug("<-- estimateUserStory()");
+    return response;
+  }
 }

@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONObject;
 
+import java.util.List;
+
 @EqualsAndHashCode
 @RequiredArgsConstructor
 @Getter
@@ -22,4 +24,6 @@ public class GptConfidentialData {
   final JSONObject confidentialData;
 
   final String language;
+
+  final List<String> voteSet;
 }

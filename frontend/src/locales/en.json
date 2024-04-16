@@ -11,7 +11,43 @@
       "backend": "Licenses (Backend)",
       "translations": "Improve translation"
     },
-    "feedback": "Feedback"
+    "feedback": "Feedback",
+    "aiFeature": {
+      "optionButtons": {
+        "keep": "Keep",
+        "adjust": "Adjust",
+        "tryAgain": "Try Again",
+        "delete": "Delete",
+        "cancel": "Cancel"
+      },
+      "descriptionButtons": {
+        "description": "Improve Description",
+        "grammar": "Grammar Check"
+      },
+      "privacyModal": {
+        "title": "Mark confidential information",
+        "warning": "Warning",
+        "warningInfo" : "Your User Story will be sent to OpenAI's GPT. Mark confidential Information now.",
+        "buttons": {
+          "company": "Companies",
+          "person": "Personal Information",
+          "number": "Number",
+          "add": "Add",
+          "ok": "Ok"
+        },
+        "labels": {
+          "english": "English",
+          "german": "German"
+        }
+      },
+      "descriptionModal": {
+        "title": "Alternative Description"
+      },
+      "estimationToast": {
+        "startingText": "Proposed Estimation for ",
+        "endingText": " is: "
+      }
+    }
   },
   "page": {
     "session": {

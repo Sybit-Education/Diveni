@@ -41,4 +41,12 @@ public class AiController {
     LOGGER.debug("<-- grammarCheck()");
     return response;
   }
+
+  @PostMapping("estimate-user-story")
+  public ResponseEntity<String> estimateUserStory(@RequestBody GptConfidentialData data) {
+    LOGGER.debug("--> estimateUserStory(), GptConfidentialData={}", data);
+    ResponseEntity<String> response = aiService.estimateUserStory(data);
+    LOGGER.debug("<-- estimateUserStory()");
+    return response;
+  }
 }

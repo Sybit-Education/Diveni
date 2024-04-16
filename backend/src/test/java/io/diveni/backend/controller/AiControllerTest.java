@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.hamcrest.Matchers.containsString;
@@ -63,7 +64,7 @@ public class AiControllerTest {
     Map<String, String> content = new HashMap<>();
     content.put("test-company", "company");
     JSONObject testObject = new JSONObject(content);
-    GptConfidentialData data = new GptConfidentialData("1", "TEST", "TEST", "3", true, testObject, "english");
+    GptConfidentialData data = new GptConfidentialData("1", "TEST", "TEST", "3", true, testObject, "english", List.of("1", "2", "3", "4"));
     this.mockMvc
         .perform(
             post("/ai/improve-title")
@@ -79,7 +80,7 @@ public class AiControllerTest {
     Map<String, String> content = new HashMap<>();
     content.put("test-company", "company");
     JSONObject testObject = new JSONObject(content);
-    GptConfidentialData data = new GptConfidentialData("1", "TEST", "TEST", "3", true, testObject, "english");
+    GptConfidentialData data = new GptConfidentialData("1", "TEST", "TEST", "3", true, testObject, "english", List.of("1", "2", "3", "4"));
 
     this.mockMvc
         .perform(
@@ -96,7 +97,7 @@ public class AiControllerTest {
     Map<String, String> content = new HashMap<>();
     content.put("test-company", "company");
     JSONObject testObject = new JSONObject(content);
-    GptConfidentialData data = new GptConfidentialData("1", "TEST", "TEST", "3", true, testObject, "english");
+    GptConfidentialData data = new GptConfidentialData("1", "TEST", "TEST", "3", true, testObject, "english", List.of("1", "2", "3", "4"));
 
     this.mockMvc
         .perform(

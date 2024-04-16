@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -31,7 +32,7 @@ public class AiServiceTest {
     Map<String, String> content = new HashMap<>();
     content.put("test-company", "company");
     JSONObject testObject = new JSONObject(content);
-    GptConfidentialData data = new GptConfidentialData("1", "TEST", "TEST", "3", true, testObject, "english");
+    GptConfidentialData data = new GptConfidentialData("1", "TEST", "TEST", "3", true, testObject, "english", List.of("1", "2", "3", "4"));
 
     when(aiService.improveDescription(data)).thenReturn(mockedResponse);
 
@@ -56,7 +57,7 @@ public class AiServiceTest {
     Map<String, String> content = new HashMap<>();
     content.put("test-company", "company");
     JSONObject testObject = new JSONObject(content);
-    GptConfidentialData data = new GptConfidentialData("1", "TEST", "TEST", "3", true, testObject, "english");
+    GptConfidentialData data = new GptConfidentialData("1", "TEST", "TEST", "3", true, testObject, "english", List.of("1", "2", "3", "4"));
 
     when(aiService.improveDescription(data)).thenReturn(mockedResponse);
 

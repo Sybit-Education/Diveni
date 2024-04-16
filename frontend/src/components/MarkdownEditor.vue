@@ -32,14 +32,14 @@
           class="my-1 aiDescriptionButtons"
           @click="aiButtonClicked('grammar')"
         >
-          <b-icon-pencil/> Grammar check
+          <b-icon-pencil/> {{ t("general.aiFeature.descriptionButtons.grammar") }}
         </b-button>
         <b-button
           v-if="foundDescription"
           class="my-1 aiDescriptionButtons"
           @click="aiButtonClicked('improveDescription')"
         >
-          <b-icon-lightbulb/> Improve Description
+          <b-icon-lightbulb/> {{ t("general.aiFeature.descriptionButtons.description") }}
         </b-button>
       </div>
     </div>
@@ -68,6 +68,7 @@ import codeSyntaxHighlight from "@toast-ui/editor-plugin-code-syntax-highlight/d
 import UiToastEditorWrapper from "@/components/UiToastEditorWrapper.vue";
 import { PropType } from "vue";
 import PrivacyModal from "@/components/PrivacyModal.vue";
+import {useI18n} from "vue-i18n";
 
 export default defineComponent({
   name: "MarkdownEditor",
@@ -107,6 +108,10 @@ export default defineComponent({
       required: false,
       default: []
     },
+  },
+  setup() {
+    const { t } = useI18n();
+    return { t };
   },
   data() {
     return {

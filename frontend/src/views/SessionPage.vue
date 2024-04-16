@@ -327,6 +327,7 @@
           @adjustTitle="adjustOriginalTitle"
           @retryTitle="retryImproveTitle"
           @deleteTitle="deleteTitle"
+          @aiEstimation="aiEstimation"
         />
         <user-story-descriptions
           :initial-stories="userStories"
@@ -354,6 +355,7 @@
           @adjustTitle="adjustOriginalTitle"
           @retryTitle="retryImproveTitle"
           @deleteTitle="deleteTitle"
+          @aiEstimation="aiEstimation"
         />
         <user-story-descriptions
           :initial-stories="userStories"
@@ -842,6 +844,13 @@ export default defineComponent({
       this.showGPTModal = false;
       this.gptDescriptionResponse = false;
     },
+    async aiEstimation({confidentialData}){
+      this.confidentialData = confidentialData;
+      this.showSpinner = true;
+      const response = await apiService.estimateUserStory(this.userStories[this.index], confidentialData, this.voteSet);
+      this.showSpinner = false;
+      this.toast.info(this.t("general.aiFeature.estimationToast.startingText") + "\"" + this.userStories[this.index].title + "\"" + this.t("general.aiFeature.estimationToast.endingText") + response, {timeout: false});
+    }
   },
 });
 </script>

@@ -9,11 +9,17 @@
     >
       <template #modal-header>
         <div class="text-center">
-          Mark confidential information
+          {{ t("general.aiFeature.privacyModal.title") }}
         </div>
       </template>
-      <BIconExclamationTriangle/> Warning <BIconExclamationTriangle/>: Your User Story will be sent to OpenAI's GPT. Mark confidential Information now.
+      <BIconExclamationTriangle/>{{ t("general.aiFeature.privacyModal.warning") }}<BIconExclamationTriangle/>: {{ t("general.aiFeature.privacyModal.warningInfo") }}
       <div>
+        <b-form-textarea
+          v-if="currentTitle !== ''"
+          id="titleInputField"
+          class="mt-2"
+          v-model="currentTitleData"
+          disabled/>
         <UiToastEditorWrapper
           :initial-value="currentText"
           :none-clickable="true"
@@ -25,21 +31,21 @@
             :class="isCompany ? 'activeCompany' : ''"
             @click="markButtonClicked('company'); $event.target.blur()"
           >
-            <BIconHouseDoorFill/> Companies
+            <BIconHouseDoorFill/> {{ t("general.aiFeature.privacyModal.buttons.company") }}
           </b-button>
           <b-button
             class="toggle-button"
             :class="isPerson ? 'activePerson' : ''"
             @click="markButtonClicked('person')"
           >
-            <BIconPersonFill/> Personal Information
+            <BIconPersonFill/> {{ t("general.aiFeature.privacyModal.buttons.person") }}
           </b-button>
           <b-button
             class="toggle-button"
             :class="isNumber ? 'activeNumber' : ''"
             @click="markButtonClicked('number')"
           >
-            <BIconCalculatorFill/> Numbers
+            <BIconCalculatorFill/> {{ t("general.aiFeature.privacyModal.buttons.number") }}
           </b-button>
         </div>
         <div class="mt-2">
@@ -47,7 +53,7 @@
             id="addWordsToListButton"
             @click="addWordToList()"
           >
-            <BIconPlus/> Add
+            <BIconPlus/> {{ t("general.aiFeature.privacyModal.buttons.add") }}
           </b-button>
         </div>
         <div
@@ -84,22 +90,22 @@
       <div v-if="isDescription" class="my-2 d-inline-flex">
         <div class="position-relative mb-2">
           <input class="position-absolute" style="height: 20px; width:20px; left: 150px; top: 2px;" v-model="selectedLanguage" type="radio" name="languageSelector" value="english">
-          <label for="english" class="position-absolute" style="left: 175px;">English</label>
+          <label for="english" class="position-absolute" style="left: 175px;">{{ t("general.aiFeature.privacyModal.labels.english") }}</label>
         </div>
         <div class="position-relative mb-2">
           <input class="position-absolute" style="height: 20px; width:20px; left: 250px; top: 2px;" v-model="selectedLanguage" type="radio" name="languageSelector" value="german">
-          <label for="german" style="left: 275px" class="position-absolute">German</label>
+          <label for="german" style="left: 275px" class="position-absolute">{{ t("general.aiFeature.privacyModal.labels.german") }}</label>
         </div>
       </div>
       <template #modal-footer >
         <div id="aiOptions" class="text-center mt-1">
           <b-button id="acceptAIOption" class="m-1" @click="submitIssue">
             <b-icon-check2 />
-            Ok
+            {{ t("general.aiFeature.privacyModal.buttons.ok") }}
           </b-button>
           <b-button class="aiOptionButtons m-1" @click="hideModal(); $event.target.blur();">
             <b-icon-x-square/>
-            Cancel
+            {{ t("general.aiFeature.privacyModal.buttons.cancel") }}
           </b-button>
         </div>
       </template>
@@ -118,6 +124,7 @@ export default defineComponent({
   components: {UiToastEditorWrapper},
   props: {
     currentText: {type: String, required: false, default: ""},
+    currentTitle: {type: String, required: false, default: ""},
     isDescription: { type: Boolean, required: false, default: false }
   },
   setup() {
@@ -133,10 +140,12 @@ export default defineComponent({
       isNumber: false,
       showModal: true,
       selectedLanguage: "english",
+      currentTitleData: "",
     }
   },
   created() {
     this.confidentialWords = new Map();
+    this.currentTitleData = this.currentTitle;
   },
   methods: {
     markButtonClicked(type) {
@@ -192,6 +201,12 @@ export default defineComponent({
 })
 </script>
 <style lang="scss">
+#titleInputField {
+  border: 0;
+  background-color: var(--text-field) !important;
+  color: var(--text-primary-color);
+}
+
 .confidential-modal {
   .toastui-editor-contents p::selection {
     color: var(--text-primary-color);
