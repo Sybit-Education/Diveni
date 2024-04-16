@@ -12,6 +12,7 @@
           Mark confidential information
         </div>
       </template>
+      <BIconExclamationTriangle/> Warning <BIconExclamationTriangle/>: Your User Story will be sent to OpenAI's GPT. Mark confidential Information now.
       <div>
         <UiToastEditorWrapper
           :initial-value="currentText"
@@ -80,6 +81,16 @@
           </div>
         </div>
       </div>
+      <div v-if="isDescription" class="my-2 d-inline-flex">
+        <div class="position-relative mb-2">
+          <input class="position-absolute" style="height: 20px; width:20px; left: 150px; top: 2px;" v-model="selectedLanguage" type="radio" name="languageSelector" value="english">
+          <label for="english" class="position-absolute" style="left: 175px;">English</label>
+        </div>
+        <div class="position-relative mb-2">
+          <input class="position-absolute" style="height: 20px; width:20px; left: 250px; top: 2px;" v-model="selectedLanguage" type="radio" name="languageSelector" value="german">
+          <label for="german" style="left: 275px" class="position-absolute">German</label>
+        </div>
+      </div>
       <template #modal-footer >
         <div id="aiOptions" class="text-center mt-1">
           <b-button id="acceptAIOption" class="m-1" @click="submitIssue">
@@ -100,12 +111,18 @@
 
 import {defineComponent} from "vue";
 import UiToastEditorWrapper from "@/components/UiToastEditorWrapper.vue";
+import {useI18n} from "vue-i18n";
 
 export default defineComponent({
   name: "PrivacyModal",
   components: {UiToastEditorWrapper},
   props: {
     currentText: {type: String, required: false, default: ""},
+    isDescription: { type: Boolean, required: false, default: false }
+  },
+  setup() {
+    const { t } = useI18n();
+    return { t };
   },
   data() {
     return {
@@ -115,6 +132,7 @@ export default defineComponent({
       isPerson: false,
       isNumber: false,
       showModal: true,
+      selectedLanguage: "english",
     }
   },
   created() {
@@ -158,7 +176,12 @@ export default defineComponent({
       }
     },
     submitIssue() {
-      this.$emit("sendGPTRequest", {description: this.currentText, confidentialData: this.confidentialWords });
+      if (this.isDescription) {
+        this.$emit("sendGPTRequest", {description: this.currentText, confidentialData: this.confidentialWords, language: this.selectedLanguage });
+      } else {
+        this.$emit("sendGPTRequest", {confidentialData: this.confidentialWords });
+      }
+
       this.hideModal();
     },
     hideModal() {

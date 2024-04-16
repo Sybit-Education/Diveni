@@ -20,4 +20,6 @@ public class GptConfidentialData {
   final Boolean isActive;
 
   final JSONObject confidentialData;
+
+  final String language;
 }

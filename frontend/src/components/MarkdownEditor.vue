@@ -49,6 +49,7 @@
     <PrivacyModal
       v-if="showModal"
       :current-text="currentText"
+      :is-description="true"
       @sendGPTRequest="redirectSubmit"
       @resetShowModal="showModal = false"
     />
@@ -161,8 +162,8 @@ export default defineComponent({
       this.showModal = true;
       this.currentIssue = issue;
     },
-    redirectSubmit({description, confidentialData}) {
-      this.$emit("sendGPTDescriptionRequest", {description: description, issue: this.currentIssue, confidentialData: confidentialData });
+    redirectSubmit({description, confidentialData, language}) {
+      this.$emit("sendGPTDescriptionRequest", {description: description, issue: this.currentIssue, confidentialData: confidentialData, language: language });
       this.showModal = false;
     },
   },

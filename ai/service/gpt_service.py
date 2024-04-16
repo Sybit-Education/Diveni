@@ -6,59 +6,58 @@ from dto.user_story import UserStory
 from dto.description_response import Description_Response
 import json
 
-prompt_title = ("Task: Improve the title of this issue: Create a homepage for information research"
+prompt_title = ("Task: Improve the title of this issue in its language: Create a homepage for information research"
                 "\nDesigning an Information Research Homepage: Enhancing User Experience and Accessibility\n"
-                "Task: Improve the title of this issue: Create a homepage for [placeholder]\n"
+                "Task: Improve the title of this issue in its language: Create a homepage for [placeholder]\n"
                 "Designing a Homepage for a Placeholder Website\n"
-                "Task: Improve the title of this issue: Erstellung einer Homepage\n"
+                "Task: Improve the title of this issue in its language: Erstellung einer Homepage\n"
                 "Erstellung einer benutzerfreundlichen Homepage: Verbessernde User Experience\n"
-                "Task: Improve the title of this issue: ")
+                "Task: Improve the title of this issue in its language: ")
 
-prompt_description = (
-    "Task: Send JSON with \"description\" & \"acceptance_criteria\" & \"language\" for this User Story: create rest service for backend \n"
-    "{\"description\" : \"As a developer, I want to create a REST service for the backend so that I can easily access and manipulate data from the database.\", "
+prompt_description_english = (
+    "Task: Send JSON with \"description\" & \"acceptance_criteria\" for this User Story: create rest service for backend \n"
+    "Solution: {\"description\" : \"As a developer, I want to create a REST service for the backend so that I can easily access and manipulate data from the database.\", "
     "\"acceptance_criteria\" : ["
     "\"The REST service should have endpoints for GET, POST, PUT & DELETE requests\","
-    "\"Unit Tests should be written\"],"
-    "\"language\" : \"en\""
-    "}\n"
-    "Task: Send JSON with \"description\" & \"acceptance_criteria\" & \"language\" for this User Story: create Homepage\n"
-    "{\"description\" : \"As a user, I want to be able to access a homepage so that I can easily navigate to different sections of the website.\", "
-    "\"acceptance_criteria\" : [\"The homepage should have a visually appealing design.\", \"The homepage should have a clear and concise navigation menu.\", \"It should have a search bar for easy navigation.\",\"The homepage should be accessible on different devices.\"],"
-    "\"language\" : \"en\""
-    "}\n"
-    "Task: Send JSON with \"description\" & \"acceptance_criteria\" & \"language\" for this User Story: erstelle eine webseite mit navbar\n"
-    "{\"description\" : \" Als ein Nutzer, möchte ich eine Webseite mit einer Navigationsleiste besuchen, um schnell von einer Seite zu der nächsten zu gelangen.\","
-    "\"acceptance_critera\" : [\"Die Webseite soll einem schönen Design entsprechen\", \"Die Navigationsleiste soll das Logo beinhalten\"],"
-    "\"language\" : \"de\"}\n"
-    "Task: Send JSON with \"description\" & \"acceptance_criteria\" & \"language\" for this User Story (at least 6 acceptance criteria): ")
+    "\"Unit Tests should be written\"]}\n"
+    "Task: Send JSON with \"description\" & \"acceptance_criteria\" for this User Story: create Homepage\n"
+    "Solution: {\"description\" : \"As a user, I want to be able to access a homepage so that I can easily navigate to different sections of the website.\", "
+    "\"acceptance_criteria\" : [\"The homepage should have a visually appealing design.\", \"The homepage should have a clear and concise navigation menu.\", \"It should have a search bar for easy navigation.\",\"The homepage should be accessible on different devices.\"]}\n"
+    "Task: Send JSON with \"description\" & \"acceptance_criteria\" for this User Story: create a homepage for placerholder-company-1 with a java backend. It should not cost more than 100 thousand euros\n"
+    "### Acceptance Criteria: \n"
+    "* good looking design \n"
+    "* logo of placerholder-company-1 should be on the navbar \n"
+    "Solution: {\"description\" : \"As a developer, I want to create a visually appealing homepage for placerholder-company-1. The website should have a modern design and incorporate a Java backend.\", "
+    "\"acceptance_criteria\" : ["
+    "\"The homepage should have an aesthetically pleasing layout.\","
+    "\"Use responsive design principles to ensure it looks great on various devices\","
+    "\"The placerholder-company-1 logo must be prominently displayed on the navigation bar\"]}\n"
+    "Task: Send JSON with \"description\" & \"acceptance_criteria\" for this User Story (at least 6 acceptance criteria): ")
+
+prompt_description_german = ("Aufgabe: Sende ein JSON mit \"description\" & \"acceptance_criteria\" für diese User Story: Erstelle einen REST Service für das Backend \n"
+                             "Antwort: {\"description\": \"Als Entwickler im Backend-Team möchte ich einen RESTful Service erstellen, um die Kommunikation zwischen dem Frontend und dem Backend zu ermöglichen.\","
+                             "\"acceptance_criteria\": [\"Die Anfragen können GET, POST, PUT oder DELETE sein.\",\"Der Service muss sicherstellen, dass nur autorisierte Benutzer auf die Endpunkte zugreifen können.\",\"Der Service sollte die eingehenden Anfragen validieren, um sicherzustellen, dass sie den erwarteten Parametern und Formaten entsprechen.\"]}\n"
+                             "Aufgabe: Sende ein JSON mit \"description\" & \"acceptance_criteria\" für diese User Story: Erstelle eine Homepage für placeholder-company-1 mit einem java Backend. Es sollte nicht mehr als 100 tausend Euro kosten\n"
+                             "## Akzeptanz Kriterien \n"
+                             "* gut aussehende Webseite \n"
+                             "* Das Logo von placeholder-company-1 sollte auf der Navigationsleiste zu sehen sein \n"
+                             "Antwort: {\"description\" : \"Als Entwickler möchte ich eine professionelle Homepage, mit einem Java-Backend für placeholder-company-1 erstellen, um eine benutzerfreundliche Plattform zu schaffen, die das Unternehmen online repräsentiert.\","
+                             "\"acceptance_criteria\" : [\"Die Kosten für die Erstellung der Homepage dürfen 100.000 Euro nicht überschreiten\",\"Das Java-Backend muss robust und sicher sein, um die Funktionalität der Website zu unterstützen.\", \"Die Website sollte eine klare Navigation haben, um Benutzern das Auffinden von Informationen zu erleichtern\"]}\n"
+                             "Aufgabe:  Sende ein JSON mit \"description\" & \"acceptance_criteria\" für diese User Story (mindestens 6 Akzeptanz Kriterien): ")
 
 prompt_grammar = (
-    "Task: Send a JSON with \"description\" & \"acceptance_criteria\" & \"language\" and fix grammar & syntax mistakes, but do not add new elements, for this markdown-text: "
+    "Task: Send a JSON with \"description\" & \"acceptance_criteria\" and fix grammar & syntax mistakes, but do not add new elements, for this markdown-text: "
     "As a user i want 2 be able to accessed a homepage so that I can easily navigate to different sections of the website.\n"
     "##### Acceptance Criteria:\n "
     "* The homepage should have a visualy appealing design.\n "
     "* The homepage should have an clear and concise navigation menü.\n"
-    "{\"description\" : \"As a user, I want to be able to access a homepage so that I can easily navigate to different sections of the website.\n ##### Acceptance Criteria:\n \",\n"
-    "\"acceptance_criteria\" : [\"* The homepage should have a visually appealing design.\",\"* The homepage should have a clear and concise navigation menu.\"],"
-    "\"language\" : \"en\"}\n"
-    "Task: Send a JSON with \"description\" & \"acceptance_criteria\" & \"language\" and fix grammar & syntax mistakes, but do not add new elements, for this markdown-text: "
+    "Solution: {\"description\" : \"As a user, I want to be able to access a homepage so that I can easily navigate to different sections of the website.\n ##### Acceptance Criteria:\n \",\n"
+    "\"acceptance_criteria\" : [\"* The homepage should have a visually appealing design.\",\"* The homepage should have a clear and concise navigation menu.\"]}\n"
+    "Task: Send a JSON with \"description\" & \"acceptance_criteria\" and fix grammar & syntax mistakes, but do not add new elements, for this markdown-text: "
     "As a devloper, i want to crete a backend servize with a REST API so dhat i can easily manage and manipulate dayta from the database\n"
-    "{\"description\" : \"As a developer, I want to create a backend service with a REST API so that I can easily manage and manipulate data from the database.\"\n"
-    "\"acceptance_criteria\" : [],"
-    "\"language\" : \"en\"}\n"
-    "Task: Send a JSON with \"description\" & \"acceptance_criteria\" & \"language\" and fix grammar & syntax mistakes, but do not add new elements, for this markdown-text: ")
-
-prompt_grammer2 = (
-    "Task: Send a JSON with \"description\" & fix the grammar and syntax mistakes. DO NOT ADD NEW ELEMENTS. This is the markdown text to it: "
-    "As a user i want to bhe ahble to accessed an homepage so that i can easily naigate to diferent sections of the website.\n"
-    "##### Acceptance Criteria:\n"
-    "* The hompeage should have a good looking design \n"
-    "* the homepage should habe an clear and concise navigation menü\n"
-    "Answer: {\"description\": \"As a user, I want to be able to access a homepage so that I can easily navigate to different sections of the website.\n ##### Acceptance Criteria:\n"
-    "* The homepage should have a visually appealing design.\n"
-    "* The homepage should have a clear and concise navigation menu.\"}\n"
-    "Task: Send a JSON with \"description\" & fix the grammar and syntax mistakes. DO NOT ADD NEW ELEMENTS. This is the markdown text to it: ")
+    "Solution: {\"description\" : \"As a developer, I want to create a backend service with a REST API so that I can easily manage and manipulate data from the database.\"\n"
+    "\"acceptance_criteria\" : []}\n"
+    "Task: Send a JSON with \"description\" & \"acceptance_criteria\" and fix grammar & syntax mistakes, but do not add new elements, for this markdown-text: ")
 
 
 def setUp():
@@ -138,8 +137,11 @@ async def improve_description(original_user_story: UserStory):
     client, model_id = setUp()
     # prompt_input = ("Send JSON with 'description' & 'acceptance_criteria' (acceptance_criteria should be a list & description needs "
     #                "improvement) for this user story description: ") + new_description
-    print(new_description)
-    final_prompt = prompt_description + new_description
+
+    if original_user_story.language == "english":
+        final_prompt = prompt_description_english + new_description + "\n Solution: "
+    else:
+        final_prompt = prompt_description_german+ new_description + "\n Antwort: "
     completion = client.completions.create(
         model=model_id,
         prompt=final_prompt,
@@ -156,8 +158,7 @@ async def improve_description(original_user_story: UserStory):
     # data = json.loads(completion.choices[0].text.strip("'<>() ").replace('\'', '\"'), strict = False)
     description = data.get("description", "")
     acceptance_criteria = data.get("acceptance_criteria", [])
-    language = data.get("language", "")
-    if language == "de":
+    if original_user_story.language == "german":
         description = description + "\n ##### Akzeptanz Kriterien: \n"
     else:
         description = description + "\n ##### Acceptance Criteria: \n"
@@ -175,7 +176,7 @@ async def grammar_check(original_user_story: UserStory):
     prompt_input = ("Fix grammar & syntax mistakes, but do not add new elements. Send it back as a JSON with 'description' and "
                     "'acceptance_criteria' (list) field."
                     "If the text does not mention acceptance criteria, leave the field blank. This is the text: ") + new_description
-    final_prompt = prompt_grammar + new_description
+    final_prompt = prompt_grammar + new_description + "\n Solution: "
     print(final_prompt)
     completion = client.completions.create(
         model=model_id,
@@ -189,15 +190,13 @@ async def grammar_check(original_user_story: UserStory):
     json_ready_string = output[start_brace: end_brace + 1]
     data = json.loads(json_ready_string, strict=False)
     description = data.get("description", "")
-    language = data.get("language", "")
     if "acceptance_criteria" in data:
         acceptance_criteria = data.get("acceptance_criteria")
         criterias = ""
         for criteria in acceptance_criteria:
             criterias = criterias + " \n" + criteria
         if criterias != "":
-            text = ""
-            if language == "en":
+            if original_user_story.language == "english":
                 text = "Acceptance Criteria"
             else:
                 text = "Akzeptanz Kriterien"

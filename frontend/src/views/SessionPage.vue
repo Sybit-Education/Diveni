@@ -461,6 +461,8 @@ export default defineComponent({
       showSpinner: false,
       // needed for privacy feature
       confidentialData: {} as Map<string, string>,
+      // needed for multi-language GPT
+      userStoryLanguage: "",
     };
   },
   computed: {
@@ -805,15 +807,16 @@ export default defineComponent({
       this.alternateTitle = "";
       this.gptTitleResponse = false;
     },
-    async improveDescription({ userStory, description, issue, confidentialData }) {
+    async improveDescription({ userStory, description, issue, confidentialData, language }) {
+      this.userStoryLanguage = language;
       this.confidentialData = confidentialData;
       this.showSpinner = true;
       if (issue === 'improveDescription') {
-        const response = await apiService.improveDescription(userStory, description, this.confidentialData);
+        const response = await apiService.improveDescription(userStory, description, this.confidentialData, language);
         this.alternateDescription =
           response.description + response.acceptance_criteria.toString().replaceAll(",", "");
       } else {
-        const response = await apiService.grammarCheck(userStory, description, this.confidentialData);
+        const response = await apiService.grammarCheck(userStory, description, this.confidentialData, language);
         this.alternateDescription = response.description;
       }
       this.descriptionMode = issue;
@@ -832,7 +835,7 @@ export default defineComponent({
       this.acceptedStoriesDescription.push({ storyID: this.userStories[this.index].id, issueType: this.descriptionMode})
     },
     async retrySuggestionDescription() {
-      await this.improveDescription({userStory: this.userStories[this.index],description: this.userStories[this.index].description, issue: this. descriptionMode, confidentialData: this.confidentialData});
+      await this.improveDescription({userStory: this.userStories[this.index],description: this.userStories[this.index].description, issue: this. descriptionMode, confidentialData: this.confidentialData, language: this.userStoryLanguage});
       this.updateComponent = !this.updateComponent;
     },
     closeModal() {

@@ -57,7 +57,7 @@ public class AiService {
     content.put("title", data.getTitle());
     content.put("description", data.getDescription());
     content.put("confidential_data", data.getConfidentialData().toMap());
-    LOGGER.debug(new Gson().toJson(content));
+    content.put("language", data.getLanguage());
     ResponseEntity<String> response =
         executeRequest(aiUrl + "/improve-description", HttpMethod.POST, new Gson().toJson(content));
     LOGGER.debug("<-- improveDescription()");
@@ -70,6 +70,7 @@ public class AiService {
     content.put("title", data.getTitle());
     content.put("description", data.getDescription());
     content.put("confidential_data", data.getConfidentialData().toMap());
+    content.put("language", data.getLanguage());
     ResponseEntity<String> response =
         executeRequest(aiUrl + "/grammar-check", HttpMethod.POST, new Gson().toJson(content));
     LOGGER.debug("<-- grammarCheck()");

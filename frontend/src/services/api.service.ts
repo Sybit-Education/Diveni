@@ -184,7 +184,7 @@ class ApiService {
         }, {})),
     });
   }
-  public async improveDescription(userStory: UserStory, description: string, confidentialData: Map<string,string>) {
+  public async improveDescription(userStory: UserStory, description: string, confidentialData: Map<string,string>, language: string) {
     const response = await axios.post(`${constants.backendURL}/ai/improve-description`, {
       id: userStory.id,
       title: userStory.title,
@@ -196,6 +196,7 @@ class ApiService {
         o[key] = value;
         return o;
       }, {})),
+      language: language,
     });
     return {
       description: response.data.improved_description,
@@ -203,7 +204,7 @@ class ApiService {
     };
 
   }
-  public async grammarCheck(userStory: UserStory, description: string, confidentialData: Map<string,string>) {
+  public async grammarCheck(userStory: UserStory, description: string, confidentialData: Map<string,string>, language: string) {
     const response = await axios.post(`${constants.backendURL}/ai/grammar-check`, {
         id: userStory.id,
         title: userStory.title,
@@ -215,6 +216,7 @@ class ApiService {
           o[key] = value;
           return o;
         }, {})),
+        language: language,
       }
     );
     return {
