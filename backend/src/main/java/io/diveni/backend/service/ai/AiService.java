@@ -85,7 +85,7 @@ public class AiService {
     content.put("confidential_data", data.getConfidentialData().toMap());
     content.put("voteSet", data.getVoteSet());
     ResponseEntity<String> response =
-      executeRequest(aiUrl + "/estimate-user-story", HttpMethod.POST, new Gson().toJson(content));
+        executeRequest(aiUrl + "/estimate-user-story", HttpMethod.POST, new Gson().toJson(content));
     LOGGER.debug("<-- estimateUserStory()");
     return response;
   }
