@@ -33,7 +33,8 @@
           "person": "Personal Information",
           "number": "Number",
           "add": "Add",
-          "ok": "Ok"
+          "ok": "Ok",
+          "cancel": "Cancel"
         },
         "labels": {
           "english": "English",
