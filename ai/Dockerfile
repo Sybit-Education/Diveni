@@ -1,6 +1,6 @@
 FROM python:3.11.2
 
-WORKDIR /diveni-ai
+WORKDIR /ai
 
 RUN pip install poetry
 

@@ -22,12 +22,8 @@ def readFile(filename):
 
 
 def replace_confidential_data(data: str, confidential_map: dict[str, str]):
-    is_docker_container = os.environ.get('STARTED_IN_DOCKER')
     fileDir = os.path.dirname(os.path.realpath('__file__'))
-    if is_docker_container == 'true':
-        filename = os.path.join(fileDir, '../diveni-ai/resource/names.txt')
-    else:
-        filename = os.path.join(fileDir, '../ai/resource/names.txt')
+    filename = os.path.join(fileDir, 'resource/names.txt')
     filename = os.path.abspath(os.path.realpath(filename))
     names = readFile(filename)
     replaced_words = {}
@@ -62,13 +58,8 @@ def replace_confidential_data_to_original(data, confidential_map: dict):
         return data
 
 def get_prompt(information):
-    is_docker_container = os.environ.get('STARTED_IN_DOCKER')
     fileDir = os.path.dirname(os.path.realpath('__file__'))
-    if is_docker_container == 'true':
-        path = "resource/prompts/"
-    else:
-        path = "../ai/resource/prompts/"
-    filename = os.path.join(fileDir, path + "prompt_" + information + ".txt")
+    filename = os.path.join(fileDir, "resource/prompts/prompt_" + information + ".txt")
     prompt = open(filename, 'r', encoding='utf-8').read()
     return prompt
 

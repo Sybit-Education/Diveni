@@ -21,9 +21,6 @@ services:
     restart: unless-stopped
     env_file:
       ./ai/.env
-    environment:
-      - STARTED_IN_DOCKER=true
-
 
   backend:
     depends_on:
