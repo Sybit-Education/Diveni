@@ -159,8 +159,10 @@ export default defineComponent({
       }
     },
     userStories() {
-      if (this.userStories.length > 0) {
-        this.showAIEstimationButton = this.userStories[this.index].title !== '' && this.userStories[this.index].description !== '';
+      if (this.userStories[this.index] !== undefined) {
+        if (this.userStories.length > 0) {
+          this.showAIEstimationButton = this.userStories[this.index].title !== '' && this.userStories[this.index].description !== '';
+        }
       }
     }
   },

@@ -195,8 +195,10 @@ export default defineComponent({
       this.publishChanges(index, true);
     },
     publishChanges(index, remove) {
-      if (this.userStories[index].title !== "") {
-        this.$emit("userStoriesChanged", { us: this.userStories, idx: index, doRemove: remove });
+      if (this.userStories[index] !== undefined) {
+        if (this.userStories[index].title !== "" || remove) {
+          this.$emit("userStoriesChanged", { us: this.userStories, idx: index, doRemove: remove });
+        }
       }
     },
     markUserStory(index) {
