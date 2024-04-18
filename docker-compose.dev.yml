@@ -20,7 +20,10 @@ services:
     container_name: diveni_ai
     restart: unless-stopped
     env_file:
-         ./ai/.env
+      ./ai/.env
+    environment:
+      - STARTED_IN_DOCKER=true
+
 
   backend:
     depends_on:
