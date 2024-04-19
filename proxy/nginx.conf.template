@@ -18,13 +18,13 @@ server {
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 
         if ( $uri = '/index.html' ) {
-            add_header Cache-Control "no-cache, no-store, must-revalidate";
+            add_header Cache-Control "max-age=0, no-cache, no-store, must-revalidate";
             add_header Pragma "no-cache";
             expires off;
         }
 
         if ($http_accept ~* "text/html") {
-            add_header Cache-Control "no-cache, no-store, must-revalidate";
+            add_header Cache-Control "max-age=0, no-cache, no-store, must-revalidate";
             add_header Pragma "no-cache";
             expires off;
         }
