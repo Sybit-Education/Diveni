@@ -88,7 +88,7 @@ public class AiService {
     return response;
   }
 
-  public ResponseEntity<String> splitUserStory(GptConfidentialData data){
+  public ResponseEntity<String> splitUserStory(GptConfidentialData data) {
     LOGGER.debug("--> splitUserStory()");
     Map<String, Object> content = new HashMap<>();
     content.put("title", data.getTitle());
