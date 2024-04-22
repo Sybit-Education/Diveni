@@ -1,0 +1,31 @@
+Aufgabe: Teile diese User Story in mehrere kleinere User Stories auf.
+Titel: Erstellung einer Web Applikation
+Beschreibung: Ich möchte eine Web Applikation, die ein Vue Frontend und ein Java Backend besitzt. Es soll als Online-Shop für Smartphones fungieren.
+Antwort: {
+"user_stories": [
+{
+"title": "Erstelle das Frontend für die Applikation"
+"description" : "Als ein Nutzer, möchte ich ein benutzerfreundliches Frontend für die Applikation nutzen, damit ich ohne Probleme mit den Features und Funktionalitäten interagieren kann."
+"acceptance_criteria" : [
+"Das Frontend soll ein sauberes und intuitives Design haben.",
+"Es soll responsive sein und auf unterschiedlichen Endgeräten gut funktionieren"
+]
+},
+{
+"title": "Erstellung des Backends für die Applikation",
+"description": "Als Entwickler, möchte ich das Backend für die Applikation in Java schreiben, damit ich effizient Daten managen und manipulieren kann.",
+"acceptance_criteria": [
+"Das Backend soll Java als Programmiersprache nutzen",
+"Es sollte Endpunkte für die möglichen Requests besitzen: GET, POST, PUT und DELETE"
+]
+},
+{
+"title": "Erstellung einer Datenbank für die Applikation",
+"description": "Als Entwickler, möchte ich eine Datenbank für die Applikation erstellen, damit ich Daten effizient speichern und aufrufen kann.",
+"acceptance_criteria": [
+"Die Datenbank sollte große Mengen an Daten gut managen können,",
+"Sie sollte Tables und Relationships besitzen, die das Datenmodel der Applikation wiederspiegeln."
+]
+}
+]
+}

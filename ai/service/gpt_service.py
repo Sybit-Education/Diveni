@@ -7,6 +7,7 @@ from dto.description_response import Description_Response
 from dto.estimation_data import Estimation_data
 import json
 
+
 def setUp():
     API_KEY = os.environ.get('api_key')
     model_id = 'gpt-3.5-turbo-instruct'
@@ -57,12 +58,12 @@ def replace_confidential_data_to_original(data, confidential_map: dict):
                 data[x] = replaced_data.sub(key, data[x])
         return data
 
+
 def get_prompt(information):
     fileDir = os.path.dirname(os.path.realpath('__file__'))
     filename = os.path.join(fileDir, "resource/prompts/prompt_" + information + ".txt")
     prompt = open(filename, 'r', encoding='utf-8').read()
     return prompt
-
 
 
 async def improve_title(original_title: str, confidential_data: dict):
@@ -159,22 +160,28 @@ async def grammar_check(original_user_story: UserStory):
     print("gpt_service: <-- grammar_check()")
     return description
 
+
 async def estimate_user_story(original_data: Estimation_data):
     print("gpt_service: --> estimate_user_story()")
     client, model_id = setUp()
     swappedDataTitle, new_title = replace_confidential_data(original_data.title, original_data.confidential_data)
     swappedDataDescription, new_description = replace_confidential_data(original_data.description, original_data.confidential_data)
     if original_data.voteSet == ['1', '2', '3', '5', '8', '13', '21']:
-        prompt = get_prompt("estimation_fibo") + new_title + "\n Description: " + new_description + "\n Valid Options are: " + str(original_data.voteSet)
-    elif original_data.voteSet == ['XS','S','M','L','XL']:
-        prompt = get_prompt("estimation_shirt") + new_title + "\n Description: " + new_description + "\n Valid Options are: " + str(original_data.voteSet)
-    elif original_data.voteSet == ['1','2','3','4','5','6','8','10','12','16']:
-        prompt = get_prompt("estimation_hour") + new_title + "\n Description: " + new_description + "\n Valid Options are: " + str(original_data.voteSet)
-    elif original_data.voteSet == ['1','2','3','4','5','6','7','8','9','10']:
-        prompt = get_prompt("estimation_number") + new_title + "\n Description: " + new_description + "\n Valid Options are: " + str(original_data.voteSet)
+        prompt = get_prompt("estimation_fibo") + new_title + "\n Description: " + new_description + "\n Valid Options are: " + str(
+            original_data.voteSet)
+    elif original_data.voteSet == ['XS', 'S', 'M', 'L', 'XL']:
+        prompt = get_prompt("estimation_shirt") + new_title + "\n Description: " + new_description + "\n Valid Options are: " + str(
+            original_data.voteSet)
+    elif original_data.voteSet == ['1', '2', '3', '4', '5', '6', '8', '10', '12', '16']:
+        prompt = get_prompt("estimation_hour") + new_title + "\n Description: " + new_description + "\n Valid Options are: " + str(
+            original_data.voteSet)
+    elif original_data.voteSet == ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']:
+        prompt = get_prompt("estimation_number") + new_title + "\n Description: " + new_description + "\n Valid Options are: " + str(
+            original_data.voteSet)
     else:
         prompt = ("Task: Send a JSON with \"estimation\" and estimate the effort for this user story: Title: " + new_title + "\n "
-                  "Description: " + new_description + "\n Valid Options are: " + str(original_data.voteSet))
+                                                                                                                             "Description: " + new_description + "\n Valid Options are: " + str(
+            original_data.voteSet))
     print(prompt)
     completion = client.completions.create(
         model=model_id,
@@ -191,3 +198,42 @@ async def estimate_user_story(original_data: Estimation_data):
     estimation = data.get("estimation", "")
     print("gpt_service: <-- estimate_user_story()")
     return estimation
+
+
+async def split_user_story(data: UserStory):
+    print("gpt_service: --> split_user_story()")
+    client, model_id = setUp()
+    swapped_data_title, new_title = replace_confidential_data(data.title, data.confidential_data)
+    swapped_data_description, new_description = replace_confidential_data(data.description, data.confidential_data)
+    if data.language == "english":
+        prompt = get_prompt("split_story") + new_title + "\nDescription: " + new_description + "\nSolution:"
+    else:
+        prompt = get_prompt("split_story_german") + new_title + "\nBeschreibung: " + new_description + "\nAntwort:"
+    completion = client.completions.create(
+        model=model_id,
+        prompt=prompt,
+        max_tokens=600,
+        temperature=0
+    )
+    print(completion.choices[0].text)
+    output = completion.choices[0].text
+    start_brace = output.find('{')
+    end_brace = output.rfind('}')
+    json_ready_string = output[start_brace: end_brace + 1]
+    replaced_title_data = replace_confidential_data_to_original(json_ready_string, swapped_data_title)
+    replace_description_data = replace_confidential_data_to_original(replaced_title_data, swapped_data_description)
+    gpt_json = json.loads(replace_description_data, strict=False)
+    user_story_list = []
+    for user_story in gpt_json["user_stories"]:
+        acceptance_criteria = user_story["acceptance_criteria"]
+        criterias = ""
+        for criteria in acceptance_criteria:
+            criterias = criterias + " \n* " + criteria
+            if data.language == "english":
+                text = "Acceptance Criteria"
+            else:
+                text = "Akzeptanz Kriterien"
+        description = user_story["description"] + "\n##### " + text + ": \n" + criterias
+        user_story_list.append({"title": user_story["title"], "description": description})
+    print("gpt_service: <-- split_user_story()")
+    return user_story_list

@@ -257,8 +257,12 @@
           :show-edit-buttons="true"
           :select-story="true"
           :story-mode="userStoryMode"
+          :splittedUserStories="splitted_user_stories"
+          :story-to-split-idx="index"
+          :key="splitted_user_stories"
           @userStoriesChanged="onUserStoriesChanged"
           @selectedStory="onSelectedStory($event)"
+          @sendGPTRequest="splitUserStory"
         />
         <div v-if="userStoryMode === 'US_JIRA'" class="refreshUserstories">
           <b-button
@@ -281,8 +285,12 @@
           :show-edit-buttons="true"
           :select-story="true"
           :story-mode="userStoryMode"
+          :splittedUserStories="splitted_user_stories"
+          :story-to-split-idx="index"
+          :key="splitted_user_stories"
           @userStoriesChanged="onUserStoriesChanged"
           @selectedStory="onSelectedStory($event)"
+          @sendGPTRequest="splitUserStory"
         />
         <div v-if="userStoryMode === 'US_JIRA'" class="refreshUserstories">
           <b-button
@@ -396,6 +404,7 @@ import SessionAdminCard from "@/components/SessionAdminCard.vue";
 import GptModal from "@/components/GptModal.vue";
 import UserStoryTitle from "@/components/UserStoryTitle.vue";
 import j2m from "jira2md";
+import UserStory from "@/model/UserStory";
 
 export default defineComponent({
   name: "SessionPage",
@@ -465,6 +474,9 @@ export default defineComponent({
       confidentialData: {} as Map<string, string>,
       // needed for multi-language GPT
       userStoryLanguage: "",
+      // needed for splitting user stories
+      splitted_user_stories: [] as Array<UserStory>,
+      language: "",
     };
   },
   computed: {
@@ -850,6 +862,22 @@ export default defineComponent({
       const response = await apiService.estimateUserStory(this.userStories[this.index], confidentialData, this.voteSet);
       this.showSpinner = false;
       this.toast.info(this.t("general.aiFeature.estimationToast.startingText") + "\"" + this.userStories[this.index].title + "\"" + this.t("general.aiFeature.estimationToast.endingText") + response, {timeout: false});
+    },
+    async splitUserStory({confidentialData: confidentialData, language: language, retry: retry}) {
+      if(!retry) {
+        this.confidentialData = confidentialData;
+        this.language = language;
+        this.showSpinner = true;
+        const response = await apiService.splitUserStory(this.userStories[this.index], confidentialData, language);
+        this.showSpinner = false;
+        this.splitted_user_stories = response;
+      } else {
+        this.showSpinner = true;
+        const response = await apiService.splitUserStory(this.userStories[this.index], this.confidentialData, this.language);
+        this.showSpinner = false;
+        this.splitted_user_stories = response;
+      }
+
     }
   },
 });

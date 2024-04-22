@@ -49,4 +49,12 @@ public class AiController {
     LOGGER.debug("<-- estimateUserStory()");
     return response;
   }
+
+  @PostMapping("split-user-story")
+  public ResponseEntity<String> splitUserStory(@RequestBody GptConfidentialData data) {
+    LOGGER.debug("--> splitUserStory(), GptConfidentialData={}", data);
+    ResponseEntity<String> response = aiService.splitUserStory(data);
+    LOGGER.debug("<-- splitUserStory()");
+    return response;
+  }
 }

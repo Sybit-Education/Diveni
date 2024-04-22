@@ -173,7 +173,7 @@
             :index="index"
           />
           <user-story-descriptions
-            v-if="userStories.length > 0"
+            v-if="userStories.length > 0 && index < userStories.length"
             :index="index"
             :initial-stories="userStories"
             :edit-description="false"

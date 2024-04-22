@@ -30,9 +30,18 @@ async def grammar_check(data: UserStory):
     print("gpt_controller: <-- grammar_check()")
     return {"improved_description": response}
 
+
 @app.post("/estimate-user-story")
 async def estimate_user_story(data: Estimation_data):
-    print("gpt_controller: --> estimate_user_story(), data={" , data , "}")
+    print("gpt_controller: --> estimate_user_story(), data={", data, "}")
     response = await service.estimate_user_story(data)
     print("gpt_controller: <-- estimate_user_story()")
     return {"estimation": response}
+
+
+@app.post("/split-user-story")
+async def split_user_story(data: UserStory):
+    print("gpt_controller: --> split_user_story(), data={", data, "}")
+    response = await service.split_user_story(data)
+    print("gpt_controller: <-- split_user_story()")
+    return {"new_user_stories" : response}

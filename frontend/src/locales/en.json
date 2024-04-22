@@ -47,6 +47,11 @@
       "estimationToast": {
         "startingText": "Proposed Estimation for ",
         "endingText": " is: "
+      },
+      "splitUserStoriesModal" : {
+        "title" : "Splitted User Stories",
+        "originalStory" : "Original User Story",
+        "newStories" : "New User Stories"
       }
     }
   },

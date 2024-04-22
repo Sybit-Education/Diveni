@@ -239,8 +239,26 @@ class ApiService {
         }, {})),
       voteSet: voteSet,
     })
-    console.log("reponse " + response.data.estimation);
     return response.data.estimation;
+  }
+
+  public async splitUserStory(userStory: UserStory, confidentialData: Map<string, string>, language: string): Promise<Array<UserStory>> {
+    const response = await axios.post(`${constants.backendURL}/ai/split-user-story`, {
+      id: userStory.id,
+      title: userStory.title,
+      description: userStory.description,
+      estimation: userStory.estimation,
+      isActive: userStory.isActive,
+      confidentialData: JSON.stringify(
+        Array.from(confidentialData.entries()).reduce((o, [key, value]) => {
+          o[key] = value;
+          return o;
+        }, {})),
+      language: language,
+    })
+    const splitted_stories: Array<UserStory> = response.data.new_user_stories;
+    splitted_stories.map(us => us.id = null);
+    return splitted_stories;
   }
 }
 

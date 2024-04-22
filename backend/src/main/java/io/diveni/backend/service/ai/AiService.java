@@ -10,9 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.beans.factory.annotation.Value;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class AiService {
@@ -87,6 +85,19 @@ public class AiService {
     ResponseEntity<String> response =
         executeRequest(aiUrl + "/estimate-user-story", HttpMethod.POST, new Gson().toJson(content));
     LOGGER.debug("<-- estimateUserStory()");
+    return response;
+  }
+
+  public ResponseEntity<String> splitUserStory(GptConfidentialData data){
+    LOGGER.debug("--> splitUserStory()");
+    Map<String, Object> content = new HashMap<>();
+    content.put("title", data.getTitle());
+    content.put("description", data.getDescription());
+    content.put("confidential_data", data.getConfidentialData().toMap());
+    content.put("language", data.getLanguage());
+    ResponseEntity<String> response =
+        executeRequest(aiUrl + "/split-user-story", HttpMethod.POST, new Gson().toJson(content));
+    LOGGER.debug("<-- splitUserStory()");
     return response;
   }
 }
