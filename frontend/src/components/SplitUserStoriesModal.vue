@@ -35,6 +35,9 @@
             />
           </b-col>
           <b-col>
+            <div class="text-center font-italic">
+              {{ t("general.aiFeature.splitUserStoriesModal.newStories") }}
+            </div>
             <b-card-group id="userStoryBlock" class="overflow-auto center">
               <b-list-group-item
                 v-for="(story,index) of newUserStoriesEditable"
@@ -61,11 +64,15 @@
                   <b-icon-trash />
                 </b-button>
               </b-list-group-item>
+              <div
+                class="selectedStoryLine"
+                :style="{'top': 50 + (50 * this.idx) + 'px'}"
+              />
             </b-card-group>
           </b-col>
-          <b-col>
+          <b-col class="newUserStoryCol">
             <div class="text-center font-italic">
-              {{ t("general.aiFeature.splitUserStoriesModal.newStories") }}
+              {{ t("general.aiFeature.splitUserStoriesModal.selectedStory") }}
             </div>
             <b-form-textarea
               id="titleInputField"
@@ -159,12 +166,26 @@ export default defineComponent({
     },
     deleteDescription() {
       this.hideModal();
-    }
-  }
-})
+    },
+  },
+});
 </script>
 
 <style scoped lang="scss">
+.newUserStoryCol {
+  border: 3px solid;
+  box-shadow: inset 4px 4px 10px var(--text-primary-color), 4px 4px 10px var(--text-primary-color);
+  border-radius: 1rem;
+}
+
+.selectedStoryLine {
+  position: absolute;
+  right: 0;
+  border-bottom: 2px solid var(--text-primary-color);
+  box-shadow: 0 10px 5px var(--text-primary-color);
+  width: 16px;
+}
+
 #titleInputField {
   width: 100%;
   padding: 1em;
@@ -182,14 +203,13 @@ export default defineComponent({
 
 #userStoryBlock {
   max-height: 205px; /*exactly 4 User Stories tall*/
-  border-radius: 1rem;
-  overflow: scroll;
+  overflow: auto;
   -webkit-overflow-scrolling: touch;
 }
 
 #userStoryRow {
   height: 50px;
-  background-color: var(--textAreaColour);
+  border: var(--text-primary-color) 3px solid;
   color: var(--text-primary-color);
 }
 

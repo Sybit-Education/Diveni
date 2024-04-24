@@ -51,7 +51,8 @@
       "splitUserStoriesModal" : {
         "title" : "Splitted User Stories",
         "originalStory" : "Original User Story",
-        "newStories" : "New User Stories"
+        "newStories" : "New User Stories",
+        "selectedStory" : "Selected User Story"
       }
     }
   },
