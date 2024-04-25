@@ -83,8 +83,20 @@ docker-compose up -d
 ```shell
 docker-compose -f docker-compose.dev.yml up --build -d
 ```
+---
 
 ### Run Diveni locally
+
+- create an file ``.env`` in directory ``backend`` first with the following contents:
+```
+#URL the server is running on
+SERVER_URL=http://localhost:8080
+
+#The locale the frontend should be set to
+LOCALE=en
+```
+- detailed documentation on the ``.env`` file can be found in the [docs](https://github.com/Sybit-Education/Diveni/blob/main/docs/guide/install.md) (e.g., available configurations for adding issue trackers)
+  
 
 #### Frontend
 - npm, vue2
