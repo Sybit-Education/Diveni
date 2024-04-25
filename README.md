@@ -14,11 +14,13 @@
 
 WebApp to do Planning Poker with remote teams using external issue tracker as source of stories.
 
-Supported issue trackers:
+Supported issue trackers/platforms:
 
 - Atlassian JIRA on premise
 - Atlassian JIRA Cloud
 - Microsoft Azure DevOps
+- GitHub
+- GitLab
 - More connectors are planned
 
 ## Read more
@@ -42,6 +44,10 @@ How to contribute:
 7) Have fun and learn new things
 
 Happy coding 🚀
+
+### Hacktoberfest 2023
+Many thanks all contributors supporting us during Hacktoberfest 2023!
+We are happy to announce that we had **20 PRs** where **15 PRs** have been merged successful during Hacktoberfest 🚀 
 
 ### Hacktoberfest 2022
 
