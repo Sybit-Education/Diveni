@@ -71,7 +71,7 @@ async def improve_title(original_title: str, confidential_data: dict):
     swapped_data, new_title = replace_confidential_data(original_title, confidential_data)
     client, model_id = setUp()
     # "Improve the title of this issue: "
-    prompt_input = get_prompt("title") + new_title
+    prompt_input = get_prompt("title") + new_title + "\nAnswer:"
     completion = client.completions.create(
         model=model_id,
         prompt=prompt_input,

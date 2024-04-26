@@ -1,7 +1,7 @@
 Task: Improve the title of this issue in its language: Create a homepage for information research
-Designing an Information Research Homepage: Enhancing User Experience and Accessibility
+Answer: Designing an Information Research Homepage: Enhancing User Experience and Accessibility
 Task: Improve the title of this issue in its language: Create a homepage for placeholder-company-0
-Designing a Homepage for a placeholder-company-0 Website
+Answer: Designing a Homepage for a placeholder-company-0 Website
 Task: Improve the title of this issue in its language: Erstellung einer Homepage
-Erstellung einer benutzerfreundlichen Homepage: Verbessernde User Experience
+Answer: Erstellung einer benutzerfreundlichen Homepage: Verbessernde User Experience
 Task: Improve the title of this issue in its language:
