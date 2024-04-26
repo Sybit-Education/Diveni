@@ -132,7 +132,6 @@ export default defineComponent({
       }>,
       showImproveTitleButton: false,
       savedTitle: "",
-      oldTitleHolder: "",
       requestedUserStoryID: "" as string | null,
       acceptedUserStoriesID: [] as Array<string | null>,
       showSpinner: false,
@@ -154,7 +153,6 @@ export default defineComponent({
     },
     alternateTitle() {
       if (this.alternateTitle !== "") {
-        this.oldTitleHolder = this.userStories[this.index].title;
         this.userStories[this.index].title = this.alternateTitle;
       }
     },
@@ -204,14 +202,13 @@ export default defineComponent({
     acceptGptTitle() {
       this.showSpinner = false;
       this.savedTitle = "";
-      this.oldTitleHolder = "";
       this.showImproveTitleButton = false;
       this.acceptedUserStoriesID.push(this.requestedUserStoryID);
       this.$emit("acceptTitle", { userStory: this.requestedUserStoryID });
     },
     adjustTitle() {
       this.showSpinner = false;
-      this.userStories[this.index].title = this.oldTitleHolder;
+      this.userStories[this.index].title = this.savedTitle;
       this.showImproveTitleButton = false;
       this.$emit("adjustTitle");
     },
@@ -226,7 +223,6 @@ export default defineComponent({
     },
     deleteTitle() {
       this.showSpinner = false;
-      this.oldTitleHolder = "";
       this.showImproveTitleButton = false;
       this.userStories
         .filter((us) => us.id === this.requestedUserStoryID)
