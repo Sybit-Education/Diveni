@@ -260,9 +260,7 @@ export default defineComponent({
         newUserStories.forEach(() => {
           this.publishChanges(this.userStories.length - count, false);
           count = count - 1;
-        })
-        this.publishChanges(this.storyToSplitIdx, true);
-
+        });
       }
     },
     retry() {
