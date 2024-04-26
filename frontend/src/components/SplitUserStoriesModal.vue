@@ -21,15 +21,12 @@
               {{ t("general.aiFeature.splitUserStoriesModal.originalStory") }}
             </div>
             <b-form-textarea
-              id="titleInputField"
               v-model="originalTitleData"
-              class="overflow-auto"
-              rows="1"
-              size="lg"
+              class="overflow-auto font-weight-bold titleInputField"
               :disabled="true"
             />
             <UiToastEditorWrapper
-              class="overflow-auto editor"
+              class="editor"
               :initial-value="originalUserStory[0].description"
               :none-clickable="true"
             />
@@ -75,14 +72,14 @@
               {{ t("general.aiFeature.splitUserStoriesModal.selectedStory") }}
             </div>
             <b-form-textarea
-              id="titleInputField"
               v-model="newUserStoriesEditable[idx].title"
-              class="overflow-auto"
+              class="overflow-auto font-weight-bold titleInputField"
               rows="1"
               size="lg"
+              disabled
             />
             <UiToastEditorWrapper
-              class="overflow-auto editor"
+              class="editor"
               :initial-value="newUserStoriesEditable[idx].description"
               :none-clickable="true"
               :key="idx"
@@ -176,6 +173,7 @@ export default defineComponent({
   border: 3px solid;
   box-shadow: inset 4px 4px 10px var(--text-primary-color), 4px 4px 10px var(--text-primary-color);
   border-radius: 1rem;
+  height: 30%;
 }
 
 .selectedStoryLine {
@@ -186,13 +184,16 @@ export default defineComponent({
   width: 16px;
 }
 
-#titleInputField {
+.titleInputField {
   width: 100%;
-  padding: 1em;
-  padding-right: 3em;
-  border: 0;
-  background-color: var(--text-field) !important;
+  background-color: transparent !important;
 }
+.titleInputField:hover {
+  width: 100%;
+  background-color: transparent !important;
+  border-color: #ced4da;
+}
+
 .max-height-modal{
   height: 500px;
 }
@@ -202,7 +203,6 @@ export default defineComponent({
 }
 
 #userStoryBlock {
-  max-height: 205px; /*exactly 4 User Stories tall*/
   overflow: auto;
   -webkit-overflow-scrolling: touch;
 }
@@ -211,6 +211,7 @@ export default defineComponent({
   height: 50px;
   border: var(--text-primary-color) 3px solid;
   color: var(--text-primary-color);
+  background-color: transparent;
 }
 
 #userStoryTitles {

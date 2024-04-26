@@ -4,8 +4,8 @@ Beschreibung: Ich möchte eine Web Applikation, die ein Vue Frontend und ein Jav
 Antwort: {
 "user_stories": [
 {
-"title": "Erstelle das Frontend für die Applikation"
-"description" : "Als ein Nutzer, möchte ich ein benutzerfreundliches Frontend für die Applikation nutzen, damit ich ohne Probleme mit den Features und Funktionalitäten interagieren kann."
+"title": "Erstelle das Frontend für die Applikation",
+"description" : "Als ein Nutzer, möchte ich ein benutzerfreundliches Frontend für die Applikation nutzen, damit ich ohne Probleme mit den Features und Funktionalitäten interagieren kann.",
 "acceptance_criteria" : [
 "Das Frontend soll ein sauberes und intuitives Design haben.",
 "Es soll responsive sein und auf unterschiedlichen Endgeräten gut funktionieren"
