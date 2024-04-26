@@ -717,6 +717,7 @@ export default defineComponent({
     },
     onPlanningStarted() {
       this.planningStart = true;
+      this.onSelectedStory(this.index);
     },
     vote(vote: string) {
       this.hostEstimation = vote;
