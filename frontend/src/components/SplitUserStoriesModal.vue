@@ -170,17 +170,15 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .newUserStoryCol {
-  border: 3px solid;
-  box-shadow: inset 4px 4px 10px var(--text-primary-color), 4px 4px 10px var(--text-primary-color);
+  box-shadow: inset 4px 4px 6px var(--newUserStoryShadow);
   border-radius: 1rem;
-  height: 30%;
+  padding: 1em;
 }
 
 .selectedStoryLine {
   position: absolute;
   right: 0;
   border-bottom: 2px solid var(--text-primary-color);
-  box-shadow: 0 10px 5px var(--text-primary-color);
   width: 16px;
 }
 
@@ -199,7 +197,7 @@ export default defineComponent({
 }
 
 .selected-Story{
-  border: var(--ai-stars) 3px solid!important;
+  border: var(--ai-stars) 2px solid!important;
 }
 
 #userStoryBlock {
@@ -209,7 +207,7 @@ export default defineComponent({
 
 #userStoryRow {
   height: 50px;
-  border: var(--text-primary-color) 3px solid;
+  border: var(--text-primary-color) 2px solid;
   color: var(--text-primary-color);
   background-color: transparent;
 }
