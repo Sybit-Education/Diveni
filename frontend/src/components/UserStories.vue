@@ -49,7 +49,7 @@
         </b-button>
         <b-button
           id="stars"
-          v-if="showEditButtons"
+          v-if="showEditButtons && hasApiKey"
           v-show="userStories[index].title !== '' && userStories[index].description !== ''"
           @click="selectedStoryIndex = index; showPrivacyModal = true;"
         >
@@ -150,6 +150,7 @@ export default defineComponent({
     storyMode: { type: String, required: false, default: null },
     splittedUserStories: { type: Array<UserStory>, required: false, default: [] },
     storyToSplitIdx: { type: Number, required: false, default: 0 },
+    hasApiKey: { type: Boolean, required: false, default: false },
   },
   setup() {
     const { t } = useI18n();

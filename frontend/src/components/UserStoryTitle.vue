@@ -26,7 +26,8 @@
               host &&
               showImproveTitleButton &&
               (savedTitle === '' || savedTitle === userStories[idx].title) &&
-              userStories[idx].title !== ''
+              userStories[idx].title !== '' &&
+              hasApiKey
             "
               id="submitAI"
               @click="showModalTitle = true"
@@ -77,7 +78,7 @@
               {{ num }}
             </b-dropdown-item>
             <b-dropdown-item
-              v-if="showAIEstimationButton"
+              v-if="showAIEstimationButton && hasApiKey"
               @click="showModalEstimation = true"
             >
               <BIconStars/>
@@ -115,6 +116,7 @@ export default defineComponent({
     host: { type: Boolean, required: true, default: false},
     displayAiOption: { type: Boolean, required: false, default: false },
     alternateTitle: { type: String, required: false, default: "" },
+    hasApiKey: { type: Boolean, required: false, default: false },
   },
   setup() {
     const { t } = useI18n();

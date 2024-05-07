@@ -17,6 +17,7 @@
           :accepted-stories="acceptedStories"
           :current-story-i-d="userStories[idx].id"
           :key="updateComponent"
+          :hasApiKey="hasApiKey"
           @textValueChanged="(event) => valueChanged(idx, event)"
           @sendGPTDescriptionRequest="sendGPTDescriptionRequest"
         />
@@ -56,7 +57,8 @@ export default defineComponent({
     editDescription: { type: Boolean, required: true, default: false },
     gptDescriptionResponse: { type: Boolean, required: false, default: false },
     updateComponent: { type: Boolean, required: false, default: false },
-    acceptedStories: { type: Array<{ storyID: number | null, issueType: string }>, required: false, default: []}
+    acceptedStories: { type: Array<{ storyID: number | null, issueType: string }>, required: false, default: []},
+    hasApiKey: { type: Boolean, required: false, default: false },
   },
   setup() {
     const { t } = useI18n();

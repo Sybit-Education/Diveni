@@ -16,7 +16,7 @@
     />
     <b-button
       id="submitAIDescription"
-      v-show="aiButtonVisible && currentText !== ''"
+      v-show="aiButtonVisible && currentText !== '' && hasApiKey"
       @click="showPopOver = !showPopOver;"
     >
       <b-icon-stars id="aiStars" />
@@ -107,6 +107,11 @@ export default defineComponent({
       type: Array<{ storyID: number | null, issueType: string }>,
       required: false,
       default: []
+    },
+    hasApiKey: {
+      type: Boolean,
+      required: false,
+      default: false
     },
   },
   setup() {

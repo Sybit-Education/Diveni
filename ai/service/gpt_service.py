@@ -237,3 +237,11 @@ async def split_user_story(data: UserStory):
         user_story_list.append({"title": user_story["title"], "description": description})
     print("gpt_service: <-- split_user_story()")
     return user_story_list
+
+
+def check_api_key():
+    print("gpt_service: --> check_api_key()")
+    api_key = os.environ.get('api_key')
+    print("gpt_service: <-- check_api_key()")
+    return False if api_key is None else True
+

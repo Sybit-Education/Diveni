@@ -260,6 +260,12 @@ class ApiService {
     splitted_stories.map(us => us.id = null);
     return splitted_stories;
   }
+
+  public async checkApiKey() {
+    const response = await axios.get(`${constants.backendURL}/ai/check-api-key`);
+    return response.data.has_api_key;
+  }
+
 }
 
 export default new ApiService();

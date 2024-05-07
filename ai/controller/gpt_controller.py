@@ -44,4 +44,12 @@ async def split_user_story(data: UserStory):
     print("gpt_controller: --> split_user_story(), data={", data, "}")
     response = await service.split_user_story(data)
     print("gpt_controller: <-- split_user_story()")
-    return {"new_user_stories" : response}
+    return {"new_user_stories": response}
+
+
+@app.get("/check-api-key")
+def check_api_key():
+    print("gpt_controller: --> check_api_key()")
+    response = service.check_api_key()
+    print("gpt_controller: <-- check_api_key()")
+    return {"has_api_key": response}

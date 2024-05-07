@@ -100,4 +100,12 @@ public class AiService {
     LOGGER.debug("<-- splitUserStory()");
     return response;
   }
+
+  public ResponseEntity<String> checkApiKey() {
+    LOGGER.debug("--> checkApiKey()");
+    ResponseEntity<String> response =
+      executeRequest(aiUrl +"/check-api-key", HttpMethod.GET, null);
+    LOGGER.debug("<-- checkApiKey()");
+    return response;
+  }
 }

@@ -260,6 +260,7 @@
           :splittedUserStories="splitted_user_stories"
           :story-to-split-idx="index"
           :key="splitted_user_stories"
+          :hasApiKey="hasApiKey"
           @userStoriesChanged="onUserStoriesChanged"
           @selectedStory="onSelectedStory($event)"
           @sendGPTRequest="splitUserStory"
@@ -288,6 +289,7 @@
           :splittedUserStories="splitted_user_stories"
           :story-to-split-idx="index"
           :key="splitted_user_stories"
+          :hasApiKey="hasApiKey"
           @userStoriesChanged="onUserStoriesChanged"
           @selectedStory="onSelectedStory($event)"
           @sendGPTRequest="splitUserStory"
@@ -329,6 +331,7 @@
           :initial-stories="userStories"
           :card-set="voteSet"
           :index="index"
+          :hasApiKey="hasApiKey"
           @userStoriesChanged="onUserStoriesChanged"
           @improveTitle="improveTitle"
           @acceptTitle="acceptSuggestionTitle"
@@ -345,6 +348,7 @@
           :update-component="updateComponent"
           :accepted-stories="acceptedStoriesDescription"
           :isJiraSelected="isJiraSelected"
+          :hasApiKey="hasApiKey"
           @userStoriesChanged="onUserStoriesChanged"
           @sendGPTDescriptionRequest="improveDescription"
         />
@@ -357,6 +361,7 @@
           :initial-stories="userStories"
           :card-set="voteSet"
           :index="index"
+          :hasApiKey="hasApiKey"
           @userStoriesChanged="onUserStoriesChanged"
           @improveTitle="improveTitle"
           @acceptTitle="acceptSuggestionTitle"
@@ -372,6 +377,7 @@
           :gpt-description-response="gptDescriptionResponse"
           :update-component="updateComponent"
           :isJiraSelected="isJiraSelected"
+          :hasApiKey="hasApiKey"
           @userStoriesChanged="onUserStoriesChanged"
           @sendGPTDescriptionRequest="improveDescription"
         />
@@ -457,6 +463,7 @@ export default defineComponent({
       //generell needed for GPT usage
       showGPTModal: false,
       gptMode: "",
+      hasApiKey: false,
       // needed for title + anti spam
       gptTitleResponse: false,
       alternateTitle: "",
@@ -549,6 +556,7 @@ export default defineComponent({
   },
   async created() {
     this.store.clearStoreWithoutUserStories();
+    this.hasApiKey = await apiService.checkApiKey();
     if (!this.sessionID || !this.adminID) {
       //check for cookie
       await this.checkAdminCookie();
