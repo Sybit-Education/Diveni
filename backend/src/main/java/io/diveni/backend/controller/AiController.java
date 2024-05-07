@@ -62,5 +62,4 @@ public class AiController {
     LOGGER.debug("<-- checkApiKey()");
     return response;
   }
-
 }
