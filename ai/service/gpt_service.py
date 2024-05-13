@@ -75,7 +75,7 @@ async def improve_title(original_title: str, confidential_data: dict):
     completion = client.completions.create(
         model=model_id,
         prompt=prompt_input,
-        max_tokens=40,
+        max_tokens=100,
         temperature=0.8
     )
     response = completion.choices[0].text.lstrip().rstrip()
@@ -100,7 +100,7 @@ async def improve_description(original_user_story: UserStory):
     completion = client.completions.create(
         model=model_id,
         prompt=final_prompt,
-        max_tokens=250,
+        max_tokens=1500,
         temperature=0.1
     )
     print(completion.choices[0].text + "\n")
@@ -136,7 +136,7 @@ async def grammar_check(original_user_story: UserStory):
     completion = client.completions.create(
         model=model_id,
         prompt=final_prompt,
-        max_tokens=250,
+        max_tokens=1500,
         temperature=0
     )
     output = completion.choices[0].text
@@ -186,7 +186,7 @@ async def estimate_user_story(original_data: Estimation_data):
     completion = client.completions.create(
         model=model_id,
         prompt=prompt,
-        max_tokens=250,
+        max_tokens=1000,
         temperature=0
     )
     print(completion.choices[0].text)
@@ -212,7 +212,7 @@ async def split_user_story(data: UserStory):
     completion = client.completions.create(
         model=model_id,
         prompt=prompt,
-        max_tokens=600,
+        max_tokens=3000,
         temperature=0
     )
     print(completion.choices[0].text)
