@@ -104,7 +104,7 @@ public class AiService {
   public ResponseEntity<String> checkApiKey() {
     LOGGER.debug("--> checkApiKey()");
     ResponseEntity<String> response =
-      executeRequest(aiUrl +"/check-api-key", HttpMethod.GET, null);
+        executeRequest(aiUrl + "/check-api-key", HttpMethod.GET, null);
     LOGGER.debug("<-- checkApiKey()");
     return response;
   }
