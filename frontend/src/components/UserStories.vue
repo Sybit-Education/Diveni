@@ -24,14 +24,14 @@
         :style="getOriginalIndex(index) === selectedStoryIndex ? 'border-width: 3px;' : ''"
         @mouseover="hover = index"
         @mouseleave="hover = null"
-        @click.stop="setUserStoryAsActive(index)"
+        @click="setUserStoryAsActive(index)"
       >
         <b-button
           v-if="showEditButtons"
           variant="primary"
           :class="story.isActive ? 'selectedStory' : 'outlineColorStory'"
           size="sm"
-          @click.stop="
+          @click="
             markUserStory(index);
             $event.target.blur();
           "
