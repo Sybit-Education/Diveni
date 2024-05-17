@@ -3,35 +3,35 @@
     <div v-if="userStories.length > 0 || filterActive" class="w-100 d-flex justify-content-left">
       <b-input-group>
         <b-input-group-prepend>
-          <b-input-group-text><BIconSearch id="searchIcon"></BIconSearch></b-input-group-text>
+          <b-input-group-text><BIconSearch id="searchIcon" /></b-input-group-text>
         </b-input-group-prepend>
         <b-input
           id="search"
           v-model="input"
           type="text"
           :placeholder="t('page.session.before.userStories.placeholder.searchUserStories')"
-          @input="swapPriority"
+          @input="filterStories"
         />
       </b-input-group>
     </div>
     <b-card-group id="userStoryBlock" class="mt-2">
       <b-list-group-item
-        v-for="(story, index) of userStories"
+        v-for="(story, index) in displayedStories"
         id="userStoryRow"
         :key="index"
-        :active="index === selectedStoryIndex"
+        :active="getOriginalIndex(index) === selectedStoryIndex"
         class="w-100 p-1 d-flex justify-content-left"
-        :style="index === selectedStoryIndex ? 'border-width: 3px;' : ''"
+        :style="getOriginalIndex(index) === selectedStoryIndex ? 'border-width: 3px;' : ''"
         @mouseover="hover = index"
         @mouseleave="hover = null"
-        @click="setUserStoryAsActive(index)"
+        @click.stop="setUserStoryAsActive(index)"
       >
         <b-button
           v-if="showEditButtons"
           variant="primary"
           :class="story.isActive ? 'selectedStory' : 'outlineColorStory'"
           size="sm"
-          @click="
+          @click.stop="
             markUserStory(index);
             $event.target.blur();
           "
@@ -129,87 +129,97 @@ export default defineComponent({
   },
   data() {
     return {
-      selectedStoryIndex: null as unknown,
-      sideBarOpen: false,
+      selectedStoryIndex: null as number | null,
       userStories: [] as Array<UserStory>,
-      hover: null,
+      hover: null as number | null,
       input: "",
       filterActive: false,
       savedStories: [] as Array<UserStory>,
+      filteredStories: [] as Array<{ story: UserStory; originalIndex: number }>,
     };
   },
-  watch: {
-    initialStories() {
-      this.userStories = this.initialStories as Array<UserStory>;
+  computed: {
+    displayedStories() {
+      return this.filterActive ? this.filteredStories.map((item) => item.story) : this.userStories;
     },
-    hostSelectedStoryIndex() {
-      this.selectedStoryIndex = this.hostSelectedStoryIndex;
-      this.$emit("selectedStory", this.selectedStoryIndex);
+  },
+  watch: {
+    initialStories: {
+      immediate: true,
+      handler(newStories) {
+        this.userStories = newStories;
+        this.savedStories = newStories;
+      },
+    },
+    hostSelectedStoryIndex(newIndex) {
+      this.selectedStoryIndex = newIndex;
+      this.$emit("selectedStory", newIndex);
     },
   },
   mounted() {
     this.userStories = this.initialStories as Array<UserStory>;
+    this.displayedStories = this.initialStories as Array<UserStory>;
   },
   methods: {
-    setUserStoryAsActive(index) {
-      this.selectedStoryIndex = index;
-      this.$emit("selectedStory", index);
+    getOriginalIndex(index: number) {
+      if (this.filterActive && index >= 0 && index < this.filteredStories.length) {
+        return this.filteredStories[index].originalIndex;
+      } else {
+        return index;
+      }
+    },
+    setUserStoryAsActive(index: number) {
+      const originalIndex = this.getOriginalIndex(index);
+      this.selectedStoryIndex = originalIndex;
+      this.$emit("selectedStory", originalIndex);
     },
     addUserStory() {
-      const story: UserStory = {
+      const newStory: UserStory = {
         id: null,
         title: "",
         description: "",
         estimation: null,
         isActive: false,
       };
-      this.userStories.push(story);
+      this.userStories.push(newStory);
       this.setUserStoryAsActive(this.userStories.length - 1);
     },
-    swapPriority: function () {
+    filterStories() {
       if (!this.filterActive) {
         this.savedStories = this.userStories;
       }
       this.userStories = this.savedStories;
-      if (this.input !== "") {
-        const filteredUserStories: UserStory[] = [];
-        this.userStories.forEach((userStory) => {
-          if (userStory.title.toLowerCase().includes(this.input.toLowerCase())) {
-            filteredUserStories.push(userStory);
-          }
-        });
-        if (filteredUserStories.length > 0) {
-          this.filterActive = true;
-          this.userStories = filteredUserStories;
-          this.publishChanges(null, false);
-        } else {
-          this.filterActive = true;
-          this.userStories = [];
-          this.publishChanges(null, false);
-        }
+      if (this.input) {
+        const filteredUserStories = this.userStories
+          .map((story, index) => ({ story, originalIndex: index }))
+          .filter(({ story }) => story.title.toLowerCase().includes(this.input.toLowerCase()));
+        this.filterActive = true;
+        this.filteredStories = filteredUserStories;
+        this.userStories = filteredUserStories.map((item) => item.story);
       } else {
         this.filterActive = false;
         this.userStories = this.savedStories;
-        this.publishChanges(null, false);
       }
     },
-    deleteStory(index) {
-      this.publishChanges(index, true);
+    deleteStory(index: number) {
+      const originalIndex = this.getOriginalIndex(index);
+      if (this.filterActive) {
+        this.filteredStories.splice(index, 1);
+        this.displayedStories.splice(index, 1);
+      }
+      this.publishChanges(originalIndex, true);
+      this.filterStories();
     },
-    publishChanges(index, remove) {
-      this.$emit("userStoriesChanged", { us: this.userStories, idx: index, doRemove: remove });
+    publishChanges(index: number, remove: boolean) {
+      this.$emit("userStoriesChanged", { us: this.savedStories, idx: index, doRemove: remove });
     },
-    markUserStory(index) {
-      const stories = this.userStories.map((s) => ({
-        id: s.id,
-        title: s.title,
-        description: s.description,
-        estimation: s.estimation,
-        isActive: false,
+    markUserStory(index: number) {
+      const originalIndex = this.getOriginalIndex(index);
+      this.userStories = this.userStories.map((story, idx) => ({
+        ...story,
+        isActive: idx === originalIndex,
       }));
-      stories[index].isActive = true;
-      this.userStories = stories;
-      this.publishChanges(index, false);
+      this.publishChanges(originalIndex, false);
     },
   },
 });
