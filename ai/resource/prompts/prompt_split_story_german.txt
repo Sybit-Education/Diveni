@@ -29,3 +29,5 @@ Antwort: {
 }
 ]
 }
+Aufgabe: Teile diese User Story in mehrere kleinere User Stories auf.
+Titel:
