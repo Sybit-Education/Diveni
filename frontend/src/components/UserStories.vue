@@ -149,6 +149,7 @@ export default defineComponent({
       handler(newStories) {
         this.userStories = newStories;
         this.savedStories = newStories;
+        this.filterStories();
       },
     },
     hostSelectedStoryIndex(newIndex) {
@@ -203,12 +204,7 @@ export default defineComponent({
     },
     deleteStory(index: number) {
       const originalIndex = this.getOriginalIndex(index);
-      if (this.filterActive) {
-        this.filteredStories.splice(index, 1);
-        this.displayedStories.splice(index, 1);
-      }
       this.publishChanges(originalIndex, true);
-      this.filterStories();
     },
     publishChanges(index: number, remove: boolean) {
       this.$emit("userStoriesChanged", { us: this.savedStories, idx: index, doRemove: remove });
