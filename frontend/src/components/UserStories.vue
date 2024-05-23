@@ -40,7 +40,7 @@
         </b-button>
 
         <b-button
-          v-else-if="hostSelectedStoryIndex === index && !showEditButtons"
+          v-else-if="hostSelectedStoryIndex === getOriginalIndex(index) && !showEditButtons"
           size="sm"
           variant="success"
           disabled
