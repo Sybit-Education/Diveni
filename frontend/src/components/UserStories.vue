@@ -31,10 +31,6 @@
           variant="primary"
           :class="story.isActive ? 'selectedStory' : 'outlineColorStory'"
           size="sm"
-          @click="
-            markUserStory(index);
-            $event.target.blur();
-          "
         >
           <b-img id="userStoryPicture" :src="require('@/assets/ActiveUserStory.png')" />
         </b-button>
@@ -208,14 +204,6 @@ export default defineComponent({
     },
     publishChanges(index: number, remove: boolean) {
       this.$emit("userStoriesChanged", { us: this.savedStories, idx: index, doRemove: remove });
-    },
-    markUserStory(index: number) {
-      const originalIndex = this.getOriginalIndex(index);
-      this.userStories = this.userStories.map((story, idx) => ({
-        ...story,
-        isActive: idx === originalIndex,
-      }));
-      this.publishChanges(originalIndex, false);
     },
   },
 });
