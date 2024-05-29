@@ -8,7 +8,7 @@ app = FastAPI()
 
 
 @app.post("/improve-title")
-async def root(title: Title):
+async def improve_title(title: Title):
     print("gpt_controller: --> improve_title(), title={", title.name, "}")
     response = await service.improve_title(title.name, title.confidential_data)
     print("gpt_controller: <-- improve_title()")
@@ -45,6 +45,14 @@ async def split_user_story(data: UserStory):
     response = await service.split_user_story(data)
     print("gpt_controller: <-- split_user_story()")
     return {"new_user_stories": response}
+
+
+@app.post("/mark-description")
+async def mark_description(data: UserStory):
+    print("gpt_controller: --> mark_description(), data={", data, "}")
+    response = await service.mark_description(data)
+    print("gpt_controller: <-- mark_description()")
+    return {"description": response}
 
 
 @app.get("/check-api-key")

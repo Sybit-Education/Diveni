@@ -132,7 +132,6 @@ async def grammar_check(original_user_story: UserStory):
                     "'acceptance_criteria' (list) field."
                     "If the text does not mention acceptance criteria, leave the field blank. This is the text: ") + new_description
     final_prompt = get_prompt("grammar_check") + new_description + "\n Solution: "
-    print(final_prompt)
     completion = client.completions.create(
         model=model_id,
         prompt=final_prompt,
@@ -237,6 +236,31 @@ async def split_user_story(data: UserStory):
         user_story_list.append({"title": user_story["title"], "description": description})
     print("gpt_service: <-- split_user_story()")
     return user_story_list
+
+async def mark_description(data: UserStory):
+    print("gpt_service: --> mark_description()")
+    client, model_id = setUp()
+    swappedData, new_description = replace_confidential_data(data.description, data.confidential_data)
+    if data.language == "english":
+        prompt = get_prompt("mark_description") + new_description + "\nSolution:"
+    else:
+        prompt = get_prompt("mark_description_german") + new_description + "\nAntwort:"
+    completion = client.completions.create(
+        model=model_id,
+        prompt=prompt,
+        max_tokens=3000,
+        temperature=0
+    )
+    print(completion.choices[0].text)
+    output = completion.choices[0].text
+    start_brace = output.find('{')
+    end_brace = output.rfind('}')
+    json_ready_string = output[start_brace: end_brace + 1]
+    result_data = json.loads(json_ready_string, strict=False)
+    description = result_data.get("description", "")
+    description = replace_confidential_data_to_original(description, swappedData)
+    print("gpt_service: <-- mark_description()")
+    return description
 
 
 def check_api_key():

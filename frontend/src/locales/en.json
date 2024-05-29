@@ -22,7 +22,8 @@
       },
       "descriptionButtons": {
         "description": "Improve Description",
-        "grammar": "Grammar Check"
+        "grammar": "Grammar Check",
+        "mark": "Mark important content"
       },
       "privacyModal": {
         "title": "Mark confidential information",

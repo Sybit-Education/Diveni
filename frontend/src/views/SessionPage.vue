@@ -837,9 +837,11 @@ export default defineComponent({
         const response = await apiService.improveDescription(userStory, description, this.confidentialData, language);
         this.alternateDescription =
           response.description + response.acceptance_criteria.toString().replaceAll(",", "");
-      } else {
+      } if (issue === 'grammar') {
         const response = await apiService.grammarCheck(userStory, description, this.confidentialData, language);
         this.alternateDescription = response.description;
+      } if (issue === 'markDescription') {
+        this.alternateDescription= await apiService.markDescription(userStory, description, this.confidentialData, language);
       }
       this.descriptionMode = issue;
       this.gptDescriptionResponse = true;

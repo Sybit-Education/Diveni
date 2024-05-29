@@ -55,6 +55,14 @@ public class AiController {
     return response;
   }
 
+  @PostMapping("mark-description")
+  public ResponseEntity<String> markDescription(@RequestBody GptConfidentialData data) {
+    LOGGER.debug("--> markDescription(), GptConfidentialData={}", data);
+    ResponseEntity<String> response = aiService.markDescription(data);
+    LOGGER.debug("<-- markDescription()");
+    return response;
+  }
+
   @GetMapping("check-api-key")
   public ResponseEntity<String> checkApiKey() {
     LOGGER.debug("--> checkApiKey()");

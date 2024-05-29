@@ -261,6 +261,23 @@ class ApiService {
     return splitted_stories;
   }
 
+  public async markDescription(userStory: UserStory, description: string, confidentialData: Map<string, string>, language: string) {
+    const response = await axios.post(`${constants.backendURL}/ai/mark-description`, {
+      id: userStory.id,
+      title: userStory.title,
+      description: description,
+      estimation: userStory.estimation,
+      isActive: userStory.isActive,
+      confidentialData: JSON.stringify(
+        Array.from(confidentialData.entries()).reduce((o, [key, value]) => {
+          o[key] = value;
+          return o;
+        }, {})),
+      language: language,
+    });
+    return response.data.description;
+  }
+
   public async checkApiKey() {
     const response = await axios.get(`${constants.backendURL}/ai/check-api-key`);
     return response.data.has_api_key;

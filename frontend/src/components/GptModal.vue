@@ -8,8 +8,15 @@
       hide-header-close
     >
       <template #modal-header>
-        <div class="text-center">
-          {{gptMode === 'improveDescription' ? 'Alternative Description' : 'Corrected Description'}}
+        <div
+          v-if="gptMode === 'improveDescription'"
+          class="text-center">
+          Alternative Description>
+        </div>
+        <div
+          v-else
+          class="text-center">
+          {{gptMode === 'grammar' ? 'Corrected Description' : 'Marked Description'}}
         </div>
       </template>
       <div

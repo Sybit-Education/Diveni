@@ -101,6 +101,19 @@ public class AiService {
     return response;
   }
 
+  public ResponseEntity<String> markDescription(GptConfidentialData data) {
+    LOGGER.debug("--> markDescription");
+    Map<String, Object> content = new HashMap<>();
+    content.put("title", data.getTitle());
+    content.put("description", data.getDescription());
+    content.put("confidential_data", data.getConfidentialData().toMap());
+    content.put("language", data.getLanguage());
+    ResponseEntity<String> response =
+      executeRequest(aiUrl + "/mark-description", HttpMethod.POST, new Gson().toJson(content));
+    LOGGER.debug("<-- markDescription");
+    return response;
+  }
+
   public ResponseEntity<String> checkApiKey() {
     LOGGER.debug("--> checkApiKey()");
     ResponseEntity<String> response =

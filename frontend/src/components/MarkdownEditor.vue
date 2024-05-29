@@ -41,6 +41,12 @@
         >
           <b-icon-lightbulb/> {{ t("general.aiFeature.descriptionButtons.description") }}
         </b-button>
+        <b-button
+          class="my-1 aiDescriptionButtons"
+          @click="aiButtonClicked('markDescription')"
+        >
+          <b-icon-input-cursor-text/> {{ t("general.aiFeature.descriptionButtons.mark") }}
+        </b-button>
       </div>
     </div>
     <div
