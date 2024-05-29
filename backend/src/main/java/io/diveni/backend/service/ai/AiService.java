@@ -109,7 +109,7 @@ public class AiService {
     content.put("confidential_data", data.getConfidentialData().toMap());
     content.put("language", data.getLanguage());
     ResponseEntity<String> response =
-      executeRequest(aiUrl + "/mark-description", HttpMethod.POST, new Gson().toJson(content));
+        executeRequest(aiUrl + "/mark-description", HttpMethod.POST, new Gson().toJson(content));
     LOGGER.debug("<-- markDescription");
     return response;
   }
