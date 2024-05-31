@@ -1,174 +1,181 @@
 <template>
   <b-container class="main">
-    <h1>
-      {{ t("session.prepare.title") }}
-    </h1>
+    <h1>{{ t("session.prepare.title") }}</h1>
 
-    <h4 class="mt-2">
-      <b-img
-        v-if="theme === 'light'"
-        :src="require('@/assets/preparePage/P1.png')"
-        class="numberPictures"
-      />
-      <b-img v-else :src="require('@/assets/preparePage/P1D.png')" class="numberPictures" />
-      {{ t("session.prepare.step.selection.mode.title") }}
-    </h4>
-    <b-tabs v-model="tabIndex" fill>
-      <b-tab
-        class="mt-2"
-        :title="t('session.prepare.step.selection.mode.description.withoutUS.tab.label')"
-        :title-link-class="linkClass(0)"
-      >
-        <story-points-component />
-      </b-tab>
-      <b-tab
-        :title="t('session.prepare.step.selection.mode.description.withUS.tab.label')"
-        :title-link-class="linkClass(1)"
-      >
-        <user-story-component class="mt-2" />
-        <input
-          id="fileUpload"
-          type="file"
-          hidden
-          accept="text/csv"
-          @change="importStory($event.target?.files)"
-        />
-        <b-button
-          block
-          elevation="2"
-          class="btn-primary"
-          variant="primary"
-          @click="
-            openFileUploader();
-            $event.target.blur();
-          "
-        >
-          {{ t("session.prepare.step.selection.mode.description.withUS.importButton") }}
-        </b-button>
-      </b-tab>
-      <b-tab
-        v-if="isIssueTrackerEnabled"
-        :title="t('session.prepare.step.selection.mode.description.withIssueTracker.tab.label')"
-        :title-link-class="linkClass(2)"
-      >
-        <jira-component class="mt-2" />
-      </b-tab>
-    </b-tabs>
-    <h4 class="mt-4">
-      <b-img
-        v-if="theme === 'light'"
-        :src="require('@/assets/preparePage/P2.png')"
-        class="numberPictures"
-      />
-      <b-img v-else :src="require('@/assets/preparePage/P2D.png')" class="numberPictures" />
-      {{ t("session.prepare.step.selection.cardSet.title") }}
-    </h4>
-    <card-set-component
-      class="mt-2"
-      :user-story-mode="userStoryMode"
-      @selectedCardSetOptions="setCardSetOptions"
-    />
-    <h4 class="mt-4">
-      <b-img
-        v-if="theme === 'light'"
-        :src="require('@/assets/preparePage/P3.png')"
-        class="numberPictures"
-      />
-      <b-img v-else :src="require('@/assets/preparePage/P3D.png')" class="numberPictures" />
-      {{ t("session.prepare.step.selection.time.title") }}
-    </h4>
-    <div class="settings-control">
-      <b-button
-        variant="primary"
-        class="btn-sm btn-outline-light"
-        @click="
-          setTimerDown();
-          $event.target.blur();
-        "
-      >
-        -
-      </b-button>
-      <div id="setting-value" class="font-weight-bolder px-3 text-center">
-        {{ timer == 0 ? "∞" : formatTimer }}
-      </div>
-      <b-button
-        variant="primary"
-        class="btn-sm btn-outline-light"
-        @click="
-          setTimerUp();
-          $event.target.blur();
-        "
-      >
-        +
-      </b-button>
-    </div>
-    <h4 class="mt-5">
-      <b-img
-        v-if="theme === 'light'"
-        :src="require('@/assets/preparePage/P4.png')"
-        class="numberPictures"
-      />
-      <b-img v-else :src="require('@/assets/preparePage/P4D.png')" class="numberPictures" />
-      {{ t("session.prepare.step.selection.hostVoting.title") }}
-    </h4>
-    <b-row class="mt-2">
-      <b-col>
-        <div class="settings-control">
-          <b-button
-            variant="primary"
-            class="btn-sm btn-outline-light"
-            @click="
-              hostVoting = true;
-              $event.target.blur();
-            "
-          >
-            {{ t("session.prepare.step.selection.hostVoting.hostVotingOn") }}
-          </b-button>
-          <div id="setting-value" class="font-weight-bolder px-3 text-center">
-            {{
-              hostVoting
-                ? t("session.prepare.step.selection.hostVoting.hostVotingOn")
-                : t("session.prepare.step.selection.hostVoting.hostVotingOff")
-            }}
-          </div>
-          <b-button
-            variant="primary"
-            class="btn-sm btn-outline-light"
-            @click="
-              hostVoting = false;
-              $event.target.blur();
-            "
-          >
-            {{ t("session.prepare.step.selection.hostVoting.hostVotingOff") }}
-          </b-button>
-        </div>
-      </b-col>
-    </b-row>
-    <h4 class="mt-5">
-      {{ t("session.prepare.step.selection.password.title") }}
-    </h4>
-    <b-row class="mt-2">
-      <b-col>
-        <b-form-input
-          id="input-password"
-          v-model="password"
-          :placeholder="t('session.prepare.step.selection.password.placeholder')"
-        />
-      </b-col>
-    </b-row>
-    <b-button
-      variant="primary"
-      class="mt-5 mb-2"
-      :disabled="buttonDisabled()"
-      @click="sendCreateSessionRequest"
+    <Steppy
+      v-model:step="step"
+      :finalize="finalize"
+      :back-text="t('session.prepare.step.wizardBack')"
+      :next-text="t('session.prepare.step.wizardNext')"
+      :done-text="t('session.prepare.step.wizardDone')"
     >
-      {{ t("session.prepare.button.start") }}
-    </b-button>
+      <template #1>
+        <div>
+          <h4 class="mt-2">{{ t("session.prepare.step.selection.mode.title") }}</h4>
+          <b-tabs v-model="tabIndex" fill>
+            <b-tab
+              class="mt-2"
+              :title="t('session.prepare.step.selection.mode.description.withoutUS.tab.label')"
+              :title-link-class="linkClass(0)"
+            >
+              <story-points-component />
+            </b-tab>
+            <b-tab
+              :title="t('session.prepare.step.selection.mode.description.withUS.tab.label')"
+              :title-link-class="linkClass(1)"
+            >
+              <user-story-component class="mt-2" />
+              <input
+                id="fileUpload"
+                type="file"
+                hidden
+                accept="text/csv"
+                @change="importStory($event.target?.files)"
+              />
+              <b-button
+                block
+                elevation="2"
+                class="btn-primary"
+                variant="primary"
+                @click="
+                  openFileUploader();
+                  $event.target.blur();
+                "
+              >
+                {{ t("session.prepare.step.selection.mode.description.withUS.importButton") }}
+              </b-button>
+            </b-tab>
+            <b-tab
+              v-if="isIssueTrackerEnabled"
+              :title="
+                t('session.prepare.step.selection.mode.description.withIssueTracker.tab.label')
+              "
+              :title-link-class="linkClass(2)"
+            >
+              <jira-component class="mt-2" />
+            </b-tab>
+          </b-tabs>
+        </div>
+      </template>
+
+      <template #2>
+        <div>
+          <h4 class="mt-4">{{ t("session.prepare.step.selection.cardSet.title") }}</h4>
+          <card-set-component
+            class="mt-2"
+            :user-story-mode="userStoryMode"
+            @selectedCardSetOptions="setCardSetOptions"
+          />
+          <h4 class="mt-4">{{ t("session.prepare.step.selection.time.title") }}</h4>
+          <div class="settings-control">
+            <b-button
+              variant="primary"
+              class="btn-sm btn-outline-light"
+              @click="
+                setTimerDown();
+                $event.target.blur();
+              "
+            >
+              -
+            </b-button>
+            <div id="setting-value" class="font-weight-bolder px-3 text-center">
+              {{ timer == 0 ? "∞" : formatTimer }}
+            </div>
+            <b-button
+              variant="primary"
+              class="btn-sm btn-outline-light"
+              @click="
+                setTimerUp();
+                $event.target.blur();
+              "
+            >
+              +
+            </b-button>
+          </div>
+          <h4 class="mt-5">{{ t("session.prepare.step.selection.hostVoting.title") }}</h4>
+          <b-row class="mt-2">
+            <b-col>
+              <div class="settings-control">
+                <b-button
+                  variant="primary"
+                  class="btn-sm btn-outline-light"
+                  @click="
+                    hostVoting = true;
+                    $event.target.blur();
+                  "
+                >
+                  {{ t("session.prepare.step.selection.hostVoting.hostVotingOn") }}
+                </b-button>
+                <div id="setting-value" class="font-weight-bolder px-3 text-center">
+                  {{
+                    hostVoting
+                      ? t("session.prepare.step.selection.hostVoting.hostVotingOn")
+                      : t("session.prepare.step.selection.hostVoting.hostVotingOff")
+                  }}
+                </div>
+                <b-button
+                  variant="primary"
+                  class="btn-sm btn-outline-light"
+                  @click="
+                    hostVoting = false;
+                    $event.target.blur();
+                  "
+                >
+                  {{ t("session.prepare.step.selection.hostVoting.hostVotingOff") }}
+                </b-button>
+              </div>
+            </b-col>
+          </b-row>
+          <h4 class="mt-5">{{ t("session.prepare.step.selection.password.title") }}</h4>
+          <b-row class="mt-2">
+            <b-col>
+              <b-form-input
+                id="input-password"
+                v-model="password"
+                :placeholder="t('session.prepare.step.selection.password.placeholder')"
+              />
+            </b-col>
+          </b-row>
+        </div>
+      </template>
+
+      <template #3>
+        <div>
+          <h4 class="mt-2">{{ t("session.prepare.step.confirmation.title") }}</h4>
+          <b-list-group>
+            <b-list-group-item
+              >{{ t("session.prepare.step.selection.mode.title") }}:
+              {{ userStoryMode }}</b-list-group-item
+            >
+            <b-list-group-item
+              >{{ t("session.prepare.step.selection.cardSet.title") }}:
+              {{ selectedCardSetOptions.join(", ") }}</b-list-group-item
+            >
+            <b-list-group-item
+              >{{ t("session.prepare.step.selection.time.title") }}:
+              {{ timer == 0 ? "∞" : formatTimer }}</b-list-group-item
+            >
+            <b-list-group-item
+              >{{ t("session.prepare.step.selection.hostVoting.title") }}:
+              {{
+                hostVoting
+                  ? t("session.prepare.step.selection.hostVoting.hostVotingOn")
+                  : t("session.prepare.step.selection.hostVoting.hostVotingOff")
+              }}</b-list-group-item
+            >
+            <b-list-group-item
+              >{{ t("session.prepare.step.selection.password.title") }}:
+              {{ password }}</b-list-group-item
+            >
+          </b-list-group>
+        </div>
+      </template>
+    </Steppy>
   </b-container>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 import Session from "../model/Session";
 import Constants from "../constants";
 import CardSetComponent from "../components/CardSetComponent.vue";
@@ -181,6 +188,7 @@ import apiService from "@/services/api.service";
 import { useDiveniStore } from "@/store";
 import { useToast } from "vue-toastification";
 import { useI18n } from "vue-i18n";
+import { Steppy } from "vue3-steppy";
 
 export default defineComponent({
   name: "PrepareSessionPage",
@@ -189,12 +197,14 @@ export default defineComponent({
     UserStoryComponent,
     JiraComponent,
     StoryPointsComponent,
+    Steppy,
   },
   setup() {
     const store = useDiveniStore();
     const toast = useToast();
     const { t } = useI18n();
-    return { store, toast, t };
+    const step = ref<number>(1);
+    return { store, toast, t, step };
   },
   data() {
     return {
@@ -206,6 +216,10 @@ export default defineComponent({
       hostVoting: false,
       isIssueTrackerEnabled: false,
       theme: localStorage.getItem("user-theme"),
+      primaryColor1: "orange",
+      primaryColor2: "#fff",
+      backgroundColor: "#fff",
+      circleSize: 68,
     };
   },
   computed: {
@@ -251,6 +265,9 @@ export default defineComponent({
     this.store.setUserStories({ stories: [] });
   },
   methods: {
+    finalize() {
+      this.sendCreateSessionRequest();
+    },
     linkClass(idx) {
       if (this.tabIndex === idx) {
         return ["selectedTab", "selectedTextColor"];

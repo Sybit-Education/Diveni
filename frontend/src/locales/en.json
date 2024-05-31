@@ -178,6 +178,9 @@
     "prepare": {
       "title": "Prepare your session:",
       "step": {
+        "wizardNext" : "Next",
+        "wizardBack" : "Back",
+        "wizardDone" : "Done",
         "selection": {
           "mode": {
             "title": "Select the mode for your User Stories",
@@ -295,6 +298,9 @@
             "title": "Choose a password if needed",
             "placeholder": "Password (leave empty for unprotected session)"
           }
+        },
+        "confirmation":{
+          "title": "Session Stats"
         }
       },
       "button": {
