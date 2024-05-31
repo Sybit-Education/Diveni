@@ -178,9 +178,15 @@
     "prepare": {
       "title": "Prepare your session:",
       "step": {
-        "wizardNext" : "Next",
-        "wizardBack" : "Back",
-        "wizardDone" : "Done",
+        "wizard": {
+          "wizardNext" : "Next",
+          "wizardBack" : "Back",
+          "wizardDone" : "Create Session",
+          "modeSelection": "Mode Selection",
+          "configurationCardSet": "Configuration - Card set",
+          "configurationTime/HostVote": "Configuration - Time/Host Vote",
+          "confirmation": "Confirmation"
+        },
         "selection": {
           "mode": {
             "title": "Select the mode for your User Stories",

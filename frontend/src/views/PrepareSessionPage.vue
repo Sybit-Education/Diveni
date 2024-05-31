@@ -5,16 +5,30 @@
     <Steppy
       v-model:step="step"
       :finalize="finalize"
-      :back-text="t('session.prepare.step.wizardBack')"
-      :next-text="t('session.prepare.step.wizardNext')"
-      :done-text="t('session.prepare.step.wizardDone')"
+      :tabs="tabs"
+      :circle-size="40"
+      :primary-color1="'var(--preparePage-wizard-status)'"
+      :primary-color2="'var(--preparePage-wizard-statusbackground)'"
+      :background-color="'var(--preparePage-wizard-background)'"
+      :back-text="t('session.prepare.step.wizard.wizardBack')"
+      :next-text="t('session.prepare.step.wizard.wizardNext')"
+      :done-text="t('session.prepare.step.wizard.wizardDone')"
     >
       <template #1>
-        <div>
-          <h4 class="mt-2">{{ t("session.prepare.step.selection.mode.title") }}</h4>
+<!--        TODO: REMOVE OR MAKE TABS NICER,.. MAYBE PICTURES ?-->
+        <div class="wizardStep">
+          <h4 class="mb-2">
+            <b-img
+              v-if="theme === 'light'"
+              :src="require('@/assets/preparePage/P1.png')"
+              class="numberPictures"
+            />
+            <b-img v-else :src="require('@/assets/preparePage/P1D.png')" class="numberPictures" />
+            {{ t("session.prepare.step.selection.mode.title") }}
+          </h4>
           <b-tabs v-model="tabIndex" fill>
             <b-tab
-              class="mt-2"
+              class="mt-5"
               :title="t('session.prepare.step.selection.mode.description.withoutUS.tab.label')"
               :title-link-class="linkClass(0)"
             >
@@ -24,7 +38,7 @@
               :title="t('session.prepare.step.selection.mode.description.withUS.tab.label')"
               :title-link-class="linkClass(1)"
             >
-              <user-story-component class="mt-2" />
+              <user-story-component class="mt-5" />
               <input
                 id="fileUpload"
                 type="file"
@@ -52,21 +66,52 @@
               "
               :title-link-class="linkClass(2)"
             >
-              <jira-component class="mt-2" />
+              <jira-component class="mt-5" />
             </b-tab>
           </b-tabs>
         </div>
       </template>
 
       <template #2>
-        <div>
-          <h4 class="mt-4">{{ t("session.prepare.step.selection.cardSet.title") }}</h4>
+        <div class="wizardStep">
+          <h4 class="mt-4">
+            <b-img
+              v-if="theme === 'light'"
+              :src="require('@/assets/preparePage/P2.png')"
+              class="numberPictures"
+            />
+            <b-img v-else :src="require('@/assets/preparePage/P2D.png')" class="numberPictures" />
+            {{ t("session.prepare.step.selection.cardSet.title") }}
+          </h4>
           <card-set-component
             class="mt-2"
             :user-story-mode="userStoryMode"
             @selectedCardSetOptions="setCardSetOptions"
           />
-          <h4 class="mt-4">{{ t("session.prepare.step.selection.time.title") }}</h4>
+          <h4 class="mt-5">{{ t("session.prepare.step.selection.password.title") }}</h4>
+          <b-row class="mt-2">
+            <b-col>
+              <b-form-input
+                id="input-password"
+                v-model="password"
+                :placeholder="t('session.prepare.step.selection.password.placeholder')"
+              />
+            </b-col>
+          </b-row>
+        </div>
+      </template>
+
+      <template #3>
+        <div class="wizardStep">
+          <h4 class="mt-4">
+            <b-img
+              v-if="theme === 'light'"
+              :src="require('@/assets/preparePage/P3.png')"
+              class="numberPictures"
+            />
+            <b-img v-else :src="require('@/assets/preparePage/P3D.png')" class="numberPictures" />
+            {{ t("session.prepare.step.selection.time.title") }}
+          </h4>
           <div class="settings-control">
             <b-button
               variant="primary"
@@ -92,7 +137,15 @@
               +
             </b-button>
           </div>
-          <h4 class="mt-5">{{ t("session.prepare.step.selection.hostVoting.title") }}</h4>
+          <h4 class="mt-5">
+            <b-img
+              v-if="theme === 'light'"
+              :src="require('@/assets/preparePage/P4.png')"
+              class="numberPictures"
+            />
+            <b-img v-else :src="require('@/assets/preparePage/P4D.png')" class="numberPictures" />
+            {{ t("session.prepare.step.selection.hostVoting.title") }}
+          </h4>
           <b-row class="mt-2">
             <b-col>
               <div class="settings-control">
@@ -126,20 +179,11 @@
               </div>
             </b-col>
           </b-row>
-          <h4 class="mt-5">{{ t("session.prepare.step.selection.password.title") }}</h4>
-          <b-row class="mt-2">
-            <b-col>
-              <b-form-input
-                id="input-password"
-                v-model="password"
-                :placeholder="t('session.prepare.step.selection.password.placeholder')"
-              />
-            </b-col>
-          </b-row>
         </div>
       </template>
 
-      <template #3>
+      <template #4>
+        <!--        TODO: STYLING-->
         <div>
           <h4 class="mt-2">{{ t("session.prepare.step.confirmation.title") }}</h4>
           <b-list-group>
@@ -216,10 +260,28 @@ export default defineComponent({
       hostVoting: false,
       isIssueTrackerEnabled: false,
       theme: localStorage.getItem("user-theme"),
-      primaryColor1: "orange",
-      primaryColor2: "#fff",
-      backgroundColor: "#fff",
-      circleSize: 68,
+      tabs: [
+        {
+          title: this.t("session.prepare.step.wizard.modeSelection"),
+          isValid: false,
+          iconSuccess: null,
+        },
+        {
+          title: this.t("session.prepare.step.wizard.configurationCardSet"),
+          isValid: false,
+          iconSuccess: null,
+        },
+        {
+          title: this.t("session.prepare.step.wizard.configurationTime/HostVote"),
+          isValid: true,
+          iconSuccess: null,
+        },
+        {
+          title: this.t("session.prepare.step.wizard.confirmation"),
+          isValid: true,
+          iconSuccess: null,
+        },
+      ],
     };
   },
   computed: {
@@ -243,6 +305,12 @@ export default defineComponent({
       if (newTimer > 0) {
         this.warningWhenUnderZero = "";
       }
+    },
+    tabIndex(isPresent) {
+      this.tabs[0].isValid = isPresent != null;
+    },
+    selectedCardSetOptions(isPresent) {
+      this.tabs[1].isValid = isPresent != null;
     },
   },
   created() {
@@ -329,9 +397,6 @@ export default defineComponent({
     setCardSetOptions($event) {
       this.selectedCardSetOptions = $event;
     },
-    buttonDisabled() {
-      return this.selectedCardSetOptions.length < 1;
-    },
     onUserStoriesChanged(stories) {
       this.store.setUserStories({ stories });
     },
@@ -403,6 +468,10 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import "@/assets/style/_variables.scss";
 
+.wizardStep {
+  color: var(--text-primary-color) !important;
+}
+
 .settings-control {
   display: flex;
   border-radius: $border-radius;
@@ -411,19 +480,18 @@ export default defineComponent({
   width: 12rem;
   height: 2rem;
   padding: 0;
+  margin: 0 auto;
 
   button {
-    flex: auto;
-    width: 2rem;
-    height: 2rem;
-    margin: 0;
+    width: 6rem;
+    border-radius: $border-radius;
     &:hover {
       color: var(--text-color-hover);
     }
   }
 
   .setting-value {
-    flex: content;
+    flex: 0 0 auto;
     width: 5rem;
   }
 }
