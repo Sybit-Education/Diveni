@@ -4,7 +4,7 @@
 
     <Steppy
       v-model:step="step"
-      :finalize="finalize"
+      :finalize="sendCreateSessionRequest"
       :tabs="tabs"
       :circle-size="40"
       :primary-color1="'var(--preparePage-wizard-status)'"
@@ -333,9 +333,6 @@ export default defineComponent({
     this.store.setUserStories({ stories: [] });
   },
   methods: {
-    finalize() {
-      this.sendCreateSessionRequest();
-    },
     linkClass(idx) {
       if (this.tabIndex === idx) {
         return ["selectedTab", "selectedTextColor"];
