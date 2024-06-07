@@ -35,10 +35,10 @@
         </div>
       </b-col>
     </b-row>
-    <b-row v-if="selectedCardSet.name !== ''">
-      <div v-if="selectedCardSet.values.length !== 0" class="text-center mt-3 pill-group">
+    <b-row v-if="changedCardSet.name !== ''">
+      <div v-if="changedCardSet.values.length !== 0" class="text-center mt-3 pill-group">
         <b-button
-          v-for="item in selectedCardSet.values"
+          v-for="item in changedCardSet.values"
           :key="item"
           :class="isActiveCardSetNumber(item)"
           pill
@@ -60,7 +60,7 @@
         </b-col>
         <b-col sm="6">
           <b-button
-            v-for="item in selectedCardSet.activeValues"
+            v-for="item in changedCardSet.activeValues"
             :key="item"
             :class="isActiveCardSetNumber(item)"
             class="pill"
@@ -77,11 +77,16 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { useI18n } from "vue-i18n";
+import CardSet from "../model/CardSet";
 
 export default defineComponent({
   name: "CardSetComponent",
   props: {
     userStoryMode: { type: String, required: true },
+    selectedCardSet: {
+      type: Object,
+      required: true,
+    },
   },
   setup() {
     const { t } = useI18n();
@@ -91,13 +96,13 @@ export default defineComponent({
     return {
       theme: localStorage.getItem("user-theme"),
       jiraTag: "US_JIRA",
-      selectedCardSet: {
+      createSetInput: "",
+      changedCardSet: {
         name: "",
-        values: [],
+        values: [] as string[],
         activeValues: [] as string[],
         position: 0,
-      },
-      createSetInput: "",
+      } as CardSet,
       allCardSets: [
         {
           values: ["1", "2", "3", "5", "8", "13", "21", "34", "55", "?"],
@@ -156,11 +161,11 @@ export default defineComponent({
       if (newVal.length > 1 && newVal.slice(-1) === ";") {
         const currentValues = [...new Set(newVal.split(";"))] as string[];
         currentValues.pop();
-        this.selectedCardSet.activeValues = currentValues;
-        this.$emit("selectedCardSetOptions", this.selectedCardSet.activeValues);
+        this.changedCardSet.activeValues = currentValues;
+        this.$emit("selectedCardSetOptions", this.changedCardSet);
       } else if (newVal.length == 0) {
-        this.selectedCardSet.activeValues = [];
-        this.$emit("selectedCardSetOptions", this.selectedCardSet.activeValues);
+        this.changedCardSet.activeValues = [];
+        this.$emit("selectedCardSetOptions", this.changedCardSet);
       }
     },
   },
@@ -169,6 +174,7 @@ export default defineComponent({
       const customEvent = event as CustomEvent;
       this.theme = customEvent.detail.storage;
     });
+    this.changedCardSet = this.selectedCardSet as CardSet;
   },
   methods: {
     getTitle(pos, mode) {
@@ -222,23 +228,23 @@ export default defineComponent({
       }
     },
     isActiveCardSetNumber(num) {
-      return this.selectedCardSet.activeValues.includes(num) ? "active" : "outline-secondary";
+      return this.changedCardSet.activeValues.includes(num) ? "active" : "outline-secondary";
     },
     onCardSetSelected(set) {
-      this.selectedCardSet = set;
+      this.changedCardSet = set;
       this.emitChanges();
     },
     emitChanges() {
-      this.$emit("selectedCardSetOptions", this.selectedCardSet.activeValues);
+      this.$emit("selectedCardSetOptions", this.changedCardSet);
     },
     onCardSetNumberSelected(number) {
-      if (this.selectedCardSet.activeValues.includes(number)) {
-        this.selectedCardSet.activeValues = this.selectedCardSet.activeValues.filter(
+      if (this.changedCardSet.activeValues.includes(number)) {
+        this.changedCardSet.activeValues = this.changedCardSet.activeValues.filter(
           (num) => num !== number
         );
       } else {
-        const newActiveValues = [...this.selectedCardSet.activeValues, number];
-        this.selectedCardSet.activeValues = this.selectedCardSet.values.filter((num) =>
+        const newActiveValues = [...this.changedCardSet.activeValues, number];
+        this.changedCardSet.activeValues = this.changedCardSet.values.filter((num) =>
           newActiveValues.includes(num)
         );
       }
@@ -248,7 +254,7 @@ export default defineComponent({
       return `${this.getCardActiveClass(item)} ${this.getPictureClass(item)}`;
     },
     getCardActiveClass(item) {
-      return this.selectedCardSet.position === item.position ? "selected" : "";
+      return this.changedCardSet.position === item.position ? "selected" : "";
     },
     getPictureClass(item) {
       if (this.userStoryMode !== this.jiraTag) {

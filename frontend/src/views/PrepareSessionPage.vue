@@ -15,7 +15,7 @@
       :done-text="t('session.prepare.step.wizard.wizardDone')"
     >
       <template #1>
-<!--        TODO: REMOVE OR MAKE TABS NICER,.. MAYBE PICTURES ?-->
+        <!--        TODO: REMOVE OR MAKE TABS NICER,.. MAYBE PICTURES ?-->
         <div class="wizardStep">
           <h4 class="mb-2">
             <b-img
@@ -86,6 +86,7 @@
           <card-set-component
             class="mt-2"
             :user-story-mode="userStoryMode"
+            :selected-card-set="selectedCardSetOptions"
             @selectedCardSetOptions="setCardSetOptions"
           />
           <h4 class="mt-5">{{ t("session.prepare.step.selection.password.title") }}</h4>
@@ -191,10 +192,14 @@
               >{{ t("session.prepare.step.selection.mode.title") }}:
               {{ userStoryMode }}</b-list-group-item
             >
-            <b-list-group-item
-              >{{ t("session.prepare.step.selection.cardSet.title") }}:
-              {{ selectedCardSetOptions.join(", ") }}</b-list-group-item
-            >
+            <b-list-group-item>
+              {{ t("session.prepare.step.selection.cardSet.title") }}:
+              {{
+                Array.isArray(selectedCardSetOptions.activeValues)
+                  ? selectedCardSetOptions.activeValues.join(", ")
+                  : ""
+              }}
+            </b-list-group-item>
             <b-list-group-item
               >{{ t("session.prepare.step.selection.time.title") }}:
               {{ timer == 0 ? "∞" : formatTimer }}</b-list-group-item
@@ -221,6 +226,7 @@
 <script lang="ts">
 import { defineComponent, ref } from "vue";
 import Session from "../model/Session";
+import CardSet from "../model/CardSet";
 import Constants from "../constants";
 import CardSetComponent from "../components/CardSetComponent.vue";
 import UserStoryComponent from "../components/UserStoryComponent.vue";
@@ -253,7 +259,12 @@ export default defineComponent({
   data() {
     return {
       password: "",
-      selectedCardSetOptions: [],
+      selectedCardSetOptions: {
+        name: "",
+        values: [] as string[],
+        activeValues: [] as string[],
+        position: 0,
+      } as CardSet,
       timer: 30,
       warningWhenUnderZero: "",
       tabIndex: 0,
@@ -343,7 +354,7 @@ export default defineComponent({
     async sendCreateSessionRequest() {
       const url = Constants.backendURL + Constants.createSessionRoute;
       const sessionConfig = {
-        set: this.selectedCardSetOptions,
+        set: this.selectedCardSetOptions.activeValues,
         timerSeconds: this.timer,
         password: this.password === "" ? null : this.password,
         userStories: this.userStories,
