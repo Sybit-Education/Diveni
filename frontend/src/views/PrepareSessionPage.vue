@@ -15,7 +15,6 @@
       :done-text="t('session.prepare.step.wizard.wizardDone')"
     >
       <template #1>
-        <!--        TODO: REMOVE OR MAKE TABS NICER,.. MAYBE PICTURES ?-->
         <div class="wizardStep">
           <h4 class="mb-2">
             <b-img
@@ -184,7 +183,6 @@
       </template>
 
       <template #4>
-        <!--        TODO: STYLING-->
         <div>
           <h4 class="mt-2">{{ t("session.prepare.step.confirmation.title") }}</h4>
           <b-list-group>
@@ -296,6 +294,9 @@ export default defineComponent({
     };
   },
   computed: {
+    selectedProjectAndTabIndex() {
+      return `${this.store.selectedProject}|${this.tabIndex}`;
+    },
     userStories() {
       return this.store.userStories;
     },
@@ -317,8 +318,9 @@ export default defineComponent({
         this.warningWhenUnderZero = "";
       }
     },
-    tabIndex(isPresent) {
-      this.tabs[0].isValid = isPresent != null;
+    selectedProjectAndTabIndex() {
+      this.tabs[0].isValid =
+        this.tabIndex === 2 ? !!this.store.selectedProject : this.tabIndex != null;
     },
     selectedCardSetOptions(isPresent) {
       this.tabs[1].isValid = isPresent != null;
