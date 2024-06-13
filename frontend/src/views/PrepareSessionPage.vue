@@ -496,7 +496,7 @@ export default defineComponent({
   margin: 0 auto;
 
   button {
-    width: 6rem;
+    width: 5rem;
     border-radius: $border-radius;
     &:hover {
       color: var(--text-color-hover);

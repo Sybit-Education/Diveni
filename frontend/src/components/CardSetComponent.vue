@@ -384,6 +384,7 @@ export default defineComponent({
 
   .pill {
     width: 5rem;
+    border-radius: $border-radius !important;
 
     &:not(.active) {
       background-color: var(--preparePageNotSelectedTabBackground) !important;
