@@ -43,7 +43,7 @@
                 type="file"
                 hidden
                 accept="text/csv"
-                @change="importStory($event.target?.files)"
+                @change="importStory($event)"
               />
               <b-button
                 block
@@ -183,7 +183,7 @@
       </template>
 
       <template #4>
-        <div>
+        <div class="wizardStep">
           <h4 class="mt-2">{{ t("session.prepare.step.confirmation.title") }}</h4>
           <b-list-group>
             <b-list-group-item
@@ -231,7 +231,7 @@ import UserStoryComponent from "../components/UserStoryComponent.vue";
 import JiraComponent from "../components/JiraComponent.vue";
 import StoryPointsComponent from "@/components/StoryPointsComponent.vue";
 import UserStory from "@/model/UserStory";
-import papaparse from "papaparse";
+import papaparse, { ParseResult } from "papaparse";
 import apiService from "@/services/api.service";
 import { useDiveniStore } from "@/store";
 import { useToast } from "vue-toastification";
@@ -346,7 +346,7 @@ export default defineComponent({
     this.store.setUserStories({ stories: [] });
   },
   methods: {
-    linkClass(idx) {
+    linkClass(idx: number) {
       if (this.tabIndex === idx) {
         return ["selectedTab", "selectedTextColor"];
       } else {
@@ -404,10 +404,10 @@ export default defineComponent({
         },
       });
     },
-    setCardSetOptions($event) {
+    setCardSetOptions($event: CardSet) {
       this.selectedCardSetOptions = $event;
     },
-    onUserStoriesChanged(stories) {
+    onUserStoriesChanged(stories: UserStory) {
       this.store.setUserStories({ stories });
     },
     setTimerUp() {
@@ -429,11 +429,14 @@ export default defineComponent({
     },
     openFileUploader() {
       const fileUpload = document.getElementById("fileUpload");
-      if (fileUpload != null) {
+      if (fileUpload) {
         fileUpload.click();
       }
     },
-    importStory(files: FileList) {
+    importStory(event: Event) {
+      const target = event.target as HTMLInputElement;
+      const files = target.files;
+
       if (!files || !files[0]) {
         return;
       }
@@ -441,13 +444,11 @@ export default defineComponent({
       papaparse.parse(files[0], {
         header: true,
         delimiter: ";",
-        complete: (file: { data }) => {
+        complete: (result: ParseResult<UserStory>) => {
           const stories: UserStory[] = [];
 
-          file.data.forEach((story) => {
-            const title = story.title ? story.title : story.Title;
-            const description = story.description ? story.description : story.Description;
-            const estimation = story.estimation ? story.estimation : story.Estimation;
+          result.data.forEach((story) => {
+            const { title, description, estimation } = story;
 
             stories.push({
               id: null,
@@ -457,6 +458,7 @@ export default defineComponent({
               isActive: false,
             });
           });
+
           this.store.setUserStories({ stories: stories });
           this.toast.success(
             this.t(
@@ -464,7 +466,8 @@ export default defineComponent({
             )
           );
         },
-        error: () => {
+        error: (err) => {
+          console.error("Error parsing CSV:", err);
           this.toast.error(
             this.t("session.prepare.step.selection.mode.description.withUS.toastErrorNotification")
           );
