@@ -1,5 +1,5 @@
 interface UserStory {
-  id: number | null;
+  id: string | null;
   title: string;
   description: string;
   estimation: string | null;

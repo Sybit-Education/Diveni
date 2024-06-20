@@ -1,0 +1,10 @@
+Aufgabe: Sende ein JSON mit "description" & "acceptance_criteria" für diese User Story: Erstelle einen REST Service für das Backend
+Antwort: {"description": "Als Entwickler im Backend-Team möchte ich einen RESTful Service erstellen, um die Kommunikation zwischen dem Frontend und dem Backend zu ermöglichen.",
+"acceptance_criteria": ["Die Anfragen können GET, POST, PUT oder DELETE sein.","Der Service muss sicherstellen, dass nur autorisierte Benutzer auf die Endpunkte zugreifen können.","Der Service sollte die eingehenden Anfragen validieren, um sicherzustellen, dass sie den erwarteten Parametern und Formaten entsprechen."]}
+Aufgabe: Sende ein JSON mit "description" & "acceptance_criteria" für diese User Story: Erstelle eine Homepage für placeholder-company-1 mit einem java Backend. Es sollte nicht mehr als 100 tausend Euro kosten
+## Akzeptanz Kriterien
+* gut aussehende Webseite
+* Das Logo von placeholder-company-1 sollte auf der Navigationsleiste zu sehen sein
+Antwort: {"description" : "Als Entwickler möchte ich eine professionelle Homepage, mit einem Java-Backend für placeholder-company-1 erstellen, um eine benutzerfreundliche Plattform zu schaffen, die das Unternehmen online repräsentiert.",
+"acceptance_criteria" : ["Die Kosten für die Erstellung der Homepage dürfen 100.000 Euro nicht überschreiten","Das Java-Backend muss robust und sicher sein, um die Funktionalität der Website zu unterstützen.", "Die Website sollte eine klare Navigation haben, um Benutzern das Auffinden von Informationen zu erleichtern"]}
+Aufgabe: Sende ein JSON mit "description" & "acceptance_criteria" für diese User Story (mindestens 6 Akzeptanz Kriterien):

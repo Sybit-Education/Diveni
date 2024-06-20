@@ -1,0 +1,23 @@
+Aufgabe: Send JSON with "description" for this User Story and mark all important content: Als Backend-Entwickler möchte ich einen zuverlässigen und skalierbaren RESTful API-Service erstellen, damit unsere Anwendung Clientanfragen und Datenverarbeitung effizient handhaben kann.
+##### Acceptance Criteria:
+* Der API-Service sollte gängige HTTP-Methoden (GET, POST, PUT, DELETE) für CRUD-Operationen unterstützen.
+* Der Service sollte eine angemessene Fehlerbehandlung implementieren und entsprechende HTTP-Statuscodes zurückgeben.
+* Authentifizierungs- und Autorisierungsmechanismen sollten implementiert werden, um die API-Endpunkte abzusichern.
+Antwort: {"description" : "Als *Backend-Entwickler* möchte ich einen **zuverlässigen und skalierbaren RESTful API-Service erstellen**, damit unsere Anwendung Clientanfragen und Datenverarbeitung effizient handhaben kann.
+##### Acceptance Criteria:
+* Der API-Service sollte gängige HTTP-Methoden (GET, POST, PUT, DELETE) für **CRUD-Operationen unterstützen**.
+* Der Service sollte eine **angemessene Fehlerbehandlung implementieren** und **entsprechende HTTP-Statuscodes zurückgeben**.
+* **Authentifizierungs- und Autorisierungsmechanismen** sollten implementiert werden, um die API-Endpunkte abzusichern. }
+Aufgabe: Send JSON with "description" for this User Story and mark all important content: Als Webentwickler möchte ich eine ansprechende und informative Homepage für unsere Website erstellen, damit Besucher unsere Produkte oder Dienstleistungen leicht verstehen können.
+Antwort: {"description" : "Als *Webentwickler* möchte ich eine **ansprechende und informative Homepage** für unsere Website erstellen, damit Besucher unsere Produkte oder Dienstleistungen leicht verstehen können."}
+Aufgabe: Send JSON with "description" for this User Story and mark all important content: Als Webentwickler möchte ich eine Homepage für Placeholder Company 1 mit Java-Backend erstellen, wobei die Gesamtkosten 100.000 Euro nicht überschreiten dürfen.
+##### Acceptance Criteria:
+* Die Homepage sollte mit Java für das Backend und einem modernen Frontend-Framework (z.B. React, Angular, Vue.js) aufgebaut sein.
+* Die Homepage sollte die Marke, Produkte und Dienstleistungen von Placeholder Company 1 korrekt widerspiegeln.
+* Die Gesamtkosten für Entwicklung, einschließlich Arbeitsaufwand, Hosting und eventueller Drittanbieter-Tools oder -Services, dürfen 100.000 Euro nicht überschreiten.
+Antwort: {"description" : "Als *Webentwickler* möchte ich eine **Homepage für Placeholder Company 1 mit Java-Backend erstellen**, wobei die Gesamtkosten **100.000 Euro nicht überschreiten** dürfen.
+##### Acceptance Criteria:
+* Die Homepage sollte mit **Java für das Backend** und einem modernen Frontend-Framework (z.B. *React*, *Angular*, *Vue.js*) aufgebaut sein.
+* Die Homepage sollte die Marke, Produkte und Dienstleistungen von Placeholder Company 1 **korrekt widerspiegeln**.
+* Die Gesamtkosten für Entwicklung, einschließlich **Arbeitsaufwand, Hosting und eventueller Drittanbieter-Tools oder -Services**, dürfen **100.000 Euro nicht überschreiten**."}
+Aufgabe: Send JSON with "description" for this User Story and mark all important content:

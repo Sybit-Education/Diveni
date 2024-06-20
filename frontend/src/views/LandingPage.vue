@@ -184,7 +184,7 @@ export default defineComponent({
               set: Array<string>;
               timerSeconds: number;
               userStories: Array<{
-                id: number | null;
+                id: string | null;
                 title: string;
                 description: string;
                 estimation: string | null;

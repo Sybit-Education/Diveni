@@ -1,0 +1,33 @@
+Task: Split this User Story in multiple smaller User Stories.
+Title: Create a Web application
+Description: I want a Web application, that does have a vue frontend and a java backend. It should be an online shop for smartphones.
+Solution: {
+"user_stories": [
+{
+"title": "Create Frontend for Application",
+"description": "As a user, I want to have a user-friendly frontend for the application so that I can easily interact with the features and functionalities.",
+"acceptance_criteria": [
+"The frontend should have a clean and intuitive design.",
+"It should be responsive and work well on different devices."
+]
+},
+{
+"title": "Create Backend for Application",
+"description": "As a developer, I want to create a backend for the application using Java so that I can efficiently manage and manipulate data.",
+"acceptance_criteria": [
+"The backend should be built using Java programming language.",
+"It should have endpoints for GET, POST, PUT, and DELETE requests."
+]
+},
+{
+"title": "Create Database for Application",
+"description": "As a developer, I want to create a database for the application so that I can store and retrieve data efficiently.",
+"acceptance_criteria": [
+"The database should be designed to handle large amounts of data.",
+"It should have tables and relationships that accurately represent the data model of the application."
+]
+}
+]
+}
+Task: Split this User Story in multiple smaller User Stories.
+Title:

@@ -1,0 +1,11 @@
+Task: Send a JSON with "description" & "acceptance_criteria" and fix grammar & syntax mistakes, but do not add new elements, for this markdown-text: As a user i want 2 be able to accessed a homepage so that I can easily navigate to different sections of the website.
+##### Acceptance Criteria:
+* The homepage should have a visualy appealing design.
+* The homepage should have an clear and concise navigation menü
+Solution: {"description" : "As a user, I want to be able to access a homepage so that I can easily navigate to different sections of the website.
+##### Acceptance Criteria:\n ",
+"acceptance_criteria" : ["* The homepage should have a visually appealing design.","* The homepage should have a clear and concise navigation menu."]}
+Task: Send a JSON with "description" & "acceptance_criteria" and fix grammar & syntax mistakes, but do not add new elements, for this markdown-text: As a devloper, i want to crete a backend servize with a REST API so dhat i can easily manage and manipulate dayta from the database
+Solution: {"description" : "As a developer, I want to create a backend service with a REST API so that I can easily manage and manipulate data from the database.",
+"acceptance_criteria" : []}
+Task: Send a JSON with "description" & "acceptance_criteria" and fix grammar & syntax mistakes, but do not add new elements, for this markdown-text:

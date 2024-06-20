@@ -51,7 +51,7 @@
         :title="t('session.prepare.step.selection.mode.description.withIssueTracker.tab.label')"
         :title-link-class="linkClass(2)"
       >
-        <jira-component class="mt-2" />
+        <jira-component @jira="isJiraSelected = true;" class="mt-2" />
       </b-tab>
     </b-tabs>
     <h4 class="mt-4">
@@ -206,6 +206,7 @@ export default defineComponent({
       hostVoting: false,
       isIssueTrackerEnabled: false,
       theme: localStorage.getItem("user-theme"),
+      isJiraSelected: false,
     };
   },
   computed: {
@@ -306,6 +307,7 @@ export default defineComponent({
           userStoryMode: session.sessionConfig.userStoryMode,
           hostVoting: this.hostVoting,
           rejoined: "false",
+          isJiraSelected: this.isJiraSelected,
         },
       });
     },
@@ -358,7 +360,7 @@ export default defineComponent({
             const estimation = story.estimation ? story.estimation : story.Estimation;
 
             stories.push({
-              id: null,
+              id: Math.floor(Math.random() * 2000000).toString(),
               title: title,
               description: description,
               estimation: estimation,
