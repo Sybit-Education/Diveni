@@ -112,10 +112,9 @@
             <b-img v-else :src="require('@/assets/preparePage/P3D.png')" class="numberPictures" />
             {{ t("session.prepare.step.selection.time.title") }}
           </h4>
-          <div class="timer-control">
+          <div class="timer-control d-flex justify-content-center">
             <b-button
               variant="primary"
-              class="btn-sm btn-outline-light"
               @click="
                 setTimerDown();
                 $event.target.blur();
@@ -128,7 +127,6 @@
             </div>
             <b-button
               variant="primary"
-              class="btn-sm btn-outline-light"
               @click="
                 setTimerUp();
                 $event.target.blur();
@@ -148,7 +146,7 @@
           </h4>
           <b-row class="mt-2">
             <b-col>
-              <div class="d-flex voting-control justify-content-center">
+              <div class="voting-control d-flex justify-content-center">
                 <b-button
                   :variant="hostVoting ? 'primary' : 'outline-light'"
                   @click="
@@ -496,7 +494,6 @@ export default defineComponent({
 }
 
 .timer-control {
-  display: flex;
   align-items: center;
   border-radius: $border-radius;
   background-color: var(--preparePageTimerBackground);
