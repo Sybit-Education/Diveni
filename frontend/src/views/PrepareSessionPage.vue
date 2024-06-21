@@ -16,7 +16,7 @@
     >
       <template #1>
         <div class="wizardStep">
-          <h4 class="mb-2">
+          <h4 class="mb-3">
             <b-img
               v-if="theme === 'light'"
               :src="require('@/assets/preparePage/P1.png')"
@@ -73,7 +73,7 @@
 
       <template #2>
         <div class="wizardStep">
-          <h4 class="mt-4">
+          <h4 class="mb-3">
             <b-img
               v-if="theme === 'light'"
               :src="require('@/assets/preparePage/P2.png')"
@@ -88,8 +88,8 @@
             :selected-card-set="selectedCardSetOptions"
             @selectedCardSetOptions="setCardSetOptions"
           />
-          <h4 class="mt-5">{{ t("session.prepare.step.selection.password.title") }}</h4>
-          <b-row class="mt-2">
+          <h4 class="mt-3">{{ t("session.prepare.step.selection.password.title") }}</h4>
+          <b-row class="mt-1">
             <b-col>
               <b-form-input
                 id="input-password"
@@ -103,7 +103,7 @@
 
       <template #3>
         <div class="wizardStep">
-          <h4 class="mt-4">
+          <h4 class="mb-3">
             <b-img
               v-if="theme === 'light'"
               :src="require('@/assets/preparePage/P3.png')"
@@ -112,7 +112,7 @@
             <b-img v-else :src="require('@/assets/preparePage/P3D.png')" class="numberPictures" />
             {{ t("session.prepare.step.selection.time.title") }}
           </h4>
-          <div class="timer-control d-flex justify-content-center">
+          <div class="timer-control d-flex justify-content-center mb-5">
             <b-button
               variant="primary"
               @click="
@@ -135,7 +135,7 @@
               +
             </b-button>
           </div>
-          <h4 class="mt-5">
+          <h4 class="mb-3">
             <b-img
               v-if="theme === 'light'"
               :src="require('@/assets/preparePage/P4.png')"
@@ -146,7 +146,7 @@
           </h4>
           <b-row class="mt-2">
             <b-col>
-              <div class="voting-control d-flex justify-content-center">
+              <div class="voting-control d-flex justify-content-center mb-2">
                 <b-button
                   :variant="hostVoting ? 'primary' : 'outline-light'"
                   @click="
@@ -173,7 +173,7 @@
 
       <template #4>
         <div class="wizardStep">
-          <h4 class="mt-2">{{ t("session.prepare.step.confirmation.title") }}</h4>
+          <h4 class="mb-3">{{ t("session.prepare.step.confirmation.title") }}</h4>
           <b-list-group>
             <b-list-group-item
               >{{ t("session.prepare.step.selection.mode.title") }}:
@@ -469,6 +469,10 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 @import "@/assets/style/_variables.scss";
+
+.main {
+  white-space: pre-line;
+}
 
 .wizardStep {
   color: var(--text-primary-color) !important;

@@ -280,7 +280,7 @@ export default defineComponent({
 @import "@/assets/style/variables.scss";
 .card {
   max-width: 224px;
-  min-height: 300px;
+  min-height: 275px;
   justify-content: flex-start;
   align-items: center;
   display: flex;

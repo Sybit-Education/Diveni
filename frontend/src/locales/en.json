@@ -183,8 +183,8 @@
           "wizardBack" : "Back",
           "wizardDone" : "Create Session",
           "modeSelection": "Mode Selection",
-          "configurationCardSet": "Configuration - Card set",
-          "configurationTime/HostVote": "Configuration - Time/Host Vote",
+          "configurationCardSet": "Configuration \n Card set",
+          "configurationTime/HostVote": "Configuration \n Time & Host Vote",
           "confirmation": "Confirmation"
         },
         "selection": {
