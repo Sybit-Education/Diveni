@@ -43,9 +43,9 @@
   --preparePageInActiveCardSet: #e27712;
   --preparePageTimerBackground: rgba(192, 175, 156, 0.4);
   --preparePageNotSelectedTabBackground: rgba(192, 175, 156, 0.4);
-  --preparePage-wizard-background: rgba(255, 255, 255, 0.51); //TODO: Colorn
-  --preparePage-wizard-status: #da7315; //TODO: Colorn
-  --preparePage-wizard-statusbackground: rgb(255, 255, 255); //TODO: Colorn
+  --preparePage-wizard-background: rgba(255, 255, 255, 0.5);
+  --preparePage-wizard-status: #da7315;
+  --preparePage-wizard-statusbackground: rgb(255, 255, 255);
 
   /*Session Page*/
   --textAreaColour: rgba(192, 175, 156, 0.4);
@@ -105,9 +105,9 @@
   --preparePageInActiveCardSet: #e27712;
   --preparePageTimerBackground: rgba(137, 152, 187, 0.4);
   --preparePageNotSelectedTabBackground: rgba(137, 152, 187, 0.4);
-  --preparePage-wizard-background: rgba(80, 96, 199, 0.15); //TODO: Colorn
-  --preparePage-wizard-status: rgb(19, 98, 246); //TODO: Colorn
-  --preparePage-wizard-statusbackground: rgb(255, 255, 255); //TODO: Colorn
+  --preparePage-wizard-background: rgba(80, 96, 199, 0.15);
+  --preparePage-wizard-status: rgb(19, 98, 246);
+  --preparePage-wizard-statusbackground: rgb(255, 255, 255);
 
   /*Session Page*/
   --textAreaColour: rgba(137, 152, 187, 0.4);
@@ -123,9 +123,9 @@
   --editor-defaultui-container-bg: #3e4b6c;
 }
 
-$border-radius:               0.6rem !default;
-$border-radius-lg:            0.9rem !default;
-$border-radius-sm:            1rem !default;
+$border-radius:               0.5rem !default;
+$border-radius-lg:            0.5rem !default;
+$border-radius-sm:            0.5rem !default;
 $list-group-bg:               transparent;
 
 

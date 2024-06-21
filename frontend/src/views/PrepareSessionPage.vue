@@ -112,7 +112,7 @@
             <b-img v-else :src="require('@/assets/preparePage/P3D.png')" class="numberPictures" />
             {{ t("session.prepare.step.selection.time.title") }}
           </h4>
-          <div class="settings-control">
+          <div class="timer-control">
             <b-button
               variant="primary"
               class="btn-sm btn-outline-light"
@@ -148,10 +148,9 @@
           </h4>
           <b-row class="mt-2">
             <b-col>
-              <div class="settings-control">
+              <div class="d-flex voting-control justify-content-center">
                 <b-button
-                  variant="primary"
-                  class="btn-sm btn-outline-light"
+                  :variant="hostVoting ? 'primary' : 'outline-light'"
                   @click="
                     hostVoting = true;
                     $event.target.blur();
@@ -159,16 +158,8 @@
                 >
                   {{ t("session.prepare.step.selection.hostVoting.hostVotingOn") }}
                 </b-button>
-                <div id="setting-value" class="font-weight-bolder px-3 text-center">
-                  {{
-                    hostVoting
-                      ? t("session.prepare.step.selection.hostVoting.hostVotingOn")
-                      : t("session.prepare.step.selection.hostVoting.hostVotingOff")
-                  }}
-                </div>
                 <b-button
-                  variant="primary"
-                  class="btn-sm btn-outline-light"
+                  :variant="!hostVoting ? 'primary' : 'outline-light'"
                   @click="
                     hostVoting = false;
                     $event.target.blur();
@@ -485,22 +476,40 @@ export default defineComponent({
   color: var(--text-primary-color) !important;
 }
 
-.settings-control {
+.voting-control {
+  button {
+    width: 6rem;
+    border-radius: $border-radius;
+    border-color: var(--btn-border-color) !important;
+
+    &:not(.active) {
+      background-color: var(--preparePageTimerBackground);
+      &:hover {
+        background-color: var(--preparePageInActiveTabHover);
+      }
+      &:focus {
+        background-color: var(--preparePageInActiveTabHover);
+        color: var(--text-color-hover);
+      }
+    }
+  }
+}
+
+.timer-control {
   display: flex;
+  align-items: center;
   border-radius: $border-radius;
   background-color: var(--preparePageTimerBackground);
   font-size: 1.25rem;
   width: 12rem;
-  height: 2rem;
+  height: 2.5rem;
   padding: 0;
   margin: 0 auto;
 
   button {
+    height: 2.5rem;
     width: 5rem;
     border-radius: $border-radius;
-    &:hover {
-      color: var(--text-color-hover);
-    }
   }
 
   .setting-value {
