@@ -25,7 +25,7 @@
             <b-img v-else :src="require('@/assets/preparePage/P1D.png')" class="numberPictures" />
             {{ t("session.prepare.step.selection.mode.title") }}
           </h4>
-          <div class="mode-icons d-flex justify-content-around">
+          <div class="mode-icons mt-2 d-flex justify-content-around">
             <button
               type="button"
               :class="['mode-icon', tabIndex === 0 ? 'active' : '']"
