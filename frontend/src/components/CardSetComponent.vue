@@ -387,7 +387,7 @@ export default defineComponent({
     border-radius: $border-radius !important;
 
     &:not(.active) {
-      background-color: var(--preparePageNotSelectedTabBackground) !important;
+      background-color: var(--preparePageNotSelectedBackground) !important;
       color: var(--text-primary-color) !important;
       border: transparent !important;
 
