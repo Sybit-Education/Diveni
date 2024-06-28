@@ -133,7 +133,7 @@ export default defineComponent({
   max-height: 200px;
   margin-top: 8px;
   width: 100%;
-  background-color: var(--preparePageNotSelectedTabBackground);
+  background-color: var(--preparePageNotSelectedBackground);
   border-radius: 8px;
   overflow: auto;
 }
