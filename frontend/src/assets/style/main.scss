@@ -204,25 +204,4 @@ a {
   color: var(--text-primary-color) !important;
 }
 
-/* PreparePage - Tab Style */
-.selectedTab {
-  background-color: var(--primary-button) !important;
-  border-color: var(--preparePageBorderTab) !important;
-}
 
-.selectedTextColor {
-  color: var(--text-primary-color) !important;
-}
-
-.notSelectedTab {
-  background-color: var(--preparePageNotSelectedTabBackground) !important;
-  border-color: var(--preparePageBorderTab) !important;
-}
-
-.notSelectedTab:hover {
-  background-color: var(--preparePageInActiveTabHover) !important;
-}
-
-.notSelectedTextColor {
-  color: var(--text-primary-color) !important;
-}
