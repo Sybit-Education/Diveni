@@ -32,14 +32,7 @@
               @click="setTabIndex(0)"
             >
               <b-img
-                v-if="theme === 'light'"
-                :src="require('@/assets/preparePage/Mode1-light.png')"
-                class="modeIconImage"
-                :class="{ active: tabIndex === 0 }"
-              />
-              <b-img
-                v-else
-                :src="require('@/assets/preparePage/Mode1-dark.png')"
+                :src="require('@/assets/preparePage/Mode1.png')"
                 class="modeIconImage"
                 :class="{ active: tabIndex === 0 }"
               />
@@ -53,14 +46,7 @@
               @click="setTabIndex(1)"
             >
               <b-img
-                v-if="theme === 'light'"
-                :src="require('@/assets/preparePage/Mode2-light.png')"
-                class="modeIconImage"
-                :class="{ active: tabIndex === 1 }"
-              />
-              <b-img
-                v-else
-                :src="require('@/assets/preparePage/Mode2-dark.png')"
+                :src="require('@/assets/preparePage/Mode2.png')"
                 class="modeIconImage"
                 :class="{ active: tabIndex === 1 }"
               />
@@ -75,14 +61,7 @@
               @click="setTabIndex(2)"
             >
               <b-img
-                v-if="theme === 'light'"
-                :src="require('@/assets/preparePage/Mode3-light.png')"
-                class="modeIconImage"
-                :class="{ active: tabIndex === 2 }"
-              />
-              <b-img
-                v-else
-                :src="require('@/assets/preparePage/Mode3-dark.png')"
+                :src="require('@/assets/preparePage/Mode3.png')"
                 class="modeIconImage"
                 :class="{ active: tabIndex === 2 }"
               />
@@ -569,9 +548,9 @@ export default defineComponent({
 
 .mode-icons {
   .mode-icon {
-    max-width: 224px;
+    max-width: 225px;
     min-width: 95px;
-    min-height: 200px;
+    min-height: 175px;
     justify-content: flex-start;
     align-items: center;
     display: flex;
@@ -585,10 +564,6 @@ export default defineComponent({
       border-width: 4px;
       border-color: var(--secondary-button-hovered);
       border-style: solid;
-      p {
-        color: var(--text-primary-color) !important;
-        font-weight: bold !important;
-      }
     }
 
     &.active {
@@ -604,10 +579,8 @@ export default defineComponent({
 
     .mode-icon-text {
       font-size: 20px;
-      padding-top: 16px;
       text-align: center;
       font-weight: bold;
-      color: var(--text-primary-color);
     }
   }
 }
