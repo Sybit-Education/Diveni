@@ -26,16 +26,20 @@
             {{ t("session.prepare.step.selection.mode.title") }}
           </h4>
           <div class="mode-icons d-flex justify-content-around">
-            <button :class="['mode-icon', tabIndex === 0 ? 'active' : '']" @click="setTabIndex(0)">
+            <button
+              type="button"
+              :class="['mode-icon', tabIndex === 0 ? 'active' : '']"
+              @click="setTabIndex(0)"
+            >
               <b-img
                 v-if="theme === 'light'"
-                :src="require('@/assets/preparePage/mode1-light.png')"
+                :src="require('@/assets/preparePage/Mode1-light.png')"
                 class="modeIconImage"
                 :class="{ active: tabIndex === 0 }"
               />
               <b-img
                 v-else
-                :src="require('@/assets/preparePage/mode1-dark.png')"
+                :src="require('@/assets/preparePage/Mode1-dark.png')"
                 class="modeIconImage"
                 :class="{ active: tabIndex === 0 }"
               />
@@ -43,16 +47,20 @@
                 t("session.prepare.step.selection.mode.description.withoutUS.tab.label")
               }}</span>
             </button>
-            <button :class="['mode-icon', tabIndex === 1 ? 'active' : '']" @click="setTabIndex(1)">
+            <button
+              type="button"
+              :class="['mode-icon', tabIndex === 1 ? 'active' : '']"
+              @click="setTabIndex(1)"
+            >
               <b-img
                 v-if="theme === 'light'"
-                :src="require('@/assets/preparePage/mode2-light.png')"
+                :src="require('@/assets/preparePage/Mode2-light.png')"
                 class="modeIconImage"
                 :class="{ active: tabIndex === 1 }"
               />
               <b-img
                 v-else
-                :src="require('@/assets/preparePage/mode2-dark.png')"
+                :src="require('@/assets/preparePage/Mode2-dark.png')"
                 class="modeIconImage"
                 :class="{ active: tabIndex === 1 }"
               />
@@ -62,18 +70,19 @@
             </button>
             <button
               v-if="isIssueTrackerEnabled"
+              type="button"
               :class="['mode-icon', tabIndex === 2 ? 'active' : '']"
               @click="setTabIndex(2)"
             >
               <b-img
                 v-if="theme === 'light'"
-                :src="require('@/assets/preparePage/mode3-light.png')"
+                :src="require('@/assets/preparePage/Mode3-light.png')"
                 class="modeIconImage"
                 :class="{ active: tabIndex === 2 }"
               />
               <b-img
                 v-else
-                :src="require('@/assets/preparePage/mode3-dark.png')"
+                :src="require('@/assets/preparePage/Mode3-dark.png')"
                 class="modeIconImage"
                 :class="{ active: tabIndex === 2 }"
               />
