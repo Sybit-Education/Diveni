@@ -35,6 +35,7 @@
     "vue-i18n": "^9.12.1",
     "vue-router": "^4.3.3",
     "vue-toastification": "^2.0.0-rc.5",
+    "vue3-steppy": "^1.5.1",
     "webstomp-client": "^1.2.6"
   },
   "devDependencies": {

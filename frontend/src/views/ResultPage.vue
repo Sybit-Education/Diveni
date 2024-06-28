@@ -93,7 +93,7 @@ export default defineComponent({
 }
 
 .list-group-item {
-  background-color: var(--preparePageNotSelectedTabBackground);
+  background-color: var(--preparePageNotSelectedBackground);
 }
 
 .stories {
