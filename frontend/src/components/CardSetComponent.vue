@@ -291,12 +291,12 @@ export default defineComponent({
 
   &:hover {
     border-width: 4px;
-    border-color: var(--preparePageInActiveTabHover);
+    border-color: var(--secondary-button-hovered);
     border-style: solid;
   }
   &.selected {
     border-width: 5px;
-    border-color: var(--primary-button);
+    border-color: var(--primary-button-hovered);
     border-style: solid;
   }
 

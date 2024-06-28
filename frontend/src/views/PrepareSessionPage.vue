@@ -25,18 +25,68 @@
             <b-img v-else :src="require('@/assets/preparePage/P1D.png')" class="numberPictures" />
             {{ t("session.prepare.step.selection.mode.title") }}
           </h4>
-          <b-tabs v-model="tabIndex" fill>
-            <b-tab
-              class="mt-5"
-              :title="t('session.prepare.step.selection.mode.description.withoutUS.tab.label')"
-              :title-link-class="linkClass(0)"
+          <div class="mode-icons d-flex justify-content-around">
+            <button :class="['mode-icon', tabIndex === 0 ? 'active' : '']" @click="setTabIndex(0)">
+              <b-img
+                v-if="theme === 'light'"
+                :src="require('@/assets/preparePage/mode1-light.png')"
+                class="modeIconImage"
+                :class="{ active: tabIndex === 0 }"
+              />
+              <b-img
+                v-else
+                :src="require('@/assets/preparePage/mode1-dark.png')"
+                class="modeIconImage"
+                :class="{ active: tabIndex === 0 }"
+              />
+              <span class="mode-icon-text">{{
+                t("session.prepare.step.selection.mode.description.withoutUS.tab.label")
+              }}</span>
+            </button>
+            <button :class="['mode-icon', tabIndex === 1 ? 'active' : '']" @click="setTabIndex(1)">
+              <b-img
+                v-if="theme === 'light'"
+                :src="require('@/assets/preparePage/mode2-light.png')"
+                class="modeIconImage"
+                :class="{ active: tabIndex === 1 }"
+              />
+              <b-img
+                v-else
+                :src="require('@/assets/preparePage/mode2-dark.png')"
+                class="modeIconImage"
+                :class="{ active: tabIndex === 1 }"
+              />
+              <span class="mode-icon-text">{{
+                t("session.prepare.step.selection.mode.description.withUS.tab.label")
+              }}</span>
+            </button>
+            <button
+              v-if="isIssueTrackerEnabled"
+              :class="['mode-icon', tabIndex === 2 ? 'active' : '']"
+              @click="setTabIndex(2)"
             >
-              <story-points-component />
-            </b-tab>
-            <b-tab
-              :title="t('session.prepare.step.selection.mode.description.withUS.tab.label')"
-              :title-link-class="linkClass(1)"
-            >
+              <b-img
+                v-if="theme === 'light'"
+                :src="require('@/assets/preparePage/mode3-light.png')"
+                class="modeIconImage"
+                :class="{ active: tabIndex === 2 }"
+              />
+              <b-img
+                v-else
+                :src="require('@/assets/preparePage/mode3-dark.png')"
+                class="modeIconImage"
+                :class="{ active: tabIndex === 2 }"
+              />
+              <span class="mode-icon-text">
+                {{
+                  t("session.prepare.step.selection.mode.description.withIssueTracker.tab.label")
+                }}
+              </span>
+            </button>
+          </div>
+          <div class="mt-5">
+            <story-points-component v-if="tabIndex === 0" />
+            <div v-else-if="tabIndex === 1">
               <user-story-component class="mt-5" />
               <input
                 id="fileUpload"
@@ -57,17 +107,9 @@
               >
                 {{ t("session.prepare.step.selection.mode.description.withUS.importButton") }}
               </b-button>
-            </b-tab>
-            <b-tab
-              v-if="isIssueTrackerEnabled"
-              :title="
-                t('session.prepare.step.selection.mode.description.withIssueTracker.tab.label')
-              "
-              :title-link-class="linkClass(2)"
-            >
-              <jira-component class="mt-5" />
-            </b-tab>
-          </b-tabs>
+            </div>
+            <jira-component v-else-if="tabIndex === 2" class="mt-5" />
+          </div>
         </div>
       </template>
 
@@ -254,7 +296,7 @@ export default defineComponent({
       } as CardSet,
       timer: 30,
       warningWhenUnderZero: "",
-      tabIndex: 0,
+      tabIndex: null as number | null,
       hostVoting: false,
       isIssueTrackerEnabled: false,
       theme: localStorage.getItem("user-theme"),
@@ -290,7 +332,7 @@ export default defineComponent({
       return this.store.userStories;
     },
     userStoryMode(): string {
-      return ["NO_US", "US_MANUALLY", "US_JIRA"][this.tabIndex];
+      return ["NO_US", "US_MANUALLY", "US_JIRA"][this.tabIndex || 0];
     },
     formatTimer(): string {
       const minutes = Math.floor(this.timer / 60);
@@ -315,10 +357,6 @@ export default defineComponent({
       this.tabs[1].isValid = isPresent != null;
     },
   },
-  created() {
-    const parsedTabIndex = parseInt(this.$route.query.tabIndex + "", 10);
-    this.tabIndex = isNaN(parsedTabIndex) ? 0 : parsedTabIndex;
-  },
   mounted() {
     window.addEventListener("user-theme-localstorage-changed", (event) => {
       const customEvent = event as CustomEvent;
@@ -335,13 +373,6 @@ export default defineComponent({
     this.store.setUserStories({ stories: [] });
   },
   methods: {
-    linkClass(idx: number) {
-      if (this.tabIndex === idx) {
-        return ["selectedTab", "selectedTextColor"];
-      } else {
-        return ["notSelectedTab", "notSelectedTextColor"];
-      }
-    },
     async sendCreateSessionRequest() {
       const url = Constants.backendURL + Constants.createSessionRoute;
       const sessionConfig = {
@@ -463,6 +494,9 @@ export default defineComponent({
         },
       });
     },
+    setTabIndex(index: number) {
+      this.tabIndex = index;
+    },
   },
 });
 </script>
@@ -522,5 +556,50 @@ export default defineComponent({
 .numberPictures {
   height: 45px;
   width: 45px;
+}
+
+.mode-icons {
+  .mode-icon {
+    max-width: 224px;
+    min-width: 95px;
+    min-height: 200px;
+    justify-content: flex-start;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    border-radius: $border-radius;
+    box-shadow: 8px 8px 5px var(--box-shadow);
+    background-color: var(--preparePage-mode-backround);
+
+    &:hover {
+      border-width: 4px;
+      border-color: var(--secondary-button-hovered);
+      border-style: solid;
+      p {
+        color: var(--text-primary-color) !important;
+        font-weight: bold !important;
+      }
+    }
+
+    &.active {
+      border-width: 5px;
+      border-color: var(--primary-button-hovered);
+      border-style: solid;
+    }
+
+    .modeIconImage {
+      width: 100px;
+      height: 100px;
+    }
+
+    .mode-icon-text {
+      font-size: 20px;
+      padding-top: 16px;
+      text-align: center;
+      font-weight: bold;
+      color: var(--text-primary-color);
+    }
+  }
 }
 </style>
