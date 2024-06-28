@@ -305,11 +305,13 @@ export default defineComponent({
     font-weight: 500;
     padding-top: 16px;
     text-align: center;
+    color: black !important;
   }
 
   .card-description {
     padding: 16px;
     text-align: center;
+    color: black;
   }
 }
 
@@ -341,36 +343,26 @@ export default defineComponent({
 .dark1 {
   background-image: url("@/assets/preparePage/Fibonacci-DarkMode.png");
   background-size: cover;
-  text-shadow: #000 0 0 3px;
-  -webkit-font-smoothing: antialiased;
 }
 
 .dark2 {
   background-image: url("@/assets/preparePage/TShirt-DarkMode.png");
   background-size: cover;
-  text-shadow: #000 0 0 3px;
-  -webkit-font-smoothing: antialiased;
 }
 
 .dark3 {
   background-image: url("@/assets/preparePage/Hour-DarkMode.png");
   background-size: cover;
-  text-shadow: #000 0 0 3px;
-  -webkit-font-smoothing: antialiased;
 }
 
 .dark4 {
   background-image: url("@/assets/preparePage/Numbers-DarkMode.png");
   background-size: cover;
-  text-shadow: #000 0 0 3px;
-  -webkit-font-smoothing: antialiased;
 }
 
 .dark5 {
   background-image: url("@/assets/preparePage/OwnSet-DarkMode.png");
   background-size: cover;
-  text-shadow: #000 0 0 3px;
-  -webkit-font-smoothing: antialiased;
 }
 
 #popUp {
