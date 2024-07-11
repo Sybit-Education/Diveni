@@ -12,11 +12,7 @@
       </div>
     </div>
     <div v-else>
-      <div
-        class="swipe-card"
-        :style="swipeableCardBackgroundColor"
-        @click="onCardClicked()"
-      >
+      <div class="swipe-card" :style="swipeableCardBackgroundColor" @click="onCardClicked()">
         <div class="text">
           {{ dragged ? "💪" : voteOption }}
         </div>

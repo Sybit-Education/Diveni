@@ -374,7 +374,7 @@ export default defineComponent({
       userStoryMode: history.state.userStoryMode,
       hostVoting: history.state.hostVoting as boolean,
       rejoined: history.state.rejoined,
-      index: 0,
+      index: null as number | null,
       stageLabelReady: "Ready",
       stageLabelWaiting: "Waiting room",
       planningStart: false,
@@ -717,6 +717,7 @@ export default defineComponent({
     },
     onPlanningStarted() {
       this.planningStart = true;
+      this.onSelectedStory(this.index);
     },
     vote(vote: string) {
       this.hostEstimation = vote;
@@ -735,7 +736,6 @@ export default defineComponent({
 
 <!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
 <style lang="scss" scoped>
-
 .spaceBetweenAvatar {
   margin-right: 2em;
   margin-left: 2em;

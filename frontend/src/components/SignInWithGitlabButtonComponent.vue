@@ -1,12 +1,6 @@
 <template>
   <div>
-    <b-button
-      variant="primary"
-      :disabled="disabled"
-      @click="
-       clicked = !clicked
-     "
-    >
+    <b-button variant="primary" :disabled="disabled" @click="clicked = !clicked">
       {{
         t(
           "session.prepare.step.selection.mode.description.withIssueTracker.buttons.signInWithGitlab.label"
@@ -30,15 +24,14 @@
       </div>
     </div>
   </div>
-
 </template>
 
 <script lang="ts">
 import apiService from "@/services/api.service";
-import {defineComponent} from "vue";
-import {useDiveniStore} from "@/store";
-import {useToast} from "vue-toastification";
-import {useI18n} from "vue-i18n";
+import { defineComponent } from "vue";
+import { useDiveniStore } from "@/store";
+import { useToast } from "vue-toastification";
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
   name: "SignInWithGitlabButtonComponent",
@@ -47,7 +40,7 @@ export default defineComponent({
       type: Boolean,
       required: false,
       default: false,
-    }
+    },
   },
   setup() {
     const store = useDiveniStore();
@@ -58,8 +51,8 @@ export default defineComponent({
   data() {
     return {
       clicked: false,
-      patToken: ""
-    }
+      patToken: "",
+    };
   },
   methods: {
     async getAccessToken() {
@@ -81,7 +74,6 @@ export default defineComponent({
     },
   },
 });
-
 </script>
 
 <style scoped>
