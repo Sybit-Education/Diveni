@@ -233,7 +233,7 @@ export default defineComponent({
   },
   data() {
     return {
-      index: 0,
+      index: null as number | null,
       hostSelectedStoryIndex: undefined,
       draggedVote: null,
       voteSet: [] as string[],

@@ -374,7 +374,7 @@ export default defineComponent({
       userStoryMode: history.state.userStoryMode,
       hostVoting: history.state.hostVoting as boolean,
       rejoined: history.state.rejoined,
-      index: 0,
+      index: null as number | null,
       stageLabelReady: "Ready",
       stageLabelWaiting: "Waiting room",
       planningStart: false,
