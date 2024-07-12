@@ -114,6 +114,8 @@ import { defineComponent } from "vue";
 import UserStory from "../model/UserStory";
 import { useI18n } from "vue-i18n";
 
+const generatedUUIDs = new Set<number>();
+
 export default defineComponent({
   name: "UserStories",
   props: {
@@ -157,7 +159,7 @@ export default defineComponent({
     },
     addUserStory() {
       const story: UserStory = {
-        id: null,
+        id: this.generateNumericUUID(),
         title: "",
         description: "",
         estimation: null,
@@ -210,6 +212,14 @@ export default defineComponent({
       stories[index].isActive = true;
       this.userStories = stories;
       this.publishChanges(index, false);
+    },
+    generateNumericUUID() {
+      let uuid: number;
+      do {
+        uuid = Math.floor(Math.random() * 1e15) + Date.now();
+      } while (generatedUUIDs.has(uuid));
+      generatedUUIDs.add(uuid);
+      return uuid;
     },
   },
 });
