@@ -114,8 +114,6 @@ import { defineComponent } from "vue";
 import UserStory from "../model/UserStory";
 import { useI18n } from "vue-i18n";
 
-const generatedUUIDs = new Set<number>();
-
 export default defineComponent({
   name: "UserStories",
   props: {
@@ -139,6 +137,7 @@ export default defineComponent({
       input: "",
       filterActive: false,
       savedStories: [] as Array<UserStory>,
+      generatedUUIDs: new Set<number>(),
     };
   },
   watch: {
@@ -218,8 +217,8 @@ export default defineComponent({
       let uuid: number;
       do {
         uuid = Math.floor(Math.random() * 1e15) + Date.now();
-      } while (generatedUUIDs.has(uuid));
-      generatedUUIDs.add(uuid);
+      } while (this.generatedUUIDs.has(uuid));
+      this.generatedUUIDs.add(uuid);
       return uuid;
     },
   },
