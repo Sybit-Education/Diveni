@@ -663,7 +663,7 @@ export default defineComponent({
       }
     },
     onSelectedStory($event) {
-      if (this.planningStart) {
+      if (this.planningStart && $event != null) {
         const endPoint = Constants.webSocketAdminSelectedUserStoryRoute;
         this.store.sendViaBackendWS(endPoint, $event);
       }
