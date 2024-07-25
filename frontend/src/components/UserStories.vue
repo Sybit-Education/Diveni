@@ -122,6 +122,7 @@ export default defineComponent({
     showEstimations: { type: Boolean, required: true },
     showEditButtons: { type: Boolean, required: false, default: true },
     hostSelectedStoryIndex: { type: Number, required: false, default: null },
+    storyMode: { type: String, required: false, default: null },
   },
   setup() {
     const { t } = useI18n();
@@ -136,6 +137,7 @@ export default defineComponent({
       input: "",
       filterActive: false,
       savedStories: [] as Array<UserStory>,
+      generatedUUIDs: new Set<number>(),
     };
   },
   watch: {
@@ -157,7 +159,7 @@ export default defineComponent({
     },
     addUserStory() {
       const story: UserStory = {
-        id: null,
+        id: this.storyMode === "US_JIRA" ? null : this.generateNumericUUID(),
         title: "",
         description: "",
         estimation: null,
@@ -210,6 +212,14 @@ export default defineComponent({
       stories[index].isActive = true;
       this.userStories = stories;
       this.publishChanges(index, false);
+    },
+    generateNumericUUID() {
+      let uuid: number;
+      do {
+        uuid = Math.floor(Math.random() * 1e15) + Date.now();
+      } while (this.generatedUUIDs.has(uuid));
+      this.generatedUUIDs.add(uuid);
+      return uuid;
     },
   },
 });
