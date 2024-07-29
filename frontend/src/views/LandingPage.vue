@@ -161,7 +161,7 @@ export default defineComponent({
     };
   },
   created() {
-    this.disconnectFromBackendWS();
+    this.store.clearStoreWithoutUserStories();
     this.checkAdminCookie();
   },
   methods: {
@@ -227,9 +227,6 @@ export default defineComponent({
           rejoined: "false",
         },
       });
-    },
-    disconnectFromBackendWS() {
-      this.store.disconnectFromBackendWS();
     },
   },
 });

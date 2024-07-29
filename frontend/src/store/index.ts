@@ -9,23 +9,28 @@ import Member from "@/model/Member";
 import AdminVote from "@/model/AdminVote";
 
 export const useDiveniStore = defineStore("diveni-store", {
-  state: () => ({
-    stompClient: undefined as Client | undefined,
-    webSocketConnected: false,
-    memberUpdates: [] as string[],
-    userStories: [] as UserStory[],
-    members: [] as Member[],
-    notifications: [] as Notification[],
-    highlightedMembers: [],
-    timerTimestamp: undefined as string | undefined,
-    tokenId: undefined,
-    projects: [],
-    selectedProject: undefined as Project | undefined,
-    selectedUserStoryIndex: null as number | null,
-    hostEstimation: undefined as AdminVote | undefined,
-    hostVoting: false,
-    autoReveal: false,
-  }),
+  state: () => {
+    return {
+      stompClient: undefined as Client | undefined,
+      webSocketConnected: false,
+      memberUpdates: [] as string[],
+      userStories: [] as UserStory[],
+      members: [] as Member[],
+      notifications: [] as Notification[],
+      highlightedMembers: [],
+      timerTimestamp: undefined as string | undefined,
+      tokenId: undefined,
+      projects: [],
+      selectedProject: undefined as Project | undefined,
+      selectedUserStoryIndex: null as number | null,
+      hostEstimation: undefined as AdminVote | undefined,
+      hostVoting: false,
+      autoReveal: false,
+    };
+  },
+  persist: {
+    storage: localStorage, //Storage where we store our "store-state"
+  },
   actions: {
     setMembers(members) {
       this.members = members;
@@ -117,6 +122,7 @@ export const useDiveniStore = defineStore("diveni-store", {
       this.notifications = [];
       this.webSocketConnected = false;
       this.stompClient = undefined;
+      this.selectedUserStoryIndex = null;
     },
     clearStoreWithoutUserStories() {
       this.members = [];
@@ -133,6 +139,9 @@ export const useDiveniStore = defineStore("diveni-store", {
     },
     setUserStories({ stories }) {
       this.userStories = stories;
+    },
+    setUserStoryIndex(idx) {
+      this.selectedUserStoryIndex = idx;
     },
     setTokenId(tokenId) {
       this.tokenId = tokenId;
