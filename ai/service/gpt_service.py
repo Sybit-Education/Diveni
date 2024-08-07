@@ -96,19 +96,16 @@ async def improve_description(original_user_story: UserStory):
     else:
         final_prompt = get_prompt("improve_description_german") + new_description + "\n Antwort: "
 
-    print(final_prompt)
     completion = client.completions.create(
         model=model_id,
         prompt=final_prompt,
         max_tokens=1500,
         temperature=0.1
     )
-    print(completion.choices[0].text + "\n")
     output = completion.choices[0].text
     start_brace = output.find('{')
     end_brace = output.rfind('}')
     json_ready_string = output[start_brace: end_brace + 1]
-    print(json_ready_string)
     data = json.loads(json_ready_string)
     # data = json.loads(completion.choices[0].text.strip("'<>() ").replace('\'', '\"'), strict = False)
     description = data.get("description", "")
@@ -181,14 +178,12 @@ async def estimate_user_story(original_data: Estimation_data):
         prompt = ("Task: Send a JSON with \"estimation\" and estimate the effort for this user story: Title: " + new_title + "\n "
                                                                                                                              "Description: " + new_description + "\n Valid Options are: " + str(
             original_data.voteSet))
-    print(prompt)
     completion = client.completions.create(
         model=model_id,
         prompt=prompt,
         max_tokens=1000,
         temperature=0
     )
-    print(completion.choices[0].text)
     output = completion.choices[0].text
     start_brace = output.find('{')
     end_brace = output.rfind('}')
@@ -214,7 +209,6 @@ async def split_user_story(data: UserStory):
         max_tokens=3000,
         temperature=0
     )
-    print(completion.choices[0].text)
     output = completion.choices[0].text
     start_brace = output.find('{')
     end_brace = output.rfind('}')
@@ -251,7 +245,6 @@ async def mark_description(data: UserStory):
         max_tokens=3000,
         temperature=0
     )
-    print(completion.choices[0].text)
     output = completion.choices[0].text
     start_brace = output.find('{')
     end_brace = output.rfind('}')
