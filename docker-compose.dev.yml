@@ -31,7 +31,7 @@ services:
     container_name: diveni_backend
     restart: unless-stopped
     environment:
-      - "SPRING_PROFILES_ACTIVE=prod"
+      - "SPRING_PROFILES_ACTIVE=devDiveni"
     env_file:
       - ./backend/.env
     healthcheck:
