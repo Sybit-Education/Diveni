@@ -1,186 +1,261 @@
 <template>
   <b-container class="main">
-    <h1>
-      {{ t("session.prepare.title") }}
-    </h1>
+    <h1>{{ t("session.prepare.title") }}</h1>
 
-    <h4 class="mt-2">
-      <b-img
-        v-if="theme === 'light'"
-        :src="require('@/assets/preparePage/P1.png')"
-        class="numberPictures"
-      />
-      <b-img v-else :src="require('@/assets/preparePage/P1D.png')" class="numberPictures" />
-      {{ t("session.prepare.step.selection.mode.title") }}
-    </h4>
-    <b-tabs v-model="tabIndex" fill>
-      <b-tab
-        class="mt-2"
-        :title="t('session.prepare.step.selection.mode.description.withoutUS.tab.label')"
-        :title-link-class="linkClass(0)"
-      >
-        <story-points-component />
-      </b-tab>
-      <b-tab
-        :title="t('session.prepare.step.selection.mode.description.withUS.tab.label')"
-        :title-link-class="linkClass(1)"
-      >
-        <user-story-component class="mt-2" />
-        <input
-          id="fileUpload"
-          type="file"
-          hidden
-          accept="text/csv"
-          @change="importStory($event.target?.files)"
-        />
-        <b-button
-          block
-          elevation="2"
-          class="btn-primary"
-          variant="primary"
-          @click="
-            openFileUploader();
-            $event.target.blur();
-          "
-        >
-          {{ t("session.prepare.step.selection.mode.description.withUS.importButton") }}
-        </b-button>
-      </b-tab>
-      <b-tab
-        v-if="isIssueTrackerEnabled"
-        :title="t('session.prepare.step.selection.mode.description.withIssueTracker.tab.label')"
-        :title-link-class="linkClass(2)"
-      >
-        <jira-component class="mt-2" />
-      </b-tab>
-    </b-tabs>
-    <h4 class="mt-4">
-      <b-img
-        v-if="theme === 'light'"
-        :src="require('@/assets/preparePage/P2.png')"
-        class="numberPictures"
-      />
-      <b-img v-else :src="require('@/assets/preparePage/P2D.png')" class="numberPictures" />
-      {{ t("session.prepare.step.selection.cardSet.title") }}
-    </h4>
-    <card-set-component
-      class="mt-2"
-      :user-story-mode="userStoryMode"
-      @selectedCardSetOptions="setCardSetOptions"
-    />
-    <h4 class="mt-4">
-      <b-img
-        v-if="theme === 'light'"
-        :src="require('@/assets/preparePage/P3.png')"
-        class="numberPictures"
-      />
-      <b-img v-else :src="require('@/assets/preparePage/P3D.png')" class="numberPictures" />
-      {{ t("session.prepare.step.selection.time.title") }}
-    </h4>
-    <div class="settings-control">
-      <b-button
-        variant="primary"
-        class="btn-sm btn-outline-light"
-        @click="
-          setTimerDown();
-          $event.target.blur();
-        "
-      >
-        -
-      </b-button>
-      <div id="setting-value" class="font-weight-bolder px-3 text-center">
-        {{ timer == 0 ? "∞" : formatTimer }}
-      </div>
-      <b-button
-        variant="primary"
-        class="btn-sm btn-outline-light"
-        @click="
-          setTimerUp();
-          $event.target.blur();
-        "
-      >
-        +
-      </b-button>
-    </div>
-    <h4 class="mt-5">
-      <b-img
-        v-if="theme === 'light'"
-        :src="require('@/assets/preparePage/P4.png')"
-        class="numberPictures"
-      />
-      <b-img v-else :src="require('@/assets/preparePage/P4D.png')" class="numberPictures" />
-      {{ t("session.prepare.step.selection.hostVoting.title") }}
-    </h4>
-    <b-row class="mt-2">
-      <b-col>
-        <div class="settings-control">
-          <b-button
-            variant="primary"
-            class="btn-sm btn-outline-light"
-            @click="
-              hostVoting = true;
-              $event.target.blur();
-            "
-          >
-            {{ t("session.prepare.step.selection.hostVoting.hostVotingOn") }}
-          </b-button>
-          <div id="setting-value" class="font-weight-bolder px-3 text-center">
-            {{
-              hostVoting
-                ? t("session.prepare.step.selection.hostVoting.hostVotingOn")
-                : t("session.prepare.step.selection.hostVoting.hostVotingOff")
-            }}
-          </div>
-          <b-button
-            variant="primary"
-            class="btn-sm btn-outline-light"
-            @click="
-              hostVoting = false;
-              $event.target.blur();
-            "
-          >
-            {{ t("session.prepare.step.selection.hostVoting.hostVotingOff") }}
-          </b-button>
-        </div>
-      </b-col>
-    </b-row>
-    <h4 class="mt-5">
-      {{ t("session.prepare.step.selection.password.title") }}
-    </h4>
-    <b-row class="mt-2">
-      <b-col>
-        <b-form-input
-          id="input-password"
-          v-model="password"
-          :placeholder="t('session.prepare.step.selection.password.placeholder')"
-        />
-      </b-col>
-    </b-row>
-    <b-button
-      variant="primary"
-      class="mt-5 mb-2"
-      :disabled="buttonDisabled()"
-      @click="sendCreateSessionRequest"
+    <Steppy
+      v-model:step="step"
+      :finalize="sendCreateSessionRequest"
+      :tabs="tabs"
+      :circle-size="40"
+      :primary-color1="'var(--preparePage-wizard-status)'"
+      :primary-color2="'var(--preparePage-wizard-statusbackground)'"
+      :background-color="'var(--preparePage-wizard-background)'"
+      :back-text="t('session.prepare.step.wizard.wizardBack')"
+      :next-text="t('session.prepare.step.wizard.wizardNext')"
+      :done-text="t('session.prepare.step.wizard.wizardDone')"
     >
-      {{ t("session.prepare.button.start") }}
-    </b-button>
+      <template #1>
+        <div class="wizardStep">
+          <h4 class="mb-3">
+            <b-img
+              v-if="theme === 'light'"
+              :src="require('@/assets/preparePage/P1.png')"
+              class="numberPictures"
+            />
+            <b-img v-else :src="require('@/assets/preparePage/P1D.png')" class="numberPictures" />
+            {{ t("session.prepare.step.selection.mode.title") }}
+          </h4>
+          <div class="mode-icons mt-2 d-flex justify-content-around">
+            <button
+              type="button"
+              :class="['mode-icon', tabIndex === 0 ? 'active' : '']"
+              @click="setTabIndex(0)"
+            >
+              <b-img
+                :src="require('@/assets/preparePage/Mode1.png')"
+                class="modeIconImage"
+                :class="{ active: tabIndex === 0 }"
+              />
+              <span class="mode-icon-text">{{
+                t("session.prepare.step.selection.mode.description.withoutUS.tab.label")
+              }}</span>
+            </button>
+            <button
+              type="button"
+              :class="['mode-icon', tabIndex === 1 ? 'active' : '']"
+              @click="setTabIndex(1)"
+            >
+              <b-img
+                :src="require('@/assets/preparePage/Mode2.png')"
+                class="modeIconImage"
+                :class="{ active: tabIndex === 1 }"
+              />
+              <span class="mode-icon-text">{{
+                t("session.prepare.step.selection.mode.description.withUS.tab.label")
+              }}</span>
+            </button>
+            <button
+              v-if="isIssueTrackerEnabled"
+              type="button"
+              :class="['mode-icon', tabIndex === 2 ? 'active' : '']"
+              @click="setTabIndex(2)"
+            >
+              <b-img
+                :src="require('@/assets/preparePage/Mode3.png')"
+                class="modeIconImage"
+                :class="{ active: tabIndex === 2 }"
+              />
+              <span class="mode-icon-text">
+                {{
+                  t("session.prepare.step.selection.mode.description.withIssueTracker.tab.label")
+                }}
+              </span>
+            </button>
+          </div>
+          <div class="mt-5">
+            <story-points-component v-if="tabIndex === 0" />
+            <div v-else-if="tabIndex === 1">
+              <user-story-component class="mt-5" />
+              <input
+                id="fileUpload"
+                type="file"
+                hidden
+                accept="text/csv"
+                @change="importStory($event)"
+              />
+              <b-button
+                block
+                elevation="2"
+                class="btn-primary"
+                variant="primary"
+                @click="
+                  openFileUploader();
+                  $event.target.blur();
+                "
+              >
+                {{ t("session.prepare.step.selection.mode.description.withUS.importButton") }}
+              </b-button>
+            </div>
+            <jira-component v-else-if="tabIndex === 2" class="mt-5" />
+          </div>
+        </div>
+      </template>
+
+      <template #2>
+        <div class="wizardStep">
+          <h4 class="mb-3">
+            <b-img
+              v-if="theme === 'light'"
+              :src="require('@/assets/preparePage/P2.png')"
+              class="numberPictures"
+            />
+            <b-img v-else :src="require('@/assets/preparePage/P2D.png')" class="numberPictures" />
+            {{ t("session.prepare.step.selection.cardSet.title") }}
+          </h4>
+          <card-set-component
+            class="mt-2"
+            :user-story-mode="userStoryMode"
+            :selected-card-set="selectedCardSetOptions"
+            @selectedCardSetOptions="setCardSetOptions"
+          />
+          <h4 class="mt-3">{{ t("session.prepare.step.selection.password.title") }}</h4>
+          <b-row class="mt-1">
+            <b-col>
+              <b-form-input
+                id="input-password"
+                v-model="password"
+                :placeholder="t('session.prepare.step.selection.password.placeholder')"
+              />
+            </b-col>
+          </b-row>
+        </div>
+      </template>
+
+      <template #3>
+        <div class="wizardStep">
+          <h4 class="mb-3">
+            <b-img
+              v-if="theme === 'light'"
+              :src="require('@/assets/preparePage/P3.png')"
+              class="numberPictures"
+            />
+            <b-img v-else :src="require('@/assets/preparePage/P3D.png')" class="numberPictures" />
+            {{ t("session.prepare.step.selection.time.title") }}
+          </h4>
+          <div class="timer-control d-flex justify-content-center mb-5">
+            <b-button
+              variant="primary"
+              @click="
+                setTimerDown();
+                $event.target.blur();
+              "
+            >
+              -
+            </b-button>
+            <div id="setting-value" class="font-weight-bolder px-3 text-center">
+              {{ timer == 0 ? "∞" : formatTimer }}
+            </div>
+            <b-button
+              variant="primary"
+              @click="
+                setTimerUp();
+                $event.target.blur();
+              "
+            >
+              +
+            </b-button>
+          </div>
+          <h4 class="mb-3">
+            <b-img
+              v-if="theme === 'light'"
+              :src="require('@/assets/preparePage/P4.png')"
+              class="numberPictures"
+            />
+            <b-img v-else :src="require('@/assets/preparePage/P4D.png')" class="numberPictures" />
+            {{ t("session.prepare.step.selection.hostVoting.title") }}
+          </h4>
+          <b-row class="mt-2">
+            <b-col>
+              <div class="voting-control d-flex justify-content-center mb-2">
+                <b-button
+                  :variant="hostVoting ? 'primary' : 'outline-light'"
+                  @click="
+                    hostVoting = true;
+                    $event.target.blur();
+                  "
+                >
+                  {{ t("session.prepare.step.selection.hostVoting.hostVotingOn") }}
+                </b-button>
+                <b-button
+                  :variant="!hostVoting ? 'primary' : 'outline-light'"
+                  @click="
+                    hostVoting = false;
+                    $event.target.blur();
+                  "
+                >
+                  {{ t("session.prepare.step.selection.hostVoting.hostVotingOff") }}
+                </b-button>
+              </div>
+            </b-col>
+          </b-row>
+        </div>
+      </template>
+
+      <template #4>
+        <div class="wizardStep">
+          <h4 class="mb-3">{{ t("session.prepare.step.confirmation.title") }}</h4>
+          <b-list-group>
+            <b-list-group-item
+              >{{ t("session.prepare.step.selection.mode.title") }}:
+              {{ userStoryMode }}</b-list-group-item
+            >
+            <b-list-group-item>
+              {{ t("session.prepare.step.selection.cardSet.title") }}:
+              {{
+                Array.isArray(selectedCardSetOptions.activeValues)
+                  ? selectedCardSetOptions.activeValues.join(", ")
+                  : ""
+              }}
+            </b-list-group-item>
+            <b-list-group-item
+              >{{ t("session.prepare.step.selection.time.title") }}:
+              {{ timer == 0 ? "∞" : formatTimer }}</b-list-group-item
+            >
+            <b-list-group-item
+              >{{ t("session.prepare.step.selection.hostVoting.title") }}:
+              {{
+                hostVoting
+                  ? t("session.prepare.step.selection.hostVoting.hostVotingOn")
+                  : t("session.prepare.step.selection.hostVoting.hostVotingOff")
+              }}</b-list-group-item
+            >
+            <b-list-group-item
+              >{{ t("session.prepare.step.selection.password.title") }}:
+              {{ password }}</b-list-group-item
+            >
+          </b-list-group>
+        </div>
+      </template>
+    </Steppy>
   </b-container>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 import Session from "../model/Session";
+import CardSet from "../model/CardSet";
 import Constants from "../constants";
 import CardSetComponent from "../components/CardSetComponent.vue";
 import UserStoryComponent from "../components/UserStoryComponent.vue";
 import JiraComponent from "../components/JiraComponent.vue";
 import StoryPointsComponent from "@/components/StoryPointsComponent.vue";
 import UserStory from "@/model/UserStory";
-import papaparse from "papaparse";
+import papaparse, { ParseResult } from "papaparse";
 import apiService from "@/services/api.service";
 import { useDiveniStore } from "@/store";
 import { useToast } from "vue-toastification";
 import { useI18n } from "vue-i18n";
+import { Steppy } from "vue3-steppy";
 
 export default defineComponent({
   name: "PrepareSessionPage",
@@ -189,31 +264,63 @@ export default defineComponent({
     UserStoryComponent,
     JiraComponent,
     StoryPointsComponent,
+    Steppy,
   },
   setup() {
     const store = useDiveniStore();
     const toast = useToast();
     const { t } = useI18n();
-    return { store, toast, t };
+    const step = ref<number>(1);
+    return { store, toast, t, step };
   },
   data() {
     return {
       password: "",
-      selectedCardSetOptions: [],
+      selectedCardSetOptions: {
+        name: "",
+        values: [] as string[],
+        activeValues: [] as string[],
+        position: 0,
+      } as CardSet,
       timer: 30,
       warningWhenUnderZero: "",
-      tabIndex: 0,
+      tabIndex: null as number | null,
       hostVoting: false,
       isIssueTrackerEnabled: false,
       theme: localStorage.getItem("user-theme"),
+      tabs: [
+        {
+          title: this.t("session.prepare.step.wizard.modeSelection"),
+          isValid: false,
+          iconSuccess: null,
+        },
+        {
+          title: this.t("session.prepare.step.wizard.configurationCardSet"),
+          isValid: false,
+          iconSuccess: null,
+        },
+        {
+          title: this.t("session.prepare.step.wizard.configurationTime/HostVote"),
+          isValid: true,
+          iconSuccess: null,
+        },
+        {
+          title: this.t("session.prepare.step.wizard.confirmation"),
+          isValid: true,
+          iconSuccess: null,
+        },
+      ],
     };
   },
   computed: {
+    selectedProjectAndTabIndex() {
+      return `${this.store.selectedProject}|${this.tabIndex}`;
+    },
     userStories() {
       return this.store.userStories;
     },
     userStoryMode(): string {
-      return ["NO_US", "US_MANUALLY", "US_JIRA"][this.tabIndex];
+      return ["NO_US", "US_MANUALLY", "US_JIRA"][this.tabIndex || 0];
     },
     formatTimer(): string {
       const minutes = Math.floor(this.timer / 60);
@@ -230,10 +337,13 @@ export default defineComponent({
         this.warningWhenUnderZero = "";
       }
     },
-  },
-  created() {
-    const parsedTabIndex = parseInt(this.$route.query.tabIndex + "", 10);
-    this.tabIndex = isNaN(parsedTabIndex) ? 0 : parsedTabIndex;
+    selectedProjectAndTabIndex() {
+      this.tabs[0].isValid =
+        this.tabIndex === 2 ? !!this.store.selectedProject : this.tabIndex != null;
+    },
+    selectedCardSetOptions(isPresent) {
+      this.tabs[1].isValid = isPresent != null;
+    },
   },
   mounted() {
     window.addEventListener("user-theme-localstorage-changed", (event) => {
@@ -251,17 +361,10 @@ export default defineComponent({
     this.store.setUserStories({ stories: [] });
   },
   methods: {
-    linkClass(idx) {
-      if (this.tabIndex === idx) {
-        return ["selectedTab", "selectedTextColor"];
-      } else {
-        return ["notSelectedTab", "notSelectedTextColor"];
-      }
-    },
     async sendCreateSessionRequest() {
       const url = Constants.backendURL + Constants.createSessionRoute;
       const sessionConfig = {
-        set: this.selectedCardSetOptions,
+        set: this.selectedCardSetOptions.activeValues,
         timerSeconds: this.timer,
         password: this.password === "" ? null : this.password,
         userStories: this.userStories,
@@ -309,13 +412,10 @@ export default defineComponent({
         },
       });
     },
-    setCardSetOptions($event) {
+    setCardSetOptions($event: CardSet) {
       this.selectedCardSetOptions = $event;
     },
-    buttonDisabled() {
-      return this.selectedCardSetOptions.length < 1;
-    },
-    onUserStoriesChanged(stories) {
+    onUserStoriesChanged(stories: UserStory) {
       this.store.setUserStories({ stories });
     },
     setTimerUp() {
@@ -337,11 +437,14 @@ export default defineComponent({
     },
     openFileUploader() {
       const fileUpload = document.getElementById("fileUpload");
-      if (fileUpload != null) {
+      if (fileUpload) {
         fileUpload.click();
       }
     },
-    importStory(files: FileList) {
+    importStory(event: Event) {
+      const target = event.target as HTMLInputElement;
+      const files = target.files;
+
       if (!files || !files[0]) {
         return;
       }
@@ -349,13 +452,11 @@ export default defineComponent({
       papaparse.parse(files[0], {
         header: true,
         delimiter: ";",
-        complete: (file: { data }) => {
+        complete: (result: ParseResult<UserStory>) => {
           const stories: UserStory[] = [];
 
-          file.data.forEach((story) => {
-            const title = story.title ? story.title : story.Title;
-            const description = story.description ? story.description : story.Description;
-            const estimation = story.estimation ? story.estimation : story.Estimation;
+          result.data.forEach((story) => {
+            const { title, description, estimation } = story;
 
             stories.push({
               id: null,
@@ -365,6 +466,7 @@ export default defineComponent({
               isActive: false,
             });
           });
+
           this.store.setUserStories({ stories: stories });
           this.toast.success(
             this.t(
@@ -372,12 +474,16 @@ export default defineComponent({
             )
           );
         },
-        error: () => {
+        error: (err) => {
+          console.error("Error parsing CSV:", err);
           this.toast.error(
             this.t("session.prepare.step.selection.mode.description.withUS.toastErrorNotification")
           );
         },
       });
+    },
+    setTabIndex(index: number) {
+      this.tabIndex = index;
     },
   },
 });
@@ -386,27 +492,51 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import "@/assets/style/_variables.scss";
 
-.settings-control {
-  display: flex;
+.main {
+  white-space: pre-line;
+}
+
+.wizardStep {
+  color: var(--text-primary-color) !important;
+}
+
+.voting-control {
+  button {
+    width: 6rem;
+    border-radius: $border-radius;
+    border-color: var(--btn-border-color) !important;
+
+    &:not(.active) {
+      background-color: var(--preparePageTimerBackground);
+      &:hover {
+        background-color: var(--preparePageInActiveTabHover);
+      }
+      &:focus {
+        background-color: var(--preparePageInActiveTabHover);
+        color: var(--text-color-hover);
+      }
+    }
+  }
+}
+
+.timer-control {
+  align-items: center;
   border-radius: $border-radius;
   background-color: var(--preparePageTimerBackground);
   font-size: 1.25rem;
   width: 12rem;
-  height: 2rem;
+  height: 2.5rem;
   padding: 0;
+  margin: 0 auto;
 
   button {
-    flex: auto;
-    width: 2rem;
-    height: 2rem;
-    margin: 0;
-    &:hover {
-      color: var(--text-color-hover);
-    }
+    height: 2.5rem;
+    width: 5rem;
+    border-radius: $border-radius;
   }
 
   .setting-value {
-    flex: content;
+    flex: 0 0 auto;
     width: 5rem;
   }
 }
@@ -414,5 +544,44 @@ export default defineComponent({
 .numberPictures {
   height: 45px;
   width: 45px;
+}
+
+.mode-icons {
+  .mode-icon {
+    max-width: 225px;
+    min-width: 95px;
+    min-height: 175px;
+    justify-content: flex-start;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    border-radius: $border-radius;
+    box-shadow: 8px 8px 5px var(--box-shadow);
+    background-color: var(--preparePage-mode-backround);
+
+    &:hover {
+      border-width: 4px;
+      border-color: var(--preparePage-hover-icon-border);
+      border-style: solid;
+    }
+
+    &.active {
+      border-width: 5px;
+      border-color: var(--preparePage-active-icon-border);
+      border-style: solid;
+    }
+
+    .modeIconImage {
+      width: 100px;
+      height: 100px;
+    }
+
+    .mode-icon-text {
+      font-size: 20px;
+      text-align: center;
+      font-weight: bold;
+    }
+  }
 }
 </style>

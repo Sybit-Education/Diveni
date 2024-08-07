@@ -755,7 +755,7 @@ export default defineComponent({
 
 .activePills {
   &:not(.active) {
-    background-color: var(--preparePageNotSelectedTabBackground) !important;
+    background-color: var(--preparePageNotSelectedBackground) !important;
     color: var(--text-primary-color) !important;
 
     &:hover {
