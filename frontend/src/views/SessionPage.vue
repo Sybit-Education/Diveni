@@ -45,9 +45,6 @@
     </b-row>
 
     <div v-if="!planningStart">
-      <div id="catGifDiv">
-        <b-img :src="require('@/assets/LoadingCat.gif')" class="catGif" />
-      </div>
       <copy-session-id-popup
         :text-before-session-i-d="t('page.session.before.text.beforeID')"
         :session-id="sessionID"
@@ -257,8 +254,13 @@
           :show-edit-buttons="true"
           :select-story="true"
           :story-mode="userStoryMode"
+          :splittedUserStories="splitted_user_stories"
+          :story-to-split-idx="index"
+          :key="splitted_user_stories"
+          :hasApiKey="hasApiKey"
           @userStoriesChanged="onUserStoriesChanged"
           @selectedStory="onSelectedStory($event)"
+          @sendGPTRequest="splitUserStory"
         />
         <div v-if="userStoryMode === 'US_JIRA'" class="refreshUserstories">
           <b-button
@@ -281,8 +283,13 @@
           :show-edit-buttons="true"
           :select-story="true"
           :story-mode="userStoryMode"
+          :splittedUserStories="splitted_user_stories"
+          :story-to-split-idx="index"
+          :key="splitted_user_stories"
+          :hasApiKey="hasApiKey"
           @userStoriesChanged="onUserStoriesChanged"
           @selectedStory="onSelectedStory($event)"
+          @sendGPTRequest="splitUserStory"
         />
         <div v-if="userStoryMode === 'US_JIRA'" class="refreshUserstories">
           <b-button
@@ -298,23 +305,78 @@
         </div>
       </b-col>
     </b-row>
+    <b-spinner
+      v-if="showSpinner"
+      variant="primary"
+      class="position-absolute centerSpinner"
+      />
+    <GptModal
+      v-if="showGPTModal"
+      :suggestion-description="alternateDescription"
+      :gpt-mode="descriptionMode"
+      :retry-repaint="updateComponent"
+      @acceptSuggestionDescription="acceptSuggestionDescription"
+      @retry="retrySuggestionDescription"
+      @hideModal="closeModal"
+    />
     <b-row>
-      <b-col v-if="!isMobile" cols="10">
-        <user-story-descriptions
+      <b-col v-if="!isMobile" class="my-5" cols="10">
+        <user-story-title
+          :alternate-title="alternateTitle"
+          :display-ai-option="gptTitleResponse"
+          :host="true"
+          :initial-stories="userStories"
           :card-set="voteSet"
+          :index="index!"
+          :hasApiKey="hasApiKey"
+          @userStoriesChanged="onUserStoriesChanged"
+          @improveTitle="improveTitle"
+          @acceptTitle="acceptSuggestionTitle"
+          @adjustTitle="adjustOriginalTitle"
+          @retryTitle="retryImproveTitle"
+          @deleteTitle="deleteTitle"
+          @aiEstimation="aiEstimation"
+        />
+        <user-story-descriptions
           :initial-stories="userStories"
           :edit-description="true"
-          :index="index"
+          :index="index!"
+          :gpt-description-response="gptDescriptionResponse"
+          :update-component="updateComponent"
+          :accepted-stories="acceptedStoriesDescription"
+          :isJiraSelected="isJiraSelected"
+          :hasApiKey="hasApiKey"
           @userStoriesChanged="onUserStoriesChanged"
+          @sendGPTDescriptionRequest="improveDescription"
         />
       </b-col>
-      <b-col v-else cols="12">
-        <user-story-descriptions
+      <b-col v-else class="my-5" cols="12">
+        <user-story-title
+          :alternate-title="alternateTitle"
+          :display-ai-option="gptTitleResponse"
+          :host="true"
+          :initial-stories="userStories"
           :card-set="voteSet"
+          :index="index"
+          :hasApiKey="hasApiKey"
+          @userStoriesChanged="onUserStoriesChanged"
+          @improveTitle="improveTitle"
+          @acceptTitle="acceptSuggestionTitle"
+          @adjustTitle="adjustOriginalTitle"
+          @retryTitle="retryImproveTitle"
+          @deleteTitle="deleteTitle"
+          @aiEstimation="aiEstimation"
+        />
+        <user-story-descriptions
           :initial-stories="userStories"
           :edit-description="true"
-          :index="index"
+          :index="index!"
+          :gpt-description-response="gptDescriptionResponse"
+          :update-component="updateComponent"
+          :isJiraSelected="isJiraSelected"
+          :hasApiKey="hasApiKey"
           @userStoriesChanged="onUserStoriesChanged"
+          @sendGPTDescriptionRequest="improveDescription"
         />
       </b-col>
     </b-row>
@@ -342,10 +404,16 @@ import { useDiveniStore } from "@/store";
 import { useToast } from "vue-toastification";
 import { useI18n } from "vue-i18n";
 import SessionAdminCard from "@/components/SessionAdminCard.vue";
+import GptModal from "@/components/GptModal.vue";
+import UserStoryTitle from "@/components/UserStoryTitle.vue";
+import j2m from "jira2md";
+import UserStory from "@/model/UserStory";
 
 export default defineComponent({
   name: "SessionPage",
   components: {
+    UserStoryTitle,
+    GptModal,
     SessionStartButton,
     SessionCloseButton,
     KickUserWrapper,
@@ -387,6 +455,32 @@ export default defineComponent({
       session: {},
       hostEstimation: "",
       autoReveal: false,
+      //needed for jira converter
+      isJiraSelected: history.state.isJiraSelected as boolean,
+      //generell needed for GPT usage
+      showGPTModal: false,
+      gptMode: "",
+      hasApiKey: false,
+      // needed for title + anti spam
+      gptTitleResponse: false,
+      alternateTitle: "",
+      //needed for description + anti spam
+      gptDescriptionResponse: false,
+      alternateDescription: "",
+      descriptionMode: "",
+      updateComponent: false,
+      acceptedStoriesDescription: [] as Array<{
+        storyID: string | null,
+        issueType: string,
+      }>,
+      showSpinner: false,
+      // needed for privacy feature
+      confidentialData: {} as Map<string, string>,
+      // needed for multi-language GPT
+      userStoryLanguage: "",
+      // needed for splitting user stories
+      splitted_user_stories: [] as Array<UserStory>,
+      language: "",
     };
   },
   computed: {
@@ -458,8 +552,8 @@ export default defineComponent({
     },
   },
   async created() {
-    this.copyPropsToData();
     this.store.clearStoreWithoutUserStories();
+    this.hasApiKey = await apiService.checkApiKey();
     if (!this.sessionID || !this.adminID) {
       //check for cookie
       await this.checkAdminCookie();
@@ -529,17 +623,6 @@ export default defineComponent({
         }
       }
     },
-    copyPropsToData() {
-      // if (this.adminID) {
-      //   this.session_adminID = this.adminID;
-      //   this.session_sessionID = this.sessionID;
-      //   this.session_sessionState = this.sessionState;
-      //   this.session_timerSecondsString = this.timerSecondsString;
-      //   this.session_voteSetJson = this.voteSetJson;
-      //   this.session_userStoryMode = this.userStoryMode;
-      //   this.session_hostVoting = String(this.hostVoting).toLowerCase() === "true";
-      // }
-    },
     assignSessionToData(session) {
       if (Object.keys(session).length !== 0) {
         this.adminID = session.adminID;
@@ -600,6 +683,9 @@ export default defineComponent({
               console.log(`assigned id: ${us[idx].id}`);
             }
           } else {
+            if (this.isJiraSelected && us[idx].description) {
+              us[idx].description = j2m.to_jira(us[idx].description);
+            }
             response = await apiService.updateUserStory(JSON.stringify(us[idx]));
           }
         }
@@ -619,6 +705,9 @@ export default defineComponent({
       }
       this.store.setUserStories({ stories: us });
       if (this.webSocketIsConnected) {
+        if (this.isJiraSelected && us[idx].description) {
+          us[idx].description = j2m.to_jira(us[idx].description);
+        }
         const endPoint = `${Constants.webSocketAdminUpdatedUserStoriesRoute}`;
         this.store.sendViaBackendWS(endPoint, JSON.stringify(us));
       }
@@ -629,37 +718,6 @@ export default defineComponent({
       if (this.webSocketIsConnected) {
         const endPoint = `${Constants.webSocketAdminUpdatedUserStoriesRoute}`;
         this.store.sendViaBackendWS(endPoint, JSON.stringify(response));
-      }
-    },
-    async onSynchronizeJira({ story, doRemove }) {
-      if (this.userStoryMode === "US_JIRA") {
-        let response;
-        if (doRemove) {
-          response = await apiService.deleteUserStory(story.id);
-        } else {
-          console.log(`ID: ${story.id}`);
-          if (story.id === null) {
-            response = await apiService.createUserStory(
-              JSON.stringify(story),
-              this.selectedProject?.id
-            );
-            if (response.status === 200) {
-              const updatedStories = this.userStories.map(
-                (s) => s.title === story.title && s.description === story.description
-              );
-              this.store.setUserStories({ stories: updatedStories });
-            }
-          } else {
-            response = await apiService.updateUserStory(JSON.stringify(story));
-          }
-        }
-        if (response.status === 200) {
-          this.toast.success(
-            this.t("session.notification.messages.issueTrackerSynchronizeSuccess")
-          );
-        } else {
-          this.toast.error(this.t("session.notification.messages.issueTrackerSynchronizeFailed"));
-        }
       }
     },
     onSelectedStory($event) {
@@ -732,12 +790,119 @@ export default defineComponent({
         })
       );
     },
+    async improveTitle({ userStory, confidentialInformation }) {
+      const trimmedStoryTitle = userStory.title.trim();
+      if (trimmedStoryTitle.length > 0) {
+        const response = await apiService.improveTitle(userStory, confidentialInformation);
+        this.alternateTitle = response.data.improvedTitle;
+        this.gptTitleResponse = true;
+      }
+    },
+    acceptSuggestionTitle({ id }) {
+      this.userStories
+        .filter((us) => {
+          us.id !== id;
+        })
+        .map((us) => {
+          us.title = this.alternateTitle;
+        });
+      this.gptTitleResponse = false;
+      this.alternateTitle = "";
+      this.onUserStoriesChanged({ us: this.userStories, idx: this.index, doRemove: false });
+    },
+    adjustOriginalTitle() {
+      this.alternateTitle = "";
+      this.gptTitleResponse = false;
+    },
+    async retryImproveTitle({ id, originalTitle, confidentialData }) {
+      this.gptTitleResponse = false;
+      const userstory = this.userStories.find((us) => us.id === id);
+      if (userstory) {
+        const response = await apiService.retryImproveTitle(userstory, originalTitle, confidentialData);
+        this.alternateTitle = response.data.improvedTitle;
+        this.gptTitleResponse = true;
+      }
+    },
+    deleteTitle() {
+      this.alternateTitle = "";
+      this.gptTitleResponse = false;
+    },
+    async improveDescription({ userStory, description, issue, confidentialData, language }) {
+      this.userStoryLanguage = language;
+      this.confidentialData = confidentialData;
+      this.showSpinner = true;
+      if (issue === 'improveDescription') {
+        const response = await apiService.improveDescription(userStory, description, this.confidentialData, language);
+        this.alternateDescription =
+          response.description + response.acceptance_criteria.toString().replaceAll(",", "");
+      } if (issue === 'grammar') {
+        const response = await apiService.grammarCheck(userStory, description, this.confidentialData, language);
+        this.alternateDescription = response.description;
+      } if (issue === 'markDescription') {
+        this.alternateDescription= await apiService.markDescription(userStory, description, this.confidentialData, language);
+      }
+      this.descriptionMode = issue;
+      this.gptDescriptionResponse = true;
+      this.showSpinner = false;
+      this.showGPTModal = true;
+    },
+    acceptSuggestionDescription({ description, originalText }) {
+      if (originalText) {
+        this.userStories[this.index!].description = this.alternateDescription;
+      } else {
+        this.userStories[this.index!].description = description;
+      }
+      this.onUserStoriesChanged({ us: this.userStories, idx: this.index, doRemove: false });
+      this.updateComponent = !this.updateComponent;
+      this.acceptedStoriesDescription.push({ storyID: this.userStories[this.index!].id, issueType: this.descriptionMode})
+    },
+    async retrySuggestionDescription() {
+      await this.improveDescription({userStory: this.userStories[this.index!],description: this.userStories[this.index!].description, issue: this. descriptionMode, confidentialData: this.confidentialData, language: this.userStoryLanguage});
+      this.updateComponent = !this.updateComponent;
+    },
+    closeModal() {
+      this.showGPTModal = false;
+      this.gptDescriptionResponse = false;
+    },
+    async aiEstimation({confidentialData}){
+      this.confidentialData = confidentialData;
+      this.showSpinner = true;
+      const response = await apiService.estimateUserStory(this.userStories[this.index!], confidentialData, this.voteSet);
+      this.showSpinner = false;
+      this.toast.info(this.t("general.aiFeature.estimationToast.startingText") + "\"" + this.userStories[this.index!].title + "\"" + this.t("general.aiFeature.estimationToast.endingText") + response, {timeout: false});
+    },
+    async splitUserStory({confidentialData: confidentialData, language: language, retry: retry}) {
+      if(!retry) {
+        this.confidentialData = confidentialData;
+        this.language = language;
+        this.showSpinner = true;
+        const response = await apiService.splitUserStory(this.userStories[this.index!], confidentialData, language);
+        this.showSpinner = false;
+        this.splitted_user_stories = response;
+      } else {
+        this.showSpinner = true;
+        const response = await apiService.splitUserStory(this.userStories[this.index!], this.confidentialData, this.language);
+        this.showSpinner = false;
+        this.splitted_user_stories = response;
+      }
+
+    }
   },
 });
 </script>
 
 <!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
 <style lang="scss" scoped>
+
+.centerSpinner {
+  left: 0;
+  right: 10%;
+  top: 57%;
+  bottom: 0;
+  margin: auto;
+  z-index: 3;
+}
+
 .spaceBetweenAvatar {
   margin-right: 2em;
   margin-left: 2em;

@@ -14,10 +14,18 @@ services:
       retries: 3
       start_period: 30s
 
+  ai:
+    image: ghcr.io/sybit-education/diveni-ai:latest
+    container_name: diveni_ai
+    restart: unless-stopped
+    env_file:
+      - ./ai/.env
+
   backend:
     image: ghcr.io/sybit-education/diveni-backend:latest
     depends_on:
       - database
+      - ai
     container_name: diveni_backend
     restart: unless-stopped
     environment:

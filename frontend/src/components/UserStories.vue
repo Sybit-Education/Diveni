@@ -14,7 +14,7 @@
         />
       </b-input-group>
     </div>
-    <b-card-group id="userStoryBlock" class="mt-2">
+    <b-card-group id="userStoryBlock" class="my-2 overflow-auto">
       <b-list-group-item
         v-for="(story, index) of userStories"
         id="userStoryRow"
@@ -47,7 +47,14 @@
         >
           <b-icon-arrow-right />
         </b-button>
-
+        <b-button
+          id="stars"
+          v-if="showEditButtons && hasApiKey"
+          v-show="userStories[index].title !== '' && userStories[index].description !== ''"
+          @click="selectedStoryIndex = index; showPrivacyModal = true;"
+        >
+          <BIconStars/>
+        </b-button>
         <b-form-input
           id="userStoryTitles"
           v-model="story.title"
@@ -55,7 +62,6 @@
           readonly
           size="sm"
           :placeholder="t('page.session.before.userStories.placeholder.userStoryTitle')"
-          @blur="publishChanges(index, false)"
         />
 
         <b-badge id="badge" class="p-2">
@@ -106,6 +112,22 @@
       <b-icon-plus />
       {{ t("page.session.before.userStories.button.addUserStory") }}
     </b-button>
+    <PrivacyModal
+      v-if="showPrivacyModal"
+      :current-title="userStories[selectedStoryIndex].title"
+      :current-text="userStories[selectedStoryIndex].description"
+      :is-description="true"
+      @resetShowModal="showPrivacyModal = false;"
+      @sendGPTRequest="submitRequest"
+    />
+    <SplitUserStoriesModal
+      v-if="splittedUserStoriesData.length > 0 && !showPrivacyModal"
+      :new-user-stories-list="splittedUserStoriesData"
+      :original-user-story="[userStories[storyToSplitIdx]]"
+      @resetShowModal="showUserStorySplitModal = false; splittedUserStoriesData = []"
+      @acceptSplitting="acceptSplitting"
+      @retry="retry"
+    />
   </div>
 </template>
 
@@ -113,9 +135,12 @@
 import { defineComponent } from "vue";
 import UserStory from "../model/UserStory";
 import { useI18n } from "vue-i18n";
+import PrivacyModal from "@/components/PrivacyModal.vue";
+import SplitUserStoriesModal from "@/components/SplitUserStoriesModal.vue";
 
 export default defineComponent({
   name: "UserStories",
+  components: {SplitUserStoriesModal, PrivacyModal},
   props: {
     cardSet: { type: Array, required: true },
     initialStories: { type: Array, required: true },
@@ -123,6 +148,9 @@ export default defineComponent({
     showEditButtons: { type: Boolean, required: false, default: true },
     hostSelectedStoryIndex: { type: Number, required: false, default: null },
     storyMode: { type: String, required: false, default: null },
+    splittedUserStories: { type: Array<UserStory>, required: false, default: [] },
+    storyToSplitIdx: { type: Number, required: false, default: 0 },
+    hasApiKey: { type: Boolean, required: false, default: false },
   },
   setup() {
     const { t } = useI18n();
@@ -138,6 +166,9 @@ export default defineComponent({
       filterActive: false,
       savedStories: [] as Array<UserStory>,
       generatedUUIDs: new Set<number>(),
+      showPrivacyModal: false,
+      showUserStorySplitModal: false,
+      splittedUserStoriesData: [] as Array<UserStory>,
     };
   },
   watch: {
@@ -151,15 +182,21 @@ export default defineComponent({
   },
   mounted() {
     this.userStories = this.initialStories as Array<UserStory>;
+    this.splittedUserStoriesData = this.splittedUserStories;
   },
   methods: {
     setUserStoryAsActive(index) {
-      this.selectedStoryIndex = index;
-      this.$emit("selectedStory", index);
+      if (index >= this.userStories.length) {
+        console.log("Pressed after deletion");
+      } else {
+        this.selectedStoryIndex = index;
+        this.$emit("selectedStory", index);
+        this.publishChanges(index, false);
+      }
     },
     addUserStory() {
       const story: UserStory = {
-        id: this.storyMode === "US_JIRA" ? null : this.generateNumericUUID(),
+        id: this.storyMode === "US_JIRA" ? null : this.generateNumericUUID().toString(),
         title: "",
         description: "",
         estimation: null,
@@ -183,23 +220,24 @@ export default defineComponent({
         if (filteredUserStories.length > 0) {
           this.filterActive = true;
           this.userStories = filteredUserStories;
-          this.publishChanges(null, false);
         } else {
           this.filterActive = true;
           this.userStories = [];
-          this.publishChanges(null, false);
         }
       } else {
         this.filterActive = false;
         this.userStories = this.savedStories;
-        this.publishChanges(null, false);
       }
     },
     deleteStory(index) {
       this.publishChanges(index, true);
     },
     publishChanges(index, remove) {
-      this.$emit("userStoriesChanged", { us: this.userStories, idx: index, doRemove: remove });
+      if (this.userStories[index] !== undefined) {
+        if (this.userStories[index].title !== "" || remove) {
+          this.$emit("userStoriesChanged", { us: this.userStories, idx: index, doRemove: remove });
+        }
+      }
     },
     markUserStory(index) {
       const stories = this.userStories.map((s) => ({
@@ -221,12 +259,36 @@ export default defineComponent({
       this.generatedUUIDs.add(uuid);
       return uuid;
     },
+    submitRequest({description, confidentialData, language}) {
+      this.$emit("sendGPTRequest",{confidentialData: confidentialData, language: language, retry: false})
+    },
+    acceptSplitting({newUserStories}) {
+      newUserStories.map(us => this.userStories.push(us));
+      this.publishChanges(this.storyToSplitIdx, true);
+      if (this.storyMode === "US_JIRA") {
+        let count = newUserStories.length;
+        newUserStories.forEach(() => {
+          this.publishChanges(this.userStories.length - count, false);
+          count = count - 1;
+        });
+      }
+    },
+    retry() {
+      this.$emit("sendGPTRequest", {retry: true});
+    }
   },
 });
 </script>
 
 <!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
 <style lang="scss" scoped>
+#stars {
+  color: var(--ai-stars) !important;
+  background-color: transparent !important;
+  border-style: none;
+  animation: showUp 1s;
+}
+
 #searchIcon {
   rotate: 90deg;
 }

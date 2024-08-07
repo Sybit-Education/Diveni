@@ -54,6 +54,7 @@ sed -i 's/    container_name: diveni_database/    container_name: dev_diveni_dat
 sed -i 's/    container_name: diveni_backend/    container_name: dev_diveni_backend/g' docker-compose.dev.yml
 sed -i 's/    container_name: diveni_frontend/    container_name: dev_diveni_frontend/g' docker-compose.dev.yml
 sed -i 's/    container_name: diveni_proxy/    container_name: dev_diveni_proxy/g' docker-compose.dev.yml
+sed -i 's/    container_name: diveni_ai/    container_name: dev_diveni_ai/g' docker-compose.dev.yml
 sed -i 's/      - "80:80"/      - "9999:80"/g' docker-compose.dev.yml
 
 echo Updating devs backend prod file ...

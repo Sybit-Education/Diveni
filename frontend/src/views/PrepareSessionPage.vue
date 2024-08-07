@@ -96,7 +96,7 @@
                 {{ t("session.prepare.step.selection.mode.description.withUS.importButton") }}
               </b-button>
             </div>
-            <jira-component v-else-if="tabIndex === 2" class="mt-5" />
+            <jira-component v-else-if="tabIndex === 2" @jira="isJiraSelected = true;" class="mt-5" />
           </div>
         </div>
       </template>
@@ -288,6 +288,8 @@ export default defineComponent({
       hostVoting: false,
       isIssueTrackerEnabled: false,
       theme: localStorage.getItem("user-theme"),
+      isJiraSelected: false,
+      generatedUUIDs: new Set<number>(),
       tabs: [
         {
           title: this.t("session.prepare.step.wizard.modeSelection"),
@@ -409,6 +411,7 @@ export default defineComponent({
           userStoryMode: session.sessionConfig.userStoryMode,
           hostVoting: this.hostVoting,
           rejoined: "false",
+          isJiraSelected: this.isJiraSelected,
         },
       });
     },
@@ -441,6 +444,14 @@ export default defineComponent({
         fileUpload.click();
       }
     },
+    generateNumericUUID() {
+      let uuid: number;
+      do {
+        uuid = Math.floor(Math.random() * 1e15) + Date.now();
+      } while (this.generatedUUIDs.has(uuid));
+      this.generatedUUIDs.add(uuid);
+      return uuid;
+    },
     importStory(event: Event) {
       const target = event.target as HTMLInputElement;
       const files = target.files;
@@ -459,7 +470,7 @@ export default defineComponent({
             const { title, description, estimation } = story;
 
             stories.push({
-              id: null,
+              id: this.generateNumericUUID().toString(),
               title: title,
               description: description,
               estimation: estimation,

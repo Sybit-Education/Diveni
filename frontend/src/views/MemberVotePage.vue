@@ -153,8 +153,8 @@
         </b-col>
       </b-row>
       <b-row v-if="userStoryMode !== 'NO_US' && !isMobile">
-        <b-col class="mt-2">
-          <div class="overflow-auto" style="height: 700px">
+        <b-col cols="4" class="mt-2">
+          <div class="overflow-auto" style="max-height: 700px">
             <user-stories
               :card-set="voteSet"
               :show-estimations="true"
@@ -165,12 +165,19 @@
             />
           </div>
         </b-col>
-        <b-col class="mt-2">
-          <user-story-descriptions
+        <b-col cols="8" class="mt-2">
+          <user-story-title
+            :host="false"
+            :initial-stories="userStories"
             :card-set="voteSet"
+            :index="index"
+          />
+          <user-story-descriptions
+            v-if="userStories.length > 0 && index < userStories.length"
             :index="index"
             :initial-stories="userStories"
             :edit-description="false"
+            :key="userStories[index].description"
           />
         </b-col>
       </b-row>
@@ -210,10 +217,12 @@ import { defineComponent } from "vue";
 import { useDiveniStore } from "@/store";
 import { useToast } from "vue-toastification";
 import { useI18n } from "vue-i18n";
+import UserStoryTitle from "@/components/UserStoryTitle.vue";
 
 export default defineComponent({
   name: "MemberVotePage",
   components: {
+    UserStoryTitle,
     SessionLeaveButton,
     RoundedAvatar,
     MemberVoteCard,
@@ -233,7 +242,7 @@ export default defineComponent({
   },
   data() {
     return {
-      index: null as number | null,
+      index: 0,
       hostSelectedStoryIndex: undefined,
       draggedVote: null,
       voteSet: [] as string[],
