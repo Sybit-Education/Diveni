@@ -45,9 +45,6 @@
     </b-row>
 
     <div v-if="!planningStart">
-      <div id="catGifDiv">
-        <b-img :src="require('@/assets/LoadingCat.gif')" class="catGif" />
-      </div>
       <copy-session-id-popup
         :text-before-session-i-d="t('page.session.before.text.beforeID')"
         :session-id="sessionID"
@@ -330,7 +327,7 @@
           :host="true"
           :initial-stories="userStories"
           :card-set="voteSet"
-          :index="index"
+          :index="index!"
           :hasApiKey="hasApiKey"
           @userStoriesChanged="onUserStoriesChanged"
           @improveTitle="improveTitle"
@@ -343,7 +340,7 @@
         <user-story-descriptions
           :initial-stories="userStories"
           :edit-description="true"
-          :index="index"
+          :index="index!"
           :gpt-description-response="gptDescriptionResponse"
           :update-component="updateComponent"
           :accepted-stories="acceptedStoriesDescription"
@@ -373,7 +370,7 @@
         <user-story-descriptions
           :initial-stories="userStories"
           :edit-description="true"
-          :index="index"
+          :index="index!"
           :gpt-description-response="gptDescriptionResponse"
           :update-component="updateComponent"
           :isJiraSelected="isJiraSelected"
@@ -851,16 +848,16 @@ export default defineComponent({
     },
     acceptSuggestionDescription({ description, originalText }) {
       if (originalText) {
-        this.userStories[this.index].description = this.alternateDescription;
+        this.userStories[this.index!].description = this.alternateDescription;
       } else {
-        this.userStories[this.index].description = description;
+        this.userStories[this.index!].description = description;
       }
       this.onUserStoriesChanged({ us: this.userStories, idx: this.index, doRemove: false });
       this.updateComponent = !this.updateComponent;
-      this.acceptedStoriesDescription.push({ storyID: this.userStories[this.index].id, issueType: this.descriptionMode})
+      this.acceptedStoriesDescription.push({ storyID: this.userStories[this.index!].id, issueType: this.descriptionMode})
     },
     async retrySuggestionDescription() {
-      await this.improveDescription({userStory: this.userStories[this.index],description: this.userStories[this.index].description, issue: this. descriptionMode, confidentialData: this.confidentialData, language: this.userStoryLanguage});
+      await this.improveDescription({userStory: this.userStories[this.index!],description: this.userStories[this.index!].description, issue: this. descriptionMode, confidentialData: this.confidentialData, language: this.userStoryLanguage});
       this.updateComponent = !this.updateComponent;
     },
     closeModal() {
@@ -870,21 +867,21 @@ export default defineComponent({
     async aiEstimation({confidentialData}){
       this.confidentialData = confidentialData;
       this.showSpinner = true;
-      const response = await apiService.estimateUserStory(this.userStories[this.index], confidentialData, this.voteSet);
+      const response = await apiService.estimateUserStory(this.userStories[this.index!], confidentialData, this.voteSet);
       this.showSpinner = false;
-      this.toast.info(this.t("general.aiFeature.estimationToast.startingText") + "\"" + this.userStories[this.index].title + "\"" + this.t("general.aiFeature.estimationToast.endingText") + response, {timeout: false});
+      this.toast.info(this.t("general.aiFeature.estimationToast.startingText") + "\"" + this.userStories[this.index!].title + "\"" + this.t("general.aiFeature.estimationToast.endingText") + response, {timeout: false});
     },
     async splitUserStory({confidentialData: confidentialData, language: language, retry: retry}) {
       if(!retry) {
         this.confidentialData = confidentialData;
         this.language = language;
         this.showSpinner = true;
-        const response = await apiService.splitUserStory(this.userStories[this.index], confidentialData, language);
+        const response = await apiService.splitUserStory(this.userStories[this.index!], confidentialData, language);
         this.showSpinner = false;
         this.splitted_user_stories = response;
       } else {
         this.showSpinner = true;
-        const response = await apiService.splitUserStory(this.userStories[this.index], this.confidentialData, this.language);
+        const response = await apiService.splitUserStory(this.userStories[this.index!], this.confidentialData, this.language);
         this.showSpinner = false;
         this.splitted_user_stories = response;
       }

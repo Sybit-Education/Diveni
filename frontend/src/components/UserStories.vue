@@ -196,7 +196,7 @@ export default defineComponent({
     },
     addUserStory() {
       const story: UserStory = {
-        id: this.storyMode === "US_JIRA" ? null : this.generateNumericUUID(),
+        id: this.storyMode === "US_JIRA" ? null : this.generateNumericUUID().toString(),
         title: "",
         description: "",
         estimation: null,

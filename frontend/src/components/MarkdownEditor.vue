@@ -110,7 +110,7 @@ export default defineComponent({
       default: null
     },
     acceptedStories: {
-      type: Array<{ storyID: number | null, issueType: string }>,
+      type: Array<{ storyID: string | null, issueType: string }>,
       required: false,
       default: []
     },

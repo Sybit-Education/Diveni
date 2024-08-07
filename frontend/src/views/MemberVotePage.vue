@@ -242,7 +242,7 @@ export default defineComponent({
   },
   data() {
     return {
-      index: null as number | null,
+      index: 0,
       hostSelectedStoryIndex: undefined,
       draggedVote: null,
       voteSet: [] as string[],

@@ -57,7 +57,7 @@ export default defineComponent({
     editDescription: { type: Boolean, required: true, default: false },
     gptDescriptionResponse: { type: Boolean, required: false, default: false },
     updateComponent: { type: Boolean, required: false, default: false },
-    acceptedStories: { type: Array<{ storyID: number | null, issueType: string }>, required: false, default: []},
+    acceptedStories: { type: Array<{ storyID: string | null, issueType: string }>, required: false, default: []},
     hasApiKey: { type: Boolean, required: false, default: false },
   },
   setup() {
@@ -67,7 +67,7 @@ export default defineComponent({
   data() {
     return {
       userStories: [] as Array<{
-        id: number | null;
+        id: string | null;
         title: string;
         description: string;
         estimation: string | null;
@@ -78,7 +78,7 @@ export default defineComponent({
   watch: {
     initialStories() {
       this.userStories = this.initialStories as Array<{
-        id: number | null;
+        id: string | null;
         title: string;
         description: string;
         estimation: string | null;
@@ -88,7 +88,7 @@ export default defineComponent({
   },
   created() {
     this.userStories = this.initialStories as Array<{
-      id: number | null;
+      id: string | null;
       title: string;
       description: string;
       estimation: string | null;
@@ -118,33 +118,6 @@ export default defineComponent({
 
 <!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
 <style lang="scss" scoped>
-.animated-badge {
-  animation: Shake 3s linear infinite; /* Increased duration to account for the pause */
-  cursor: pointer;
-}
-
-@keyframes Shake {
-  0% {
-    transform: rotate(5deg);
-  }
-
-  25% {
-    transform: rotate(-6deg);
-  }
-
-  50% {
-    transform: rotate(5deg);
-  }
-
-  75% {
-    transform: rotate(-6deg);
-  }
-
-  100% {
-    transform: rotate(5deg);
-  }
-}
-
 .description-box {
   background: transparent;
   padding: 0;
