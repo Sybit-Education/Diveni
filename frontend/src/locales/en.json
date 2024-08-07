@@ -222,6 +222,15 @@
     "prepare": {
       "title": "Prepare your session:",
       "step": {
+        "wizard": {
+          "wizardNext" : "Next",
+          "wizardBack" : "Back",
+          "wizardDone" : "Create Session",
+          "modeSelection": "Mode Selection",
+          "configurationCardSet": "Configuration \n Card set",
+          "configurationTime/HostVote": "Configuration \n Time & Host Vote",
+          "confirmation": "Confirmation"
+        },
         "selection": {
           "mode": {
             "title": "Select the mode for your User Stories",
@@ -339,6 +348,9 @@
             "title": "Choose a password if needed",
             "placeholder": "Password (leave empty for unprotected session)"
           }
+        },
+        "confirmation":{
+          "title": "Session Stats"
         }
       },
       "button": {

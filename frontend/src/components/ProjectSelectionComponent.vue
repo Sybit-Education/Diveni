@@ -33,7 +33,7 @@
 
     <div class="mt-3">
       {{ t("session.prepare.step.selection.mode.description.withIssueTracker.selectedProject") }}
-      <strong>{{ aCorrectProject ? selected : "-" }}</strong>
+      <strong>{{ selected || "-" }}</strong>
     </div>
   </div>
 </template>
@@ -70,6 +70,10 @@ export default defineComponent({
   },
   mounted() {
     document.addEventListener("click", this.handleGlobalClick);
+    if (this.store.selectedProject?.name) {
+      this.selected = this.store.selectedProject.name;
+      this.getUserStories();
+    }
   },
   beforeUnmount() {
     document.removeEventListener("click", this.handleGlobalClick);
@@ -84,10 +88,8 @@ export default defineComponent({
       }
     },
     async getUserStories() {
-      this.aCorrectProject = false;
       const selectedProject = this.projects.find((p) => p.name === this.selected);
       if (selectedProject) {
-        this.aCorrectProject = true;
         this.store.setSelectedProject(selectedProject);
         const response = await apiService.getUserStoriesFromProject(this.selected);
         this.store.setUserStories({ stories: response });
@@ -131,7 +133,7 @@ export default defineComponent({
   max-height: 200px;
   margin-top: 8px;
   width: 100%;
-  background-color: var(--preparePageNotSelectedTabBackground);
+  background-color: var(--preparePageNotSelectedBackground);
   border-radius: 8px;
   overflow: auto;
 }

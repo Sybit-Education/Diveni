@@ -43,7 +43,7 @@ public class WebsocketController {
   @Autowired private WebSocketService webSocketService;
 
   @MessageMapping("/registerAdminUser")
-  public void registerAdminUser(AdminPrincipal principal) {
+  public synchronized void registerAdminUser(AdminPrincipal principal) {
     LOGGER.debug("--> registerAdminUser()");
     Session session =
         ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID());
@@ -63,7 +63,7 @@ public class WebsocketController {
   }
 
   @MessageMapping("/registerMember")
-  public void joinMember(MemberPrincipal principal) {
+  public synchronized void joinMember(MemberPrincipal principal) {
     LOGGER.debug("--> joinMember()");
     val session =
         ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID());
@@ -86,7 +86,7 @@ public class WebsocketController {
   }
 
   @MessageMapping("/unregister")
-  public void removeMember(Principal principal) {
+  public synchronized void removeMember(Principal principal) {
     LOGGER.debug("--> removeMember()");
     if (principal instanceof MemberPrincipal) {
       webSocketService.removeMember((MemberPrincipal) principal);
@@ -120,7 +120,7 @@ public class WebsocketController {
   }
 
   @MessageMapping("/kick-member")
-  public void kickMember(AdminPrincipal principal, @Payload String memberID) {
+  public synchronized void kickMember(AdminPrincipal principal, @Payload String memberID) {
     val session =
         ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID())
             .removeMember(memberID);
@@ -132,7 +132,7 @@ public class WebsocketController {
   }
 
   @MessageMapping("/closeSession")
-  public void closeSession(AdminPrincipal principal) {
+  public synchronized void closeSession(AdminPrincipal principal) {
     LOGGER.debug("--> closeSession()");
     val session =
         ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID());
@@ -153,7 +153,7 @@ public class WebsocketController {
   }
 
   @MessageMapping("/startVoting")
-  public void startEstimation(AdminPrincipal principal, @Payload String message) {
+  public synchronized void startEstimation(AdminPrincipal principal, @Payload String message) {
     LOGGER.debug("--> startEstimation()");
     JSONObject jsonObject = new JSONObject(message);
     boolean stateOfHostVoting = jsonObject.getBoolean("hostVoting");
@@ -172,7 +172,7 @@ public class WebsocketController {
   }
 
   @MessageMapping("/votingFinished")
-  public void votingFinished(AdminPrincipal principal) {
+  public synchronized void votingFinished(AdminPrincipal principal) {
     LOGGER.debug("--> votingFinished()");
     val session =
         ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID())

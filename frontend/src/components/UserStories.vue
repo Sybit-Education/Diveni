@@ -165,6 +165,7 @@ export default defineComponent({
       input: "",
       filterActive: false,
       savedStories: [] as Array<UserStory>,
+      generatedUUIDs: new Set<number>(),
       showPrivacyModal: false,
       showUserStorySplitModal: false,
       splittedUserStoriesData: [] as Array<UserStory>,
@@ -195,7 +196,7 @@ export default defineComponent({
     },
     addUserStory() {
       const story: UserStory = {
-        id: this.storyMode === "US_JIRA" ? null : Math.floor(Math.random() * 2000000).toString(),
+        id: this.storyMode === "US_JIRA" ? null : this.generateNumericUUID(),
         title: "",
         description: "",
         estimation: null,
@@ -249,6 +250,14 @@ export default defineComponent({
       stories[index].isActive = true;
       this.userStories = stories;
       this.publishChanges(index, false);
+    },
+    generateNumericUUID() {
+      let uuid: number;
+      do {
+        uuid = Math.floor(Math.random() * 1e15) + Date.now();
+      } while (this.generatedUUIDs.has(uuid));
+      this.generatedUUIDs.add(uuid);
+      return uuid;
     },
     submitRequest({description, confidentialData, language}) {
       this.$emit("sendGPTRequest",{confidentialData: confidentialData, language: language, retry: false})
