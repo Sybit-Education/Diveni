@@ -282,7 +282,7 @@ export default defineComponent({
         activeValues: [] as string[],
         position: 0,
       } as CardSet,
-      timer: 30,
+      timer: 0,
       warningWhenUnderZero: "",
       tabIndex: null as number | null,
       hostVoting: false,
