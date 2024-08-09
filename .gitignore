@@ -35,6 +35,7 @@ docs/.vitepress/dist
 .env.local
 .env.*.local
 backend/.env
+ai/.env
 
 # Log files
 npm-debug.log*

@@ -278,11 +278,21 @@ class ApiService {
     return response.data.description;
   }
 
-  public async checkApiKey() {
-    const response = await axios.get(`${constants.backendURL}/ai/check-api-key`);
-    return response.data.has_api_key;
-  }
+  public async ensureServiceAndApiKey() {
+    try {
+      const response = await axios.get(`${constants.backendURL}/ai/check-api-key`);
+      const { apiKeyValid, serviceAvailable } = response.data;
+      if (!serviceAvailable) {
+        console.log("AI Service is not available!");
+        return false;
+      }
 
+      return apiKeyValid;
+    } catch (error) {
+      console.log("Error checking Service or API key:", error);
+      return false;
+    }
+  }
 }
 
 export default new ApiService();

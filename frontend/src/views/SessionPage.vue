@@ -553,7 +553,7 @@ export default defineComponent({
   },
   async created() {
     this.store.clearStoreWithoutUserStories();
-    this.hasApiKey = await apiService.checkApiKey();
+    this.hasApiKey = await apiService.ensureServiceAndApiKey();
     if (!this.sessionID || !this.adminID) {
       //check for cookie
       await this.checkAdminCookie();
