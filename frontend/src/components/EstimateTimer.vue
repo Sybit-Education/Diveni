@@ -63,7 +63,10 @@ export default defineComponent({
   },
   methods: {
     formatTimer() {
-      if (this.startTimestamp === "" || this.duration === 0) {
+      if (this.duration === 0) {
+        return "∞";
+      }
+      if (this.startTimestamp === "") {
         return "";
       }
       const minutes = Math.floor(this.timerCount / 60);
