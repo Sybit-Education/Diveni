@@ -1,5 +1,6 @@
 package io.diveni.backend.controller;
 
+import io.diveni.backend.dto.AiServiceResponse;
 import io.diveni.backend.dto.GptConfidentialData;
 import io.diveni.backend.service.ai.AiService;
 import org.slf4j.Logger;
@@ -64,9 +65,9 @@ public class AiController {
   }
 
   @GetMapping("check-api-key")
-  public ResponseEntity<String> checkApiKey() {
+  public ResponseEntity<AiServiceResponse> ensureServiceAndApiKey() {
     LOGGER.debug("--> checkApiKey()");
-    ResponseEntity<String> response = aiService.checkApiKey();
+    ResponseEntity<AiServiceResponse> response = aiService.ensureServiceAndApiKey();
     LOGGER.debug("<-- checkApiKey()");
     return response;
   }
