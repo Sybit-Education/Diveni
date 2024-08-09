@@ -12,7 +12,4 @@ public class AiServiceResponse {
   private final Boolean apiKeyValid;
 
   private final Boolean serviceAvailable;
-
 }
-
-
