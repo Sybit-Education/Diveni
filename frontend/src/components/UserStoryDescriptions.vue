@@ -10,14 +10,14 @@
       <div>
         <markdown-editor
           id="textarea-auto-height"
+          :key="updateComponent"
           v-model="userStories[idx].description"
           class="my-2"
           :disabled="!editDescription"
           :placeholder="t('page.session.before.userStories.placeholder.userStoryDescription')"
           :accepted-stories="acceptedStories"
           :current-story-i-d="userStories[idx].id"
-          :key="updateComponent"
-          :hasApiKey="hasApiKey"
+          :has-api-key="hasApiKey"
           @textValueChanged="(event) => valueChanged(idx, event)"
           @sendGPTDescriptionRequest="sendGPTDescriptionRequest"
         />
@@ -25,10 +25,10 @@
       <div v-if="!editDescription">
         <markdown-editor
           id="textarea-auto-height"
+          :key="updateComponent"
           v-model="userStories[idx].description"
           class="my-2 noneClickable"
           :placeholder="t('page.session.before.userStories.placeholder.userStoryDescription')"
-          :key="updateComponent"
           @textValueChanged="(event) => valueChanged(idx, event)"
           @sendGPTDescriptionRequest="sendGPTDescriptionRequest"
         />
@@ -50,14 +50,18 @@ import { useI18n } from "vue-i18n";
 
 export default defineComponent({
   name: "UserStoryDescriptions",
-  components: {MarkdownEditor },
+  components: { MarkdownEditor },
   props: {
     index: { type: Number, required: true },
     initialStories: { type: Array, required: true },
     editDescription: { type: Boolean, required: true, default: false },
     gptDescriptionResponse: { type: Boolean, required: false, default: false },
     updateComponent: { type: Boolean, required: false, default: false },
-    acceptedStories: { type: Array<{ storyID: string | null, issueType: string }>, required: false, default: []},
+    acceptedStories: {
+      type: Array<{ storyID: string | null; issueType: string }>,
+      required: false,
+      default: [],
+    },
     hasApiKey: { type: Boolean, required: false, default: false },
   },
   setup() {

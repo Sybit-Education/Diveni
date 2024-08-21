@@ -15,43 +15,35 @@
       @stoppedTyping="showAiButton"
     />
     <b-button
-      id="submitAIDescription"
       v-show="aiButtonVisible && currentText !== '' && hasApiKey"
-      @click="showPopOver = !showPopOver;"
+      id="submitAIDescription"
+      @click="showPopOver = !showPopOver"
     >
       <b-icon-stars id="aiStars" />
     </b-button>
 
-    <div
-      v-if="showPopOver"
-      id='aiPopOver'
-    >
+    <div v-if="showPopOver" id="aiPopOver">
       <div id="popoverBody">
         <b-button
           v-if="foundGrammar"
           class="my-1 aiDescriptionButtons"
           @click="aiButtonClicked('grammar')"
         >
-          <b-icon-pencil/> {{ t("general.aiFeature.descriptionButtons.grammar") }}
+          <b-icon-pencil /> {{ t("general.aiFeature.descriptionButtons.grammar") }}
         </b-button>
         <b-button
           v-if="foundDescription"
           class="my-1 aiDescriptionButtons"
           @click="aiButtonClicked('improveDescription')"
         >
-          <b-icon-lightbulb/> {{ t("general.aiFeature.descriptionButtons.description") }}
+          <b-icon-lightbulb /> {{ t("general.aiFeature.descriptionButtons.description") }}
         </b-button>
-        <b-button
-          class="my-1 aiDescriptionButtons"
-          @click="aiButtonClicked('markDescription')"
-        >
-          <b-icon-input-cursor-text/> {{ t("general.aiFeature.descriptionButtons.mark") }}
+        <b-button class="my-1 aiDescriptionButtons" @click="aiButtonClicked('markDescription')">
+          <b-icon-input-cursor-text /> {{ t("general.aiFeature.descriptionButtons.mark") }}
         </b-button>
       </div>
     </div>
-    <div
-      v-if="showPopOver"
-      class="triangle-down"/>
+    <div v-if="showPopOver" class="triangle-down" />
     <PrivacyModal
       v-if="showModal"
       :current-text="currentText"
@@ -69,12 +61,12 @@ import "@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin
 
 import "@toast-ui/editor/dist/i18n/de-de";
 
-import {customRef, defineComponent, ref} from "vue";
+import { customRef, defineComponent, ref } from "vue";
 import codeSyntaxHighlight from "@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin-code-syntax-highlight-all";
 import UiToastEditorWrapper from "@/components/UiToastEditorWrapper.vue";
 import { PropType } from "vue";
 import PrivacyModal from "@/components/PrivacyModal.vue";
-import {useI18n} from "vue-i18n";
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
   name: "MarkdownEditor",
@@ -107,17 +99,17 @@ export default defineComponent({
     currentStoryID: {
       type: [String, null] as PropType<string | null>,
       required: false,
-      default: null
+      default: null,
     },
     acceptedStories: {
-      type: Array<{ storyID: string | null, issueType: string }>,
+      type: Array<{ storyID: string | null; issueType: string }>,
       required: false,
-      default: []
+      default: [],
     },
     hasApiKey: {
       type: Boolean,
       required: false,
-      default: false
+      default: false,
     },
   },
   setup() {
@@ -165,11 +157,16 @@ export default defineComponent({
   },
   methods: {
     customRef,
-    showAiButton({description}) {
-      if (description.trim().length > 0) { // hier vielleicht eher überprüfen ob String Text oder Zahlen beinhaltet
+    showAiButton({ description }) {
+      if (description.trim().length > 0) {
+        // hier vielleicht eher überprüfen ob String Text oder Zahlen beinhaltet
         this.currentText = description;
-        this.foundDescription = !this.acceptedStories.find(us => us.storyID === this.currentStoryID && us.issueType === 'improveDescription');
-        this.foundGrammar = !this.acceptedStories.find(us => us.storyID === this.currentStoryID && us.issueType === 'grammar');
+        this.foundDescription = !this.acceptedStories.find(
+          (us) => us.storyID === this.currentStoryID && us.issueType === "improveDescription"
+        );
+        this.foundGrammar = !this.acceptedStories.find(
+          (us) => us.storyID === this.currentStoryID && us.issueType === "grammar"
+        );
         this.aiButtonVisible = this.foundDescription || this.foundGrammar;
       }
     },
@@ -179,8 +176,13 @@ export default defineComponent({
       this.showModal = true;
       this.currentIssue = issue;
     },
-    redirectSubmit({description, confidentialData, language}) {
-      this.$emit("sendGPTDescriptionRequest", {description: description, issue: this.currentIssue, confidentialData: confidentialData, language: language });
+    redirectSubmit({ description, confidentialData, language }) {
+      this.$emit("sendGPTDescriptionRequest", {
+        description: description,
+        issue: this.currentIssue,
+        confidentialData: confidentialData,
+        language: language,
+      });
       this.showModal = false;
     },
   },
@@ -212,7 +214,8 @@ export default defineComponent({
   margin-left: -16px;
 }
 
-.toastui-editor-contents ul > li::before, .toastui-editor-contents ol > li::before {
+.toastui-editor-contents ul > li::before,
+.toastui-editor-contents ol > li::before {
   top: 4px;
 }
 
@@ -236,7 +239,6 @@ export default defineComponent({
   color: var(--text-primary-color);
   font-size: large;
 }
-
 
 .lightMode .toastui-editor-md-container .toastui-editor-md-preview {
   overflow: auto;
@@ -273,7 +275,7 @@ export default defineComponent({
   }
 }
 
-#aiPopOver{
+#aiPopOver {
   background-color: white;
   position: absolute;
   border: 3px solid black;
@@ -320,5 +322,4 @@ export default defineComponent({
     opacity: 1;
   }
 }
-
 </style>

@@ -1,14 +1,6 @@
 <template>
-  <div
-    id="splitUserStoriesModal"
-  >
-    <b-modal
-      v-model="showModal"
-      centered
-      hide-header-close
-      @hide="hideModal"
-      size="xl"
-    >
+  <div id="splitUserStoriesModal">
+    <b-modal v-model="showModal" centered hide-header-close size="xl" @hide="hideModal">
       <template #modal-header>
         <div class="text-center">
           {{ t("general.aiFeature.splitUserStoriesModal.title") }}
@@ -37,7 +29,7 @@
             </div>
             <b-card-group id="userStoryBlock" class="overflow-auto center">
               <b-list-group-item
-                v-for="(story,index) of newUserStoriesEditable"
+                v-for="(story, index) of newUserStoriesEditable"
                 id="userStoryRow"
                 :key="index"
                 class="w-100 p-1 d-flex justify-content-left"
@@ -61,10 +53,7 @@
                   <b-icon-trash />
                 </b-button>
               </b-list-group-item>
-              <div
-                class="selectedStoryLine"
-                :style="{'top': 50 + (50 * this.idx) + 'px'}"
-              />
+              <div class="selectedStoryLine" :style="{ top: 50 + 50 * idx + 'px' }" />
             </b-card-group>
           </b-col>
           <b-col class="newUserStoryCol">
@@ -79,21 +68,27 @@
               disabled
             />
             <UiToastEditorWrapper
+              :key="idx"
               class="editor"
               :initial-value="newUserStoriesEditable[idx].description"
               :none-clickable="true"
-              :key="idx"
             />
           </b-col>
         </b-row>
       </b-container>
-      <template #modal-footer >
+      <template #modal-footer>
         <div id="aiOptions" class="text-center mt-1">
           <b-button id="acceptAISplitButton" class="m-1" @click="acceptDescription">
             <b-icon-check2 />
             Keep
           </b-button>
-          <b-button class="aiOptionButtons m-1" @click="retryDescription(); $event.target.blur()">
+          <b-button
+            class="aiOptionButtons m-1"
+            @click="
+              retryDescription();
+              $event.target.blur();
+            "
+          >
             <b-icon-arrow-repeat />
             Try Again
           </b-button>
@@ -105,30 +100,23 @@
       </template>
     </b-modal>
   </div>
-
 </template>
 
 <script lang="ts">
-import {defineComponent} from "vue";
+import { defineComponent } from "vue";
 import UiToastEditorWrapper from "@/components/UiToastEditorWrapper.vue";
-import {useI18n} from "vue-i18n";
+import { useI18n } from "vue-i18n";
 import UserStory from "@/model/UserStory";
 export default defineComponent({
   name: "SplitUserStoriesModal",
-  components: {UiToastEditorWrapper},
+  components: { UiToastEditorWrapper },
   props: {
-    originalUserStory: {type: Array<UserStory>, required: true},
-    newUserStoriesList: {type: Array<UserStory>, required: true},
+    originalUserStory: { type: Array<UserStory>, required: true },
+    newUserStoriesList: { type: Array<UserStory>, required: true },
   },
   setup() {
     const { t } = useI18n();
     return { t };
-  },
-  created() {
-    this.originalTitleData = this.originalUserStory[0].title;
-  },
-  mounted() {
-    this.newUserStoriesEditable = this.newUserStoriesList;
   },
   data() {
     return {
@@ -136,7 +124,13 @@ export default defineComponent({
       originalTitleData: "",
       idx: 0,
       newUserStoriesEditable: [] as Array<UserStory>,
-    }
+    };
+  },
+  created() {
+    this.originalTitleData = this.originalUserStory[0].title;
+  },
+  mounted() {
+    this.newUserStoriesEditable = this.newUserStoriesList;
   },
   methods: {
     hideModal() {
@@ -155,7 +149,7 @@ export default defineComponent({
       }
     },
     acceptDescription() {
-      this.$emit("acceptSplitting", {newUserStories: this.newUserStoriesEditable})
+      this.$emit("acceptSplitting", { newUserStories: this.newUserStoriesEditable });
       this.hideModal();
     },
     retryDescription() {
@@ -192,12 +186,12 @@ export default defineComponent({
   border-color: #ced4da;
 }
 
-.max-height-modal{
+.max-height-modal {
   height: 500px;
 }
 
-.selected-Story{
-  border: var(--ai-stars) 2px solid!important;
+.selected-Story {
+  border: var(--ai-stars) 2px solid !important;
 }
 
 #userStoryBlock {

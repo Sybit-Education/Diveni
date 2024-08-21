@@ -48,12 +48,15 @@
           <b-icon-arrow-right />
         </b-button>
         <b-button
-          id="stars"
           v-if="showEditButtons && hasApiKey"
           v-show="userStories[index].title !== '' && userStories[index].description !== ''"
-          @click="selectedStoryIndex = index; showPrivacyModal = true;"
+          id="stars"
+          @click="
+            selectedStoryIndex = index;
+            showPrivacyModal = true;
+          "
         >
-          <BIconStars/>
+          <BIconStars />
         </b-button>
         <b-form-input
           id="userStoryTitles"
@@ -117,14 +120,17 @@
       :current-title="userStories[selectedStoryIndex].title"
       :current-text="userStories[selectedStoryIndex].description"
       :is-description="true"
-      @resetShowModal="showPrivacyModal = false;"
+      @resetShowModal="showPrivacyModal = false"
       @sendGPTRequest="submitRequest"
     />
     <SplitUserStoriesModal
       v-if="splittedUserStoriesData.length > 0 && !showPrivacyModal"
       :new-user-stories-list="splittedUserStoriesData"
       :original-user-story="[userStories[storyToSplitIdx]]"
-      @resetShowModal="showUserStorySplitModal = false; splittedUserStoriesData = []"
+      @resetShowModal="
+        showUserStorySplitModal = false;
+        splittedUserStoriesData = [];
+      "
       @acceptSplitting="acceptSplitting"
       @retry="retry"
     />
@@ -140,7 +146,7 @@ import SplitUserStoriesModal from "@/components/SplitUserStoriesModal.vue";
 
 export default defineComponent({
   name: "UserStories",
-  components: {SplitUserStoriesModal, PrivacyModal},
+  components: { SplitUserStoriesModal, PrivacyModal },
   props: {
     cardSet: { type: Array, required: true },
     initialStories: { type: Array, required: true },
@@ -259,11 +265,15 @@ export default defineComponent({
       this.generatedUUIDs.add(uuid);
       return uuid;
     },
-    submitRequest({description, confidentialData, language}) {
-      this.$emit("sendGPTRequest",{confidentialData: confidentialData, language: language, retry: false})
+    submitRequest({ confidentialData, language }) {
+      this.$emit("sendGPTRequest", {
+        confidentialData: confidentialData,
+        language: language,
+        retry: false,
+      });
     },
-    acceptSplitting({newUserStories}) {
-      newUserStories.map(us => this.userStories.push(us));
+    acceptSplitting({ newUserStories }) {
+      newUserStories.map((us) => this.userStories.push(us));
       this.publishChanges(this.storyToSplitIdx, true);
       if (this.storyMode === "US_JIRA") {
         let count = newUserStories.length;
@@ -274,8 +284,8 @@ export default defineComponent({
       }
     },
     retry() {
-      this.$emit("sendGPTRequest", {retry: true});
-    }
+      this.$emit("sendGPTRequest", { retry: true });
+    },
   },
 });
 </script>
