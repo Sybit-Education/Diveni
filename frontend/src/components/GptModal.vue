@@ -1,32 +1,16 @@
 <template>
   <div>
-    <b-modal
-      v-model="showModal"
-      id="gptModal"
-      @hide="closeModal()"
-      centered
-      hide-header-close
-    >
+    <b-modal id="gptModal" v-model="showModal" centered hide-header-close @hide="closeModal()">
       <template #modal-header>
-        <div
-          v-if="gptMode === 'improveDescription'"
-          class="text-center">
+        <div v-if="gptMode === 'improveDescription'" class="text-center">
           Alternative Description>
         </div>
-        <div
-          v-else
-          class="text-center">
-          {{gptMode === 'grammar' ? 'Corrected Description' : 'Marked Description'}}
+        <div v-else class="text-center">
+          {{ gptMode === "grammar" ? "Corrected Description" : "Marked Description" }}
         </div>
       </template>
-      <div
-        id="b-modal-body"
-      >
-        <b-spinner
-          v-if="showSpinner"
-          variant="primary"
-          class="position-absolute centerSpinner"
-        />
+      <div id="b-modal-body">
+        <b-spinner v-if="showSpinner" variant="primary" class="position-absolute centerSpinner" />
         <UiToastEditorWrapper
           v-if="!showSpinner"
           :key="repaint"
@@ -35,26 +19,51 @@
           @stillTyping="copyText"
         />
       </div>
-      <template #modal-footer >
+      <template #modal-footer>
         <div id="aiOptions" class="text-center mt-1">
           <b-button id="acceptAIOption" class="m-1" @click="acceptDescription">
             <b-icon-check2 />
             Keep
           </b-button>
-          <b-button v-if="showOtherOptionButtons" class="aiOptionButtons m-1" @click="adjustDescription(); $event.target.blur();">
+          <b-button
+            v-if="showOtherOptionButtons"
+            class="aiOptionButtons m-1"
+            @click="
+              adjustDescription();
+              $event.target.blur();
+            "
+          >
             <b-icon-sliders />
             Adjust
           </b-button>
-          <b-button v-if="showOtherOptionButtons" class="aiOptionButtons m-1" @click="retryDescription(); $event.target.blur()">
+          <b-button
+            v-if="showOtherOptionButtons"
+            class="aiOptionButtons m-1"
+            @click="
+              retryDescription();
+              $event.target.blur();
+            "
+          >
             <b-icon-arrow-repeat />
             Try Again
           </b-button>
-          <b-button v-if="showOtherOptionButtons" class="aiOptionButtons m-1" @click="deleteDescription">
+          <b-button
+            v-if="showOtherOptionButtons"
+            class="aiOptionButtons m-1"
+            @click="deleteDescription"
+          >
             <b-icon-backspace />
             Delete
           </b-button>
-          <b-button v-if="!showOtherOptionButtons" class="aiOptionButtons m-1" @click="cancelAdjust(); $event.target.blur();">
-            <b-icon-x-square/>
+          <b-button
+            v-if="!showOtherOptionButtons"
+            class="aiOptionButtons m-1"
+            @click="
+              cancelAdjust();
+              $event.target.blur();
+            "
+          >
+            <b-icon-x-square />
             Cancel
           </b-button>
         </div>
@@ -70,11 +79,16 @@ import UiToastEditorWrapper from "@/components/UiToastEditorWrapper.vue";
 
 export default defineComponent({
   name: "GptModal",
-  components: {UiToastEditorWrapper},
+  components: { UiToastEditorWrapper },
+  props: {
+    suggestionDescription: { type: String, required: true },
+    gptMode: { type: String, required: true },
+    retryRepaint: { type: Boolean, required: true },
+  },
   setup() {
     const showModal = true;
     const { t } = useI18n();
-    return { t, showModal};
+    return { t, showModal };
   },
   data() {
     return {
@@ -83,24 +97,22 @@ export default defineComponent({
       editText: "",
       repaint: false,
       showSpinner: false,
-    }
-  },
-  props: {
-    suggestionDescription: { type: String, required: true},
-    gptMode: { type: String, required: true },
-    retryRepaint: { type: Boolean, required: true },
+    };
   },
   watch: {
     retryRepaint() {
       this.showSpinner = false;
       this.repaint = !this.repaint;
-    }
+    },
   },
   methods: {
     acceptDescription() {
-     console.log("ACCEPT");
-     this.$emit("acceptSuggestionDescription", {description: this.editText, originalText: this.showOtherOptionButtons});
-     this.closeModal();
+      console.log("ACCEPT");
+      this.$emit("acceptSuggestionDescription", {
+        description: this.editText,
+        originalText: this.showOtherOptionButtons,
+      });
+      this.closeModal();
     },
     adjustDescription() {
       console.log("ADJUST");
@@ -123,20 +135,19 @@ export default defineComponent({
       this.repaint = !this.repaint;
       this.showOtherOptionButtons = true;
     },
-    copyText({text}) {
+    copyText({ text }) {
       this.editText = text;
     },
     closeModal() {
       this.showModal = true;
       this.showOtherOptionButtons = true;
       this.$emit("hideModal");
-    }
+    },
   },
 });
 </script>
 
 <style lang="scss">
-
 .centerSpinner {
   left: 0;
   right: 0%;
@@ -160,7 +171,7 @@ export default defineComponent({
   text-align: center !important;
   display: block !important;
   font-size: x-large !important;
-  color: var(--text-primary-color)
+  color: var(--text-primary-color);
 }
 
 .modal-body {
@@ -197,5 +208,4 @@ export default defineComponent({
   display: inline-flex;
   animation: showUp 1s;
 }
-
 </style>

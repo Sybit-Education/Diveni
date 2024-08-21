@@ -96,7 +96,7 @@
                 {{ t("session.prepare.step.selection.mode.description.withUS.importButton") }}
               </b-button>
             </div>
-            <jira-component v-else-if="tabIndex === 2" @jira="isJiraSelected = true;" class="mt-5" />
+            <jira-component v-else-if="tabIndex === 2" class="mt-5" @jira="isJiraSelected = true" />
           </div>
         </div>
       </template>

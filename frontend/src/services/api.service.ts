@@ -1,6 +1,6 @@
 import constants from "@/constants";
-import {JiraRequestTokenDto, JiraResponseCodeDto, PullRequestDto} from "@/types";
-import axios, {AxiosResponse} from "axios";
+import { JiraRequestTokenDto, JiraResponseCodeDto, PullRequestDto } from "@/types";
+import axios, { AxiosResponse } from "axios";
 import UserStory from "@/model/UserStory";
 
 class ApiService {
@@ -155,7 +155,7 @@ class ApiService {
     return response.data;
   }
 
-  public async improveTitle(userStory: UserStory, confidentialData: Map<string,string>) {
+  public async improveTitle(userStory: UserStory, confidentialData: Map<string, string>) {
     return await axios.post(`${constants.backendURL}/ai/improve-title`, {
       id: userStory.id,
       title: userStory.title,
@@ -166,11 +166,16 @@ class ApiService {
         Array.from(confidentialData.entries()).reduce((o, [key, value]) => {
           o[key] = value;
           return o;
-        }, {})),
+        }, {})
+      ),
     });
   }
 
-  public async retryImproveTitle(userStory: UserStory, oldTitle: string, confidentialData: Map<string,string>) {
+  public async retryImproveTitle(
+    userStory: UserStory,
+    oldTitle: string,
+    confidentialData: Map<string, string>
+  ) {
     return await axios.post(`${constants.backendURL}/ai/improve-title`, {
       id: userStory.id,
       title: oldTitle,
@@ -181,10 +186,16 @@ class ApiService {
         Array.from(confidentialData.entries()).reduce((o, [key, value]) => {
           o[key] = value;
           return o;
-        }, {})),
+        }, {})
+      ),
     });
   }
-  public async improveDescription(userStory: UserStory, description: string, confidentialData: Map<string,string>, language: string) {
+  public async improveDescription(
+    userStory: UserStory,
+    description: string,
+    confidentialData: Map<string, string>,
+    language: string
+  ) {
     const response = await axios.post(`${constants.backendURL}/ai/improve-description`, {
       id: userStory.id,
       title: userStory.title,
@@ -193,39 +204,48 @@ class ApiService {
       isActive: userStory.isActive,
       confidentialData: JSON.stringify(
         Array.from(confidentialData.entries()).reduce((o, [key, value]) => {
-        o[key] = value;
-        return o;
-      }, {})),
+          o[key] = value;
+          return o;
+        }, {})
+      ),
       language: language,
     });
     return {
       description: response.data.improved_description,
       acceptance_criteria: response.data.improved_acceptance_criteria,
     };
-
   }
-  public async grammarCheck(userStory: UserStory, description: string, confidentialData: Map<string,string>, language: string) {
+  public async grammarCheck(
+    userStory: UserStory,
+    description: string,
+    confidentialData: Map<string, string>,
+    language: string
+  ) {
     const response = await axios.post(`${constants.backendURL}/ai/grammar-check`, {
-        id: userStory.id,
-        title: userStory.title,
-        description: description,
-        estimation: userStory.estimation,
-        isActive: userStory.isActive,
-        confidentialData: JSON.stringify(
-          Array.from(confidentialData.entries()).reduce((o, [key, value]) => {
+      id: userStory.id,
+      title: userStory.title,
+      description: description,
+      estimation: userStory.estimation,
+      isActive: userStory.isActive,
+      confidentialData: JSON.stringify(
+        Array.from(confidentialData.entries()).reduce((o, [key, value]) => {
           o[key] = value;
           return o;
-        }, {})),
-        language: language,
-      }
-    );
+        }, {})
+      ),
+      language: language,
+    });
     return {
       description: response.data.improved_description,
       acceptance_criteria: response.data.improved_acceptance_criteria,
     };
   }
 
-  public async estimateUserStory(userStory: UserStory, confidentialData: Map<string,string>, voteSet: string[]) {
+  public async estimateUserStory(
+    userStory: UserStory,
+    confidentialData: Map<string, string>,
+    voteSet: string[]
+  ) {
     const response = await axios.post(`${constants.backendURL}/ai/estimate-user-story`, {
       id: userStory.id,
       title: userStory.title,
@@ -236,13 +256,18 @@ class ApiService {
         Array.from(confidentialData.entries()).reduce((o, [key, value]) => {
           o[key] = value;
           return o;
-        }, {})),
+        }, {})
+      ),
       voteSet: voteSet,
-    })
+    });
     return response.data.estimation;
   }
 
-  public async splitUserStory(userStory: UserStory, confidentialData: Map<string, string>, language: string): Promise<Array<UserStory>> {
+  public async splitUserStory(
+    userStory: UserStory,
+    confidentialData: Map<string, string>,
+    language: string
+  ): Promise<Array<UserStory>> {
     const response = await axios.post(`${constants.backendURL}/ai/split-user-story`, {
       id: userStory.id,
       title: userStory.title,
@@ -253,15 +278,21 @@ class ApiService {
         Array.from(confidentialData.entries()).reduce((o, [key, value]) => {
           o[key] = value;
           return o;
-        }, {})),
+        }, {})
+      ),
       language: language,
-    })
+    });
     const splitted_stories: Array<UserStory> = response.data.new_user_stories;
-    splitted_stories.map(us => us.id = null);
+    splitted_stories.map((us) => (us.id = null));
     return splitted_stories;
   }
 
-  public async markDescription(userStory: UserStory, description: string, confidentialData: Map<string, string>, language: string) {
+  public async markDescription(
+    userStory: UserStory,
+    description: string,
+    confidentialData: Map<string, string>,
+    language: string
+  ) {
     const response = await axios.post(`${constants.backendURL}/ai/mark-description`, {
       id: userStory.id,
       title: userStory.title,
@@ -272,7 +303,8 @@ class ApiService {
         Array.from(confidentialData.entries()).reduce((o, [key, value]) => {
           o[key] = value;
           return o;
-        }, {})),
+        }, {})
+      ),
       language: language,
     });
     return response.data.description;
@@ -282,7 +314,6 @@ class ApiService {
     const response = await axios.get(`${constants.backendURL}/ai/check-api-key`);
     return response.data.has_api_key;
   }
-
 }
 
 export default new ApiService();

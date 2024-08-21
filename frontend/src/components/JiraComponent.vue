@@ -8,7 +8,11 @@
       <li>
         {{ t("session.prepare.step.selection.mode.description.withIssueTracker.descriptionLine1") }}
         <sign-in-with-jira-cloud-button-component v-if="isJiraCloudEnabled" class="my-1" />
-        <sign-in-with-jira-server-button-component v-if="isJiraServerEnabled" @jira="$emit('jira')" class="my-1" />
+        <sign-in-with-jira-server-button-component
+          v-if="isJiraServerEnabled"
+          class="my-1"
+          @jira="$emit('jira')"
+        />
         <sign-in-with-azure-cloud-button-component v-if="isAzureDevOpsEnabled" class="my-1" />
         <sign-in-with-git-hub-button-component v-if="isGithubEnabled" class="my-1" />
         <sign-in-with-gitlab-button-component v-if="isGitlabEnabled" class="my-1" />
