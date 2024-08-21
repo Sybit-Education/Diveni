@@ -113,9 +113,9 @@ export default defineComponent({
     },
   },
   setup() {
-    const { locale } = useI18n();
+    const { t, locale } = useI18n();
     const currentLocale = ref(locale.value);
-    return { currentLocale };
+    return { t, currentLocale };
   },
   data() {
     return {
