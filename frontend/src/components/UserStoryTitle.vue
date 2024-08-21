@@ -106,7 +106,7 @@ export default defineComponent({
   components: { PrivacyModal },
   props: {
     index: { type: Number, required: true },
-    cardSet: { type: Array, required: false },
+    cardSet: { type: Array, required: false, default: () => [] },
     initialStories: { type: Array, required: true },
     host: { type: Boolean, required: true, default: false },
     displayAiOption: { type: Boolean, required: false, default: false },
