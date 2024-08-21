@@ -256,6 +256,7 @@ import { useDiveniStore } from "@/store";
 import { useToast } from "vue-toastification";
 import { useI18n } from "vue-i18n";
 import { Steppy } from "vue3-steppy";
+import { useRouter } from "vue-router";
 
 export default defineComponent({
   name: "PrepareSessionPage",
@@ -270,8 +271,9 @@ export default defineComponent({
     const store = useDiveniStore();
     const toast = useToast();
     const { t } = useI18n();
+    const router = useRouter();
     const step = ref<number>(1);
-    return { store, toast, t, step };
+    return { store, toast, t, step, router };
   },
   data() {
     return {
@@ -400,7 +402,7 @@ export default defineComponent({
       }
     },
     goToSessionPage(session: Session) {
-      this.$router.push({
+      this.router.push({
         name: "SessionPage",
         state: {
           sessionID: session.sessionID,

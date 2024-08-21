@@ -13,6 +13,7 @@ import apiService from "@/services/api.service";
 import { useDiveniStore } from "@/store";
 import { useToast } from "vue-toastification";
 import { useI18n } from "vue-i18n";
+import { useRouter } from "vue-router";
 
 export default defineComponent({
   name: "JiraCallbackPage",
@@ -20,7 +21,8 @@ export default defineComponent({
     const store = useDiveniStore();
     const toast = useToast();
     const { t } = useI18n();
-    return { store, toast, t };
+    const router = useRouter();
+    return { store, toast, t, router };
   },
   created() {
     const urlSearchParams = new URLSearchParams(window.location.search);
@@ -28,7 +30,7 @@ export default defineComponent({
     const jiraStateId = localStorage.getItem("jiraStateId");
     if (!params.code || !params.state || !jiraStateId || jiraStateId !== params.state) {
       this.toast.error(this.t("session.notification.messages.issueTrackerLoginFailed"));
-      this.$router.push({ name: "PrepareSessionPage" });
+      this.router.push({ name: "PrepareSessionPage" });
       return;
     }
     this.verifyCode(params.code);
@@ -42,7 +44,7 @@ export default defineComponent({
       } catch (e) {
         this.showToast(e);
       }
-      this.$router.push({ name: "PrepareSessionPage", query: { tabIndex: "2" } });
+      this.router.push({ name: "PrepareSessionPage", query: { tabIndex: "2" } });
     },
     showToast(error) {
       if (error.message == "failed to retrieve access token") {

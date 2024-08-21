@@ -1,11 +1,11 @@
 <template>
   <ul style="list-style-type: none; padding: 0">
-    <b-nav-item-dropdown :text="locales[$i18n.locale]" right>
+    <b-nav-item-dropdown :text="locales[currentLocale]" right>
       <ul style="list-style-type: disc">
         <b-dropdown-item
           v-for="(locale, key) in locales"
           :key="key"
-          :active="$i18n.locale === key ? true : false"
+          :active="currentLocale === key"
           class="text-light"
           @click="setLocale(key)"
         >
@@ -21,17 +21,23 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 export default defineComponent({
   name: "LocaleDropdown",
   setup() {
-    const { t } = useI18n();
-    return { t };
-  },
-  data() {
+    const { t, locale } = useI18n();
+    const currentLocale = ref(locale.value);
+
+    const setLocale = (newLocale: string) => {
+      locale.value = newLocale;
+      currentLocale.value = newLocale;
+      localStorage.setItem("locale", newLocale);
+    };
+
     return {
+      t,
       locales: {
         de: "Deutsch",
         en: "English",
@@ -42,13 +48,9 @@ export default defineComponent({
         pt: "Português",
         uk: "українська",
       },
+      currentLocale,
+      setLocale,
     };
-  },
-  methods: {
-    setLocale(locale) {
-      this.$i18n.locale = locale;
-      localStorage.setItem("locale", locale);
-    },
   },
 });
 </script>

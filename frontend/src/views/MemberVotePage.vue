@@ -217,6 +217,7 @@ import { defineComponent } from "vue";
 import { useDiveniStore } from "@/store";
 import { useToast } from "vue-toastification";
 import { useI18n } from "vue-i18n";
+import { useRouter } from "vue-router";
 import UserStoryTitle from "@/components/UserStoryTitle.vue";
 
 export default defineComponent({
@@ -238,7 +239,8 @@ export default defineComponent({
     const store = useDiveniStore();
     const toast = useToast();
     const { t } = useI18n();
-    return { store, toast, t };
+    const router = useRouter();
+    return { store, toast, t, router };
   },
   data() {
     return {
@@ -408,11 +410,11 @@ export default defineComponent({
       );
     },
     goToJoinPage() {
-      this.$router.push({ name: "JoinPage" });
+      this.router.push({ name: "JoinPage" });
     },
     leaveMeeting() {
       window.localStorage.removeItem("memberCookie");
-      this.$router.push({ name: "LandingPage" });
+      this.router.push({ name: "LandingPage" });
     },
     reactOnHostLeave() {
       this.pauseSession = true;

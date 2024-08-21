@@ -408,6 +408,7 @@ import GptModal from "@/components/GptModal.vue";
 import UserStoryTitle from "@/components/UserStoryTitle.vue";
 import j2m from "jira2md";
 import UserStory from "@/model/UserStory";
+import { useRouter } from "vue-router";
 
 export default defineComponent({
   name: "SessionPage",
@@ -431,7 +432,8 @@ export default defineComponent({
     const store = useDiveniStore();
     const toast = useToast();
     const { t } = useI18n();
-    return { store, toast, t };
+    const router = useRouter();
+    return { store, toast, t, router };
   },
   data() {
     return {
@@ -773,7 +775,7 @@ export default defineComponent({
       );
     },
     goToLandingPage() {
-      this.$router.push({ name: "LandingPage" });
+      this.router.push({ name: "LandingPage" });
     },
     onPlanningStarted() {
       this.planningStart = true;
