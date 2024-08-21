@@ -33,7 +33,7 @@ function getMarkdownText(text: string) {
 
 onMounted(() => {
   if (props.noneClickable) {
-    const v = Editor.factory({
+    Editor.factory({
       el: viewer.value,
       viewer: true,
       minHeight: "200px",
