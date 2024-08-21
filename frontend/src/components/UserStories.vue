@@ -265,7 +265,7 @@ export default defineComponent({
       this.generatedUUIDs.add(uuid);
       return uuid;
     },
-    submitRequest({ description, confidentialData, language }) {
+    submitRequest({ confidentialData, language }) {
       this.$emit("sendGPTRequest", {
         confidentialData: confidentialData,
         language: language,
