@@ -69,7 +69,7 @@ import "@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin
 
 import "@toast-ui/editor/dist/i18n/de-de";
 
-import {customRef, defineComponent} from "vue";
+import {customRef, defineComponent, ref} from "vue";
 import codeSyntaxHighlight from "@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin-code-syntax-highlight-all";
 import UiToastEditorWrapper from "@/components/UiToastEditorWrapper.vue";
 import { PropType } from "vue";
@@ -121,8 +121,9 @@ export default defineComponent({
     },
   },
   setup() {
-    const { t } = useI18n();
-    return { t };
+    const { locale } = useI18n();
+    const currentLocale = ref(locale.value);
+    return { currentLocale };
   },
   data() {
     return {
@@ -130,7 +131,7 @@ export default defineComponent({
         autofocus: false,
         height: "auto",
         minHeight: "200px",
-        language: this.$i18n.locale,
+        language: this.currentLocale,
         useCommandShortcut: true,
         usageStatistics: true,
         hideModeSwitch: false,

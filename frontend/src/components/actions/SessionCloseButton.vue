@@ -30,6 +30,7 @@ import { defineComponent } from "vue";
 import Constants from "@/constants";
 import { useDiveniStore } from "@/store";
 import { useI18n } from "vue-i18n";
+import { useRouter } from "vue-router";
 
 export default defineComponent({
   name: "SessionCloseButton",
@@ -46,17 +47,18 @@ export default defineComponent({
   setup() {
     const store = useDiveniStore();
     const { t } = useI18n();
-    return { store, t };
+    const router = useRouter();
+    return { store, t, router };
   },
   methods: {
     closeSession() {
       this.sendCloseSessionCommand();
       window.localStorage.removeItem("adminCookie");
       if (this.userStoryMode !== "NO_US") {
-        this.$router.push({ name: "ResultPage" });
+        this.router.push({ name: "ResultPage" });
       } else {
         this.store.clearStore();
-        this.$router.push({ name: "LandingPage" });
+        this.router.push({ name: "LandingPage" });
       }
     },
     sendCloseSessionCommand() {
