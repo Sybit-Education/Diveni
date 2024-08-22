@@ -1,10 +1,7 @@
 <template>
   <div>
-    <div
-      ref="editor"
-      v-debounce:1s="() => emit('stoppedTyping', { description: markdownText})"
-    />
-    <div ref="viewer"/>
+    <div ref="editor" v-debounce:1s="() => emit('stoppedTyping', { description: markdownText })" />
+    <div ref="viewer" />
   </div>
 </template>
 
@@ -13,7 +10,7 @@ import { onMounted, ref } from "vue";
 import Editor from "@toast-ui/editor";
 import "@toast-ui/editor/dist/toastui-editor.css";
 import codeSyntaxHighlight from "@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin-code-syntax-highlight-all";
-import '@toast-ui/editor/dist/toastui-editor-viewer.css';
+import "@toast-ui/editor/dist/toastui-editor-viewer.css";
 import { useI18n } from "vue-i18n";
 
 const props = defineProps({
@@ -23,7 +20,7 @@ const props = defineProps({
   height: { type: String, default: "500px", required: false },
   noneClickable: { type: Boolean, default: false, required: false },
 });
-const emit = defineEmits(["update:modelValue", "stillTyping",'stoppedTyping']);
+const emit = defineEmits(["update:modelValue", "stillTyping", "stoppedTyping"]);
 const editor = ref();
 const viewer = ref();
 const i18n = useI18n();
@@ -31,16 +28,16 @@ let markdownText = "";
 
 function getMarkdownText(text: string) {
   markdownText = text;
-  emit("stillTyping", {text: text});
+  emit("stillTyping", { text: text });
 }
 
 onMounted(() => {
   if (props.noneClickable) {
-    const v = Editor.factory({
+    Editor.factory({
       el: viewer.value,
       viewer: true,
-      minHeight: '200px',
-      initialValue: props.initialValue ?? ""
+      minHeight: "200px",
+      initialValue: props.initialValue ?? "",
     });
   } else {
     const e = new Editor({
@@ -72,6 +69,5 @@ onMounted(() => {
       },
     });
   }
-
 });
 </script>

@@ -135,7 +135,9 @@ export const useDiveniStore = defineStore("diveni-store", {
     },
     setUserStories({ stories }) {
       if (this.isJiraSelected) {
-        stories.filter(us => us.description).map(us => us.description = j2m.to_markdown(us.description));
+        stories
+          .filter((us) => us.description)
+          .map((us) => (us.description = j2m.to_markdown(us.description)));
       }
       this.userStories = stories;
     },

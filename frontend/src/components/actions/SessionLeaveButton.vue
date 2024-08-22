@@ -20,6 +20,7 @@ import { defineComponent } from "vue";
 import Constants from "../../constants";
 import { useDiveniStore } from "@/store";
 import { useI18n } from "vue-i18n";
+import { useRouter } from "vue-router";
 
 export default defineComponent({
   name: "SessionLeaveButton",
@@ -29,7 +30,8 @@ export default defineComponent({
   setup() {
     const store = useDiveniStore();
     const { t } = useI18n();
-    return { store, t };
+    const router = useRouter();
+    return { store, t, router };
   },
   methods: {
     leaveSession() {
@@ -37,7 +39,7 @@ export default defineComponent({
       this.store.sendViaBackendWS(endPoint);
       this.store.clearStore();
       window.localStorage.removeItem("memberCookie");
-      this.$router.push({ name: "LandingPage" });
+      this.router.push({ name: "LandingPage" });
     },
   },
 });

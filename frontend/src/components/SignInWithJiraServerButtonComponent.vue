@@ -130,7 +130,7 @@ export default defineComponent({
         this.showVerificationModal = false;
       });
       this.store.isJiraSelected = true;
-      this.$emit("jira")
+      this.$emit("jira");
     },
     showToast(error) {
       if (error.message == "failed to retrieve access token") {

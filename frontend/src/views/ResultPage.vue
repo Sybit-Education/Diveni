@@ -40,6 +40,7 @@ import { defineComponent } from "vue";
 import papaparse from "papaparse";
 import { useDiveniStore } from "@/store";
 import { useI18n } from "vue-i18n";
+import { useRouter } from "vue-router";
 
 export default defineComponent({
   name: "SessionPage",
@@ -47,7 +48,8 @@ export default defineComponent({
   setup() {
     const store = useDiveniStore();
     const { t } = useI18n();
-    return { store, t };
+    const router = useRouter();
+    return { store, t, router };
   },
   computed: {
     userStories() {
@@ -72,7 +74,7 @@ export default defineComponent({
     goHome() {
       this.store.setUserStories({ stories: [] });
       this.store.clearStore();
-      this.$router.push({ name: "LandingPage" });
+      this.router.push({ name: "LandingPage" });
     },
   },
 });

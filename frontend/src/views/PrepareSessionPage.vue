@@ -96,7 +96,7 @@
                 {{ t("session.prepare.step.selection.mode.description.withUS.importButton") }}
               </b-button>
             </div>
-            <jira-component v-else-if="tabIndex === 2" @jira="isJiraSelected = true;" class="mt-5" />
+            <jira-component v-else-if="tabIndex === 2" class="mt-5" @jira="isJiraSelected = true" />
           </div>
         </div>
       </template>
@@ -256,6 +256,7 @@ import { useDiveniStore } from "@/store";
 import { useToast } from "vue-toastification";
 import { useI18n } from "vue-i18n";
 import { Steppy } from "vue3-steppy";
+import { useRouter } from "vue-router";
 
 export default defineComponent({
   name: "PrepareSessionPage",
@@ -270,8 +271,9 @@ export default defineComponent({
     const store = useDiveniStore();
     const toast = useToast();
     const { t } = useI18n();
+    const router = useRouter();
     const step = ref<number>(1);
-    return { store, toast, t, step };
+    return { store, toast, t, step, router };
   },
   data() {
     return {
@@ -282,7 +284,7 @@ export default defineComponent({
         activeValues: [] as string[],
         position: 0,
       } as CardSet,
-      timer: 30,
+      timer: 0,
       warningWhenUnderZero: "",
       tabIndex: null as number | null,
       hostVoting: false,
@@ -400,7 +402,7 @@ export default defineComponent({
       }
     },
     goToSessionPage(session: Session) {
-      this.$router.push({
+      this.router.push({
         name: "SessionPage",
         state: {
           sessionID: session.sessionID,

@@ -1,27 +1,26 @@
 <template>
   <div class="list">
-      <b-list-group-item
-        v-for="(story, idx) of userStories"
-        v-show="idx === index"
-        :key="story.id"
-        class="border-0 title-box"
-        variant="outline-secondary"
-      >
-        <div class="list-group list-group-horizontal w-100">
-          <div class="position-relative w-100 text-center">
-            <b-form-textarea
-              id="titleInputField"
-              v-model="userStories[idx].title"
-              v-debounce:1s="showGptButtonTitle"
-              class="overflow-auto"
-              rows="1"
-              size="lg"
-              :disabled="!host"
-              :placeholder="t('page.session.before.userStories.placeholder.userStoryTitle')"
-
-            />
-            <b-button
-              v-if="
+    <b-list-group-item
+      v-for="(story, idx) of userStories"
+      v-show="idx === index"
+      :key="story.id"
+      class="border-0 title-box"
+      variant="outline-secondary"
+    >
+      <div class="list-group list-group-horizontal w-100">
+        <div class="position-relative w-100 text-center">
+          <b-form-textarea
+            id="titleInputField"
+            v-model="userStories[idx].title"
+            v-debounce:1s="showGptButtonTitle"
+            class="overflow-auto"
+            rows="1"
+            size="lg"
+            :disabled="!host"
+            :placeholder="t('page.session.before.userStories.placeholder.userStoryTitle')"
+          />
+          <b-button
+            v-if="
               !displayAiOption &&
               host &&
               showImproveTitleButton &&
@@ -29,63 +28,59 @@
               userStories[idx].title !== '' &&
               hasApiKey
             "
-              id="submitAI"
-              @click="showModalTitle = true"
-            >
-              <b-icon-stars class="aiStars" />
-            </b-button>
-            <b-spinner
-              v-if="showSpinner && !displayAiOption"
-            >
-
-            </b-spinner>
-            <div v-if="displayAiOption" id="aiOptions" class="text-center mt-1">
-              <b-button id="acceptAIOption" class="m-1" @click="acceptGptTitle">
-                <b-icon-check2 />
-                {{ t("general.aiFeature.optionButtons.keep") }}
-              </b-button>
-              <b-button class="aiOptionButtons m-1" @click="adjustTitle">
-                <b-icon-sliders />
-                {{ t("general.aiFeature.optionButtons.adjust") }}
-              </b-button>
-              <b-button class="aiOptionButtons m-1" @click="retryTitle">
-                <b-icon-arrow-repeat />
-                {{ t("general.aiFeature.optionButtons.tryAgain") }}
-              </b-button>
-              <b-button class="aiOptionButtons m-1" @click="deleteTitle">
-                <b-icon-backspace />
-                {{ t("general.aiFeature.optionButtons.delete") }}
-              </b-button>
-            </div>
-          </div>
-          <b-dropdown
-            v-show="host"
-            variant="none"
-            class="px-3 ml-3 estimationDescription"
-            :text="(userStories[idx].estimation ? userStories[idx].estimation : '?') + '    '"
+            id="submitAI"
+            @click="showModalTitle = true"
           >
-            <b-dropdown-item
-              v-for="num in cardSet"
-              :key="num"
-              :disabled="!host"
-              :value="num"
-              @click="
+            <b-icon-stars class="aiStars" />
+          </b-button>
+          <b-spinner v-if="showSpinner && !displayAiOption"> </b-spinner>
+          <div v-if="displayAiOption" id="aiOptions" class="text-center mt-1">
+            <b-button id="acceptAIOption" class="m-1" @click="acceptGptTitle">
+              <b-icon-check2 />
+              {{ t("general.aiFeature.optionButtons.keep") }}
+            </b-button>
+            <b-button class="aiOptionButtons m-1" @click="adjustTitle">
+              <b-icon-sliders />
+              {{ t("general.aiFeature.optionButtons.adjust") }}
+            </b-button>
+            <b-button class="aiOptionButtons m-1" @click="retryTitle">
+              <b-icon-arrow-repeat />
+              {{ t("general.aiFeature.optionButtons.tryAgain") }}
+            </b-button>
+            <b-button class="aiOptionButtons m-1" @click="deleteTitle">
+              <b-icon-backspace />
+              {{ t("general.aiFeature.optionButtons.delete") }}
+            </b-button>
+          </div>
+        </div>
+        <b-dropdown
+          v-show="host"
+          variant="none"
+          class="px-3 ml-3 estimationDescription"
+          :text="(userStories[idx].estimation ? userStories[idx].estimation : '?') + '    '"
+        >
+          <b-dropdown-item
+            v-for="num in cardSet"
+            :key="num"
+            :disabled="!host"
+            :value="num"
+            @click="
               userStories[idx].estimation = num;
               publishChanges(idx);
               $event.target.blur();
             "
-            >
-              {{ num }}
-            </b-dropdown-item>
-            <b-dropdown-item
-              v-if="showAIEstimationButton && hasApiKey"
-              @click="showModalEstimation = true"
-            >
-              <BIconStars/>
-            </b-dropdown-item>
-          </b-dropdown>
-        </div>
-      </b-list-group-item>
+          >
+            {{ num }}
+          </b-dropdown-item>
+          <b-dropdown-item
+            v-if="showAIEstimationButton && hasApiKey"
+            @click="showModalEstimation = true"
+          >
+            <BIconStars />
+          </b-dropdown-item>
+        </b-dropdown>
+      </div>
+    </b-list-group-item>
     <privacy-modal
       v-if="showModalTitle"
       :current-text="userStories[index].title"
@@ -97,23 +92,23 @@
       :current-title="userStories[index].title"
       :current-text="userStories[index].description"
       @sendGPTRequest="submitAiEstimation"
-      @resetShowModal="showModalEstimation = false;"
+      @resetShowModal="showModalEstimation = false"
     />
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import {useI18n} from "vue-i18n";
+import { useI18n } from "vue-i18n";
 import PrivacyModal from "@/components/PrivacyModal.vue";
 export default defineComponent({
   name: "UserStoryTitle",
-  components: {PrivacyModal},
+  components: { PrivacyModal },
   props: {
-    index: { type: Number, required: true},
-    cardSet: { type: Array, required: false },
+    index: { type: Number, required: true },
+    cardSet: { type: Array, required: false, default: () => [] },
     initialStories: { type: Array, required: true },
-    host: { type: Boolean, required: true, default: false},
+    host: { type: Boolean, required: true, default: false },
     displayAiOption: { type: Boolean, required: false, default: false },
     alternateTitle: { type: String, required: false, default: "" },
     hasApiKey: { type: Boolean, required: false, default: false },
@@ -139,7 +134,7 @@ export default defineComponent({
       showSpinner: false,
       showModalTitle: false,
       showModalEstimation: false,
-      confidentialInformation: {} as Map<string,string>,
+      confidentialInformation: {} as Map<string, string>,
       showAIEstimationButton: false,
     };
   },
@@ -161,10 +156,12 @@ export default defineComponent({
     userStories() {
       if (this.userStories[this.index] !== undefined) {
         if (this.userStories.length > 0) {
-          this.showAIEstimationButton = this.userStories[this.index].title !== '' && this.userStories[this.index].description !== '';
+          this.showAIEstimationButton =
+            this.userStories[this.index].title !== "" &&
+            this.userStories[this.index].description !== "";
         }
       }
-    }
+    },
   },
   created() {
     this.userStories = this.initialStories as Array<{
@@ -178,7 +175,7 @@ export default defineComponent({
   },
   methods: {
     publishChanges(idx) {
-      if (this.userStories[idx].title !== '') {
+      if (this.userStories[idx].title !== "") {
         this.$emit("userStoriesChanged", { us: this.userStories, idx: idx, doRemove: false });
       }
     },
@@ -193,13 +190,16 @@ export default defineComponent({
         this.savedTitle = this.userStories[this.index].title;
       }
     },
-    sendGptTitle({confidentialData}) {
+    sendGptTitle({ confidentialData }) {
       this.confidentialInformation = confidentialData;
       this.showSpinner = true;
       this.showImproveTitleButton = false;
       this.requestedUserStoryID = this.userStories[this.index].id;
       this.showModalTitle = false;
-      this.$emit("improveTitle", { userStory: this.userStories[this.index], confidentialInformation: confidentialData });
+      this.$emit("improveTitle", {
+        userStory: this.userStories[this.index],
+        confidentialInformation: confidentialData,
+      });
     },
     acceptGptTitle() {
       this.showSpinner = false;
@@ -231,13 +231,13 @@ export default defineComponent({
         .map((us) => (us.title = ""));
       this.$emit("deleteTitle");
     },
-    submitAiEstimation({confidentialData}) {
+    submitAiEstimation({ confidentialData }) {
       this.confidentialInformation = confidentialData;
       this.showModalEstimation = false;
-      this.$emit("aiEstimation", {confidentialData: confidentialData});
-    }
-  }
-})
+      this.$emit("aiEstimation", { confidentialData: confidentialData });
+    },
+  },
+});
 </script>
 
 <style scoped lang="scss">

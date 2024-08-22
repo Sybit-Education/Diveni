@@ -248,16 +248,16 @@
     <b-row v-if="userStoryMode !== 'NO_US'">
       <b-col v-if="!isMobile" cols="7">
         <user-stories
+          :key="splitted_user_stories"
           :card-set="voteSet"
           :show-estimations="planningStart"
           :initial-stories="userStories"
           :show-edit-buttons="true"
           :select-story="true"
           :story-mode="userStoryMode"
-          :splittedUserStories="splitted_user_stories"
+          :splitted-user-stories="splitted_user_stories"
           :story-to-split-idx="index"
-          :key="splitted_user_stories"
-          :hasApiKey="hasApiKey"
+          :has-api-key="hasApiKey"
           @userStoriesChanged="onUserStoriesChanged"
           @selectedStory="onSelectedStory($event)"
           @sendGPTRequest="splitUserStory"
@@ -277,16 +277,16 @@
       </b-col>
       <b-col v-else cols="12">
         <user-stories
+          :key="splitted_user_stories"
           :card-set="voteSet"
           :show-estimations="planningStart"
           :initial-stories="userStories"
           :show-edit-buttons="true"
           :select-story="true"
           :story-mode="userStoryMode"
-          :splittedUserStories="splitted_user_stories"
+          :splitted-user-stories="splitted_user_stories"
           :story-to-split-idx="index"
-          :key="splitted_user_stories"
-          :hasApiKey="hasApiKey"
+          :has-api-key="hasApiKey"
           @userStoriesChanged="onUserStoriesChanged"
           @selectedStory="onSelectedStory($event)"
           @sendGPTRequest="splitUserStory"
@@ -305,11 +305,7 @@
         </div>
       </b-col>
     </b-row>
-    <b-spinner
-      v-if="showSpinner"
-      variant="primary"
-      class="position-absolute centerSpinner"
-      />
+    <b-spinner v-if="showSpinner" variant="primary" class="position-absolute centerSpinner" />
     <GptModal
       v-if="showGPTModal"
       :suggestion-description="alternateDescription"
@@ -328,7 +324,7 @@
           :initial-stories="userStories"
           :card-set="voteSet"
           :index="index!"
-          :hasApiKey="hasApiKey"
+          :has-api-key="hasApiKey"
           @userStoriesChanged="onUserStoriesChanged"
           @improveTitle="improveTitle"
           @acceptTitle="acceptSuggestionTitle"
@@ -344,8 +340,8 @@
           :gpt-description-response="gptDescriptionResponse"
           :update-component="updateComponent"
           :accepted-stories="acceptedStoriesDescription"
-          :isJiraSelected="isJiraSelected"
-          :hasApiKey="hasApiKey"
+          :is-jira-selected="isJiraSelected"
+          :has-api-key="hasApiKey"
           @userStoriesChanged="onUserStoriesChanged"
           @sendGPTDescriptionRequest="improveDescription"
         />
@@ -358,7 +354,7 @@
           :initial-stories="userStories"
           :card-set="voteSet"
           :index="index"
-          :hasApiKey="hasApiKey"
+          :has-api-key="hasApiKey"
           @userStoriesChanged="onUserStoriesChanged"
           @improveTitle="improveTitle"
           @acceptTitle="acceptSuggestionTitle"
@@ -373,8 +369,8 @@
           :index="index!"
           :gpt-description-response="gptDescriptionResponse"
           :update-component="updateComponent"
-          :isJiraSelected="isJiraSelected"
-          :hasApiKey="hasApiKey"
+          :is-jira-selected="isJiraSelected"
+          :has-api-key="hasApiKey"
           @userStoriesChanged="onUserStoriesChanged"
           @sendGPTDescriptionRequest="improveDescription"
         />
@@ -408,6 +404,7 @@ import GptModal from "@/components/GptModal.vue";
 import UserStoryTitle from "@/components/UserStoryTitle.vue";
 import j2m from "jira2md";
 import UserStory from "@/model/UserStory";
+import { useRouter } from "vue-router";
 
 export default defineComponent({
   name: "SessionPage",
@@ -431,7 +428,8 @@ export default defineComponent({
     const store = useDiveniStore();
     const toast = useToast();
     const { t } = useI18n();
-    return { store, toast, t };
+    const router = useRouter();
+    return { store, toast, t, router };
   },
   data() {
     return {
@@ -470,8 +468,8 @@ export default defineComponent({
       descriptionMode: "",
       updateComponent: false,
       acceptedStoriesDescription: [] as Array<{
-        storyID: string | null,
-        issueType: string,
+        storyID: string | null;
+        issueType: string;
       }>,
       showSpinner: false,
       // needed for privacy feature
@@ -773,7 +771,7 @@ export default defineComponent({
       );
     },
     goToLandingPage() {
-      this.$router.push({ name: "LandingPage" });
+      this.router.push({ name: "LandingPage" });
     },
     onPlanningStarted() {
       this.planningStart = true;
@@ -818,7 +816,11 @@ export default defineComponent({
       this.gptTitleResponse = false;
       const userstory = this.userStories.find((us) => us.id === id);
       if (userstory) {
-        const response = await apiService.retryImproveTitle(userstory, originalTitle, confidentialData);
+        const response = await apiService.retryImproveTitle(
+          userstory,
+          originalTitle,
+          confidentialData
+        );
         this.alternateTitle = response.data.improvedTitle;
         this.gptTitleResponse = true;
       }
@@ -831,15 +833,32 @@ export default defineComponent({
       this.userStoryLanguage = language;
       this.confidentialData = confidentialData;
       this.showSpinner = true;
-      if (issue === 'improveDescription') {
-        const response = await apiService.improveDescription(userStory, description, this.confidentialData, language);
+      if (issue === "improveDescription") {
+        const response = await apiService.improveDescription(
+          userStory,
+          description,
+          this.confidentialData,
+          language
+        );
         this.alternateDescription =
           response.description + response.acceptance_criteria.toString().replaceAll(",", "");
-      } if (issue === 'grammar') {
-        const response = await apiService.grammarCheck(userStory, description, this.confidentialData, language);
+      }
+      if (issue === "grammar") {
+        const response = await apiService.grammarCheck(
+          userStory,
+          description,
+          this.confidentialData,
+          language
+        );
         this.alternateDescription = response.description;
-      } if (issue === 'markDescription') {
-        this.alternateDescription= await apiService.markDescription(userStory, description, this.confidentialData, language);
+      }
+      if (issue === "markDescription") {
+        this.alternateDescription = await apiService.markDescription(
+          userStory,
+          description,
+          this.confidentialData,
+          language
+        );
       }
       this.descriptionMode = issue;
       this.gptDescriptionResponse = true;
@@ -854,46 +873,73 @@ export default defineComponent({
       }
       this.onUserStoriesChanged({ us: this.userStories, idx: this.index, doRemove: false });
       this.updateComponent = !this.updateComponent;
-      this.acceptedStoriesDescription.push({ storyID: this.userStories[this.index!].id, issueType: this.descriptionMode})
+      this.acceptedStoriesDescription.push({
+        storyID: this.userStories[this.index!].id,
+        issueType: this.descriptionMode,
+      });
     },
     async retrySuggestionDescription() {
-      await this.improveDescription({userStory: this.userStories[this.index!],description: this.userStories[this.index!].description, issue: this. descriptionMode, confidentialData: this.confidentialData, language: this.userStoryLanguage});
+      await this.improveDescription({
+        userStory: this.userStories[this.index!],
+        description: this.userStories[this.index!].description,
+        issue: this.descriptionMode,
+        confidentialData: this.confidentialData,
+        language: this.userStoryLanguage,
+      });
       this.updateComponent = !this.updateComponent;
     },
     closeModal() {
       this.showGPTModal = false;
       this.gptDescriptionResponse = false;
     },
-    async aiEstimation({confidentialData}){
+    async aiEstimation({ confidentialData }) {
       this.confidentialData = confidentialData;
       this.showSpinner = true;
-      const response = await apiService.estimateUserStory(this.userStories[this.index!], confidentialData, this.voteSet);
+      const response = await apiService.estimateUserStory(
+        this.userStories[this.index!],
+        confidentialData,
+        this.voteSet
+      );
       this.showSpinner = false;
-      this.toast.info(this.t("general.aiFeature.estimationToast.startingText") + "\"" + this.userStories[this.index!].title + "\"" + this.t("general.aiFeature.estimationToast.endingText") + response, {timeout: false});
+      this.toast.info(
+        this.t("general.aiFeature.estimationToast.startingText") +
+          '"' +
+          this.userStories[this.index!].title +
+          '"' +
+          this.t("general.aiFeature.estimationToast.endingText") +
+          response,
+        { timeout: false }
+      );
     },
-    async splitUserStory({confidentialData: confidentialData, language: language, retry: retry}) {
-      if(!retry) {
+    async splitUserStory({ confidentialData: confidentialData, language: language, retry: retry }) {
+      if (!retry) {
         this.confidentialData = confidentialData;
         this.language = language;
         this.showSpinner = true;
-        const response = await apiService.splitUserStory(this.userStories[this.index!], confidentialData, language);
+        const response = await apiService.splitUserStory(
+          this.userStories[this.index!],
+          confidentialData,
+          language
+        );
         this.showSpinner = false;
         this.splitted_user_stories = response;
       } else {
         this.showSpinner = true;
-        const response = await apiService.splitUserStory(this.userStories[this.index!], this.confidentialData, this.language);
+        const response = await apiService.splitUserStory(
+          this.userStories[this.index!],
+          this.confidentialData,
+          this.language
+        );
         this.showSpinner = false;
         this.splitted_user_stories = response;
       }
-
-    }
+    },
   },
 });
 </script>
 
 <!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
 <style lang="scss" scoped>
-
 .centerSpinner {
   left: 0;
   right: 10%;
