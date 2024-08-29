@@ -559,6 +559,10 @@ export default defineComponent({
   width: 45px;
 }
 
+:deep(.wrapper-steppy .controls .btn:hover) {
+  color: black;
+}
+
 .mode-icons {
   .mode-icon {
     max-width: 225px;
@@ -569,6 +573,8 @@ export default defineComponent({
     display: flex;
     flex-direction: column;
     cursor: pointer;
+    border: thin solid;
+    border-color: var(--estimateButtonBorder);
     border-radius: $border-radius;
     box-shadow: 8px 8px 5px var(--box-shadow);
     background-color: var(--preparePage-mode-backround);
@@ -591,10 +597,19 @@ export default defineComponent({
     }
 
     .mode-icon-text {
-      font-size: 20px;
+      font-size: 18px;
       text-align: center;
       font-weight: bold;
     }
   }
+}
+
+.mode-icon-text::before {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 1px;
+  background: var(--estimateButtonBorder);
+  margin: 8px 0;
 }
 </style>
