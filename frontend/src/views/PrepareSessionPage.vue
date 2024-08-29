@@ -603,4 +603,13 @@ export default defineComponent({
     }
   }
 }
+
+.mode-icon-text::before {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 1px;
+  background: var(--estimateButtonBorder);
+  margin: 8px 0;
+}
 </style>
