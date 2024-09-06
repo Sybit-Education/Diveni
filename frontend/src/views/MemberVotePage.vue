@@ -152,8 +152,8 @@
           <user-story-sum-component class="ms-4" />
         </b-col>
       </b-row>
-      <b-row v-if="userStoryMode !== 'NO_US' && !isMobile">
-        <b-col cols="4" class="mt-2">
+      <b-row v-if="userStoryMode !== 'NO_US'" class="d-flex flex-wrap">
+        <b-col cols="12" md="5">
           <div class="overflow-auto" style="max-height: 700px">
             <user-stories
               :card-set="voteSet"
@@ -165,7 +165,7 @@
             />
           </div>
         </b-col>
-        <b-col cols="8" class="mt-2">
+        <b-col v-if="index !== null" cols="12" md="7">
           <user-story-title
             :host="false"
             :initial-stories="userStories"
@@ -181,25 +181,12 @@
           />
         </b-col>
       </b-row>
-      <b-col v-if="userStoryMode !== 'NO_US' && isMobile" class="mt-2">
-        <div class="overflow-auto pb-3">
-          <user-stories
-            :card-set="voteSet"
-            :show-estimations="true"
-            :initial-stories="userStories"
-            :show-edit-buttons="false"
-            :host-selected-story-index="hostSelectedStoryIndex"
-            @selectedStory="onSelectedStory($event)"
-          />
-        </div>
-      </b-col>
       <notify-member-component @hostLeft="reactOnHostLeave" @hostJoined="reactOnHostJoin" />
     </b-overlay>
   </b-container>
 </template>
 
 <script lang="ts">
-// eslint-disable-next-line
 import RoundedAvatar from "../components/RoundedAvatar.vue";
 import MemberVoteCard from "../components/MemberVoteCard.vue";
 import Constants from "../constants";
@@ -244,7 +231,7 @@ export default defineComponent({
   },
   data() {
     return {
-      index: 0,
+      index: null as number | null,
       hostSelectedStoryIndex: undefined,
       draggedVote: null,
       voteSet: [] as string[],
