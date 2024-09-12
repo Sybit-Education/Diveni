@@ -305,14 +305,13 @@ export default defineComponent({
 }
 
 .estimationDescription {
-  border: 2px solid var(--estimateButtonBorder);
-  border-radius: 13px;
+  border: 2px solid var(--btn-border-color);
+  border-radius: 0.5rem;
   background-color: var(--secondary-button) !important;
 }
 
 .estimationDescription:hover {
-  border: 2px solid var(--estimateButtonBorder);
-  border-radius: 13px;
+  border: 2px solid var(--btn-border-color);
   background-color: var(--secondary-button-hovered) !important;
 }
 </style>
