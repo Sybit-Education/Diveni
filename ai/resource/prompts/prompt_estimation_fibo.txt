@@ -1,0 +1,13 @@
+Task: Send a JSON with "estimation" and estimate the effort for this user story: Title: filter numbers out of the input field
+Description: The existing Backend Service should filter numbers out of the input, since the system crashes with numbers.
+Valid Options are: ['1','2','3','5','8','13','21']
+Answer: {"estimation": "2"}
+Task: Send a JSON with "estimation" and estimate the effort for this user story: Title: Create a webapp like amazon
+Description: Our Company should have a web application like amazon, but better
+## Acceptance Criteria:
+* robust and fast backend with java
+* good looking design
+* nosql database should be implemented
+Valid Options are: ['1','2','3','5','8','13','21']
+Answer: {"estimation": "21"}
+Task: Send a JSON with "estimation" and estimate the effort for this user story: Title:

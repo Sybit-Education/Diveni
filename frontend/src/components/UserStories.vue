@@ -14,7 +14,7 @@
         />
       </b-input-group>
     </div>
-    <b-card-group id="userStoryBlock" class="mt-2">
+    <b-card-group id="userStoryBlock" class="my-2 overflow-auto">
       <b-list-group-item
         v-for="(story, index) in displayedStories"
         id="userStoryRow"
@@ -43,7 +43,17 @@
         >
           <b-icon-arrow-right />
         </b-button>
-
+        <b-button
+          v-if="showEditButtons && hasApiKey"
+          v-show="userStories[index].title !== '' && userStories[index].description !== ''"
+          id="stars"
+          @click="
+            selectedStoryIndex = index;
+            showPrivacyModal = true;
+          "
+        >
+          <BIconStars />
+        </b-button>
         <b-form-input
           id="userStoryTitles"
           v-model="story.title"
@@ -51,7 +61,6 @@
           readonly
           size="sm"
           :placeholder="t('page.session.before.userStories.placeholder.userStoryTitle')"
-          @blur="publishChanges(index, false)"
         />
 
         <b-badge id="badge" class="p-2">
@@ -102,6 +111,25 @@
       <b-icon-plus />
       {{ t("page.session.before.userStories.button.addUserStory") }}
     </b-button>
+    <PrivacyModal
+      v-if="showPrivacyModal"
+      :current-title="userStories[selectedStoryIndex].title"
+      :current-text="userStories[selectedStoryIndex].description"
+      :is-description="true"
+      @resetShowModal="showPrivacyModal = false"
+      @sendGPTRequest="submitRequest"
+    />
+    <SplitUserStoriesModal
+      v-if="splittedUserStoriesData.length > 0 && !showPrivacyModal"
+      :new-user-stories-list="splittedUserStoriesData"
+      :original-user-story="[userStories[storyToSplitIdx]]"
+      @resetShowModal="
+        showUserStorySplitModal = false;
+        splittedUserStoriesData = [];
+      "
+      @acceptSplitting="acceptSplitting"
+      @retry="retry"
+    />
   </div>
 </template>
 
@@ -109,15 +137,22 @@
 import { defineComponent } from "vue";
 import UserStory from "../model/UserStory";
 import { useI18n } from "vue-i18n";
+import PrivacyModal from "@/components/PrivacyModal.vue";
+import SplitUserStoriesModal from "@/components/SplitUserStoriesModal.vue";
 
 export default defineComponent({
   name: "UserStories",
+  components: { SplitUserStoriesModal, PrivacyModal },
   props: {
     cardSet: { type: Array, required: true },
     initialStories: { type: Array, required: true },
     showEstimations: { type: Boolean, required: true },
     showEditButtons: { type: Boolean, required: false, default: true },
     hostSelectedStoryIndex: { type: Number, required: false, default: null },
+    storyMode: { type: String, required: false, default: null },
+    splittedUserStories: { type: Array<UserStory>, required: false, default: [] },
+    storyToSplitIdx: { type: Number, required: false, default: 0 },
+    hasApiKey: { type: Boolean, required: false, default: false },
   },
   setup() {
     const { t } = useI18n();
@@ -132,6 +167,10 @@ export default defineComponent({
       filterActive: false,
       savedStories: [] as Array<UserStory>,
       filteredStories: [] as Array<{ story: UserStory; originalIndex: number }>,
+      generatedUUIDs: new Set<number>(),
+      showPrivacyModal: false,
+      showUserStorySplitModal: false,
+      splittedUserStoriesData: [] as Array<UserStory>,
     };
   },
   computed: {
@@ -155,6 +194,7 @@ export default defineComponent({
   },
   mounted() {
     this.userStories = this.initialStories as Array<UserStory>;
+    this.splittedUserStoriesData = this.splittedUserStories;
     this.displayedStories = this.initialStories as Array<UserStory>;
   },
   methods: {
@@ -172,7 +212,7 @@ export default defineComponent({
     },
     addUserStory() {
       const newStory: UserStory = {
-        id: null,
+        id: this.storyMode === "US_JIRA" ? null : this.generateNumericUUID().toString(),
         title: "",
         description: "",
         estimation: null,
@@ -205,12 +245,48 @@ export default defineComponent({
     publishChanges(index: number, remove: boolean) {
       this.$emit("userStoriesChanged", { us: this.savedStories, idx: index, doRemove: remove });
     },
+    generateNumericUUID() {
+      let uuid: number;
+      do {
+        uuid = Math.floor(Math.random() * 1e15) + Date.now();
+      } while (this.generatedUUIDs.has(uuid));
+      this.generatedUUIDs.add(uuid);
+      return uuid;
+    },
+    submitRequest({ confidentialData, language }) {
+      this.$emit("sendGPTRequest", {
+        confidentialData: confidentialData,
+        language: language,
+        retry: false,
+      });
+    },
+    acceptSplitting({ newUserStories }) {
+      newUserStories.map((us) => this.userStories.push(us));
+      this.publishChanges(this.storyToSplitIdx, true);
+      if (this.storyMode === "US_JIRA") {
+        let count = newUserStories.length;
+        newUserStories.forEach(() => {
+          this.publishChanges(this.userStories.length - count, false);
+          count = count - 1;
+        });
+      }
+    },
+    retry() {
+      this.$emit("sendGPTRequest", { retry: true });
+    },
   },
 });
 </script>
 
 <!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
 <style lang="scss" scoped>
+#stars {
+  color: var(--ai-stars) !important;
+  background-color: transparent !important;
+  border-style: none;
+  animation: showUp 1s;
+}
+
 #searchIcon {
   rotate: 90deg;
 }

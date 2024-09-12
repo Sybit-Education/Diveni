@@ -129,6 +129,8 @@ export default defineComponent({
       this.$nextTick(() => {
         this.showVerificationModal = false;
       });
+      this.store.isJiraSelected = true;
+      this.$emit("jira");
     },
     showToast(error) {
       if (error.message == "failed to retrieve access token") {

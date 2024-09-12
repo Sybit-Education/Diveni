@@ -1,72 +1,44 @@
 <template>
   <div class="user-story-descriptions">
-    <div class="list">
-      <b-list-group-item
-        v-for="(story, idx) of userStories"
-        v-show="idx === index"
-        :key="story.id"
-        class="border-0 description-box"
-        variant="outline-secondary"
-      >
-        <div class="list-group list-group-horizontal mt-5">
-          <b-form-textarea
-            v-model="userStories[idx].title"
-            rows="1"
-            max-rows="3"
-            :disabled="!editDescription"
-            size="lg"
-            :placeholder="t('page.session.before.userStories.placeholder.userStoryTitle')"
-            @blur="publishChanges(idx)"
-          />
-          <b-dropdown
-            v-show="editDescription"
-            variant="none"
-            class="px-3 ml-5 estimationDescription"
-            :text="(userStories[idx].estimation ? userStories[idx].estimation : '?') + '    '"
-          >
-            <b-dropdown-item
-              v-for="num in filteredCardSet"
-              :key="num"
-              :disabled="!editDescription"
-              :value="num"
-              @click="
-                userStories[idx].estimation = num;
-                publishChanges(idx);
-                $event.target.blur();
-              "
-            >
-              {{ num }}
-            </b-dropdown-item>
-          </b-dropdown>
-        </div>
-        <div>
-          <markdown-editor
-            id="textarea-auto-height"
-            v-model="userStories[idx].description"
-            class="my-2"
-            :disabled="!editDescription"
-            :placeholder="t('page.session.before.userStories.placeholder.userStoryDescription')"
-            @textValueChanged="(event) => valueChanged(idx, event)"
-          />
-        </div>
-        <div v-if="!editDescription">
-          <b-form-textarea
-            id="textarea-auto-height-plaintext"
-            class="py-2 description-text-area"
-            :disabled="!editDescription"
-            plaintext
-            :value="userStories[idx].description"
-            rows="15"
-            size="m"
-          />
-        </div>
-      </b-list-group-item>
-      <div
-        v-if="userStories.length <= index && userStories.length"
-        class="text-center rounded p-3 m-2"
-      >
-        <b-card class="border-0" :title="t('page.session.before.userStories.text')" />
+    <b-list-group-item
+      v-for="(story, idx) of userStories"
+      v-show="idx === index"
+      :key="story.id"
+      class="border-0 description-box"
+      variant="outline-secondary"
+    >
+      <div>
+        <markdown-editor
+          id="textarea-auto-height"
+          :key="updateComponent"
+          v-model="userStories[idx].description"
+          class="my-2"
+          :disabled="!editDescription"
+          :placeholder="t('page.session.before.userStories.placeholder.userStoryDescription')"
+          :accepted-stories="acceptedStories"
+          :current-story-i-d="userStories[idx].id"
+          :has-api-key="hasApiKey"
+          @textValueChanged="(event) => valueChanged(idx, event)"
+          @sendGPTDescriptionRequest="sendGPTDescriptionRequest"
+        />
       </div>
+      <div v-if="!editDescription">
+        <markdown-editor
+          id="textarea-auto-height"
+          :key="updateComponent"
+          v-model="userStories[idx].description"
+          class="my-2 noneClickable"
+          :placeholder="t('page.session.before.userStories.placeholder.userStoryDescription')"
+          @textValueChanged="(event) => valueChanged(idx, event)"
+          @sendGPTDescriptionRequest="sendGPTDescriptionRequest"
+        />
+      </div>
+    </b-list-group-item>
+    <div
+      v-if="userStories.length <= index && userStories.length"
+      class="text-center rounded p-3 m-2"
+    >
+      <b-card class="border-0" :title="t('page.session.before.userStories.text')" />
     </div>
   </div>
 </template>
@@ -81,11 +53,16 @@ export default defineComponent({
   components: { MarkdownEditor },
   props: {
     index: { type: Number, required: true },
-    cardSet: { type: Array, required: true },
     initialStories: { type: Array, required: true },
     editDescription: { type: Boolean, required: true, default: false },
-    showEstimations: { type: Boolean, required: false },
-    showEditButtons: { type: Boolean, required: false, default: true },
+    gptDescriptionResponse: { type: Boolean, required: false, default: false },
+    updateComponent: { type: Boolean, required: false, default: false },
+    acceptedStories: {
+      type: Array<{ storyID: string | null; issueType: string }>,
+      required: false,
+      default: [],
+    },
+    hasApiKey: { type: Boolean, required: false, default: false },
   },
   setup() {
     const { t } = useI18n();
@@ -93,7 +70,6 @@ export default defineComponent({
   },
   data() {
     return {
-      sideBarOpen: false,
       userStories: [] as Array<{
         id: string | null;
         title: string;
@@ -102,11 +78,6 @@ export default defineComponent({
         isActive: boolean;
       }>,
     };
-  },
-  computed: {
-    filteredCardSet(): Array<unknown> {
-      return this.cardSet.filter((card) => card !== "?");
-    },
   },
   watch: {
     initialStories() {
@@ -133,51 +104,24 @@ export default defineComponent({
       this.userStories[idx].description = markdown;
       this.publishChanges(idx);
     },
-    setUserStoryAsActive(index) {
-      const stories = this.userStories.map((s) => ({
-        id: s.id,
-        title: s.title,
-        description: s.description,
-        estimation: s.estimation,
-        isActive: false,
-      }));
-      stories[index].isActive = true;
-      this.userStories = stories;
-      this.publishChanges(index);
-    },
-    addUserStory() {
-      this.userStories.push({
-        id: null,
-        title: "",
-        description: "",
-        estimation: null,
-        isActive: false,
-      });
-    },
     publishChanges(idx) {
       this.$emit("userStoriesChanged", { us: this.userStories, idx: idx, doRemove: false });
     },
-    // synchronizeJira(idx) {
-    //   this.$emit("synchronizeJira", { story: this.userStories[idx], doRemove: false });
-    // },
+    sendGPTDescriptionRequest({ description, issue, confidentialData, language }) {
+      this.$emit("sendGPTDescriptionRequest", {
+        userStory: this.userStories[this.index],
+        description: description,
+        issue: issue,
+        confidentialData: confidentialData,
+        language: language,
+      });
+    },
   },
 });
 </script>
 
 <!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
 <style lang="scss" scoped>
-.estimationDescription {
-  border: 2px solid var(--estimateButtonBorder);
-  border-radius: 13px;
-  background-color: var(--secondary-button) !important;
-}
-
-.estimationDescription:hover {
-  border: 2px solid var(--estimateButtonBorder);
-  border-radius: 13px;
-  background-color: var(--secondary-button-hovered) !important;
-}
-
 .description-box {
   background: transparent;
   padding: 0;
@@ -199,6 +143,10 @@ export default defineComponent({
   background-color: var(--blurredColour8);
   border-radius: 13px;
   box-shadow: none !important;
+}
+
+.noneClickable {
+  pointer-events: none;
 }
 
 .sidenav {

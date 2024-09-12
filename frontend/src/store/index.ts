@@ -1,4 +1,5 @@
 import SockJS from "sockjs-client";
+import j2m from "jira2md";
 import webstomp, { Client } from "webstomp-client";
 import Constants from "../constants";
 import { defineStore } from "pinia";
@@ -25,6 +26,7 @@ export const useDiveniStore = defineStore("diveni-store", {
     hostEstimation: undefined as AdminVote | undefined,
     hostVoting: false,
     autoReveal: false,
+    isJiraSelected: false,
   }),
   actions: {
     setMembers(members) {
@@ -132,6 +134,11 @@ export const useDiveniStore = defineStore("diveni-store", {
       this.projects = projects;
     },
     setUserStories({ stories }) {
+      if (this.isJiraSelected) {
+        stories
+          .filter((us) => us.description)
+          .map((us) => (us.description = j2m.to_markdown(us.description)));
+      }
       this.userStories = stories;
     },
     setTokenId(tokenId) {

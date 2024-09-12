@@ -15,6 +15,7 @@ module.exports = {
     ecmaVersion: 2020,
   },
   rules: {
+    "vue/no-v-model-argument": "off",
     "no-console": "off",
     "no-debugger": "off",
     noImplicitAny: 0,

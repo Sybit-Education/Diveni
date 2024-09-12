@@ -25,6 +25,7 @@ import { BIconController } from "bootstrap-vue";
 import { useDiveniStore } from "@/store";
 import { useToast } from "vue-toastification";
 import { useI18n } from "vue-i18n";
+import { useRouter, useRoute } from "vue-router";
 
 export default defineComponent({
   name: "JoinPage",
@@ -36,7 +37,9 @@ export default defineComponent({
     const store = useDiveniStore();
     const toast = useToast();
     const { t } = useI18n();
-    return { store, toast, t };
+    const route = useRoute();
+    const router = useRouter();
+    return { store, toast, t, route, router };
   },
   data() {
     return {
@@ -74,7 +77,7 @@ export default defineComponent({
     },
   },
   created() {
-    const id = this.$route.query as unknown as { sessionID: string };
+    const id = this.route.query as unknown as { sessionID: string };
     if (id.sessionID) {
       this.sessionID = id.sessionID;
     }
@@ -154,7 +157,7 @@ export default defineComponent({
       this.store.subscribeOnBackendWSTimerStart();
     },
     goToEstimationPage() {
-      this.$router.push({
+      this.router.push({
         name: "MemberVotePage",
         state: {
           memberID: this.memberID,

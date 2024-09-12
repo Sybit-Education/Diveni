@@ -14,9 +14,18 @@ services:
       retries: 3
       start_period: 30s
 
+  ai:
+    build:
+      ./ai
+    container_name: diveni_ai
+    restart: unless-stopped
+    env_file:
+      ./ai/.env
+
   backend:
     depends_on:
       - database
+      - ai
     build:
       ./backend
     container_name: diveni_backend

@@ -152,9 +152,9 @@
           <user-story-sum-component class="ms-4" />
         </b-col>
       </b-row>
-      <b-row v-if="userStoryMode !== 'NO_US' && !isMobile">
-        <b-col class="mt-2">
-          <div class="overflow-auto" style="height: 700px">
+      <b-row v-if="userStoryMode !== 'NO_US'" class="d-flex flex-wrap">
+        <b-col cols="12" md="5">
+          <div class="overflow-auto" style="max-height: 700px">
             <user-stories
               :card-set="voteSet"
               :show-estimations="true"
@@ -165,34 +165,28 @@
             />
           </div>
         </b-col>
-        <b-col class="mt-2">
-          <user-story-descriptions
+        <b-col v-if="index !== null" cols="12" md="7">
+          <user-story-title
+            :host="false"
+            :initial-stories="userStories"
             :card-set="voteSet"
+            :index="index"
+          />
+          <user-story-descriptions
+            v-if="userStories.length > 0 && index < userStories.length"
+            :key="userStories[index].description"
             :index="index"
             :initial-stories="userStories"
             :edit-description="false"
           />
         </b-col>
       </b-row>
-      <b-col v-if="userStoryMode !== 'NO_US' && isMobile" class="mt-2">
-        <div class="overflow-auto pb-3">
-          <user-stories
-            :card-set="voteSet"
-            :show-estimations="true"
-            :initial-stories="userStories"
-            :show-edit-buttons="false"
-            :host-selected-story-index="hostSelectedStoryIndex"
-            @selectedStory="onSelectedStory($event)"
-          />
-        </div>
-      </b-col>
       <notify-member-component @hostLeft="reactOnHostLeave" @hostJoined="reactOnHostJoin" />
     </b-overlay>
   </b-container>
 </template>
 
 <script lang="ts">
-// eslint-disable-next-line
 import RoundedAvatar from "../components/RoundedAvatar.vue";
 import MemberVoteCard from "../components/MemberVoteCard.vue";
 import Constants from "../constants";
@@ -210,10 +204,13 @@ import { defineComponent } from "vue";
 import { useDiveniStore } from "@/store";
 import { useToast } from "vue-toastification";
 import { useI18n } from "vue-i18n";
+import { useRouter } from "vue-router";
+import UserStoryTitle from "@/components/UserStoryTitle.vue";
 
 export default defineComponent({
   name: "MemberVotePage",
   components: {
+    UserStoryTitle,
     SessionLeaveButton,
     RoundedAvatar,
     MemberVoteCard,
@@ -229,7 +226,8 @@ export default defineComponent({
     const store = useDiveniStore();
     const toast = useToast();
     const { t } = useI18n();
-    return { store, toast, t };
+    const router = useRouter();
+    return { store, toast, t, router };
   },
   data() {
     return {
@@ -399,11 +397,11 @@ export default defineComponent({
       );
     },
     goToJoinPage() {
-      this.$router.push({ name: "JoinPage" });
+      this.router.push({ name: "JoinPage" });
     },
     leaveMeeting() {
       window.localStorage.removeItem("memberCookie");
-      this.$router.push({ name: "LandingPage" });
+      this.router.push({ name: "LandingPage" });
     },
     reactOnHostLeave() {
       this.pauseSession = true;

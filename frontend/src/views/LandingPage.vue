@@ -141,6 +141,8 @@ import { useDiveniStore } from "@/store";
 import { useI18n } from "vue-i18n";
 import CarouselComponent from "@/components/CarouselComponent.vue";
 import DownloadPWAModal from "@/components/DownloadPWAModal.vue";
+import { useRouter } from "vue-router";
+
 export default defineComponent({
   name: "LandingPage",
   components: {
@@ -152,7 +154,8 @@ export default defineComponent({
   setup() {
     const store = useDiveniStore();
     const { t } = useI18n();
-    return { store, t };
+    const router = useRouter();
+    return { store, t, router };
   },
   data() {
     return {
@@ -184,7 +187,7 @@ export default defineComponent({
               set: Array<string>;
               timerSeconds: number;
               userStories: Array<{
-                id: number | null;
+                id: string | null;
                 title: string;
                 description: string;
                 estimation: string | null;
@@ -204,16 +207,16 @@ export default defineComponent({
       }
     },
     goToJoinPage() {
-      this.$router.push({ name: "JoinPage" });
+      this.router.push({ name: "JoinPage" });
     },
     goToPrepareSessionPage() {
-      this.$router.push({ name: "PrepareSessionPage" });
+      this.router.push({ name: "PrepareSessionPage" });
     },
     goToSessionPage() {
       this.store.setUserStories({
         stories: this.sessionWrapper.session.sessionConfig.userStories,
       });
-      this.$router.push({
+      this.router.push({
         name: "SessionPage",
         state: {
           sessionID: this.sessionWrapper.session.sessionID,

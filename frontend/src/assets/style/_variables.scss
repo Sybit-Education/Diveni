@@ -42,7 +42,13 @@
   --preparePageActiveCardSet: black;
   --preparePageInActiveCardSet: #e27712;
   --preparePageTimerBackground: rgba(192, 175, 156, 0.4);
-  --preparePageNotSelectedTabBackground: rgba(192, 175, 156, 0.4);
+  --preparePageNotSelectedBackground: rgba(192, 175, 156, 0.4);
+  --preparePage-wizard-background: rgba(255, 255, 255, 0.5);
+  --preparePage-wizard-status: #da7315;
+  --preparePage-wizard-statusbackground: rgb(255, 255, 255);
+  --preparePage-mode-backround: rgb(238, 238, 238);
+  --preparePage-active-icon-border: #946234e0;
+  --preparePage-hover-icon-border: #658462;
 
   /*Session Page*/
   --textAreaColour: rgba(192, 175, 156, 0.4);
@@ -56,6 +62,13 @@
   /*Editor*/
   --editor-toolbar-switch-bg: #7a777773;
   --editor-defaultui-container-bg: #3e4b6c;
+
+  /*Ai-Feature*/
+  --text-field: #b4b2b2;
+  --ai-stars: #266aea;
+  --b-modal-background: white;
+  --markConfidentialInformation: #2131aa;
+  --newUserStoryShadow: #575757;
 }
 
 /* Define styles for the root window with dark - mode preference */
@@ -101,7 +114,13 @@
   --preparePageActiveCardSet: white;
   --preparePageInActiveCardSet: #e27712;
   --preparePageTimerBackground: rgba(137, 152, 187, 0.4);
-  --preparePageNotSelectedTabBackground: rgba(137, 152, 187, 0.4);
+  --preparePageNotSelectedBackground: rgba(137, 152, 187, 0.4);
+  --preparePage-wizard-background: rgba(80, 96, 199, 0.15);
+  --preparePage-wizard-status: rgb(19, 98, 246);
+  --preparePage-wizard-statusbackground: rgb(255, 255, 255);
+  --preparePage-mode-backround: rgb(205, 236, 255);
+  --preparePage-active-icon-border: #0f32b2;
+  --preparePage-hover-icon-border: #631975;
 
   /*Session Page*/
   --textAreaColour: rgba(137, 152, 187, 0.4);
@@ -115,10 +134,21 @@
   /*Editor*/
   --editor-toolbar-switch-bg: #7a777773;
   --editor-defaultui-container-bg: #3e4b6c;
+
+  /*Ai-Feature*/
+  --text-field: #56585d;
+  --ai-stars: #266aea;
+  --b-modal-background: #282C35;
+  --markConfidentialInformation: #2131aa;
+  --newUserStoryShadow: #b0b0b0;
 }
 
-$border-radius:               0.8rem !default;
-$border-radius-lg:            0.9rem !default;
-$border-radius-sm:            1rem !default;
+$border-radius:               0.5rem !default;
+$border-radius-lg:            0.5rem !default;
+$border-radius-sm:            0.5rem !default;
+$list-group-bg:               transparent;
+$list-group-border-color:     transparent;
+
+
 
 

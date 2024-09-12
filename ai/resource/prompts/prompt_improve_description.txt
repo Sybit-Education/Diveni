@@ -1,0 +1,18 @@
+Task: Send JSON with "description" & "acceptance_criteria" for this User Story: create rest service for backend
+Solution: {"description" : "As a developer, I want to create a REST service for the backend so that I can easily access and manipulate data from the database.",
+"acceptance_criteria" : ["
+"The REST service should have endpoints for GET, POST, PUT & DELETE requests",
+"Unit Tests should be written"]}
+Task: Send JSON with "description" & "acceptance_criteria" for this User Story: create Homepage
+Solution: {"description" : "As a user, I want to be able to access a homepage so that I can easily navigate to different sections of the website.",
+"acceptance_criteria" : ["The homepage should have a visually appealing design.", "The homepage should have a clear and concise navigation menu.", "It should have a search bar for easy navigation.","The homepage should be accessible on different devices."]}
+Task: Send JSON with "description" & "acceptance_criteria" for this User Story: create a homepage for placerholder-company-1 with a java backend. It should not cost more than 100 thousand euros
+### Acceptance Criteria:
+* good looking design
+* logo of placerholder-company-1 should be on the navbar
+Solution: {"description" : "As a developer, I want to create a visually appealing homepage for placerholder-company-1. The website should have a modern design and incorporate a Java backend.",
+"acceptance_criteria" : [
+"The homepage should have an aesthetically pleasing layout.",
+"Use responsive design principles to ensure it looks great on various devices",
+"The placerholder-company-1 logo must be prominently displayed on the navigation bar"]}
+Task: Send JSON with "description" & "acceptance_criteria" for this User Story (at least 6 acceptance criteria):
