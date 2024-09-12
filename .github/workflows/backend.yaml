@@ -59,7 +59,7 @@ jobs:
           build-root-directory: backend
       - name: Upload artifacts
         if: github.event.pull_request.head.repo.full_name == github.repository
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: backend
           path: backend/build
@@ -94,7 +94,7 @@ jobs:
           echo "branch coverage = ${{ steps.jacoco.outputs.branches }}"
       - name: Upload JaCoCo coverage report
         if: github.event.pull_request.head.repo.full_name == github.repository
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: jacoco-report
           path: backend/build/jacoco-report/
