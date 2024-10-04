@@ -165,18 +165,10 @@
               +
             </b-button>
           </div>
-          <h4 class="mb-3">
-            <b-img
-              v-if="theme === 'light'"
-              :src="require('@/assets/preparePage/P4.png')"
-              class="numberPictures"
-            />
-            <b-img v-else :src="require('@/assets/preparePage/P4D.png')" class="numberPictures" />
-            {{ t("session.prepare.step.selection.hostVoting.title") }}
-          </h4>
+          <h4 class="mb-3">{{ t("session.prepare.step.selection.hostVoting.title") }}</h4>
           <b-row class="mt-2">
             <b-col>
-              <div class="voting-control d-flex justify-content-center mb-2">
+              <div class="voting-control d-flex justify-content-center mb-5">
                 <b-button
                   :variant="hostVoting ? 'primary' : 'outline-light'"
                   @click="
@@ -198,12 +190,47 @@
               </div>
             </b-col>
           </b-row>
+          <div v-if="isNoUSMode">
+            <h4 class="mb-3">{{ t("session.prepare.step.selection.memberControl.title") }}</h4>
+            <b-row class="mt-2">
+              <b-col>
+                <div class="voting-control d-flex justify-content-center mb-2">
+                  <b-button
+                    :variant="memberControl ? 'primary' : 'outline-light'"
+                    @click="
+                      memberControl = true;
+                      $event.target.blur();
+                    "
+                  >
+                    {{ t("session.prepare.step.selection.memberControl.memberControlOn") }}
+                  </b-button>
+                  <b-button
+                    :variant="!memberControl ? 'primary' : 'outline-light'"
+                    @click="
+                      memberControl = false;
+                      $event.target.blur();
+                    "
+                  >
+                    {{ t("session.prepare.step.selection.memberControl.memberControlOff") }}
+                  </b-button>
+                </div>
+              </b-col>
+            </b-row>
+          </div>
         </div>
       </template>
 
       <template #4>
         <div class="wizardStep">
-          <h4 class="mb-3">{{ t("session.prepare.step.confirmation.title") }}</h4>
+          <h4 class="mb-3">
+            <b-img
+              v-if="theme === 'light'"
+              :src="require('@/assets/preparePage/P4.png')"
+              class="numberPictures"
+            />
+            <b-img v-else :src="require('@/assets/preparePage/P4D.png')" class="numberPictures" />
+            {{ t("session.prepare.step.confirmation.title") }}
+          </h4>
           <b-list-group>
             <b-list-group-item
               >{{ t("session.prepare.step.selection.mode.title") }}:
@@ -288,6 +315,7 @@ export default defineComponent({
       warningWhenUnderZero: "",
       tabIndex: null as number | null,
       hostVoting: false,
+      memberControl: false,
       isIssueTrackerEnabled: false,
       theme: localStorage.getItem("user-theme"),
       isJiraSelected: false,
@@ -325,6 +353,9 @@ export default defineComponent({
     },
     userStoryMode(): string {
       return ["NO_US", "US_MANUALLY", "US_JIRA"][this.tabIndex || 0];
+    },
+    isNoUSMode() {
+      return this.userStoryMode === "NO_US";
     },
     formatTimer(): string {
       const minutes = Math.floor(this.timer / 60);

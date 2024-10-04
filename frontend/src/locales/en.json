@@ -344,6 +344,11 @@
             "hostVotingOn": "Yes",
             "hostVotingOff": "No"
           },
+          "memberControl": {
+            "title": "Should the member be allowed to restart the session",
+            "memberControlOn": "Yes",
+            "memberControlOff": "No"
+          },
           "password": {
             "title": "Choose a password if needed",
             "placeholder": "Password (leave empty for unprotected session)"
