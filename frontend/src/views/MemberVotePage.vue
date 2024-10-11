@@ -10,6 +10,18 @@
       <b-row v-if="!isMobile" class="headers">
         <b-col>
           <h1>{{ t("page.vote.title") }}</h1>
+          <b-button
+            v-if="memberControl"
+            class="mr-3 optionButton"
+            variant="outline-dark"
+            @click="
+              sendRestartMessage();
+              $event.target.blur();
+            "
+          >
+            <BIconArrowClockwise class="bIcons"></BIconArrowClockwise>
+            {{ t("page.session.during.estimation.buttons.new") }}
+          </b-button>
         </b-col>
         <b-col cols="auto">
           <session-leave-button />
@@ -28,6 +40,18 @@
         <b-col class="align-self-end">
           <rounded-avatar :member="getMember" :admin="false" :mobile="true" />
           <h1>{{ t("page.vote.title") }}</h1>
+          <b-button
+            v-if="memberControl"
+            class="mr-3 optionButton"
+            variant="outline-dark"
+            @click="
+              sendRestartMessage();
+              $event.target.blur();
+            "
+          >
+            <BIconArrowClockwise class="bIcons"></BIconArrowClockwise>
+            {{ t("page.session.during.estimation.buttons.new") }}
+          </b-button>
         </b-col>
         <b-col>
           <session-leave-button :is-mobile="true" />
@@ -206,10 +230,12 @@ import { useToast } from "vue-toastification";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import UserStoryTitle from "@/components/UserStoryTitle.vue";
+import { BIconArrowClockwise } from "bootstrap-vue";
 
 export default defineComponent({
   name: "MemberVotePage",
   components: {
+    BIconArrowClockwise,
     UserStoryTitle,
     SessionLeaveButton,
     RoundedAvatar,
@@ -246,6 +272,7 @@ export default defineComponent({
       voteSetJson: history.state.voteSetJson,
       timerSecondsString: history.state.timerSecondsString,
       userStoryMode: history.state.userStoryMode,
+      memberControl: history.state.memberControl,
       safedHostEstimation: undefined as string | undefined,
     };
   },
@@ -290,6 +317,9 @@ export default defineComponent({
     },
     hostEstimation() {
       return this.store.hostEstimation;
+    },
+    autoReveal() {
+      return this.store.autoReveal;
     },
     getMember() {
       return {
@@ -409,6 +439,17 @@ export default defineComponent({
     reactOnHostJoin() {
       this.pauseSession = false;
     },
+    sendRestartMessage() {
+      this.estimateFinished = false;
+      const endPoint = Constants.webSocketRestartPlanningRoute;
+      this.store.sendViaBackendWS(
+        endPoint,
+        JSON.stringify({
+          hostVoting: this.hostVoting,
+          autoReveal: this.autoReveal,
+        })
+      );
+    },
   },
 });
 </script>
@@ -440,5 +481,26 @@ export default defineComponent({
 .centerCards {
   margin-left: auto;
   margin-right: auto;
+}
+
+.optionButton {
+  background-color: var(--textAreaColour);
+  display: inline-flex;
+  align-items: center;
+}
+
+.optionButton:hover {
+  background-color: var(--textAreaColourHovered);
+  color: var(--text-primary-color);
+}
+
+.optionButton:focus {
+  background-color: var(--textAreaColourHovered) !important;
+  color: var(--text-primary-color) !important;
+}
+
+.optionButton:disabled {
+  background-color: var(--textAreaColourHovered) !important;
+  color: var(--text-primary-color) !important;
 }
 </style>

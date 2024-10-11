@@ -22,7 +22,10 @@ public class SessionConfig {
   private final List<UserStory> userStories;
 
   private final Integer timerSeconds;
+
   private final String userStoryMode;
+
+  private final Boolean memberControl;
 
   @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
   private final String password;

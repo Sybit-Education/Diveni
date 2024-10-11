@@ -345,7 +345,7 @@
             "hostVotingOff": "No"
           },
           "memberControl": {
-            "title": "Should the member be allowed to restart the session",
+            "title": "Should members be allowed to restart the session",
             "memberControlOn": "Yes",
             "memberControlOff": "No"
           },

@@ -11,6 +11,8 @@ public class ErrorMessages {
 
   public static String sessionNotFoundErrorMessage = "session not found";
 
+  public static String principalNotFoundErrorMessage = "principal not found";
+
   public static String memberExistsErrorMessage = "member already exists";
 
   public static String memberNotExistsErrorMessage = "member does not exist";

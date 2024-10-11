@@ -240,13 +240,13 @@ public class WebsocketController {
   }
 
   @MessageMapping("/restart")
-  public synchronized void restartVote(AdminPrincipal principal, @Payload String message) {
+  public synchronized void restartVote(Principal principal, @Payload String message) {
     LOGGER.debug("--> restartVote()");
     JSONObject jsonObject = new JSONObject(message);
     boolean stateOfHostVoting = jsonObject.getBoolean("hostVoting");
     boolean autoReveal = jsonObject.getBoolean("autoReveal");
     val session =
-        ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID())
+        ControllerUtils.getSessionByPrincipalTypeOrThrowResponse(databaseService, principal)
             .updateSessionState(SessionState.START_VOTING)
             .resetEstimations()
             .setHostVoting(stateOfHostVoting)

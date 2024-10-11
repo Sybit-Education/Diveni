@@ -404,6 +404,7 @@ export default defineComponent({
         password: this.password === "" ? null : this.password,
         userStories: this.userStories,
         userStoryMode: this.userStoryMode,
+        memberControl: this.memberControl,
       };
       try {
         const response = (await this.axios.post(url, sessionConfig)).data as {
@@ -420,6 +421,7 @@ export default defineComponent({
                 isActive: false;
               }>;
               userStoryMode: string;
+              memberControl: boolean;
             };
             sessionState: string;
           };

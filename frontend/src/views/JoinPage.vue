@@ -51,6 +51,7 @@ export default defineComponent({
       voteSet: "",
       timerSeconds: 0,
       userStoryMode: "",
+      memberControl: null as boolean | null,
     };
   },
   computed: {
@@ -105,10 +106,12 @@ export default defineComponent({
           timerSeconds: number;
           userStories: Array<{ title: string; description: string; estimation: string | null }>;
           userStoryMode: string;
+          memberControl: boolean;
         };
         this.voteSet = JSON.stringify(sessionConfig.set);
         this.timerSeconds = parseInt(JSON.stringify(sessionConfig.timerSeconds), 10);
         this.userStoryMode = sessionConfig.userStoryMode;
+        this.memberControl = sessionConfig.memberControl;
         this.store.setUserStories({
           stories: sessionConfig.userStories,
         });
@@ -167,6 +170,7 @@ export default defineComponent({
           voteSetJson: this.voteSet,
           timerSecondsString: this.timerSeconds.toString(),
           userStoryMode: this.userStoryMode,
+          memberControl: this.memberControl,
         },
       });
     },

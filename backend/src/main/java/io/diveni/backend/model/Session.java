@@ -276,6 +276,7 @@ public class Session {
             userStories,
             sessionConfig.getTimerSeconds().orElse(null),
             sessionConfig.getUserStoryMode(),
+            sessionConfig.getMemberControl(),
             sessionConfig.getPassword());
     return new Session(
         databaseID,

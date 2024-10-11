@@ -6,9 +6,13 @@
 package io.diveni.backend.controller;
 
 import io.diveni.backend.model.Session;
+import io.diveni.backend.principals.AdminPrincipal;
+import io.diveni.backend.principals.MemberPrincipal;
 import io.diveni.backend.service.DatabaseService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.security.Principal;
 
 public class ControllerUtils {
 
@@ -32,4 +36,14 @@ public class ControllerUtils {
                 new ResponseStatusException(
                     HttpStatus.NOT_FOUND, ErrorMessages.sessionNotFoundErrorMessage));
   }
+
+  static Session getSessionByPrincipalTypeOrThrowResponse(DatabaseService databaseService, Principal principal) {
+    if (principal instanceof AdminPrincipal) {
+      return getSessionOrThrowResponse(databaseService, ((AdminPrincipal) principal).getSessionID());
+    } else if (principal instanceof MemberPrincipal) {
+      return getSessionByMemberIDOrThrowResponse(databaseService, ((MemberPrincipal) principal).getMemberID());
+    }
+    throw new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessages.principalNotFoundErrorMessage);
+  }
+
 }
