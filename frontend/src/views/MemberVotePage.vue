@@ -22,6 +22,18 @@
             <BIconArrowClockwise class="bIcons"></BIconArrowClockwise>
             {{ t("page.session.during.estimation.buttons.new") }}
           </b-button>
+          <b-button
+            v-if="memberControl"
+            class="mr-3 optionButton"
+            variant="outline-dark"
+            @click="
+              sendVotingFinishedMessage();
+              $event.target.blur();
+            "
+          >
+            <BIconBarChartFill class="bIcons"></BIconBarChartFill>
+            {{ t("page.session.during.estimation.buttons.result") }}
+          </b-button>
         </b-col>
         <b-col cols="auto">
           <session-leave-button />
@@ -234,11 +246,12 @@ import { useToast } from "vue-toastification";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import UserStoryTitle from "@/components/UserStoryTitle.vue";
-import { BIconArrowClockwise } from "bootstrap-vue";
+import { BIconArrowClockwise, BIconBarChartFill } from "bootstrap-vue";
 
 export default defineComponent({
   name: "MemberVotePage",
   components: {
+    BIconBarChartFill,
     BIconArrowClockwise,
     UserStoryTitle,
     SessionLeaveButton,
@@ -453,6 +466,13 @@ export default defineComponent({
           autoReveal: this.autoReveal,
         })
       );
+    },
+    sendVotingFinishedMessage() {
+      if (!this.estimateFinished) {
+        this.estimateFinished = true;
+        const endPoint = Constants.webSocketVotingFinishedRoute;
+        this.store.sendViaBackendWS(endPoint);
+      }
     },
   },
 });

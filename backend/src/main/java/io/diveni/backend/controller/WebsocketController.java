@@ -172,10 +172,10 @@ public class WebsocketController {
   }
 
   @MessageMapping("/votingFinished")
-  public synchronized void votingFinished(AdminPrincipal principal) {
+  public synchronized void votingFinished(Principal principal) {
     LOGGER.debug("--> votingFinished()");
     val session =
-        ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID())
+        ControllerUtils.getSessionByPrincipalTypeOrThrowResponse(databaseService, principal)
             .updateSessionState(SessionState.VOTING_FINISHED)
             .selectHighlightedMembers()
             .resetTimerTimestamp();
