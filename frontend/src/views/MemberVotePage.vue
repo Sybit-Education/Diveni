@@ -205,7 +205,11 @@
           />
         </b-col>
       </b-row>
-      <notify-member-component @hostLeft="reactOnHostLeave" @hostJoined="reactOnHostJoin" />
+      <notify-member-component
+        v-if="!memberControl"
+        @hostLeft="reactOnHostLeave"
+        @hostJoined="reactOnHostJoin"
+      />
     </b-overlay>
   </b-container>
 </template>
