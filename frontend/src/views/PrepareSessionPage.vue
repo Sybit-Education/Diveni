@@ -573,6 +573,7 @@ export default defineComponent({
     display: flex;
     flex-direction: column;
     cursor: pointer;
+    color: black;
     border: thin solid;
     border-color: var(--estimateButtonBorder);
     border-radius: $border-radius;
