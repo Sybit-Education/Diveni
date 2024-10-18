@@ -10,14 +10,15 @@
       <div class="list-group list-group-horizontal w-100">
         <div class="position-relative w-100 text-center">
           <b-form-textarea
-            id="titleInputField"
+            :id="'titleInputField_' + idx"
             v-model="userStories[idx].title"
             v-debounce:1s="showGptButtonTitle"
-            class="overflow-auto"
+            class="overflow-auto titleInputField"
             rows="1"
             size="lg"
             :disabled="!host"
             :placeholder="t('page.session.before.userStories.placeholder.userStoryTitle')"
+            @blur="publishChanges(idx)"
           />
           <b-button
             v-if="
@@ -273,7 +274,7 @@ export default defineComponent({
   width: 2em;
 }
 
-#titleInputField {
+.titleInputField {
   width: 100%;
   padding: 1em;
   padding-right: 3em;

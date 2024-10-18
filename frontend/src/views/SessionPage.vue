@@ -254,6 +254,7 @@
           :initial-stories="userStories"
           :show-edit-buttons="true"
           :select-story="true"
+          :host="true"
           :story-mode="userStoryMode"
           :splitted-user-stories="splitted_user_stories"
           :story-to-split-idx="index"
