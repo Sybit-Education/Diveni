@@ -240,13 +240,13 @@
         </div>
       </div>
     </div>
-    <b-row v-if="userStoryMode !== 'NO_US'" class="mt-4">
+    <b-row v-if="userStoryMode !== 'NO_US'">
       <b-col>
         <user-story-sum-component />
       </b-col>
     </b-row>
-    <b-row v-if="userStoryMode !== 'NO_US'">
-      <b-col v-if="!isMobile" cols="7">
+    <b-row v-if="userStoryMode !== 'NO_US'" class="d-flex flex-wrap">
+      <b-col cols="12" md="5" class="userStories">
         <user-stories
           :key="splitted_user_stories"
           :card-set="voteSet"
@@ -254,6 +254,7 @@
           :initial-stories="userStories"
           :show-edit-buttons="true"
           :select-story="true"
+          :host="true"
           :story-mode="userStoryMode"
           :splitted-user-stories="splitted_user_stories"
           :story-to-split-idx="index"
@@ -275,48 +276,17 @@
           </b-button>
         </div>
       </b-col>
-      <b-col v-else cols="12">
-        <user-stories
-          :key="splitted_user_stories"
-          :card-set="voteSet"
-          :show-estimations="planningStart"
-          :initial-stories="userStories"
-          :show-edit-buttons="true"
-          :select-story="true"
-          :story-mode="userStoryMode"
-          :splitted-user-stories="splitted_user_stories"
-          :story-to-split-idx="index"
-          :has-api-key="hasApiKey"
-          @userStoriesChanged="onUserStoriesChanged"
-          @selectedStory="onSelectedStory($event)"
-          @sendGPTRequest="splitUserStory"
-        />
-        <div v-if="userStoryMode === 'US_JIRA'" class="refreshUserstories">
-          <b-button
-            variant="primary"
-            class="w-100 mb-3"
-            @click="
-              refreshUserStories();
-              $event.target.blur();
-            "
-          >
-            {{ t("page.session.before.refreshStories") }}
-          </b-button>
-        </div>
-      </b-col>
-    </b-row>
-    <b-spinner v-if="showSpinner" variant="primary" class="position-absolute centerSpinner" />
-    <GptModal
-      v-if="showGPTModal"
-      :suggestion-description="alternateDescription"
-      :gpt-mode="descriptionMode"
-      :retry-repaint="updateComponent"
-      @acceptSuggestionDescription="acceptSuggestionDescription"
-      @retry="retrySuggestionDescription"
-      @hideModal="closeModal"
-    />
-    <b-row>
-      <b-col v-if="!isMobile" class="my-5" cols="10">
+      <b-spinner v-if="showSpinner" variant="primary" class="position-absolute centerSpinner" />
+      <GptModal
+        v-if="showGPTModal"
+        :suggestion-description="alternateDescription"
+        :gpt-mode="descriptionMode"
+        :retry-repaint="updateComponent"
+        @acceptSuggestionDescription="acceptSuggestionDescription"
+        @retry="retrySuggestionDescription"
+        @hideModal="closeModal"
+      />
+      <b-col cols="12" md="7">
         <user-story-title
           :alternate-title="alternateTitle"
           :display-ai-option="gptTitleResponse"
@@ -340,35 +310,6 @@
           :gpt-description-response="gptDescriptionResponse"
           :update-component="updateComponent"
           :accepted-stories="acceptedStoriesDescription"
-          :is-jira-selected="isJiraSelected"
-          :has-api-key="hasApiKey"
-          @userStoriesChanged="onUserStoriesChanged"
-          @sendGPTDescriptionRequest="improveDescription"
-        />
-      </b-col>
-      <b-col v-else class="my-5" cols="12">
-        <user-story-title
-          :alternate-title="alternateTitle"
-          :display-ai-option="gptTitleResponse"
-          :host="true"
-          :initial-stories="userStories"
-          :card-set="voteSet"
-          :index="index"
-          :has-api-key="hasApiKey"
-          @userStoriesChanged="onUserStoriesChanged"
-          @improveTitle="improveTitle"
-          @acceptTitle="acceptSuggestionTitle"
-          @adjustTitle="adjustOriginalTitle"
-          @retryTitle="retryImproveTitle"
-          @deleteTitle="deleteTitle"
-          @aiEstimation="aiEstimation"
-        />
-        <user-story-descriptions
-          :initial-stories="userStories"
-          :edit-description="true"
-          :index="index!"
-          :gpt-description-response="gptDescriptionResponse"
-          :update-component="updateComponent"
           :is-jira-selected="isJiraSelected"
           :has-api-key="hasApiKey"
           @userStoriesChanged="onUserStoriesChanged"
