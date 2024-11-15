@@ -297,6 +297,7 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
     fields.put("issuetype", Map.of("id", USER_STORY_ID));
     fields.put("project", Map.of("id", projectID));
     fields.put("summary", story.getTitle());
+    fields.put("description", story.getDescription());
     content.put("fields", fields);
     try {
       JiraOAuthClient jiraOAuthClient = new JiraOAuthClient(JIRA_HOME);
