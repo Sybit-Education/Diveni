@@ -600,20 +600,10 @@ export default defineComponent({
         let response;
         if (doRemove) {
           if (us[idx].id === null) {
-            console.error(idx);
-            console.error(us);
-            console.error(us[idx]);
-            console.error(us[idx].id);
-            console.error("us[idx].id === null");
             response = 204;
           } else {
-            console.error("response = await apiService.deleteUserStory(us[idx].id);");
-            console.error(us);
-            console.error(us[idx]);
-            console.error(us[idx].id);
             response = await apiService.deleteUserStory(us[idx].id);
           }
-          //us.splice(idx, 1);
           doRemove = false;
         } else {
           console.log(`ID: ${us[idx].id}`);
@@ -623,10 +613,9 @@ export default defineComponent({
               this.selectedProject.id
             );
             if (response.status === 200) {
-              console.error("response.data");
-              console.error(response);
               us = this.userStories.map((s) =>
-                s.title === us[idx].title && s.description === us[idx].description ? { ...s, id: response.data }
+                s.title === us[idx].title && s.description === us[idx].description
+                  ? { ...s, id: response.data }
                   : s
               );
               console.log(`assigned id: ${us[idx].id}`);
@@ -648,13 +637,9 @@ export default defineComponent({
           this.toast.error(this.t("session.notification.messages.issueTrackerSynchronizeFailed"));
         }
       }
-      // WS send
-      // if (doRemove) {
-      //   us.splice(idx, 1);
-      // }
       this.store.setUserStories({ stories: us });
       if (this.webSocketIsConnected) {
-        if (this.isJiraSelected && us[idx].description) {
+        if (this.isJiraSelected && us[idx] && us[idx].description) {
           us[idx].description = j2m.to_jira(us[idx].description);
         }
         const endPoint = `${Constants.webSocketAdminUpdatedUserStoriesRoute}`;
