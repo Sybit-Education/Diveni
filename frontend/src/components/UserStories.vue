@@ -246,6 +246,7 @@ export default defineComponent({
     },
     deleteStory(index) {
       this.publishChanges(index, true);
+      this.userStories.splice(index, 1);
     },
     publishChanges(index, remove) {
       if (this.userStories[index] !== undefined) {

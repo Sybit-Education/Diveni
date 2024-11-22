@@ -604,7 +604,6 @@ export default defineComponent({
           } else {
             response = await apiService.deleteUserStory(us[idx].id);
           }
-          us.splice(idx, 1);
           doRemove = false;
         } else {
           console.log(`ID: ${us[idx].id}`);
@@ -638,13 +637,9 @@ export default defineComponent({
           this.toast.error(this.t("session.notification.messages.issueTrackerSynchronizeFailed"));
         }
       }
-      // WS send
-      if (doRemove) {
-        us.splice(idx, 1);
-      }
       this.store.setUserStories({ stories: us });
       if (this.webSocketIsConnected) {
-        if (this.isJiraSelected && us[idx].description) {
+        if (this.isJiraSelected && us[idx] && us[idx].description) {
           us[idx].description = j2m.to_jira(us[idx].description);
         }
         const endPoint = `${Constants.webSocketAdminUpdatedUserStoriesRoute}`;
