@@ -18,7 +18,6 @@
             size="lg"
             :disabled="!host"
             :placeholder="t('page.session.before.userStories.placeholder.userStoryTitle')"
-            @blur="publishChanges(idx)"
           />
           <b-button
             v-if="
