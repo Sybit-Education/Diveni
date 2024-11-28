@@ -307,6 +307,7 @@
           :initial-stories="userStories"
           :edit-description="true"
           :index="index!"
+          :story-mode="userStoryMode"
           :gpt-description-response="gptDescriptionResponse"
           :update-component="updateComponent"
           :accepted-stories="acceptedStoriesDescription"
