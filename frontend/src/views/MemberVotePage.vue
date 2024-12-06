@@ -196,6 +196,7 @@
               :show-estimations="true"
               :initial-stories="userStories"
               :show-edit-buttons="false"
+              :host="false"
               :host-selected-story-index="hostSelectedStoryIndex"
               @selectedStory="onSelectedStory($event)"
             />

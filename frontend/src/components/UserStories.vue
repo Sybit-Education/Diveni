@@ -150,6 +150,7 @@ export default defineComponent({
   props: {
     cardSet: { type: Array, required: true },
     initialStories: { type: Array, required: true },
+    host: { type: Boolean, required: true, default: false },
     showEstimations: { type: Boolean, required: true },
     showEditButtons: { type: Boolean, required: false, default: true },
     hostSelectedStoryIndex: { type: Number, required: false, default: null },
@@ -210,6 +211,14 @@ export default defineComponent({
       };
       this.userStories.push(story);
       this.setUserStoryAsActive(this.userStories.length - 1);
+      this.$nextTick(() => {
+        const inputField = document.getElementById(
+          `titleInputField_${this.userStories.length - 1}`
+        ) as HTMLInputElement;
+        if (inputField && this.host) {
+          inputField.focus();
+        }
+      });
     },
     swapPriority: function () {
       if (!this.filterActive) {
@@ -237,6 +246,7 @@ export default defineComponent({
     },
     deleteStory(index) {
       this.publishChanges(index, true);
+      this.userStories.splice(index, 1);
     },
     publishChanges(index, remove) {
       if (this.userStories[index] !== undefined) {
