@@ -9,11 +9,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Base64;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.google.api.client.util.Base64;
 
 import io.diveni.backend.Utils;
 import io.diveni.backend.model.Project;
@@ -126,7 +126,7 @@ public class JiraCloudService implements ProjectManagementProviderOAuth2 {
     LOGGER.debug("--> getAccessToken()");
     RestTemplate restTemplate = new RestTemplate();
     String credentials = CLIENT_ID + ":" + CLIENT_SECRET;
-    String encodedCredentials = new String(Base64.encodeBase64(credentials.getBytes()));
+    String encodedCredentials = new String(Base64.getEncoder().encode(credentials.getBytes()));
 
     HttpHeaders headers = new HttpHeaders();
     headers.setAccept(List.of(MediaType.APPLICATION_JSON));
