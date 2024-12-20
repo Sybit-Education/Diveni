@@ -16,7 +16,6 @@ import java.security.spec.PKCS8EncodedKeySpec;
 
 import java.util.Base64;
 
-
 public class JiraOAuthTokenFactory {
   protected final String accessTokenUrl;
   protected final String requestTokenUrl;

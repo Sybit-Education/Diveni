@@ -82,7 +82,8 @@ public class AzureDevOpsService implements ProjectManagementProviderOAuth2 {
     headers.setAccept(List.of(MediaType.APPLICATION_JSON));
     headers.setContentType(contentType);
     String token = ":" + accessToken;
-    headers.add("Authorization", "Basic " + new String(Base64.getEncoder().encode(token.getBytes())));
+    headers.add(
+        "Authorization", "Basic " + new String(Base64.getEncoder().encode(token.getBytes())));
     HttpEntity<Object> request = new HttpEntity<>(body, headers);
     LOGGER.debug("<-- executeRequest()");
     return restTemplate.exchange(url, method, request, String.class);
