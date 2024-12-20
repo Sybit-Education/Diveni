@@ -25,6 +25,11 @@ jobs:
         with:
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           ref: ${{ github.event.pull_request.head.ref }}
+      - name: Set up JDK ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@v3
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: 'adopt'
       - name: Format
         if: (github.event.pull_request.head.repo.full_name == github.repository) && (github.actor != 'dependabot[bot]')
         uses: axel-op/googlejavaformat-action@v3
