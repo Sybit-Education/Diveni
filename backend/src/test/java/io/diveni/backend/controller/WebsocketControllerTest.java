@@ -121,7 +121,7 @@ public class WebsocketControllerTest {
 
   private StompSession getAdminSession(String sessionID, String adminID) throws Exception {
     return webSocketStompClient
-        .connect(
+        .connectAsync(
             getWsPath(WS_ADMIN_PATH, sessionID, adminID),
             new StompSessionHandlerAdapter() {
               @Override
@@ -139,7 +139,7 @@ public class WebsocketControllerTest {
 
   private StompSession getMemberSession(String sessionID, String memberID) throws Exception {
     return webSocketStompClient
-        .connect(
+        .connectAsync(
             getWsPath(WS_MEMBER_PATH, sessionID, memberID), new StompSessionHandlerAdapter() {})
         .get();
   }

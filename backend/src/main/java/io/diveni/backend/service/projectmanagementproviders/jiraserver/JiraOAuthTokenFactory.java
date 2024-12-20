@@ -6,14 +6,16 @@
 package io.diveni.backend.service.projectmanagementproviders.jiraserver;
 
 import com.google.api.client.auth.oauth.OAuthRsaSigner;
-import com.google.api.client.http.apache.ApacheHttpTransport;
-import com.google.api.client.util.Base64;
+import com.google.api.client.http.javanet.NetHttpTransport;
 
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
+
+import java.util.Base64;
+
 
 public class JiraOAuthTokenFactory {
   protected final String accessTokenUrl;
@@ -42,7 +44,7 @@ public class JiraOAuthTokenFactory {
     JiraOAuthGetAccessToken accessToken = new JiraOAuthGetAccessToken(accessTokenUrl);
     accessToken.consumerKey = consumerKey;
     accessToken.signer = getOAuthRsaSigner(privateKey);
-    accessToken.transport = new ApacheHttpTransport();
+    accessToken.transport = new NetHttpTransport();
     accessToken.verifier = secret;
     accessToken.temporaryToken = tmpToken;
     return accessToken;
@@ -65,7 +67,7 @@ public class JiraOAuthTokenFactory {
     JiraOAuthGetAccessToken accessToken = new JiraOAuthGetAccessToken(accessTokenUrl);
     accessToken.consumerKey = consumerKey;
     accessToken.signer = getOAuthRsaSigner(privateKey);
-    accessToken.transport = new ApacheHttpTransport();
+    accessToken.transport = new NetHttpTransport();
     accessToken.temporaryToken = tmpToken;
     return accessToken;
   }
@@ -86,7 +88,7 @@ public class JiraOAuthTokenFactory {
         new JiraOAuthGetTemporaryToken(requestTokenUrl);
     oAuthGetTemporaryToken.consumerKey = consumerKey;
     oAuthGetTemporaryToken.signer = getOAuthRsaSigner(privateKey);
-    oAuthGetTemporaryToken.transport = new ApacheHttpTransport();
+    oAuthGetTemporaryToken.transport = new NetHttpTransport();
     oAuthGetTemporaryToken.callback = "oob";
     return oAuthGetTemporaryToken;
   }
@@ -114,7 +116,7 @@ public class JiraOAuthTokenFactory {
    */
   private PrivateKey getPrivateKey(String privateKey)
       throws NoSuchAlgorithmException, InvalidKeySpecException {
-    byte[] privateBytes = Base64.decodeBase64(privateKey);
+    byte[] privateBytes = Base64.getDecoder().decode(privateKey);
     PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(privateBytes);
     KeyFactory kf = KeyFactory.getInstance("RSA");
     return kf.generatePrivate(keySpec);

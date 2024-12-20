@@ -11,7 +11,6 @@ import io.diveni.backend.model.UserStory;
 import io.diveni.backend.service.projectmanagementproviders.ProjectManagementProviderOAuth2;
 import lombok.Getter;
 import lombok.val;
-import org.apache.tomcat.util.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,6 +31,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Base64;
 
 @Service
 public class AzureDevOpsService implements ProjectManagementProviderOAuth2 {
@@ -82,7 +82,7 @@ public class AzureDevOpsService implements ProjectManagementProviderOAuth2 {
     headers.setAccept(List.of(MediaType.APPLICATION_JSON));
     headers.setContentType(contentType);
     String token = ":" + accessToken;
-    headers.add("Authorization", "Basic " + new String(new Base64().encode(token.getBytes())));
+    headers.add("Authorization", "Basic " + new String(Base64.getEncoder().encode(token.getBytes())));
     HttpEntity<Object> request = new HttpEntity<>(body, headers);
     LOGGER.debug("<-- executeRequest()");
     return restTemplate.exchange(url, method, request, String.class);
