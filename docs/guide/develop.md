@@ -56,6 +56,7 @@ docker run -p 27017:27017 --name mongo -d mongodb/mongodb-community-server
 2. Start backend
    * Open  first terminal and enter these commands:
    * cd /backend
+   * create an file .env in directory backend first. Available env configuration contents: [Available configuration](https://sybit-education.github.io/Diveni/guide/install#available-configuration)
    * gradle bootRun
    * The backend should now be running and accessible at http://localhost:8081
 3. Start frontend
