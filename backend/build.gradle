@@ -26,7 +26,7 @@ dependencies {
     implementation 'com.google.oauth-client:google-oauth-client:1.37.0'
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.4'
     implementation 'com.google.api-client:google-api-client-gson:1.35.2'
-    implementation 'com.google.code.gson:gson:2.11.0'
+    implementation 'com.google.code.gson:gson:2.12.1'
     implementation 'org.springdoc:springdoc-openapi-ui:1.8.0'
     implementation 'org.apache.httpcomponents:httpclient:4.5.14'
     implementation 'org.json:json:20230227'
