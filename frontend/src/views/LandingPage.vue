@@ -8,56 +8,48 @@
     <b-container class="my-5">
       <b-card-group deck class="justify-content-center">
         <landing-page-card
-          :title="$t('page.landing.meeting.new.title')"
-          :description="$t('page.landing.meeting.new.description')"
-          :button-text="$t('page.landing.meeting.new.buttons.start.label')"
+          :title="t('page.landing.meeting.new.title')"
+          :description="t('page.landing.meeting.new.description')"
+          :button-text="t('page.landing.meeting.new.buttons.start.label')"
           :on-click="goToPrepareSessionPage"
+          button-variant="primary"
           class="newSessionCard"
         />
         <landing-page-card
-          :title="$t('page.landing.meeting.join.title')"
-          :description="$t('page.landing.meeting.join.description')"
-          :button-text="$t('page.landing.meeting.join.buttons.start.label')"
+          :title="t('page.landing.meeting.join.title')"
+          :description="t('page.landing.meeting.join.description')"
+          :button-text="t('page.landing.meeting.join.buttons.start.label')"
           :on-click="goToJoinPage"
+          button-variant="secondary"
           class="joinSessionCard"
         />
         <landing-page-card
           v-if="sessionWrapper.session"
-          :title="$t('page.landing.meeting.reconnect.title')"
-          :description="$t('page.landing.meeting.reconnect.description')"
-          :button-text="$t('page.landing.meeting.reconnect.buttons.start.label')"
+          :title="t('page.landing.meeting.reconnect.title')"
+          :description="t('page.landing.meeting.reconnect.description')"
+          :button-text="t('page.landing.meeting.reconnect.buttons.start.label')"
           :on-click="goToSessionPage"
           class="reconnectSessionCard"
         />
       </b-card-group>
     </b-container>
     <AnalyticsDataComponent ref="dataComponent"> </AnalyticsDataComponent>
-    <b-container class="py-5">
-      <div class="parent py-5 px-5">
-        <div class="background py-5"></div>
-        <div class="text">
-          <h1>Remote Planning Poker using DIVENI</h1>
+    <b-container>
+      <div class="parent pb-md-5 px-5">
+        <div class="py-5"></div>
+        <div>
+          <h1 class="text-center">How DIVENI works <b-icon-gear-wide /></h1>
           <b-card-group deck class="py-5">
             <b-card class="pictureCard">
               <b-card-text>
-                <b-img :src="require(`@/assets/SetUpSession.png`)" class="landingPagePictures" />
-              </b-card-text>
-            </b-card>
-            <b-card class="pictureCard">
-              <b-card-text>
-                <b-img :src="require(`@/assets/InviteYourTeam.png`)" class="landingPagePictures" />
-              </b-card-text>
-            </b-card>
-            <b-card class="pictureCard">
-              <b-card-text>
-                <b-img
-                  :src="require(`@/assets/EstimateUserStories.png`)"
-                  class="landingPagePictures"
+                <b-img-lazy
+                  :src="require(`@/assets/SetUpSession.png`)"
+                  width="300"
+                  height="265"
+                  alt="Set Up Session Picture"
                 />
               </b-card-text>
             </b-card>
-          </b-card-group>
-          <b-card-group deck>
             <b-card class="aboutDiveni" title="Set up Session">
               <b-card-text>
                 Create a planning session and select your prefered voting set.
@@ -65,13 +57,18 @@
               <b-card-text>
                 You could import your user stories or connect JIRA to syncronize story points.
               </b-card-text>
-
-              <b-card-sub-title> Connecting to Issue-Tracker </b-card-sub-title>
+              <b-card-sub-title>
+                <a href="https://sybit-education.github.io/Diveni/guide" target="_blank">
+                  Connecting to Issue-Tracker</a
+                >
+              </b-card-sub-title>
               <b-card-text>
                 DIVENI could connect to issue trackers like Azure DevOps, JIRA Server and Cloud to
                 show user stories and update the voted results of your planning poker.
               </b-card-text>
             </b-card>
+          </b-card-group>
+          <b-card-group>
             <b-card class="aboutDiveni" title="Invite your Team">
               <b-card-text> Invite your team using QR-Code, invite link or code. </b-card-text>
               <b-card-text>
@@ -80,6 +77,28 @@
               <b-card-text>
                 If everybody is in the session, you could start estimation. Having defined a time
                 limit this will be used as limit for voting time.
+              </b-card-text>
+            </b-card>
+            <b-card class="pictureCard">
+              <b-card-text>
+                <b-img-lazy
+                  :src="require(`@/assets/InviteYourTeam.png`)"
+                  width="300"
+                  height="265"
+                  alt="Invite Your Team Picture"
+                />
+              </b-card-text>
+            </b-card>
+          </b-card-group>
+          <b-card-group>
+            <b-card class="pictureCard">
+              <b-card-text>
+                <b-img-lazy
+                  :src="require(`@/assets/EstimateUserStories.png`)"
+                  width="300"
+                  height="265"
+                  alt="Estimate User Stories Picture"
+                />
               </b-card-text>
             </b-card>
             <b-card class="aboutDiveni" title="Estimate User Stories">
@@ -95,27 +114,48 @@
           </b-card-group>
         </div>
       </div>
-      <h1 class="mt-5">About DIVENI</h1>
-      <p>DIVENI was initially developed by students of HTWG Constance and is open source now.</p>
-      <p>
+      <h1 class="mt-5 text-center pt-md-5">About DIVENI</h1>
+      <p class="text-center">
+        DIVENI was initially developed by students of HTWG Constance and is open source now.
+      </p>
+      <p class="text-center">
         More information could be found in the
         <a href="https://docs.diveni.io/">documentation</a>.
       </p>
     </b-container>
+    <b-container class="py-3">
+      <h1 class="mt-5 text-center">Connectors</h1>
+    </b-container>
+    <CarouselComponent class="py-5"></CarouselComponent>
+    <DownloadPWAModal />
   </div>
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
 import LandingPageCard from "../components/LandingPageCard.vue";
 import Constants from "../constants";
 import Session from "../model/Session";
 import AnalyticsDataComponent from "../components/AnalyticsDataComponent.vue";
-export default Vue.extend({
+import { useDiveniStore } from "@/store";
+import { useI18n } from "vue-i18n";
+import CarouselComponent from "@/components/CarouselComponent.vue";
+import DownloadPWAModal from "@/components/DownloadPWAModal.vue";
+import { useRouter } from "vue-router";
+
+export default defineComponent({
   name: "LandingPage",
   components: {
+    DownloadPWAModal,
     LandingPageCard,
     AnalyticsDataComponent,
+    CarouselComponent,
+  },
+  setup() {
+    const store = useDiveniStore();
+    const { t } = useI18n();
+    const router = useRouter();
+    return { store, t, router };
   },
   data() {
     return {
@@ -124,6 +164,7 @@ export default Vue.extend({
     };
   },
   created() {
+    this.disconnectFromBackendWS();
     this.checkAdminCookie();
   },
   methods: {
@@ -146,7 +187,7 @@ export default Vue.extend({
               set: Array<string>;
               timerSeconds: number;
               userStories: Array<{
-                id: number | null;
+                id: string | null;
                 title: string;
                 description: string;
                 estimation: string | null;
@@ -156,7 +197,7 @@ export default Vue.extend({
             };
             sessionState: string;
             members: Array<string>;
-            hostVoting: string;
+            hostVoting: boolean;
           };
           this.sessionWrapper = { session };
         } catch (e) {
@@ -166,18 +207,18 @@ export default Vue.extend({
       }
     },
     goToJoinPage() {
-      this.$router.push({ name: "JoinPage" });
+      this.router.push({ name: "JoinPage" });
     },
     goToPrepareSessionPage() {
-      this.$router.push({ name: "PrepareSessionPage" });
+      this.router.push({ name: "PrepareSessionPage" });
     },
     goToSessionPage() {
-      this.$store.commit("setUserStories", {
+      this.store.setUserStories({
         stories: this.sessionWrapper.session.sessionConfig.userStories,
       });
-      this.$router.push({
+      this.router.push({
         name: "SessionPage",
-        params: {
+        state: {
           sessionID: this.sessionWrapper.session.sessionID,
           adminID: this.sessionWrapper.session.adminID,
           voteSetJson: JSON.stringify(this.sessionWrapper.session.sessionConfig.set),
@@ -186,29 +227,26 @@ export default Vue.extend({
           startNewSessionOnMountedString: this.startNewSessionOnMounted.toString(),
           userStoryMode: this.sessionWrapper.session.sessionConfig.userStoryMode,
           hostVoting: this.sessionWrapper.session.hostVoting,
+          rejoined: "false",
         },
       });
+    },
+    disconnectFromBackendWS() {
+      this.store.disconnectFromBackendWS();
     },
   },
 });
 </script>
 
+<!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
 <style lang="scss">
 .newSessionCard {
-  .landingPageCardButton {
-    background-color: var(--primary-button);
-    color: var(--text-primary-color);
-  }
   .card-footer {
     background-color: #52173100; /* So the Footer does not overflow */
   }
 }
 
 .joinSessionCard {
-  .landingPageCardButton {
-    background-color: var(--secondary-button);
-  }
-
   .card-footer {
     background-color: #52173100; /* So the Footer does not overflow */
   }
@@ -216,9 +254,11 @@ export default Vue.extend({
 
 .reconnectSessionCard {
   .landingPageCardButton {
-    background-color: var(--reconnectButton);
+    background-color: var(--reconnectButton) !important;
+    &:hover {
+      background-color: var(--reconnectButtonHovered) !important;
+    }
   }
-
   .card-footer {
     background-color: #52173100; /* So the Footer does not overflow */
   }
@@ -232,17 +272,15 @@ export default Vue.extend({
 }
 
 .aboutDiveni {
-  border-radius: 2rem;
-  background-color: var(--landingPageCardsBackground);
-  box-shadow: 0 0 5px 10px var(--landingPageCardsBackground);
-  border: none;
+  background: transparent !important;
+  border-style: none !important;
+  height: 300px;
+  font-size: large;
+  overflow: auto;
 }
 
-.card-sub-title {
-  color: red;
-}
 .card-title {
-  color: var(--text-primary-color);
+  color: var(--text-primary-color) !important;
 }
 
 .parent {
@@ -251,26 +289,17 @@ export default Vue.extend({
   width: 100%;
 }
 
-.background {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: var(--blurBackGroundColor);
-  filter: blur(10px);
-  z-index: 0;
-  border-radius: 1rem;
-}
-
 .pictureCard {
-  background: transparent;
-  border: none;
+  background: transparent !important;
   align-items: center;
+  box-shadow: none !important;
+  border: none !important;
 }
 
-.landingPagePictures {
-  height: 250px;
-  width: 250px;
+.diveniDescription {
+  font-size: 1.25rem;
+  max-height: 25rem;
+  overflow: auto;
+  width: 35%;
 }
 </style>

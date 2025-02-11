@@ -1,11 +1,13 @@
 /* all variables, see node_modules/bootstrap/scss/_variables.scss */
-
 :root {
+  /*Background Colors*/
   --background-color-primary: #e2e2e2;
   --blurredColour1: #94623400;
   --blurredColour2: rgba(0, 0, 0, 0.219);
   --blurredColour3: rgba(216, 125, 6, 0);
   --blurredColour4: rgba(17, 9, 0, 0);
+  --blurredColour7: #658462;
+  --blurredColour8: rgba(192, 175, 156, 0.4);
 
   /* Bottom */
   --blurredColour5: rgba(6, 1, 8, 0.24);
@@ -14,19 +16,23 @@
   /*other basic stuff*/
   --accent-color: #cacaca;
   --text-primary-color: #222;
+  --text-color-hover: #ffffff;
   --element-size: 6rem;
-  --link-color: #254bb3;
+  --link-color: #2d5ea1;
+  --box-shadow: #cacaca;
+  --btn-border-color: rgb(185, 185, 185);
 
   /*Landing Page*/
   --primary-button: #946234e0;
-  --primary-button-hovered: #9c5b1d;
+  --primary-button-hovered: #cb7421;
   --secondary-button: #658462;
-  --secondary-button-hovered: #4d8a47;
-  --reconnectButton: #822e1c;
-  --reconnectButtonHovered: #9e2e15;
+  --secondary-button-hovered: #43933f;
+  --reconnectButton: #a84f3b;
+  --reconnectButtonHovered: #d53814;
   --pictureGradientEnd: rgba(19, 44, 20, 0.5);
   --landingPageCardsBackground: #e4e4e4;
-  --blurBackGroundColor: rgba(80, 80, 80, 0.219);
+  --blurBackGroundColor: rgba(170, 170, 170, 0.4);
+
   /*Prepare page*/
   --preparePageMainColor: #946234;
   --preparePageInActiveTab: #ffffff;
@@ -35,15 +41,34 @@
   --preparePageImportUserStoriesButton: #30a858;
   --preparePageActiveCardSet: black;
   --preparePageInActiveCardSet: #e27712;
-  --preparePageTimerBackground: #974f0d3d;
+  --preparePageTimerBackground: rgba(192, 175, 156, 0.4);
+  --preparePageNotSelectedBackground: rgba(192, 175, 156, 0.4);
+  --preparePage-wizard-background: rgba(255, 255, 255, 0.5);
+  --preparePage-wizard-status: #da7315;
+  --preparePage-wizard-statusbackground: rgb(255, 255, 255);
+  --preparePage-mode-backround: rgb(238, 238, 238);
+  --preparePage-active-icon-border: #946234e0;
+  --preparePage-hover-icon-border: #658462;
 
   /*Session Page*/
-  --textAreaColour: #c3c7bd;
+  --textAreaColour: rgba(192, 175, 156, 0.4);
   --textAreaColourHovered: #c3c7bdb6;
+  --estimateButtonBorder: #ccd5da;
 
   /*other Stuff*/
   --topNavigationBarColor: rgba(200, 200, 200, 0.75);
-  --popUpMenu: rgb(143, 143, 143);
+  --popUpMenu: rgb(201, 201, 201);
+
+  /*Editor*/
+  --editor-toolbar-switch-bg: #7a777773;
+  --editor-defaultui-container-bg: #3e4b6c;
+
+  /*Ai-Feature*/
+  --text-field: #b4b2b2;
+  --ai-stars: #266aea;
+  --b-modal-background: white;
+  --markConfidentialInformation: #2131aa;
+  --newUserStoryShadow: #575757;
 }
 
 /* Define styles for the root window with dark - mode preference */
@@ -54,6 +79,8 @@
   --blurredColour2: rgba(167, 236, 219, 0.534);
   --blurredColour3: rgba(151, 199, 241, 0.37);
   --blurredColour4: rgba(255, 255, 255, 0.329);
+  --blurredColour7: #42104b;
+  --blurredColour8: rgba(137, 152, 187, 0.4);
 
   /* Bottom */
   --blurredColour5: rgba(211, 167, 236, 0.322);
@@ -62,21 +89,23 @@
   /*other basic stuff*/
   --accent-color: rgba(34, 34, 34, 0.863);
   --text-primary-color: #ffffff;
-  --link-color: #00ffdd;
+  --text-color-hover: #000000;
+  --link-color: #4c93f3;
+  --box-shadow: rgba(137, 152, 187, 0.4);
+  --btn-border-color: rgb(100, 100, 100);
 
   /*Landing Page*/
   --primary-button: #13276d;
-  --primary-button-hovered: #13266dc9;
+  --primary-button-hovered: #0f2fa2;
   --secondary-button: #42104b;
-  --secondary-button-hovered: #42104bb4;
-  --reconnectButton: #033347;
-  --reconnectButtonHovered: #033347bd;
-  --landingPageCardsBackground: #525252;
-  --blurBackGroundColor: #50505069;
+  --secondary-button-hovered: #631975;
+  --reconnectButton: #822e1c;
+  --reconnectButtonHovered: #9e2e15;
+  --landingPageCardsBackground: rgba(75, 75, 75, 0.5);
+  --blurBackGroundColor: rgba(75, 75, 75, 0.50);
   --pictureGradientEnd: rgba(44, 19, 32, 0.5);
 
   /*Prepare Page*/
-
   --preparePageMainColor: #13276d;
   --preparePageInActiveTab: #666565;
   --preparePageInActiveTabHover: #42104b;
@@ -84,23 +113,42 @@
   --preparePageImportUserStoriesButton: #7e5a0c;
   --preparePageActiveCardSet: white;
   --preparePageInActiveCardSet: #e27712;
-  --preparePageTimerBackground: #7ebcc98a;
+  --preparePageTimerBackground: rgba(137, 152, 187, 0.4);
+  --preparePageNotSelectedBackground: rgba(137, 152, 187, 0.4);
+  --preparePage-wizard-background: rgba(80, 96, 199, 0.15);
+  --preparePage-wizard-status: rgb(19, 98, 246);
+  --preparePage-wizard-statusbackground: rgb(255, 255, 255);
+  --preparePage-mode-backround: rgb(205, 236, 255);
+  --preparePage-active-icon-border: #0f32b2;
+  --preparePage-hover-icon-border: #631975;
+
   /*Session Page*/
-  --textAreaColour: #a8e8f65c;
+  --textAreaColour: rgba(137, 152, 187, 0.4);
   --textAreaColourHovered: #a8e8f6b9;
+  --estimateButtonBorder: #ccd5da;
 
   /*other Stuff*/
   --topNavigationBarColor: rgba(34, 34, 34, 0.863);
   --popUpMenu: rgb(201, 201, 201);
+
+  /*Editor*/
+  --editor-toolbar-switch-bg: #7a777773;
+  --editor-defaultui-container-bg: #3e4b6c;
+
+  /*Ai-Feature*/
+  --text-field: #56585d;
+  --ai-stars: #266aea;
+  --b-modal-background: #282C35;
+  --markConfidentialInformation: #2131aa;
+  --newUserStoryShadow: #b0b0b0;
 }
 
-$border-radius:               0.8rem !default;
-$border-radius-lg:            0.9rem !default;
-$border-radius-sm:            1rem !default;
+$border-radius:               0.5rem !default;
+$border-radius-lg:            0.5rem !default;
+$border-radius-sm:            0.5rem !default;
+$list-group-bg:               transparent;
+$list-group-border-color:     transparent;
 
-// Navs
-$nav-tabs-border-color:             var(--accent-color);
-$nav-tabs-link-hover-border-color:  $nav-tabs-border-color $nav-tabs-border-color $nav-tabs-border-color;
-$nav-tabs-link-active-color:        var(--blurredColour2);
-$nav-tabs-link-active-bg:           var(--blurredColour2);
-$nav-tabs-link-active-border-color: $nav-tabs-link-active-bg $nav-tabs-link-active-bg $nav-tabs-link-active-bg;
+
+
+

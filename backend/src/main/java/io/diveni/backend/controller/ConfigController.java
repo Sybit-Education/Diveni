@@ -1,6 +1,8 @@
 package io.diveni.backend.controller;
 
 import io.diveni.backend.service.projectmanagementproviders.azuredevops.AzureDevOpsService;
+import io.diveni.backend.service.projectmanagementproviders.github.GithubService;
+import io.diveni.backend.service.projectmanagementproviders.gitlab.GitlabService;
 import io.diveni.backend.service.projectmanagementproviders.jiracloud.JiraCloudService;
 import io.diveni.backend.service.projectmanagementproviders.jiraserver.JiraServerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,10 @@ public class ConfigController {
 
   @Autowired private AzureDevOpsService azureDevOpsService;
 
+  @Autowired private GithubService githubService;
+
+  @Autowired private GitlabService gitlabService;
+
   @Value("${LOCALE:en}")
   private String LOCALE;
 
@@ -35,6 +41,8 @@ public class ConfigController {
     issueTrackerConfig.put("jiraCloudAuthorizeUrl", jiraCloudService.getJiraCloudAuthorizeUrl());
     issueTrackerConfig.put(
         "isAzureDevOpsEnabled", Boolean.toString(azureDevOpsService.serviceEnabled()));
+    issueTrackerConfig.put("isGithubEnabled", Boolean.toString(githubService.serviceEnabled()));
+    issueTrackerConfig.put("isGitlabEnabled", Boolean.toString(gitlabService.serviceEnabled()));
     return issueTrackerConfig;
   }
 

@@ -14,11 +14,13 @@
 
 WebApp to do Planning Poker with remote teams using external issue tracker as source of stories.
 
-Supported issue trackers:
+Supported issue trackers/platforms:
 
 - Atlassian JIRA on premise
 - Atlassian JIRA Cloud
 - Microsoft Azure DevOps
+- GitHub
+- GitLab
 - More connectors are planned
 
 ## Read more
@@ -42,6 +44,10 @@ How to contribute:
 7) Have fun and learn new things
 
 Happy coding 🚀
+
+### Hacktoberfest 2023
+Many thanks all contributors supporting us during Hacktoberfest 2023!
+We are happy to announce that we had **20 PRs** where **15 PRs** have been merged successful during Hacktoberfest 🚀 
 
 ### Hacktoberfest 2022
 
@@ -77,8 +83,20 @@ docker-compose up -d
 ```shell
 docker-compose -f docker-compose.dev.yml up --build -d
 ```
+---
 
 ### Run Diveni locally
+
+- create an file ``.env`` in directory ``backend`` first with the following contents:
+```
+#URL the server is running on
+SERVER_URL=http://localhost:8080
+
+#The locale the frontend should be set to
+LOCALE=en
+```
+- detailed documentation on the ``.env`` file can be found in the [docs](https://github.com/Sybit-Education/Diveni/blob/main/docs/guide/install.md) (e.g., available configurations for adding issue trackers)
+  
 
 #### Frontend
 - npm, vue2

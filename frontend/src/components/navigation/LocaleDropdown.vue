@@ -1,27 +1,43 @@
 <template>
-  <b-nav-item-dropdown :text="locales[$i18n.locale]" right>
-    <b-dropdown-item
-      v-for="(locale, key) in locales"
-      :key="key"
-      :active="$i18n.locale === key ? true : false"
-      class="text-light"
-      @click="setLocale(key)"
-      >{{ locale }}</b-dropdown-item
-    >
-    <hr />
-    <b-dropdown-item href="https://crowdin.com/project/diveni">
-      {{ $t("general.licenses.translations") }}
-    </b-dropdown-item>
-  </b-nav-item-dropdown>
+  <ul style="list-style-type: none; padding: 0">
+    <b-nav-item-dropdown :text="locales[currentLocale]" right>
+      <ul style="list-style-type: disc">
+        <b-dropdown-item
+          v-for="(locale, key) in locales"
+          :key="key"
+          :active="currentLocale === key"
+          class="text-light"
+          @click="setLocale(key)"
+        >
+          {{ locale }}
+        </b-dropdown-item>
+      </ul>
+      <b-dropdown-divider></b-dropdown-divider>
+      <b-dropdown-item href="https://crowdin.com/project/diveni">
+        {{ t("general.licenses.translations") }}
+      </b-dropdown-item>
+    </b-nav-item-dropdown>
+  </ul>
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent, ref } from "vue";
+import { useI18n } from "vue-i18n";
 
-export default Vue.extend({
+export default defineComponent({
   name: "LocaleDropdown",
-  data() {
+  setup() {
+    const { t, locale } = useI18n();
+    const currentLocale = ref(locale.value);
+
+    const setLocale = (newLocale: string) => {
+      locale.value = newLocale;
+      currentLocale.value = newLocale;
+      localStorage.setItem("locale", newLocale);
+    };
+
     return {
+      t,
       locales: {
         de: "Deutsch",
         en: "English",
@@ -32,13 +48,9 @@ export default Vue.extend({
         pt: "Português",
         uk: "українська",
       },
+      currentLocale,
+      setLocale,
     };
-  },
-  methods: {
-    setLocale(locale: string) {
-      this.$i18n.locale = locale;
-      localStorage.setItem("locale", locale);
-    },
   },
 });
 </script>

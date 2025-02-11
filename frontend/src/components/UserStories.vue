@@ -9,12 +9,12 @@
           id="search"
           v-model="input"
           type="text"
-          :placeholder="$t('page.session.before.userStories.placeholder.searchUserStories')"
+          :placeholder="t('page.session.before.userStories.placeholder.searchUserStories')"
           @input="swapPriority"
         />
       </b-input-group>
     </div>
-    <b-card-group id="userStoryBlock" class="my-3">
+    <b-card-group id="userStoryBlock" class="my-2 overflow-auto">
       <b-list-group-item
         v-for="(story, index) of userStories"
         id="userStoryRow"
@@ -28,6 +28,7 @@
       >
         <b-button
           v-if="showEditButtons"
+          variant="primary"
           :class="story.isActive ? 'selectedStory' : 'outlineColorStory'"
           size="sm"
           @click="
@@ -46,15 +47,24 @@
         >
           <b-icon-arrow-right />
         </b-button>
-
+        <b-button
+          v-if="showEditButtons && hasApiKey"
+          v-show="userStories[index].title !== '' && userStories[index].description !== ''"
+          id="stars"
+          @click="
+            selectedStoryIndex = index;
+            showPrivacyModal = true;
+          "
+        >
+          <BIconStars />
+        </b-button>
         <b-form-input
           id="userStoryTitles"
           v-model="story.title"
           class="mx-1 w-100 shadow-none"
           readonly
           size="sm"
-          :placeholder="$t('page.session.before.userStories.placeholder.userStoryTitle')"
-          @blur="publishChanges"
+          :placeholder="t('page.session.before.userStories.placeholder.userStoryTitle')"
         />
 
         <b-badge id="badge" class="p-2">
@@ -74,15 +84,15 @@
 
     <b-button
       v-if="userStories.length < 1 && showEditButtons && !filterActive"
-      class="w-100 mb-3"
-      variant="secondary"
+      class="w-100 mb-1"
+      variant="primary"
       @click="
         addUserStory();
         $event.target.blur();
       "
     >
       <b-icon-plus />
-      {{ $t("page.session.before.userStories.button.addFirstUserStory") }}
+      {{ t("page.session.before.userStories.button.addFirstUserStory") }}
     </b-button>
 
     <b-alert
@@ -90,35 +100,68 @@
       show
       variant="warning"
     >
-      {{ $t("page.session.before.userStories.filter.noStoryFound") }}
+      {{ t("page.session.before.userStories.filter.noStoryFound") }}
     </b-alert>
 
     <b-button
       v-if="userStories.length > 0 && showEditButtons && !filterActive"
-      class="w-100 mb-3"
-      variant="secondary"
+      class="w-100 mb-1"
+      variant="primary"
       @click="
         addUserStory();
         $event.target.blur();
       "
     >
       <b-icon-plus />
-      {{ $t("page.session.before.userStories.button.addUserStory") }}
+      {{ t("page.session.before.userStories.button.addUserStory") }}
     </b-button>
+    <PrivacyModal
+      v-if="showPrivacyModal"
+      :current-title="userStories[selectedStoryIndex].title"
+      :current-text="userStories[selectedStoryIndex].description"
+      :is-description="true"
+      @resetShowModal="showPrivacyModal = false"
+      @sendGPTRequest="submitRequest"
+    />
+    <SplitUserStoriesModal
+      v-if="splittedUserStoriesData.length > 0 && !showPrivacyModal"
+      :new-user-stories-list="splittedUserStoriesData"
+      :original-user-story="[userStories[storyToSplitIdx]]"
+      @resetShowModal="
+        showUserStorySplitModal = false;
+        splittedUserStoriesData = [];
+      "
+      @acceptSplitting="acceptSplitting"
+      @retry="retry"
+    />
   </div>
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
 import UserStory from "../model/UserStory";
-export default Vue.extend({
+import { useI18n } from "vue-i18n";
+import PrivacyModal from "@/components/PrivacyModal.vue";
+import SplitUserStoriesModal from "@/components/SplitUserStoriesModal.vue";
+
+export default defineComponent({
   name: "UserStories",
+  components: { SplitUserStoriesModal, PrivacyModal },
   props: {
     cardSet: { type: Array, required: true },
     initialStories: { type: Array, required: true },
+    host: { type: Boolean, required: true, default: false },
     showEstimations: { type: Boolean, required: true },
     showEditButtons: { type: Boolean, required: false, default: true },
     hostSelectedStoryIndex: { type: Number, required: false, default: null },
+    storyMode: { type: String, required: false, default: null },
+    splittedUserStories: { type: Array<UserStory>, required: false, default: [] },
+    storyToSplitIdx: { type: Number, required: false, default: 0 },
+    hasApiKey: { type: Boolean, required: false, default: false },
+  },
+  setup() {
+    const { t } = useI18n();
+    return { t };
   },
   data() {
     return {
@@ -129,6 +172,10 @@ export default Vue.extend({
       input: "",
       filterActive: false,
       savedStories: [] as Array<UserStory>,
+      generatedUUIDs: new Set<number>(),
+      showPrivacyModal: false,
+      showUserStorySplitModal: false,
+      splittedUserStoriesData: [] as Array<UserStory>,
     };
   },
   watch: {
@@ -142,15 +189,21 @@ export default Vue.extend({
   },
   mounted() {
     this.userStories = this.initialStories as Array<UserStory>;
+    this.splittedUserStoriesData = this.splittedUserStories;
   },
   methods: {
     setUserStoryAsActive(index) {
-      this.selectedStoryIndex = index;
-      this.$emit("selectedStory", index);
+      if (index >= this.userStories.length) {
+        console.log("Pressed after deletion");
+      } else {
+        this.selectedStoryIndex = index;
+        this.$emit("selectedStory", index);
+        this.publishChanges(index, false);
+      }
     },
     addUserStory() {
       const story: UserStory = {
-        id: null,
+        id: this.storyMode === "US_JIRA" ? null : this.generateNumericUUID().toString(),
         title: "",
         description: "",
         estimation: null,
@@ -158,6 +211,14 @@ export default Vue.extend({
       };
       this.userStories.push(story);
       this.setUserStoryAsActive(this.userStories.length - 1);
+      this.$nextTick(() => {
+        const inputField = document.getElementById(
+          `titleInputField_${this.userStories.length - 1}`
+        ) as HTMLInputElement;
+        if (inputField && this.host) {
+          inputField.focus();
+        }
+      });
     },
     swapPriority: function () {
       if (!this.filterActive) {
@@ -165,7 +226,7 @@ export default Vue.extend({
       }
       this.userStories = this.savedStories;
       if (this.input !== "") {
-        let filteredUserStories: UserStory[] = [];
+        const filteredUserStories: UserStory[] = [];
         this.userStories.forEach((userStory) => {
           if (userStory.title.toLowerCase().includes(this.input.toLowerCase())) {
             filteredUserStories.push(userStory);
@@ -174,23 +235,25 @@ export default Vue.extend({
         if (filteredUserStories.length > 0) {
           this.filterActive = true;
           this.userStories = filteredUserStories;
-          this.publishChanges(null, false);
         } else {
           this.filterActive = true;
           this.userStories = [];
-          this.publishChanges(null, false);
         }
       } else {
         this.filterActive = false;
         this.userStories = this.savedStories;
-        this.publishChanges(null, false);
       }
     },
     deleteStory(index) {
       this.publishChanges(index, true);
+      this.userStories.splice(index, 1);
     },
     publishChanges(index, remove) {
-      this.$emit("userStoriesChanged", { us: this.userStories, idx: index, doRemove: remove });
+      if (this.userStories[index] !== undefined) {
+        if (this.userStories[index].title !== "" || remove) {
+          this.$emit("userStoriesChanged", { us: this.userStories, idx: index, doRemove: remove });
+        }
+      }
     },
     markUserStory(index) {
       const stories = this.userStories.map((s) => ({
@@ -204,45 +267,50 @@ export default Vue.extend({
       this.userStories = stories;
       this.publishChanges(index, false);
     },
+    generateNumericUUID() {
+      let uuid: number;
+      do {
+        uuid = Math.floor(Math.random() * 1e15) + Date.now();
+      } while (this.generatedUUIDs.has(uuid));
+      this.generatedUUIDs.add(uuid);
+      return uuid;
+    },
+    submitRequest({ confidentialData, language }) {
+      this.$emit("sendGPTRequest", {
+        confidentialData: confidentialData,
+        language: language,
+        retry: false,
+      });
+    },
+    acceptSplitting({ newUserStories }) {
+      newUserStories.map((us) => this.userStories.push(us));
+      this.publishChanges(this.storyToSplitIdx, true);
+      if (this.storyMode === "US_JIRA") {
+        let count = newUserStories.length;
+        newUserStories.forEach(() => {
+          this.publishChanges(this.userStories.length - count, false);
+          count = count - 1;
+        });
+      }
+    },
+    retry() {
+      this.$emit("sendGPTRequest", { retry: true });
+    },
   },
 });
 </script>
 
+<!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
 <style lang="scss" scoped>
+#stars {
+  color: var(--ai-stars) !important;
+  background-color: transparent !important;
+  border-style: none;
+  animation: showUp 1s;
+}
+
 #searchIcon {
   rotate: 90deg;
-}
-
-.selectedStory {
-  background-color: transparent;
-  border: none;
-}
-
-.selectedStory:hover {
-  background-color: transparent !important;
-  border: none;
-}
-
-.selectedStory:focus {
-  background-color: transparent !important;
-  border: none;
-  outline: none;
-  box-shadow: none;
-}
-
-.outlineColorStory {
-  background-color: transparent;
-  border: none;
-}
-
-.outlineColorStory:hover {
-  background-color: transparent;
-  border: none;
-}
-
-.outlineColorStory:focus {
-  background-color: transparent !important;
-  border: none;
 }
 
 #userStoryRow {
@@ -251,7 +319,7 @@ export default Vue.extend({
 }
 
 #userStoryBlock {
-  max-height: 200px; /*exactly 4 User Stories tall*/
+  max-height: 205px; /*exactly 4 User Stories tall*/
   border-radius: 1rem;
   overflow: scroll;
   -webkit-overflow-scrolling: touch;
@@ -263,9 +331,10 @@ export default Vue.extend({
   font-size: large;
   border: none;
 }
+
 #userStoryPicture {
-  height: 30px;
-  width: 30px;
+  height: 25px;
+  width: 25px;
 }
 
 #badge {

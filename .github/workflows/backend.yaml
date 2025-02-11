@@ -14,7 +14,7 @@ env:
 jobs:
   formatting:
     name: Formatting
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout
         if: github.event_name != 'pull_request'
@@ -25,8 +25,13 @@ jobs:
         with:
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           ref: ${{ github.event.pull_request.head.ref }}
+      - name: Set up JDK ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@v3
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: 'adopt'
       - name: Format
-        if: github.event.pull_request.head.repo.full_name == github.repository
+        if: (github.event.pull_request.head.repo.full_name == github.repository) && (github.actor != 'dependabot[bot]')
         uses: axel-op/googlejavaformat-action@v3
         with:
           args: "--skip-sorting-imports --replace"
@@ -43,7 +48,7 @@ jobs:
 
   build:
     name: Build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -59,14 +64,14 @@ jobs:
           build-root-directory: backend
       - name: Upload artifacts
         if: github.event.pull_request.head.repo.full_name == github.repository
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: backend
           path: backend/build
 
   test:
     name: Test
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     permissions:
       checks: write
       contents: read
@@ -94,7 +99,7 @@ jobs:
           echo "branch coverage = ${{ steps.jacoco.outputs.branches }}"
       - name: Upload JaCoCo coverage report
         if: github.event.pull_request.head.repo.full_name == github.repository
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: jacoco-report
           path: backend/build/jacoco-report/

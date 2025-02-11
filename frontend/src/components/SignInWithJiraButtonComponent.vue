@@ -7,7 +7,11 @@
         openModal();
       "
     >
-      {{ $t("session.prepare.step.selection.mode.description.withIssueTracker.buttons.signInWithJira.label") }}
+      {{
+        t(
+          "session.prepare.step.selection.mode.description.withIssueTracker.buttons.signInWithJira.label"
+        )
+      }}
     </b-button>
     <b-modal
       id="modal-verification-code"
@@ -18,7 +22,9 @@
       @ok="handleOk"
     >
       <p>
-        {{ $t("session.prepare.step.selection.mode.description.withIssueTracker.dialog.description") }}
+        {{
+          t("session.prepare.step.selection.mode.description.withIssueTracker.dialog.description")
+        }}
       </p>
       <form ref="form" @submit.stop.prevent="handleSubmit">
         <b-form-group
@@ -32,7 +38,7 @@
             v-model="verificationCode"
             required
             :placeholder="
-              $t(
+              t(
                 'session.prepare.step.selection.mode.description.withIssueTracker.inputs.verificationCode.placeholder'
               )
             "
@@ -45,21 +51,29 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
 import apiService from "@/services/api.service";
+import { useI18n } from "vue-i18n";
 
-export default Vue.extend({
+export default defineComponent({
   name: "SignInWithJiraButtonComponent",
+  setup() {
+    const { t } = useI18n();
+    return { t };
+  },
   data() {
     return {
       token: "",
       verificationCode: "",
       verificationCodeState: false,
+      showVerificationModal: false,
     };
   },
   methods: {
     checkFormValidity() {
-      const valid = (this.$refs.form as Vue & { checkValidity: () => boolean }).checkValidity();
+      const valid = (
+        this.$refs.form as HTMLElement & { checkValidity: () => boolean }
+      ).checkValidity();
       this.verificationCodeState = valid;
       return valid;
     },
@@ -70,7 +84,7 @@ export default Vue.extend({
     },
     openModal() {
       this.$nextTick(() => {
-        this.$bvModal.show("modal-verification-code");
+        this.showVerificationModal = true;
       });
     },
     resetModal() {
@@ -88,7 +102,7 @@ export default Vue.extend({
       }
       await apiService.sendJiraOauth1VerificationCode(this.verificationCode, this.token);
       this.$nextTick(() => {
-        this.$bvModal.hide("modal-verification-code");
+        this.showVerificationModal = false;
       });
     },
   },

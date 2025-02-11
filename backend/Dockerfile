@@ -1,4 +1,4 @@
-FROM gradle:7.5.0 as build-stage
+FROM gradle:8.11.1 as build-stage
 COPY --chown=gradle:gradle . /app/Diveni
 WORKDIR /app/Diveni
 RUN gradle --no-daemon assemble

@@ -19,6 +19,7 @@ import io.diveni.backend.model.notification.Notification;
 import io.diveni.backend.model.notification.NotificationType;
 import io.diveni.backend.service.DatabaseService;
 import io.diveni.backend.service.WebSocketService;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +43,7 @@ public class WebsocketController {
   @Autowired private WebSocketService webSocketService;
 
   @MessageMapping("/registerAdminUser")
-  public void registerAdminUser(AdminPrincipal principal) {
+  public synchronized void registerAdminUser(AdminPrincipal principal) {
     LOGGER.debug("--> registerAdminUser()");
     Session session =
         ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID());
@@ -62,7 +63,7 @@ public class WebsocketController {
   }
 
   @MessageMapping("/registerMember")
-  public void joinMember(MemberPrincipal principal) {
+  public synchronized void joinMember(MemberPrincipal principal) {
     LOGGER.debug("--> joinMember()");
     val session =
         ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID());
@@ -85,7 +86,7 @@ public class WebsocketController {
   }
 
   @MessageMapping("/unregister")
-  public void removeMember(Principal principal) {
+  public synchronized void removeMember(Principal principal) {
     LOGGER.debug("--> removeMember()");
     if (principal instanceof MemberPrincipal) {
       webSocketService.removeMember((MemberPrincipal) principal);
@@ -119,7 +120,7 @@ public class WebsocketController {
   }
 
   @MessageMapping("/kick-member")
-  public void kickMember(AdminPrincipal principal, @Payload String memberID) {
+  public synchronized void kickMember(AdminPrincipal principal, @Payload String memberID) {
     val session =
         ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID())
             .removeMember(memberID);
@@ -131,14 +132,12 @@ public class WebsocketController {
   }
 
   @MessageMapping("/closeSession")
-  public void closeSession(AdminPrincipal principal) {
+  public synchronized void closeSession(AdminPrincipal principal) {
     LOGGER.debug("--> closeSession()");
     val session =
         ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID());
     webSocketService.sendSessionStateToMembers(
         session.updateSessionState(SessionState.SESSION_CLOSED));
-    webSocketService.getSessionPrincipals(session.getSessionID()).memberPrincipals().stream()
-        .forEach(memberP -> removeMember(memberP));
     webSocketService.removeSession(session);
     databaseService.deleteSession(session);
     LOGGER.debug("<-- closeSession()");
@@ -154,8 +153,11 @@ public class WebsocketController {
   }
 
   @MessageMapping("/startVoting")
-  public void startEstimation(AdminPrincipal principal, @Payload Boolean stateOfHostVoting) {
+  public synchronized void startEstimation(AdminPrincipal principal, @Payload String message) {
     LOGGER.debug("--> startEstimation()");
+    JSONObject jsonObject = new JSONObject(message);
+    boolean stateOfHostVoting = jsonObject.getBoolean("hostVoting");
+    boolean autoReveal = jsonObject.getBoolean("autoReveal");
     val session =
         ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID())
             .updateSessionState(SessionState.START_VOTING)
@@ -164,13 +166,13 @@ public class WebsocketController {
             .setTimerTimestamp(Utils.getTimestampISO8601(new Date()));
     databaseService.saveSession(session);
     webSocketService.sendMembersHostVoting(session);
-    webSocketService.sendSessionStateToMembers(session);
+    webSocketService.sendSessionStateToMembersWithAutoReveal(session, autoReveal);
     webSocketService.sendTimerStartMessage(session, session.getTimerTimestamp());
     LOGGER.debug("<-- startEstimation()");
   }
 
   @MessageMapping("/votingFinished")
-  public void votingFinished(AdminPrincipal principal) {
+  public synchronized void votingFinished(AdminPrincipal principal) {
     LOGGER.debug("--> votingFinished()");
     val session =
         ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID())
@@ -187,34 +189,43 @@ public class WebsocketController {
   }
 
   @MessageMapping("/vote/admin")
-  public synchronized void processVoteAdmin(@Payload String vote, AdminPrincipal admin) {
+  public synchronized void processVoteAdmin(
+      @Payload String message, AdminPrincipal admin) { // add Payload
     LOGGER.debug("--> processVoteAdmin()");
+    JSONObject jsonObject = new JSONObject(message);
+    String vote = jsonObject.getString("vote");
+    boolean autoReveal = jsonObject.getBoolean("autoReveal");
     val session =
         ControllerUtils.getSessionOrThrowResponse(databaseService, admin.getSessionID())
             .setHostEstimation(vote);
-    // webSocketService.sendMembersUpdate(session);
     databaseService.saveSession(session);
-    if (checkIfAllMembersVoted(session.getMembers(), session)) {
-      votingFinished(new AdminPrincipal(admin.getSessionID(), admin.getAdminID()));
+    if (autoReveal) {
+      if (checkIfAllMembersVoted(session.getMembers(), session)) {
+        votingFinished(new AdminPrincipal(admin.getSessionID(), admin.getAdminID()));
+      }
     }
     LOGGER.debug("<-- processVoteAdmin()");
   }
 
   @MessageMapping("/vote")
-  public synchronized void processVote(@Payload String vote, MemberPrincipal member) {
+  public synchronized void processVote(@Payload String message, MemberPrincipal member) {
     LOGGER.debug("--> processVote()");
+    JSONObject jsonObject = new JSONObject(message);
+    String vote = jsonObject.getString("vote");
+    boolean autoReveal = jsonObject.getBoolean("autoReveal");
     val session =
         ControllerUtils.getSessionByMemberIDOrThrowResponse(databaseService, member.getMemberID())
             .updateEstimation(member.getMemberID(), vote);
     webSocketService.sendMembersUpdate(session);
     databaseService.saveSession(session);
 
-    boolean votingCompleted = checkIfAllMembersVoted(session.getMembers(), session);
-    if (votingCompleted) {
-      votingFinished(
-          new AdminPrincipal(
-              member.getSessionID(),
-              databaseService.getSessionByID(member.getSessionID()).get().getAdminID()));
+    if (autoReveal) {
+      if (checkIfAllMembersVoted(session.getMembers(), session)) {
+        votingFinished(
+            new AdminPrincipal(
+                member.getSessionID(),
+                databaseService.getSessionByID(member.getSessionID()).get().getAdminID()));
+      }
     }
     LOGGER.debug("<-- processVote()");
   }
@@ -229,9 +240,11 @@ public class WebsocketController {
   }
 
   @MessageMapping("/restart")
-  public synchronized void restartVote(
-      AdminPrincipal principal, @Payload Boolean stateOfHostVoting) {
+  public synchronized void restartVote(AdminPrincipal principal, @Payload String message) {
     LOGGER.debug("--> restartVote()");
+    JSONObject jsonObject = new JSONObject(message);
+    boolean stateOfHostVoting = jsonObject.getBoolean("hostVoting");
+    boolean autoReveal = jsonObject.getBoolean("autoReveal");
     val session =
         ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID())
             .updateSessionState(SessionState.START_VOTING)
@@ -241,7 +254,7 @@ public class WebsocketController {
     databaseService.saveSession(session);
     webSocketService.sendMembersUpdate(session);
     webSocketService.sendMembersHostVoting(session);
-    webSocketService.sendSessionStateToMembers(session);
+    webSocketService.sendSessionStateToMembersWithAutoReveal(session, autoReveal);
     webSocketService.sendTimerStartMessage(session, session.getTimerTimestamp());
     webSocketService.sendMembersAdminVote(session);
     LOGGER.debug("<-- restartVote()");
@@ -279,5 +292,17 @@ public class WebsocketController {
     long timeDifference = currentDate.getTime() - startDate.getTime();
     LOGGER.debug("<-- get-timer-value() + " + timeDifference);
     return new ResponseEntity<>(timeDifference, HttpStatus.OK);
+  }
+
+  public boolean isMemberInSession(Principal principal) {
+    LOGGER.debug("--> isMemberInSession()");
+    if (principal instanceof MemberPrincipal) {
+      LOGGER.debug("<-- isMemberInSession()");
+      return databaseService
+          .getSessionByMemberID(((MemberPrincipal) principal).getMemberID())
+          .isPresent();
+    }
+    LOGGER.debug("<-- isMemberInSession(). principal is NOT instanceof MemberPrincipal");
+    return false;
   }
 }

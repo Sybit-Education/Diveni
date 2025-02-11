@@ -11,7 +11,51 @@
       "backend": "Licenses (Backend)",
       "translations": "Improve translation"
     },
-    "feedback": "Feedback"
+    "feedback": "Feedback",
+    "aiFeature": {
+      "optionButtons": {
+        "keep": "Keep",
+        "adjust": "Adjust",
+        "tryAgain": "Try Again",
+        "delete": "Delete",
+        "cancel": "Cancel"
+      },
+      "descriptionButtons": {
+        "description": "Improve Description",
+        "grammar": "Grammar Check",
+        "mark": "Mark important content"
+      },
+      "privacyModal": {
+        "title": "Mark confidential information",
+        "warning": "Warning",
+        "warningInfo" : "Your User Story will be sent to OpenAI's GPT. Mark confidential Information now.",
+        "buttons": {
+          "company": "Companies",
+          "person": "Personal Information",
+          "number": "Number",
+          "add": "Add",
+          "ok": "Ok",
+          "cancel": "Cancel"
+        },
+        "labels": {
+          "english": "English",
+          "german": "German"
+        }
+      },
+      "descriptionModal": {
+        "title": "Alternative Description"
+      },
+      "estimationToast": {
+        "startingText": "Proposed Estimation for ",
+        "endingText": " is: "
+      },
+      "splitUserStoriesModal" : {
+        "title" : "Splitted User Stories",
+        "originalStory" : "Original User Story",
+        "newStories" : "New User Stories",
+        "selectedStory" : "Selected User Story"
+      }
+    }
   },
   "page": {
     "session": {
@@ -150,7 +194,8 @@
             "label": "What's new"
           }
         }
-      }
+      },
+      "install": "Do you want to install Diveni on your Device?"
     },
     "join": {
       "title": "Join the session",
@@ -177,6 +222,15 @@
     "prepare": {
       "title": "Prepare your session:",
       "step": {
+        "wizard": {
+          "wizardNext" : "Next",
+          "wizardBack" : "Back",
+          "wizardDone" : "Create Session",
+          "modeSelection": "Mode Selection",
+          "configurationCardSet": "Configuration \n Card set",
+          "configurationTime/HostVote": "Configuration \n Time & Host Vote",
+          "confirmation": "Confirmation"
+        },
         "selection": {
           "mode": {
             "title": "Select the mode for your User Stories",
@@ -236,6 +290,9 @@
                   "signInWithGithub": {
                     "label": "Sign in with Github"
                   },
+                  "signInWithGitlab": {
+                    "label": "Sign in with Gitlab"
+                  },
                   "selectProject": {
                     "label": "Select your jira project"
                   },
@@ -291,6 +348,9 @@
             "title": "Choose a password if needed",
             "placeholder": "Password (leave empty for unprotected session)"
           }
+        },
+        "confirmation":{
+          "title": "Session Stats"
         }
       },
       "button": {

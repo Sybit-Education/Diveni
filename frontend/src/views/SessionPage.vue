@@ -5,42 +5,61 @@
         <h1>
           {{
             planningStart
-              ? $t("page.session.during.estimation.title")
-              : $t("page.session.before.title")
+              ? t("page.session.during.estimation.title")
+              : t("page.session.before.title")
           }}
         </h1>
       </b-col>
-      <b-col cols="auto">
-        <copy-session-id-popup
-          v-if="planningStart"
-          class="float-end"
-          :session-id="session_sessionID"
-        />
+      <b-col>
+        <b-button
+          v-if="!autoReveal && !planningStart"
+          class="mr-3 autoRevealButtons optionButton"
+          variant="outline-dark"
+          @click="
+            autoReveal = true;
+            $event.target.blur();
+          "
+        >
+          <b-icon-eye-slash-fill class="bIcons" />
+          {{ t("page.session.during.estimation.buttons.autoRevealOff") }}
+        </b-button>
+        <b-button
+          v-if="autoReveal && !planningStart"
+          class="mr-3 autoRevealButtons optionButton"
+          variant="outline-dark"
+          @click="
+            autoReveal = false;
+            $event.target.blur();
+          "
+        >
+          <b-icon-eye-fill class="bIcons" />
+          {{ t("page.session.during.estimation.buttons.autoRevealOn") }}
+        </b-button>
       </b-col>
-      <b-col id="sessionCloseCol" cols="auto">
-        <session-close-button
-          :is-planning-start="planningStart"
-          :user-story-mode="session_userStoryMode"
-        />
+      <b-col cols="auto" class="mr-auto">
+        <copy-session-id-popup v-if="planningStart" class="float-end" :session-id="sessionID" />
+      </b-col>
+      <b-col cols="auto">
+        <session-close-button :is-planning-start="planningStart" :user-story-mode="userStoryMode" />
       </b-col>
     </b-row>
 
     <div v-if="!planningStart">
-      <div id="catGifDiv">
-        <b-img :src="require('@/assets/LoadingCat.gif')" class="catGif" />
-      </div>
       <copy-session-id-popup
-        :text-before-session-i-d="$t('page.session.before.text.beforeID')"
-        :session-id="session_sessionID"
-        :text-after-session-i-d="$t('page.session.before.text.afterID')"
+        :text-before-session-i-d="t('page.session.before.text.beforeID')"
+        :session-id="sessionID"
+        :text-after-session-i-d="t('page.session.before.text.afterID')"
         class="copy-popup"
       />
 
-      <b-row class="d-flex justify-content-center overflow-auto kick-user">
+      <b-row
+        class="d-flex justify-content-center overflow-auto kick-user"
+        :class="isMobile ? 'avatar-maxHeight' : ''"
+      >
         <kick-user-wrapper
           v-for="member of members"
           :key="member.memberID"
-          class="m-4"
+          :class="isMobile ? 'm-4' : 'spaceBetweenAvatar'"
           child="RoundedAvatar"
           :member="member"
         />
@@ -48,14 +67,13 @@
       <b-row>
         <b-col class="text-center">
           <session-start-button
-            :members="members"
-            :host-voting="session_hostVoting"
+            :host-voting="hostVoting"
+            :auto-reveal="autoReveal"
             @clicked="onPlanningStarted"
           />
         </b-col>
       </b-row>
     </div>
-
     <div v-else>
       <b-row class="d-flex justify-content-start pb-3">
         <b-col cols="auto" class="mr-auto optionButtonCol">
@@ -68,7 +86,7 @@
             "
           >
             <BIconArrowClockwise class="bIcons"></BIconArrowClockwise>
-            {{ $t("page.session.during.estimation.buttons.new") }}
+            {{ t("page.session.during.estimation.buttons.new") }}
           </b-button>
           <b-button
             class="mr-3 optionButton"
@@ -79,7 +97,33 @@
             "
           >
             <BIconBarChartFill class="bIcons"></BIconBarChartFill>
-            {{ $t("page.session.during.estimation.buttons.result") }}
+            {{ t("page.session.during.estimation.buttons.result") }}
+          </b-button>
+          <b-button
+            v-if="!autoReveal"
+            class="mr-3 optionButton"
+            variant="outline-dark"
+            :disabled="planningStart && !estimateFinished"
+            @click="
+              autoReveal = true;
+              $event.target.blur();
+            "
+          >
+            <b-icon-eye-slash-fill class="bIcons" />
+            {{ t("page.session.during.estimation.buttons.autoRevealOff") }}
+          </b-button>
+          <b-button
+            v-if="autoReveal"
+            class="mr-3 optionButton"
+            variant="outline-dark"
+            :disabled="planningStart && !estimateFinished"
+            @click="
+              autoReveal = false;
+              $event.target.blur();
+            "
+          >
+            <b-icon-eye-fill class="bIcons" />
+            {{ t("page.session.during.estimation.buttons.autoRevealOn") }}
           </b-button>
         </b-col>
         <b-col cols="auto">
@@ -94,33 +138,38 @@
       </b-row>
 
       <h4 v-if="membersPending.length > 0 && !estimateFinished" class="d-inline">
-        {{ $t("page.session.during.estimation.message.waitingFor") }}
+        {{ t("page.session.during.estimation.message.waitingFor") }}
         {{ membersPending.length }} /
         {{ membersPending.length + membersEstimated.length }}
       </h4>
-      <b-row v-if="!estimateFinished" class="my-2 d-flex justify-content-center flex-wrap">
+
+      <b-row
+        v-if="!estimateFinished"
+        class="d-flex justify-content-center overflow-auto"
+        :class="isMobile ? 'avatar-maxHeight' : ''"
+      >
         <kick-user-wrapper
           v-for="member of membersPending"
           :key="member.memberID"
-          class="mx-2"
+          :class="isMobile ? 'm-4' : 'spaceBetweenAvatar'"
           child="RoundedAvatar"
           :member="member"
         />
       </b-row>
       <hr class="my-5 breakingLine" />
-      <h4 v-if="!session_hostVoting">
-        {{ $t("page.session.during.estimation.message.finished") }}
+      <h4 v-if="!hostVoting">
+        {{ t("page.session.during.estimation.message.finished") }}
         {{ membersEstimated.length }} /
         {{ members.length }}
       </h4>
       <h4 v-else>
         <div v-if="hostEstimation == ''">
-          {{ $t("page.session.during.estimation.message.finished") }}
+          {{ t("page.session.during.estimation.message.finished") }}
           {{ membersEstimated.length }} /
           {{ members.length + 1 }}
         </div>
         <div v-else>
-          {{ $t("page.session.during.estimation.message.finished") }}
+          {{ t("page.session.during.estimation.message.finished") }}
           {{ membersEstimated.length + 1 }} /
           {{ members.length + 1 }}
         </div>
@@ -131,7 +180,7 @@
         style="max-height: 500px"
       >
         <session-admin-card
-          v-if="(safedHostVoting && estimateFinished) || hostEstimation !== ''"
+          v-if="(estimateFinished && hostVoting) || hostEstimation !== ''"
           :current-estimation="hostEstimation"
           :estimate-finished="estimateFinished"
           :highlight="highlightedMembers.includes(adminID) || highlightedMembers.length === 0"
@@ -165,13 +214,13 @@
           }"
         />
         <session-admin-card
-          v-if="(safedHostVoting && estimateFinished) || hostEstimation !== ''"
+          v-if="(estimateFinished && hostVoting) || hostEstimation !== ''"
           :current-estimation="hostEstimation"
           :estimate-finished="estimateFinished"
           :highlight="highlightedMembers.includes(adminID) || highlightedMembers.length === 0"
         />
       </b-row>
-      <div v-if="session_hostVoting && estimateFinished === false">
+      <div v-if="hostVoting && !estimateFinished">
         <div v-if="!estimateFinished">
           <hr class="breakingLine" />
           <h4 class="d-inline">Your Estimation</h4>
@@ -180,6 +229,7 @@
           <b-button
             v-for="item in voteSet"
             :key="item"
+            variant="primary"
             class="activePills m-1"
             pill
             style="width: 60px"
@@ -190,74 +240,80 @@
         </div>
       </div>
     </div>
-    <b-row v-if="session_userStoryMode !== 'NO_US'" class="mt-4">
+    <b-row v-if="userStoryMode !== 'NO_US'">
       <b-col>
         <user-story-sum-component />
       </b-col>
     </b-row>
-    <b-row v-if="session_userStoryMode !== 'NO_US'">
-      <b-col v-if="!isMobile" cols="7">
-        <div v-if="session_userStoryMode === 'US_JIRA'" class="refreshUserstories">
-          <b-button
-            class="w-100 mb-3 refreshButton"
-            @click="
-              refreshUserStories();
-              $event.target.blur();
-            "
-          >
-            {{ $t("page.session.before.refreshStories") }}
-          </b-button>
-        </div>
+    <b-row v-if="userStoryMode !== 'NO_US'" class="d-flex flex-wrap">
+      <b-col cols="12" md="5" class="userStories">
         <user-stories
+          :key="splitted_user_stories"
           :card-set="voteSet"
           :show-estimations="planningStart"
           :initial-stories="userStories"
           :show-edit-buttons="true"
           :select-story="true"
+          :host="true"
+          :story-mode="userStoryMode"
+          :splitted-user-stories="splitted_user_stories"
+          :story-to-split-idx="index"
+          :has-api-key="hasApiKey"
           @userStoriesChanged="onUserStoriesChanged"
           @selectedStory="onSelectedStory($event)"
+          @sendGPTRequest="splitUserStory"
         />
-      </b-col>
-      <b-col v-else cols="12">
-        <div v-if="session_userStoryMode === 'US_JIRA'" class="refreshUserstories">
+        <div v-if="userStoryMode === 'US_JIRA'" class="refreshUserstories">
           <b-button
-            class="w-100 mb-3 refreshButton"
+            variant="primary"
+            class="w-100 mb-3"
             @click="
               refreshUserStories();
               $event.target.blur();
             "
           >
-            {{ $t("page.session.before.refreshStories") }}
+            {{ t("page.session.before.refreshStories") }}
           </b-button>
         </div>
-        <user-stories
-          :card-set="voteSet"
-          :show-estimations="planningStart"
-          :initial-stories="userStories"
-          :show-edit-buttons="true"
-          :select-story="true"
-          @userStoriesChanged="onUserStoriesChanged"
-          @selectedStory="onSelectedStory($event)"
-        />
       </b-col>
-    </b-row>
-    <b-row>
-      <b-col v-if="!isMobile" cols="10">
-        <user-story-descriptions
+      <b-spinner v-if="showSpinner" variant="primary" class="position-absolute centerSpinner" />
+      <GptModal
+        v-if="showGPTModal"
+        :suggestion-description="alternateDescription"
+        :gpt-mode="descriptionMode"
+        :retry-repaint="updateComponent"
+        @acceptSuggestionDescription="acceptSuggestionDescription"
+        @retry="retrySuggestionDescription"
+        @hideModal="closeModal"
+      />
+      <b-col cols="12" md="7">
+        <user-story-title
+          :alternate-title="alternateTitle"
+          :display-ai-option="gptTitleResponse"
+          :host="true"
+          :initial-stories="userStories"
           :card-set="voteSet"
+          :index="index!"
+          :has-api-key="hasApiKey"
+          @userStoriesChanged="onUserStoriesChanged"
+          @improveTitle="improveTitle"
+          @acceptTitle="acceptSuggestionTitle"
+          @adjustTitle="adjustOriginalTitle"
+          @retryTitle="retryImproveTitle"
+          @deleteTitle="deleteTitle"
+          @aiEstimation="aiEstimation"
+        />
+        <user-story-descriptions
           :initial-stories="userStories"
           :edit-description="true"
-          :index="index"
+          :index="index!"
+          :gpt-description-response="gptDescriptionResponse"
+          :update-component="updateComponent"
+          :accepted-stories="acceptedStoriesDescription"
+          :is-jira-selected="isJiraSelected"
+          :has-api-key="hasApiKey"
           @userStoriesChanged="onUserStoriesChanged"
-        />
-      </b-col>
-      <b-col v-else cols="12">
-        <user-story-descriptions
-          :card-set="voteSet"
-          :initial-stories="userStories"
-          :edit-description="true"
-          :index="index"
-          @userStoriesChanged="onUserStoriesChanged"
+          @sendGPTDescriptionRequest="improveDescription"
         />
       </b-col>
     </b-row>
@@ -266,7 +322,6 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
 import Constants from "../constants";
 import Member from "../model/Member";
 import UserStories from "../components/UserStories.vue";
@@ -277,16 +332,26 @@ import confetti from "canvas-confetti";
 import NotifyHostComponent from "../components/NotifyHostComponent.vue";
 import apiService from "@/services/api.service";
 import UserStorySumComponent from "@/components/UserStorySum.vue";
-import Project from "../model/Project";
 import KickUserWrapper from "@/components/KickUserWrapper.vue";
 import SessionCloseButton from "@/components/actions/SessionCloseButton.vue";
 import SessionStartButton from "@/components/actions/SessionStartButton.vue";
 import { BIconArrowClockwise, BIconBarChartFill } from "bootstrap-vue";
+import { defineComponent } from "vue";
+import { useDiveniStore } from "@/store";
+import { useToast } from "vue-toastification";
+import { useI18n } from "vue-i18n";
 import SessionAdminCard from "@/components/SessionAdminCard.vue";
+import GptModal from "@/components/GptModal.vue";
+import UserStoryTitle from "@/components/UserStoryTitle.vue";
+import j2m from "jira2md";
+import UserStory from "@/model/UserStory";
+import { useRouter } from "vue-router";
 
-export default Vue.extend({
+export default defineComponent({
   name: "SessionPage",
   components: {
+    UserStoryTitle,
+    GptModal,
     SessionStartButton,
     SessionCloseButton,
     KickUserWrapper,
@@ -300,33 +365,25 @@ export default Vue.extend({
     BIconBarChartFill,
     SessionAdminCard,
   },
-  props: {
-    adminID: { type: String, required: false, default: undefined },
-    sessionID: { type: String, required: false, default: undefined },
-    voteSetJson: { type: String, required: false, default: undefined },
-    sessionState: { type: String, required: false, default: undefined },
-    timerSecondsString: { type: String, required: false, default: undefined },
-    hostVoting: { type: String, required: true },
-    startNewSessionOnMountedString: {
-      type: String,
-      required: false,
-      default: "false",
-    },
-    userStoryMode: { type: String, required: false, default: undefined },
-    rejoined: { type: String, required: false, default: "true" },
+  setup() {
+    const store = useDiveniStore();
+    const toast = useToast();
+    const { t } = useI18n();
+    const router = useRouter();
+    return { store, toast, t, router };
   },
   data() {
     return {
-      //props copy
-      session_adminID: "",
-      session_sessionID: "",
-      session_voteSetJson: "",
-      session_sessionState: "",
-      session_timerSecondsString: "",
-      session_userStoryMode: "",
-      session_hostVoting: false,
-      //data
-      index: 0,
+      sessionID: history.state.sessionID,
+      adminID: history.state.adminID,
+      voteSetJson: history.state.voteSetJson,
+      sessionState: history.state.sessionState,
+      timerSecondsString: history.state.timerSecondsString,
+      startNewSessionOnMountedString: history.state.startNewSessionOnMountedString,
+      userStoryMode: history.state.userStoryMode,
+      hostVoting: history.state.hostVoting as boolean,
+      rejoined: history.state.rejoined,
+      index: null as number | null,
       stageLabelReady: "Ready",
       stageLabelWaiting: "Waiting room",
       planningStart: false,
@@ -336,24 +393,50 @@ export default Vue.extend({
       estimateFinished: false,
       session: {},
       hostEstimation: "",
-      safedHostVoting: false,
+      autoReveal: false,
+      //needed for jira converter
+      isJiraSelected: history.state.isJiraSelected as boolean,
+      //generell needed for GPT usage
+      showGPTModal: false,
+      gptMode: "",
+      hasApiKey: false,
+      // needed for title + anti spam
+      gptTitleResponse: false,
+      alternateTitle: "",
+      //needed for description + anti spam
+      gptDescriptionResponse: false,
+      alternateDescription: "",
+      descriptionMode: "",
+      updateComponent: false,
+      acceptedStoriesDescription: [] as Array<{
+        storyID: string | null;
+        issueType: string;
+      }>,
+      showSpinner: false,
+      // needed for privacy feature
+      confidentialData: {} as Map<string, string>,
+      // needed for multi-language GPT
+      userStoryLanguage: "",
+      // needed for splitting user stories
+      splitted_user_stories: [] as Array<UserStory>,
+      language: "",
     };
   },
   computed: {
-    selectedProject(): Project {
-      return this.$store.state.selectedProject;
+    selectedProject() {
+      return this.store.selectedProject;
     },
     userStories() {
-      return this.$store.state.userStories;
+      return this.store.userStories;
     },
     members() {
-      return this.$store.state.members;
+      return this.store.members;
     },
     webSocketIsConnected() {
-      return this.$store.state.webSocketConnected;
+      return this.store.webSocketConnected;
     },
     highlightedMembers() {
-      return this.$store.state.highlightedMembers;
+      return this.store.highlightedMembers;
     },
     membersPending(): Member[] {
       return this.members.filter((member: Member) => member.currentEstimation === null);
@@ -362,7 +445,7 @@ export default Vue.extend({
       return this.members.filter((member: Member) => member.currentEstimation !== null);
     },
     timerTimestamp() {
-      return this.$store.state.timerTimestamp ? this.$store.state.timerTimestamp : "";
+      return this.store.timerTimestamp ? this.store.timerTimestamp : "";
     },
     isMobile() {
       return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
@@ -377,19 +460,14 @@ export default Vue.extend({
         setTimeout(() => {
           this.registerAdminPrincipalOnBackend();
           this.subscribeWSMemberUpdated();
-          this.requestMemberUpdate();
           this.subscribeOnTimerStart();
-          if (this.rejoined === "false") {
-            this.subscribeWSNotification();
-          }
+          this.subscribeWSNotification();
           if (this.startNewSessionOnMountedString === "true") {
             this.sendRestartMessage();
           }
-        }, 300);
-        setTimeout(() => {
-          if (this.members.length === 0) {
+          setTimeout(() => {
             this.requestMemberUpdate();
-          }
+          }, 400);
         }, 300);
       }
     },
@@ -403,41 +481,43 @@ export default Vue.extend({
       }
     },
     membersEstimated() {
-      if (this.membersPending.length === 0 && this.membersEstimated.length > 0) {
-        if (this.safedHostVoting && this.hostEstimation !== "") {
+      if (this.membersPending.length === 0 && this.membersEstimated.length > 0 && this.autoReveal) {
+        if (this.hostVoting && this.hostEstimation !== "") {
           this.estimateFinished = true;
-        }
-        if (!this.safedHostVoting) {
+        } else if (!this.hostVoting) {
           this.estimateFinished = true;
         }
       }
     },
   },
   async created() {
-    this.copyPropsToData();
-    this.$store.commit("clearStoreWithoutUserStories");
-    if (!this.session_sessionID || !this.session_adminID) {
+    this.store.clearStoreWithoutUserStories();
+    this.hasApiKey = await apiService.ensureServiceAndApiKey();
+    if (!this.sessionID || !this.adminID) {
       //check for cookie
       await this.checkAdminCookie();
       this.assignSessionToData(this.session);
-      if (this.session_sessionID.length === 0) {
+      if (this.sessionID?.length === 0) {
         this.goToLandingPage();
       } else {
         this.handleReload();
       }
     }
-    this.timerCountdownNumber = parseInt(this.session_timerSecondsString, 10);
+    this.timerCountdownNumber = parseInt(this.timerSecondsString ?? "0", 10);
     window.addEventListener("beforeunload", this.sendUnregisterCommand);
   },
   mounted() {
-    if (this.session_voteSetJson) {
-      this.voteSet = JSON.parse(this.session_voteSetJson);
+    if (this.rejoined === "false") {
+      this.connectToWebSocket();
     }
-    this.connectToWebSocket();
-    if (this.session_sessionState === Constants.memberUpdateCommandStartVoting) {
+    if (this.voteSetJson) {
+      this.voteSet = JSON.parse(this.voteSetJson);
+    }
+    if (this.sessionState === Constants.memberUpdateCommandStartVoting) {
       this.planningStart = true;
-    } else if (this.session_sessionState === Constants.memberUpdateCommandVotingFinished) {
+    } else if (this.sessionState === Constants.memberUpdateCommandVotingFinished) {
       this.planningStart = true;
+      console.log("ON MOUNTED");
       this.estimateFinished = true;
     }
   },
@@ -482,48 +562,33 @@ export default Vue.extend({
         }
       }
     },
-    copyPropsToData() {
-      if (this.adminID) {
-        this.session_adminID = this.adminID;
-        this.session_sessionID = this.sessionID;
-        this.session_sessionState = this.sessionState;
-        this.session_timerSecondsString = this.timerSecondsString;
-        this.session_voteSetJson = this.voteSetJson;
-        this.session_userStoryMode = this.userStoryMode;
-        this.session_hostVoting = String(this.hostVoting).toLowerCase() === "true";
-      }
-    },
     assignSessionToData(session) {
       if (Object.keys(session).length !== 0) {
-        this.session_adminID = session.adminID;
-        this.session_sessionID = session.sessionID;
-        this.session_sessionState = session.sessionState;
-        this.session_timerSecondsString = session.sessionConfig.timerSeconds.toString();
-        this.session_voteSetJson = JSON.stringify(session.sessionConfig.set);
-        this.session_userStoryMode = session.sessionConfig.userStoryMode;
-        this.session_hostVoting = String(session.hostVoting).toLowerCase() === "true";
-        this.$store.commit("setUserStories", {
-          stories: session.sessionConfig.userStories,
-        });
-        this.voteSet = JSON.parse(this.session_voteSetJson);
+        this.adminID = session.adminID;
+        this.sessionID = session.sessionID;
+        this.sessionState = session.sessionState;
+        this.timerSecondsString = session.sessionConfig.timerSeconds.toString();
+        this.voteSetJson = JSON.stringify(session.sessionConfig.set);
+        this.userStoryMode = session.sessionConfig.userStoryMode;
+        this.hostVoting = String(session.hostVoting).toLowerCase() === "true";
+
+        this.store.setUserStories({ stories: session.sessionConfig.userStories });
+        this.voteSet = JSON.parse(this.voteSetJson);
       }
     },
     handleReload() {
       if (
-        this.session_sessionState === Constants.memberUpdateCommandStartVoting ||
-        this.session_sessionState === Constants.memberUpdateCommandVotingFinished
+        this.sessionState === Constants.memberUpdateCommandStartVoting ||
+        this.sessionState === Constants.memberUpdateCommandVotingFinished
       ) {
         this.planningStart = true;
       }
-      if (this.session_sessionState === Constants.memberUpdateCommandVotingFinished) {
+      if (this.sessionState === Constants.memberUpdateCommandVotingFinished) {
         this.estimateFinished = true;
       }
-      this.timerCountdownNumber = parseInt(this.session_timerSecondsString, 10);
+      this.timerCountdownNumber = parseInt(this.timerSecondsString ?? "0", 10);
       //reconnect and reload member
       this.connectToWebSocket();
-      setTimeout(() => {
-        this.subscribeWSNotification();
-      }, 300);
     },
     async onUserStoriesChanged({ us, idx, doRemove }) {
       console.log(`stories: ${us}`);
@@ -531,7 +596,7 @@ export default Vue.extend({
       console.log(`doRemove: ${doRemove}`);
       console.log(`Syncing ${us[idx]}`);
       //Jira sync
-      if (this.session_userStoryMode === "US_JIRA") {
+      if (this.userStoryMode === "US_JIRA") {
         let response;
         if (doRemove) {
           if (us[idx].id === null) {
@@ -539,11 +604,10 @@ export default Vue.extend({
           } else {
             response = await apiService.deleteUserStory(us[idx].id);
           }
-          us.splice(idx, 1);
           doRemove = false;
         } else {
           console.log(`ID: ${us[idx].id}`);
-          if (us[idx].id === null) {
+          if (us[idx].id === null && this.selectedProject?.id) {
             response = await apiService.createUserStory(
               JSON.stringify(us[idx]),
               this.selectedProject.id
@@ -557,149 +621,298 @@ export default Vue.extend({
               console.log(`assigned id: ${us[idx].id}`);
             }
           } else {
+            if (this.isJiraSelected && us[idx].description) {
+              us[idx].description = j2m.to_jira(us[idx].description);
+            }
             response = await apiService.updateUserStory(JSON.stringify(us[idx]));
           }
         }
         if (response.status === 200) {
-          this.$toast.success(
-            this.$t("session.notification.messages.issueTrackerSynchronizeSuccess")
+          this.toast.success(
+            this.t("session.notification.messages.issueTrackerSynchronizeSuccess")
           );
         } else if (response === 204) {
-          this.$toast.info(this.$t("session.notification.messages.issueTrackerNothingChanged"));
+          this.toast.info(this.t("session.notification.messages.issueTrackerNothingChanged"));
         } else {
-          this.$toast.error(this.$t("session.notification.messages.issueTrackerSynchronizeFailed"));
+          this.toast.error(this.t("session.notification.messages.issueTrackerSynchronizeFailed"));
         }
       }
-      // WS send
-      if (doRemove) {
-        us.splice(idx, 1);
-      }
-      this.$store.commit("setUserStories", { stories: us });
+      this.store.setUserStories({ stories: us });
       if (this.webSocketIsConnected) {
+        if (this.isJiraSelected && us[idx] && us[idx].description) {
+          us[idx].description = j2m.to_jira(us[idx].description);
+        }
         const endPoint = `${Constants.webSocketAdminUpdatedUserStoriesRoute}`;
-        this.$store.commit("sendViaBackendWS", {
-          endPoint,
-          data: JSON.stringify(us),
-        });
+        this.store.sendViaBackendWS(endPoint, JSON.stringify(us));
       }
     },
     async refreshUserStories() {
-      const response = await apiService.getUserStoriesFromProject(this.selectedProject.name);
-      this.$store.commit("setUserStories", { stories: response });
+      const response = await apiService.getUserStoriesFromProject(this.selectedProject?.name);
+      this.store.setUserStories({ stories: response });
       if (this.webSocketIsConnected) {
         const endPoint = `${Constants.webSocketAdminUpdatedUserStoriesRoute}`;
-        this.$store.commit("sendViaBackendWS", {
-          endPoint,
-          data: JSON.stringify(response),
-        });
-      }
-    },
-    async onSynchronizeJira({ story, doRemove }) {
-      if (this.session_userStoryMode === "US_JIRA") {
-        let response;
-        if (doRemove) {
-          response = await apiService.deleteUserStory(story.id);
-        } else {
-          console.log(`ID: ${story.id}`);
-          if (story.id === null) {
-            response = await apiService.createUserStory(
-              JSON.stringify(story),
-              this.selectedProject.id
-            );
-            if (response.status === 200) {
-              const updatedStories = this.userStories.map(
-                (s) => s.title === story.title && s.description === story.description
-              );
-              this.$store.commit("setUserStories", updatedStories);
-            }
-          } else {
-            response = await apiService.updateUserStory(JSON.stringify(story));
-          }
-        }
-        if (response.status === 200) {
-          this.$toast.success(
-            this.$t("session.notification.messages.issueTrackerSynchronizeSuccess")
-          );
-        } else {
-          this.$toast.error(this.$t("session.notification.messages.issueTrackerSynchronizeFailed"));
-        }
+        this.store.sendViaBackendWS(endPoint, JSON.stringify(response));
       }
     },
     onSelectedStory($event) {
-      if (this.planningStart) {
+      if (this.planningStart && $event != null) {
         const endPoint = Constants.webSocketAdminSelectedUserStoryRoute;
-        this.$store.commit("sendViaBackendWS", { endPoint, data: $event });
+        this.store.sendViaBackendWS(endPoint, $event);
       }
       this.index = $event;
     },
     connectToWebSocket() {
-      const url = `${Constants.backendURL}/connect?sessionID=${this.session_sessionID}&adminID=${this.session_adminID}`;
-      this.$store.commit("connectToBackendWS", url);
+      const url = `${Constants.backendURL}/connect?sessionID=${this.sessionID}&adminID=${this.adminID}`;
+      this.store.connectToBackendWS(url);
     },
     registerAdminPrincipalOnBackend() {
       const endPoint = Constants.webSocketRegisterAdminUserRoute;
-      this.$store.commit("sendViaBackendWS", { endPoint });
+      this.store.sendViaBackendWS(endPoint);
     },
     subscribeWSMemberUpdated() {
-      this.$store.commit("subscribeOnBackendWSAdminUpdate");
+      this.store.subscribeOnBackendWSAdminUpdate();
     },
     subscribeOnTimerStart() {
-      this.$store.commit("subscribeOnBackendWSTimerStart");
+      this.store.subscribeOnBackendWSTimerStart();
     },
     requestMemberUpdate() {
       const endPoint = Constants.webSocketGetMemberUpdateRoute;
-      this.$store.commit("sendViaBackendWS", { endPoint });
+      this.store.sendViaBackendWS(endPoint);
     },
     subscribeWSNotification() {
-      this.$store.commit("subscribeOnBackendWSNotify");
+      this.store.subscribeOnBackendWSNotify();
     },
     sendUnregisterCommand() {
       const endPoint = `${Constants.webSocketUnregisterRoute}`;
-      this.$store.commit("sendViaBackendWS", { endPoint, data: null });
-      this.$store.commit("clearStore");
+      this.store.sendViaBackendWS(endPoint);
+      this.store.clearStore();
     },
     sendVotingFinishedMessage() {
       if (!this.estimateFinished) {
-        const endPoint = Constants.webSocketVotingFinishedRoute;
-        this.$store.commit("sendViaBackendWS", { endPoint });
         this.estimateFinished = true;
+        const endPoint = Constants.webSocketVotingFinishedRoute;
+        this.store.sendViaBackendWS(endPoint);
       }
     },
     sendRestartMessage() {
       this.estimateFinished = false;
       this.hostEstimation = "";
-      this.safedHostVoting = this.session_hostVoting;
       const endPoint = Constants.webSocketRestartPlanningRoute;
-      this.$store.commit("sendViaBackendWS", { endPoint, data: this.session_hostVoting });
+      this.store.sendViaBackendWS(
+        endPoint,
+        JSON.stringify({
+          hostVoting: this.hostVoting,
+          autoReveal: this.autoReveal,
+        })
+      );
     },
     goToLandingPage() {
-      this.$router.push({ name: "LandingPage" });
+      this.router.push({ name: "LandingPage" });
     },
     onPlanningStarted() {
       this.planningStart = true;
-      this.safedHostVoting = this.session_hostVoting;
+      this.onSelectedStory(this.index);
     },
     vote(vote: string) {
       this.hostEstimation = vote;
       const endPoint = `${Constants.webSocketVoteRouteAdmin}`;
-      this.$store.commit("sendViaBackendWS", { endPoint, data: vote });
+      this.store.sendViaBackendWS(
+        endPoint,
+        JSON.stringify({
+          vote: this.hostEstimation,
+          autoReveal: this.autoReveal,
+        })
+      );
+    },
+    async improveTitle({ userStory, confidentialInformation }) {
+      const trimmedStoryTitle = userStory.title.trim();
+      if (trimmedStoryTitle.length > 0) {
+        const response = await apiService.improveTitle(userStory, confidentialInformation);
+        this.alternateTitle = response.data.improvedTitle;
+        this.gptTitleResponse = true;
+      }
+    },
+    acceptSuggestionTitle({ id }) {
+      this.userStories
+        .filter((us) => {
+          us.id !== id;
+        })
+        .map((us) => {
+          us.title = this.alternateTitle;
+        });
+      this.gptTitleResponse = false;
+      this.alternateTitle = "";
+      this.onUserStoriesChanged({ us: this.userStories, idx: this.index, doRemove: false });
+    },
+    adjustOriginalTitle() {
+      this.alternateTitle = "";
+      this.gptTitleResponse = false;
+    },
+    async retryImproveTitle({ id, originalTitle, confidentialData }) {
+      this.gptTitleResponse = false;
+      const userstory = this.userStories.find((us) => us.id === id);
+      if (userstory) {
+        const response = await apiService.retryImproveTitle(
+          userstory,
+          originalTitle,
+          confidentialData
+        );
+        this.alternateTitle = response.data.improvedTitle;
+        this.gptTitleResponse = true;
+      }
+    },
+    deleteTitle() {
+      this.alternateTitle = "";
+      this.gptTitleResponse = false;
+    },
+    async improveDescription({ userStory, description, issue, confidentialData, language }) {
+      this.userStoryLanguage = language;
+      this.confidentialData = confidentialData;
+      this.showSpinner = true;
+      if (issue === "improveDescription") {
+        const response = await apiService.improveDescription(
+          userStory,
+          description,
+          this.confidentialData,
+          language
+        );
+        this.alternateDescription =
+          response.description + response.acceptance_criteria.toString().replaceAll(",", "");
+      }
+      if (issue === "grammar") {
+        const response = await apiService.grammarCheck(
+          userStory,
+          description,
+          this.confidentialData,
+          language
+        );
+        this.alternateDescription = response.description;
+      }
+      if (issue === "markDescription") {
+        this.alternateDescription = await apiService.markDescription(
+          userStory,
+          description,
+          this.confidentialData,
+          language
+        );
+      }
+      this.descriptionMode = issue;
+      this.gptDescriptionResponse = true;
+      this.showSpinner = false;
+      this.showGPTModal = true;
+    },
+    acceptSuggestionDescription({ description, originalText }) {
+      if (originalText) {
+        this.userStories[this.index!].description = this.alternateDescription;
+      } else {
+        this.userStories[this.index!].description = description;
+      }
+      this.onUserStoriesChanged({ us: this.userStories, idx: this.index, doRemove: false });
+      this.updateComponent = !this.updateComponent;
+      this.acceptedStoriesDescription.push({
+        storyID: this.userStories[this.index!].id,
+        issueType: this.descriptionMode,
+      });
+    },
+    async retrySuggestionDescription() {
+      await this.improveDescription({
+        userStory: this.userStories[this.index!],
+        description: this.userStories[this.index!].description,
+        issue: this.descriptionMode,
+        confidentialData: this.confidentialData,
+        language: this.userStoryLanguage,
+      });
+      this.updateComponent = !this.updateComponent;
+    },
+    closeModal() {
+      this.showGPTModal = false;
+      this.gptDescriptionResponse = false;
+    },
+    async aiEstimation({ confidentialData }) {
+      this.confidentialData = confidentialData;
+      this.showSpinner = true;
+      const response = await apiService.estimateUserStory(
+        this.userStories[this.index!],
+        confidentialData,
+        this.voteSet
+      );
+      this.showSpinner = false;
+      this.toast.info(
+        this.t("general.aiFeature.estimationToast.startingText") +
+          '"' +
+          this.userStories[this.index!].title +
+          '"' +
+          this.t("general.aiFeature.estimationToast.endingText") +
+          response,
+        { timeout: false }
+      );
+    },
+    async splitUserStory({ confidentialData: confidentialData, language: language, retry: retry }) {
+      if (!retry) {
+        this.confidentialData = confidentialData;
+        this.language = language;
+        this.showSpinner = true;
+        const response = await apiService.splitUserStory(
+          this.userStories[this.index!],
+          confidentialData,
+          language
+        );
+        this.showSpinner = false;
+        this.splitted_user_stories = response;
+      } else {
+        this.showSpinner = true;
+        const response = await apiService.splitUserStory(
+          this.userStories[this.index!],
+          this.confidentialData,
+          this.language
+        );
+        this.showSpinner = false;
+        this.splitted_user_stories = response;
+      }
     },
   },
 });
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
+<style lang="scss" scoped>
+.centerSpinner {
+  left: 0;
+  right: 10%;
+  top: 57%;
+  bottom: 0;
+  margin: auto;
+  z-index: 3;
+}
+
+.spaceBetweenAvatar {
+  margin-right: 2em;
+  margin-left: 2em;
+}
+
+.avatar-maxHeight {
+  max-height: 500px;
+}
+
 .newVotes {
   text-align: center;
   margin-left: auto;
   margin-right: auto;
 }
 
-.hostVotingButtons {
-  position: relative;
-  top: 50%;
-  transform: translateY(-50%);
+.activePills {
+  &:not(.active) {
+    background-color: var(--preparePageNotSelectedBackground) !important;
+    color: var(--text-primary-color) !important;
+
+    &:hover {
+      color: var(--text-color-hover) !important;
+    }
+
+    &:focus {
+      background-color: var(--primary-button) !important;
+    }
+  }
 }
 
 .optionButtonCol {
@@ -719,14 +932,11 @@ export default Vue.extend({
   max-height: 500px;
 }
 
-#sessionCloseCol {
-  min-width: 200px;
-}
-
 .headers {
   display: flex;
   align-items: center;
   min-height: 20vh;
+  margin-right: 130px;
 }
 
 .bIcons {
@@ -736,8 +946,6 @@ export default Vue.extend({
 
 .optionButton {
   background-color: var(--textAreaColour);
-  color: var(--text-primary-color);
-  border-color: black;
   display: inline-flex;
   align-items: center;
 }
@@ -752,19 +960,8 @@ export default Vue.extend({
   color: var(--text-primary-color) !important;
 }
 
-.refreshButton {
-  border-radius: var(--element-size);
-  color: var(--text-primary-color);
-  background-color: var(--secondary-button);
-}
-
-.refreshButton:hover {
-  color: var(--text-primary-color);
-  background-color: var(--secondary-button-hovered);
-}
-
-.refreshButton:focus {
-  background-color: var(--secondary-button-hovered) !important;
+.optionButton:disabled {
+  background-color: var(--textAreaColourHovered) !important;
   color: var(--text-primary-color) !important;
 }
 
@@ -775,20 +972,5 @@ export default Vue.extend({
 .catGif {
   width: 240px;
   height: 180px;
-}
-
-.activePills {
-  background-color: var(--preparePageMainColor);
-  color: var(--text-primary-color);
-}
-
-.activePills:hover {
-  background-color: var(--preparePageInActiveTabHover);
-  color: var(--text-primary-color);
-}
-
-.activePills:focus {
-  background-color: var(--preparePageInActiveTabHover) !important;
-  color: var(--text-primary-color);
 }
 </style>

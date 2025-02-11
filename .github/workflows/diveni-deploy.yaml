@@ -8,6 +8,7 @@ on:
       - 'backend/**'
       - 'frontend/**'
       - 'proxy/**'
+      - 'ai/**'
       - '.github/workflows/diveni-deploy.yaml'
   workflow_dispatch:
 
@@ -18,7 +19,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        service: [backend, frontend, proxy]
+        service: [ai, backend, frontend, proxy]
     permissions:
       contents: read
       packages: write

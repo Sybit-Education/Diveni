@@ -1,43 +1,44 @@
 <template>
   <div>
-    <b-row class="d-flex justify-content-around">
+    <b-row :class="isMobile ? 'd-flex justify-content-center' : 'd-flex justify-content-around'">
       <b-col
         v-for="item of userStoryMode === jiraTag ? allCardSetsWithJiraMode : allCardSets"
         :key="item.position"
+        :cols="isMobile ? '3' : ''"
         class="card m-2"
         :class="getClasses(item)"
         @click="onCardSetSelected(item)"
       >
         <div class="card-title">
-          {{ item.name }}
+          {{ getTitle(item.position, userStoryMode !== jiraTag) }}
         </div>
         <div class="card-description">
-          {{ item.description }}
+          {{ getDescription(item.position, userStoryMode !== jiraTag) }}
           <div v-if="item.values.length === 0">
             <span id="createSetHint">
               <b-icon-info-circle class="mt-3 me-1" />{{
-                $t("session.prepare.step.selection.cardSet.sets.ownSet.hint.label")
+                t("session.prepare.step.selection.cardSet.sets.ownSet.hint.label")
               }}</span
             >
             <b-popover id="popUp" target="createSetHint" triggers="hover" placement="top">
               <template #title>
-                {{ $t("session.prepare.step.selection.cardSet.sets.ownSet.hint.label") }}
+                {{ t("session.prepare.step.selection.cardSet.sets.ownSet.hint.label") }}
               </template>
               <p>
-                {{ $t("session.prepare.step.selection.cardSet.sets.ownSet.hint.description") }}
+                {{ t("session.prepare.step.selection.cardSet.sets.ownSet.hint.description") }}
               </p>
               <p>
-                {{ $t("session.prepare.step.selection.cardSet.sets.ownSet.hint.example") }}
+                {{ t("session.prepare.step.selection.cardSet.sets.ownSet.hint.example") }}
               </p>
             </b-popover>
           </div>
         </div>
       </b-col>
     </b-row>
-    <b-row v-if="selectedCardSet.name !== ''">
-      <div v-if="selectedCardSet.values.length !== 0" class="text-center mt-3 pill-group">
+    <b-row v-if="changedCardSet.name !== ''">
+      <div v-if="changedCardSet.values.length !== 0" class="text-center mt-3 pill-group">
         <b-button
-          v-for="item in selectedCardSet.values"
+          v-for="item in changedCardSet.values"
           :key="item"
           :class="isActiveCardSetNumber(item)"
           pill
@@ -54,12 +55,12 @@
         <b-col sm="6">
           <b-form-input
             v-model="createSetInput"
-            :placeholder="$t('session.prepare.step.selection.cardSet.sets.ownSet.hint.example')"
+            :placeholder="t('session.prepare.step.selection.cardSet.sets.ownSet.hint.example')"
           ></b-form-input>
         </b-col>
         <b-col sm="6">
           <b-button
-            v-for="item in selectedCardSet.activeValues"
+            v-for="item in changedCardSet.activeValues"
             :key="item"
             :class="isActiveCardSetNumber(item)"
             class="pill"
@@ -74,57 +75,56 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
+import { useI18n } from "vue-i18n";
+import CardSet from "../model/CardSet";
 
-export default Vue.extend({
+export default defineComponent({
   name: "CardSetComponent",
   props: {
     userStoryMode: { type: String, required: true },
+    selectedCardSet: {
+      type: Object,
+      required: true,
+    },
+  },
+  setup() {
+    const { t } = useI18n();
+    return { t };
   },
   data() {
     return {
       theme: localStorage.getItem("user-theme"),
       jiraTag: "US_JIRA",
-      selectedCardSet: {
-        name: "",
-        values: [],
-        activeValues: [] as string[],
-      },
       createSetInput: "",
+      changedCardSet: {
+        name: "",
+        values: [] as string[],
+        activeValues: [] as string[],
+        position: 0,
+      } as CardSet,
       allCardSets: [
         {
-          name: this.$t("session.prepare.step.selection.cardSet.sets.fibonacci.label"),
-          description: this.$t("session.prepare.step.selection.cardSet.sets.fibonacci.description"),
           values: ["1", "2", "3", "5", "8", "13", "21", "34", "55", "?"],
           activeValues: ["1", "2", "3", "5", "8", "13", "21"],
           position: 1,
         },
         {
-          name: this.$t("session.prepare.step.selection.cardSet.sets.tShirtSizes.label"),
-          description: this.$t(
-            "session.prepare.step.selection.cardSet.sets.tShirtSizes.description"
-          ),
           values: ["XXS", "XS", "S", "M", "L", "XL", "XXL", "XXXL", "?"],
           activeValues: ["XS", "S", "M", "L", "XL"],
           position: 2,
         },
         {
-          name: this.$t("session.prepare.step.selection.cardSet.sets.hours.label"),
-          description: this.$t("session.prepare.step.selection.cardSet.sets.hours.description"),
           values: ["1", "2", "3", "4", "5", "6", "8", "10", "12", "16", "?"],
           activeValues: ["1", "2", "3", "4", "5", "6", "8", "10", "12", "16"],
           position: 3,
         },
         {
-          name: this.$t("session.prepare.step.selection.cardSet.sets.numbers.label"),
-          description: this.$t("session.prepare.step.selection.cardSet.sets.numbers.description"),
           values: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "?"],
           activeValues: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
           position: 4,
         },
         {
-          name: this.$t("session.prepare.step.selection.cardSet.sets.ownSet.label"),
-          description: this.$t("session.prepare.step.selection.cardSet.sets.ownSet.description"),
           values: [],
           activeValues: [],
           position: 5,
@@ -132,22 +132,16 @@ export default Vue.extend({
       ],
       allCardSetsWithJiraMode: [
         {
-          name: this.$t("session.prepare.step.selection.cardSet.sets.fibonacci.label"),
-          description: this.$t("session.prepare.step.selection.cardSet.sets.fibonacci.description"),
           values: ["1", "2", "3", "5", "8", "13", "21", "34", "55", "?"],
           activeValues: ["1", "2", "3", "5", "8", "13", "21"],
           position: 1,
         },
         {
-          name: this.$t("session.prepare.step.selection.cardSet.sets.hours.label"),
-          description: this.$t("session.prepare.step.selection.cardSet.sets.hours.description"),
           values: ["1", "2", "3", "4", "5", "6", "8", "10", "12", "16", "?"],
           activeValues: ["1", "2", "3", "4", "5", "6", "8", "10", "12", "16"],
           position: 2,
         },
         {
-          name: this.$t("session.prepare.step.selection.cardSet.sets.numbers.label"),
-          description: this.$t("session.prepare.step.selection.cardSet.sets.numbers.description"),
           values: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "?"],
           activeValues: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
           position: 3,
@@ -155,16 +149,23 @@ export default Vue.extend({
       ],
     };
   },
+  computed: {
+    isMobile() {
+      return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent
+      );
+    },
+  },
   watch: {
     createSetInput(newVal) {
       if (newVal.length > 1 && newVal.slice(-1) === ";") {
         const currentValues = [...new Set(newVal.split(";"))] as string[];
         currentValues.pop();
-        this.selectedCardSet.activeValues = currentValues;
-        this.$emit("selectedCardSetOptions", this.selectedCardSet.activeValues);
+        this.changedCardSet.activeValues = currentValues;
+        this.$emit("selectedCardSetOptions", this.changedCardSet);
       } else if (newVal.length == 0) {
-        this.selectedCardSet.activeValues = [];
-        this.$emit("selectedCardSetOptions", this.selectedCardSet.activeValues);
+        this.changedCardSet.activeValues = [];
+        this.$emit("selectedCardSetOptions", this.changedCardSet);
       }
     },
   },
@@ -173,26 +174,77 @@ export default Vue.extend({
       const customEvent = event as CustomEvent;
       this.theme = customEvent.detail.storage;
     });
+    this.changedCardSet = this.selectedCardSet as CardSet;
   },
   methods: {
+    getTitle(pos, mode) {
+      if (mode) {
+        switch (pos) {
+          case 1:
+            return this.t("session.prepare.step.selection.cardSet.sets.fibonacci.label");
+          case 2:
+            return this.t("session.prepare.step.selection.cardSet.sets.tShirtSizes.label");
+          case 3:
+            return this.t("session.prepare.step.selection.cardSet.sets.hours.label");
+          case 4:
+            return this.t("session.prepare.step.selection.cardSet.sets.numbers.label");
+          case 5:
+            return this.t("session.prepare.step.selection.cardSet.sets.ownSet.label");
+        }
+      } else {
+        switch (pos) {
+          case 1:
+            return this.t("session.prepare.step.selection.cardSet.sets.fibonacci.label");
+          case 2:
+            return this.t("session.prepare.step.selection.cardSet.sets.hours.label");
+          case 3:
+            return this.t("session.prepare.step.selection.cardSet.sets.numbers.label");
+        }
+      }
+    },
+    getDescription(pos, mode) {
+      if (mode) {
+        switch (pos) {
+          case 1:
+            return this.t("session.prepare.step.selection.cardSet.sets.fibonacci.description");
+          case 2:
+            return this.t("session.prepare.step.selection.cardSet.sets.tShirtSizes.description");
+          case 3:
+            return this.t("session.prepare.step.selection.cardSet.sets.hours.description");
+          case 4:
+            return this.t("session.prepare.step.selection.cardSet.sets.numbers.description");
+          case 5:
+            return this.t("session.prepare.step.selection.cardSet.sets.ownSet.description");
+        }
+      } else {
+        switch (pos) {
+          case 1:
+            return this.t("session.prepare.step.selection.cardSet.sets.fibonacci.description");
+          case 2:
+            return this.t("session.prepare.step.selection.cardSet.sets.hours.description");
+          case 3:
+            return this.t("session.prepare.step.selection.cardSet.sets.numbers.description");
+        }
+      }
+    },
     isActiveCardSetNumber(num) {
-      return this.selectedCardSet.activeValues.includes(num) ? "active" : "outline-secondary";
+      return this.changedCardSet.activeValues.includes(num) ? "active" : "outline-secondary";
     },
     onCardSetSelected(set) {
-      this.selectedCardSet = set;
+      this.changedCardSet = set;
       this.emitChanges();
     },
     emitChanges() {
-      this.$emit("selectedCardSetOptions", this.selectedCardSet.activeValues);
+      this.$emit("selectedCardSetOptions", this.changedCardSet);
     },
     onCardSetNumberSelected(number) {
-      if (this.selectedCardSet.activeValues.includes(number)) {
-        this.selectedCardSet.activeValues = this.selectedCardSet.activeValues.filter(
+      if (this.changedCardSet.activeValues.includes(number)) {
+        this.changedCardSet.activeValues = this.changedCardSet.activeValues.filter(
           (num) => num !== number
         );
       } else {
-        const newActiveValues = [...this.selectedCardSet.activeValues, number];
-        this.selectedCardSet.activeValues = this.selectedCardSet.values.filter((num) =>
+        const newActiveValues = [...this.changedCardSet.activeValues, number];
+        this.changedCardSet.activeValues = this.changedCardSet.values.filter((num) =>
           newActiveValues.includes(num)
         );
       }
@@ -202,7 +254,7 @@ export default Vue.extend({
       return `${this.getCardActiveClass(item)} ${this.getPictureClass(item)}`;
     },
     getCardActiveClass(item) {
-      return this.selectedCardSet.name === item.name ? "selected" : "";
+      return this.changedCardSet.position === item.position ? "selected" : "";
     },
     getPictureClass(item) {
       if (this.userStoryMode !== this.jiraTag) {
@@ -223,27 +275,28 @@ export default Vue.extend({
 });
 </script>
 
+<!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
 <style lang="scss" scoped>
 @import "@/assets/style/variables.scss";
 .card {
   max-width: 224px;
-  height: 300px;
+  min-height: 275px;
   justify-content: flex-start;
   align-items: center;
   display: flex;
   flex-direction: column;
   cursor: pointer;
   border-radius: $border-radius;
-  box-shadow: 10px 10px 5px var(--accent-color);
+  box-shadow: 8px 8px 5px var(--box-shadow);
 
   &:hover {
-    border-width: 3px;
-    border-color: var(--preparePageInActiveCardSet);
+    border-width: 4px;
+    border-color: var(--preparePage-hover-icon-border);
     border-style: solid;
   }
   &.selected {
-    border-width: 3px;
-    border-color: var(--primary-button);
+    border-width: 5px;
+    border-color: var(--preparePage-active-icon-border);
     border-style: solid;
   }
 
@@ -252,11 +305,13 @@ export default Vue.extend({
     font-weight: 500;
     padding-top: 16px;
     text-align: center;
+    color: black !important;
   }
 
   .card-description {
     padding: 16px;
     text-align: center;
+    color: black;
   }
 }
 
@@ -311,6 +366,7 @@ export default Vue.extend({
 }
 
 #popUp {
+  color: var(--text-primary-color);
   background-color: var(--landingPageCardsBackground);
 }
 
@@ -319,21 +375,29 @@ export default Vue.extend({
   margin-right: auto;
 
   .pill {
-    width: 4rem;
+    width: 5rem;
+    border-radius: $border-radius !important;
 
-    .active {
-      background-color: var(--preparePageMainColor);
-      color: var(--text-primary-color);
+    &:not(.active) {
+      background-color: var(--preparePageNotSelectedBackground) !important;
+      color: var(--text-primary-color) !important;
+      border: transparent !important;
+
+      &:hover {
+        color: var(--text-color-hover) !important;
+        background-color: var(--preparePageInActiveTabHover) !important;
+      }
     }
 
-    .active:hover {
-      background-color: var(--preparePageInActiveTabHover);
-      color: var(--text-primary-color);
-    }
+    &.active {
+      background-color: var(--preparePageMainColor) !important;
+      color: var(--text-primary-color) !important;
+      border-color: var(--btn-border-color) !important;
 
-    .active:focus {
-      background-color: var(--preparePageInActiveTabHover);
-      color: var(--text-primary-color);
+      &:hover {
+        background-color: var(--preparePageInActiveTabHover);
+        color: var(--text-color-hover) !important;
+      }
     }
   }
 }
