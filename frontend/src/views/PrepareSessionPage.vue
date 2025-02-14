@@ -310,16 +310,13 @@ export default defineComponent({
         },
         {
           title: this.t("session.prepare.step.wizard.confirmation"),
-          isValid: true,
+          isValid: false,
           iconSuccess: null,
         },
       ],
     };
   },
   computed: {
-    selectedProjectAndTabIndex() {
-      return `${this.store.selectedProject}|${this.tabIndex}`;
-    },
     userStories() {
       return this.store.userStories;
     },
@@ -331,6 +328,22 @@ export default defineComponent({
       const seconds = (this.timer % 60).toString().padStart(2, "0");
       return `${minutes}:${seconds}`;
     },
+    modeStepIsValid(): boolean {
+      if (this.tabIndex === 2) {
+        return !!this.store.selectedProject;
+      }
+      return this.tabIndex !== null;
+    },
+    cardSetStepIsValid(): boolean {
+      return (
+        this.selectedCardSetOptions &&
+        Array.isArray(this.selectedCardSetOptions.activeValues) &&
+        this.selectedCardSetOptions.activeValues.length > 0
+      );
+    },
+    finalStepIsValid(): boolean {
+      return this.modeStepIsValid && this.cardSetStepIsValid;
+    },
   },
   watch: {
     timer(newTimer) {
@@ -341,12 +354,14 @@ export default defineComponent({
         this.warningWhenUnderZero = "";
       }
     },
-    selectedProjectAndTabIndex() {
-      this.tabs[0].isValid =
-        this.tabIndex === 2 ? !!this.store.selectedProject : this.tabIndex != null;
+    modeStepIsValid(newVal: boolean) {
+      this.tabs[0].isValid = newVal;
     },
-    selectedCardSetOptions(isPresent) {
-      this.tabs[1].isValid = isPresent != null;
+    cardSetStepIsValid(newVal: boolean) {
+      this.tabs[1].isValid = newVal;
+    },
+    finalStepIsValid(newVal: boolean) {
+      this.tabs[3].isValid = newVal;
     },
   },
   mounted() {
@@ -496,6 +511,14 @@ export default defineComponent({
       });
     },
     setTabIndex(index: number) {
+      if (this.tabIndex !== index) {
+        this.selectedCardSetOptions = {
+          name: "",
+          values: [] as string[],
+          activeValues: [] as string[],
+          position: 0,
+        } as CardSet;
+      }
       this.tabIndex = index;
     },
   },
