@@ -382,6 +382,7 @@
         "issueTrackerSynchronizeSuccess": "Synchronized changes with Issue-Tracker",
         "issueTrackerNothingChanged": "No changes were made",
         "issueTrackerSynchronizeFailed": "Failed to synchronize changes with Issue-Tracker",
+        "issueTrackerJiraMissingTitle": "A title is required to create/update an issue in Jira. Please enter a title!",
         "wrongID": "Wrong invitation code",
         "password": "Wrong password"
       }

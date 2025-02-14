@@ -47,6 +47,7 @@
 import { defineComponent } from "vue";
 import MarkdownEditor from "@/components/MarkdownEditor.vue";
 import { useI18n } from "vue-i18n";
+import { useToast } from "vue-toastification";
 
 export default defineComponent({
   name: "UserStoryDescriptions",
@@ -57,6 +58,7 @@ export default defineComponent({
     editDescription: { type: Boolean, required: true, default: false },
     gptDescriptionResponse: { type: Boolean, required: false, default: false },
     updateComponent: { type: Boolean, required: false, default: false },
+    storyMode: { type: String, required: true },
     acceptedStories: {
       type: Array<{ storyID: string | null; issueType: string }>,
       required: false,
@@ -66,7 +68,8 @@ export default defineComponent({
   },
   setup() {
     const { t } = useI18n();
-    return { t };
+    const toast = useToast();
+    return { t, toast };
   },
   data() {
     return {
@@ -101,8 +104,12 @@ export default defineComponent({
   },
   methods: {
     valueChanged(idx, { markdown }) {
-      this.userStories[idx].description = markdown;
-      this.publishChanges(idx);
+      if (this.storyMode !== "US_JIRA" || this.userStories[idx].title?.trim()) {
+        this.userStories[idx].description = markdown;
+        this.publishChanges(idx);
+      } else {
+        this.toast.error(this.t("session.notification.messages.issueTrackerJiraMissingTitle"));
+      }
     },
     publishChanges(idx) {
       this.$emit("userStoriesChanged", { us: this.userStories, idx: idx, doRemove: false });
