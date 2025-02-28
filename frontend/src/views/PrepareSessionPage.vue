@@ -14,7 +14,6 @@
       :next-text="t('session.prepare.step.wizard.wizardNext')"
       :done-text="t('session.prepare.step.wizard.wizardDone')"
     >
-      <!-- Step 1: Modus-Auswahl und Authentifizierung (bei US_JIRA zwingend) -->
       <template #1>
         <div class="wizardStep">
           <h4 class="mb-3">
@@ -74,7 +73,6 @@
             </button>
           </div>
           <div class="mt-5">
-            <!-- Beim US_JIRA-Modus ist Authentifizierung zwingend erforderlich -->
             <story-points-component v-if="tabIndex === 0" />
             <div v-else-if="tabIndex === 1">
               <user-story-component class="mt-5" />
@@ -103,7 +101,6 @@
         </div>
       </template>
 
-      <!-- Step 2: Card-Set und Passwort -->
       <template #2>
         <div class="wizardStep">
           <h4 class="mb-3">
@@ -134,7 +131,6 @@
         </div>
       </template>
 
-      <!-- Step 3: Timer und HostVoting -->
       <template #3>
         <div class="wizardStep">
           <h4 class="mb-3">
@@ -203,10 +199,8 @@
         </div>
       </template>
 
-      <!-- Step 4: Bestätigung -->
       <template #4>
         <div class="wizardStep">
-          <!-- Container für den Button -->
           <div class="copy-btn-container">
             <b-button variant="primary" class="copy-btn" @click="copyDeepLink">
               {{ t("session.prepare.step.wizard.deeplink.copyDeeplink") }}
