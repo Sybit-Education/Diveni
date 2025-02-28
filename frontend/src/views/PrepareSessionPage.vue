@@ -434,6 +434,7 @@ export default defineComponent({
           sessionID: session.sessionID,
           adminID: session.adminID,
           timerSecondsString: this.timer.toString(),
+          password: this.password,
           voteSetJson: JSON.stringify(session.sessionConfig.set),
           sessionState: session.sessionState,
           userStoryMode: session.sessionConfig.userStoryMode,
