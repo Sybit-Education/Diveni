@@ -279,7 +279,8 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import "@/assets/style/variables.scss";
 .card {
-  max-width: 224px;
+  max-width: 225px;
+  min-width: 75px;
   min-height: 275px;
   justify-content: flex-start;
   align-items: center;
@@ -301,14 +302,15 @@ export default defineComponent({
   }
 
   .card-title {
-    font-size: 22px;
-    font-weight: 500;
+    font-size: clamp(14px, 2vw, 22px);
+    font-weight: bold;
     padding-top: 16px;
     text-align: center;
     color: black !important;
   }
 
   .card-description {
+    font-size: clamp(12px, 1.5vw, 18px);
     padding: 16px;
     text-align: center;
     color: black;
