@@ -14,6 +14,7 @@
       :next-text="t('session.prepare.step.wizard.wizardNext')"
       :done-text="t('session.prepare.step.wizard.wizardDone')"
     >
+      <!-- Step 1: Modus-Auswahl und Authentifizierung (bei US_JIRA zwingend) -->
       <template #1>
         <div class="wizardStep">
           <h4 class="mb-3">
@@ -36,9 +37,9 @@
                 class="modeIconImage"
                 :class="{ active: tabIndex === 0 }"
               />
-              <span class="mode-icon-text">{{
-                t("session.prepare.step.selection.mode.description.withoutUS.tab.label")
-              }}</span>
+              <span class="mode-icon-text">
+                {{ t("session.prepare.step.selection.mode.description.withoutUS.tab.label") }}
+              </span>
             </button>
             <button
               type="button"
@@ -50,9 +51,9 @@
                 class="modeIconImage"
                 :class="{ active: tabIndex === 1 }"
               />
-              <span class="mode-icon-text">{{
-                t("session.prepare.step.selection.mode.description.withUS.tab.label")
-              }}</span>
+              <span class="mode-icon-text">
+                {{ t("session.prepare.step.selection.mode.description.withUS.tab.label") }}
+              </span>
             </button>
             <button
               v-if="isIssueTrackerEnabled"
@@ -73,6 +74,7 @@
             </button>
           </div>
           <div class="mt-5">
+            <!-- Beim US_JIRA-Modus ist Authentifizierung zwingend erforderlich -->
             <story-points-component v-if="tabIndex === 0" />
             <div v-else-if="tabIndex === 1">
               <user-story-component class="mt-5" />
@@ -101,6 +103,7 @@
         </div>
       </template>
 
+      <!-- Step 2: Card-Set und Passwort -->
       <template #2>
         <div class="wizardStep">
           <h4 class="mb-3">
@@ -131,6 +134,7 @@
         </div>
       </template>
 
+      <!-- Step 3: Timer und HostVoting -->
       <template #3>
         <div class="wizardStep">
           <h4 class="mb-3">
@@ -149,9 +153,8 @@
                 setTimerDown();
                 $event.target.blur();
               "
+              >-</b-button
             >
-              -
-            </b-button>
             <div id="setting-value" class="font-weight-bolder px-3 text-center">
               {{ timer == 0 ? "∞" : formatTimer }}
             </div>
@@ -161,9 +164,8 @@
                 setTimerUp();
                 $event.target.blur();
               "
+              >+</b-button
             >
-              +
-            </b-button>
           </div>
           <h4 class="mb-3">
             <b-img
@@ -201,14 +203,21 @@
         </div>
       </template>
 
+      <!-- Step 4: Bestätigung -->
       <template #4>
         <div class="wizardStep">
+          <!-- Container für den Button -->
+          <div class="copy-btn-container">
+            <b-button variant="primary" class="copy-btn" @click="copyDeepLink">
+              {{ t("session.prepare.step.wizard.deeplink.copyDeeplink") }}
+            </b-button>
+          </div>
           <h4 class="mb-3">{{ t("session.prepare.step.confirmation.title") }}</h4>
           <b-list-group>
-            <b-list-group-item
-              >{{ t("session.prepare.step.selection.mode.title") }}:
-              {{ userStoryMode }}</b-list-group-item
-            >
+            <b-list-group-item>
+              {{ t("session.prepare.step.selection.mode.title") }}:
+              {{ userStoryMode }}
+            </b-list-group-item>
             <b-list-group-item>
               {{ t("session.prepare.step.selection.cardSet.title") }}:
               {{
@@ -217,22 +226,22 @@
                   : ""
               }}
             </b-list-group-item>
-            <b-list-group-item
-              >{{ t("session.prepare.step.selection.time.title") }}:
-              {{ timer == 0 ? "∞" : formatTimer }}</b-list-group-item
-            >
-            <b-list-group-item
-              >{{ t("session.prepare.step.selection.hostVoting.title") }}:
+            <b-list-group-item>
+              {{ t("session.prepare.step.selection.time.title") }}:
+              {{ timer == 0 ? "∞" : formatTimer }}
+            </b-list-group-item>
+            <b-list-group-item>
+              {{ t("session.prepare.step.selection.hostVoting.title") }}:
               {{
                 hostVoting
                   ? t("session.prepare.step.selection.hostVoting.hostVotingOn")
                   : t("session.prepare.step.selection.hostVoting.hostVotingOff")
-              }}</b-list-group-item
-            >
-            <b-list-group-item
-              >{{ t("session.prepare.step.selection.password.title") }}:
-              {{ password }}</b-list-group-item
-            >
+              }}
+            </b-list-group-item>
+            <b-list-group-item>
+              {{ t("session.prepare.step.selection.password.title") }}:
+              {{ password }}
+            </b-list-group-item>
           </b-list-group>
         </div>
       </template>
@@ -256,7 +265,7 @@ import { useDiveniStore } from "@/store";
 import { useToast } from "vue-toastification";
 import { useI18n } from "vue-i18n";
 import { Steppy } from "vue3-steppy";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute, LocationQueryValue } from "vue-router";
 
 export default defineComponent({
   name: "PrepareSessionPage",
@@ -272,8 +281,9 @@ export default defineComponent({
     const toast = useToast();
     const { t } = useI18n();
     const router = useRouter();
+    const route = useRoute();
     const step = ref<number>(1);
-    return { store, toast, t, step, router };
+    return { store, toast, t, step, router, route };
   },
   data() {
     return {
@@ -291,6 +301,7 @@ export default defineComponent({
       isIssueTrackerEnabled: false,
       theme: localStorage.getItem("user-theme"),
       isJiraSelected: false,
+      isDeepLink: false,
       generatedUUIDs: new Set<number>(),
       tabs: [
         {
@@ -363,6 +374,11 @@ export default defineComponent({
     finalStepIsValid(newVal: boolean) {
       this.tabs[3].isValid = newVal;
     },
+    step(newStep) {
+      if (this.isDeepLink && this.tabIndex === 2 && newStep === 2 && this.store.selectedProject) {
+        this.step = 4;
+      }
+    },
   },
   mounted() {
     window.addEventListener("user-theme-localstorage-changed", (event) => {
@@ -378,6 +394,7 @@ export default defineComponent({
         result.isGitlabEnabled === "true";
     });
     this.store.setUserStories({ stories: [] });
+    this.parseDeepLink();
   },
   methods: {
     async sendCreateSessionRequest() {
@@ -472,20 +489,16 @@ export default defineComponent({
     importStory(event: Event) {
       const target = event.target as HTMLInputElement;
       const files = target.files;
-
       if (!files || !files[0]) {
         return;
       }
-
       papaparse.parse(files[0], {
         header: true,
         delimiter: ";",
         complete: (result: ParseResult<UserStory>) => {
           const stories: UserStory[] = [];
-
           result.data.forEach((story) => {
             const { title, description, estimation } = story;
-
             stories.push({
               id: this.generateNumericUUID().toString(),
               title: title,
@@ -494,7 +507,6 @@ export default defineComponent({
               isActive: false,
             });
           });
-
           this.store.setUserStories({ stories: stories });
           this.toast.success(
             this.t(
@@ -521,6 +533,86 @@ export default defineComponent({
       }
       this.tabIndex = index;
     },
+    parseDeepLink() {
+      const { query } = this.route;
+      if (!Object.keys(query).length) return; // No deep link provided
+
+      const getQueryParam = (
+        param: LocationQueryValue | LocationQueryValue[] | null | undefined
+      ): string | null => {
+        if (param == null) return null;
+        return Array.isArray(param) ? param.find((item) => item != null) ?? null : param;
+      };
+
+      const modeValue = getQueryParam(query.mode);
+      const setValue = getQueryParam(query.set);
+      const timerValue = getQueryParam(query.timer);
+      const hostVotingValue = getQueryParam(query.hostVoting);
+      const passwordValue = getQueryParam(query.password);
+
+      if (!modeValue || !setValue || !timerValue || hostVotingValue == null) {
+        this.toast.error(this.t("session.prepare.step.wizard.deeplink.missingParameters"));
+        return;
+      }
+
+      const modeMap: Record<string, number> = {
+        NO_US: 0,
+        US_MANUALLY: 1,
+        US_JIRA: 2,
+      };
+
+      if (!(modeValue in modeMap)) {
+        this.toast.error(this.t("session.prepare.step.wizard.deeplink.invalidMode"));
+        return;
+      }
+
+      this.tabIndex = modeMap[modeValue];
+      this.selectedCardSetOptions.activeValues = setValue.split(",");
+
+      const parsedTimer = parseInt(timerValue, 10);
+      if (isNaN(parsedTimer)) {
+        this.toast.error(this.t("session.prepare.step.wizard.deeplink.invalidTime"));
+        return;
+      }
+      this.timer = parsedTimer;
+      this.hostVoting = hostVotingValue === "true";
+
+      if (passwordValue !== null) {
+        this.password = passwordValue;
+      }
+
+      this.isDeepLink = true;
+      // In US_JIRA mode, enforce authentication (step 1); otherwise, jump to confirmation (step 4)
+      this.step = modeValue === "US_JIRA" ? 1 : 4;
+    },
+    copyDeepLink() {
+      // Build the deep link URL based on current configuration
+      const modeMap: Record<number, string> = {
+        0: "NO_US",
+        1: "US_MANUALLY",
+        2: "US_JIRA",
+      };
+      const index = this.tabIndex ?? 0;
+      const mode = modeMap[index] || "NO_US";
+      const setParam = this.selectedCardSetOptions.activeValues.join(",");
+      const timerParam = this.timer;
+      const hostVotingParam = this.hostVoting;
+      const passwordParam = this.password ? `&password=${encodeURIComponent(this.password)}` : "";
+      const baseUrl = window.location.origin + "/prepare";
+      const deepLink = `${baseUrl}?mode=${mode}&set=${encodeURIComponent(
+        setParam
+      )}&timer=${timerParam}&hostVoting=${hostVotingParam}${passwordParam}`;
+
+      navigator.clipboard
+        .writeText(deepLink)
+        .then(() => {
+          this.toast.success(this.t("session.prepare.step.wizard.deeplink.copy"));
+        })
+        .catch((err) => {
+          console.error("Failed to copy deep link", err);
+          this.toast.error(this.t("session.prepare.step.wizard.deeplink.copyFailed"));
+        });
+    },
   },
 });
 </script>
@@ -541,7 +633,6 @@ export default defineComponent({
     width: 6rem;
     border-radius: $border-radius;
     border-color: var(--btn-border-color) !important;
-
     &:not(.active) {
       background-color: var(--preparePageTimerBackground);
       &:hover {
@@ -566,7 +657,6 @@ export default defineComponent({
   height: clamp(2.5rem, 5vw, 2.5rem);
   padding: 0;
   margin: 0 auto;
-
   button {
     height: 100%;
     width: 50%;
@@ -584,7 +674,6 @@ export default defineComponent({
   flex-wrap: wrap;
   justify-content: center;
   gap: 1rem;
-
   .mode-icon {
     max-width: 225px;
     min-width: 95px;
@@ -600,30 +689,33 @@ export default defineComponent({
     border-radius: $border-radius;
     box-shadow: 8px 8px 5px var(--box-shadow);
     background-color: var(--preparePage-mode-backround);
-
     &:hover {
       border-width: 4px;
       border-color: var(--preparePage-hover-icon-border);
       border-style: solid;
     }
-
     &.active {
       border-width: 5px;
       border-color: var(--preparePage-active-icon-border);
       border-style: solid;
     }
-
     .modeIconImage {
       width: 100px;
       height: 100px;
     }
-
     .mode-icon-text {
       font-size: 18px;
       text-align: center;
       font-weight: bold;
     }
   }
+}
+
+.copy-btn-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 1rem;
 }
 
 .mode-icon-text::before {
