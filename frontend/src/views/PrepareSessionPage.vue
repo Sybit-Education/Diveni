@@ -556,24 +556,21 @@ export default defineComponent({
 }
 
 .timer-control {
+  display: flex;
   align-items: center;
   border-radius: $border-radius;
   background-color: var(--preparePageTimerBackground);
-  font-size: 1.25rem;
-  width: 12rem;
-  height: 2.5rem;
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  width: 100%;
+  max-width: 12rem;
+  height: clamp(2.5rem, 5vw, 2.5rem);
   padding: 0;
   margin: 0 auto;
 
   button {
-    height: 2.5rem;
-    width: 5rem;
+    height: 100%;
+    width: 50%;
     border-radius: $border-radius;
-  }
-
-  .setting-value {
-    flex: 0 0 auto;
-    width: 5rem;
   }
 }
 
