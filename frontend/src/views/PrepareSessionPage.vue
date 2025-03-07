@@ -556,24 +556,21 @@ export default defineComponent({
 }
 
 .timer-control {
+  display: flex;
   align-items: center;
   border-radius: $border-radius;
   background-color: var(--preparePageTimerBackground);
-  font-size: 1.25rem;
-  width: 12rem;
-  height: 2.5rem;
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  width: 100%;
+  max-width: 12rem;
+  height: clamp(2.5rem, 5vw, 2.5rem);
   padding: 0;
   margin: 0 auto;
 
   button {
-    height: 2.5rem;
-    width: 5rem;
+    height: 100%;
+    width: 50%;
     border-radius: $border-radius;
-  }
-
-  .setting-value {
-    flex: 0 0 auto;
-    width: 5rem;
   }
 }
 
@@ -582,11 +579,12 @@ export default defineComponent({
   width: 45px;
 }
 
-:deep(.wrapper-steppy .controls .btn:hover) {
-  color: black;
-}
-
 .mode-icons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+
   .mode-icon {
     max-width: 225px;
     min-width: 95px;
@@ -635,5 +633,34 @@ export default defineComponent({
   height: 1px;
   background: var(--estimateButtonBorder);
   margin: 8px 0;
+}
+
+:deep(.steppy) {
+  padding-bottom: calc(20px + (1000px - 100vw) / 20);
+}
+
+:deep(.steppy-item-title) {
+  font-weight: bold;
+  text-align: center;
+  display: block;
+  font-size: clamp(6px, 3vw, 17px);
+  max-width: clamp(52px, 15vw, 200px);
+  margin: 0 auto;
+  line-height: 1.2;
+  padding: 0 10px;
+}
+
+@media (max-width: 500px) {
+  :deep(.steppy-item-title) {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    line-clamp: 5;
+    -webkit-line-clamp: 5;
+    overflow: hidden;
+  }
+}
+
+:deep(.wrapper-steppy .controls .btn:hover) {
+  color: black;
 }
 </style>
