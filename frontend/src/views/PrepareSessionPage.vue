@@ -730,6 +730,7 @@ export default defineComponent({
   font-weight: bold;
   text-align: center;
   display: block;
+  font-size: clamp(6px, 3vw, 17px) !important;
   max-width: clamp(52px, 15vw, 200px);
   margin: 0 auto;
   line-height: 1.2;
