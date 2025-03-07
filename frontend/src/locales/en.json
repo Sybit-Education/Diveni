@@ -229,7 +229,15 @@
           "modeSelection": "Mode Selection",
           "configurationCardSet": "Configuration Card set",
           "configurationTime/HostVote": "Configuration Time & Host Vote",
-          "confirmation": "Confirmation"
+          "confirmation": "Confirmation",
+            "deeplink": {
+              "missingParameters": "Deep link is incomplete – essential parameters are missing",
+              "invalidMode": "Unknown mode parameter in the deep link",
+              "invalidTime": "Invalid timer parameter in the deep link",
+              "copyDeeplink": "Copy Deeplink",
+              "copy": "Deep link copied!",
+              "copyFailed": "Failed to copy deep link"
+            }
         },
         "selection": {
           "mode": {
