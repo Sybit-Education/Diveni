@@ -10,7 +10,7 @@
           }}
         </h1>
       </b-col>
-      <b-col>
+      <b-col class="d-flex align-items-center">
         <b-button
           v-if="!autoReveal && !planningStart"
           class="mr-3 autoRevealButtons optionButton"
@@ -34,6 +34,15 @@
         >
           <b-icon-eye-fill class="bIcons" />
           {{ t("page.session.during.estimation.buttons.autoRevealOn") }}
+        </b-button>
+        <b-button
+          v-if="!planningStart"
+          class="mr-3 optionButton"
+          variant="outline-dark"
+          @click="copyDeepLink"
+        >
+          <b-icon icon="clipboard" class="bIcons" />
+          {{ t("session.prepare.step.wizard.deeplink.copyDeeplink") }}
         </b-button>
       </b-col>
       <b-col cols="auto" class="mr-auto">
@@ -124,6 +133,17 @@
           >
             <b-icon-eye-fill class="bIcons" />
             {{ t("page.session.during.estimation.buttons.autoRevealOn") }}
+          </b-button>
+          <b-button
+            class="mr-3 optionButton"
+            variant="outline-dark"
+            @click="
+              copyDeepLink();
+              $event.target.blur();
+            "
+          >
+            <b-icon icon="clipboard" class="bIcons" />
+            {{ t("session.prepare.step.wizard.deeplink.copyDeeplink") }}
           </b-button>
         </b-col>
         <b-col cols="auto">
@@ -380,6 +400,7 @@ export default defineComponent({
       voteSetJson: history.state.voteSetJson,
       sessionState: history.state.sessionState,
       timerSecondsString: history.state.timerSecondsString,
+      password: history.state.password,
       startNewSessionOnMountedString: history.state.startNewSessionOnMountedString,
       userStoryMode: history.state.userStoryMode,
       hostVoting: history.state.hostVoting as boolean,
@@ -870,6 +891,23 @@ export default defineComponent({
         this.showSpinner = false;
         this.splitted_user_stories = response;
       }
+    },
+    copyDeepLink() {
+      const baseUrl = window.location.origin + "/prepare";
+      const passwordParam = this.password ? `&password=${encodeURIComponent(this.password)}` : "";
+      const deepLink = `${baseUrl}?mode=${this.userStoryMode}&set=${encodeURIComponent(
+        this.voteSet.join(",")
+      )}&timer=${this.timerSecondsString}&hostVoting=${this.hostVoting}${passwordParam}`;
+
+      navigator.clipboard
+        .writeText(deepLink)
+        .then(() => {
+          this.toast.success(this.t("session.prepare.step.wizard.deeplink.copy"));
+        })
+        .catch((err) => {
+          console.error("Failed to copy deep link", err);
+          this.toast.error(this.t("session.prepare.step.wizard.deeplink.copyFailed"));
+        });
     },
   },
 });
