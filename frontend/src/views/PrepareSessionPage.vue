@@ -202,12 +202,7 @@
       <template #4>
         <div class="wizardStep">
           <div class="copy-btn-container">
-            <b-button
-              v-if="!planningStart"
-              class="copy-btn"
-              variant="outline-dark"
-              @click="copyDeepLink"
-            >
+            <b-button class="copy-btn" variant="outline-dark" @click="copyDeepLink">
               <b-icon icon="clipboard" class="bIcons" />
               {{ t("session.prepare.step.wizard.deeplink.copyDeeplink") }}
             </b-button>
