@@ -10,7 +10,18 @@
           }}
         </h1>
       </b-col>
-      <b-col class="d-flex flex-wrap align-items-center">
+
+      <b-col cols="auto" class="mr-auto">
+        <copy-session-id-popup v-if="planningStart" class="float-end" :session-id="sessionID" />
+      </b-col>
+
+      <b-col cols="auto">
+        <session-close-button :is-planning-start="planningStart" :user-story-mode="userStoryMode" />
+      </b-col>
+    </b-row>
+
+    <b-row class="pb-3">
+      <b-col class="d-flex justify-content-center flex-wrap">
         <b-button
           v-if="!autoReveal && !planningStart"
           class="optionButton"
@@ -23,6 +34,7 @@
           <b-icon-eye-slash-fill class="bIcons" />
           {{ t("page.session.during.estimation.buttons.autoRevealOff") }}
         </b-button>
+
         <b-button
           v-if="autoReveal && !planningStart"
           class="optionButton"
@@ -45,12 +57,6 @@
           <b-icon icon="clipboard" class="bIcons" />
           {{ t("session.prepare.step.wizard.deeplink.copyDeeplink") }}
         </b-button>
-      </b-col>
-      <b-col cols="auto" class="mr-auto">
-        <copy-session-id-popup v-if="planningStart" class="float-end" :session-id="sessionID" />
-      </b-col>
-      <b-col cols="auto">
-        <session-close-button :is-planning-start="planningStart" :user-story-mode="userStoryMode" />
       </b-col>
     </b-row>
 
@@ -980,16 +986,18 @@ export default defineComponent({
 }
 
 .bIcons {
-  height: 25px;
-  width: 25px;
+  height: 40px;
+  width: 40px;
 }
 
 .optionButton {
   background-color: var(--textAreaColour);
+  margin: 0.5rem;
   display: inline-flex;
   align-items: center;
-  margin: 0.25rem;
-  flex: 1 0 auto;
+  justify-content: center;
+  min-width: 150px;
+  max-width: 300px;
 }
 
 .optionButton:hover {
