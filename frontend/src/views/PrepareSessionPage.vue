@@ -202,7 +202,13 @@
       <template #4>
         <div class="wizardStep">
           <div class="copy-btn-container">
-            <b-button variant="primary" class="copy-btn" @click="copyDeepLink">
+            <b-button
+              v-if="!planningStart"
+              class="copy-btn"
+              variant="outline-dark"
+              @click="copyDeepLink"
+            >
+              <b-icon icon="clipboard" class="bIcons" />
               {{ t("session.prepare.step.wizard.deeplink.copyDeeplink") }}
             </b-button>
           </div>
@@ -711,6 +717,18 @@ export default defineComponent({
   justify-content: flex-end;
   align-items: center;
   margin-bottom: 1rem;
+}
+
+.copy-btn {
+  background-color: var(--textAreaColour);
+  display: inline-flex;
+  align-items: center;
+  margin: 0.25rem;
+}
+
+.copy-btn:hover {
+  background-color: var(--textAreaColourHovered);
+  color: var(--text-primary-color);
 }
 
 .mode-icon-text::before {

@@ -10,10 +10,10 @@
           }}
         </h1>
       </b-col>
-      <b-col class="d-flex align-items-center">
+      <b-col class="d-flex flex-wrap align-items-center">
         <b-button
           v-if="!autoReveal && !planningStart"
-          class="mr-3 autoRevealButtons optionButton"
+          class="optionButton"
           variant="outline-dark"
           @click="
             autoReveal = true;
@@ -25,7 +25,7 @@
         </b-button>
         <b-button
           v-if="autoReveal && !planningStart"
-          class="mr-3 autoRevealButtons optionButton"
+          class="optionButton"
           variant="outline-dark"
           @click="
             autoReveal = false;
@@ -35,9 +35,10 @@
           <b-icon-eye-fill class="bIcons" />
           {{ t("page.session.during.estimation.buttons.autoRevealOn") }}
         </b-button>
+
         <b-button
           v-if="!planningStart"
-          class="mr-3 optionButton"
+          class="optionButton"
           variant="outline-dark"
           @click="copyDeepLink"
         >
@@ -979,14 +980,16 @@ export default defineComponent({
 }
 
 .bIcons {
-  height: 40px;
-  width: 40px;
+  height: 25px;
+  width: 25px;
 }
 
 .optionButton {
   background-color: var(--textAreaColour);
   display: inline-flex;
   align-items: center;
+  margin: 0.25rem;
+  flex: 1 0 auto;
 }
 
 .optionButton:hover {
