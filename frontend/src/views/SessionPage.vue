@@ -10,12 +10,8 @@
           }}
         </h1>
       </b-col>
-
-      <b-col cols="auto" class="mr-auto">
-        <copy-session-id-popup v-if="planningStart" class="float-end" :session-id="sessionID" />
-      </b-col>
-
-      <b-col cols="auto">
+      <b-col class="d-flex justify-content-end align-items-center ml-auto">
+        <copy-session-id-popup v-if="planningStart" :session-id="sessionID" class="mr-2" />
         <session-close-button :is-planning-start="planningStart" :user-story-mode="userStoryMode" />
       </b-col>
     </b-row>
@@ -972,6 +968,7 @@ export default defineComponent({
 
 .copy-popup {
   text-align: center;
+  margin-bottom: 30px;
 }
 
 .kick-user {
