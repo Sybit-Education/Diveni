@@ -235,6 +235,7 @@
               "missingParameters": "Deep link is incomplete – essential parameters are missing",
               "invalidMode": "Unknown mode parameter in the deep link",
               "invalidTime": "Invalid timer parameter in the deep link",
+              "invalidHostVoting": "The hostVoting parameter must be either 'true' or 'false'",
               "invalidSetForJira": "The set can only contain numbers in US_JIRA mode!",
               "copyDeeplink": "Copy Session Config",
               "copy": "Deep link copied!",

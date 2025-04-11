@@ -266,7 +266,7 @@ import { useDiveniStore } from "@/store";
 import { useToast } from "vue-toastification";
 import { useI18n } from "vue-i18n";
 import { Steppy } from "vue3-steppy";
-import { useRouter, useRoute, LocationQueryValue } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 
 export default defineComponent({
   name: "PrepareSessionPage",
@@ -548,22 +548,17 @@ export default defineComponent({
     },
     parseDeepLink() {
       const { query } = this.route;
-      if (!Object.keys(query).length) return; // No deep link provided
 
-      const getQueryParam = (
-        param: LocationQueryValue | LocationQueryValue[] | null | undefined
-      ): string | null => {
-        if (param == null) return null;
-        return Array.isArray(param) ? param.find((item) => item != null) ?? null : param;
-      };
+      // No DeepLink provided
+      if (!query || Object.keys(query).length === 0) return;
 
-      const modeValue = getQueryParam(query.mode);
-      const setValue = getQueryParam(query.set);
-      const timerValue = getQueryParam(query.timer);
-      const hostVotingValue = getQueryParam(query.hostVoting);
-      const passwordValue = getQueryParam(query.password);
+      const modeValue = query.mode as string | undefined;
+      const setValue = query.set as string | undefined;
+      const timerValue = query.timer as string | undefined;
+      const hostVotingValue = query.hostVoting as string | undefined;
+      const passwordValue = query.password as string | undefined;
 
-      if (!modeValue || !setValue || !timerValue || hostVotingValue == null) {
+      if (!modeValue || !setValue || !timerValue || !hostVotingValue) {
         this.showErrorModal(this.t("session.prepare.step.wizard.deeplink.missingParameters"));
         return;
       }
@@ -594,9 +589,14 @@ export default defineComponent({
         return;
       }
       this.timer = parsedTimer;
+
+      if (hostVotingValue !== "true" && hostVotingValue !== "false") {
+        this.showErrorModal(this.t("session.prepare.step.wizard.deeplink.invalidHostVoting"));
+        return;
+      }
       this.hostVoting = hostVotingValue === "true";
 
-      if (passwordValue !== null) {
+      if (passwordValue !== undefined) {
         this.password = passwordValue;
       }
 
