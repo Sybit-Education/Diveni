@@ -581,16 +581,12 @@ export default defineComponent({
 
       this.tabIndex = modeMap[modeValue];
 
-      if (this.tabIndex === 2) {
-        const setArray = setValue.split(",");
-        if (!setArray.every((item) => /^\d+$/.test(item))) {
-          this.showErrorModal(this.t("session.prepare.step.wizard.deeplink.invalidSetForJira"));
-          return;
-        }
-        this.selectedCardSetOptions.activeValues = setArray;
-      } else {
-        this.selectedCardSetOptions.activeValues = setValue.split(",");
+      const setArray = setValue.split(",");
+      if (this.tabIndex === 2 && !setArray.every((item) => /^\d+$/.test(item))) {
+        this.showErrorModal(this.t("session.prepare.step.wizard.deeplink.invalidSetForJira"));
+        return;
       }
+      this.selectedCardSetOptions.activeValues = setArray;
 
       const parsedTimer = parseInt(timerValue, 10);
       if (isNaN(parsedTimer)) {
