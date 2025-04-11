@@ -231,9 +231,11 @@
           "configurationTime/HostVote": "Configuration Time & Host Vote",
           "confirmation": "Confirmation",
             "deeplink": {
+              "errorTitle": "Deep link is invalid!",
               "missingParameters": "Deep link is incomplete – essential parameters are missing",
               "invalidMode": "Unknown mode parameter in the deep link",
               "invalidTime": "Invalid timer parameter in the deep link",
+              "invalidSetForJira": "The set can only contain numbers in US_JIRA mode!",
               "copyDeeplink": "Copy Session Config",
               "copy": "Deep link copied!",
               "copyFailed": "Failed to copy deep link"

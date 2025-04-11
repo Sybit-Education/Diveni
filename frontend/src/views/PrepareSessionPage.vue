@@ -1,7 +1,12 @@
 <template>
   <b-container class="main">
     <h1>{{ t("session.prepare.title") }}</h1>
-
+    <WizardErrorModal
+      :visible="errorModal.visible"
+      :title="errorModal.title"
+      :message="errorModal.message"
+      @close="errorModal.visible = false"
+    />
     <Steppy
       v-model:step="step"
       :finalize="sendCreateSessionRequest"
@@ -253,6 +258,7 @@ import CardSetComponent from "../components/CardSetComponent.vue";
 import UserStoryComponent from "../components/UserStoryComponent.vue";
 import JiraComponent from "../components/JiraComponent.vue";
 import StoryPointsComponent from "@/components/StoryPointsComponent.vue";
+import WizardErrorModal from "@/components/WizardErrorModal.vue";
 import UserStory from "@/model/UserStory";
 import papaparse, { ParseResult } from "papaparse";
 import apiService from "@/services/api.service";
@@ -265,6 +271,7 @@ import { useRouter, useRoute, LocationQueryValue } from "vue-router";
 export default defineComponent({
   name: "PrepareSessionPage",
   components: {
+    WizardErrorModal,
     CardSetComponent,
     UserStoryComponent,
     JiraComponent,
@@ -320,6 +327,11 @@ export default defineComponent({
           iconSuccess: null,
         },
       ],
+      errorModal: {
+        visible: false,
+        title: "",
+        message: "",
+      },
     };
   },
   computed: {
@@ -529,6 +541,11 @@ export default defineComponent({
       }
       this.tabIndex = index;
     },
+    showErrorModal(message: string) {
+      this.errorModal.title = this.t("session.prepare.step.wizard.deeplink.errorTitle");
+      this.errorModal.message = message;
+      this.errorModal.visible = true;
+    },
     parseDeepLink() {
       const { query } = this.route;
       if (!Object.keys(query).length) return; // No deep link provided
@@ -547,7 +564,7 @@ export default defineComponent({
       const passwordValue = getQueryParam(query.password);
 
       if (!modeValue || !setValue || !timerValue || hostVotingValue == null) {
-        this.toast.error(this.t("session.prepare.step.wizard.deeplink.missingParameters"));
+        this.showErrorModal(this.t("session.prepare.step.wizard.deeplink.missingParameters"));
         return;
       }
 
@@ -558,16 +575,26 @@ export default defineComponent({
       };
 
       if (!(modeValue in modeMap)) {
-        this.toast.error(this.t("session.prepare.step.wizard.deeplink.invalidMode"));
+        this.showErrorModal(this.t("session.prepare.step.wizard.deeplink.invalidMode"));
         return;
       }
 
       this.tabIndex = modeMap[modeValue];
-      this.selectedCardSetOptions.activeValues = setValue.split(",");
+
+      if (this.tabIndex === 2) {
+        const setArray = setValue.split(",");
+        if (!setArray.every((item) => /^\d+$/.test(item))) {
+          this.showErrorModal(this.t("session.prepare.step.wizard.deeplink.invalidSetForJira"));
+          return;
+        }
+        this.selectedCardSetOptions.activeValues = setArray;
+      } else {
+        this.selectedCardSetOptions.activeValues = setValue.split(",");
+      }
 
       const parsedTimer = parseInt(timerValue, 10);
       if (isNaN(parsedTimer)) {
-        this.toast.error(this.t("session.prepare.step.wizard.deeplink.invalidTime"));
+        this.showErrorModal(this.t("session.prepare.step.wizard.deeplink.invalidTime"));
         return;
       }
       this.timer = parsedTimer;
@@ -578,7 +605,6 @@ export default defineComponent({
       }
 
       this.isDeepLink = true;
-      // In US_JIRA mode, enforce authentication (step 1); otherwise, jump to confirmation (step 4)
       this.step = modeValue === "US_JIRA" ? 1 : 4;
     },
     copyDeepLink() {
