@@ -134,6 +134,11 @@
       @acceptSplitting="acceptSplitting"
       @retry="retry"
     />
+    <UserStoryDeleteModal
+      v-model:is-visible="showDeleteConfirmModal"
+      :story-mode="storyMode"
+      @confirmDelete="confirmDelete"
+    />
   </div>
 </template>
 
@@ -143,10 +148,11 @@ import UserStory from "../model/UserStory";
 import { useI18n } from "vue-i18n";
 import PrivacyModal from "@/components/PrivacyModal.vue";
 import SplitUserStoriesModal from "@/components/SplitUserStoriesModal.vue";
+import UserStoryDeleteModal from "@/components/UserStoryDeleteModal.vue";
 
 export default defineComponent({
   name: "UserStories",
-  components: { SplitUserStoriesModal, PrivacyModal },
+  components: { SplitUserStoriesModal, PrivacyModal, UserStoryDeleteModal },
   props: {
     cardSet: { type: Array, required: true },
     initialStories: { type: Array, required: true },
@@ -176,6 +182,8 @@ export default defineComponent({
       showPrivacyModal: false,
       showUserStorySplitModal: false,
       splittedUserStoriesData: [] as Array<UserStory>,
+      showDeleteConfirmModal: false,
+      indexToDelete: null,
     };
   },
   watch: {
@@ -245,8 +253,16 @@ export default defineComponent({
       }
     },
     deleteStory(index) {
-      this.publishChanges(index, true);
-      this.userStories.splice(index, 1);
+      this.indexToDelete = index;
+      this.showDeleteConfirmModal = true;
+    },
+    confirmDelete() {
+      const index = this.indexToDelete;
+      if (index !== null) {
+        this.publishChanges(index, true);
+        this.userStories.splice(index, 1);
+        this.indexToDelete = null;
+      }
     },
     publishChanges(index, remove) {
       if (this.userStories[index] !== undefined) {
