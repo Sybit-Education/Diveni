@@ -260,7 +260,6 @@ export default defineComponent({
       const index = this.indexToDelete;
       if (index !== null) {
         this.publishChanges(index, true);
-        this.userStories.splice(index, 1);
         this.indexToDelete = null;
       }
     },
