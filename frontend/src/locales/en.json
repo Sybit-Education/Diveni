@@ -108,6 +108,7 @@
           "title": "Remove member",
           "bodyPart1": "Are you sure you want to remove ",
           "bodyPart2": " from your current session?",
+          "deleteTitle": "Delete Story",
           "defaultDeleteInfo": "Are you sure you want to delete this story? This action cannot be undone",
           "jiraDeleteInfo": "You are connected to Jira. Deleting this story will also permanently delete the linked issue in your Jira project. This action cannot be undone.",
           "buttons": {

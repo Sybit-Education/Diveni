@@ -2,9 +2,9 @@
   <b-modal
     v-model="isVisibleProxy"
     centered
-    title="Delete Story"
-    ok-title="Yes"
-    cancel-title="Cancel"
+    :title="t('page.session.during.modal.deleteTitle')"
+    :ok-title="t('page.session.during.modal.buttons.ok')"
+    :cancel-title="t('page.session.during.modal.buttons.cancel')"
     @ok="confirm"
     @cancel="cancel"
   >
