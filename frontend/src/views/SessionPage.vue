@@ -604,6 +604,9 @@ export default defineComponent({
             response = 204;
           } else {
             response = await apiService.deleteUserStory(us[idx].id);
+            if (response.status === 200) {
+              us.splice(idx, 1);
+            }
           }
           doRemove = false;
         } else {
@@ -636,6 +639,10 @@ export default defineComponent({
           this.toast.info(this.t("session.notification.messages.issueTrackerNothingChanged"));
         } else {
           this.toast.error(this.t("session.notification.messages.issueTrackerSynchronizeFailed"));
+        }
+      } else if (this.userStoryMode === "US_MANUALLY") {
+        if (doRemove) {
+          us.splice(idx, 1);
         }
       }
       this.store.setUserStories({ stories: us });

@@ -10,21 +10,20 @@
           v-model="input"
           type="text"
           :placeholder="t('page.session.before.userStories.placeholder.searchUserStories')"
-          @input="swapPriority"
         />
       </b-input-group>
     </div>
     <b-card-group id="userStoryBlock" class="my-2 overflow-auto">
       <b-list-group-item
-        v-for="(story, index) of userStories"
+        v-for="(story, index) of displayedUserStories"
         id="userStoryRow"
         :key="index"
-        :active="index === selectedStoryIndex"
+        :active="story.id === userStories[selectedStoryIndex]?.id"
+        :style="story.id === userStories[selectedStoryIndex]?.id ? 'border-width: 3px;' : ''"
         class="w-100 p-1 d-flex justify-content-left"
-        :style="index === selectedStoryIndex ? 'border-width: 3px;' : ''"
         @mouseover="hover = index"
         @mouseleave="hover = null"
-        @click="setUserStoryAsActive(index)"
+        @click="setUserStoryAsActive(userStories.indexOf(story))"
       >
         <b-button
           v-if="showEditButtons"
@@ -171,14 +170,26 @@ export default defineComponent({
       hover: null,
       input: "",
       filterActive: false,
-      savedStories: [] as Array<UserStory>,
       generatedUUIDs: new Set<number>(),
       showPrivacyModal: false,
       showUserStorySplitModal: false,
       splittedUserStoriesData: [] as Array<UserStory>,
     };
   },
+  computed: {
+    displayedUserStories(): Array<UserStory> {
+      if (this.input === "") {
+        return this.userStories;
+      }
+      return this.userStories.filter((userStory) =>
+        userStory.title.toLowerCase().includes(this.input.toLowerCase())
+      );
+    },
+  },
   watch: {
+    input(newVal: string) {
+      this.filterActive = newVal !== "";
+    },
     initialStories() {
       this.userStories = this.initialStories as Array<UserStory>;
     },
@@ -220,33 +231,12 @@ export default defineComponent({
         }
       });
     },
-    swapPriority: function () {
-      if (!this.filterActive) {
-        this.savedStories = this.userStories;
+    deleteStory(filteredIndex) {
+      const storyToDelete = this.displayedUserStories[filteredIndex];
+      const actualIndex = this.userStories.findIndex((s) => s === storyToDelete);
+      if (actualIndex !== -1) {
+        this.publishChanges(actualIndex, true);
       }
-      this.userStories = this.savedStories;
-      if (this.input !== "") {
-        const filteredUserStories: UserStory[] = [];
-        this.userStories.forEach((userStory) => {
-          if (userStory.title.toLowerCase().includes(this.input.toLowerCase())) {
-            filteredUserStories.push(userStory);
-          }
-        });
-        if (filteredUserStories.length > 0) {
-          this.filterActive = true;
-          this.userStories = filteredUserStories;
-        } else {
-          this.filterActive = true;
-          this.userStories = [];
-        }
-      } else {
-        this.filterActive = false;
-        this.userStories = this.savedStories;
-      }
-    },
-    deleteStory(index) {
-      this.publishChanges(index, true);
-      this.userStories.splice(index, 1);
     },
     publishChanges(index, remove) {
       if (this.userStories[index] !== undefined) {
