@@ -166,7 +166,7 @@
             />
           </div>
         </b-col>
-        <b-col v-if="index !== null" cols="12" md="7">
+        <b-col v-if="index !== null && index >= 0 && index < userStories.length" cols="12" md="7">
           <user-story-title
             :host="false"
             :initial-stories="userStories"
@@ -384,7 +384,7 @@ export default defineComponent({
       return false;
     },
     onSelectedStory($event) {
-      this.index = $event;
+      this.index = $event ?? null;
     },
     onSendVote({ vote }) {
       this.draggedVote = vote;
