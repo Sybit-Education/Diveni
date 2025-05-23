@@ -231,8 +231,13 @@ export default defineComponent({
         }
       });
     },
-    deleteStory(filteredIndex) {
-      const storyToDelete = this.displayedUserStories[filteredIndex];
+    deleteStory(index) {
+      if (!this.filterActive) {
+        this.publishChanges(index, true);
+        return;
+      }
+
+      const storyToDelete = this.displayedUserStories[index];
       const actualIndex = this.userStories.findIndex((s) => s === storyToDelete);
       if (actualIndex !== -1) {
         this.publishChanges(actualIndex, true);
