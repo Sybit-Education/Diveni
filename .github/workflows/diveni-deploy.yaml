@@ -75,4 +75,4 @@ jobs:
           port: ${{ secrets.DEPLOY_SSH_PORT }}
           script_stop: true
           script: |
-            bash startDiveni.sh
+            sudo ${{ secrets.START_SCRIPT_PATH }}
