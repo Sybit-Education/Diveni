@@ -1,7 +1,7 @@
 cd Diveni
 
 echo Pulling Docker images ...
-docker-compose pull
+docker compose pull
 
 echo Starting Diveni ...
-docker-compose up -d
+docker compose up -d
