@@ -1,62 +1,51 @@
 <template>
-  <teleport to="body">
-    <div v-if="visible" class="modal-backdrop">
-      <div class="modal-content">
-        <h2 class="modal-title">{{ title }}</h2>
-        <p class="modal-message">{{ message }}</p>
-        <button class="btn btn-primary" @click="handleOk">OK</button>
-      </div>
-    </div>
-  </teleport>
+  <b-modal
+    v-model="localVisible"
+    centered
+    :title="title"
+    ok-only
+    :ok-title="Ok"
+    hide-header-close
+    no-close-on-esc
+    no-close-on-backdrop
+    @ok="handleOk"
+  >
+    <p class="text-center">{{ message }}</p>
+  </b-modal>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import { useI18n } from "vue-i18n";
+import { useRouter } from "vue-router";
 
 export default defineComponent({
   name: "WizardErrorModal",
   props: {
-    visible: { type: Boolean, required: false, default: false },
-    title: { type: String, default: "", required: false },
-    message: { type: String, default: "", required: false },
+    visible: { type: Boolean, default: false },
+    title: { type: String, default: "" },
+    message: { type: String, default: "" },
   },
-  emits: ["close"],
+  emits: ["reset-wizard"],
+  setup() {
+    const { t } = useI18n();
+    const router = useRouter();
+    return { t, router };
+  },
+  data() {
+    return {
+      localVisible: this.visible as boolean,
+    };
+  },
+  watch: {
+    visible(newVal: boolean) {
+      this.localVisible = newVal;
+    },
+  },
   methods: {
     handleOk() {
-      this.$emit("close");
-      window.location.href = "/prepare";
+      this.$emit("reset-wizard");
     },
   },
 });
 </script>
-
-<style scoped>
-.modal-backdrop {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  opacity: 1;
-  background-color: rgba(0, 0, 0, 0.75);
-}
-
-.modal-content {
-  border-radius: 12px;
-  padding: 2rem;
-  max-width: 500px;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
-  text-align: center;
-}
-
-.modal-title {
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin-bottom: 1rem;
-  color: var(--text-primary-color);
-}
-
-.modal-message {
-  font-size: 1rem;
-  margin-bottom: 1.5rem;
-  color: var(--text-primary-color);
-}
-</style>

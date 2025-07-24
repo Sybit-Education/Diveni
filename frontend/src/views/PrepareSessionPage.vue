@@ -5,7 +5,7 @@
       :visible="errorModal.visible"
       :title="errorModal.title"
       :message="errorModal.message"
-      @close="errorModal.visible = false"
+      @reset-wizard="resetWizard"
     />
     <Steppy
       v-model:step="step"
@@ -630,6 +630,22 @@ export default defineComponent({
           console.error("Failed to copy deep link", err);
           this.toast.error(this.t("session.prepare.step.wizard.deeplink.copyFailed"));
         });
+    },
+    resetWizard() {
+      this.errorModal.visible = false;
+      this.step = 1;
+      this.tabIndex = null;
+      this.timer = 0;
+      this.password = "";
+      this.hostVoting = false;
+      this.selectedCardSetOptions = {
+        name: "",
+        values: [],
+        activeValues: [],
+        position: 0,
+      };
+      this.store.setUserStories({ stories: [] });
+      this.isDeepLink = false;
     },
   },
 });
