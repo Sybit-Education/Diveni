@@ -1,10 +1,10 @@
 
 plugins {
-    id 'org.springframework.boot' version '3.5.0'
+    id 'org.springframework.boot' version '3.5.3'
     id 'io.spring.dependency-management' version '1.1.7'
     id 'java'
     id 'jacoco'
-    id "io.freefair.lombok" version "8.13.1"
+    id "io.freefair.lombok" version "8.14"
 }
 
 configurations {
@@ -24,7 +24,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
     implementation 'com.google.oauth-client:google-oauth-client:1.39.0'
-    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.8'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.9'
     implementation 'com.google.api-client:google-api-client-gson:1.35.2'
     implementation 'com.google.code.gson:gson:2.13.1'
     implementation 'org.springdoc:springdoc-openapi-ui:1.8.0'
