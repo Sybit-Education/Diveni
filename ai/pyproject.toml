@@ -12,6 +12,7 @@ uvicorn = "^0.28.0"
 openai = "^1.13.3"
 pytest = "^8.1.1"
 mock = "^5.1.0"
+poetry-dotenv-plugin = "^0.2.0"
 
 
 [tool.poetry.group.dev.dependencies]
