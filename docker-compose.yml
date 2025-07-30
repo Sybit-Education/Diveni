@@ -20,7 +20,7 @@ services:
     env_file:
       - ./ai/.env
     healthcheck:
-      test: curl --fail http://diveni_ai:8000/health | grep UP || exit 1
+      test: curl --fail http://localhost:8000/health | grep UP || exit 1
       interval: 60s
       timeout: 30s
       retries: 3
@@ -38,7 +38,7 @@ services:
     env_file:
       - ./backend/.env
     healthcheck:
-      test: curl --fail http://backend:9090/actuator/health | grep UP || exit 1
+      test: curl --fail http://localhost:9090/actuator/health | grep UP || exit 1
       interval: 60s
       timeout: 30s
       retries: 3
@@ -51,7 +51,7 @@ services:
     container_name: diveni_frontend
     restart: unless-stopped
     healthcheck:
-      test: curl --fail http://frontend:80 || exit 1
+      test: curl --fail http://localhost:80 || exit 1
       interval: 60s
       timeout: 30s
       retries: 3
