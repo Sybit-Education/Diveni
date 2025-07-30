@@ -61,3 +61,8 @@ def check_api_key():
     response = service.check_api_key()
     print("gpt_controller: <-- check_api_key()")
     return {"has_api_key": response}
+
+
+@app.get("/health")
+def health():
+    return {"status": "UP"}
