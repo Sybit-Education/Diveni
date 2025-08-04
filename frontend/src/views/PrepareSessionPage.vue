@@ -596,7 +596,7 @@ export default defineComponent({
         US_JIRA: 2,
       };
 
-      if (!(modeValue in modeMap)) { //chekc check 
+      if (!(modeValue in modeMap)) {
         this.showErrorModal(this.t("session.prepare.step.wizard.deeplink.invalidMode"));
         return;
       }
