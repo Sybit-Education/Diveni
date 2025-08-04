@@ -332,6 +332,33 @@ export default defineComponent({
         title: "",
         message: "",
       },
+      allCardSets: [
+        {
+          values: ["1", "2", "3", "5", "8", "13", "21", "34", "55", "?"],
+          activeValues: ["1", "2", "3", "5", "8", "13", "21"],
+          position: 1,
+        },
+        {
+          values: ["XXS", "XS", "S", "M", "L", "XL", "XXL", "XXXL", "?"],
+          activeValues: ["XS", "S", "M", "L", "XL"],
+          position: 2,
+        },
+        {
+          values: ["1", "2", "3", "4", "5", "6", "8", "10", "12", "16", "?"],
+          activeValues: ["1", "2", "3", "4", "5", "6", "8", "10", "12", "16"],
+          position: 3,
+        },
+        {
+          values: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "?"],
+          activeValues: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
+          position: 4,
+        },
+        {
+          values: [],
+          activeValues: [],
+          position: 5,
+        },
+      ],
     };
   },
   computed: {
@@ -569,7 +596,7 @@ export default defineComponent({
         US_JIRA: 2,
       };
 
-      if (!(modeValue in modeMap)) {
+      if (!(modeValue in modeMap)) { //chekc check 
         this.showErrorModal(this.t("session.prepare.step.wizard.deeplink.invalidMode"));
         return;
       }
@@ -577,6 +604,13 @@ export default defineComponent({
       this.tabIndex = modeMap[modeValue];
 
       const setArray = setValue.split(",");
+      const validCardSets = this.tabIndex === 2 ? this.allCardSets : this.allCardSets;
+      const allPossibleValues = validCardSets.flatMap((set) => set.values);
+      if (!setArray.every((item) => allPossibleValues.includes(item))) {
+        this.showErrorModal(this.t("session.prepare.step.wizard.deeplink.invalidSet"));
+        return;
+      }
+    
       if (this.tabIndex === 2 && !setArray.every((item) => /^\d+$/.test(item))) {
         this.showErrorModal(this.t("session.prepare.step.wizard.deeplink.invalidSetForJira"));
         return;
@@ -584,7 +618,7 @@ export default defineComponent({
       this.selectedCardSetOptions.activeValues = setArray;
 
       const parsedTimer = parseInt(timerValue, 10);
-      if (isNaN(parsedTimer)) {
+      if (isNaN(parsedTimer) || parsedTimer == 0 || parsedTimer > 3600) {
         this.showErrorModal(this.t("session.prepare.step.wizard.deeplink.invalidTime"));
         return;
       }
