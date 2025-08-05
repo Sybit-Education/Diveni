@@ -20,7 +20,7 @@
     "bootstrap": "^4.6.1",
     "bootstrap-vue": "^2.23.1",
     "canvas-confetti": "^1.9.3",
-    "core-js": "^3.41.0",
+    "core-js": "^3.45.0",
     "gsap": "^3.12.7",
     "hammerjs": "^2.0.8",
     "jira2md": "^3.0.1",
