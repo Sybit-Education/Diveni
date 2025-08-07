@@ -618,7 +618,7 @@ export default defineComponent({
       this.selectedCardSetOptions.activeValues = setArray;
 
       const parsedTimer = parseInt(timerValue, 10);
-      if (isNaN(parsedTimer) || parsedTimer == 0 || parsedTimer > 3600) {
+      if (isNaN(parsedTimer) || parsedTimer == 0) {
         this.showErrorModal(this.t("session.prepare.step.wizard.deeplink.invalidTime"));
         return;
       }
