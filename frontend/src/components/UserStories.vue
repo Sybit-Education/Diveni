@@ -64,7 +64,7 @@
           class="p-0 mx-1 custom-link-button"
           size="sm"
           target="_blank"
-          title="Zum Jira Ticket"
+          :title="t('page.session.before.userStories.button.openExternalTracker')"
           @click.stop="openLink(story.storyUrl)"
         >
           <b-icon-box-arrow-up-right class="custom-link-icon" />
