@@ -181,7 +181,7 @@ public class GithubService implements ProjectManagementProviderOAuth2 {
                 description,
                 estimation,
                 false,
-              null));
+                null));
       }
       selectedProject.put(accessTokens.get(tokenIdentifier), projectName);
       LOGGER.debug("<-- getIssues()");
