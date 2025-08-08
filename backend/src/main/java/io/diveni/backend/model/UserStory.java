@@ -25,5 +25,4 @@ public class UserStory {
   final Boolean isActive;
 
   final String storyUrl;
-
 }
