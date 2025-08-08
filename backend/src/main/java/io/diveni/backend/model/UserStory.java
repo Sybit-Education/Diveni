@@ -23,4 +23,7 @@ public class UserStory {
   final String estimation;
 
   final Boolean isActive;
+
+  final String storyUrl;
+
 }

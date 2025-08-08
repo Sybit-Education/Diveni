@@ -153,7 +153,8 @@ public class GitlabService implements ProjectManagementProviderOAuth2 {
                 node.get("title").asText(),
                 node.get("description").asText(),
                 estimation,
-                null));
+                null,
+              null));
       }
       projectIDTokenID.put(tokenIdentifier, projectIDs.get(projectName));
       LOGGER.debug("<-- getIssues()");

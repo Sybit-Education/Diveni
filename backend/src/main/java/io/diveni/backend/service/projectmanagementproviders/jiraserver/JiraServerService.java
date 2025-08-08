@@ -238,7 +238,8 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
                   fields.get("summary").textValue(),
                   fields.get("description").textValue(),
                   estimation,
-                  false));
+                  false,
+                String.format("%s/browse/%s", JIRA_HOME, jsonNode.get("key").asText())));
         }
       }
 
@@ -314,7 +315,12 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
 
       JsonNode node = new ObjectMapper().readTree(response.parseAsString());
       LOGGER.debug("<-- createIssue()");
-      return node.path("id").asText();
+      // Rückgabe von id UND URL
+      return new ObjectMapper().createObjectNode()
+        .put("id", node.path("id").asText())
+        .put("storyUrl", String.format("%s/browse/%s", JIRA_HOME, node.path("key").asText()))
+        .toString();
+
     } catch (Exception e) {
       LOGGER.error("Failed to create issue!", e);
       throw new ResponseStatusException(

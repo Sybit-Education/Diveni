@@ -180,7 +180,8 @@ public class GithubService implements ProjectManagementProviderOAuth2 {
                 node.get("title").asText(),
                 description,
                 estimation,
-                false));
+                false,
+              null));
       }
       selectedProject.put(accessTokens.get(tokenIdentifier), projectName);
       LOGGER.debug("<-- getIssues()");

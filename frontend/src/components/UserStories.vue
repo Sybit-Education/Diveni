@@ -58,6 +58,17 @@
         >
           <BIconStars />
         </b-button>
+        <b-button
+          v-if="storyMode === 'US_JIRA' && story.storyUrl"
+          variant="link"
+          class="p-0 mx-1 custom-link-button"
+          size="sm"
+          target="_blank"
+          title="Zum Jira Ticket"
+          @click.stop="openLink(story.storyUrl)"
+        >
+          <b-icon-box-arrow-up-right class="custom-link-icon" />
+        </b-button>
         <b-form-input
           id="userStoryTitles"
           v-model="story.title"
@@ -66,7 +77,6 @@
           size="sm"
           :placeholder="t('page.session.before.userStories.placeholder.userStoryTitle')"
         />
-
         <b-badge id="badge" class="p-2">
           {{ story.estimation == null ? "?" : story.estimation }}
         </b-badge>
@@ -296,6 +306,9 @@ export default defineComponent({
     retry() {
       this.$emit("sendGPTRequest", { retry: true });
     },
+    openLink(url: string) {
+      window.open(url, "_blank");
+    },
   },
 });
 </script>
@@ -341,5 +354,17 @@ export default defineComponent({
   background-color: var(--secondary-button);
   color: var(--text-primary-color);
   font-size: large;
+}
+
+.custom-link-button:hover {
+  color: var(--bs-primary-dark);
+}
+
+.custom-link-icon {
+  font-size: 1.5rem !important;
+}
+
+.custom-link-button:hover .custom-link-icon {
+  transform: scale(1.1);
 }
 </style>
