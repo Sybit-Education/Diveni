@@ -614,9 +614,10 @@ export default defineComponent({
               this.selectedProject.id
             );
             if (response.status === 200) {
+              const { id, storyUrl = null } = response.data;
               us = this.userStories.map((s) =>
                 s.title === us[idx].title && s.description === us[idx].description
-                  ? { ...s, id: response.data }
+                  ? { ...s, id, storyUrl }
                   : s
               );
               console.log(`assigned id: ${us[idx].id}`);
