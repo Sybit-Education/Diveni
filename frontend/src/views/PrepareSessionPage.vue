@@ -1,7 +1,12 @@
 <template>
   <b-container class="main">
     <h1>{{ t("session.prepare.title") }}</h1>
-
+    <WizardErrorModal
+      :visible="errorModal.visible"
+      :title="errorModal.title"
+      :message="errorModal.message"
+      @reset-wizard="resetWizard"
+    />
     <Steppy
       v-model:step="step"
       :finalize="sendCreateSessionRequest"
@@ -36,9 +41,9 @@
                 class="modeIconImage"
                 :class="{ active: tabIndex === 0 }"
               />
-              <span class="mode-icon-text">{{
-                t("session.prepare.step.selection.mode.description.withoutUS.tab.label")
-              }}</span>
+              <span class="mode-icon-text">
+                {{ t("session.prepare.step.selection.mode.description.withoutUS.tab.label") }}
+              </span>
             </button>
             <button
               type="button"
@@ -50,9 +55,9 @@
                 class="modeIconImage"
                 :class="{ active: tabIndex === 1 }"
               />
-              <span class="mode-icon-text">{{
-                t("session.prepare.step.selection.mode.description.withUS.tab.label")
-              }}</span>
+              <span class="mode-icon-text">
+                {{ t("session.prepare.step.selection.mode.description.withUS.tab.label") }}
+              </span>
             </button>
             <button
               v-if="isIssueTrackerEnabled"
@@ -149,9 +154,8 @@
                 setTimerDown();
                 $event.target.blur();
               "
+              >-</b-button
             >
-              -
-            </b-button>
             <div id="setting-value" class="font-weight-bolder px-3 text-center">
               {{ timer == 0 ? "∞" : formatTimer }}
             </div>
@@ -161,9 +165,8 @@
                 setTimerUp();
                 $event.target.blur();
               "
+              >+</b-button
             >
-              +
-            </b-button>
           </div>
           <h4 class="mb-3">
             <b-img
@@ -203,12 +206,18 @@
 
       <template #4>
         <div class="wizardStep">
+          <div class="copy-btn-container">
+            <b-button class="copy-btn" variant="outline-dark" @click="copyDeepLink">
+              <b-icon icon="clipboard" class="bIcons" />
+              {{ t("session.prepare.step.wizard.deeplink.copyDeeplink") }}
+            </b-button>
+          </div>
           <h4 class="mb-3">{{ t("session.prepare.step.confirmation.title") }}</h4>
           <b-list-group>
-            <b-list-group-item
-              >{{ t("session.prepare.step.selection.mode.title") }}:
-              {{ userStoryMode }}</b-list-group-item
-            >
+            <b-list-group-item>
+              {{ t("session.prepare.step.selection.mode.title") }}:
+              {{ userStoryMode }}
+            </b-list-group-item>
             <b-list-group-item>
               {{ t("session.prepare.step.selection.cardSet.title") }}:
               {{
@@ -217,22 +226,22 @@
                   : ""
               }}
             </b-list-group-item>
-            <b-list-group-item
-              >{{ t("session.prepare.step.selection.time.title") }}:
-              {{ timer == 0 ? "∞" : formatTimer }}</b-list-group-item
-            >
-            <b-list-group-item
-              >{{ t("session.prepare.step.selection.hostVoting.title") }}:
+            <b-list-group-item>
+              {{ t("session.prepare.step.selection.time.title") }}:
+              {{ timer == 0 ? "∞" : formatTimer }}
+            </b-list-group-item>
+            <b-list-group-item>
+              {{ t("session.prepare.step.selection.hostVoting.title") }}:
               {{
                 hostVoting
                   ? t("session.prepare.step.selection.hostVoting.hostVotingOn")
                   : t("session.prepare.step.selection.hostVoting.hostVotingOff")
-              }}</b-list-group-item
-            >
-            <b-list-group-item
-              >{{ t("session.prepare.step.selection.password.title") }}:
-              {{ password }}</b-list-group-item
-            >
+              }}
+            </b-list-group-item>
+            <b-list-group-item>
+              {{ t("session.prepare.step.selection.password.title") }}:
+              {{ password }}
+            </b-list-group-item>
           </b-list-group>
         </div>
       </template>
@@ -249,6 +258,7 @@ import CardSetComponent from "../components/CardSetComponent.vue";
 import UserStoryComponent from "../components/UserStoryComponent.vue";
 import JiraComponent from "../components/JiraComponent.vue";
 import StoryPointsComponent from "@/components/StoryPointsComponent.vue";
+import WizardErrorModal from "@/components/WizardErrorModal.vue";
 import UserStory from "@/model/UserStory";
 import papaparse, { ParseResult } from "papaparse";
 import apiService from "@/services/api.service";
@@ -256,11 +266,12 @@ import { useDiveniStore } from "@/store";
 import { useToast } from "vue-toastification";
 import { useI18n } from "vue-i18n";
 import { Steppy } from "vue3-steppy";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 
 export default defineComponent({
   name: "PrepareSessionPage",
   components: {
+    WizardErrorModal,
     CardSetComponent,
     UserStoryComponent,
     JiraComponent,
@@ -272,8 +283,9 @@ export default defineComponent({
     const toast = useToast();
     const { t } = useI18n();
     const router = useRouter();
+    const route = useRoute();
     const step = ref<number>(1);
-    return { store, toast, t, step, router };
+    return { store, toast, t, step, router, route };
   },
   data() {
     return {
@@ -291,6 +303,7 @@ export default defineComponent({
       isIssueTrackerEnabled: false,
       theme: localStorage.getItem("user-theme"),
       isJiraSelected: false,
+      isDeepLink: false,
       generatedUUIDs: new Set<number>(),
       tabs: [
         {
@@ -312,6 +325,38 @@ export default defineComponent({
           title: this.t("session.prepare.step.wizard.confirmation"),
           isValid: false,
           iconSuccess: null,
+        },
+      ],
+      errorModal: {
+        visible: false,
+        title: "",
+        message: "",
+      },
+      allCardSets: [
+        {
+          values: ["1", "2", "3", "5", "8", "13", "21", "34", "55", "?"],
+          activeValues: ["1", "2", "3", "5", "8", "13", "21"],
+          position: 1,
+        },
+        {
+          values: ["XXS", "XS", "S", "M", "L", "XL", "XXL", "XXXL", "?"],
+          activeValues: ["XS", "S", "M", "L", "XL"],
+          position: 2,
+        },
+        {
+          values: ["1", "2", "3", "4", "5", "6", "8", "10", "12", "16", "?"],
+          activeValues: ["1", "2", "3", "4", "5", "6", "8", "10", "12", "16"],
+          position: 3,
+        },
+        {
+          values: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "?"],
+          activeValues: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
+          position: 4,
+        },
+        {
+          values: [],
+          activeValues: [],
+          position: 5,
         },
       ],
     };
@@ -363,6 +408,11 @@ export default defineComponent({
     finalStepIsValid(newVal: boolean) {
       this.tabs[3].isValid = newVal;
     },
+    step(newStep) {
+      if (this.isDeepLink && this.tabIndex === 2 && newStep === 2 && this.store.selectedProject) {
+        this.step = 4;
+      }
+    },
   },
   mounted() {
     window.addEventListener("user-theme-localstorage-changed", (event) => {
@@ -378,6 +428,7 @@ export default defineComponent({
         result.isGitlabEnabled === "true";
     });
     this.store.setUserStories({ stories: [] });
+    this.parseDeepLink();
   },
   methods: {
     async sendCreateSessionRequest() {
@@ -423,6 +474,7 @@ export default defineComponent({
           sessionID: session.sessionID,
           adminID: session.adminID,
           timerSecondsString: this.timer.toString(),
+          password: this.password,
           voteSetJson: JSON.stringify(session.sessionConfig.set),
           sessionState: session.sessionState,
           userStoryMode: session.sessionConfig.userStoryMode,
@@ -472,20 +524,16 @@ export default defineComponent({
     importStory(event: Event) {
       const target = event.target as HTMLInputElement;
       const files = target.files;
-
       if (!files || !files[0]) {
         return;
       }
-
       papaparse.parse(files[0], {
         header: true,
         delimiter: ";",
         complete: (result: ParseResult<UserStory>) => {
           const stories: UserStory[] = [];
-
           result.data.forEach((story) => {
             const { title, description, estimation } = story;
-
             stories.push({
               id: this.generateNumericUUID().toString(),
               title: title,
@@ -494,7 +542,6 @@ export default defineComponent({
               isActive: false,
             });
           });
-
           this.store.setUserStories({ stories: stories });
           this.toast.success(
             this.t(
@@ -521,6 +568,127 @@ export default defineComponent({
       }
       this.tabIndex = index;
     },
+    showErrorModal(message: string) {
+      this.errorModal.title = this.t("session.prepare.step.wizard.deeplink.errorTitle");
+      this.errorModal.message = message;
+      this.errorModal.visible = true;
+    },
+    parseDeepLink() {
+      const { query } = this.route;
+
+      // No DeepLink provided
+      if (!query || Object.keys(query).length === 0) return;
+
+      const modeValue = query.mode as string | undefined;
+      const setValue = query.set as string | undefined;
+      const timerValue = query.timer as string | undefined;
+      const hostVotingValue = query.hostVoting as string | undefined;
+      const passwordValue = query.password as string | undefined;
+
+      if (!modeValue || !setValue || !timerValue || !hostVotingValue) {
+        this.showErrorModal(this.t("session.prepare.step.wizard.deeplink.missingParameters"));
+        return;
+      }
+
+      const modeMap: Record<string, number> = {
+        NO_US: 0,
+        US_MANUALLY: 1,
+        US_JIRA: 2,
+      };
+
+      if (!(modeValue in modeMap)) {
+        this.showErrorModal(this.t("session.prepare.step.wizard.deeplink.invalidMode"));
+        return;
+      }
+
+      this.tabIndex = modeMap[modeValue];
+
+      const setArray = setValue.split(",").map(item => item.trim()).filter(item => item !== "");
+      
+      const uniqueSetArray = [...new Set(setArray)];
+      
+      const validCardSets = this.tabIndex === 2 ? this.allCardSets : this.allCardSets;
+      const allPossibleValues = validCardSets.flatMap((set) => set.values);
+      if (!uniqueSetArray.every((item) => allPossibleValues.includes(item))) {
+        this.showErrorModal(this.t("session.prepare.step.wizard.deeplink.invalidSet"));
+        return;
+      }
+    
+      if (this.tabIndex === 2 && !uniqueSetArray.every((item) => /^\d+$/.test(item))) {
+        this.showErrorModal(this.t("session.prepare.step.wizard.deeplink.invalidSetForJira"));
+        return;
+      }
+      this.selectedCardSetOptions.activeValues = uniqueSetArray;
+
+      if (!/^\d+$/.test(timerValue)) {
+        this.showErrorModal(this.t("session.prepare.step.wizard.deeplink.invalidTime"));
+        return;
+      }
+      
+      const parsedTimer = parseInt(timerValue, 10);
+      if (isNaN(parsedTimer) || parsedTimer < 0 || parsedTimer > 1600) {
+        this.showErrorModal(this.t("session.prepare.step.wizard.deeplink.invalidTime"));
+        return;
+      }
+      this.timer = parsedTimer;
+
+      if (hostVotingValue !== "true" && hostVotingValue !== "false") {
+        this.showErrorModal(this.t("session.prepare.step.wizard.deeplink.invalidHostVoting"));
+        return;
+      }
+      this.hostVoting = hostVotingValue === "true";
+
+      if (passwordValue !== undefined) {
+        this.password = passwordValue;
+      }
+
+      this.isDeepLink = true;
+      this.step = modeValue === "US_JIRA" ? 1 : 4;
+    },
+    copyDeepLink() {
+      // Build the deep link URL based on current configuration
+      const modeMap: Record<number, string> = {
+        0: "NO_US",
+        1: "US_MANUALLY",
+        2: "US_JIRA",
+      };
+      const index = this.tabIndex ?? 0;
+      const mode = modeMap[index] || "NO_US";
+      const setParam = this.selectedCardSetOptions.activeValues.join(",");
+      const timerParam = this.timer;
+      const hostVotingParam = this.hostVoting;
+      const passwordParam = this.password ? `&password=${encodeURIComponent(this.password)}` : "";
+      const baseUrl = window.location.origin + "/prepare";
+      const deepLink = `${baseUrl}?mode=${mode}&set=${encodeURIComponent(
+        setParam
+      )}&timer=${timerParam}&hostVoting=${hostVotingParam}${passwordParam}`;
+
+      navigator.clipboard
+        .writeText(deepLink)
+        .then(() => {
+          this.toast.success(this.t("session.prepare.step.wizard.deeplink.copy"));
+        })
+        .catch((err) => {
+          console.error("Failed to copy deep link", err);
+          this.toast.error(this.t("session.prepare.step.wizard.deeplink.copyFailed"));
+        });
+    },
+    resetWizard() {
+      this.errorModal.visible = false;
+      this.step = 1;
+      this.tabIndex = null;
+      this.timer = 0;
+      this.password = "";
+      this.hostVoting = false;
+      this.selectedCardSetOptions = {
+        name: "",
+        values: [],
+        activeValues: [],
+        position: 0,
+      };
+      this.store.setUserStories({ stories: [] });
+      this.isDeepLink = false;
+    },
   },
 });
 </script>
@@ -541,7 +709,6 @@ export default defineComponent({
     width: 6rem;
     border-radius: $border-radius;
     border-color: var(--btn-border-color) !important;
-
     &:not(.active) {
       background-color: var(--preparePageTimerBackground);
       &:hover {
@@ -566,7 +733,6 @@ export default defineComponent({
   height: clamp(2.5rem, 5vw, 2.5rem);
   padding: 0;
   margin: 0 auto;
-
   button {
     height: 100%;
     width: 50%;
@@ -584,7 +750,6 @@ export default defineComponent({
   flex-wrap: wrap;
   justify-content: center;
   gap: 1rem;
-
   .mode-icon {
     max-width: 225px;
     min-width: 95px;
@@ -600,30 +765,45 @@ export default defineComponent({
     border-radius: $border-radius;
     box-shadow: 8px 8px 5px var(--box-shadow);
     background-color: var(--preparePage-mode-backround);
-
     &:hover {
       border-width: 4px;
       border-color: var(--preparePage-hover-icon-border);
       border-style: solid;
     }
-
     &.active {
       border-width: 5px;
       border-color: var(--preparePage-active-icon-border);
       border-style: solid;
     }
-
     .modeIconImage {
       width: 100px;
       height: 100px;
     }
-
     .mode-icon-text {
       font-size: 18px;
       text-align: center;
       font-weight: bold;
     }
   }
+}
+
+.copy-btn-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.copy-btn {
+  background-color: var(--textAreaColour);
+  display: inline-flex;
+  align-items: center;
+  margin: 0.25rem;
+}
+
+.copy-btn:hover {
+  background-color: var(--textAreaColourHovered);
+  color: var(--text-primary-color);
 }
 
 .mode-icon-text::before {
@@ -664,3 +844,5 @@ export default defineComponent({
   color: black;
 }
 </style>
+
+
