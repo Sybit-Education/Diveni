@@ -76,6 +76,12 @@ autolabeler:
       - 'backend/**'
       - '!**.md'
 
+  # Label for docs changes based on file paths
+  - label: 'documentation'
+    files:
+      - '.github/workflows/docs.yaml'
+      - 'docs/**'
+
   # Label for bug fixes based on branch names and PR titles
   - label: 'bug'
     branch:
