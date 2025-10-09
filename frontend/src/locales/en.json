@@ -78,7 +78,8 @@
           },
           "button": {
             "addFirstUserStory": "No stories yet... click to add stories",
-            "addUserStory": "Add"
+            "addUserStory": "Add",
+            "openExternalTracker": "Open issue in external tracker (opens in new tab)"
           },
           "placeholder": {
             "userStoryTitle": "User Story Title",

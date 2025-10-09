@@ -217,7 +217,8 @@ public class JiraCloudService implements ProjectManagementProviderOAuth2 {
                 fields.get("summary").textValue(),
                 fields.get("description").textValue(),
                 estimation,
-                false));
+                false,
+                null));
       }
       LOGGER.debug("<-- getIssues()");
       return userStories;
