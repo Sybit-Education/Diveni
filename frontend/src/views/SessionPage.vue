@@ -608,7 +608,7 @@ export default defineComponent({
               us.splice(idx, 1);
             }
           }
-          doRemove = false;
+          // TODO: Display a user-facing warning when save operations fail due to server errors like invalid or read-only token
         } else {
           console.log(`ID: ${us[idx].id}`);
           if (us[idx].id === null && this.selectedProject?.id) {
@@ -628,6 +628,7 @@ export default defineComponent({
             if (this.isJiraSelected && us[idx].description) {
               us[idx].description = j2m.to_jira(us[idx].description);
             }
+            console.log('Server Error, either token is invalid or something is wrong.')
             response = await apiService.updateUserStory(JSON.stringify(us[idx]));
           }
         }
