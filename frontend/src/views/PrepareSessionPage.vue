@@ -304,11 +304,12 @@ export default defineComponent({
       timer: 0,
       warningWhenUnderZero: "",
       tabIndex: null as number | null,
-      hostVoting: false,
-      isIssueTrackerEnabled: false,
+      hostVoting: false as boolean,
+      isIssueTrackerEnabled: false as boolean,
       theme: localStorage.getItem("user-theme"),
-      isJiraSelected: false,
-      isDeepLink: false,
+      isJiraSelected: false as boolean,
+      isAwaitingProject: false as boolean,
+      isDeepLink: false as boolean,
       generatedUUIDs: new Set<number>(),
       tabs: [
         {
@@ -389,9 +390,11 @@ export default defineComponent({
       this.tabs[3].isValid = newVal;
     },
     step(newStep) {
-      if (this.isDeepLink && this.tabIndex === 2 && newStep === 2 && this.store.selectedProject) {
+      if (!this.isDeepLink || this.tabIndex !== 2 || newStep !== 2) return;
+      if (this.store.selectedProject) {
         this.step = 4;
       }
+      this.isDeepLink = false;
     },
   },
   mounted() {
