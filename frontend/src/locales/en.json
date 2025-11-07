@@ -244,7 +244,19 @@
               "copyDeeplink": "Copy Session Config",
               "copy": "Deep link copied!",
               "copyFailed": "Failed to copy deep link"
-            }
+            },
+          "summary": {
+            "title": "Summary of your session configuration",
+            "mode": "Mode",
+            "jiraProject": "Jira Project",
+            "cardSet": "Card Set",
+            "timer": "Timer",
+            "hostVoting": "Host Voting",
+            "hostVotingOn": "Host can vote",
+            "hostVotingOff": "Host cannot vote",
+            "password": "Password",
+            "noPassword": "No password set"
+          }
         },
         "selection": {
           "mode": {
@@ -363,9 +375,6 @@
             "title": "Choose a password if needed",
             "placeholder": "Password (leave empty for unprotected session)"
           }
-        },
-        "confirmation":{
-          "title": "Session Stats"
         }
       },
       "button": {

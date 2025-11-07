@@ -212,14 +212,18 @@
               {{ t("session.prepare.step.wizard.deeplink.copyDeeplink") }}
             </b-button>
           </div>
-          <h4 class="mb-3">{{ t("session.prepare.step.confirmation.title") }}</h4>
+          <h4 class="mb-3">{{ t("session.prepare.step.wizard.summary.title") }}</h4>
           <b-list-group>
             <b-list-group-item>
-              {{ t("session.prepare.step.selection.mode.title") }}:
+              {{ t("session.prepare.step.wizard.summary.mode") }}:
               {{ userStoryMode }}
             </b-list-group-item>
+            <b-list-group-item v-if="tabIndex === 2 && store.selectedProject">
+              {{ t("session.prepare.step.wizard.summary.jiraProject") }}:
+              {{ store.selectedProject.name }}
+            </b-list-group-item>
             <b-list-group-item>
-              {{ t("session.prepare.step.selection.cardSet.title") }}:
+              {{ t("session.prepare.step.wizard.summary.cardSet") }}:
               {{
                 Array.isArray(selectedCardSetOptions.activeValues)
                   ? selectedCardSetOptions.activeValues.join(", ")
@@ -227,20 +231,20 @@
               }}
             </b-list-group-item>
             <b-list-group-item>
-              {{ t("session.prepare.step.selection.time.title") }}:
+              {{ t("session.prepare.step.wizard.summary.timer") }}:
               {{ timer == 0 ? "∞" : formatTimer }}
             </b-list-group-item>
             <b-list-group-item>
-              {{ t("session.prepare.step.selection.hostVoting.title") }}:
+              {{ t("session.prepare.step.wizard.summary.hostVoting") }}:
               {{
                 hostVoting
-                  ? t("session.prepare.step.selection.hostVoting.hostVotingOn")
-                  : t("session.prepare.step.selection.hostVoting.hostVotingOff")
+                  ? t("session.prepare.step.wizard.summary.hostVotingOn")
+                  : t("session.prepare.step.wizard.summary.hostVotingOff")
               }}
             </b-list-group-item>
             <b-list-group-item>
-              {{ t("session.prepare.step.selection.password.title") }}:
-              {{ password }}
+              {{ t("session.prepare.step.wizard.summary.password") }}:
+              {{ password ? password : t("session.prepare.step.wizard.summary.noPassword") }}
             </b-list-group-item>
           </b-list-group>
         </div>
