@@ -69,4 +69,9 @@ export default defineComponent({
   background-color: var(--textAreaColourHovered) !important;
   color: var(--text-primary-color) !important;
 }
+
+.bIcons {
+  height: 40px;
+  width: 40px;
+}
 </style>

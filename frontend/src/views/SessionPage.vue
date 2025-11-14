@@ -46,8 +46,6 @@
 
         <DeepLinkButton
           v-if="!planningStart"
-          class="mr-3 optionButton"
-          variant="outline-dark"
           :mode="userStoryMode"
           :card-set-type="cardSetType"
           :active-values="voteSet"
@@ -90,7 +88,7 @@
     </div>
     <div v-else>
       <b-row class="d-flex justify-content-start pb-3">
-        <b-col cols="auto" class="mr-auto optionButtonCol">
+        <b-col class="d-flex justify-content-center flex-wrap optionButtonCol">
           <b-button
             class="mr-3 optionButton"
             variant="outline-dark"
@@ -140,8 +138,6 @@
             {{ t("page.session.during.estimation.buttons.autoRevealOn") }}
           </b-button>
           <DeepLinkButton
-            class="mr-3 optionButton"
-            variant="outline-dark"
             :mode="userStoryMode"
             :card-set-type="cardSetType"
             :active-values="voteSet"
