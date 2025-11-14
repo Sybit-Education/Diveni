@@ -15,7 +15,7 @@ public class NewsController {
 
   public static final String STATE_PARAM = "state";
   public static final String PAGE_PARAM = "page";
-  public static final String PER_PAGE_PARAM = "per_page";
+    public static final String PER_PAGE_PARAM = "per_page";
   public static final String IS_MERGED = "is_merged";
   public static final String SORT = "sort";
   public static final String SORT_DIRECTION = "direction";
@@ -36,7 +36,7 @@ public class NewsController {
       @RequestParam(name = PER_PAGE_PARAM, defaultValue = "50") Integer perPage,
       @RequestParam(name = PAGE_PARAM, defaultValue = "1") Integer page) {
 
-    return new ResponseEntity<>(
+      return new ResponseEntity<>(
         service.getPullRequests(state, sort, direction, isMerged, perPage, page), HttpStatus.OK);
   }
 }
