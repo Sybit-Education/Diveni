@@ -42,7 +42,7 @@ jobs:
         if: github.event.pull_request.head.repo.full_name != github.repository
         uses: axel-op/googlejavaformat-action@v4
         with:
-          release-name:  "1.17.0"
+          release-name: "1.17.0"
           skip-commit: true
           args: "--skip-sorting-imports --replace"
           # Recommended if you use MacOS:
