@@ -44,15 +44,17 @@
           {{ t("page.session.during.estimation.buttons.autoRevealOn") }}
         </b-button>
 
-        <b-button
+        <DeepLinkButton
           v-if="!planningStart"
-          class="optionButton"
+          class="mr-3 optionButton"
           variant="outline-dark"
-          @click="copyDeepLink"
-        >
-          <b-icon icon="clipboard" class="bIcons" />
-          {{ t("session.prepare.step.wizard.deeplink.copyDeeplink") }}
-        </b-button>
+          :mode="userStoryMode"
+          :card-set-type="cardSetType"
+          :active-values="voteSet"
+          :timer="timerSecondsString"
+          :host-voting="hostVoting"
+          :password="password"
+        />
       </b-col>
     </b-row>
 
@@ -137,17 +139,16 @@
             <b-icon-eye-fill class="bIcons" />
             {{ t("page.session.during.estimation.buttons.autoRevealOn") }}
           </b-button>
-          <b-button
+          <DeepLinkButton
             class="mr-3 optionButton"
             variant="outline-dark"
-            @click="
-              copyDeepLink();
-              $event.target.blur();
-            "
-          >
-            <b-icon icon="clipboard" class="bIcons" />
-            {{ t("session.prepare.step.wizard.deeplink.copyDeeplink") }}
-          </b-button>
+            :mode="userStoryMode"
+            :card-set-type="cardSetType"
+            :active-values="voteSet"
+            :timer="timerSecondsString"
+            :host-voting="hostVoting"
+            :password="password"
+          />
         </b-col>
         <b-col cols="auto">
           <estimate-timer
@@ -370,10 +371,12 @@ import UserStoryTitle from "@/components/UserStoryTitle.vue";
 import j2m from "jira2md";
 import UserStory from "@/model/UserStory";
 import { useRouter } from "vue-router";
+import DeepLinkButton from "@/components/actions/DeepLinkButton.vue";
 
 export default defineComponent({
   name: "SessionPage",
   components: {
+    DeepLinkButton,
     UserStoryTitle,
     GptModal,
     SessionStartButton,
@@ -406,6 +409,7 @@ export default defineComponent({
       password: history.state.password,
       startNewSessionOnMountedString: history.state.startNewSessionOnMountedString,
       userStoryMode: history.state.userStoryMode,
+      cardSetType: history.state.cardSetType,
       hostVoting: history.state.hostVoting as boolean,
       rejoined: history.state.rejoined,
       index: null as number | null,
@@ -567,6 +571,7 @@ export default defineComponent({
             sessionID: string;
             adminID: string;
             sessionConfig: {
+              cardSetType: string;
               set: Array<string>;
               timerSeconds: number;
               userStories: Array<{
@@ -593,6 +598,7 @@ export default defineComponent({
         this.sessionID = session.sessionID;
         this.sessionState = session.sessionState;
         this.timerSecondsString = session.sessionConfig.timerSeconds.toString();
+        this.cardSetType = session.sessionConfig.cardSetType;
         this.voteSetJson = JSON.stringify(session.sessionConfig.set);
         this.userStoryMode = session.sessionConfig.userStoryMode;
         this.hostVoting = String(session.hostVoting).toLowerCase() === "true";
@@ -894,23 +900,6 @@ export default defineComponent({
         this.showSpinner = false;
         this.splitted_user_stories = response;
       }
-    },
-    copyDeepLink() {
-      const baseUrl = window.location.origin + "/prepare";
-      const passwordParam = this.password ? `&password=${encodeURIComponent(this.password)}` : "";
-      const deepLink = `${baseUrl}?mode=${this.userStoryMode}&set=${encodeURIComponent(
-        this.voteSet.join(",")
-      )}&timer=${this.timerSecondsString}&hostVoting=${this.hostVoting}${passwordParam}`;
-
-      navigator.clipboard
-        .writeText(deepLink)
-        .then(() => {
-          this.toast.success(this.t("session.prepare.step.wizard.deeplink.copy"));
-        })
-        .catch((err) => {
-          console.error("Failed to copy deep link", err);
-          this.toast.error(this.t("session.prepare.step.wizard.deeplink.copyFailed"));
-        });
     },
   },
 });

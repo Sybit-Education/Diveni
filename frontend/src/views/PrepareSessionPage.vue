@@ -207,10 +207,14 @@
       <template #4>
         <div class="wizardStep">
           <div class="copy-btn-container">
-            <b-button class="copy-btn" variant="outline-dark" @click="copyDeepLink">
-              <b-icon icon="clipboard" class="bIcons" />
-              {{ t("session.prepare.step.wizard.deeplink.copyDeeplink") }}
-            </b-button>
+            <DeepLinkButton
+              :mode="userStoryMode"
+              :card-set-type="selectedCardSetOptions.name"
+              :active-values="selectedCardSetOptions.activeValues"
+              :timer="timer"
+              :host-voting="hostVoting"
+              :password="password"
+            />
           </div>
           <h4 class="mb-3">{{ t("session.prepare.step.wizard.summary.title") }}</h4>
           <b-list-group>
@@ -272,10 +276,12 @@ import { useI18n } from "vue-i18n";
 import { Steppy } from "vue3-steppy";
 import { useRouter, useRoute } from "vue-router";
 import { allCardSets, allCardSetsWithJiraMode } from "@/data/cardSets";
+import DeepLinkButton from "@/components/actions/DeepLinkButton.vue";
 
 export default defineComponent({
   name: "PrepareSessionPage",
   components: {
+    DeepLinkButton,
     WizardErrorModal,
     CardSetComponent,
     UserStoryComponent,
@@ -417,6 +423,7 @@ export default defineComponent({
     async sendCreateSessionRequest() {
       const url = Constants.backendURL + Constants.createSessionRoute;
       const sessionConfig = {
+        cardSetType: this.selectedCardSetOptions.name,
         set: this.selectedCardSetOptions.activeValues,
         timerSeconds: this.timer,
         password: this.password === "" ? null : this.password,
@@ -429,6 +436,7 @@ export default defineComponent({
             sessionID: string;
             adminID: string;
             sessionConfig: {
+              cardSetType: string;
               set: Array<string>;
               timerSeconds: number;
               userStories: Array<{
@@ -458,6 +466,7 @@ export default defineComponent({
           adminID: session.adminID,
           timerSecondsString: this.timer.toString(),
           password: this.password,
+          cardSetType: session.sessionConfig.cardSetType,
           voteSetJson: JSON.stringify(session.sessionConfig.set),
           sessionState: session.sessionState,
           userStoryMode: session.sessionConfig.userStoryMode,
@@ -562,14 +571,14 @@ export default defineComponent({
       if (!query || Object.keys(query).length === 0) return;
 
       const modeValue = query.mode as string | undefined;
-      const setNameValue = query.setName as string | undefined;
+      const cardSetType = query.cardSetType as string | undefined;
       const setValue = query.set as string | undefined;
       const timerValue = query.timer as string | undefined;
       const hostVotingValue = query.hostVoting as string | undefined;
       const passwordValue = query.password as string | undefined;
 
       // Check if query parameters are present
-      if (!modeValue || !setNameValue || !setValue || !timerValue || !hostVotingValue) {
+      if (!modeValue || !cardSetType || !setValue || !timerValue || !hostVotingValue) {
         this.showErrorModal(this.t("session.prepare.step.wizard.deeplink.missingParameters"));
         return;
       }
@@ -609,11 +618,11 @@ export default defineComponent({
 
       // Check that the setNameValue(query param) also exists in validCardSets(depending on provided mode)
       const matchingSet = validCardSets.find(
-        (set) => set.name.toLowerCase() === setNameValue.toLowerCase()
+        (set) => set.name.toLowerCase() === cardSetType.toLowerCase()
       );
 
       if (!matchingSet) {
-        this.showErrorModal(this.t("session.prepare.step.wizard.deeplink.invalidSetName"));
+        this.showErrorModal(this.t("session.prepare.step.wizard.deeplink.invalidSetType"));
         return;
       }
 
@@ -661,43 +670,6 @@ export default defineComponent({
 
       this.isDeepLink = true;
       this.step = modeValue === "US_JIRA" ? 1 : 4;
-    },
-    copyDeepLink(): void {
-      const modeMap: Record<number, string> = {
-        0: "NO_US",
-        1: "US_MANUALLY",
-        2: "US_JIRA",
-      };
-
-      const index = this.tabIndex ?? 0;
-      const mode = modeMap[index] ?? "NO_US";
-      const { name: cardSetName, activeValues } = this.selectedCardSetOptions ?? {};
-      const setParam = activeValues?.join(",") ?? "";
-      const timerParam = this.timer ?? 0;
-      const hostVotingParam = Boolean(this.hostVoting);
-      const passwordParam = this.password ? `&password=${encodeURIComponent(this.password)}` : "";
-
-      const baseUrl = `${window.location.origin}/prepare`;
-
-      const queryParams = new URLSearchParams({
-        mode,
-        setName: cardSetName,
-        set: setParam,
-        timer: String(timerParam),
-        hostVoting: String(hostVotingParam),
-      });
-
-      const deepLink = `${baseUrl}?${queryParams.toString()}${passwordParam}`;
-
-      navigator.clipboard
-        .writeText(deepLink)
-        .then(() => {
-          this.toast.success(this.t("session.prepare.step.wizard.deeplink.copy"));
-        })
-        .catch((err: unknown) => {
-          console.error("Failed to copy deep link", err);
-          this.toast.error(this.t("session.prepare.step.wizard.deeplink.copyFailed"));
-        });
     },
     resetWizard() {
       this.errorModal.visible = false;
@@ -818,18 +790,6 @@ export default defineComponent({
   justify-content: flex-end;
   align-items: center;
   margin-bottom: 1rem;
-}
-
-.copy-btn {
-  background-color: var(--textAreaColour);
-  display: inline-flex;
-  align-items: center;
-  margin: 0.25rem;
-}
-
-.copy-btn:hover {
-  background-color: var(--textAreaColourHovered);
-  color: var(--text-primary-color);
 }
 
 .mode-icon-text::before {

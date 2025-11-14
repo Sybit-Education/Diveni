@@ -1,6 +1,7 @@
 import UserStory from "./UserStory";
 
 interface SessionConfig {
+  cardSetType: string;
   set: Array<string>;
   password?: string;
   timerSeconds: number;
