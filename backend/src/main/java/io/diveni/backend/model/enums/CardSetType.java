@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum CardSetType {
-
   FIBONACCI("fibonacci"),
   T_SHIRTS("t-shirts"),
   HOURS("hours"),

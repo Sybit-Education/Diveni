@@ -43,7 +43,8 @@ public class AnalyticsControllerTest {
             new ObjectId(),
             Utils.generateRandomID(),
             Utils.generateRandomID(),
-            new SessionConfig(CardSetType.HOURS, new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+            new SessionConfig(
+                CardSetType.HOURS, new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
             null,
             List.of(),
             new HashMap<>(),
@@ -71,7 +72,8 @@ public class AnalyticsControllerTest {
             new ObjectId(),
             Utils.generateRandomID(),
             Utils.generateRandomID(),
-            new SessionConfig(CardSetType.HOURS, new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+            new SessionConfig(
+                CardSetType.HOURS, new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
             null,
             List.of(),
             new HashMap<>(),
@@ -88,7 +90,8 @@ public class AnalyticsControllerTest {
             new ObjectId(),
             Utils.generateRandomID(),
             Utils.generateRandomID(),
-            new SessionConfig(CardSetType.HOURS, new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+            new SessionConfig(
+                CardSetType.HOURS, new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
             null,
             List.of(new Member(), new Member()),
             new HashMap<>(),
@@ -118,7 +121,8 @@ public class AnalyticsControllerTest {
             new ObjectId(),
             Utils.generateRandomID(),
             Utils.generateRandomID(),
-            new SessionConfig(CardSetType.HOURS, new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+            new SessionConfig(
+                CardSetType.HOURS, new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
             null,
             List.of(new Member(), new Member(), new Member()),
             new HashMap<>(),
@@ -147,7 +151,8 @@ public class AnalyticsControllerTest {
             new ObjectId(),
             Utils.generateRandomID(),
             Utils.generateRandomID(),
-            new SessionConfig(CardSetType.HOURS, new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+            new SessionConfig(
+                CardSetType.HOURS, new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
             null,
             List.of(new Member(), new Member()),
             new HashMap<>(),
@@ -165,7 +170,8 @@ public class AnalyticsControllerTest {
             new ObjectId(),
             Utils.generateRandomID(),
             Utils.generateRandomID(),
-            new SessionConfig(CardSetType.HOURS, new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+            new SessionConfig(
+                CardSetType.HOURS, new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
             null,
             List.of(new Member()),
             new HashMap<>(),

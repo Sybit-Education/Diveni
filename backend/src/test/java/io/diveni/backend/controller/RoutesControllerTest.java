@@ -61,7 +61,13 @@ public class RoutesControllerTest {
   public void createSession_returnsSession() throws Exception {
     val sessionConfigJson =
         sessionConfigToJson(
-            new SessionConfig(CardSetType.HOURS, Arrays.asList("1", "2", "3"), List.of(), 10, "US_MANUALLY", null));
+            new SessionConfig(
+                CardSetType.HOURS,
+                Arrays.asList("1", "2", "3"),
+                List.of(),
+                10,
+                "US_MANUALLY",
+                null));
     this.mockMvc
         .perform(post("/sessions").contentType(APPLICATION_JSON_UTF8).content(sessionConfigJson))
         .andExpect(status().isCreated())
@@ -77,7 +83,12 @@ public class RoutesControllerTest {
     val sessionConfigJson =
         sessionConfigToJson(
             new SessionConfig(
-              CardSetType.HOURS, Arrays.asList("1", "2", "3"), List.of(), 10, "US_MANUALLY", "testPassword"));
+                CardSetType.HOURS,
+                Arrays.asList("1", "2", "3"),
+                List.of(),
+                10,
+                "US_MANUALLY",
+                "testPassword"));
     this.mockMvc
         .perform(post("/sessions").contentType(APPLICATION_JSON_UTF8).content(sessionConfigJson))
         .andExpect(status().isCreated())
@@ -103,7 +114,8 @@ public class RoutesControllerTest {
             new ObjectId(),
             sessionUUID,
             Utils.generateRandomID(),
-            new SessionConfig(CardSetType.HOURS, new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+            new SessionConfig(
+                CardSetType.HOURS, new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
             null,
             new ArrayList<>(),
             new HashMap<>(),
@@ -143,7 +155,8 @@ public class RoutesControllerTest {
     val sessionUUID = Utils.generateRandomID();
     val password = "testPassword";
     SessionConfig sessionConfig =
-        new SessionConfig(CardSetType.HOURS, new ArrayList<>(), List.of(), 10, "US_MANUALLY", password);
+        new SessionConfig(
+            CardSetType.HOURS, new ArrayList<>(), List.of(), 10, "US_MANUALLY", password);
     sessionRepo.save(
         new Session(
             new ObjectId(),
@@ -192,7 +205,8 @@ public class RoutesControllerTest {
     val sessionUUID = Utils.generateRandomID();
     val password = "testPassword";
     SessionConfig sessionConfig =
-        new SessionConfig(CardSetType.HOURS, new ArrayList<>(), List.of(), 10, "US_MANUALLY", password);
+        new SessionConfig(
+            CardSetType.HOURS, new ArrayList<>(), List.of(), 10, "US_MANUALLY", password);
     sessionRepo.save(
         new Session(
             new ObjectId(),
@@ -241,7 +255,8 @@ public class RoutesControllerTest {
     val sessionUUID = Utils.generateRandomID();
     val password = "testPassword";
     SessionConfig sessionConfig =
-        new SessionConfig(CardSetType.HOURS, new ArrayList<>(), List.of(), 10, "US_MANUALLY", password);
+        new SessionConfig(
+            CardSetType.HOURS, new ArrayList<>(), List.of(), 10, "US_MANUALLY", password);
     sessionRepo.save(
         new Session(
             new ObjectId(),
@@ -294,7 +309,8 @@ public class RoutesControllerTest {
             new ObjectId(),
             Utils.generateRandomID(),
             Utils.generateRandomID(),
-            new SessionConfig(CardSetType.HOURS, new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+            new SessionConfig(
+                CardSetType.HOURS, new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
             null,
             new ArrayList<Member>(),
             new HashMap<>(),
@@ -337,7 +353,8 @@ public class RoutesControllerTest {
             new ObjectId(),
             Utils.generateRandomID(),
             Utils.generateRandomID(),
-            new SessionConfig(CardSetType.HOURS, new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+            new SessionConfig(
+                CardSetType.HOURS, new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
             null,
             new ArrayList<Member>(),
             new HashMap<>(),
@@ -380,7 +397,8 @@ public class RoutesControllerTest {
             new ObjectId(),
             Utils.generateRandomID(),
             Utils.generateRandomID(),
-            new SessionConfig(CardSetType.HOURS, new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+            new SessionConfig(
+                CardSetType.HOURS, new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
             null,
             new ArrayList<Member>(),
             new HashMap<>(),
@@ -450,7 +468,8 @@ public class RoutesControllerTest {
             new ObjectId(),
             sessionUUID,
             Utils.generateRandomID(),
-            new SessionConfig(CardSetType.HOURS, new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+            new SessionConfig(
+                CardSetType.HOURS, new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
             null,
             new ArrayList<Member>(),
             new HashMap<>(),
@@ -502,7 +521,8 @@ public class RoutesControllerTest {
             new ObjectId(),
             sessionUUID,
             Utils.generateRandomID(),
-            new SessionConfig(CardSetType.HOURS, new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+            new SessionConfig(
+                CardSetType.HOURS, new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
             null,
             new ArrayList<Member>(),
             new HashMap<>(),
@@ -529,7 +549,8 @@ public class RoutesControllerTest {
             new ObjectId(),
             Utils.generateRandomID(),
             Utils.generateRandomID(),
-            new SessionConfig(CardSetType.HOURS, new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+            new SessionConfig(
+                CardSetType.HOURS, new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
             null,
             new ArrayList<Member>(),
             new HashMap<>(),
