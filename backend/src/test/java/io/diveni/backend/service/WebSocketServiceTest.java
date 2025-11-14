@@ -23,6 +23,7 @@ import io.diveni.backend.model.MemberUpdate;
 import io.diveni.backend.model.Session;
 import io.diveni.backend.model.SessionConfig;
 import io.diveni.backend.model.SessionState;
+import io.diveni.backend.model.enums.CardSetType;
 import io.diveni.backend.model.notification.Notification;
 import io.diveni.backend.model.notification.NotificationType;
 import io.diveni.backend.principals.AdminPrincipal;
@@ -405,7 +406,8 @@ public class WebSocketServiceTest {
             new ObjectId(),
             defaultAdminPrincipal.getSessionID(),
             defaultAdminPrincipal.getAdminID(),
-            new SessionConfig(List.of(), List.of(), null, "US_MANUALLY", "password"),
+            new SessionConfig(
+                CardSetType.HOURS, List.of(), List.of(), null, "US_MANUALLY", "password"),
             null,
             List.of(
                 new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null),
@@ -446,7 +448,8 @@ public class WebSocketServiceTest {
             new ObjectId(),
             defaultAdminPrincipal.getSessionID(),
             defaultAdminPrincipal.getAdminID(),
-            new SessionConfig(List.of(), List.of(), null, "US_MANUALLY", "password"),
+            new SessionConfig(
+                CardSetType.HOURS, List.of(), List.of(), null, "US_MANUALLY", "password"),
             null,
             List.of(
                 new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null),
@@ -480,7 +483,8 @@ public class WebSocketServiceTest {
             new ObjectId(),
             defaultAdminPrincipal.getSessionID(),
             defaultAdminPrincipal.getAdminID(),
-            new SessionConfig(List.of(), List.of(), null, "US_MANUALLY", "password"),
+            new SessionConfig(
+                CardSetType.HOURS, List.of(), List.of(), null, "US_MANUALLY", "password"),
             null,
             List.of(
                 new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null),

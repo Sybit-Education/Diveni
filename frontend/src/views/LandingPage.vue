@@ -184,6 +184,7 @@ export default defineComponent({
             sessionID: string;
             adminID: string;
             sessionConfig: {
+              cardSetType: string;
               set: Array<string>;
               timerSeconds: number;
               userStories: Array<{

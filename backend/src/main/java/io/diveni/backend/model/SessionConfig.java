@@ -10,6 +10,7 @@ import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import io.diveni.backend.model.enums.CardSetType;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -17,11 +18,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SessionConfig {
 
+  private final CardSetType cardSetType;
+
   private final List<String> set;
 
   private final List<UserStory> userStories;
 
   private final Integer timerSeconds;
+
   private final String userStoryMode;
 
   @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)

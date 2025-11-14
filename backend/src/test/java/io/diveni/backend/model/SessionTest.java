@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Date;
 
 import io.diveni.backend.Utils;
+import io.diveni.backend.model.enums.CardSetType;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.Test;
 
@@ -282,7 +283,7 @@ public class SessionTest {
             null,
             null,
             null,
-            new SessionConfig(set, List.of(), 30, "US_MANUALLY", null),
+            new SessionConfig(CardSetType.T_SHIRTS, set, List.of(), 30, "US_MANUALLY", null),
             null,
             List.of(member1, member2, member3),
             new HashMap<>(),
@@ -315,7 +316,7 @@ public class SessionTest {
             null,
             null,
             "ADMINID",
-            new SessionConfig(set, List.of(), 30, "US_MANUALLY", null),
+            new SessionConfig(CardSetType.T_SHIRTS, set, List.of(), 30, "US_MANUALLY", null),
             null,
             List.of(member1, member2, member3),
             new HashMap<>(),
@@ -349,7 +350,7 @@ public class SessionTest {
             null,
             null,
             null,
-            new SessionConfig(set, List.of(), 30, null, null),
+            new SessionConfig(CardSetType.HOURS, set, List.of(), 30, null, null),
             null,
             List.of(member1, member2, member3, member4),
             new HashMap<>(),
@@ -385,7 +386,7 @@ public class SessionTest {
             null,
             null,
             null,
-            new SessionConfig(set, List.of(), 30, "US_MANUALLY", null),
+            new SessionConfig(CardSetType.T_SHIRTS, set, List.of(), 30, "US_MANUALLY", null),
             null,
             List.of(member1, member2, member3),
             map,

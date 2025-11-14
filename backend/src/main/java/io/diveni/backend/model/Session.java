@@ -272,6 +272,7 @@ public class Session {
   public Session updateUserStories(List<UserStory> userStories) {
     val updatedSessionConfig =
         new SessionConfig(
+            sessionConfig.getCardSetType(),
             sessionConfig.getSet(),
             userStories,
             sessionConfig.getTimerSeconds().orElse(null),

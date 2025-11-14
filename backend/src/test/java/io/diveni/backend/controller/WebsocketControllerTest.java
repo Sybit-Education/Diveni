@@ -27,6 +27,7 @@ import io.diveni.backend.model.MemberUpdate;
 import io.diveni.backend.model.Session;
 import io.diveni.backend.model.SessionConfig;
 import io.diveni.backend.model.SessionState;
+import io.diveni.backend.model.enums.CardSetType;
 import io.diveni.backend.principals.AdminPrincipal;
 import io.diveni.backend.principals.MemberPrincipal;
 import io.diveni.backend.repository.SessionRepository;
@@ -170,7 +171,8 @@ public class WebsocketControllerTest {
             dbID,
             sessionID,
             adminID,
-            new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+            new SessionConfig(
+                CardSetType.HOURS, new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
             null,
             new ArrayList<Member>(),
             new HashMap<>(),
@@ -209,7 +211,8 @@ public class WebsocketControllerTest {
             dbID,
             sessionID,
             adminID,
-            new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+            new SessionConfig(
+                CardSetType.HOURS, new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
             null,
             List.of(member),
             new HashMap<>(),
@@ -256,7 +259,8 @@ public class WebsocketControllerTest {
             dbID,
             sessionID,
             adminID,
-            new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+            new SessionConfig(
+                CardSetType.HOURS, new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
             null,
             memberList,
             new HashMap<>(),
@@ -316,7 +320,8 @@ public class WebsocketControllerTest {
             dbID,
             sessionID,
             adminID,
-            new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+            new SessionConfig(
+                CardSetType.HOURS, new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
             null,
             new ArrayList<Member>(),
             new HashMap<>(),
@@ -351,7 +356,8 @@ public class WebsocketControllerTest {
             new ObjectId(),
             adminID,
             Utils.generateRandomID(),
-            new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+            new SessionConfig(
+                CardSetType.HOURS, new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
             null,
             List.of(member),
             new HashMap<>(),
@@ -392,7 +398,8 @@ public class WebsocketControllerTest {
             new ObjectId(),
             sessionID,
             adminID,
-            new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+            new SessionConfig(
+                CardSetType.HOURS, new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
             null,
             List.of(member, member2),
             new HashMap<>(),
@@ -435,7 +442,8 @@ public class WebsocketControllerTest {
             new ObjectId(),
             sessionID,
             adminID,
-            new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+            new SessionConfig(
+                CardSetType.HOURS, new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
             null,
             List.of(member, member2, member3),
             new HashMap<>(),
@@ -476,7 +484,8 @@ public class WebsocketControllerTest {
             dbID,
             sessionID,
             adminID,
-            new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+            new SessionConfig(
+                CardSetType.HOURS, new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
             null,
             memberList,
             new HashMap<>(),
@@ -515,7 +524,8 @@ public class WebsocketControllerTest {
             dbID,
             sessionID,
             adminID,
-            new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+            new SessionConfig(
+                CardSetType.HOURS, new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
             null,
             memberList,
             new HashMap<>(),
@@ -554,7 +564,8 @@ public class WebsocketControllerTest {
             dbID,
             sessionID,
             adminID,
-            new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+            new SessionConfig(
+                CardSetType.HOURS, new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
             null,
             memberList,
             new HashMap<>(),
@@ -594,7 +605,8 @@ public class WebsocketControllerTest {
             dbID,
             sessionID,
             adminID,
-            new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+            new SessionConfig(
+                CardSetType.HOURS, new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
             null,
             memberList,
             new HashMap<>(),
@@ -635,7 +647,8 @@ public class WebsocketControllerTest {
             dbID,
             sessionID,
             adminID,
-            new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+            new SessionConfig(
+                CardSetType.HOURS, new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
             null,
             memberList,
             new HashMap<>(),
@@ -674,7 +687,8 @@ public class WebsocketControllerTest {
             dbID,
             sessionID,
             adminID,
-            new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+            new SessionConfig(
+                CardSetType.HOURS, new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
             null,
             memberList,
             new HashMap<>(),
@@ -713,7 +727,8 @@ public class WebsocketControllerTest {
             dbID,
             sessionID,
             adminID,
-            new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+            new SessionConfig(
+                CardSetType.HOURS, new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
             null,
             memberList,
             new HashMap<>(),
@@ -756,7 +771,8 @@ public class WebsocketControllerTest {
             dbID,
             sessionID,
             adminID,
-            new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+            new SessionConfig(
+                CardSetType.HOURS, new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
             null,
             memberList,
             new HashMap<>(),
@@ -794,7 +810,8 @@ public class WebsocketControllerTest {
             dbID,
             sessionID,
             adminID,
-            new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+            new SessionConfig(
+                CardSetType.HOURS, new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
             null,
             memberList,
             new HashMap<>(),
@@ -832,7 +849,8 @@ public class WebsocketControllerTest {
             dbID,
             sessionID,
             adminID,
-            new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+            new SessionConfig(
+                CardSetType.HOURS, new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
             null,
             memberList,
             new HashMap<>(),
