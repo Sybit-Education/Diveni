@@ -258,7 +258,13 @@ public class JiraServerService implements ProjectManagementProviderOAuth1 {
     Map<String, Object> fields = new HashMap<>();
     fields.put("summary", story.getTitle());
     fields.put("description", story.getDescription());
-    if (story.getEstimation() != null) {
+
+    String estimation = story.getEstimation();
+
+    if (estimation != null && "?".equals(estimation.trim())) {
+      //The field does not allow empty strings, null values, or default values — reset only with 0
+      fields.put(ESTIMATION_FIELD, 0);
+    } else if (estimation != null && !estimation.isBlank()) {
       try {
         fields.put(ESTIMATION_FIELD, Double.parseDouble(story.getEstimation()));
       } catch (NumberFormatException e) {
