@@ -1,0 +1,131 @@
+# The name template for the release tag
+name-template: 'v$RESOLVED_VERSION 🌈'
+
+# The tag template for the release version
+tag-template: 'v$RESOLVED_VERSION'
+
+# Categories for organizing changes in the release notes
+categories:
+  - title: '🚀 Features'
+    collapse-after: 5
+    labels:
+      - 'feature'
+      - 'feature request'
+      - 'enhancement'
+  - title: '🐛 Bug Fixes'
+    collapse-after: 5
+    labels:
+      - 'fix'
+      - 'bugfix'
+      - 'bug'
+  - title: '🧰 Maintenance'
+    collapse-after: 3
+    labels:
+      - 'chore'
+      - 'refactor'
+      - 'documentation'
+  - title: '🤖 Dependabot Updates'
+    collapse-after: 3
+    labels:
+      - 'npm dependencies'
+      - 'gradle dependencies'
+
+# Template for individual changes in the release notes
+change-template: '- $TITLE @$AUTHOR (#$NUMBER)'
+
+# Escaping characters in titles to avoid issues with Markdown
+change-title-escapes: '\<*_&' # You can add # and @ to disable mentions, and add ` to disable code blocks.
+
+# Version resolver settings based on labels
+version-resolver:
+  major:
+    labels:
+      - 'major'
+  minor:
+    labels:
+      - 'minor'
+  patch:
+    labels:
+      - 'patch'
+  default: patch
+
+# Release notes template
+template: |
+  ## 📦 Release $RESOLVED_VERSION
+
+  ## Changes
+  $CHANGES
+
+  ## Compare
+  [Full Compare: $PREVIOUS_TAG...$RESOLVED_VERSION](https://github.com/$OWNER/$REPOSITORY/compare/$PREVIOUS_TAG...v$RESOLVED_VERSION)
+
+
+# Autolabeler settings to automatically add labels based on file paths or PR details like Title or Branch
+autolabeler:
+  # Label for frontend changes based on file paths
+  - label: 'frontend'
+    files:
+      - '.github/workflows/frontend.yaml'
+      - 'frontend/**'
+      - '!**.md'
+
+  # Label for backend changes based on file paths
+  - label: 'backend'
+    files:
+      - '.github/workflows/backend.yaml'
+      - 'backend/**'
+      - '!**.md'
+
+  # Label for docs changes based on file paths
+  - label: 'documentation'
+    files:
+      - '.github/workflows/docs.yaml'
+      - 'docs/**'
+
+  # Label for bug fixes based on branch names and PR titles
+  - label: 'bug'
+    branch:
+      - '/fix\/.+/'
+      - '/bug\/.+/'
+      - '/bugfix\/.+/'
+    title:
+      - '/fix/i'
+      - '/bug/i'
+      - '/bugfix/i'
+
+  # Label for enhancements and feature-related changes based on branch names and PR titles
+  - label: 'enhancement'
+    branch:
+      - '/feature\/.+/'
+      - '/feat\/.+/'
+      - '/feature request\/.+/'
+      - '/enhancement\/.+/'
+    title:
+      - '/feature/i'
+      - '/feat/i'
+      - '/feature request/i'
+      - '/enhancement/i'
+
+  # Label for documentation-related changes based on branch names and PR titles
+  - label: 'documentation'
+    branch:
+      - '/docs\/.+/'
+      - '/documentation\/.+/'
+      - '/doc\/.+/'
+    title:
+      - '/docs/i'
+      - '/documentation/i'
+      - '/doc/i'
+
+  # Label for refactoring changes based on branch names and PR titles
+  - label: 'refactor'
+    branch:
+      - '/refactor\/.+/'
+      - '/cleanup\/.+/'
+      - '/rework\/.+/'
+      - '/optimize\/.+/'
+    title:
+      - '/refactor/i'
+      - '/cleanup/i'
+      - '/rework/i'
+      - '/optimize/i'
