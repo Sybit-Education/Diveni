@@ -32,15 +32,17 @@ jobs:
           distribution: 'adopt'
       - name: Format
         if: (github.event.pull_request.head.repo.full_name == github.repository) && (github.actor != 'dependabot[bot]')
-        uses: axel-op/googlejavaformat-action@v3
+        uses: axel-op/googlejavaformat-action@v4
         with:
+          release-name: "v1.28.0"
           args: "--skip-sorting-imports --replace"
           # Recommended if you use MacOS:
           # githubToken: ${{ secrets.GITHUB_TOKEN }}
       - name: Format
         if: github.event.pull_request.head.repo.full_name != github.repository
-        uses: axel-op/googlejavaformat-action@v3
+        uses: axel-op/googlejavaformat-action@v4
         with:
+          release-name: "v1.28.0"
           skip-commit: true
           args: "--skip-sorting-imports --replace"
           # Recommended if you use MacOS:

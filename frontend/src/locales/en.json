@@ -230,7 +230,19 @@
           "modeSelection": "Mode Selection",
           "configurationCardSet": "Configuration Card set",
           "configurationTime/HostVote": "Configuration Time & Host Vote",
-          "confirmation": "Confirmation"
+          "confirmation": "Confirmation",
+            "deeplink": {
+              "errorTitle": "Deep link is invalid!",
+              "missingParameters": "Deep link is incomplete – essential parameters are missing",
+              "invalidMode": "Unknown mode parameter in the deep link",
+              "invalidSet": "Invalid card set values in the deep link",
+              "invalidTime": "Invalid timer parameter in the deep link",
+              "invalidHostVoting": "The hostVoting parameter must be either 'true' or 'false'",
+              "invalidSetForJira": "The set can only contain numbers in US_JIRA mode!",
+              "copyDeeplink": "Copy Session Config",
+              "copy": "Deep link copied!",
+              "copyFailed": "Failed to copy deep link"
+            }
         },
         "selection": {
           "mode": {

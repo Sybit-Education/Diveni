@@ -10,10 +10,17 @@
           }}
         </h1>
       </b-col>
-      <b-col>
+      <b-col class="d-flex justify-content-end align-items-center ml-auto">
+        <copy-session-id-popup v-if="planningStart" :session-id="sessionID" class="mr-2" />
+        <session-close-button :is-planning-start="planningStart" :user-story-mode="userStoryMode" />
+      </b-col>
+    </b-row>
+
+    <b-row class="pb-3">
+      <b-col class="d-flex justify-content-center flex-wrap">
         <b-button
           v-if="!autoReveal && !planningStart"
-          class="mr-3 autoRevealButtons optionButton"
+          class="optionButton"
           variant="outline-dark"
           @click="
             autoReveal = true;
@@ -23,9 +30,10 @@
           <b-icon-eye-slash-fill class="bIcons" />
           {{ t("page.session.during.estimation.buttons.autoRevealOff") }}
         </b-button>
+
         <b-button
           v-if="autoReveal && !planningStart"
-          class="mr-3 autoRevealButtons optionButton"
+          class="optionButton"
           variant="outline-dark"
           @click="
             autoReveal = false;
@@ -35,12 +43,16 @@
           <b-icon-eye-fill class="bIcons" />
           {{ t("page.session.during.estimation.buttons.autoRevealOn") }}
         </b-button>
-      </b-col>
-      <b-col cols="auto" class="mr-auto">
-        <copy-session-id-popup v-if="planningStart" class="float-end" :session-id="sessionID" />
-      </b-col>
-      <b-col cols="auto">
-        <session-close-button :is-planning-start="planningStart" :user-story-mode="userStoryMode" />
+
+        <b-button
+          v-if="!planningStart"
+          class="optionButton"
+          variant="outline-dark"
+          @click="copyDeepLink"
+        >
+          <b-icon icon="clipboard" class="bIcons" />
+          {{ t("session.prepare.step.wizard.deeplink.copyDeeplink") }}
+        </b-button>
       </b-col>
     </b-row>
 
@@ -124,6 +136,17 @@
           >
             <b-icon-eye-fill class="bIcons" />
             {{ t("page.session.during.estimation.buttons.autoRevealOn") }}
+          </b-button>
+          <b-button
+            class="mr-3 optionButton"
+            variant="outline-dark"
+            @click="
+              copyDeepLink();
+              $event.target.blur();
+            "
+          >
+            <b-icon icon="clipboard" class="bIcons" />
+            {{ t("session.prepare.step.wizard.deeplink.copyDeeplink") }}
           </b-button>
         </b-col>
         <b-col cols="auto">
@@ -380,6 +403,7 @@ export default defineComponent({
       voteSetJson: history.state.voteSetJson,
       sessionState: history.state.sessionState,
       timerSecondsString: history.state.timerSecondsString,
+      password: history.state.password,
       startNewSessionOnMountedString: history.state.startNewSessionOnMountedString,
       userStoryMode: history.state.userStoryMode,
       hostVoting: history.state.hostVoting as boolean,
@@ -872,6 +896,23 @@ export default defineComponent({
         this.splitted_user_stories = response;
       }
     },
+    copyDeepLink() {
+      const baseUrl = window.location.origin + "/prepare";
+      const passwordParam = this.password ? `&password=${encodeURIComponent(this.password)}` : "";
+      const deepLink = `${baseUrl}?mode=${this.userStoryMode}&set=${encodeURIComponent(
+        this.voteSet.join(",")
+      )}&timer=${this.timerSecondsString}&hostVoting=${this.hostVoting}${passwordParam}`;
+
+      navigator.clipboard
+        .writeText(deepLink)
+        .then(() => {
+          this.toast.success(this.t("session.prepare.step.wizard.deeplink.copy"));
+        })
+        .catch((err) => {
+          console.error("Failed to copy deep link", err);
+          this.toast.error(this.t("session.prepare.step.wizard.deeplink.copyFailed"));
+        });
+    },
   },
 });
 </script>
@@ -928,6 +969,7 @@ export default defineComponent({
 
 .copy-popup {
   text-align: center;
+  margin-bottom: 30px;
 }
 
 .kick-user {
@@ -948,8 +990,12 @@ export default defineComponent({
 
 .optionButton {
   background-color: var(--textAreaColour);
+  margin: 0.5rem;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
+  min-width: 150px;
+  max-width: 300px;
 }
 
 .optionButton:hover {
