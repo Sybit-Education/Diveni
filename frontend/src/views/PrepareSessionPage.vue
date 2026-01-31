@@ -603,17 +603,20 @@ export default defineComponent({
 
       this.tabIndex = modeMap[modeValue];
 
-      const setArray = setValue.split(",").map(item => item.trim()).filter(item => item !== "");
-      
+      const setArray = setValue
+        .split(",")
+        .map((item) => item.trim())
+        .filter((item) => item !== "");
+
       const uniqueSetArray = [...new Set(setArray)];
-      
+
       const validCardSets = this.tabIndex === 2 ? this.allCardSets : this.allCardSets;
       const allPossibleValues = validCardSets.flatMap((set) => set.values);
       if (!uniqueSetArray.every((item) => allPossibleValues.includes(item))) {
         this.showErrorModal(this.t("session.prepare.step.wizard.deeplink.invalidSet"));
         return;
       }
-    
+
       if (this.tabIndex === 2 && !uniqueSetArray.every((item) => /^\d+$/.test(item))) {
         this.showErrorModal(this.t("session.prepare.step.wizard.deeplink.invalidSetForJira"));
         return;
@@ -624,7 +627,7 @@ export default defineComponent({
         this.showErrorModal(this.t("session.prepare.step.wizard.deeplink.invalidTime"));
         return;
       }
-      
+
       const parsedTimer = parseInt(timerValue, 10);
       if (isNaN(parsedTimer) || parsedTimer < 0 || parsedTimer > 1600) {
         this.showErrorModal(this.t("session.prepare.step.wizard.deeplink.invalidTime"));
@@ -844,5 +847,3 @@ export default defineComponent({
   color: black;
 }
 </style>
-
-
