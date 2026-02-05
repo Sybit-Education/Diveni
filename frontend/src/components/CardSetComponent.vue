@@ -78,6 +78,7 @@
 import { defineComponent } from "vue";
 import { useI18n } from "vue-i18n";
 import CardSet from "../model/CardSet";
+import { allCardSets, allCardSetsWithJiraMode } from "@/data/cardSets";
 
 export default defineComponent({
   name: "CardSetComponent",
@@ -103,50 +104,8 @@ export default defineComponent({
         activeValues: [] as string[],
         position: 0,
       } as CardSet,
-      allCardSets: [
-        {
-          values: ["1", "2", "3", "5", "8", "13", "21", "34", "55", "?"],
-          activeValues: ["1", "2", "3", "5", "8", "13", "21"],
-          position: 1,
-        },
-        {
-          values: ["XXS", "XS", "S", "M", "L", "XL", "XXL", "XXXL", "?"],
-          activeValues: ["XS", "S", "M", "L", "XL"],
-          position: 2,
-        },
-        {
-          values: ["1", "2", "3", "4", "5", "6", "8", "10", "12", "16", "?"],
-          activeValues: ["1", "2", "3", "4", "5", "6", "8", "10", "12", "16"],
-          position: 3,
-        },
-        {
-          values: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "?"],
-          activeValues: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
-          position: 4,
-        },
-        {
-          values: [],
-          activeValues: [],
-          position: 5,
-        },
-      ],
-      allCardSetsWithJiraMode: [
-        {
-          values: ["1", "2", "3", "5", "8", "13", "21", "34", "55", "?"],
-          activeValues: ["1", "2", "3", "5", "8", "13", "21"],
-          position: 1,
-        },
-        {
-          values: ["1", "2", "3", "4", "5", "6", "8", "10", "12", "16", "?"],
-          activeValues: ["1", "2", "3", "4", "5", "6", "8", "10", "12", "16"],
-          position: 2,
-        },
-        {
-          values: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "?"],
-          activeValues: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
-          position: 3,
-        },
-      ],
+      allCardSets: allCardSets as CardSet[],
+      allCardSetsWithJiraMode: allCardSetsWithJiraMode as CardSet[],
     };
   },
   computed: {

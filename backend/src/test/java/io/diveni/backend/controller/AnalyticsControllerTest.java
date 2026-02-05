@@ -1,6 +1,7 @@
 package io.diveni.backend.controller;
 
 import io.diveni.backend.model.*;
+import io.diveni.backend.model.enums.CardSetType;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -42,7 +43,8 @@ public class AnalyticsControllerTest {
             new ObjectId(),
             Utils.generateRandomID(),
             Utils.generateRandomID(),
-            new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+            new SessionConfig(
+                CardSetType.HOURS, new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
             null,
             List.of(),
             new HashMap<>(),
@@ -70,7 +72,8 @@ public class AnalyticsControllerTest {
             new ObjectId(),
             Utils.generateRandomID(),
             Utils.generateRandomID(),
-            new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+            new SessionConfig(
+                CardSetType.HOURS, new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
             null,
             List.of(),
             new HashMap<>(),
@@ -87,7 +90,8 @@ public class AnalyticsControllerTest {
             new ObjectId(),
             Utils.generateRandomID(),
             Utils.generateRandomID(),
-            new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+            new SessionConfig(
+                CardSetType.HOURS, new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
             null,
             List.of(new Member(), new Member()),
             new HashMap<>(),
@@ -117,7 +121,8 @@ public class AnalyticsControllerTest {
             new ObjectId(),
             Utils.generateRandomID(),
             Utils.generateRandomID(),
-            new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+            new SessionConfig(
+                CardSetType.HOURS, new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
             null,
             List.of(new Member(), new Member(), new Member()),
             new HashMap<>(),
@@ -146,7 +151,8 @@ public class AnalyticsControllerTest {
             new ObjectId(),
             Utils.generateRandomID(),
             Utils.generateRandomID(),
-            new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+            new SessionConfig(
+                CardSetType.HOURS, new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
             null,
             List.of(new Member(), new Member()),
             new HashMap<>(),
@@ -164,7 +170,8 @@ public class AnalyticsControllerTest {
             new ObjectId(),
             Utils.generateRandomID(),
             Utils.generateRandomID(),
-            new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+            new SessionConfig(
+                CardSetType.HOURS, new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
             null,
             List.of(new Member()),
             new HashMap<>(),

@@ -234,14 +234,29 @@
               "errorTitle": "Deep link is invalid!",
               "missingParameters": "Deep link is incomplete – essential parameters are missing",
               "invalidMode": "Unknown mode parameter in the deep link",
-              "invalidSet": "Invalid card set values in the deep link",
+              "invalidSet": "The specified card set name does not match any existing card set",
+              "setValuesMismatch": "One or more provided card values are not part of the selected card set",
+              "emptySet": "The card set cannot be empty in the deep link",
+              "invalidSetType": "Invalid card set type in the deep link",
               "invalidTime": "Invalid timer parameter in the deep link",
               "invalidHostVoting": "The hostVoting parameter must be either 'true' or 'false'",
               "invalidSetForJira": "The set can only contain numbers in US_JIRA mode!",
               "copyDeeplink": "Copy Session Config",
               "copy": "Deep link copied!",
               "copyFailed": "Failed to copy deep link"
-            }
+            },
+          "summary": {
+            "title": "Summary of your session configuration",
+            "mode": "Mode",
+            "jiraProject": "Jira Project",
+            "cardSet": "Card Set",
+            "timer": "Timer",
+            "hostVoting": "Host Voting",
+            "hostVotingOn": "Host can vote",
+            "hostVotingOff": "Host cannot vote",
+            "password": "Password",
+            "noPassword": "No password set"
+          }
         },
         "selection": {
           "mode": {
@@ -360,9 +375,6 @@
             "title": "Choose a password if needed",
             "placeholder": "Password (leave empty for unprotected session)"
           }
-        },
-        "confirmation":{
-          "title": "Session Stats"
         }
       },
       "button": {
