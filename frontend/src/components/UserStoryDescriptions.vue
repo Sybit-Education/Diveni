@@ -104,12 +104,15 @@ export default defineComponent({
   },
   methods: {
     valueChanged(idx, { markdown }) {
+       this.userStories[idx].description = markdown; //save locally 
       if (this.storyMode !== "US_JIRA" || this.userStories[idx].title?.trim()) {
-        this.userStories[idx].description = markdown;
         this.publishChanges(idx);
       } else {
-        this.toast.error(this.t("session.notification.messages.issueTrackerJiraMissingTitle"));
+        const UserStoryIdLocally = idx + 1;
+        this.userStories[idx].title = "Unknown Issue " + UserStoryIdLocally;
+        this.publishChanges(idx);
       }
+
     },
     publishChanges(idx) {
       this.$emit("userStoriesChanged", { us: this.userStories, idx: idx, doRemove: false });
