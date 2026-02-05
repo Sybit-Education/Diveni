@@ -41,7 +41,7 @@
     "webstomp-client": "^1.2.6"
   },
   "devDependencies": {
-    "@crowdin/cli": "^3.19.4",
+    "@crowdin/cli": "^4.13.0",
     "@types/canvas-confetti": "^1.6.4",
     "@types/hammerjs": "^2.0.45",
     "@types/papaparse": "^5.3.16",
