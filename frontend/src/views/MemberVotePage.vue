@@ -161,6 +161,7 @@
               :initial-stories="userStories"
               :show-edit-buttons="false"
               :host="false"
+              :story-mode="userStoryMode"
               :host-selected-story-index="hostSelectedStoryIndex"
               @selectedStory="onSelectedStory($event)"
             />

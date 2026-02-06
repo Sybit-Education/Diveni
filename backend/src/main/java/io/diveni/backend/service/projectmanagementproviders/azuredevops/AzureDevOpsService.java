@@ -176,7 +176,8 @@ public class AzureDevOpsService implements ProjectManagementProviderOAuth2 {
                 fields.get(API_FIELD_TITLE).textValue(),
                 description,
                 estimation,
-                false));
+                false,
+                null));
       }
       accessTokenToProjectId.put(tokenIdentifier, projectName);
       LOGGER.debug("<-- getIssues()");
