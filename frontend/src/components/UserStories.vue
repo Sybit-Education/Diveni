@@ -85,7 +85,7 @@
           variant="outline-danger"
           class="border-0"
           size="sm"
-          @click="deleteStory(index)"
+          @click.stop="requestDeleteStory(index)"
         >
           <b-icon-trash />
         </b-button>
@@ -144,6 +144,11 @@
       @acceptSplitting="acceptSplitting"
       @retry="retry"
     />
+    <UserStoryDeleteModal
+      v-model:is-visible="showDeleteModal"
+      :story-mode="storyMode"
+      @confirm-delete="confirmDeleteStory"
+    />
   </div>
 </template>
 
@@ -153,10 +158,11 @@ import UserStory from "../model/UserStory";
 import { useI18n } from "vue-i18n";
 import PrivacyModal from "@/components/PrivacyModal.vue";
 import SplitUserStoriesModal from "@/components/SplitUserStoriesModal.vue";
+import UserStoryDeleteModal from "@/components/UserStoryDeleteModal.vue";
 
 export default defineComponent({
   name: "UserStories",
-  components: { SplitUserStoriesModal, PrivacyModal },
+  components: { SplitUserStoriesModal, PrivacyModal, UserStoryDeleteModal },
   props: {
     cardSet: { type: Array, required: true },
     initialStories: { type: Array, required: true },
@@ -186,6 +192,8 @@ export default defineComponent({
       showPrivacyModal: false,
       showUserStorySplitModal: false,
       splittedUserStoriesData: [] as Array<UserStory>,
+      showDeleteModal: false,
+      deleteIndex: null as number | null,
     };
   },
   watch: {
@@ -254,7 +262,22 @@ export default defineComponent({
         this.userStories = this.savedStories;
       }
     },
-    deleteStory(index) {
+    requestDeleteStory(index) {
+      const skipConfirm = localStorage.getItem("skipUserStoryDeleteConfirm") === "true";
+
+      if (skipConfirm) {
+        this.performDeleteStory(index);
+      } else {
+        this.deleteIndex = index;
+        this.showDeleteModal = true;
+      }
+    },
+    confirmDeleteStory() {
+      if (this.deleteIndex === null) return;
+      this.performDeleteStory(this.deleteIndex);
+      this.deleteIndex = null;
+    },
+    performDeleteStory(index) {
       this.publishChanges(index, true);
       this.userStories.splice(index, 1);
     },
