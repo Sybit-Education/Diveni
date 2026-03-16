@@ -43,7 +43,7 @@
             <b-card class="pictureCard">
               <b-card-text>
                 <b-img-lazy
-                  :src="require(`@/assets/SetUpSession.png`)"
+                  :src="setUpSessionImg"
                   width="300"
                   height="265"
                   alt="Set Up Session Picture"
@@ -82,7 +82,7 @@
             <b-card class="pictureCard">
               <b-card-text>
                 <b-img-lazy
-                  :src="require(`@/assets/InviteYourTeam.png`)"
+                  :src="inviteYourTeamImg"
                   width="300"
                   height="265"
                   alt="Invite Your Team Picture"
@@ -94,7 +94,7 @@
             <b-card class="pictureCard">
               <b-card-text>
                 <b-img-lazy
-                  :src="require(`@/assets/EstimateUserStories.png`)"
+                  :src="estimateUserStoriesImg"
                   width="300"
                   height="265"
                   alt="Estimate User Stories Picture"
@@ -142,6 +142,9 @@ import { useI18n } from "vue-i18n";
 import CarouselComponent from "@/components/CarouselComponent.vue";
 import DownloadPWAModal from "@/components/DownloadPWAModal.vue";
 import { useRouter } from "vue-router";
+import setUpSessionImg from "@/assets/SetUpSession.png";
+import inviteYourTeamImg from "@/assets/InviteYourTeam.png";
+import estimateUserStoriesImg from "@/assets/EstimateUserStories.png";
 
 export default defineComponent({
   name: "LandingPage",
@@ -155,7 +158,7 @@ export default defineComponent({
     const store = useDiveniStore();
     const { t } = useI18n();
     const router = useRouter();
-    return { store, t, router };
+    return { store, t, router, setUpSessionImg, inviteYourTeamImg, estimateUserStoriesImg };
   },
   data() {
     return {
@@ -266,7 +269,7 @@ export default defineComponent({
 
 .teaser {
   background: linear-gradient(var(--background-color-primary), var(--pictureGradientEnd)),
-    url("~@/assets/img/diveni-background.png");
+    url("@/assets/img/diveni-background.png");
   background-size: cover;
   background-repeat: no-repeat;
 }

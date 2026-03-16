@@ -24,10 +24,10 @@
           <h4 class="mb-3">
             <b-img
               v-if="theme === 'light'"
-              :src="require('@/assets/preparePage/P1.png')"
+              :src="p1Img"
               class="numberPictures"
             />
-            <b-img v-else :src="require('@/assets/preparePage/P1D.png')" class="numberPictures" />
+            <b-img v-else :src="p1dImg" class="numberPictures" />
             {{ t("session.prepare.step.selection.mode.title") }}
           </h4>
           <div class="mode-icons mt-2 d-flex justify-content-around">
@@ -37,7 +37,7 @@
               @click="setTabIndex(0)"
             >
               <b-img
-                :src="require('@/assets/preparePage/Mode1.png')"
+                :src="mode1Img"
                 class="modeIconImage"
                 :class="{ active: tabIndex === 0 }"
               />
@@ -51,7 +51,7 @@
               @click="setTabIndex(1)"
             >
               <b-img
-                :src="require('@/assets/preparePage/Mode2.png')"
+                :src="mode2Img"
                 class="modeIconImage"
                 :class="{ active: tabIndex === 1 }"
               />
@@ -66,7 +66,7 @@
               @click="setTabIndex(2)"
             >
               <b-img
-                :src="require('@/assets/preparePage/Mode3.png')"
+                :src="mode3Img"
                 class="modeIconImage"
                 :class="{ active: tabIndex === 2 }"
               />
@@ -111,10 +111,10 @@
           <h4 class="mb-3">
             <b-img
               v-if="theme === 'light'"
-              :src="require('@/assets/preparePage/P2.png')"
+              :src="p2Img"
               class="numberPictures"
             />
-            <b-img v-else :src="require('@/assets/preparePage/P2D.png')" class="numberPictures" />
+            <b-img v-else :src="p2dImg" class="numberPictures" />
             {{ t("session.prepare.step.selection.cardSet.title") }}
           </h4>
           <card-set-component
@@ -141,10 +141,10 @@
           <h4 class="mb-3">
             <b-img
               v-if="theme === 'light'"
-              :src="require('@/assets/preparePage/P3.png')"
+              :src="p3Img"
               class="numberPictures"
             />
-            <b-img v-else :src="require('@/assets/preparePage/P3D.png')" class="numberPictures" />
+            <b-img v-else :src="p3dImg" class="numberPictures" />
             {{ t("session.prepare.step.selection.time.title") }}
           </h4>
           <div class="timer-control d-flex justify-content-center mb-5">
@@ -171,10 +171,10 @@
           <h4 class="mb-3">
             <b-img
               v-if="theme === 'light'"
-              :src="require('@/assets/preparePage/P4.png')"
+              :src="p4Img"
               class="numberPictures"
             />
-            <b-img v-else :src="require('@/assets/preparePage/P4D.png')" class="numberPictures" />
+            <b-img v-else :src="p4dImg" class="numberPictures" />
             {{ t("session.prepare.step.selection.hostVoting.title") }}
           </h4>
           <b-row class="mt-2">
@@ -267,6 +267,17 @@ import { useToast } from "vue-toastification";
 import { useI18n } from "vue-i18n";
 import { Steppy } from "vue3-steppy";
 import { useRouter, useRoute } from "vue-router";
+import p1Img from "@/assets/preparePage/P1.png";
+import p1dImg from "@/assets/preparePage/P1D.png";
+import p2Img from "@/assets/preparePage/P2.png";
+import p2dImg from "@/assets/preparePage/P2D.png";
+import p3Img from "@/assets/preparePage/P3.png";
+import p3dImg from "@/assets/preparePage/P3D.png";
+import p4Img from "@/assets/preparePage/P4.png";
+import p4dImg from "@/assets/preparePage/P4D.png";
+import mode1Img from "@/assets/preparePage/Mode1.png";
+import mode2Img from "@/assets/preparePage/Mode2.png";
+import mode3Img from "@/assets/preparePage/Mode3.png";
 
 export default defineComponent({
   name: "PrepareSessionPage",
@@ -285,7 +296,11 @@ export default defineComponent({
     const router = useRouter();
     const route = useRoute();
     const step = ref<number>(1);
-    return { store, toast, t, step, router, route };
+    return {
+      store, toast, t, step, router, route,
+      p1Img, p1dImg, p2Img, p2dImg, p3Img, p3dImg, p4Img, p4dImg,
+      mode1Img, mode2Img, mode3Img,
+    };
   },
   data() {
     return {

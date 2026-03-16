@@ -7,14 +7,14 @@
     <meta name="twitter:image" content="https://diveni.io/img/diveniLogo.3a200645.png" />
     <meta property="og:title" content="Diveni - Instant free and easy remote Planning Poker" />
     <meta property="og:description" content="This is a free, user-friendly Planning Poker App. Ideal for your Scrum team. You can connect it to Jira, Github, Gitlab & Azure DevOps. After connecting you can create, update or delete issues and plan your next sprint with your team." />
-    <meta property="og:image" content="<%= require('@/assets/diveniLogo.png') %>"/>
+    <meta property="og:image" content="/diveniLogo.png"/>
     <base href="/" />
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
     <meta name="description" content="Diveni is a free planning poker web app for agile teams." />
 
-    <link rel="icon" href="<%= BASE_URL %>favicon.ico" />
+    <link rel="icon" href="/favicon.ico" />
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900&display=swap" />
@@ -36,6 +36,6 @@
       <strong>We're sorry but Diveni.io doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
     <div id="app"></div>
-    <!-- built files will be auto injected -->
+    <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

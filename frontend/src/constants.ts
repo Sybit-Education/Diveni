@@ -1,8 +1,8 @@
 class Constants {
-  backendURL = process.env.VUE_APP_SERVER_API_URL;
+  backendURL = import.meta.env.VITE_SERVER_API_URL;
 
-  i18nDefaultLocale = process.env.VUE_APP_I18N_DEFAULT_LOCALE;
-  i18nFallbackLocale = process.env.VUE_APP_I18N_FALLBACK_LOCALE;
+  i18nDefaultLocale = import.meta.env.VITE_I18N_DEFAULT_LOCALE;
+  i18nFallbackLocale = import.meta.env.VITE_I18N_FALLBACK_LOCALE;
 
   createSessionRoute = "/sessions";
 

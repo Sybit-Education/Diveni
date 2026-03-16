@@ -1,9 +1,3 @@
-declare module "*.vue" {
-  import Vue from "vue";
-
-  export default Vue;
-}
-
 declare module "vue" {
   import { CompatVue } from "@vue/runtime-dom";
   const Vue: CompatVue;

@@ -5,7 +5,7 @@
     :class="mobile ? 'smallAvatar' : 'bigAvatar'"
   >
     <div :id="'avatar' + member.name" class="text-center">
-      <b-img :src="require(`@/assets/${avatar}.png`)" class="rounded-avatar__image" />
+      <b-img :src="avatarUrl" class="rounded-avatar__image" />
       <div v-if="showName" class="rounded-avatar__label">
         {{ member.name }}
       </div>
@@ -17,6 +17,11 @@
 import { defineComponent, PropType } from "vue";
 import Member from "@/model/Member";
 import Constants from "@/constants";
+
+const animalImages = import.meta.glob("@/assets/*.png", {
+  eager: true,
+  import: "default",
+}) as Record<string, string>;
 
 export default defineComponent({
   name: "RoundedAvatar",
@@ -32,6 +37,9 @@ export default defineComponent({
         return Constants.getRandomAvatarAnimalAssetName();
       }
       return this.member?.avatarAnimal?.toLowerCase() ?? "fish";
+    },
+    avatarUrl() {
+      return animalImages[`/src/assets/${this.avatar}.png`] ?? "";
     },
   },
 });

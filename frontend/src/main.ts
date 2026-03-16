@@ -7,7 +7,6 @@ import Vue, { createApp } from "vue";
 import axios from "axios";
 import VueAxios from "vue-axios";
 import App from "./App.vue";
-import "./registerServiceWorker";
 import router from "./router";
 import setupInterceptors from "./interceptors";
 import { createPinia } from "pinia";
@@ -23,8 +22,6 @@ Vue.use(ModalPlugin);
 Vue.use(BootstrapVue);
 
 setupInterceptors();
-
-// Vue.config.productionTip = false;
 
 const app = createApp(App);
 

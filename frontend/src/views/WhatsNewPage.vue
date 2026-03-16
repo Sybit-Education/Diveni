@@ -129,7 +129,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 .teaser {
   background: linear-gradient(var(--background-color-primary), var(--pictureGradientEnd)),
-    url("~@/assets/img/diveni-background.png");
+    url("@/assets/img/diveni-background.png");
   background-size: cover;
   background-repeat: no-repeat;
 }

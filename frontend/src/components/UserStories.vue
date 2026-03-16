@@ -36,7 +36,7 @@
             $event.target.blur();
           "
         >
-          <b-img id="userStoryPicture" :src="require('@/assets/ActiveUserStory.png')" />
+          <b-img id="userStoryPicture" :src="activeUserStoryImg" />
         </b-button>
 
         <b-button
@@ -159,6 +159,7 @@ import { useI18n } from "vue-i18n";
 import PrivacyModal from "@/components/PrivacyModal.vue";
 import SplitUserStoriesModal from "@/components/SplitUserStoriesModal.vue";
 import UserStoryDeleteModal from "@/components/UserStoryDeleteModal.vue";
+import activeUserStoryImg from "@/assets/ActiveUserStory.png";
 
 export default defineComponent({
   name: "UserStories",
@@ -177,7 +178,7 @@ export default defineComponent({
   },
   setup() {
     const { t } = useI18n();
-    return { t };
+    return { t, activeUserStoryImg };
   },
   data() {
     return {

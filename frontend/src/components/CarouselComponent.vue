@@ -9,7 +9,7 @@
           <b-card-title>
             <div>
               <b-img-lazy
-                :src="require(`@/assets/${getClass(item).toLowerCase()}.png`)"
+                :src="getConnectorImageUrl(item)"
                 :class="getClass(item) + 'Pic'"
                 alt="Connector Picture"
               />
@@ -30,6 +30,11 @@
 <script lang="ts">
 import { defineComponent, ref } from "vue";
 import { useI18n } from "vue-i18n";
+
+const connectorImages = import.meta.glob("@/assets/*.png", {
+  eager: true,
+  import: "default",
+}) as Record<string, string>;
 
 export default defineComponent({
   name: "CarouselComponent",
@@ -82,6 +87,10 @@ export default defineComponent({
     }, 10);
   },
   methods: {
+    getConnectorImageUrl(item) {
+      const name = this.getClass(item).toLowerCase();
+      return connectorImages[`/src/assets/${name}.png`] ?? "";
+    },
     getClass(item) {
       switch (item.title) {
         case "Jira Server":

@@ -43,12 +43,12 @@ const routes = [
   {
     path: "/jiraCallback",
     name: "JiraCallbackPage",
-    component: () => import(/* webpackChunkName: "jira" */ "../views/JiraCallbackPage.vue"),
+    component: () => import("../views/JiraCallbackPage.vue"),
   },
   {
     path: "/about",
     name: "AboutPage",
-    component: () => import(/* webpackChunkName: "about" */ "../views/AboutPage.vue"),
+    component: () => import("../views/AboutPage.vue"),
   },
   {
     path: "/whats-new",
@@ -62,7 +62,7 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes: routes,
 });
 
