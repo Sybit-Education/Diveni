@@ -22,11 +22,7 @@
       <template #1>
         <div class="wizardStep">
           <h4 class="mb-3">
-            <b-img
-              v-if="theme === 'light'"
-              :src="p1Img"
-              class="numberPictures"
-            />
+            <b-img v-if="theme === 'light'" :src="p1Img" class="numberPictures" />
             <b-img v-else :src="p1dImg" class="numberPictures" />
             {{ t("session.prepare.step.selection.mode.title") }}
           </h4>
@@ -36,11 +32,7 @@
               :class="['mode-icon', tabIndex === 0 ? 'active' : '']"
               @click="setTabIndex(0)"
             >
-              <b-img
-                :src="mode1Img"
-                class="modeIconImage"
-                :class="{ active: tabIndex === 0 }"
-              />
+              <b-img :src="mode1Img" class="modeIconImage" :class="{ active: tabIndex === 0 }" />
               <span class="mode-icon-text">
                 {{ t("session.prepare.step.selection.mode.description.withoutUS.tab.label") }}
               </span>
@@ -50,11 +42,7 @@
               :class="['mode-icon', tabIndex === 1 ? 'active' : '']"
               @click="setTabIndex(1)"
             >
-              <b-img
-                :src="mode2Img"
-                class="modeIconImage"
-                :class="{ active: tabIndex === 1 }"
-              />
+              <b-img :src="mode2Img" class="modeIconImage" :class="{ active: tabIndex === 1 }" />
               <span class="mode-icon-text">
                 {{ t("session.prepare.step.selection.mode.description.withUS.tab.label") }}
               </span>
@@ -65,11 +53,7 @@
               :class="['mode-icon', tabIndex === 2 ? 'active' : '']"
               @click="setTabIndex(2)"
             >
-              <b-img
-                :src="mode3Img"
-                class="modeIconImage"
-                :class="{ active: tabIndex === 2 }"
-              />
+              <b-img :src="mode3Img" class="modeIconImage" :class="{ active: tabIndex === 2 }" />
               <span class="mode-icon-text">
                 {{
                   t("session.prepare.step.selection.mode.description.withIssueTracker.tab.label")
@@ -109,11 +93,7 @@
       <template #2>
         <div class="wizardStep">
           <h4 class="mb-3">
-            <b-img
-              v-if="theme === 'light'"
-              :src="p2Img"
-              class="numberPictures"
-            />
+            <b-img v-if="theme === 'light'" :src="p2Img" class="numberPictures" />
             <b-img v-else :src="p2dImg" class="numberPictures" />
             {{ t("session.prepare.step.selection.cardSet.title") }}
           </h4>
@@ -139,11 +119,7 @@
       <template #3>
         <div class="wizardStep">
           <h4 class="mb-3">
-            <b-img
-              v-if="theme === 'light'"
-              :src="p3Img"
-              class="numberPictures"
-            />
+            <b-img v-if="theme === 'light'" :src="p3Img" class="numberPictures" />
             <b-img v-else :src="p3dImg" class="numberPictures" />
             {{ t("session.prepare.step.selection.time.title") }}
           </h4>
@@ -169,11 +145,7 @@
             >
           </div>
           <h4 class="mb-3">
-            <b-img
-              v-if="theme === 'light'"
-              :src="p4Img"
-              class="numberPictures"
-            />
+            <b-img v-if="theme === 'light'" :src="p4Img" class="numberPictures" />
             <b-img v-else :src="p4dImg" class="numberPictures" />
             {{ t("session.prepare.step.selection.hostVoting.title") }}
           </h4>
@@ -297,9 +269,23 @@ export default defineComponent({
     const route = useRoute();
     const step = ref<number>(1);
     return {
-      store, toast, t, step, router, route,
-      p1Img, p1dImg, p2Img, p2dImg, p3Img, p3dImg, p4Img, p4dImg,
-      mode1Img, mode2Img, mode3Img,
+      store,
+      toast,
+      t,
+      step,
+      router,
+      route,
+      p1Img,
+      p1dImg,
+      p2Img,
+      p2dImg,
+      p3Img,
+      p3dImg,
+      p4Img,
+      p4dImg,
+      mode1Img,
+      mode2Img,
+      mode3Img,
     };
   },
   data() {

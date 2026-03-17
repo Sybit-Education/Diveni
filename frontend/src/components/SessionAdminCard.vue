@@ -26,13 +26,13 @@ import crownImg from "@/assets/crown.png";
 
 export default defineComponent({
   name: "SessionAdminCard",
-  setup() {
-    return { crownImg };
-  },
   props: {
     currentEstimation: { type: String, required: true },
     estimateFinished: { type: Boolean, required: true },
     highlight: { type: Boolean, required: false },
+  },
+  setup() {
+    return { crownImg };
   },
 });
 </script>
