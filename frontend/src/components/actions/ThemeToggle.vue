@@ -145,7 +145,7 @@ export default defineComponent({
 
 body.dark-mode {
   .mode-toggle {
-    background-color: lighten(#262626, 5%);
+    background-color: #333333;
     border-color: var(--text-primary-color);
 
     .toggle {

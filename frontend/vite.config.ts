@@ -72,7 +72,14 @@ export default defineConfig(({ command }) => ({
   css: {
     preprocessorOptions: {
       scss: {
-        silenceDeprecations: ["import", "legacy-js-api"],
+        silenceDeprecations: [
+          "import",
+          "legacy-js-api",
+          "if-function",
+          "global-builtin",
+          "color-functions",
+          "abs-percent",
+        ],
       },
     },
   },
