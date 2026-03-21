@@ -1,28 +1,7 @@
 {
-  "compilerOptions": {
-    "target": "ESNext",
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "resolvePackageJsonExports": true,
-    "resolvePackageJsonImports": true,
-    "strict": true,
-    "noImplicitAny": false,
-    "allowJs": true,
-    "jsx": "preserve",
-    "importHelpers": true,
-    "isolatedModules": true,
-    "resolveJsonModule": true,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "sourceMap": true,
-    "baseUrl": ".",
-    "types": ["vite/client"],
-    "paths": {
-      "@/*": ["src/*"]
-    },
-    "lib": ["ESNext", "DOM", "DOM.Iterable"]
-  },
-  "include": ["src/**/*.ts", "src/**/*.vue", "src/**/*.d.ts", "components.d.ts"],
-  "exclude": ["node_modules", "dist"]
+  "files": [],
+  "references": [
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.node.json" }
+  ]
 }
