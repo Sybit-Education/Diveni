@@ -1,7 +1,7 @@
 <template>
   <div>
-    <b-modal id="gptModal" v-model="showModal" centered hide-header-close @hide="closeModal()">
-      <template #modal-header>
+    <b-modal id="gptModal" v-model="showModal" centered no-header-close @hide="closeModal()">
+      <template #header>
         <div v-if="gptMode === 'improveDescription'" class="text-center">
           Alternative Description>
         </div>
@@ -19,10 +19,10 @@
           @stillTyping="copyText"
         />
       </div>
-      <template #modal-footer>
+      <template #footer>
         <div id="aiOptions" class="text-center mt-1">
           <b-button id="acceptAIOption" class="m-1" @click="acceptDescription">
-            <b-icon-check2 />
+            <i class="bi bi-check2"></i>
             Keep
           </b-button>
           <b-button
@@ -33,7 +33,7 @@
               $event.target.blur();
             "
           >
-            <b-icon-sliders />
+            <i class="bi bi-sliders"></i>
             Adjust
           </b-button>
           <b-button
@@ -44,7 +44,7 @@
               $event.target.blur();
             "
           >
-            <b-icon-arrow-repeat />
+            <i class="bi bi-arrow-repeat"></i>
             Try Again
           </b-button>
           <b-button
@@ -52,7 +52,7 @@
             class="aiOptionButtons m-1"
             @click="deleteDescription"
           >
-            <b-icon-backspace />
+            <i class="bi bi-backspace"></i>
             Delete
           </b-button>
           <b-button
@@ -63,7 +63,7 @@
               $event.target.blur();
             "
           >
-            <b-icon-x-square />
+            <i class="bi bi-x-square"></i>
             Cancel
           </b-button>
         </div>
@@ -73,7 +73,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import UiToastEditorWrapper from "@/components/UiToastEditorWrapper.vue";
 
@@ -86,7 +86,7 @@ export default defineComponent({
     retryRepaint: { type: Boolean, required: true },
   },
   setup() {
-    const showModal = true;
+    const showModal = ref(true);
     const { t } = useI18n();
     return { t, showModal };
   },
@@ -157,55 +157,57 @@ export default defineComponent({
   z-index: 3;
 }
 
-#b-modal-body {
-  height: 500px;
-  overflow: auto;
-}
-
-.modal-content {
-  background-color: var(--b-modal-background) !important;
-  color: black !important;
-}
-
-.modal-header {
-  text-align: center !important;
-  display: block !important;
-  font-size: x-large !important;
-  color: var(--text-primary-color);
-}
-
-.modal-body {
-  color: black;
-}
-
-.modal-footer {
-  text-align: center !important;
-  display: block !important;
-}
-
-#acceptAIOption {
-  background-color: var(--ai-stars) !important;
-  color: white !important;
-  border-style: none;
-}
-
-.aiOptionButtons {
-  border: none !important;
-  border-radius: 0 !important;
-  background-color: transparent !important;
-  transition: color 0.3s linear !important;
-
-  &:hover {
-    background-color: transparent !important;
-    color: var(--ai-stars) !important;
-    border-radius: 1em !important;
+#gptModal {
+  #b-modal-body {
+    height: 500px;
+    overflow: auto;
   }
-}
 
-#aiOptions {
-  background-color: var(--b-modal-background);
-  border-radius: 0.5em;
-  display: inline-flex;
-  animation: showUp 1s;
+  .modal-content {
+    background-color: var(--b-modal-background) !important;
+    color: black !important;
+  }
+
+  .modal-header {
+    text-align: center !important;
+    display: block !important;
+    font-size: x-large !important;
+    color: var(--text-primary-color);
+  }
+
+  .modal-body {
+    color: black;
+  }
+
+  .modal-footer {
+    text-align: center !important;
+    display: block !important;
+  }
+
+  #acceptAIOption {
+    background-color: var(--ai-stars) !important;
+    color: white !important;
+    border-style: none;
+  }
+
+  .aiOptionButtons {
+    border: none !important;
+    border-radius: 0 !important;
+    background-color: transparent !important;
+    transition: color 0.3s linear !important;
+
+    &:hover {
+      background-color: transparent !important;
+      color: var(--ai-stars) !important;
+      border-radius: 1em !important;
+    }
+  }
+
+  #aiOptions {
+    background-color: var(--b-modal-background);
+    border-radius: 0.5em;
+    display: inline-flex;
+    animation: showUp 1s;
+  }
 }
 </style>

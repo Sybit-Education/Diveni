@@ -9,13 +9,13 @@
     </b-button>
     <div v-if="clicked" class="my-2">
       <div class="inline-div input-div">
-        <b-input
+        <b-form-input
           v-model="patToken"
           class="patInputField"
           placeholder="Type in your PAT"
           type="password"
         >
-        </b-input>
+        </b-form-input>
       </div>
       <div class="inline-div">
         <b-button variant="primary" :disabled="patToken === ''" @click="getAccessToken()"

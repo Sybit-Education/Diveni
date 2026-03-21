@@ -5,7 +5,7 @@
     :title="title"
     ok-only
     :ok-title="Ok"
-    hide-header-close
+    no-header-close
     no-close-on-esc
     no-close-on-backdrop
     @ok="handleOk"

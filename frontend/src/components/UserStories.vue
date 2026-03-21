@@ -2,10 +2,8 @@
   <div class="user-stories">
     <div v-if="userStories.length > 0 || filterActive" class="w-100 d-flex justify-content-left">
       <b-input-group>
-        <b-input-group-prepend>
-          <b-input-group-text><BIconSearch id="searchIcon"></BIconSearch></b-input-group-text>
-        </b-input-group-prepend>
-        <b-input
+        <b-input-group-text><i id="searchIcon" class="bi bi-search"></i></b-input-group-text>
+        <b-form-input
           id="search"
           v-model="input"
           type="text"
@@ -21,7 +19,6 @@
         :key="index"
         :active="index === selectedStoryIndex"
         class="w-100 p-1 d-flex justify-content-left"
-        :style="index === selectedStoryIndex ? 'border-width: 3px;' : ''"
         @mouseover="hover = index"
         @mouseleave="hover = null"
         @click="setUserStoryAsActive(index)"
@@ -45,7 +42,7 @@
           variant="success"
           disabled
         >
-          <b-icon-arrow-right />
+          <i class="bi bi-arrow-right"></i>
         </b-button>
         <b-button
           v-if="showEditButtons && hasApiKey"
@@ -56,7 +53,7 @@
             showPrivacyModal = true;
           "
         >
-          <BIconStars />
+          <i class="bi bi-stars"></i>
         </b-button>
         <b-button
           v-if="storyMode === 'US_JIRA' && story.storyUrl"
@@ -67,7 +64,7 @@
           :title="t('page.session.before.userStories.button.openExternalTracker')"
           @click.stop="openLink(story.storyUrl)"
         >
-          <b-icon-box-arrow-up-right class="custom-link-icon" />
+          <i class="bi bi-box-arrow-up-right custom-link-icon"></i>
         </b-button>
         <b-form-input
           id="userStoryTitles"
@@ -87,7 +84,7 @@
           size="sm"
           @click.stop="requestDeleteStory(index)"
         >
-          <b-icon-trash />
+          <i class="bi bi-trash"></i>
         </b-button>
       </b-list-group-item>
     </b-card-group>
@@ -101,13 +98,13 @@
         $event.target.blur();
       "
     >
-      <b-icon-plus />
+      <i class="bi bi-plus"></i>
       {{ t("page.session.before.userStories.button.addFirstUserStory") }}
     </b-button>
 
     <b-alert
       v-if="userStories.length < 1 && showEditButtons && filterActive"
-      show
+      :model-value="true"
       variant="warning"
     >
       {{ t("page.session.before.userStories.filter.noStoryFound") }}
@@ -122,7 +119,7 @@
         $event.target.blur();
       "
     >
-      <b-icon-plus />
+      <i class="bi bi-plus"></i>
       {{ t("page.session.before.userStories.button.addUserStory") }}
     </b-button>
     <PrivacyModal
@@ -355,6 +352,12 @@ export default defineComponent({
   color: var(--text-primary-color);
 }
 
+#userStoryRow.active {
+  background-color: var(--textAreaColour) !important;
+  border: 3px solid var(--bs-primary) !important;
+  color: var(--text-primary-color);
+}
+
 #userStoryBlock {
   max-height: 205px; /*exactly 4 User Stories tall*/
   border-radius: 1rem;
@@ -375,8 +378,8 @@ export default defineComponent({
 }
 
 #badge {
-  background-color: var(--secondary-button);
-  color: var(--text-primary-color);
+  background-color: var(--secondary-button) !important;
+  color: var(--text-primary-color) !important;
   font-size: large;
 }
 

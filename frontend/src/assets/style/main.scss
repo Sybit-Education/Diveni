@@ -1,6 +1,5 @@
 @import "_variables.scss";
 @import "bootstrap/scss/bootstrap";
-@import "bootstrap-vue/src/index.scss";
 
 
 /*scrollbar - firefox*/
@@ -49,10 +48,16 @@ a {
 }
 
 .jumbotron {
+  padding: 2rem 1rem;
+  margin-bottom: 2rem;
   background-color: var(--background-color-primary);
   color: var(--text-primary-color);
   opacity: 0.7;
-  border-radius: 0;
+  border-radius: 0.3rem;
+
+  @media (min-width: 576px) {
+    padding: 4rem 2rem;
+  }
 }
 
 .dropdown-menu {

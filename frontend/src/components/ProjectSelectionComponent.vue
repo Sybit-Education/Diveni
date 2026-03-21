@@ -1,10 +1,8 @@
 <template>
   <div ref="projectSelectionRef">
     <b-input-group>
-      <b-input-group-prepend>
-        <b-input-group-text><BIconSearch id="searchIcon"></BIconSearch></b-input-group-text>
-      </b-input-group-prepend>
-      <b-input
+      <b-input-group-text><i id="searchIcon" class="bi bi-search"></i></b-input-group-text>
+      <b-form-input
         id="search"
         v-model="input"
         type="text"

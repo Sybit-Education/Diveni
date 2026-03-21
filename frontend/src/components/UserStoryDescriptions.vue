@@ -11,7 +11,7 @@
         <markdown-editor
           id="textarea-auto-height"
           :key="updateComponent"
-          v-model="userStories[idx].description"
+          v-model:markdown="userStories[idx].description"
           class="my-2"
           :disabled="!editDescription"
           :placeholder="t('page.session.before.userStories.placeholder.userStoryDescription')"
@@ -26,7 +26,7 @@
         <markdown-editor
           id="textarea-auto-height"
           :key="updateComponent"
-          v-model="userStories[idx].description"
+          v-model:markdown="userStories[idx].description"
           class="my-2 noneClickable"
           :placeholder="t('page.session.before.userStories.placeholder.userStoryDescription')"
           @textValueChanged="(event) => valueChanged(idx, event)"

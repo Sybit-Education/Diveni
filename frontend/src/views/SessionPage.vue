@@ -10,8 +10,8 @@
           }}
         </h1>
       </b-col>
-      <b-col class="d-flex justify-content-end align-items-center ml-auto">
-        <copy-session-id-popup v-if="planningStart" :session-id="sessionID" class="mr-2" />
+      <b-col class="d-flex justify-content-end align-items-center ms-auto">
+        <copy-session-id-popup v-if="planningStart" :session-id="sessionID" class="me-2" />
         <session-close-button :is-planning-start="planningStart" :user-story-mode="userStoryMode" />
       </b-col>
     </b-row>
@@ -27,7 +27,7 @@
             $event.target.blur();
           "
         >
-          <b-icon-eye-slash-fill class="bIcons" />
+          <i class="bi bi-eye-slash-fill bIcons"></i>
           {{ t("page.session.during.estimation.buttons.autoRevealOff") }}
         </b-button>
 
@@ -40,7 +40,7 @@
             $event.target.blur();
           "
         >
-          <b-icon-eye-fill class="bIcons" />
+          <i class="bi bi-eye-fill bIcons"></i>
           {{ t("page.session.during.estimation.buttons.autoRevealOn") }}
         </b-button>
 
@@ -50,7 +50,7 @@
           variant="outline-dark"
           @click="copyDeepLink"
         >
-          <b-icon icon="clipboard" class="bIcons" />
+          <i class="bi bi-clipboard bIcons"></i>
           {{ t("session.prepare.step.wizard.deeplink.copyDeeplink") }}
         </b-button>
       </b-col>
@@ -88,32 +88,32 @@
     </div>
     <div v-else>
       <b-row class="d-flex justify-content-start pb-3">
-        <b-col cols="auto" class="mr-auto optionButtonCol">
+        <b-col cols="auto" class="me-auto optionButtonCol">
           <b-button
-            class="mr-3 optionButton"
+            class="me-3 optionButton"
             variant="outline-dark"
             @click="
               sendRestartMessage();
               $event.target.blur();
             "
           >
-            <BIconArrowClockwise class="bIcons"></BIconArrowClockwise>
+            <i class="bi bi-arrow-clockwise bIcons"></i>
             {{ t("page.session.during.estimation.buttons.new") }}
           </b-button>
           <b-button
-            class="mr-3 optionButton"
+            class="me-3 optionButton"
             variant="outline-dark"
             @click="
               sendVotingFinishedMessage();
               $event.target.blur();
             "
           >
-            <BIconBarChartFill class="bIcons"></BIconBarChartFill>
+            <i class="bi bi-bar-chart-fill bIcons"></i>
             {{ t("page.session.during.estimation.buttons.result") }}
           </b-button>
           <b-button
             v-if="!autoReveal"
-            class="mr-3 optionButton"
+            class="me-3 optionButton"
             variant="outline-dark"
             :disabled="planningStart && !estimateFinished"
             @click="
@@ -121,12 +121,12 @@
               $event.target.blur();
             "
           >
-            <b-icon-eye-slash-fill class="bIcons" />
+            <i class="bi bi-eye-slash-fill bIcons"></i>
             {{ t("page.session.during.estimation.buttons.autoRevealOff") }}
           </b-button>
           <b-button
             v-if="autoReveal"
-            class="mr-3 optionButton"
+            class="me-3 optionButton"
             variant="outline-dark"
             :disabled="planningStart && !estimateFinished"
             @click="
@@ -134,18 +134,18 @@
               $event.target.blur();
             "
           >
-            <b-icon-eye-fill class="bIcons" />
+            <i class="bi bi-eye-fill bIcons"></i>
             {{ t("page.session.during.estimation.buttons.autoRevealOn") }}
           </b-button>
           <b-button
-            class="mr-3 optionButton"
+            class="me-3 optionButton"
             variant="outline-dark"
             @click="
               copyDeepLink();
               $event.target.blur();
             "
           >
-            <b-icon icon="clipboard" class="bIcons" />
+            <i class="bi bi-clipboard bIcons"></i>
             {{ t("session.prepare.step.wizard.deeplink.copyDeeplink") }}
           </b-button>
         </b-col>
@@ -359,7 +359,7 @@ import UserStorySumComponent from "@/components/UserStorySum.vue";
 import KickUserWrapper from "@/components/KickUserWrapper.vue";
 import SessionCloseButton from "@/components/actions/SessionCloseButton.vue";
 import SessionStartButton from "@/components/actions/SessionStartButton.vue";
-import { BIconArrowClockwise, BIconBarChartFill } from "bootstrap-vue";
+import axios from "axios";
 import { defineComponent } from "vue";
 import { useDiveniStore } from "@/store";
 import { useToast } from "vue-toastification";
@@ -385,8 +385,6 @@ export default defineComponent({
     CopySessionIdPopup,
     UserStoryDescriptions,
     NotifyHostComponent,
-    BIconArrowClockwise,
-    BIconBarChartFill,
     SessionAdminCard,
   },
   setup() {
@@ -546,7 +544,7 @@ export default defineComponent({
       this.estimateFinished = true;
     }
   },
-  destroyed() {
+  unmounted() {
     window.removeEventListener("beforeunload", this.sendUnregisterCommand);
   },
   methods: {
@@ -558,7 +556,7 @@ export default defineComponent({
         const url = Constants.backendURL + Constants.createSessionRoute;
         try {
           const session = (
-            await this.axios.get(url, {
+            await axios.get(url, {
               params: {
                 adminCookie: cookie,
               },
@@ -984,8 +982,8 @@ export default defineComponent({
 }
 
 .bIcons {
-  height: 40px;
-  width: 40px;
+  font-size: 40px;
+  line-height: 1;
 }
 
 .optionButton {

@@ -1,6 +1,6 @@
 <template>
   <b-modal
-    :visible="isVisibleProxy"
+    v-model="isVisibleProxy"
     centered
     :title="$t('page.session.during.modal.deleteTitle')"
     :ok-title="$t('page.session.during.modal.buttons.ok')"

@@ -4,7 +4,7 @@
       <b-img id="pandaPictureClose" :src="leaveButtonImg" />
     </div>
     <b-button v-b-modal.close-session-modal variant="danger" class="button">
-      <b-icon-x />
+      <i class="bi bi-x"></i>
       {{ t("page.session.during.estimation.buttons.finish") }}
     </b-button>
     <b-modal

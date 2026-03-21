@@ -2,11 +2,10 @@
   <div id="whats-new-page">
     <b-container fluid class="teaser my-5">
       <b-container>
-        <b-jumbotron header="DIVENI">
-          <template #lead>
-            {{ t("page.landing.news.buttons.info.label") }}
-          </template>
-        </b-jumbotron>
+        <div class="py-5 mb-4 jumbotron">
+          <h1 class="display-4">DIVENI</h1>
+          <p class="lead">{{ t("page.landing.news.buttons.info.label") }}</p>
+        </div>
       </b-container>
     </b-container>
     <b-container class="pb-5">
@@ -25,7 +24,7 @@
         <div v-if="loading" class="col-12 my-5 text-center">
           <b-spinner label="Loading..."></b-spinner>
         </div>
-        <b-card-group v-for="card in paginatedData" :key="card.number" deck class="my-3 col-md-4">
+        <b-card-group v-for="card in paginatedData" :key="card.number" class="my-3 col-md-4">
           <b-card
             align="center"
             border-variant="secondary"

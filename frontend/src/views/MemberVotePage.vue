@@ -91,7 +91,7 @@
         <h3 id="header">
           {{ t("page.vote.waiting") }}
           <sub>
-            <b-icon-three-dots animation="fade" font-scale="1" />
+            <i class="bi bi-three-dots fade-animation"></i>
           </sub>
         </h3>
       </b-row>
@@ -442,5 +442,18 @@ export default defineComponent({
 .centerCards {
   margin-left: auto;
   margin-right: auto;
+}
+
+.fade-animation {
+  animation: fade 1s infinite alternate;
+}
+
+@keyframes fade {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }
 </style>

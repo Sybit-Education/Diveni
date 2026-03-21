@@ -5,11 +5,4 @@ declare module "*.vue" {
   export default component;
 }
 
-declare module "vue" {
-  import { CompatVue } from "@vue/runtime-dom";
-  const Vue: CompatVue;
-  export default Vue;
-  export * from "@vue/runtime-dom";
-}
-
 declare module "vue3-steppy";

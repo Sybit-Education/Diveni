@@ -32,6 +32,7 @@ export default defineComponent({
 <style lang="scss">
 @import "./assets/style/variables.scss";
 main {
+  padding-top: 5rem;
   min-height: calc(100vh - 10rem);
   background:
   /* Top */ radial-gradient(

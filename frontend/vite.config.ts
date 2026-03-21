@@ -5,15 +5,7 @@ import { fileURLToPath, URL } from "node:url";
 
 export default defineConfig(({ command }) => ({
   plugins: [
-    vue({
-      template: {
-        compilerOptions: {
-          compatConfig: {
-            MODE: 2,
-          },
-        },
-      },
-    }),
+    vue(),
     VitePWA({
       registerType: "autoUpdate",
       workbox: {
@@ -59,7 +51,6 @@ export default defineConfig(({ command }) => ({
   },
   resolve: {
     alias: {
-      vue: "@vue/compat",
       "@": fileURLToPath(new URL("./src", import.meta.url)),
     },
   },

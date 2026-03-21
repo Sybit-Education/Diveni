@@ -26,7 +26,7 @@ export default defineComponent({
   name: "DownloadPWAModal",
   setup() {
     const deferredPrompt: Ref<BeforeInstallPromptEvent | null> = ref(null);
-    const checkIfNotInstalled = false;
+    const checkIfNotInstalled = ref(false);
     window.addEventListener("beforeinstallprompt", (e) => {
       e.preventDefault();
       deferredPrompt.value = e as BeforeInstallPromptEvent;

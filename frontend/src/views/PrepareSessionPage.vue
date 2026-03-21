@@ -73,9 +73,8 @@
                 @change="importStory($event)"
               />
               <b-button
-                block
                 elevation="2"
-                class="btn-primary"
+                class="btn-primary w-100"
                 variant="primary"
                 @click="
                   openFileUploader();
@@ -132,7 +131,7 @@
               "
               >-</b-button
             >
-            <div id="setting-value" class="font-weight-bolder px-3 text-center">
+            <div id="setting-value" class="fw-bolder px-3 text-center">
               {{ timer == 0 ? "∞" : formatTimer }}
             </div>
             <b-button
@@ -180,7 +179,7 @@
         <div class="wizardStep">
           <div class="copy-btn-container">
             <b-button class="copy-btn" variant="outline-dark" @click="copyDeepLink">
-              <b-icon icon="clipboard" class="bIcons" />
+              <i class="bi bi-clipboard bIcons"></i>
               {{ t("session.prepare.step.wizard.deeplink.copyDeeplink") }}
             </b-button>
           </div>
@@ -223,6 +222,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from "vue";
+import axios from "axios";
 import Session from "../model/Session";
 import CardSet from "../model/CardSet";
 import Constants from "../constants";
@@ -442,7 +442,7 @@ export default defineComponent({
         userStoryMode: this.userStoryMode,
       };
       try {
-        const response = (await this.axios.post(url, sessionConfig)).data as {
+        const response = (await axios.post(url, sessionConfig)).data as {
           session: {
             sessionID: string;
             adminID: string;

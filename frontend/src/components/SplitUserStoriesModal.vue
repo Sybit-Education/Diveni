@@ -1,7 +1,7 @@
 <template>
   <div id="splitUserStoriesModal">
-    <b-modal v-model="showModal" centered hide-header-close size="xl" @hide="hideModal">
-      <template #modal-header>
+    <b-modal v-model="showModal" centered no-header-close size="xl" @hide="hideModal">
+      <template #header>
         <div class="text-center">
           {{ t("general.aiFeature.splitUserStoriesModal.title") }}
         </div>
@@ -14,7 +14,7 @@
             </div>
             <b-form-textarea
               v-model="originalTitleData"
-              class="overflow-auto font-weight-bold titleInputField"
+              class="overflow-auto fw-bold titleInputField"
               :disabled="true"
             />
             <UiToastEditorWrapper
@@ -50,7 +50,7 @@
                   size="sm"
                   @click="deleteStory(index)"
                 >
-                  <b-icon-trash />
+                  <i class="bi bi-trash"></i>
                 </b-button>
               </b-list-group-item>
               <div class="selectedStoryLine" :style="{ top: 50 + 50 * idx + 'px' }" />
@@ -62,7 +62,7 @@
             </div>
             <b-form-textarea
               v-model="newUserStoriesEditable[idx].title"
-              class="overflow-auto font-weight-bold titleInputField"
+              class="overflow-auto fw-bold titleInputField"
               rows="1"
               size="lg"
               disabled
@@ -76,10 +76,10 @@
           </b-col>
         </b-row>
       </b-container>
-      <template #modal-footer>
+      <template #footer>
         <div id="aiOptions" class="text-center mt-1">
           <b-button id="acceptAISplitButton" class="m-1" @click="acceptDescription">
-            <b-icon-check2 />
+            <i class="bi bi-check2"></i>
             Keep
           </b-button>
           <b-button
@@ -89,11 +89,11 @@
               $event.target.blur();
             "
           >
-            <b-icon-arrow-repeat />
+            <i class="bi bi-arrow-repeat"></i>
             Try Again
           </b-button>
           <b-button class="aiOptionButtons m-1" @click="deleteDescription">
-            <b-icon-backspace />
+            <i class="bi bi-backspace"></i>
             Delete
           </b-button>
         </div>

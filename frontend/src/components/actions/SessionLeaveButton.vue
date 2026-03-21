@@ -9,7 +9,7 @@
       class="mt-4 button"
       @click="leaveSession"
     >
-      <b-icon-x />
+      <i class="bi bi-x"></i>
       {{ t("page.vote.button.leave.label") }}
     </b-button>
   </div>

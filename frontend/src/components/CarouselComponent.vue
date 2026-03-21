@@ -8,10 +8,12 @@
         <b-card class="connectorCards" :class="getClass(item)" @click="redirectToDoc(item)">
           <b-card-title>
             <div>
-              <b-img-lazy
+              <img
                 :src="getConnectorImageUrl(item)"
                 :class="getClass(item) + 'Pic'"
                 alt="Connector Picture"
+                loading="lazy"
+                class="img-fluid"
               />
             </div>
             <div class="title">

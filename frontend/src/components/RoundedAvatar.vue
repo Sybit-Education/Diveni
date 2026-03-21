@@ -18,10 +18,16 @@ import { defineComponent, PropType } from "vue";
 import Member from "@/model/Member";
 import Constants from "@/constants";
 
-const animalImages = import.meta.glob("@/assets/*.png", {
+const globImages = import.meta.glob("@/assets/*.png", {
   eager: true,
   import: "default",
 }) as Record<string, string>;
+
+const animalImages: Record<string, string> = {};
+for (const [key, value] of Object.entries(globImages)) {
+  const name = key.split("/").pop()?.replace(".png", "")?.toLowerCase() ?? "";
+  animalImages[name] = value;
+}
 
 export default defineComponent({
   name: "RoundedAvatar",
@@ -39,7 +45,7 @@ export default defineComponent({
       return this.member?.avatarAnimal?.toLowerCase() ?? "fish";
     },
     avatarUrl() {
-      return animalImages[`/src/assets/${this.avatar}.png`] ?? "";
+      return animalImages[this.avatar] ?? "";
     },
   },
 });

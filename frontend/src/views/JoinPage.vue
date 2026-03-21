@@ -3,7 +3,7 @@
     <h1 id="heading">
       {{ t("page.join.title") }}
       <!-- <b-img :src="require('@/assets/ControllerJoinPage.png')" id="controller"/> -->
-      <BIconController id="controller" />
+      <i id="controller" class="bi bi-controller"></i>
     </h1>
     <join-page-card
       :color="hexColor"
@@ -21,7 +21,7 @@ import { v4 as uuidv4 } from "uuid";
 import JoinPageCard from "../components/JoinPageCard.vue";
 import JoinCommand from "../model/JoinCommand";
 import Constants from "../constants";
-import { BIconController } from "bootstrap-vue";
+import axios from "axios";
 import { useDiveniStore } from "@/store";
 import { useToast } from "vue-toastification";
 import { useI18n } from "vue-i18n";
@@ -31,7 +31,6 @@ export default defineComponent({
   name: "JoinPage",
   components: {
     JoinPageCard,
-    BIconController,
   },
   setup() {
     const store = useDiveniStore();
@@ -98,7 +97,7 @@ export default defineComponent({
         },
       };
       try {
-        const result = await this.axios.post(url, joinInfo);
+        const result = await axios.post(url, joinInfo);
 
         const sessionConfig = result.data as {
           set: Array<string>;
