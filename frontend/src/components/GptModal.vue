@@ -16,7 +16,7 @@
           :key="repaint"
           :initial-value="suggestionDescription"
           :none-clickable="!clickable"
-          @stillTyping="copyText"
+          @still-typing="copyText"
         />
       </div>
       <template #footer>

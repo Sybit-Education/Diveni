@@ -84,15 +84,15 @@
     <privacy-modal
       v-if="showModalTitle"
       :current-text="userStories[index].title"
-      @sendGPTRequest="sendGptTitle"
-      @resetShowModal="showModalTitle = false"
+      @send-g-p-t-request="sendGptTitle"
+      @reset-show-modal="showModalTitle = false"
     />
     <privacy-modal
       v-if="showModalEstimation && showAIEstimationButton"
       :current-title="userStories[index].title"
       :current-text="userStories[index].description"
-      @sendGPTRequest="submitAiEstimation"
-      @resetShowModal="showModalEstimation = false"
+      @send-g-p-t-request="submitAiEstimation"
+      @reset-show-modal="showModalEstimation = false"
     />
   </div>
 </template>

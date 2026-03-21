@@ -155,7 +155,7 @@
             :pause-timer="estimateFinished"
             :duration="timerCountdownNumber"
             :voting-started="planningStart"
-            @timerFinished="sendVotingFinishedMessage"
+            @timer-finished="sendVotingFinishedMessage"
           />
         </b-col>
       </b-row>
@@ -282,9 +282,9 @@
           :splitted-user-stories="splitted_user_stories"
           :story-to-split-idx="index"
           :has-api-key="hasApiKey"
-          @userStoriesChanged="onUserStoriesChanged"
-          @selectedStory="onSelectedStory($event)"
-          @sendGPTRequest="splitUserStory"
+          @user-stories-changed="onUserStoriesChanged"
+          @selected-story="onSelectedStory($event)"
+          @send-g-p-t-request="splitUserStory"
         />
         <div v-if="userStoryMode === 'US_JIRA'" class="refreshUserstories">
           <b-button
@@ -305,9 +305,9 @@
         :suggestion-description="alternateDescription"
         :gpt-mode="descriptionMode"
         :retry-repaint="updateComponent"
-        @acceptSuggestionDescription="acceptSuggestionDescription"
+        @accept-suggestion-description="acceptSuggestionDescription"
         @retry="retrySuggestionDescription"
-        @hideModal="closeModal"
+        @hide-modal="closeModal"
       />
       <b-col cols="12" md="7">
         <user-story-title
@@ -318,13 +318,13 @@
           :card-set="voteSet"
           :index="index!"
           :has-api-key="hasApiKey"
-          @userStoriesChanged="onUserStoriesChanged"
-          @improveTitle="improveTitle"
-          @acceptTitle="acceptSuggestionTitle"
-          @adjustTitle="adjustOriginalTitle"
-          @retryTitle="retryImproveTitle"
-          @deleteTitle="deleteTitle"
-          @aiEstimation="aiEstimation"
+          @user-stories-changed="onUserStoriesChanged"
+          @improve-title="improveTitle"
+          @accept-title="acceptSuggestionTitle"
+          @adjust-title="adjustOriginalTitle"
+          @retry-title="retryImproveTitle"
+          @delete-title="deleteTitle"
+          @ai-estimation="aiEstimation"
         />
         <user-story-descriptions
           :initial-stories="userStories"
@@ -336,8 +336,8 @@
           :accepted-stories="acceptedStoriesDescription"
           :is-jira-selected="isJiraSelected"
           :has-api-key="hasApiKey"
-          @userStoriesChanged="onUserStoriesChanged"
-          @sendGPTDescriptionRequest="improveDescription"
+          @user-stories-changed="onUserStoriesChanged"
+          @send-g-p-t-description-request="improveDescription"
         />
       </b-col>
     </b-row>

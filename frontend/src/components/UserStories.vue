@@ -127,18 +127,18 @@
       :current-title="userStories[selectedStoryIndex].title"
       :current-text="userStories[selectedStoryIndex].description"
       :is-description="true"
-      @resetShowModal="showPrivacyModal = false"
-      @sendGPTRequest="submitRequest"
+      @reset-show-modal="showPrivacyModal = false"
+      @send-g-p-t-request="submitRequest"
     />
     <SplitUserStoriesModal
       v-if="splittedUserStoriesData.length > 0 && !showPrivacyModal"
       :new-user-stories-list="splittedUserStoriesData"
       :original-user-story="[userStories[storyToSplitIdx]]"
-      @resetShowModal="
+      @reset-show-modal="
         showUserStorySplitModal = false;
         splittedUserStoriesData = [];
       "
-      @acceptSplitting="acceptSplitting"
+      @accept-splitting="acceptSplitting"
       @retry="retry"
     />
     <UserStoryDeleteModal

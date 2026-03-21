@@ -100,7 +100,7 @@
             class="mt-2"
             :user-story-mode="userStoryMode"
             :selected-card-set="selectedCardSetOptions"
-            @selectedCardSetOptions="setCardSetOptions"
+            @selected-card-set-options="setCardSetOptions"
           />
           <h4 class="mt-3">{{ t("session.prepare.step.selection.password.title") }}</h4>
           <b-row class="mt-1">

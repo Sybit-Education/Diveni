@@ -63,7 +63,7 @@
             :dragged="voteOption === draggedVote"
             :is-mobile="true"
             :disabled="pauseSession"
-            @sentVote="onSendVote"
+            @sent-vote="onSendVote"
           />
         </div>
         <b-row v-else class="centerCards d-flex justify-content-between flex-wrap text-center">
@@ -81,7 +81,7 @@
                 :dragged="voteOption === draggedVote"
                 :is-mobile="false"
                 :disabled="pauseSession"
-                @sentVote="onSendVote"
+                @sent-vote="onSendVote"
               />
             </div>
           </b-col>
@@ -163,7 +163,7 @@
               :host="false"
               :story-mode="userStoryMode"
               :host-selected-story-index="hostSelectedStoryIndex"
-              @selectedStory="onSelectedStory($event)"
+              @selected-story="onSelectedStory($event)"
             />
           </div>
         </b-col>
@@ -183,7 +183,7 @@
           />
         </b-col>
       </b-row>
-      <notify-member-component @hostLeft="reactOnHostLeave" @hostJoined="reactOnHostJoin" />
+      <notify-member-component @host-left="reactOnHostLeave" @host-joined="reactOnHostJoin" />
     </b-overlay>
   </b-container>
 </template>

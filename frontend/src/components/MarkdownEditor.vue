@@ -10,9 +10,9 @@
       initial-edit-type="wysiwyg"
       preview-style="vertical"
       :class="theme === 'light' ? 'lightMode' : 'darkMode'"
-      @update:modelValue="(val: string) => { $emit('update:markdown', val); $emit('textValueChanged', { markdown: val }); }"
-      @stillTyping="aiButtonVisible = false"
-      @stoppedTyping="showAiButton"
+      @update:model-value="(val: string) => { $emit('update:markdown', val); $emit('textValueChanged', { markdown: val }); }"
+      @still-typing="aiButtonVisible = false"
+      @stopped-typing="showAiButton"
     />
     <b-button
       v-show="aiButtonVisible && currentText !== '' && hasApiKey"
@@ -50,8 +50,8 @@
       v-if="showModal"
       :current-text="currentText"
       :is-description="true"
-      @sendGPTRequest="redirectSubmit"
-      @resetShowModal="showModal = false"
+      @send-g-p-t-request="redirectSubmit"
+      @reset-show-modal="showModal = false"
     />
   </div>
 </template>
