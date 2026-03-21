@@ -3,11 +3,10 @@
   "include": ["src/**/*.ts", "src/**/*.vue", "src/**/*.d.ts", "components.d.ts"],
   "exclude": ["node_modules", "dist"],
   "compilerOptions": {
-    "composite": true,
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
     "noImplicitAny": false,
-    "allowJs": true,
     "verbatimModuleSyntax": false,
-    "importHelpers": true,
+    "isolatedModules": true,
     "sourceMap": true,
     "baseUrl": ".",
     "types": ["vite/client"],
