@@ -22,6 +22,7 @@ export default defineComponent({
     hostVoting: { type: Boolean, required: true },
     autoReveal: { type: Boolean, required: false },
   },
+  emits: ["clicked"],
   setup() {
     const store = useDiveniStore();
     const { t } = useI18n();

@@ -85,6 +85,7 @@ export default defineComponent({
     gptMode: { type: String, required: true },
     retryRepaint: { type: Boolean, required: true },
   },
+  emits: ["acceptSuggestionDescription", "retry", "hideModal"],
   setup() {
     const showModal = ref(true);
     const { t } = useI18n();

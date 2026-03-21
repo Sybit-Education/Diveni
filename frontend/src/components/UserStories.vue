@@ -173,6 +173,7 @@ export default defineComponent({
     storyToSplitIdx: { type: Number, required: false, default: 0 },
     hasApiKey: { type: Boolean, required: false, default: false },
   },
+  emits: ["selectedStory", "userStoriesChanged", "sendGPTRequest"],
   setup() {
     const { t } = useI18n();
     return { t, activeUserStoryImg };

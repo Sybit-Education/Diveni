@@ -114,6 +114,7 @@ export default defineComponent({
     originalUserStory: { type: Array<UserStory>, required: true },
     newUserStoriesList: { type: Array<UserStory>, required: true },
   },
+  emits: ["resetShowModal", "acceptSplitting", "retry"],
   setup() {
     const { t } = useI18n();
     return { t };

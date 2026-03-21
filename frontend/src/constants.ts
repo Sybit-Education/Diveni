@@ -62,12 +62,10 @@ class Constants {
 
   botUserType = "Bot";
 
-  // eslint-disable-next-line class-methods-use-this
   public joinSessionRoute(sessionID: string) {
     return `/sessions/${sessionID}/join`;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   public getRandomPastelColor() {
     const l2 = (85 + 10 * Math.random()) / 100;
     const a = ((25 + 70 * Math.random()) * Math.min(l2, 1 - l2)) / 100;
@@ -81,20 +79,15 @@ class Constants {
     return `#${f(0)}${f(8)}${f(4)}`;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   public hexToRgb(hex: string) {
     const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
     return {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       r: parseInt(result![1], 16),
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       g: parseInt(result![2], 16),
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       b: parseInt(result![3], 16),
     };
   }
 
-  // eslint-disable-next-line class-methods-use-this
   public getRandomAvatarAnimalAssetName() {
     const animals = [
       "bull",
@@ -122,7 +115,6 @@ class Constants {
     return animals[parseInt(num.toString(), 10)];
   }
 
-  // eslint-disable-next-line class-methods-use-this
   public avatarAnimalAssetNameToBackendEnum(assetName: string) {
     return assetName.split(".")[0].toUpperCase();
   }

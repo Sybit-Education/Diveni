@@ -198,6 +198,7 @@ export default defineComponent({
     currentTitle: { type: String, required: false, default: "" },
     isDescription: { type: Boolean, required: false, default: false },
   },
+  emits: ["sendGPTRequest", "resetShowModal"],
   setup() {
     const { t } = useI18n();
     return { t };

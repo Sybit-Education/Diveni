@@ -20,6 +20,7 @@ export default defineComponent({
     member: { type: String, required: false, default: "" },
     votingStarted: { type: Boolean, required: true },
   },
+  emits: ["timerFinished"],
   data() {
     return {
       timerCount: 0,

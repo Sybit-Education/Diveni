@@ -66,6 +66,7 @@ export default defineComponent({
     },
     hasApiKey: { type: Boolean, required: false, default: false },
   },
+  emits: ["userStoriesChanged", "sendGPTDescriptionRequest"],
   setup() {
     const { t } = useI18n();
     const toast = useToast();

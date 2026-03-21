@@ -35,7 +35,8 @@ main {
   padding-top: 5rem;
   min-height: calc(100vh - 10rem);
   background:
-  /* Top */ radial-gradient(
+  /* Top */
+    radial-gradient(
       farthest-corner at 500px 500px,
       var(--blurredColour1) 0.1%,
       rgba(255, 255, 255, 0) 26%
@@ -45,7 +46,11 @@ main {
       var(--blurredColour1) 0.1%,
       rgba(255, 255, 255, 0) 26%
     ),
-    radial-gradient(farthest-corner at 7% 7%, var(--blurredColour2) 0.1%, rgba(255, 255, 255, 0) 8%),
+    radial-gradient(
+      farthest-corner at 7% 7%,
+      var(--blurredColour2) 0.1%,
+      rgba(255, 255, 255, 0) 8%
+    ),
     radial-gradient(
       farthest-corner at 17% 40px,
       var(--blurredColour3) 1%,
@@ -67,7 +72,7 @@ main {
       rgba(255, 255, 255, 0) 18%
     ),
     /* Bottom */
-      radial-gradient(
+    radial-gradient(
         farthest-corner at 95% 42%,
         var(--blurredColour5) 0.1%,
         rgba(255, 255, 255, 0) 26%

@@ -627,7 +627,6 @@ export default defineComponent({
           } else {
             response = await apiService.deleteUserStory(us[idx].id);
           }
-          doRemove = false;
         } else {
           console.log(`ID: ${us[idx].id}`);
           if (us[idx].id === null && this.selectedProject?.id) {

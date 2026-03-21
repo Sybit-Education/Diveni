@@ -113,6 +113,15 @@ export default defineComponent({
     alternateTitle: { type: String, required: false, default: "" },
     hasApiKey: { type: Boolean, required: false, default: false },
   },
+  emits: [
+    "userStoriesChanged",
+    "improveTitle",
+    "acceptTitle",
+    "adjustTitle",
+    "retryTitle",
+    "deleteTitle",
+    "aiEstimation",
+  ],
   setup() {
     const { t } = useI18n();
     return { t };

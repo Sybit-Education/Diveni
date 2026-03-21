@@ -55,7 +55,6 @@
 </template>
 
 <script lang="ts">
-// eslint-disable-next-line
 import { defineComponent } from "vue";
 import apiService from "@/services/api.service";
 import { useDiveniStore } from "@/store";
@@ -71,6 +70,7 @@ export default defineComponent({
       default: false,
     },
   },
+  emits: ["jira"],
   setup() {
     const store = useDiveniStore();
     const toast = useToast();

@@ -87,6 +87,7 @@ export default defineComponent({
       required: true,
     },
   },
+  emits: ["selectedCardSetOptions"],
   setup() {
     const { t } = useI18n();
     return { t };

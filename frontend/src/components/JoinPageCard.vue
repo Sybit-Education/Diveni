@@ -72,6 +72,7 @@ export default defineComponent({
     buttonText: { type: String, required: true },
     sessionIdFromUrl: { type: String, required: true },
   },
+  emits: ["clicked"],
   setup() {
     const { t } = useI18n();
     return { t };

@@ -278,7 +278,8 @@ export default defineComponent({
 }
 
 .teaser {
-  background: linear-gradient(var(--background-color-primary), var(--pictureGradientEnd)),
+  background:
+    linear-gradient(var(--background-color-primary), var(--pictureGradientEnd)),
     url("@/assets/img/diveni-background.png");
   background-size: cover;
   background-repeat: no-repeat;

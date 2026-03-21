@@ -10,7 +10,12 @@
       initial-edit-type="wysiwyg"
       preview-style="vertical"
       :class="theme === 'light' ? 'lightMode' : 'darkMode'"
-      @update:model-value="(val: string) => { $emit('update:markdown', val); $emit('textValueChanged', { markdown: val }); }"
+      @update:model-value="
+        (val: string) => {
+          $emit('update:markdown', val);
+          $emit('textValueChanged', { markdown: val });
+        }
+      "
       @still-typing="aiButtonVisible = false"
       @stopped-typing="showAiButton"
     />
