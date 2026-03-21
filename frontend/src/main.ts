@@ -8,55 +8,8 @@ import App from "./App.vue";
 import router from "./router";
 import setupInterceptors from "./interceptors";
 import { createPinia } from "pinia";
-import {
-  createBootstrap,
-  BAlert,
-  BBadge,
-  BButton,
-  BCard,
-  BCardBody,
-  BCardFooter,
-  BCardGroup,
-  BCardHeader,
-  BCardImg,
-  BCardSubtitle,
-  BCardText,
-  BCardTitle,
-  BCol,
-  BCollapse,
-  BContainer,
-  BDropdown,
-  BDropdownDivider,
-  BDropdownItem,
-  BForm,
-  BFormCheckbox,
-  BFormGroup,
-  BFormInput,
-  BFormSelect,
-  BFormTextarea,
-  BImg,
-  BInputGroup,
-  BInputGroupText,
-  BLink,
-  BListGroup,
-  BListGroupItem,
-  BModal,
-  BNav,
-  BNavItem,
-  BNavItemDropdown,
-  BNavbar,
-  BNavbarBrand,
-  BNavbarNav,
-  BNavbarToggle,
-  BOverlay,
-  BPagination,
-  BPopover,
-  BRow,
-  BSpinner,
-  BTab,
-  BTabs,
-  vBModal,
-} from "bootstrap-vue-next";
+import { createBootstrap } from "bootstrap-vue-next/plugins/createBootstrap";
+import { vBModal } from "bootstrap-vue-next/directives/BModal";
 import "./assets/style/main.scss";
 import "bootstrap-vue-next/dist/bootstrap-vue-next.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
@@ -73,58 +26,5 @@ const pinia = createPinia();
 
 app.directive("debounce", vueDebounce({ lock: true }));
 app.directive("b-modal", vBModal);
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const components: Record<string, any> = {
-  BAlert,
-  BBadge,
-  BButton,
-  BCard,
-  BCardBody,
-  BCardFooter,
-  BCardGroup,
-  BCardHeader,
-  BCardImg,
-  BCardSubtitle,
-  BCardText,
-  BCardTitle,
-  BCol,
-  BCollapse,
-  BContainer,
-  BDropdown,
-  BDropdownDivider,
-  BDropdownItem,
-  BForm,
-  BFormCheckbox,
-  BFormGroup,
-  BFormInput,
-  BFormSelect,
-  BFormTextarea,
-  BImg,
-  BInputGroup,
-  BInputGroupText,
-  BLink,
-  BListGroup,
-  BListGroupItem,
-  BModal,
-  BNav,
-  BNavItem,
-  BNavItemDropdown,
-  BNavbar,
-  BNavbarBrand,
-  BNavbarNav,
-  BNavbarToggle,
-  BOverlay,
-  BPagination,
-  BPopover,
-  BRow,
-  BSpinner,
-  BTab,
-  BTabs,
-};
-
-Object.entries(components).forEach(([name, component]) => {
-  app.component(name, component);
-});
 
 app.use(createBootstrap()).use(router).use(pinia).use(i18n).use(Toast, {}).mount("#app");
