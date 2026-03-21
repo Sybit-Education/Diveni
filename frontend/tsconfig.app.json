@@ -3,7 +3,6 @@
   "include": ["src/**/*.ts", "src/**/*.vue", "src/**/*.d.ts", "components.d.ts"],
   "exclude": ["node_modules", "dist"],
   "compilerOptions": {
-    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
     "noImplicitAny": false,
     "verbatimModuleSyntax": false,
     "isolatedModules": true,
