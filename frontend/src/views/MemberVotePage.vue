@@ -180,6 +180,7 @@
             :index="index"
             :initial-stories="userStories"
             :edit-description="false"
+            :story-mode="userStoryMode"
           />
         </b-col>
       </b-row>

@@ -36,7 +36,7 @@
       <template #header>
         <h3>QR code</h3>
       </template>
-      <qrcode-vue :value="sessionLink" size="400" class="qr-code" />
+      <qrcode-vue :value="sessionLink" :size="400" class="qr-code" />
     </b-modal>
   </div>
 </template>

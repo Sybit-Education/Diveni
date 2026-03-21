@@ -309,14 +309,14 @@
         @retry="retrySuggestionDescription"
         @hide-modal="closeModal"
       />
-      <b-col cols="12" md="7">
+      <b-col v-if="index !== null" cols="12" md="7">
         <user-story-title
           :alternate-title="alternateTitle"
           :display-ai-option="gptTitleResponse"
           :host="true"
           :initial-stories="userStories"
           :card-set="voteSet"
-          :index="index!"
+          :index="index"
           :has-api-key="hasApiKey"
           @user-stories-changed="onUserStoriesChanged"
           @improve-title="improveTitle"
@@ -329,7 +329,7 @@
         <user-story-descriptions
           :initial-stories="userStories"
           :edit-description="true"
-          :index="index!"
+          :index="index"
           :story-mode="userStoryMode"
           :gpt-description-response="gptDescriptionResponse"
           :update-component="updateComponent"
