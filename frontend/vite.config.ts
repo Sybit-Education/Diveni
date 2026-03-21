@@ -1,11 +1,16 @@
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
+import Components from "unplugin-vue-components/vite";
+import { BootstrapVueNextResolver } from "bootstrap-vue-next/resolvers";
 import { VitePWA } from "vite-plugin-pwa";
 import { fileURLToPath, URL } from "node:url";
 
 export default defineConfig(({ command }) => ({
   plugins: [
     vue(),
+    Components({
+      resolvers: [BootstrapVueNextResolver()],
+    }),
     VitePWA({
       registerType: "autoUpdate",
       workbox: {

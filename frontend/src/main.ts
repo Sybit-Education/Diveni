@@ -8,9 +8,7 @@ import App from "./App.vue";
 import router from "./router";
 import setupInterceptors from "./interceptors";
 import { createPinia } from "pinia";
-import { createBootstrap } from "bootstrap-vue-next/plugins/createBootstrap";
-import * as BvnComponents from "bootstrap-vue-next/components";
-import { vBModal } from "bootstrap-vue-next/directives/BModal";
+import { createBootstrap } from "bootstrap-vue-next";
 import "./assets/style/main.scss";
 import "bootstrap-vue-next/dist/bootstrap-vue-next.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
@@ -22,14 +20,8 @@ import vueDebounce from "vue-debounce";
 setupInterceptors();
 
 const app = createApp(App);
-
 const pinia = createPinia();
 
 app.directive("debounce", vueDebounce({ lock: true }));
-app.directive("b-modal", vBModal);
-
-Object.entries(BvnComponents).forEach(([name, component]) => {
-  app.component(name, component);
-});
 
 app.use(createBootstrap()).use(router).use(pinia).use(i18n).use(Toast, {}).mount("#app");

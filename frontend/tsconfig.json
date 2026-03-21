@@ -1,13 +1,17 @@
 {
   "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "resolvePackageJsonExports": true,
+    "resolvePackageJsonImports": true,
     "strict": true,
     "noImplicitAny": false,
     "allowJs": true,
     "jsx": "preserve",
     "importHelpers": true,
-    "moduleResolution": "bundler",
+    "isolatedModules": true,
+    "resolveJsonModule": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
@@ -17,8 +21,8 @@
     "paths": {
       "@/*": ["src/*"]
     },
-    "lib": ["esnext", "dom", "dom.iterable", "scripthost"]
+    "lib": ["ESNext", "DOM", "DOM.Iterable"]
   },
-  "include": ["src/**/*.js", "src/**/*.ts", "src/**/*.tsx", "src/**/*.vue", "tests/**/*.ts", "tests/**/*.tsx"],
+  "include": ["src/**/*.ts", "src/**/*.vue", "src/**/*.d.ts", "components.d.ts"],
   "exclude": ["node_modules", "dist"]
 }

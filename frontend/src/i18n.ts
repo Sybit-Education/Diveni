@@ -26,7 +26,8 @@ const i18n = createI18n({
   legacy: false,
   globalInjection: true,
   fallbackLocale: constants.i18nFallbackLocale,
-  messages: loadLocaleMessages(),
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  messages: loadLocaleMessages() as any,
 }) as MyI18n;
 
 if (!localStorage.getItem("locale")) {
