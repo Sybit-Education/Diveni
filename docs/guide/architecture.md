@@ -76,7 +76,7 @@ frontend
 ├── [...]
 ├── package.json     // npm definition file 
 ├── [...]
-└── vue.config.js    // configuration of vue.js
+└── vite.config.ts    // configuration of vue.js
 ```
 
 | Component                            | Description                                                                                                                                                                                                                                                    |
