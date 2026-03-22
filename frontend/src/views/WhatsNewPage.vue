@@ -9,17 +9,16 @@
       </b-container>
     </b-container>
     <b-container class="pb-5">
-      <div class="row" style="justify-content: center">
-        <b-pagination
-          v-model="currentPage"
-          class="customPagination"
-          first-class="customPagination"
-          :total-rows="rows"
-          :per-page="perPage"
-          @change="handlePageChange"
-        >
-        </b-pagination>
-      </div>
+      <b-pagination
+        v-model="currentPage"
+        class="customPagination"
+        first-class="customPagination"
+        align="center"
+        :total-rows="rows"
+        :per-page="perPage"
+        @change="handlePageChange"
+      >
+      </b-pagination>
       <div class="row" style="justify-content: center">
         <div v-if="loading" class="col-12 my-5 text-center">
           <b-spinner label="Loading..."></b-spinner>
