@@ -824,7 +824,7 @@ export default defineComponent({
 }
 
 :deep(.steppy-item-title) {
-  font-weight: bold;
+  font-weight: bold !important;
   text-align: center;
   display: block;
   font-size: clamp(6px, 3vw, 17px) !important;
