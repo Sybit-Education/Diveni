@@ -323,6 +323,9 @@ export default defineComponent({
     align-items: center;
     justify-content: center;
     height: 100%;
+    border: none;
+    outline: none;
+    box-shadow: none;
   }
 }
 
