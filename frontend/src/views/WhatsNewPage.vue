@@ -1,9 +1,9 @@
 <template>
   <div id="whats-new-page">
-    <b-container fluid class="teaser my-5">
+    <b-container fluid class="teaser">
       <b-container>
-        <div class="py-5 mb-4 jumbotron">
-          <h1 class="display-4">DIVENI</h1>
+        <div class="jumbotron">
+          <h1 class="display-3">DIVENI</h1>
           <p class="lead">{{ t("page.landing.news.buttons.info.label") }}</p>
         </div>
       </b-container>
