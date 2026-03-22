@@ -3,7 +3,7 @@
     <Component :is="child" :member="member" :props="props" />
     <b-popover :target="`user${member.memberID}`" hover placement="top" boundary="viewport">
       <b-button v-b-modal="`modal-${member.memberID}`" class="rounded-circle px-2" variant="danger">
-        <i class="bi bi-x" style="font-size: 2em"></i>
+        <i class="bi bi-x" style="font-size: 1.2rem"></i>
       </b-button>
     </b-popover>
     <b-modal
