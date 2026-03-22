@@ -18,8 +18,8 @@
             {{ t("page.landing.meeting.join.buttons.start.label") }}
           </b-button>
         </li>
-        <b-nav-item href="https://github.com/Sybit-Education/Diveni" target="_blank">
-          <i class="bi bi-github github-logo py-2"></i>
+        <b-nav-item href="https://github.com/Sybit-Education/Diveni" target="_blank" class="me-1">
+          <i class="bi bi-github github-logo"></i>
         </b-nav-item>
         <li class="nav-item d-flex align-items-center">
           <theme-toggle class="my-2" />
@@ -60,8 +60,7 @@ export default defineComponent({
 
   .github-logo {
     color: var(--text-primary-color);
-    font-size: 2.75rem;
-    line-height: 1;
+    font-size: 1.75rem;
   }
 }
 </style>
