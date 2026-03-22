@@ -129,7 +129,6 @@ export default defineComponent({
 #popover {
   max-width: 33vw;
   background-color: var(--popUpMenu) !important;
-
 }
 
 #popover-link {
