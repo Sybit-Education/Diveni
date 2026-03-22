@@ -7,7 +7,7 @@
       </b-link>
     </strong>
     {{ textAfterSessionID }}
-    <b-popover id="popover" target="popover-link" hover click placement="top">
+    <b-popover id="popover" target="popover-link" hover click placement="top" teleport-to="body">
       <b-button
         variant="primary"
         class="mx-1 my-1"
@@ -129,6 +129,7 @@ export default defineComponent({
 #popover {
   max-width: 33vw;
   background-color: var(--popUpMenu) !important;
+
 }
 
 #popover-link {
