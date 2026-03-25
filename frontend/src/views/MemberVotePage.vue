@@ -100,16 +100,12 @@
         class="my-1 d-flex justify-content-center flex-wrap overflow-auto"
         style="max-height: 500px"
       >
-        <div v-if="hostEstimation !== undefined">
-          <div v-if="hostVoting && hostEstimation.hostEstimation !== null">
-            <session-admin-card
-              v-if="hostEstimation.hostEstimation !== null"
-              :current-estimation="hostEstimation.hostEstimation"
-              :estimate-finished="votingFinished"
-              :highlight="isAdminHighlighted()"
-            />
-          </div>
-        </div>
+        <session-admin-card
+          v-if="hostVoting && hostEstimation?.hostEstimation != null"
+          :current-estimation="hostEstimation.hostEstimation"
+          :estimate-finished="votingFinished"
+          :highlight="isAdminHighlighted()"
+        />
         <session-member-card
           v-for="member of members"
           :key="member.memberID"
@@ -122,7 +118,7 @@
         />
       </b-row>
       <b-row
-        v-if="votingFinished && isAdminHighlighted() === false"
+        v-else-if="votingFinished"
         class="my-1 d-flex justify-content-center flex-wrap overflow-auto"
         style="max-height: 500px"
       >
@@ -136,16 +132,12 @@
               highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0,
           }"
         />
-        <div v-if="hostEstimation !== undefined">
-          <div v-if="hostVoting && hostEstimation.hostEstimation !== null">
-            <session-admin-card
-              v-if="hostEstimation.hostEstimation !== null"
-              :current-estimation="hostEstimation.hostEstimation"
-              :estimate-finished="votingFinished"
-              :highlight="isAdminHighlighted()"
-            />
-          </div>
-        </div>
+        <session-admin-card
+          v-if="hostVoting && hostEstimation?.hostEstimation != null"
+          :current-estimation="hostEstimation.hostEstimation"
+          :estimate-finished="votingFinished"
+          :highlight="isAdminHighlighted()"
+        />
       </b-row>
       <b-row v-if="userStoryMode !== 'NO_US'" class="mt-5">
         <b-col md="6">
