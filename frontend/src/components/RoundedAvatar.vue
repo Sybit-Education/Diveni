@@ -18,7 +18,7 @@ import { defineComponent, PropType } from "vue";
 import Member from "@/model/Member";
 import Constants from "@/constants";
 
-const globImages = import.meta.glob("@/assets/*.png", {
+const globImages = import.meta.glob("@/assets/avatars/*.png", {
   eager: true,
   import: "default",
 }) as Record<string, string>;
@@ -45,7 +45,7 @@ export default defineComponent({
       return this.member?.avatarAnimal?.toLowerCase() ?? "fish";
     },
     avatarUrl() {
-      return animalImages[this.avatar] ?? "";
+      return animalImages[this.avatar] ?? animalImages["fish"] ?? "";
     },
   },
 });

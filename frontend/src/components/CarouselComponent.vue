@@ -33,7 +33,7 @@
 import { defineComponent, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
-const connectorImages = import.meta.glob("@/assets/*.png", {
+const connectorImages = import.meta.glob("@/assets/connectors/*.png", {
   eager: true,
   import: "default",
 }) as Record<string, string>;
@@ -44,7 +44,7 @@ export default defineComponent({
     const { t } = useI18n();
     const carousel = ref();
     const updateValue = ref(0);
-    const stopItems = false; // maybe let
+    const stopItems = ref(false);
     const items = [
       {
         title: "Jira Server",
@@ -91,7 +91,7 @@ export default defineComponent({
   methods: {
     getConnectorImageUrl(item) {
       const name = this.getClass(item).toLowerCase();
-      return connectorImages[`/src/assets/${name}.png`] ?? "";
+      return connectorImages[`/src/assets/connectors/${name}.png`] ?? "";
     },
     getClass(item) {
       switch (item.title) {

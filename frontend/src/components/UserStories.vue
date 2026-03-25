@@ -15,10 +15,9 @@
     <b-card-group id="userStoryBlock" class="my-2 overflow-auto">
       <b-list-group-item
         v-for="(story, index) of userStories"
-        id="userStoryRow"
         :key="index"
         :active="index === selectedStoryIndex"
-        class="w-100 p-1 d-flex justify-content-left"
+        class="userStoryRow w-100 p-1 d-flex justify-content-left"
         @mouseover="hover = index"
         @mouseleave="hover = null"
         @click="setUserStoryAsActive(index)"
@@ -348,12 +347,12 @@ export default defineComponent({
   rotate: 90deg;
 }
 
-#userStoryRow {
+.userStoryRow {
   background-color: var(--textAreaColour);
   color: var(--text-primary-color);
 }
 
-#userStoryRow.active {
+.userStoryRow.active {
   background-color: var(--textAreaColour) !important;
   border: 3px solid var(--bs-primary) !important;
   color: var(--text-primary-color);

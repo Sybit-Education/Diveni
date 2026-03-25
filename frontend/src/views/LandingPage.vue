@@ -60,7 +60,7 @@
                 Create a planning session and select your prefered voting set.
               </b-card-text>
               <b-card-text>
-                You could import your user stories or connect JIRA to syncronize story points.
+                You could import your user stories or connect JIRA to synchronize story points.
               </b-card-text>
               <b-card-subtitle>
                 <a href="https://sybit-education.github.io/Diveni/guide" target="_blank">
