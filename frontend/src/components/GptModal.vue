@@ -3,7 +3,7 @@
     <b-modal id="gptModal" v-model="showModal" centered no-header-close @hide="closeModal()">
       <template #header>
         <div v-if="gptMode === 'improveDescription'" class="text-center">
-          Alternative Description>
+          Alternative Description
         </div>
         <div v-else class="text-center">
           {{ gptMode === "grammar" ? "Corrected Description" : "Marked Description" }}
