@@ -94,7 +94,9 @@ watch(
   () => {
     stopInterval();
     timerCount.value = props.duration;
-    startInterval();
+    if (!props.pauseTimer) {
+      startInterval();
+    }
   }
 );
 
@@ -116,12 +118,14 @@ watch(
     if (paused) {
       tick();
       stopInterval();
+    } else if (props.startTimestamp && props.duration > 0) {
+      startInterval();
     }
   }
 );
 
 timerCount.value = props.duration;
-if (props.votingStarted && props.startTimestamp) {
+if (props.votingStarted && props.startTimestamp && !props.pauseTimer) {
   startInterval();
 }
 
