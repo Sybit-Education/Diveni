@@ -1,13 +1,14 @@
 <template>
   <div id="privacyModal">
-    <b-modal v-model="showModal" centered hide-header-close @hide="hideModal">
-      <template #modal-header>
+    <b-modal v-model="showModal" centered no-header-close @hide="hideModal">
+      <template #header>
         <div class="text-center">
           {{ t("general.aiFeature.privacyModal.title") }}
         </div>
       </template>
       <div id="warningText">
-        <BIconExclamationTriangle /> {{ t("general.aiFeature.privacyModal.warning") }}:
+        <i class="bi bi-exclamation-triangle"></i>
+        {{ t("general.aiFeature.privacyModal.warning") }}:
         {{ t("general.aiFeature.privacyModal.warningInfo") }}
       </div>
       <div>
@@ -27,7 +28,8 @@
               $event.target.blur();
             "
           >
-            <BIconHouseDoorFill /> {{ t("general.aiFeature.privacyModal.buttons.company") }}
+            <i class="bi bi-house-door-fill"></i>
+            {{ t("general.aiFeature.privacyModal.buttons.company") }}
           </b-button>
           <b-button
             class="toggle-button"
@@ -36,7 +38,8 @@
               $event.target.blur();
             "
           >
-            <BIconPersonFill /> {{ t("general.aiFeature.privacyModal.buttons.person") }}
+            <i class="bi bi-person-fill"></i>
+            {{ t("general.aiFeature.privacyModal.buttons.person") }}
           </b-button>
           <b-button
             class="toggle-button"
@@ -45,7 +48,8 @@
               $event.target.blur();
             "
           >
-            <BIconCalculatorFill /> {{ t("general.aiFeature.privacyModal.buttons.number") }}
+            <i class="bi bi-calculator-fill"></i>
+            {{ t("general.aiFeature.privacyModal.buttons.number") }}
           </b-button>
         </div>
         <div class="d-flex justify-content-between mt-3">
@@ -56,7 +60,7 @@
                 @mouseover="hover = index"
                 @mouseleave="hover = null"
               >
-                <BIconHouseFill />
+                <i class="bi bi-house-fill"></i>
                 {{ data }}
 
                 <b-button
@@ -70,7 +74,7 @@
                     );
                   "
                 >
-                  <b-icon-trash />
+                  <i class="bi bi-trash"></i>
                 </b-button>
               </div>
             </div>
@@ -83,7 +87,7 @@
                 @mouseover="hover = index"
                 @mouseleave="hover = null"
               >
-                <BIconPersonFill />
+                <i class="bi bi-person-fill"></i>
                 {{ data }}
 
                 <b-button
@@ -97,7 +101,7 @@
                     );
                   "
                 >
-                  <b-icon-trash />
+                  <i class="bi bi-trash"></i>
                 </b-button>
               </div>
             </div>
@@ -110,7 +114,7 @@
                 @mouseover="hover = index"
                 @mouseleave="hover = null"
               >
-                <BIconCalculatorFill />
+                <i class="bi bi-calculator-fill"></i>
                 {{ data }}
 
                 <b-button
@@ -124,7 +128,7 @@
                     );
                   "
                 >
-                  <b-icon-trash />
+                  <i class="bi bi-trash"></i>
                 </b-button>
               </div>
             </div>
@@ -159,10 +163,10 @@
           }}</label>
         </div>
       </div>
-      <template #modal-footer>
+      <template #footer>
         <div id="aiOptions" class="text-center mt-1">
           <b-button id="acceptAIOption" class="m-1" @click="submitIssue">
-            <b-icon-check2 />
+            <i class="bi bi-check2"></i>
             {{ t("general.aiFeature.privacyModal.buttons.ok") }}
           </b-button>
           <b-button
@@ -172,7 +176,7 @@
               $event.target.blur();
             "
           >
-            <b-icon-x-square />
+            <i class="bi bi-x-square"></i>
             {{ t("general.aiFeature.privacyModal.buttons.cancel") }}
           </b-button>
         </div>
@@ -194,6 +198,7 @@ export default defineComponent({
     currentTitle: { type: String, required: false, default: "" },
     isDescription: { type: Boolean, required: false, default: false },
   },
+  emits: ["sendGPTRequest", "resetShowModal"],
   setup() {
     const { t } = useI18n();
     return { t };

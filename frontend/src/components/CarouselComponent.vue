@@ -8,10 +8,12 @@
         <b-card class="connectorCards" :class="getClass(item)" @click="redirectToDoc(item)">
           <b-card-title>
             <div>
-              <b-img-lazy
-                :src="require(`@/assets/${getClass(item).toLowerCase()}.png`)"
+              <img
+                :src="getConnectorImageUrl(item)"
                 :class="getClass(item) + 'Pic'"
                 alt="Connector Picture"
+                loading="lazy"
+                class="img-fluid"
               />
             </div>
             <div class="title">
@@ -31,13 +33,18 @@
 import { defineComponent, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
+const connectorImages = import.meta.glob("@/assets/connectors/*.png", {
+  eager: true,
+  import: "default",
+}) as Record<string, string>;
+
 export default defineComponent({
   name: "CarouselComponent",
   setup() {
     const { t } = useI18n();
     const carousel = ref();
     const updateValue = ref(0);
-    const stopItems = false; // maybe let
+    const stopItems = ref(false);
     const items = [
       {
         title: "Jira Server",
@@ -82,6 +89,10 @@ export default defineComponent({
     }, 10);
   },
   methods: {
+    getConnectorImageUrl(item) {
+      const name = this.getClass(item).toLowerCase();
+      return connectorImages[`/src/assets/connectors/${name}.png`] ?? "";
+    },
     getClass(item) {
       switch (item.title) {
         case "Jira Server":

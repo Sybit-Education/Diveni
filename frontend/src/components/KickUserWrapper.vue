@@ -1,19 +1,14 @@
 <template>
   <div :id="`user${member.memberID}`" class="component" :style="{ width: width }">
     <Component :is="child" :member="member" :props="props" />
-    <b-popover
-      :target="`user${member.memberID}`"
-      triggers="hover"
-      placement="top"
-      boundary="viewport"
-    >
+    <b-popover :target="`user${member.memberID}`" hover placement="top" boundary="viewport">
       <b-button v-b-modal="`modal-${member.memberID}`" class="rounded-circle px-2" variant="danger">
-        <b-icon icon="x" scale="2" />
+        <i class="bi bi-x" style="font-size: 1.2rem"></i>
       </b-button>
     </b-popover>
     <b-modal
       :id="`modal-${member.memberID}`"
-      class="modal-header"
+      lazy
       :title="t('page.session.during.modal.title')"
       :cancel-title="t('page.session.during.modal.buttons.cancel')"
       :ok-title="t('page.session.during.modal.buttons.ok')"
@@ -32,11 +27,13 @@ import Constants from "@/constants";
 import { useDiveniStore } from "@/store";
 import Member from "@/model/Member";
 import { useI18n } from "vue-i18n";
+import RoundedAvatar from "@/components/RoundedAvatar.vue";
+import SessionMemberCard from "@/components/SessionMemberCard.vue";
 
 export default defineComponent({
   components: {
-    RoundedAvatar: () => import("@/components/RoundedAvatar.vue"),
-    SessionMemberCard: () => import("@/components/SessionMemberCard.vue"),
+    RoundedAvatar,
+    SessionMemberCard,
   },
   props: {
     child: { type: String, required: true },

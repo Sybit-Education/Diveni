@@ -1,44 +1,48 @@
 <template>
   <b-container>
-    <h1 class="text-center">{{ headerText }} <b-icon-bar-chart /></h1>
-    <b-card-group deck>
-      <b-card class="statsCards">
-        <b-card-title style="text-align: center">
-          {{ t("page.landing.meeting.analytics.allCreatedSessionsTitle") }}
-        </b-card-title>
-        <b-card-text>
-          <h2 class="numbers">{{ tweenedOverAllSessions.toFixed(0) }}</h2>
-          <div style="text-align: center">
-            {{ allSessions }}
-          </div>
-          <br />
-          <h2 class="numbers">{{ tweenedOverAllAttendees.toFixed(0) }}</h2>
-          <div style="text-align: center">
-            {{ allAttendees }}
-          </div>
-        </b-card-text>
-      </b-card>
-      <b-card class="statsCards">
-        <b-card-title style="text-align: center">
-          {{ t("page.landing.meeting.analytics.activeTitle") }}
-        </b-card-title>
-        <b-card-text>
-          <h2 class="numbers">
-            {{ tweenedCurrentSessions.toFixed(0) }}
-          </h2>
-          <div style="text-align: center">
-            {{ allSessions }}
-          </div>
-          <br />
-          <h2 class="numbers">
-            {{ tweendCurrentAttendees.toFixed(0) }}
-          </h2>
-          <div style="text-align: center">
-            {{ allAttendees }}
-          </div>
-        </b-card-text>
-      </b-card>
-    </b-card-group>
+    <h1 class="text-center">{{ headerText }} <i class="bi bi-bar-chart"></i></h1>
+    <b-row>
+      <b-col>
+        <b-card class="statsCards">
+          <b-card-title style="text-align: center">
+            {{ t("page.landing.meeting.analytics.allCreatedSessionsTitle") }}
+          </b-card-title>
+          <b-card-text>
+            <h2 class="numbers">{{ tweenedOverAllSessions.toFixed(0) }}</h2>
+            <div style="text-align: center">
+              {{ allSessions }}
+            </div>
+            <br />
+            <h2 class="numbers">{{ tweenedOverAllAttendees.toFixed(0) }}</h2>
+            <div style="text-align: center">
+              {{ allAttendees }}
+            </div>
+          </b-card-text>
+        </b-card>
+      </b-col>
+      <b-col>
+        <b-card class="statsCards">
+          <b-card-title style="text-align: center">
+            {{ t("page.landing.meeting.analytics.activeTitle") }}
+          </b-card-title>
+          <b-card-text>
+            <h2 class="numbers">
+              {{ tweenedCurrentSessions.toFixed(0) }}
+            </h2>
+            <div style="text-align: center">
+              {{ allSessions }}
+            </div>
+            <br />
+            <h2 class="numbers">
+              {{ tweendCurrentAttendees.toFixed(0) }}
+            </h2>
+            <div style="text-align: center">
+              {{ allAttendees }}
+            </div>
+          </b-card-text>
+        </b-card>
+      </b-col>
+    </b-row>
     <br />
   </b-container>
 </template>

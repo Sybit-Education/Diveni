@@ -2,12 +2,12 @@
   <div class="copy-session">
     {{ textBeforeSessionID }}
     <strong>
-      <b-link id="popover-link" href="#" @click="copyLinkToClipboard()">
+      <b-link id="popover-link" @click.prevent>
         {{ sessionId }}
       </b-link>
     </strong>
     {{ textAfterSessionID }}
-    <b-popover id="popover" target="popover-link" triggers="hover" placement="top">
+    <b-popover id="popover" target="popover-link" hover click placement="top" teleport-to="body">
       <b-button
         variant="primary"
         class="mx-1 my-1"
@@ -33,10 +33,10 @@
       </b-button>
     </b-popover>
     <b-modal id="qr-modal" ok-only>
-      <template #modal-header>
+      <template #header>
         <h3>QR code</h3>
       </template>
-      <qrcode-vue :value="sessionLink" size="400" class="qr-code" />
+      <qrcode-vue :value="sessionLink" :size="400" class="qr-code" />
     </b-modal>
   </div>
 </template>

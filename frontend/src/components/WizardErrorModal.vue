@@ -4,8 +4,8 @@
     centered
     :title="title"
     ok-only
-    :ok-title="Ok"
-    hide-header-close
+    ok-title="Ok"
+    no-header-close
     no-close-on-esc
     no-close-on-backdrop
     @ok="handleOk"

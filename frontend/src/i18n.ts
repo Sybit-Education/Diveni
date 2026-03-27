@@ -2,22 +2,22 @@ import { createI18n, I18n } from "vue-i18n";
 import constants from "./constants";
 import apiService from "@/services/api.service";
 
-// Vue.use(VueI18n);
-
 interface MyI18n extends I18n {
   locale: string;
 }
 
 function loadLocaleMessages() {
-  const locales = require.context("./locales", true, /[A-Za-z0-9-_,\s]+\.json$/i);
-  const messages = {};
-  locales.keys().forEach((key) => {
-    const matched = key.match(/([A-Za-z0-9-_]+)\./i);
+  const modules = import.meta.glob("./locales/*.json", {
+    eager: true,
+    import: "default",
+  }) as Record<string, Record<string, unknown>>;
+  const messages: Record<string, Record<string, unknown>> = {};
+  for (const path in modules) {
+    const matched = path.match(/([A-Za-z0-9-_]+)\.json$/i);
     if (matched && matched.length > 1) {
-      const locale = matched[1];
-      messages[locale] = locales(key);
+      messages[matched[1]] = modules[path];
     }
-  });
+  }
   return messages;
 }
 
@@ -26,7 +26,8 @@ const i18n = createI18n({
   legacy: false,
   globalInjection: true,
   fallbackLocale: constants.i18nFallbackLocale,
-  messages: loadLocaleMessages(),
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  messages: loadLocaleMessages() as any,
 }) as MyI18n;
 
 if (!localStorage.getItem("locale")) {

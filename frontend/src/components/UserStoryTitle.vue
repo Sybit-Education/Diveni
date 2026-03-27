@@ -31,24 +31,24 @@
             id="submitAI"
             @click="showModalTitle = true"
           >
-            <b-icon-stars class="aiStars" />
+            <i class="bi bi-stars aiStars"></i>
           </b-button>
           <b-spinner v-if="showSpinner && !displayAiOption"> </b-spinner>
           <div v-if="displayAiOption" id="aiOptions" class="text-center mt-1">
             <b-button id="acceptAIOption" class="m-1" @click="acceptGptTitle">
-              <b-icon-check2 />
+              <i class="bi bi-check2"></i>
               {{ t("general.aiFeature.optionButtons.keep") }}
             </b-button>
             <b-button class="aiOptionButtons m-1" @click="adjustTitle">
-              <b-icon-sliders />
+              <i class="bi bi-sliders"></i>
               {{ t("general.aiFeature.optionButtons.adjust") }}
             </b-button>
             <b-button class="aiOptionButtons m-1" @click="retryTitle">
-              <b-icon-arrow-repeat />
+              <i class="bi bi-arrow-repeat"></i>
               {{ t("general.aiFeature.optionButtons.tryAgain") }}
             </b-button>
             <b-button class="aiOptionButtons m-1" @click="deleteTitle">
-              <b-icon-backspace />
+              <i class="bi bi-backspace"></i>
               {{ t("general.aiFeature.optionButtons.delete") }}
             </b-button>
           </div>
@@ -56,7 +56,7 @@
         <b-dropdown
           v-show="host"
           variant="none"
-          class="px-3 ml-3 estimationDescription"
+          class="px-3 ms-3 estimationDescription"
           :text="(userStories[idx].estimation ? userStories[idx].estimation : '?') + '    '"
         >
           <b-dropdown-item
@@ -76,7 +76,7 @@
             v-if="showAIEstimationButton && hasApiKey"
             @click="showModalEstimation = true"
           >
-            <BIconStars />
+            <i class="bi bi-stars"></i>
           </b-dropdown-item>
         </b-dropdown>
       </div>
@@ -84,15 +84,15 @@
     <privacy-modal
       v-if="showModalTitle"
       :current-text="userStories[index].title"
-      @sendGPTRequest="sendGptTitle"
-      @resetShowModal="showModalTitle = false"
+      @send-g-p-t-request="sendGptTitle"
+      @reset-show-modal="showModalTitle = false"
     />
     <privacy-modal
       v-if="showModalEstimation && showAIEstimationButton"
       :current-title="userStories[index].title"
       :current-text="userStories[index].description"
-      @sendGPTRequest="submitAiEstimation"
-      @resetShowModal="showModalEstimation = false"
+      @send-g-p-t-request="submitAiEstimation"
+      @reset-show-modal="showModalEstimation = false"
     />
   </div>
 </template>
@@ -113,6 +113,15 @@ export default defineComponent({
     alternateTitle: { type: String, required: false, default: "" },
     hasApiKey: { type: Boolean, required: false, default: false },
   },
+  emits: [
+    "userStoriesChanged",
+    "improveTitle",
+    "acceptTitle",
+    "adjustTitle",
+    "retryTitle",
+    "deleteTitle",
+    "aiEstimation",
+  ],
   setup() {
     const { t } = useI18n();
     return { t };
@@ -308,6 +317,16 @@ export default defineComponent({
   border: 2px solid var(--btn-border-color);
   border-radius: 0.5rem;
   background-color: var(--secondary-button) !important;
+
+  :deep(.dropdown-toggle) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    border: none;
+    outline: none;
+    box-shadow: none;
+  }
 }
 
 .estimationDescription:hover {

@@ -99,7 +99,7 @@ LOCALE=en
   
 
 #### Frontend
-- npm, vue2
+- npm, vue3
 - switch to directory ``frontend`` first
 
 ```shell

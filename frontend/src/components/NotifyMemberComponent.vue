@@ -9,6 +9,7 @@ import { useI18n } from "vue-i18n";
 
 export default defineComponent({
   name: "NotifyMemberComponent",
+  emits: ["hostLeft", "hostJoined"],
   setup() {
     const store = useDiveniStore();
     const toast = useToast();

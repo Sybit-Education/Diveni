@@ -9,6 +9,7 @@
 <script lang="ts">
 import constants from "@/constants";
 import { defineComponent } from "vue";
+import axios from "axios";
 
 export default defineComponent({
   name: "EstimateTimer",
@@ -19,6 +20,7 @@ export default defineComponent({
     member: { type: String, required: false, default: "" },
     votingStarted: { type: Boolean, required: true },
   },
+  emits: ["timerFinished"],
   data() {
     return {
       timerCount: 0,
@@ -58,7 +60,7 @@ export default defineComponent({
       }
     }
   },
-  beforeDestroy() {
+  beforeUnmount() {
     clearInterval(this.intervalHandler);
   },
   methods: {
@@ -99,7 +101,7 @@ export default defineComponent({
     async localClockTimer() {
       if (this.member !== "") {
         const response = (
-          await this.axios.get(constants.backendURL + "/get-timer-value", {
+          await axios.get(constants.backendURL + "/get-timer-value", {
             params: {
               memberID: this.member,
             },

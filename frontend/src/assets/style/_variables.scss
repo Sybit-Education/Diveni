@@ -73,6 +73,12 @@
 
 /* Define styles for the root window with dark - mode preference */
 :root.dark {
+  /* Bootstrap 5 dark mode overrides */
+  --bs-body-color: #ffffff;
+  --bs-body-color-rgb: 255, 255, 255;
+  --bs-emphasis-color: #ffffff;
+  --bs-emphasis-color-rgb: 255, 255, 255;
+
   /*Background Colors*/
   --background-color-primary: #010617;
   --blurredColour1: rgba(76, 134, 185, 0.219);
@@ -148,6 +154,14 @@ $border-radius-lg:            0.5rem !default;
 $border-radius-sm:            0.5rem !default;
 $list-group-bg:               transparent;
 $list-group-border-color:     transparent;
+
+// Match Bootstrap 4 container max-width (no xxl breakpoint)
+$container-max-widths: (
+  sm: 540px,
+  md: 720px,
+  lg: 960px,
+  xl: 1140px
+) !default;
 
 
 

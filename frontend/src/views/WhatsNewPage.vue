@@ -1,31 +1,29 @@
 <template>
   <div id="whats-new-page">
-    <b-container fluid class="teaser my-5">
+    <b-container fluid class="teaser">
       <b-container>
-        <b-jumbotron header="DIVENI">
-          <template #lead>
-            {{ t("page.landing.news.buttons.info.label") }}
-          </template>
-        </b-jumbotron>
+        <div class="jumbotron">
+          <h1 class="display-3">DIVENI</h1>
+          <p class="lead">{{ t("page.landing.news.buttons.info.label") }}</p>
+        </div>
       </b-container>
     </b-container>
     <b-container class="pb-5">
-      <div class="row" style="justify-content: center">
-        <b-pagination
-          v-model="currentPage"
-          class="customPagination"
-          first-class="customPagination"
-          :total-rows="rows"
-          :per-page="perPage"
-          @change="handlePageChange"
-        >
-        </b-pagination>
-      </div>
+      <b-pagination
+        v-model="currentPage"
+        class="customPagination"
+        first-class="customPagination"
+        align="center"
+        :total-rows="rows"
+        :per-page="perPage"
+        @change="handlePageChange"
+      >
+      </b-pagination>
       <div class="row" style="justify-content: center">
         <div v-if="loading" class="col-12 my-5 text-center">
           <b-spinner label="Loading..."></b-spinner>
         </div>
-        <b-card-group v-for="card in paginatedData" :key="card.number" deck class="my-3 col-md-4">
+        <b-card-group v-for="card in paginatedData" :key="card.number" class="my-3 col-md-4">
           <b-card
             align="center"
             border-variant="secondary"
@@ -128,8 +126,9 @@ export default defineComponent({
 <!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
 <style lang="scss" scoped>
 .teaser {
-  background: linear-gradient(var(--background-color-primary), var(--pictureGradientEnd)),
-    url("~@/assets/img/diveni-background.png");
+  background:
+    linear-gradient(var(--background-color-primary), var(--pictureGradientEnd)),
+    url("@/assets/img/diveni-background.png");
   background-size: cover;
   background-repeat: no-repeat;
 }

@@ -57,6 +57,7 @@ export default defineComponent({
     SignInWithGitlabButtonComponent,
     ProjectSelectionComponent,
   },
+  emits: ["jira"],
   setup() {
     const store = useDiveniStore();
     const toast = useToast();

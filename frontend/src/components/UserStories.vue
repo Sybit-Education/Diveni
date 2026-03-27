@@ -2,10 +2,8 @@
   <div class="user-stories">
     <div v-if="userStories.length > 0 || filterActive" class="w-100 d-flex justify-content-left">
       <b-input-group>
-        <b-input-group-prepend>
-          <b-input-group-text><BIconSearch id="searchIcon"></BIconSearch></b-input-group-text>
-        </b-input-group-prepend>
-        <b-input
+        <b-input-group-text><i id="searchIcon" class="bi bi-search"></i></b-input-group-text>
+        <b-form-input
           id="search"
           v-model="input"
           type="text"
@@ -17,11 +15,9 @@
     <b-card-group id="userStoryBlock" class="my-2 overflow-auto">
       <b-list-group-item
         v-for="(story, index) of userStories"
-        id="userStoryRow"
         :key="index"
         :active="index === selectedStoryIndex"
-        class="w-100 p-1 d-flex justify-content-left"
-        :style="index === selectedStoryIndex ? 'border-width: 3px;' : ''"
+        class="userStoryRow w-100 p-1 d-flex justify-content-left"
         @mouseover="hover = index"
         @mouseleave="hover = null"
         @click="setUserStoryAsActive(index)"
@@ -36,7 +32,7 @@
             $event.target.blur();
           "
         >
-          <b-img id="userStoryPicture" :src="require('@/assets/ActiveUserStory.png')" />
+          <b-img id="userStoryPicture" :src="activeUserStoryImg" />
         </b-button>
 
         <b-button
@@ -45,7 +41,7 @@
           variant="success"
           disabled
         >
-          <b-icon-arrow-right />
+          <i class="bi bi-arrow-right"></i>
         </b-button>
         <b-button
           v-if="showEditButtons && hasApiKey"
@@ -56,7 +52,7 @@
             showPrivacyModal = true;
           "
         >
-          <BIconStars />
+          <i class="bi bi-stars"></i>
         </b-button>
         <b-button
           v-if="storyMode === 'US_JIRA' && story.storyUrl"
@@ -67,7 +63,7 @@
           :title="t('page.session.before.userStories.button.openExternalTracker')"
           @click.stop="openLink(story.storyUrl)"
         >
-          <b-icon-box-arrow-up-right class="custom-link-icon" />
+          <i class="bi bi-box-arrow-up-right custom-link-icon"></i>
         </b-button>
         <b-form-input
           id="userStoryTitles"
@@ -87,7 +83,7 @@
           size="sm"
           @click.stop="requestDeleteStory(index)"
         >
-          <b-icon-trash />
+          <i class="bi bi-trash"></i>
         </b-button>
       </b-list-group-item>
     </b-card-group>
@@ -101,13 +97,13 @@
         $event.target.blur();
       "
     >
-      <b-icon-plus />
+      <i class="bi bi-plus"></i>
       {{ t("page.session.before.userStories.button.addFirstUserStory") }}
     </b-button>
 
     <b-alert
       v-if="userStories.length < 1 && showEditButtons && filterActive"
-      show
+      :model-value="true"
       variant="warning"
     >
       {{ t("page.session.before.userStories.filter.noStoryFound") }}
@@ -122,7 +118,7 @@
         $event.target.blur();
       "
     >
-      <b-icon-plus />
+      <i class="bi bi-plus"></i>
       {{ t("page.session.before.userStories.button.addUserStory") }}
     </b-button>
     <PrivacyModal
@@ -130,18 +126,18 @@
       :current-title="userStories[selectedStoryIndex].title"
       :current-text="userStories[selectedStoryIndex].description"
       :is-description="true"
-      @resetShowModal="showPrivacyModal = false"
-      @sendGPTRequest="submitRequest"
+      @reset-show-modal="showPrivacyModal = false"
+      @send-g-p-t-request="submitRequest"
     />
     <SplitUserStoriesModal
       v-if="splittedUserStoriesData.length > 0 && !showPrivacyModal"
       :new-user-stories-list="splittedUserStoriesData"
       :original-user-story="[userStories[storyToSplitIdx]]"
-      @resetShowModal="
+      @reset-show-modal="
         showUserStorySplitModal = false;
         splittedUserStoriesData = [];
       "
-      @acceptSplitting="acceptSplitting"
+      @accept-splitting="acceptSplitting"
       @retry="retry"
     />
     <UserStoryDeleteModal
@@ -159,6 +155,7 @@ import { useI18n } from "vue-i18n";
 import PrivacyModal from "@/components/PrivacyModal.vue";
 import SplitUserStoriesModal from "@/components/SplitUserStoriesModal.vue";
 import UserStoryDeleteModal from "@/components/UserStoryDeleteModal.vue";
+import activeUserStoryImg from "@/assets/ActiveUserStory.png";
 
 export default defineComponent({
   name: "UserStories",
@@ -175,9 +172,10 @@ export default defineComponent({
     storyToSplitIdx: { type: Number, required: false, default: 0 },
     hasApiKey: { type: Boolean, required: false, default: false },
   },
+  emits: ["selectedStory", "userStoriesChanged", "sendGPTRequest"],
   setup() {
     const { t } = useI18n();
-    return { t };
+    return { t, activeUserStoryImg };
   },
   data() {
     return {
@@ -349,8 +347,14 @@ export default defineComponent({
   rotate: 90deg;
 }
 
-#userStoryRow {
+.userStoryRow {
   background-color: var(--textAreaColour);
+  color: var(--text-primary-color);
+}
+
+.userStoryRow.active {
+  background-color: var(--textAreaColour) !important;
+  border: 3px solid var(--bs-primary) !important;
   color: var(--text-primary-color);
 }
 
@@ -374,8 +378,8 @@ export default defineComponent({
 }
 
 #badge {
-  background-color: var(--secondary-button);
-  color: var(--text-primary-color);
+  background-color: var(--secondary-button) !important;
+  color: var(--text-primary-color) !important;
   font-size: large;
 }
 

@@ -136,7 +136,11 @@ export default defineComponent({
         left: 50%;
         float: left;
         background-color: var(--text-primary-color);
-        transition: border-radius 0.1s ease, width 0.1s ease, height 0.1s ease, left 0.1s ease,
+        transition:
+          border-radius 0.1s ease,
+          width 0.1s ease,
+          height 0.1s ease,
+          left 0.1s ease,
           transform 0.1s ease;
       }
     }
@@ -145,7 +149,7 @@ export default defineComponent({
 
 body.dark-mode {
   .mode-toggle {
-    background-color: lighten(#262626, 5%);
+    background-color: #333333;
     border-color: var(--text-primary-color);
 
     .toggle {

@@ -11,7 +11,7 @@
     </h1>
     <div class="rounded-avatar rounded-circle" :style="'background-color: #30a444;'">
       <div :id="'avatar'" class="text-center">
-        <b-img :src="require(`@/assets/crown.png`)" class="rounded-avatar__image" />
+        <b-img :src="crownImg" class="rounded-avatar__image" />
         <div class="rounded-avatar__label">
           <b id="hostName">Host</b>
         </div>
@@ -22,6 +22,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import crownImg from "@/assets/crown.png";
 
 export default defineComponent({
   name: "SessionAdminCard",
@@ -29,6 +30,9 @@ export default defineComponent({
     currentEstimation: { type: String, required: true },
     estimateFinished: { type: Boolean, required: true },
     highlight: { type: Boolean, required: false },
+  },
+  setup() {
+    return { crownImg };
   },
 });
 </script>

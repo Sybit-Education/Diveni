@@ -38,6 +38,7 @@ export default defineComponent({
     isMobile: { type: Boolean, required: true },
     disabled: { type: Boolean, default: false },
   },
+  emits: ["sentVote"],
   data() {
     return {
       position: 0,

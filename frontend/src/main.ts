@@ -3,40 +3,25 @@
   Diveni - The Planing-Poker App
   Copyright (C) 2022 AUME-Team 21/22, HTWG Konstanz
 */
-import Vue, { createApp } from "vue";
-import axios from "axios";
-import VueAxios from "vue-axios";
+import { createApp } from "vue";
 import App from "./App.vue";
-import "./registerServiceWorker";
 import router from "./router";
 import setupInterceptors from "./interceptors";
 import { createPinia } from "pinia";
-import { BootstrapVue, IconsPlugin, ModalPlugin } from "bootstrap-vue";
+import { createBootstrap } from "bootstrap-vue-next";
 import "./assets/style/main.scss";
+import "bootstrap-vue-next/dist/bootstrap-vue-next.css";
+import "bootstrap-icons/font/bootstrap-icons.css";
 import Toast from "vue-toastification";
 import "vue-toastification/dist/index.css";
 import i18n from "@/i18n";
 import vueDebounce from "vue-debounce";
 
-Vue.use(IconsPlugin);
-Vue.use(ModalPlugin);
-Vue.use(BootstrapVue);
-
 setupInterceptors();
 
-// Vue.config.productionTip = false;
-
 const app = createApp(App);
-
 const pinia = createPinia();
 
 app.directive("debounce", vueDebounce({ lock: true }));
 
-app
-  .use(VueAxios, axios)
-  .use(router)
-  .use(BootstrapVue)
-  .use(pinia)
-  .use(i18n)
-  .use(Toast, {})
-  .mount("#app");
+app.use(createBootstrap()).use(router).use(pinia).use(i18n).use(Toast, {}).mount("#app");

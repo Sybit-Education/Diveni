@@ -1,7 +1,7 @@
 <template>
   <div class="img-holderLeave" :class="isMobile ? '' : 'mt-5'">
     <div id="picture-holderLeave">
-      <b-img id="pandaPictureLeave" :src="require('@/assets/LeaveButton.png')" />
+      <b-img id="pandaPictureLeave" :src="leaveButtonImg" />
     </div>
     <b-button
       v-b-modal.close-session-modal
@@ -9,7 +9,7 @@
       class="mt-4 button"
       @click="leaveSession"
     >
-      <b-icon-x />
+      <i class="bi bi-x"></i>
       {{ t("page.vote.button.leave.label") }}
     </b-button>
   </div>
@@ -21,6 +21,7 @@ import Constants from "../../constants";
 import { useDiveniStore } from "@/store";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
+import leaveButtonImg from "@/assets/LeaveButton.png";
 
 export default defineComponent({
   name: "SessionLeaveButton",
@@ -31,7 +32,7 @@ export default defineComponent({
     const store = useDiveniStore();
     const { t } = useI18n();
     const router = useRouter();
-    return { store, t, router };
+    return { store, t, router, leaveButtonImg };
   },
   methods: {
     leaveSession() {

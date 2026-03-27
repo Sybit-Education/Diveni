@@ -34,8 +34,7 @@ export const useDiveniStore = defineStore("diveni-store", {
     },
     connectToBackendWS(url) {
       this.stompClient = webstomp.over(new SockJS(url));
-      if (process.env.NODE_ENV === "production") {
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
+      if (import.meta.env.PROD) {
         this.stompClient.debug = () => {};
       }
       const connect_callback = () => {

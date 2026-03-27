@@ -1,10 +1,10 @@
 <template>
   <div v-if="isPlanningStart" class="img-holderClose">
     <div id="picture-holderClose">
-      <b-img id="pandaPictureClose" :src="require('@/assets/LeaveButton.png')" />
+      <b-img id="pandaPictureClose" :src="leaveButtonImg" />
     </div>
     <b-button v-b-modal.close-session-modal variant="danger" class="button">
-      <b-icon-x />
+      <i class="bi bi-x"></i>
       {{ t("page.session.during.estimation.buttons.finish") }}
     </b-button>
     <b-modal
@@ -31,6 +31,7 @@ import Constants from "@/constants";
 import { useDiveniStore } from "@/store";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
+import leaveButtonImg from "@/assets/LeaveButton.png";
 
 export default defineComponent({
   name: "SessionCloseButton",
@@ -48,7 +49,7 @@ export default defineComponent({
     const store = useDiveniStore();
     const { t } = useI18n();
     const router = useRouter();
-    return { store, t, router };
+    return { store, t, router, leaveButtonImg };
   },
   methods: {
     closeSession() {

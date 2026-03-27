@@ -16,11 +16,10 @@
           {{ getDescription(item.position, userStoryMode !== jiraTag) }}
           <div v-if="item.values.length === 0">
             <span id="createSetHint">
-              <b-icon-info-circle class="mt-3 me-1" />{{
-                t("session.prepare.step.selection.cardSet.sets.ownSet.hint.label")
-              }}</span
-            >
-            <b-popover id="popUp" target="createSetHint" triggers="hover" placement="top">
+              <i class="bi bi-info-circle mt-3 me-1"></i>
+              {{ t("session.prepare.step.selection.cardSet.sets.ownSet.hint.label") }}
+            </span>
+            <b-popover id="popUp" target="createSetHint" hover placement="top">
               <template #title>
                 {{ t("session.prepare.step.selection.cardSet.sets.ownSet.hint.label") }}
               </template>
@@ -88,6 +87,7 @@ export default defineComponent({
       required: true,
     },
   },
+  emits: ["selectedCardSetOptions"],
   setup() {
     const { t } = useI18n();
     return { t };

@@ -22,12 +22,8 @@
       <template #1>
         <div class="wizardStep">
           <h4 class="mb-3">
-            <b-img
-              v-if="theme === 'light'"
-              :src="require('@/assets/preparePage/P1.png')"
-              class="numberPictures"
-            />
-            <b-img v-else :src="require('@/assets/preparePage/P1D.png')" class="numberPictures" />
+            <b-img v-if="theme === 'light'" :src="p1Img" class="numberPictures" />
+            <b-img v-else :src="p1dImg" class="numberPictures" />
             {{ t("session.prepare.step.selection.mode.title") }}
           </h4>
           <div class="mode-icons mt-2 d-flex justify-content-around">
@@ -36,11 +32,7 @@
               :class="['mode-icon', tabIndex === 0 ? 'active' : '']"
               @click="setTabIndex(0)"
             >
-              <b-img
-                :src="require('@/assets/preparePage/Mode1.png')"
-                class="modeIconImage"
-                :class="{ active: tabIndex === 0 }"
-              />
+              <b-img :src="mode1Img" class="modeIconImage" :class="{ active: tabIndex === 0 }" />
               <span class="mode-icon-text">
                 {{ t("session.prepare.step.selection.mode.description.withoutUS.tab.label") }}
               </span>
@@ -50,11 +42,7 @@
               :class="['mode-icon', tabIndex === 1 ? 'active' : '']"
               @click="setTabIndex(1)"
             >
-              <b-img
-                :src="require('@/assets/preparePage/Mode2.png')"
-                class="modeIconImage"
-                :class="{ active: tabIndex === 1 }"
-              />
+              <b-img :src="mode2Img" class="modeIconImage" :class="{ active: tabIndex === 1 }" />
               <span class="mode-icon-text">
                 {{ t("session.prepare.step.selection.mode.description.withUS.tab.label") }}
               </span>
@@ -65,11 +53,7 @@
               :class="['mode-icon', tabIndex === 2 ? 'active' : '']"
               @click="setTabIndex(2)"
             >
-              <b-img
-                :src="require('@/assets/preparePage/Mode3.png')"
-                class="modeIconImage"
-                :class="{ active: tabIndex === 2 }"
-              />
+              <b-img :src="mode3Img" class="modeIconImage" :class="{ active: tabIndex === 2 }" />
               <span class="mode-icon-text">
                 {{
                   t("session.prepare.step.selection.mode.description.withIssueTracker.tab.label")
@@ -89,9 +73,8 @@
                 @change="importStory($event)"
               />
               <b-button
-                block
                 elevation="2"
-                class="btn-primary"
+                class="btn-primary w-100"
                 variant="primary"
                 @click="
                   openFileUploader();
@@ -109,19 +92,15 @@
       <template #2>
         <div class="wizardStep">
           <h4 class="mb-3">
-            <b-img
-              v-if="theme === 'light'"
-              :src="require('@/assets/preparePage/P2.png')"
-              class="numberPictures"
-            />
-            <b-img v-else :src="require('@/assets/preparePage/P2D.png')" class="numberPictures" />
+            <b-img v-if="theme === 'light'" :src="p2Img" class="numberPictures" />
+            <b-img v-else :src="p2dImg" class="numberPictures" />
             {{ t("session.prepare.step.selection.cardSet.title") }}
           </h4>
           <card-set-component
             class="mt-2"
             :user-story-mode="userStoryMode"
             :selected-card-set="selectedCardSetOptions"
-            @selectedCardSetOptions="setCardSetOptions"
+            @selected-card-set-options="setCardSetOptions"
           />
           <h4 class="mt-3">{{ t("session.prepare.step.selection.password.title") }}</h4>
           <b-row class="mt-1">
@@ -139,12 +118,8 @@
       <template #3>
         <div class="wizardStep">
           <h4 class="mb-3">
-            <b-img
-              v-if="theme === 'light'"
-              :src="require('@/assets/preparePage/P3.png')"
-              class="numberPictures"
-            />
-            <b-img v-else :src="require('@/assets/preparePage/P3D.png')" class="numberPictures" />
+            <b-img v-if="theme === 'light'" :src="p3Img" class="numberPictures" />
+            <b-img v-else :src="p3dImg" class="numberPictures" />
             {{ t("session.prepare.step.selection.time.title") }}
           </h4>
           <div class="timer-control d-flex justify-content-center mb-5">
@@ -156,7 +131,7 @@
               "
               >-</b-button
             >
-            <div id="setting-value" class="font-weight-bolder px-3 text-center">
+            <div id="setting-value" class="fw-bolder px-3 text-center">
               {{ timer == 0 ? "∞" : formatTimer }}
             </div>
             <b-button
@@ -169,12 +144,8 @@
             >
           </div>
           <h4 class="mb-3">
-            <b-img
-              v-if="theme === 'light'"
-              :src="require('@/assets/preparePage/P4.png')"
-              class="numberPictures"
-            />
-            <b-img v-else :src="require('@/assets/preparePage/P4D.png')" class="numberPictures" />
+            <b-img v-if="theme === 'light'" :src="p4Img" class="numberPictures" />
+            <b-img v-else :src="p4dImg" class="numberPictures" />
             {{ t("session.prepare.step.selection.hostVoting.title") }}
           </h4>
           <b-row class="mt-2">
@@ -208,7 +179,7 @@
         <div class="wizardStep">
           <div class="copy-btn-container">
             <b-button class="copy-btn" variant="outline-dark" @click="copyDeepLink">
-              <b-icon icon="clipboard" class="bIcons" />
+              <i class="bi bi-clipboard bIcons"></i>
               {{ t("session.prepare.step.wizard.deeplink.copyDeeplink") }}
             </b-button>
           </div>
@@ -251,6 +222,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from "vue";
+import axios from "axios";
 import Session from "../model/Session";
 import CardSet from "../model/CardSet";
 import Constants from "../constants";
@@ -267,6 +239,17 @@ import { useToast } from "vue-toastification";
 import { useI18n } from "vue-i18n";
 import { Steppy } from "vue3-steppy";
 import { useRouter, useRoute } from "vue-router";
+import p1Img from "@/assets/preparePage/P1.png";
+import p1dImg from "@/assets/preparePage/P1D.png";
+import p2Img from "@/assets/preparePage/P2.png";
+import p2dImg from "@/assets/preparePage/P2D.png";
+import p3Img from "@/assets/preparePage/P3.png";
+import p3dImg from "@/assets/preparePage/P3D.png";
+import p4Img from "@/assets/preparePage/P4.png";
+import p4dImg from "@/assets/preparePage/P4D.png";
+import mode1Img from "@/assets/preparePage/Mode1.png";
+import mode2Img from "@/assets/preparePage/Mode2.png";
+import mode3Img from "@/assets/preparePage/Mode3.png";
 
 export default defineComponent({
   name: "PrepareSessionPage",
@@ -285,7 +268,25 @@ export default defineComponent({
     const router = useRouter();
     const route = useRoute();
     const step = ref<number>(1);
-    return { store, toast, t, step, router, route };
+    return {
+      store,
+      toast,
+      t,
+      step,
+      router,
+      route,
+      p1Img,
+      p1dImg,
+      p2Img,
+      p2dImg,
+      p3Img,
+      p3dImg,
+      p4Img,
+      p4dImg,
+      mode1Img,
+      mode2Img,
+      mode3Img,
+    };
   },
   data() {
     return {
@@ -441,7 +442,7 @@ export default defineComponent({
         userStoryMode: this.userStoryMode,
       };
       try {
-        const response = (await this.axios.post(url, sessionConfig)).data as {
+        const response = (await axios.post(url, sessionConfig)).data as {
           session: {
             sessionID: string;
             adminID: string;
@@ -823,7 +824,7 @@ export default defineComponent({
 }
 
 :deep(.steppy-item-title) {
-  font-weight: bold;
+  font-weight: bold !important;
   text-align: center;
   display: block;
   font-size: clamp(6px, 3vw, 17px) !important;

@@ -1,15 +1,6 @@
 <template>
   <div>
-    <b-button
-      v-b-modal.modal-verification-code
-      :disabled="disabled"
-      variant="primary"
-      @click="
-        openSignInWithJiraTab();
-        openModal();
-        $event.target.blur();
-      "
-    >
+    <b-button :disabled="disabled" variant="primary" @click="signInWithJiraServer">
       {{
         t(
           "session.prepare.step.selection.mode.description.withIssueTracker.buttons.signInWithJiraServer.label"
@@ -17,9 +8,9 @@
       }}
     </b-button>
     <b-modal
-      v-if="showVerificationModal"
       id="modal-verification-code"
       ref="modal"
+      v-model="showVerificationModal"
       title="Verification code"
       @show="resetModal"
       @hidden="resetModal"
@@ -55,7 +46,6 @@
 </template>
 
 <script lang="ts">
-// eslint-disable-next-line
 import { defineComponent } from "vue";
 import apiService from "@/services/api.service";
 import { useDiveniStore } from "@/store";
@@ -71,6 +61,7 @@ export default defineComponent({
       default: false,
     },
   },
+  emits: ["jira"],
   setup() {
     const store = useDiveniStore();
     const toast = useToast();
@@ -93,15 +84,11 @@ export default defineComponent({
       this.verificationCodeState = valid;
       return valid;
     },
-    async openSignInWithJiraTab() {
+    async signInWithJiraServer() {
+      this.showVerificationModal = true;
       const tokenDto = await apiService.getJiraOauth1RequestToken();
       this.token = tokenDto.token;
       window.open(tokenDto.url, "_blank")?.focus();
-    },
-    openModal() {
-      this.$nextTick(() => {
-        this.showVerificationModal = true;
-      });
     },
     resetModal() {
       this.verificationCode = "";

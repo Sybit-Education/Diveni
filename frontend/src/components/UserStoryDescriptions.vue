@@ -11,26 +11,26 @@
         <markdown-editor
           id="textarea-auto-height"
           :key="updateComponent"
-          v-model="userStories[idx].description"
+          v-model:markdown="userStories[idx].description"
           class="my-2"
           :disabled="!editDescription"
           :placeholder="t('page.session.before.userStories.placeholder.userStoryDescription')"
           :accepted-stories="acceptedStories"
           :current-story-i-d="userStories[idx].id"
           :has-api-key="hasApiKey"
-          @textValueChanged="(event) => valueChanged(idx, event)"
-          @sendGPTDescriptionRequest="sendGPTDescriptionRequest"
+          @text-value-changed="(event) => valueChanged(idx, event)"
+          @send-g-p-t-description-request="sendGPTDescriptionRequest"
         />
       </div>
       <div v-if="!editDescription">
         <markdown-editor
           id="textarea-auto-height"
           :key="updateComponent"
-          v-model="userStories[idx].description"
+          v-model:markdown="userStories[idx].description"
           class="my-2 noneClickable"
           :placeholder="t('page.session.before.userStories.placeholder.userStoryDescription')"
-          @textValueChanged="(event) => valueChanged(idx, event)"
-          @sendGPTDescriptionRequest="sendGPTDescriptionRequest"
+          @text-value-changed="(event) => valueChanged(idx, event)"
+          @send-g-p-t-description-request="sendGPTDescriptionRequest"
         />
       </div>
     </b-list-group-item>
@@ -66,6 +66,7 @@ export default defineComponent({
     },
     hasApiKey: { type: Boolean, required: false, default: false },
   },
+  emits: ["userStoriesChanged", "sendGPTDescriptionRequest"],
   setup() {
     const { t } = useI18n();
     const toast = useToast();

@@ -63,7 +63,7 @@
             :dragged="voteOption === draggedVote"
             :is-mobile="true"
             :disabled="pauseSession"
-            @sentVote="onSendVote"
+            @sent-vote="onSendVote"
           />
         </div>
         <b-row v-else class="centerCards d-flex justify-content-between flex-wrap text-center">
@@ -81,7 +81,7 @@
                 :dragged="voteOption === draggedVote"
                 :is-mobile="false"
                 :disabled="pauseSession"
-                @sentVote="onSendVote"
+                @sent-vote="onSendVote"
               />
             </div>
           </b-col>
@@ -91,7 +91,7 @@
         <h3 id="header">
           {{ t("page.vote.waiting") }}
           <sub>
-            <b-icon-three-dots animation="fade" font-scale="1" />
+            <i class="bi bi-three-dots fade-animation"></i>
           </sub>
         </h3>
       </b-row>
@@ -100,16 +100,12 @@
         class="my-1 d-flex justify-content-center flex-wrap overflow-auto"
         style="max-height: 500px"
       >
-        <div v-if="hostEstimation !== undefined">
-          <div v-if="hostVoting && hostEstimation.hostEstimation !== null">
-            <session-admin-card
-              v-if="hostEstimation.hostEstimation !== null"
-              :current-estimation="hostEstimation.hostEstimation"
-              :estimate-finished="votingFinished"
-              :highlight="isAdminHighlighted()"
-            />
-          </div>
-        </div>
+        <session-admin-card
+          v-if="hostVoting && hostEstimation?.hostEstimation != null"
+          :current-estimation="hostEstimation.hostEstimation"
+          :estimate-finished="votingFinished"
+          :highlight="isAdminHighlighted()"
+        />
         <session-member-card
           v-for="member of members"
           :key="member.memberID"
@@ -122,7 +118,7 @@
         />
       </b-row>
       <b-row
-        v-if="votingFinished && isAdminHighlighted() === false"
+        v-else-if="votingFinished"
         class="my-1 d-flex justify-content-center flex-wrap overflow-auto"
         style="max-height: 500px"
       >
@@ -136,16 +132,12 @@
               highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0,
           }"
         />
-        <div v-if="hostEstimation !== undefined">
-          <div v-if="hostVoting && hostEstimation.hostEstimation !== null">
-            <session-admin-card
-              v-if="hostEstimation.hostEstimation !== null"
-              :current-estimation="hostEstimation.hostEstimation"
-              :estimate-finished="votingFinished"
-              :highlight="isAdminHighlighted()"
-            />
-          </div>
-        </div>
+        <session-admin-card
+          v-if="hostVoting && hostEstimation?.hostEstimation != null"
+          :current-estimation="hostEstimation.hostEstimation"
+          :estimate-finished="votingFinished"
+          :highlight="isAdminHighlighted()"
+        />
       </b-row>
       <b-row v-if="userStoryMode !== 'NO_US'" class="mt-5">
         <b-col md="6">
@@ -163,7 +155,7 @@
               :host="false"
               :story-mode="userStoryMode"
               :host-selected-story-index="hostSelectedStoryIndex"
-              @selectedStory="onSelectedStory($event)"
+              @selected-story="onSelectedStory($event)"
             />
           </div>
         </b-col>
@@ -180,10 +172,11 @@
             :index="index"
             :initial-stories="userStories"
             :edit-description="false"
+            :story-mode="userStoryMode"
           />
         </b-col>
       </b-row>
-      <notify-member-component @hostLeft="reactOnHostLeave" @hostJoined="reactOnHostJoin" />
+      <notify-member-component @host-left="reactOnHostLeave" @host-joined="reactOnHostJoin" />
     </b-overlay>
   </b-container>
 </template>
@@ -442,5 +435,18 @@ export default defineComponent({
 .centerCards {
   margin-left: auto;
   margin-right: auto;
+}
+
+.fade-animation {
+  animation: fade 1s infinite alternate;
+}
+
+@keyframes fade {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }
 </style>

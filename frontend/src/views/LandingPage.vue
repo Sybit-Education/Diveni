@@ -2,18 +2,21 @@
   <div id="landing-page">
     <b-container fluid class="teaser">
       <b-container>
-        <b-jumbotron header="DIVENI" lead="Instant free and easy remote Planning Poker" />
+        <div class="jumbotron">
+          <h1 class="display-3">DIVENI</h1>
+          <p class="lead">Instant free and easy remote Planning Poker</p>
+        </div>
       </b-container>
     </b-container>
     <b-container class="my-5">
-      <b-card-group deck class="justify-content-center">
+      <div class="card-deck-wrapper d-flex flex-wrap justify-content-center gap-3">
         <landing-page-card
           :title="t('page.landing.meeting.new.title')"
           :description="t('page.landing.meeting.new.description')"
           :button-text="t('page.landing.meeting.new.buttons.start.label')"
           :on-click="goToPrepareSessionPage"
           button-variant="primary"
-          class="newSessionCard"
+          class="newSessionCard flex-fill"
         />
         <landing-page-card
           :title="t('page.landing.meeting.join.title')"
@@ -21,7 +24,7 @@
           :button-text="t('page.landing.meeting.join.buttons.start.label')"
           :on-click="goToJoinPage"
           button-variant="secondary"
-          class="joinSessionCard"
+          class="joinSessionCard flex-fill"
         />
         <landing-page-card
           v-if="sessionWrapper.session"
@@ -29,24 +32,26 @@
           :description="t('page.landing.meeting.reconnect.description')"
           :button-text="t('page.landing.meeting.reconnect.buttons.start.label')"
           :on-click="goToSessionPage"
-          class="reconnectSessionCard"
+          class="reconnectSessionCard flex-fill"
         />
-      </b-card-group>
+      </div>
     </b-container>
     <AnalyticsDataComponent ref="dataComponent"> </AnalyticsDataComponent>
     <b-container>
       <div class="parent pb-md-5 px-5">
         <div class="py-5"></div>
         <div>
-          <h1 class="text-center">How DIVENI works <b-icon-gear-wide /></h1>
-          <b-card-group deck class="py-5">
+          <h1 class="text-center">How DIVENI works <i class="bi bi-gear-wide"></i></h1>
+          <b-card-group class="py-5 gap-4">
             <b-card class="pictureCard">
               <b-card-text>
-                <b-img-lazy
-                  :src="require(`@/assets/SetUpSession.png`)"
+                <img
+                  :src="setUpSessionImg"
                   width="300"
                   height="265"
                   alt="Set Up Session Picture"
+                  loading="lazy"
+                  class="img-fluid"
                 />
               </b-card-text>
             </b-card>
@@ -55,13 +60,13 @@
                 Create a planning session and select your prefered voting set.
               </b-card-text>
               <b-card-text>
-                You could import your user stories or connect JIRA to syncronize story points.
+                You could import your user stories or connect JIRA to synchronize story points.
               </b-card-text>
-              <b-card-sub-title>
+              <b-card-subtitle>
                 <a href="https://sybit-education.github.io/Diveni/guide" target="_blank">
                   Connecting to Issue-Tracker</a
                 >
-              </b-card-sub-title>
+              </b-card-subtitle>
               <b-card-text>
                 DIVENI could connect to issue trackers like Azure DevOps, JIRA Server and Cloud to
                 show user stories and update the voted results of your planning poker.
@@ -81,11 +86,13 @@
             </b-card>
             <b-card class="pictureCard">
               <b-card-text>
-                <b-img-lazy
-                  :src="require(`@/assets/InviteYourTeam.png`)"
+                <img
+                  :src="inviteYourTeamImg"
                   width="300"
                   height="265"
                   alt="Invite Your Team Picture"
+                  loading="lazy"
+                  class="img-fluid"
                 />
               </b-card-text>
             </b-card>
@@ -93,11 +100,13 @@
           <b-card-group>
             <b-card class="pictureCard">
               <b-card-text>
-                <b-img-lazy
-                  :src="require(`@/assets/EstimateUserStories.png`)"
+                <img
+                  :src="estimateUserStoriesImg"
                   width="300"
                   height="265"
                   alt="Estimate User Stories Picture"
+                  loading="lazy"
+                  class="img-fluid"
                 />
               </b-card-text>
             </b-card>
@@ -133,6 +142,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import axios from "axios";
 import LandingPageCard from "../components/LandingPageCard.vue";
 import Constants from "../constants";
 import Session from "../model/Session";
@@ -142,6 +152,9 @@ import { useI18n } from "vue-i18n";
 import CarouselComponent from "@/components/CarouselComponent.vue";
 import DownloadPWAModal from "@/components/DownloadPWAModal.vue";
 import { useRouter } from "vue-router";
+import setUpSessionImg from "@/assets/SetUpSession.png";
+import inviteYourTeamImg from "@/assets/InviteYourTeam.png";
+import estimateUserStoriesImg from "@/assets/EstimateUserStories.png";
 
 export default defineComponent({
   name: "LandingPage",
@@ -155,7 +168,7 @@ export default defineComponent({
     const store = useDiveniStore();
     const { t } = useI18n();
     const router = useRouter();
-    return { store, t, router };
+    return { store, t, router, setUpSessionImg, inviteYourTeamImg, estimateUserStoriesImg };
   },
   data() {
     return {
@@ -175,7 +188,7 @@ export default defineComponent({
         const url = Constants.backendURL + Constants.createSessionRoute;
         try {
           const session = (
-            await this.axios.get(url, {
+            await axios.get(url, {
               params: {
                 adminCookie: cookie,
               },
@@ -265,8 +278,9 @@ export default defineComponent({
 }
 
 .teaser {
-  background: linear-gradient(var(--background-color-primary), var(--pictureGradientEnd)),
-    url("~@/assets/img/diveni-background.png");
+  background:
+    linear-gradient(var(--background-color-primary), var(--pictureGradientEnd)),
+    url("@/assets/img/diveni-background.png");
   background-size: cover;
   background-repeat: no-repeat;
 }

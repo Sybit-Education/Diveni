@@ -10,16 +10,21 @@
       initial-edit-type="wysiwyg"
       preview-style="vertical"
       :class="theme === 'light' ? 'lightMode' : 'darkMode'"
-      @update:modelValue="$emit('textValueChanged', { markdown: $event })"
-      @stillTyping="aiButtonVisible = false"
-      @stoppedTyping="showAiButton"
+      @update:model-value="
+        (val: string) => {
+          $emit('update:markdown', val);
+          $emit('textValueChanged', { markdown: val });
+        }
+      "
+      @still-typing="aiButtonVisible = false"
+      @stopped-typing="showAiButton"
     />
     <b-button
       v-show="aiButtonVisible && currentText !== '' && hasApiKey"
       id="submitAIDescription"
       @click="showPopOver = !showPopOver"
     >
-      <b-icon-stars id="aiStars" />
+      <i id="aiStars" class="bi bi-stars"></i>
     </b-button>
 
     <div v-if="showPopOver" id="aiPopOver">
@@ -29,17 +34,19 @@
           class="my-1 aiDescriptionButtons"
           @click="aiButtonClicked('grammar')"
         >
-          <b-icon-pencil /> {{ t("general.aiFeature.descriptionButtons.grammar") }}
+          <i class="bi bi-pencil"></i> {{ t("general.aiFeature.descriptionButtons.grammar") }}
         </b-button>
         <b-button
           v-if="foundDescription"
           class="my-1 aiDescriptionButtons"
           @click="aiButtonClicked('improveDescription')"
         >
-          <b-icon-lightbulb /> {{ t("general.aiFeature.descriptionButtons.description") }}
+          <i class="bi bi-lightbulb"></i>
+          {{ t("general.aiFeature.descriptionButtons.description") }}
         </b-button>
         <b-button class="my-1 aiDescriptionButtons" @click="aiButtonClicked('markDescription')">
-          <b-icon-input-cursor-text /> {{ t("general.aiFeature.descriptionButtons.mark") }}
+          <i class="bi bi-input-cursor-text"></i>
+          {{ t("general.aiFeature.descriptionButtons.mark") }}
         </b-button>
       </div>
     </div>
@@ -48,8 +55,8 @@
       v-if="showModal"
       :current-text="currentText"
       :is-description="true"
-      @sendGPTRequest="redirectSubmit"
-      @resetShowModal="showModal = false"
+      @send-g-p-t-request="redirectSubmit"
+      @reset-show-modal="showModal = false"
     />
   </div>
 </template>
@@ -73,10 +80,6 @@ export default defineComponent({
   components: {
     PrivacyModal,
     editor: UiToastEditorWrapper,
-  },
-  model: {
-    prop: "markdown",
-    event: "change",
   },
   props: {
     disabled: {
@@ -112,6 +115,7 @@ export default defineComponent({
       default: false,
     },
   },
+  emits: ["update:markdown", "textValueChanged", "sendGPTDescriptionRequest"],
   setup() {
     const { t, locale } = useI18n();
     const currentLocale = ref(locale.value);
@@ -258,6 +262,13 @@ export default defineComponent({
   height: 100%;
   color: var(--text-primary-color) !important;
   z-index: 0;
+
+  .placeholder {
+    cursor: text;
+    background-color: transparent;
+    opacity: 1;
+    min-height: auto;
+  }
 }
 /*AI FEATURE*/
 
