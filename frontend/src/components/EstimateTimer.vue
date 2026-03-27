@@ -1,6 +1,6 @@
 <template>
   <div class="d-flex justify-content-end estimate-timer">
-    <b-card-text :style="`color: ${textColor}`" class="timer">
+    <b-card-text :style="{ color: textColor }" class="timer">
       {{ formattedTime }}
     </b-card-text>
   </div>
@@ -30,7 +30,7 @@ let initialElapsed = 0;
 
 const textColor = computed(() => {
   if (timerCount.value === 0) return COLOR_INACTIVE;
-  if (timerCount.value > (props.duration / 3) * 2) return COLOR_PLENTY;
+  if (timerCount.value > (props.duration * 2) / 3) return COLOR_PLENTY;
   if (timerCount.value > props.duration / 3) return COLOR_WARNING;
   return COLOR_URGENT;
 });
@@ -50,6 +50,20 @@ function stopInterval() {
   }
 }
 
+function tick(): boolean {
+  if (localStartTime === 0) return false;
+
+  const localElapsed = (Date.now() - localStartTime) / 1000;
+  const remaining = props.duration - initialElapsed - localElapsed;
+
+  if (remaining <= 0) {
+    timerCount.value = 0;
+    return true;
+  }
+  timerCount.value = Math.min(props.duration, Math.ceil(remaining));
+  return false;
+}
+
 function startInterval() {
   stopInterval();
   if (props.duration === 0 || !props.startTimestamp) return;
@@ -57,31 +71,20 @@ function startInterval() {
   const serverStartMs = new Date(props.startTimestamp).getTime();
   if (Number.isNaN(serverStartMs)) return;
 
-  // Clamp initial offset to >= 0 so a client clock behind the server
-  // never produces a negative elapsed value
+  // Clamp to >= 0 so a client clock behind the server never goes negative
   const now = Date.now();
   initialElapsed = Math.max(0, (now - serverStartMs) / 1000);
   localStartTime = now;
 
-  if (initialElapsed >= props.duration) {
-    timerCount.value = 0;
+  if (tick()) {
     emit("timerFinished");
     return;
   }
 
-  timerCount.value = Math.min(props.duration, Math.ceil(props.duration - initialElapsed));
-
   intervalHandle = window.setInterval(() => {
-    const localElapsed = (Date.now() - localStartTime) / 1000;
-    const totalElapsed = initialElapsed + localElapsed;
-    const remaining = props.duration - totalElapsed;
-
-    if (remaining <= 0) {
-      timerCount.value = 0;
+    if (tick()) {
       emit("timerFinished");
       stopInterval();
-    } else {
-      timerCount.value = Math.min(props.duration, Math.ceil(remaining));
     }
   }, 100);
 }
@@ -110,7 +113,10 @@ watch(
 watch(
   () => props.pauseTimer,
   (paused) => {
-    if (paused) stopInterval();
+    if (paused) {
+      tick();
+      stopInterval();
+    }
   }
 );
 
@@ -127,10 +133,6 @@ onBeforeUnmount(stopInterval);
   font-size: 1.5rem;
   font-weight: 700;
   border-radius: 0.5rem;
-}
-
-.card-body {
-  padding: 0.5rem;
 }
 
 .card-text {
