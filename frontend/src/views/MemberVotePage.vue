@@ -19,7 +19,6 @@
             :start-timestamp="timerTimestamp"
             :pause-timer="estimateFinished || pauseSession"
             :duration="timerCountdownNumber"
-            :member="memberID"
             :voting-started="isStartVoting"
           />
         </b-col>
@@ -37,7 +36,6 @@
             :start-timestamp="timerTimestamp"
             :pause-timer="estimateFinished || pauseSession"
             :duration="timerCountdownNumber"
-            :member="memberID"
             :voting-started="isStartVoting"
           />
         </b-col>
