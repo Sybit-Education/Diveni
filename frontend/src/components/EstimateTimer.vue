@@ -182,6 +182,7 @@ watch(
       shouldEmitOnExpiry = false;
       if (!props.startTimestamp) timerCount.value = 0;
     } else if (props.startTimestamp && props.duration > 0 && !roundExpired) {
+      shouldEmitOnExpiry = true;
       startInterval();
     }
   }
