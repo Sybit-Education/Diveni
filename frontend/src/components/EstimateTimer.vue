@@ -11,6 +11,7 @@ import { ref, computed, watch, onBeforeUnmount } from "vue";
 import axios from "axios";
 import constants from "@/constants";
 
+const TICK_INTERVAL_MS = 100;
 const COLOR_INACTIVE = "#808080";
 const COLOR_PLENTY = "#229954";
 const COLOR_WARNING = "#D4AC0D";
@@ -29,13 +30,13 @@ const props = withDefaults(
 
 const emit = defineEmits<{ timerFinished: [] }>();
 
+// --- State ---
 const timerCount = ref(0);
 
-// Non-reactive internal state
-let intervalHandle = -1;
-let localStartTime = 0;
-let initialElapsed = 0;
-let syncGeneration = 0;
+let tickHandle = -1;
+let tickOrigin = 0;
+let elapsedBeforeTick = 0;
+let asyncGeneration = 0;
 let roundExpired = false;
 let shouldEmitOnExpiry = false;
 let unmounted = false;
@@ -62,18 +63,19 @@ function clampElapsed(seconds: number): number {
   return Math.min(props.duration, Math.max(0, seconds));
 }
 
-function stopInterval() {
-  if (intervalHandle !== -1) {
-    clearInterval(intervalHandle);
-    intervalHandle = -1;
+function stopTicking() {
+  if (tickHandle !== -1) {
+    clearInterval(tickHandle);
+    tickHandle = -1;
   }
 }
 
+// Returns true when the timer has expired
 function tick(): boolean {
-  if (localStartTime === 0) return false;
+  if (tickOrigin === 0) return false;
 
-  const localElapsed = (Date.now() - localStartTime) / 1000;
-  const remaining = props.duration - initialElapsed - localElapsed;
+  const tickElapsed = (Date.now() - tickOrigin) / 1000;
+  const remaining = props.duration - elapsedBeforeTick - tickElapsed;
 
   if (remaining <= 0) {
     timerCount.value = 0;
@@ -84,47 +86,47 @@ function tick(): boolean {
   return false;
 }
 
-function handleExpiry() {
+function onExpired() {
   if (shouldEmitOnExpiry) {
     shouldEmitOnExpiry = false;
     emit("timerFinished");
   }
 }
 
-function beginInterval() {
+function startTicking() {
   if (tick()) {
-    handleExpiry();
+    onExpired();
     return;
   }
-  intervalHandle = window.setInterval(() => {
+  tickHandle = window.setInterval(() => {
     if (tick()) {
-      stopInterval();
-      handleExpiry();
+      stopTicking();
+      onExpired();
     }
-  }, 100);
+  }, TICK_INTERVAL_MS);
 }
 
-// --- Server sync ---
-async function fetchServerElapsed(gen: number, rawElapsed: number): Promise<number | null> {
+// --- Timer sync ---
+async function fetchServerElapsed(gen: number, fallback: number): Promise<number | null> {
   try {
     const response = await axios.get(constants.backendURL + "/get-timer-value", {
       params: { memberID: props.member },
     });
-    if (gen !== syncGeneration || unmounted) return null;
+    if (gen !== asyncGeneration || unmounted) return null;
     const elapsed = Number(response.data);
-    return Number.isFinite(elapsed) ? elapsed / 1000 : rawElapsed;
+    return Number.isFinite(elapsed) ? elapsed / 1000 : fallback;
   } catch {
-    if (gen !== syncGeneration || unmounted) return null;
-    return rawElapsed;
+    if (gen !== asyncGeneration || unmounted) return null;
+    return fallback;
   }
 }
 
-async function startInterval() {
-  stopInterval();
-  localStartTime = 0;
+async function syncTimer() {
+  stopTicking();
+  tickOrigin = 0;
   if (props.duration === 0 || !props.startTimestamp) return;
 
-  const gen = ++syncGeneration;
+  const gen = ++asyncGeneration;
   const serverStartMs = new Date(props.startTimestamp).getTime();
   if (Number.isNaN(serverStartMs)) return;
 
@@ -134,15 +136,25 @@ async function startInterval() {
   if (hasClockSkew && props.member) {
     const serverElapsed = await fetchServerElapsed(gen, rawElapsed);
     if (serverElapsed === null) return;
-    initialElapsed = clampElapsed(serverElapsed);
+    elapsedBeforeTick = clampElapsed(serverElapsed);
   } else {
-    initialElapsed = clampElapsed(rawElapsed);
+    elapsedBeforeTick = clampElapsed(rawElapsed);
   }
+
+  // Sync display to actual remaining time (even when paused)
+  const remaining = props.duration - elapsedBeforeTick;
+  if (remaining <= 0) {
+    timerCount.value = 0;
+    roundExpired = true;
+    onExpired();
+    return;
+  }
+  timerCount.value = Math.ceil(remaining);
 
   if (props.pauseTimer) return;
 
-  localStartTime = Date.now();
-  beginInterval();
+  tickOrigin = Date.now();
+  startTicking();
 }
 
 // --- Watchers ---
@@ -150,12 +162,12 @@ watch(
   () => props.startTimestamp,
   () => {
     roundExpired = false;
-    shouldEmitOnExpiry = true;
-    stopInterval();
+    stopTicking();
     timerCount.value = props.duration;
     if (!props.pauseTimer) {
-      startInterval();
+      shouldEmitOnExpiry = true;
     }
+    syncTimer();
   }
 );
 
@@ -165,9 +177,11 @@ watch(
     if (oldDuration === 0 && newDuration > 0) {
       roundExpired = false;
       timerCount.value = newDuration;
-      if (props.votingStarted && props.startTimestamp && !props.pauseTimer) {
-        shouldEmitOnExpiry = true;
-        startInterval();
+      if (props.votingStarted && props.startTimestamp) {
+        if (!props.pauseTimer) {
+          shouldEmitOnExpiry = true;
+        }
+        syncTimer();
       }
     }
   }
@@ -177,27 +191,29 @@ watch(
   () => props.pauseTimer,
   (paused) => {
     if (paused) {
-      if (tick()) handleExpiry();
-      stopInterval();
+      if (tick()) onExpired();
+      stopTicking();
       shouldEmitOnExpiry = false;
       if (!props.startTimestamp) timerCount.value = 0;
     } else if (props.startTimestamp && props.duration > 0 && !roundExpired) {
       shouldEmitOnExpiry = true;
-      startInterval();
+      syncTimer();
     }
   }
 );
 
 // --- Initialization ---
 timerCount.value = props.pauseTimer && !props.startTimestamp ? 0 : props.duration;
-if (props.votingStarted && props.startTimestamp && !props.pauseTimer) {
-  shouldEmitOnExpiry = true;
-  startInterval();
+if (props.votingStarted && props.startTimestamp) {
+  if (!props.pauseTimer) {
+    shouldEmitOnExpiry = true;
+  }
+  syncTimer();
 }
 
 onBeforeUnmount(() => {
   unmounted = true;
-  stopInterval();
+  stopTicking();
 });
 </script>
 
