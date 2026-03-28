@@ -30,13 +30,20 @@ const props = withDefaults(
 const emit = defineEmits<{ timerFinished: [] }>();
 
 const timerCount = ref(0);
+
+// Non-reactive internal state
 let intervalHandle = -1;
 let localStartTime = 0;
 let initialElapsed = 0;
 let syncGeneration = 0;
+let roundExpired = false;
+let shouldEmitOnExpiry = false;
+let unmounted = false;
 
+// --- Computed ---
 const textColor = computed(() => {
   if (timerCount.value === 0) return COLOR_INACTIVE;
+  if (!props.startTimestamp && props.pauseTimer) return COLOR_INACTIVE;
   if (timerCount.value > (props.duration * 2) / 3) return COLOR_PLENTY;
   if (timerCount.value > props.duration / 3) return COLOR_WARNING;
   return COLOR_URGENT;
@@ -44,11 +51,16 @@ const textColor = computed(() => {
 
 const formattedTime = computed(() => {
   if (props.duration === 0) return "∞";
-  if (!props.startTimestamp) return "";
+  if (!props.startTimestamp) return props.pauseTimer ? "0:00" : "";
   const minutes = Math.floor(timerCount.value / 60);
   const seconds = (timerCount.value % 60).toString().padStart(2, "0");
   return `${minutes}:${seconds}`;
 });
+
+// --- Timer core ---
+function clampElapsed(seconds: number): number {
+  return Math.min(props.duration, Math.max(0, seconds));
+}
 
 function stopInterval() {
   if (intervalHandle !== -1) {
@@ -65,67 +77,80 @@ function tick(): boolean {
 
   if (remaining <= 0) {
     timerCount.value = 0;
+    roundExpired = true;
     return true;
   }
   timerCount.value = Math.min(props.duration, Math.ceil(remaining));
   return false;
 }
 
+function handleExpiry() {
+  if (shouldEmitOnExpiry) {
+    shouldEmitOnExpiry = false;
+    emit("timerFinished");
+  }
+}
+
 function beginInterval() {
   if (tick()) {
-    emit("timerFinished");
+    handleExpiry();
     return;
   }
   intervalHandle = window.setInterval(() => {
     if (tick()) {
-      emit("timerFinished");
       stopInterval();
+      handleExpiry();
     }
   }, 100);
 }
 
-async function startInterval(resumeFromCurrent = false) {
+// --- Server sync ---
+async function fetchServerElapsed(gen: number, rawElapsed: number): Promise<number | null> {
+  try {
+    const response = await axios.get(constants.backendURL + "/get-timer-value", {
+      params: { memberID: props.member },
+    });
+    if (gen !== syncGeneration || unmounted) return null;
+    const elapsed = Number(response.data);
+    return Number.isFinite(elapsed) ? elapsed / 1000 : rawElapsed;
+  } catch {
+    if (gen !== syncGeneration || unmounted) return null;
+    return rawElapsed;
+  }
+}
+
+async function startInterval() {
   stopInterval();
+  localStartTime = 0;
   if (props.duration === 0 || !props.startTimestamp) return;
 
   const gen = ++syncGeneration;
-
-  if (resumeFromCurrent) {
-    initialElapsed = props.duration - timerCount.value;
-    localStartTime = Date.now();
-    beginInterval();
-    return;
-  }
-
   const serverStartMs = new Date(props.startTimestamp).getTime();
   if (Number.isNaN(serverStartMs)) return;
 
-  const now = Date.now();
-  const rawElapsed = (now - serverStartMs) / 1000;
+  const rawElapsed = (Date.now() - serverStartMs) / 1000;
+  const hasClockSkew = rawElapsed < 0 || rawElapsed > props.duration;
 
-  // Clock skew detected: Use backend endpoint to get the true server-side elapsed time for members
-  if ((rawElapsed < 0 || rawElapsed > props.duration) && props.member) {
-    try {
-      const response = await axios.get(constants.backendURL + "/get-timer-value", {
-        params: { memberID: props.member },
-      });
-      if (gen !== syncGeneration) return;
-      initialElapsed = Math.max(0, response.data / 1000);
-    } catch {
-      if (gen !== syncGeneration) return;
-      initialElapsed = Math.max(0, rawElapsed);
-    }
+  if (hasClockSkew && props.member) {
+    const serverElapsed = await fetchServerElapsed(gen, rawElapsed);
+    if (serverElapsed === null) return;
+    initialElapsed = clampElapsed(serverElapsed);
   } else {
-    initialElapsed = Math.max(0, rawElapsed);
+    initialElapsed = clampElapsed(rawElapsed);
   }
+
+  if (props.pauseTimer) return;
 
   localStartTime = Date.now();
   beginInterval();
 }
 
+// --- Watchers ---
 watch(
   () => props.startTimestamp,
   () => {
+    roundExpired = false;
+    shouldEmitOnExpiry = true;
     stopInterval();
     timerCount.value = props.duration;
     if (!props.pauseTimer) {
@@ -138,8 +163,10 @@ watch(
   () => props.duration,
   (newDuration, oldDuration) => {
     if (oldDuration === 0 && newDuration > 0) {
+      roundExpired = false;
       timerCount.value = newDuration;
       if (props.votingStarted && props.startTimestamp && !props.pauseTimer) {
+        shouldEmitOnExpiry = true;
         startInterval();
       }
     }
@@ -150,20 +177,27 @@ watch(
   () => props.pauseTimer,
   (paused) => {
     if (paused) {
-      tick();
+      if (tick()) handleExpiry();
       stopInterval();
-    } else if (props.startTimestamp && props.duration > 0) {
-      startInterval(true);
+      shouldEmitOnExpiry = false;
+      if (!props.startTimestamp) timerCount.value = 0;
+    } else if (props.startTimestamp && props.duration > 0 && !roundExpired) {
+      startInterval();
     }
   }
 );
 
-timerCount.value = props.duration;
+// --- Initialization ---
+timerCount.value = props.pauseTimer && !props.startTimestamp ? 0 : props.duration;
 if (props.votingStarted && props.startTimestamp && !props.pauseTimer) {
+  shouldEmitOnExpiry = true;
   startInterval();
 }
 
-onBeforeUnmount(stopInterval);
+onBeforeUnmount(() => {
+  unmounted = true;
+  stopInterval();
+});
 </script>
 
 <style lang="scss" scoped>
