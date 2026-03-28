@@ -8,18 +8,24 @@
 
 <script setup lang="ts">
 import { ref, computed, watch, onBeforeUnmount } from "vue";
+import axios from "axios";
+import constants from "@/constants";
 
 const COLOR_INACTIVE = "#808080";
 const COLOR_PLENTY = "#229954";
 const COLOR_WARNING = "#D4AC0D";
 const COLOR_URGENT = "#CB4335";
 
-const props = defineProps<{
-  startTimestamp: string;
-  duration: number;
-  pauseTimer: boolean;
-  votingStarted: boolean;
-}>();
+const props = withDefaults(
+  defineProps<{
+    startTimestamp: string;
+    duration: number;
+    pauseTimer: boolean;
+    member?: string;
+    votingStarted: boolean;
+  }>(),
+  { member: "" }
+);
 
 const emit = defineEmits<{ timerFinished: [] }>();
 
@@ -27,6 +33,7 @@ const timerCount = ref(0);
 let intervalHandle = -1;
 let localStartTime = 0;
 let initialElapsed = 0;
+let syncGeneration = 0;
 
 const textColor = computed(() => {
   if (timerCount.value === 0) return COLOR_INACTIVE;
@@ -64,29 +71,56 @@ function tick(): boolean {
   return false;
 }
 
-function startInterval() {
-  stopInterval();
-  if (props.duration === 0 || !props.startTimestamp) return;
-
-  const serverStartMs = new Date(props.startTimestamp).getTime();
-  if (Number.isNaN(serverStartMs)) return;
-
-  // Clamp to >= 0 so a client clock behind the server never goes negative
-  const now = Date.now();
-  initialElapsed = Math.max(0, (now - serverStartMs) / 1000);
-  localStartTime = now;
-
+function beginInterval() {
   if (tick()) {
     emit("timerFinished");
     return;
   }
-
   intervalHandle = window.setInterval(() => {
     if (tick()) {
       emit("timerFinished");
       stopInterval();
     }
   }, 100);
+}
+
+async function startInterval(resumeFromCurrent = false) {
+  stopInterval();
+  if (props.duration === 0 || !props.startTimestamp) return;
+
+  const gen = ++syncGeneration;
+
+  if (resumeFromCurrent) {
+    initialElapsed = props.duration - timerCount.value;
+    localStartTime = Date.now();
+    beginInterval();
+    return;
+  }
+
+  const serverStartMs = new Date(props.startTimestamp).getTime();
+  if (Number.isNaN(serverStartMs)) return;
+
+  const now = Date.now();
+  const rawElapsed = (now - serverStartMs) / 1000;
+
+  // Clock skew detected: Use backend endpoint to get the true server-side elapsed time for members
+  if ((rawElapsed < 0 || rawElapsed > props.duration) && props.member) {
+    try {
+      const response = await axios.get(constants.backendURL + "/get-timer-value", {
+        params: { memberID: props.member },
+      });
+      if (gen !== syncGeneration) return;
+      initialElapsed = Math.max(0, response.data / 1000);
+    } catch {
+      if (gen !== syncGeneration) return;
+      initialElapsed = Math.max(0, rawElapsed);
+    }
+  } else {
+    initialElapsed = Math.max(0, rawElapsed);
+  }
+
+  localStartTime = Date.now();
+  beginInterval();
 }
 
 watch(
@@ -119,7 +153,7 @@ watch(
       tick();
       stopInterval();
     } else if (props.startTimestamp && props.duration > 0) {
-      startInterval();
+      startInterval(true);
     }
   }
 );
