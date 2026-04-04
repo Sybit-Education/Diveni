@@ -23,6 +23,7 @@ import JoinCommand from "../model/JoinCommand";
 import Constants from "../constants";
 import axios from "axios";
 import { useDiveniStore } from "@/store";
+import { webSocketService, ConnectionState } from "@/services/WebSocketService";
 import { useToast } from "vue-toastification";
 import { useI18n } from "vue-i18n";
 import { useRouter, useRoute } from "vue-router";
@@ -54,7 +55,7 @@ export default defineComponent({
   },
   computed: {
     webSocketIsConnected() {
-      return this.store.webSocketConnected;
+      return webSocketService.connectionState.value === ConnectionState.CONNECTED;
     },
   },
   watch: {

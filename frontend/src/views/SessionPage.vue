@@ -362,6 +362,7 @@ import SessionStartButton from "@/components/actions/SessionStartButton.vue";
 import axios from "axios";
 import { defineComponent } from "vue";
 import { useDiveniStore } from "@/store";
+import { webSocketService, ConnectionState } from "@/services/WebSocketService";
 import { useToast } from "vue-toastification";
 import { useI18n } from "vue-i18n";
 import SessionAdminCard from "@/components/SessionAdminCard.vue";
@@ -456,7 +457,7 @@ export default defineComponent({
       return this.store.members;
     },
     webSocketIsConnected() {
-      return this.store.webSocketConnected;
+      return webSocketService.connectionState.value === ConnectionState.CONNECTED;
     },
     highlightedMembers() {
       return this.store.highlightedMembers;
@@ -479,19 +480,15 @@ export default defineComponent({
   watch: {
     webSocketIsConnected(isConnected) {
       if (isConnected) {
-        console.debug("SessionPage: member connected to websocket");
-        setTimeout(() => {
-          this.registerAdminPrincipalOnBackend();
-          this.subscribeWSMemberUpdated();
-          this.subscribeOnTimerStart();
-          this.subscribeWSNotification();
-          if (this.startNewSessionOnMountedString === "true") {
-            this.sendRestartMessage();
-          }
-          setTimeout(() => {
-            this.requestMemberUpdate();
-          }, 400);
-        }, 300);
+        console.debug("SessionPage: admin connected to websocket");
+        this.registerAdminPrincipalOnBackend();
+        this.subscribeWSMemberUpdated();
+        this.subscribeOnTimerStart();
+        this.subscribeWSNotification();
+        if (this.startNewSessionOnMountedString === "true") {
+          this.sendRestartMessage();
+        }
+        this.requestMemberUpdate();
       }
     },
     highlightedMembers(highlights) {
