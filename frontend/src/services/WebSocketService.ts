@@ -28,7 +28,7 @@ class WebSocketService {
     this.wasConnected = false;
     this.intentionalDisconnect = false;
     if (oldClient?.active) {
-      oldClient.deactivate();
+      void oldClient.deactivate();
     }
 
     const brokerURL = this.httpToWs(url);
