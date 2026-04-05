@@ -104,11 +104,20 @@ class WebSocketService {
     this.activeStompSubs.clear();
     this.subscriptions.clear();
     this.wasConnected = false;
-    if (this.client) {
-      await this.client.deactivate();
-      this.client = null;
+    // Capture current client before awaiting -- a concurrent connect() may
+    // replace this.client while deactivate() is in-flight
+    const clientToDisconnect = this.client;
+    if (clientToDisconnect) {
+      await clientToDisconnect.deactivate();
+      // Only null if no new connect() replaced it while we were awaiting
+      if (this.client === clientToDisconnect) {
+        this.client = null;
+      }
     }
-    this.connectionState.value = ConnectionState.DISCONNECTED;
+    // Only update state if no new connect() took over
+    if (!this.client || this.client === clientToDisconnect) {
+      this.connectionState.value = ConnectionState.DISCONNECTED;
+    }
   }
 
   subscribe(destination: string, callback: (body: string) => void): () => void {
