@@ -23,6 +23,7 @@ import JoinCommand from "../model/JoinCommand";
 import Constants from "../constants";
 import axios from "axios";
 import { useDiveniStore } from "@/store";
+import { webSocketService, ConnectionState } from "@/services/WebSocketService";
 import { useToast } from "vue-toastification";
 import { useI18n } from "vue-i18n";
 import { useRouter, useRoute } from "vue-router";
@@ -54,23 +55,13 @@ export default defineComponent({
   },
   computed: {
     webSocketIsConnected() {
-      return this.store.webSocketConnected;
+      return webSocketService.connectionState.value === ConnectionState.CONNECTED;
     },
   },
   watch: {
     webSocketIsConnected(isConnected) {
       if (isConnected) {
-        console.debug("JoinPage: member connected to websocket");
         this.registerMemberPrincipalOnBackend();
-        this.subscribeWSMemberUpdates();
-        this.subscribeWSMemberUpdatesWithAutoReveal();
-        this.subscribeWSadminUpdatedUserStories();
-        this.subscribeWSStorySelected();
-        this.subscribeWSMemberUpdated();
-        this.subscribeOnTimerStart();
-        this.subscribeWSNotification();
-        this.subscribeWSMemberHostVotingUpdate();
-        this.subscribeWSMemberHostEstimation();
         this.goToEstimationPage();
       }
     },
@@ -83,7 +74,7 @@ export default defineComponent({
   },
   methods: {
     async sendJoinSessionRequest(data: JoinCommand) {
-      this.store.clearStore();
+      await this.store.clearStore();
       this.name = data.name;
       const url = `${Constants.backendURL}${Constants.joinSessionRoute(data.sessionID)}`;
       const joinInfo = {
@@ -121,39 +112,21 @@ export default defineComponent({
       return Constants.avatarAnimalAssetNameToBackendEnum(this.avatarAnimalAssetName);
     },
     connectToWebSocket(sessionID: string, memberID: string) {
+      this.store.subscribeOnBackendWSMemberUpdates();
+      this.store.subscribeOnBackendWSMemberUpdatesWithAutoReveal();
+      this.store.subscribeOnBackendWSStoriesUpdated();
+      this.store.subscribeOnBackendWSStorySelected();
+      this.store.subscribeOnBackendWSAdminUpdate();
+      this.store.subscribeOnBackendWSTimerStart();
+      this.store.subscribeOnBackendWSNotify();
+      this.store.subscribeOnBackendWSHostVoting();
+      this.store.subscribeOnBackendWSHostEstimation();
       const url = `${Constants.backendURL}/connect?sessionID=${sessionID}&memberID=${memberID}`;
       this.store.connectToBackendWS(url);
     },
     registerMemberPrincipalOnBackend() {
       const endPoint = Constants.webSocketRegisterMemberRoute;
       this.store.sendViaBackendWS(endPoint);
-    },
-    subscribeWSMemberHostVotingUpdate() {
-      this.store.subscribeOnBackendWSHostVoting();
-    },
-    subscribeWSMemberHostEstimation() {
-      this.store.subscribeOnBackendWSHostEstimation();
-    },
-    subscribeWSMemberUpdates() {
-      this.store.subscribeOnBackendWSMemberUpdates();
-    },
-    subscribeWSMemberUpdatesWithAutoReveal() {
-      this.store.subscribeOnBackendWSMemberUpdatesWithAutoReveal();
-    },
-    subscribeWSNotification() {
-      this.store.subscribeOnBackendWSNotify();
-    },
-    subscribeWSadminUpdatedUserStories() {
-      this.store.subscribeOnBackendWSStoriesUpdated();
-    },
-    subscribeWSStorySelected() {
-      this.store.subscribeOnBackendWSStorySelected();
-    },
-    subscribeWSMemberUpdated() {
-      this.store.subscribeOnBackendWSAdminUpdate();
-    },
-    subscribeOnTimerStart() {
-      this.store.subscribeOnBackendWSTimerStart();
     },
     goToEstimationPage() {
       this.router.push({

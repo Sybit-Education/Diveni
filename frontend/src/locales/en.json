@@ -403,6 +403,11 @@
         "wrongID": "Wrong invitation code",
         "password": "Wrong password"
       }
+    },
+    "connection": {
+      "reconnecting": "Connection lost — reconnecting...",
+      "disconnected": "Connection lost",
+      "reconnected": "Reconnected"
     }
   }
 }

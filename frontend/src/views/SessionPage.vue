@@ -362,6 +362,7 @@ import SessionStartButton from "@/components/actions/SessionStartButton.vue";
 import axios from "axios";
 import { defineComponent } from "vue";
 import { useDiveniStore } from "@/store";
+import { webSocketService, ConnectionState } from "@/services/WebSocketService";
 import { useToast } from "vue-toastification";
 import { useI18n } from "vue-i18n";
 import SessionAdminCard from "@/components/SessionAdminCard.vue";
@@ -443,6 +444,7 @@ export default defineComponent({
       // needed for splitting user stories
       splitted_user_stories: [] as Array<UserStory>,
       language: "",
+      subscriptionCleanups: [] as Array<() => void>,
     };
   },
   computed: {
@@ -456,7 +458,7 @@ export default defineComponent({
       return this.store.members;
     },
     webSocketIsConnected() {
-      return this.store.webSocketConnected;
+      return webSocketService.connectionState.value === ConnectionState.CONNECTED;
     },
     highlightedMembers() {
       return this.store.highlightedMembers;
@@ -479,19 +481,11 @@ export default defineComponent({
   watch: {
     webSocketIsConnected(isConnected) {
       if (isConnected) {
-        console.debug("SessionPage: member connected to websocket");
-        setTimeout(() => {
-          this.registerAdminPrincipalOnBackend();
-          this.subscribeWSMemberUpdated();
-          this.subscribeOnTimerStart();
-          this.subscribeWSNotification();
-          if (this.startNewSessionOnMountedString === "true") {
-            this.sendRestartMessage();
-          }
-          setTimeout(() => {
-            this.requestMemberUpdate();
-          }, 400);
-        }, 300);
+        this.registerAdminPrincipalOnBackend();
+        if (this.startNewSessionOnMountedString === "true") {
+          this.sendRestartMessage();
+        }
+        this.requestMemberUpdate();
       }
     },
     highlightedMembers(highlights) {
@@ -514,7 +508,7 @@ export default defineComponent({
     },
   },
   async created() {
-    this.store.clearStoreWithoutUserStories();
+    await this.store.clearStoreWithoutUserStories();
     this.hasApiKey = await apiService.ensureServiceAndApiKey();
     if (!this.sessionID || !this.adminID) {
       //check for cookie
@@ -531,6 +525,9 @@ export default defineComponent({
   },
   mounted() {
     if (this.rejoined === "false") {
+      this.subscribeWSMemberUpdated();
+      this.subscribeOnTimerStart();
+      this.subscribeWSNotification();
       this.connectToWebSocket();
     }
     if (this.voteSetJson) {
@@ -540,12 +537,13 @@ export default defineComponent({
       this.planningStart = true;
     } else if (this.sessionState === Constants.memberUpdateCommandVotingFinished) {
       this.planningStart = true;
-      console.log("ON MOUNTED");
       this.estimateFinished = true;
     }
   },
   unmounted() {
     window.removeEventListener("beforeunload", this.sendUnregisterCommand);
+    this.subscriptionCleanups.forEach((cleanup) => cleanup());
+    this.subscriptionCleanups = [];
   },
   methods: {
     async checkAdminCookie() {
@@ -610,7 +608,9 @@ export default defineComponent({
         this.estimateFinished = true;
       }
       this.timerCountdownNumber = parseInt(this.timerSecondsString ?? "0", 10);
-      //reconnect and reload member
+      this.subscribeWSMemberUpdated();
+      this.subscribeOnTimerStart();
+      this.subscribeWSNotification();
       this.connectToWebSocket();
     },
     async onUserStoriesChanged({ us, idx, doRemove }) {
@@ -680,7 +680,7 @@ export default defineComponent({
     onSelectedStory($event) {
       if (this.planningStart && $event != null) {
         const endPoint = Constants.webSocketAdminSelectedUserStoryRoute;
-        this.store.sendViaBackendWS(endPoint, $event);
+        this.store.sendViaBackendWS(endPoint, String($event));
       }
       this.index = $event;
     },
@@ -693,21 +693,23 @@ export default defineComponent({
       this.store.sendViaBackendWS(endPoint);
     },
     subscribeWSMemberUpdated() {
-      this.store.subscribeOnBackendWSAdminUpdate();
+      this.subscriptionCleanups.push(this.store.subscribeOnBackendWSAdminUpdate());
     },
     subscribeOnTimerStart() {
-      this.store.subscribeOnBackendWSTimerStart();
+      this.subscriptionCleanups.push(this.store.subscribeOnBackendWSTimerStart());
     },
     requestMemberUpdate() {
       const endPoint = Constants.webSocketGetMemberUpdateRoute;
       this.store.sendViaBackendWS(endPoint);
     },
     subscribeWSNotification() {
-      this.store.subscribeOnBackendWSNotify();
+      this.subscriptionCleanups.push(this.store.subscribeOnBackendWSNotify());
     },
     sendUnregisterCommand() {
       const endPoint = `${Constants.webSocketUnregisterRoute}`;
       this.store.sendViaBackendWS(endPoint);
+      // Fire-and-forget: clearStore is async but beforeunload cannot await.
+      // The publish above is buffered synchronously; disconnect may not complete.
       this.store.clearStore();
     },
     sendVotingFinishedMessage() {

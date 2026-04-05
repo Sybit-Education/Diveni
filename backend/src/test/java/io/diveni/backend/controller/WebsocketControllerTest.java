@@ -9,7 +9,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
@@ -49,9 +48,6 @@ import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
-import org.springframework.web.socket.sockjs.client.SockJsClient;
-import org.springframework.web.socket.sockjs.client.Transport;
-import org.springframework.web.socket.sockjs.client.WebSocketTransport;
 
 import lombok.val;
 
@@ -107,8 +103,6 @@ public class WebsocketControllerTest {
           }
         }
       };
-  private final List<Transport> transports =
-      Collections.singletonList(new WebSocketTransport(new StandardWebSocketClient()));
 
   @BeforeAll
   public static void init() {
@@ -146,7 +140,7 @@ public class WebsocketControllerTest {
 
   @BeforeEach
   public void initEach() {
-    this.webSocketStompClient = new WebSocketStompClient(new SockJsClient(transports));
+    this.webSocketStompClient = new WebSocketStompClient(new StandardWebSocketClient());
     this.webSocketStompClient.setMessageConverter(new MappingJackson2MessageConverter());
     this.blockingQueue = new LinkedBlockingDeque<>();
   }

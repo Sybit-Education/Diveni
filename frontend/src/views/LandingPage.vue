@@ -176,9 +176,9 @@ export default defineComponent({
       startNewSessionOnMounted: false,
     };
   },
-  created() {
-    this.disconnectFromBackendWS();
-    this.checkAdminCookie();
+  async created() {
+    await this.disconnectFromBackendWS();
+    await this.checkAdminCookie();
   },
   methods: {
     async checkAdminCookie() {
@@ -244,8 +244,8 @@ export default defineComponent({
         },
       });
     },
-    disconnectFromBackendWS() {
-      this.store.disconnectFromBackendWS();
+    async disconnectFromBackendWS() {
+      await this.store.disconnectFromBackendWS();
     },
   },
 });

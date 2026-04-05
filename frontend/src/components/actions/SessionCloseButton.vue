@@ -52,13 +52,13 @@ export default defineComponent({
     return { store, t, router, leaveButtonImg };
   },
   methods: {
-    closeSession() {
+    async closeSession() {
       this.sendCloseSessionCommand();
       window.localStorage.removeItem("adminCookie");
       if (this.userStoryMode !== "NO_US") {
         this.router.push({ name: "ResultPage" });
       } else {
-        this.store.clearStore();
+        await this.store.clearStore();
         this.router.push({ name: "LandingPage" });
       }
     },

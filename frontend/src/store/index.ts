@@ -1,6 +1,4 @@
-import SockJS from "sockjs-client";
 import j2m from "jira2md";
-import webstomp, { Client } from "webstomp-client";
 import Constants from "../constants";
 import { defineStore } from "pinia";
 import Project from "@/model/Project";
@@ -8,11 +6,10 @@ import UserStory from "@/model/UserStory";
 import { Notification } from "@/model/Notification";
 import Member from "@/model/Member";
 import AdminVote from "@/model/AdminVote";
+import { webSocketService } from "@/services/WebSocketService";
 
 export const useDiveniStore = defineStore("diveni-store", {
   state: () => ({
-    stompClient: undefined as Client | undefined,
-    webSocketConnected: false,
     memberUpdates: [] as string[],
     userStories: [] as UserStory[],
     members: [] as Member[],
@@ -32,99 +29,76 @@ export const useDiveniStore = defineStore("diveni-store", {
     setMembers(members) {
       this.members = members;
     },
-    connectToBackendWS(url) {
-      this.stompClient = webstomp.over(new SockJS(url));
-      if (import.meta.env.PROD) {
-        this.stompClient.debug = () => {};
-      }
-      const connect_callback = () => {
-        console.log("WebSocket Connected");
-        this.webSocketConnected = true;
-      };
-      const error_callback = (error) => {
-        console.error("Error connecting to the WebSocket");
-        console.error(error);
-        this.webSocketConnected = false;
-      };
-      /**
-       * client.connect(headers, connectCallback, errorCallback);
-       * More information here: https://jmesnil.net/stomp-websocket/doc/
-       */
-      this.stompClient.connect({}, connect_callback, error_callback);
+    connectToBackendWS(url: string) {
+      webSocketService.connect(url);
     },
-    disconnectFromBackendWS() {
-      this.stompClient?.disconnect(() => {
-        console.log("WebSocket Disconnected!");
-        this.webSocketConnected = false;
+    async disconnectFromBackendWS() {
+      await webSocketService.disconnect();
+    },
+    subscribeOnBackendWSMemberUpdates(): () => void {
+      return webSocketService.subscribe(Constants.webSocketMemberListenRoute, (body) => {
+        this.memberUpdates = this.memberUpdates.concat([body]);
       });
     },
-    subscribeOnBackendWSMemberUpdates() {
-      this.stompClient?.subscribe(Constants.webSocketMemberListenRoute, (frame) => {
-        this.memberUpdates = this.memberUpdates.concat([frame.body]);
-      });
-    },
-    subscribeOnBackendWSMemberUpdatesWithAutoReveal() {
-      this.stompClient?.subscribe(Constants.webSocketMemberAutoRevealListenRoute, (frame) => {
-        const splittedFrame = frame.body.split(" ");
+    subscribeOnBackendWSMemberUpdatesWithAutoReveal(): () => void {
+      return webSocketService.subscribe(Constants.webSocketMemberAutoRevealListenRoute, (body) => {
+        const splittedFrame = body.split(" ");
         this.autoReveal = splittedFrame[1] === "true";
         this.memberUpdates = this.memberUpdates.concat([splittedFrame[0]]);
       });
     },
-    subscribeOnBackendWSStoriesUpdated() {
-      this.stompClient?.subscribe(Constants.webSocketMemberListenUserStoriesRoute, (frame) => {
-        this.userStories = JSON.parse(frame.body);
+    subscribeOnBackendWSStoriesUpdated(): () => void {
+      return webSocketService.subscribe(Constants.webSocketMemberListenUserStoriesRoute, (body) => {
+        this.userStories = JSON.parse(body);
       });
     },
-    subscribeOnBackendWSStorySelected() {
-      this.stompClient?.subscribe(Constants.webSocketSelectedUserStoryRoute, (frame) => {
-        this.selectedUserStoryIndex = +frame.body;
+    subscribeOnBackendWSStorySelected(): () => void {
+      return webSocketService.subscribe(Constants.webSocketSelectedUserStoryRoute, (body) => {
+        this.selectedUserStoryIndex = +body;
       });
     },
-    subscribeOnBackendWSAdminUpdate() {
-      this.stompClient?.subscribe(Constants.webSocketMembersUpdatedRoute, (frame) => {
-        console.log(`web socket admin receive update: message ${frame}`);
-        this.members = JSON.parse(frame.body).members;
-        this.highlightedMembers = JSON.parse(frame.body).highlightedMembers;
+    subscribeOnBackendWSAdminUpdate(): () => void {
+      return webSocketService.subscribe(Constants.webSocketMembersUpdatedRoute, (body) => {
+        const parsed = JSON.parse(body);
+        this.members = parsed.members;
+        this.highlightedMembers = parsed.highlightedMembers;
       });
     },
-    subscribeOnBackendWSHostVoting() {
-      this.stompClient?.subscribe(Constants.webSocketMemberListenHostVotingRoute, (frame) => {
-        this.hostVoting = JSON.parse(frame.body);
+    subscribeOnBackendWSHostVoting(): () => void {
+      return webSocketService.subscribe(Constants.webSocketMemberListenHostVotingRoute, (body) => {
+        this.hostVoting = JSON.parse(body);
       });
     },
-    subscribeOnBackendWSHostEstimation() {
-      this.stompClient?.subscribe(Constants.webSocketMembersUpdatedHostEstimation, (frame) => {
-        this.hostEstimation = JSON.parse(frame.body);
+    subscribeOnBackendWSHostEstimation(): () => void {
+      return webSocketService.subscribe(Constants.webSocketMembersUpdatedHostEstimation, (body) => {
+        this.hostEstimation = JSON.parse(body);
       });
     },
-    subscribeOnBackendWSTimerStart() {
-      this.stompClient?.subscribe(Constants.webSocketTimerStartRoute, (frame) => {
-        console.log(`Got timer start ${frame.body}`);
-        this.timerTimestamp = frame.body;
+    subscribeOnBackendWSTimerStart(): () => void {
+      return webSocketService.subscribe(Constants.webSocketTimerStartRoute, (body) => {
+        this.timerTimestamp = body;
       });
     },
-    subscribeOnBackendWSNotify() {
-      this.stompClient?.subscribe(Constants.websocketNotification, (frame) => {
-        this.notifications = this.notifications.concat([JSON.parse(frame.body)]);
+    subscribeOnBackendWSNotify(): () => void {
+      return webSocketService.subscribe(Constants.websocketNotification, (body) => {
+        this.notifications = this.notifications.concat([JSON.parse(body)]);
       });
     },
     sendViaBackendWS(endPoint: string, data?: string | undefined) {
-      this.stompClient?.send(endPoint, data);
+      webSocketService.publish(endPoint, data);
     },
-    clearStore() {
+    async clearStore() {
       this.members = [];
       this.userStories = [];
       this.memberUpdates = [];
       this.notifications = [];
-      this.webSocketConnected = false;
-      this.stompClient = undefined;
+      await webSocketService.disconnect();
     },
-    clearStoreWithoutUserStories() {
+    async clearStoreWithoutUserStories() {
       this.members = [];
       this.memberUpdates = [];
       this.notifications = [];
-      this.webSocketConnected = false;
-      this.stompClient = undefined;
+      await webSocketService.disconnect();
     },
     setSelectedProject(project) {
       this.selectedProject = project;
@@ -143,8 +117,8 @@ export const useDiveniStore = defineStore("diveni-store", {
     setTokenId(tokenId) {
       this.tokenId = tokenId;
     },
-    clearTokenId(state) {
-      state.tokenId = undefined;
+    clearTokenId() {
+      this.tokenId = undefined;
     },
   },
 });

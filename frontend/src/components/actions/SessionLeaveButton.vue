@@ -35,10 +35,10 @@ export default defineComponent({
     return { store, t, router, leaveButtonImg };
   },
   methods: {
-    leaveSession() {
+    async leaveSession() {
       const endPoint = `${Constants.webSocketUnregisterRoute}`;
       this.store.sendViaBackendWS(endPoint);
-      this.store.clearStore();
+      await this.store.clearStore();
       window.localStorage.removeItem("memberCookie");
       this.router.push({ name: "LandingPage" });
     },
