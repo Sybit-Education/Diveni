@@ -6,6 +6,7 @@
 package io.diveni.backend.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -529,6 +530,62 @@ public class SessionTest {
     Session result = session.setHostVoting(true);
 
     assertTrue(result.getHostVoting());
+  }
+
+  @Test
+  public void deactivateMember_works() {
+    val memberID = Utils.generateRandomID();
+    val member = new Member(memberID, "John", "#fff", null, "5");
+    val session =
+        new Session(
+            null, null, null, null, null,
+            List.of(member),
+            new HashMap<>(), new ArrayList<>(),
+            SessionState.START_VOTING,
+            null, null, null, null, false, null);
+
+    val result = session.deactivateMember(memberID);
+
+    assertEquals(1, result.getMembers().size());
+    assertFalse(result.getMembers().get(0).isActive());
+    assertEquals("5", result.getMembers().get(0).getCurrentEstimation());
+  }
+
+  @Test
+  public void reactivateMember_works() {
+    val memberID = Utils.generateRandomID();
+    val member = new Member(memberID, "John", "#fff", null, "5", false);
+    val session =
+        new Session(
+            null, null, null, null, null,
+            List.of(member),
+            new HashMap<>(), new ArrayList<>(),
+            SessionState.START_VOTING,
+            null, null, null, null, false, null);
+
+    val result = session.reactivateMember(memberID);
+
+    assertEquals(1, result.getMembers().size());
+    assertTrue(result.getMembers().get(0).isActive());
+    assertNull(result.getMembers().get(0).getCurrentEstimation());
+  }
+
+  @Test
+  public void getActiveMembers_filtersInactive() {
+    val active = new Member(Utils.generateRandomID(), "Alice", "#fff", null, "3");
+    val inactive = new Member(Utils.generateRandomID(), "Bob", "#000", null, "5", false);
+    val session =
+        new Session(
+            null, null, null, null, null,
+            List.of(active, inactive),
+            new HashMap<>(), new ArrayList<>(),
+            SessionState.START_VOTING,
+            null, null, null, null, false, null);
+
+    val result = session.getActiveMembers();
+
+    assertEquals(1, result.size());
+    assertEquals(active.getMemberID(), result.get(0).getMemberID());
   }
 
   public void setHostEstimation_works() {

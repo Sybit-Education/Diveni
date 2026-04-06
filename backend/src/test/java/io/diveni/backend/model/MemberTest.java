@@ -6,8 +6,10 @@
 package io.diveni.backend.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import io.diveni.backend.Utils;
 import org.junit.jupiter.api.Test;
@@ -52,5 +54,37 @@ public class MemberTest {
 
     assertEquals(member.getCurrentEstimation(), vote);
     assertNull(result.getCurrentEstimation());
+  }
+
+  @Test
+  public void withActive_works() {
+    val member = new Member("id1", "John", "#fff", AvatarAnimal.WOLF, null, true);
+
+    val inactive = member.withActive(false);
+
+    assertFalse(inactive.isActive());
+    assertTrue(member.isActive());
+    assertEquals(member.getMemberID(), inactive.getMemberID());
+    assertEquals(member.getName(), inactive.getName());
+  }
+
+  @Test
+  public void updateEstimation_preservesIsActive() {
+    val member = new Member("id1", "John", "#fff", AvatarAnimal.WOLF, null, false);
+
+    val updated = member.updateEstimation("5");
+
+    assertFalse(updated.isActive());
+    assertEquals("5", updated.getCurrentEstimation());
+  }
+
+  @Test
+  public void resetEstimation_preservesIsActive() {
+    val member = new Member("id1", "John", "#fff", AvatarAnimal.WOLF, "5", false);
+
+    val reset = member.resetEstimation();
+
+    assertFalse(reset.isActive());
+    assertNull(reset.getCurrentEstimation());
   }
 }

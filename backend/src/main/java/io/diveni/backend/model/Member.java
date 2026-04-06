@@ -5,6 +5,8 @@
 */
 package io.diveni.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -26,11 +28,35 @@ public class Member {
 
   private String currentEstimation;
 
+  @JsonProperty("isActive")
+  private boolean isActive = true;
+
+  public Member(
+      String memberID,
+      String name,
+      String hexColor,
+      AvatarAnimal avatarAnimal,
+      String currentEstimation) {
+    this(memberID, name, hexColor, avatarAnimal, currentEstimation, true);
+  }
+
   public Member updateEstimation(String estimation) {
-    return new Member(this.memberID, this.name, this.hexColor, this.avatarAnimal, estimation);
+    return new Member(
+        this.memberID, this.name, this.hexColor, this.avatarAnimal, estimation, this.isActive);
   }
 
   public Member resetEstimation() {
-    return new Member(this.memberID, this.name, this.hexColor, this.avatarAnimal, null);
+    return new Member(
+        this.memberID, this.name, this.hexColor, this.avatarAnimal, null, this.isActive);
+  }
+
+  public Member withActive(boolean active) {
+    return new Member(
+        this.memberID,
+        this.name,
+        this.hexColor,
+        this.avatarAnimal,
+        this.currentEstimation,
+        active);
   }
 }

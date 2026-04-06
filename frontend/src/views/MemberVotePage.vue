@@ -109,6 +109,7 @@
         <session-member-card
           v-for="member of members"
           :key="member.memberID"
+          :class="{ 'member-inactive': !member.isActive }"
           :member="member"
           :props="{
             estimateFinished: votingFinished,
@@ -125,6 +126,7 @@
         <session-member-card
           v-for="member of members"
           :key="member.memberID"
+          :class="{ 'member-inactive': !member.isActive }"
           :member="member"
           :props="{
             estimateFinished: votingFinished,
@@ -195,12 +197,13 @@ import UserStoryDescriptions from "../components/UserStoryDescriptions.vue";
 import UserStorySumComponent from "@/components/UserStorySum.vue";
 import SessionLeaveButton from "@/components/actions/SessionLeaveButton.vue";
 import SessionAdminCard from "@/components/SessionAdminCard.vue";
-import { defineComponent } from "vue";
+import { defineComponent, watch } from "vue";
 import { useDiveniStore } from "@/store";
 import { useToast } from "vue-toastification";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import UserStoryTitle from "@/components/UserStoryTitle.vue";
+import { webSocketService, ConnectionState } from "@/services/WebSocketService";
 
 export default defineComponent({
   name: "MemberVotePage",
@@ -293,6 +296,7 @@ export default defineComponent({
         hexColor: this.hexColor,
         avatarAnimal: this.avatarAnimalAssetName,
         currentEstimation: "",
+        isActive: true,
       } as Member;
     },
     selectedUserStoryIndex() {
@@ -353,6 +357,20 @@ export default defineComponent({
     ) {
       this.goToJoinPage();
     }
+
+    watch(
+      () => webSocketService.connectionState.value,
+      (state, prevState) => {
+        if (
+          this.memberID &&
+          prevState === ConnectionState.RECONNECTING &&
+          state === ConnectionState.CONNECTED
+        ) {
+          this.store.sendViaBackendWS("/ws/registerMember", this.memberID);
+        }
+      }
+    );
+
     this.voteSet = JSON.parse(this.voteSetJson ?? "{}");
   },
   methods: {
@@ -447,6 +465,22 @@ export default defineComponent({
   }
   100% {
     opacity: 0;
+  }
+}
+
+.member-inactive {
+  opacity: 0.5;
+  position: relative;
+
+  &::after {
+    content: "\F61B";
+    font-family: "bootstrap-icons";
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    font-size: 1.2rem;
+    color: #dc3545;
+    opacity: 1;
   }
 }
 </style>

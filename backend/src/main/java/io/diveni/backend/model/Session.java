@@ -105,7 +105,7 @@ public class Session {
   }
 
   public Session selectHighlightedMembers() {
-    for (Member member : this.members) {
+    for (Member member : this.getActiveMembers()) {
       memberVoted.putIfAbsent(member.getMemberID(), 0);
     }
 
@@ -119,9 +119,11 @@ public class Session {
     if (!this.hostVoting
         || this.hostEstimation == null
         || this.hostEstimation.getHostEstimation().isEmpty()) {
-      maxEstimation = getFilteredEstimationStream(this.members).max(estimationByIndex(filteredSet));
+      maxEstimation =
+          getFilteredEstimationStream(this.getActiveMembers()).max(estimationByIndex(filteredSet));
     } else {
-      Stream<String> filteredEstimationsMember = getFilteredEstimationStream(this.members);
+      Stream<String> filteredEstimationsMember =
+          getFilteredEstimationStream(this.getActiveMembers());
       Stream<String> allEstimations =
           Stream.concat(
               filteredEstimationsMember, Stream.of(this.hostEstimation.getHostEstimation()));
@@ -130,9 +132,11 @@ public class Session {
     if (!this.hostVoting
         || this.hostEstimation == null
         || this.hostEstimation.getHostEstimation().isEmpty()) {
-      minEstimation = getFilteredEstimationStream(this.members).min(estimationByIndex(filteredSet));
+      minEstimation =
+          getFilteredEstimationStream(this.getActiveMembers()).min(estimationByIndex(filteredSet));
     } else {
-      Stream<String> filteredEstimationsMember = getFilteredEstimationStream(this.members);
+      Stream<String> filteredEstimationsMember =
+          getFilteredEstimationStream(this.getActiveMembers());
       Stream<String> allEstimations =
           Stream.concat(
               filteredEstimationsMember, Stream.of(this.hostEstimation.getHostEstimation()));
@@ -158,7 +162,7 @@ public class Session {
           hostEstimation);
     }
     val maxEstimationMembers =
-        this.members.stream()
+        this.getActiveMembers().stream()
             .filter(
                 (member) ->
                     member.getCurrentEstimation() != null
@@ -183,7 +187,7 @@ public class Session {
         Collections.max(maxOptions, Comparator.comparingInt(Map.Entry::getValue)).getKey();
 
     val minEstimationMembers =
-        this.members.stream()
+        this.getActiveMembers().stream()
             .filter(
                 (member) ->
                     member.getCurrentEstimation() != null
@@ -396,6 +400,60 @@ public class Session {
         creationTime,
         hostVoting,
         hostEstimation);
+  }
+
+  public Session deactivateMember(String memberID) {
+    val updatedMembers =
+        members.stream()
+            .map(m -> m.getMemberID().equals(memberID) ? m.withActive(false) : m)
+            .collect(Collectors.toList());
+    return new Session(
+        databaseID,
+        sessionID,
+        adminID,
+        sessionConfig,
+        adminCookie,
+        updatedMembers,
+        memberVoted,
+        currentHighlights,
+        sessionState,
+        lastModified,
+        accessToken,
+        timerTimestamp,
+        creationTime,
+        hostVoting,
+        hostEstimation);
+  }
+
+  public Session reactivateMember(String memberID) {
+    val updatedMembers =
+        members.stream()
+            .map(
+                m ->
+                    m.getMemberID().equals(memberID)
+                        ? m.withActive(true).resetEstimation()
+                        : m)
+            .collect(Collectors.toList());
+    return new Session(
+        databaseID,
+        sessionID,
+        adminID,
+        sessionConfig,
+        adminCookie,
+        updatedMembers,
+        memberVoted,
+        currentHighlights,
+        sessionState,
+        lastModified,
+        accessToken,
+        timerTimestamp,
+        creationTime,
+        hostVoting,
+        hostEstimation);
+  }
+
+  public List<Member> getActiveMembers() {
+    return members.stream().filter(Member::isActive).collect(Collectors.toList());
   }
 
   public Session setTimerTimestamp(String timestamp) {

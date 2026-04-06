@@ -7,6 +7,7 @@ package io.diveni.backend.service;
 
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -58,6 +59,16 @@ public class WebSocketService {
 
   @Getter private List<SessionPrincipals> sessionPrincipalList = List.of();
 
+  private final Set<String> pendingUnregister = ConcurrentHashMap.newKeySet();
+
+  public void markPendingUnregister(String memberID) {
+    pendingUnregister.add(memberID);
+  }
+
+  public boolean consumePendingUnregister(String memberID) {
+    return pendingUnregister.remove(memberID);
+  }
+
   public SessionPrincipals getSessionPrincipals(String sessionID) {
     LOGGER.debug("--> getSessionPrincipals(), sessionID={}", sessionID);
     SessionPrincipals sessionPrincipals =
@@ -97,6 +108,13 @@ public class WebSocketService {
 
   public synchronized void removeMember(MemberPrincipal member) {
     LOGGER.debug("--> removeMember(), member={}", member.getMemberID());
+    removeMemberPrincipal(member);
+    databaseService.addRemovedMember();
+    LOGGER.debug("<-- removeMember()");
+  }
+
+  public synchronized void removeMemberPrincipal(MemberPrincipal member) {
+    LOGGER.debug("--> removeMemberPrincipal(), member={}", member.getMemberID());
     val sessionPrincipals = getSessionPrincipals(member.getSessionID());
     val updatedMembers =
         sessionPrincipals.memberPrincipals().stream()
@@ -110,8 +128,7 @@ public class WebSocketService {
                   else return p;
                 })
             .collect(Collectors.toList());
-    databaseService.addRemovedMember();
-    LOGGER.debug("<-- removeMember()");
+    LOGGER.debug("<-- removeMemberPrincipal()");
   }
 
   public synchronized void removeAdmin(AdminPrincipal admin) {

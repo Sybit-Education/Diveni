@@ -71,7 +71,10 @@
         <kick-user-wrapper
           v-for="member of members"
           :key="member.memberID"
-          :class="isMobile ? 'm-4' : 'spaceBetweenAvatar'"
+          :class="[
+            isMobile ? 'm-4' : 'spaceBetweenAvatar',
+            { 'member-inactive': !member.isActive },
+          ]"
           child="RoundedAvatar"
           :member="member"
         />
@@ -174,7 +177,10 @@
         <kick-user-wrapper
           v-for="member of membersPending"
           :key="member.memberID"
-          :class="isMobile ? 'm-4' : 'spaceBetweenAvatar'"
+          :class="[
+            isMobile ? 'm-4' : 'spaceBetweenAvatar',
+            { 'member-inactive': !member.isActive },
+          ]"
           child="RoundedAvatar"
           :member="member"
         />
@@ -211,6 +217,7 @@
         <kick-user-wrapper
           v-for="member of estimateFinished ? members : membersEstimated"
           :key="member.memberID"
+          :class="{ 'member-inactive': !member.isActive }"
           child="SessionMemberCard"
           :member="member"
           :props="{
@@ -228,6 +235,7 @@
         <kick-user-wrapper
           v-for="member of estimateFinished ? members : membersEstimated"
           :key="member.memberID"
+          :class="{ 'member-inactive': !member.isActive }"
           child="SessionMemberCard"
           :member="member"
           :props="{
@@ -464,10 +472,14 @@ export default defineComponent({
       return this.store.highlightedMembers;
     },
     membersPending(): Member[] {
-      return this.members.filter((member: Member) => member.currentEstimation === null);
+      return this.members.filter(
+        (member: Member) => member.isActive && member.currentEstimation === null
+      );
     },
     membersEstimated(): Member[] {
-      return this.members.filter((member: Member) => member.currentEstimation !== null);
+      return this.members.filter(
+        (member: Member) => member.isActive && member.currentEstimation !== null
+      );
     },
     timerTimestamp() {
       return this.store.timerTimestamp ? this.store.timerTimestamp : "";
@@ -1019,5 +1031,21 @@ export default defineComponent({
 .catGif {
   width: 240px;
   height: 180px;
+}
+
+.member-inactive {
+  opacity: 0.5;
+  position: relative;
+
+  &::after {
+    content: "\F61B";
+    font-family: "bootstrap-icons";
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    font-size: 1.2rem;
+    color: #dc3545;
+    opacity: 1;
+  }
 }
 </style>

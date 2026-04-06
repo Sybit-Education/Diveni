@@ -67,6 +67,38 @@ public class WebsocketController {
     LOGGER.debug("--> joinMember()");
     val session =
         ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID());
+
+    // Check if this is a reconnecting inactive member
+    val inactiveMember =
+        session.getMembers().stream()
+            .filter(m -> m.getMemberID().equals(principal.getMemberID()) && !m.isActive())
+            .findFirst();
+
+    if (inactiveMember.isPresent()) {
+      // Reactivate existing member
+      val updatedSession = session.reactivateMember(principal.getMemberID());
+      databaseService.saveSession(updatedSession);
+      webSocketService.addMemberIfNew(principal);
+      webSocketService.sendMembersUpdate(updatedSession);
+      webSocketService.sendSessionStateToMember(updatedSession, principal.getName());
+      if (updatedSession.getTimerTimestamp() != null) {
+        webSocketService.sendTimerStartMessageToUser(
+            updatedSession, updatedSession.getTimerTimestamp(), principal.getMemberID());
+      }
+      webSocketService.sendUpdatedHostVotingToMember(updatedSession, principal.getMemberID());
+      if (updatedSession.getHostVoting()
+          && updatedSession.getSessionState().equals(SessionState.VOTING_FINISHED)) {
+        webSocketService.sendMembersAdminVote(updatedSession);
+      }
+      webSocketService.sendNotification(
+          updatedSession,
+          new Notification(
+              NotificationType.MEMBER_JOINED, new MemberPayload(principal.getMemberID())));
+      LOGGER.debug("<-- joinMember() [reactivated]");
+      return;
+    }
+
+    // Normal join flow
     webSocketService.addMemberIfNew(principal);
     webSocketService.sendMembersUpdate(session);
     webSocketService.sendSessionStateToMember(session, principal.getName());
@@ -89,6 +121,7 @@ public class WebsocketController {
   public synchronized void removeMember(Principal principal) {
     LOGGER.debug("--> removeMember()");
     if (principal instanceof MemberPrincipal) {
+      webSocketService.markPendingUnregister(((MemberPrincipal) principal).getMemberID());
       webSocketService.removeMember((MemberPrincipal) principal);
       val session =
           ControllerUtils.getSessionByMemberIDOrThrowResponse(
@@ -101,7 +134,7 @@ public class WebsocketController {
           new Notification(
               NotificationType.MEMBER_LEFT,
               new MemberPayload(((MemberPrincipal) principal).getMemberID())));
-      boolean votingCompleted = checkIfAllMembersVoted(session.getMembers(), session);
+      boolean votingCompleted = checkIfAllMembersVoted(session.getActiveMembers(), session);
       if (votingCompleted) {
         votingFinished(
             new AdminPrincipal(
@@ -200,7 +233,7 @@ public class WebsocketController {
             .setHostEstimation(vote);
     databaseService.saveSession(session);
     if (autoReveal) {
-      if (checkIfAllMembersVoted(session.getMembers(), session)) {
+      if (checkIfAllMembersVoted(session.getActiveMembers(), session)) {
         votingFinished(new AdminPrincipal(admin.getSessionID(), admin.getAdminID()));
       }
     }
@@ -220,7 +253,7 @@ public class WebsocketController {
     databaseService.saveSession(session);
 
     if (autoReveal) {
-      if (checkIfAllMembersVoted(session.getMembers(), session)) {
+      if (checkIfAllMembersVoted(session.getActiveMembers(), session)) {
         votingFinished(
             new AdminPrincipal(
                 member.getSessionID(),
@@ -304,5 +337,24 @@ public class WebsocketController {
     }
     LOGGER.debug("<-- isMemberInSession(). principal is NOT instanceof MemberPrincipal");
     return false;
+  }
+
+  public synchronized void deactivateMember(MemberPrincipal principal) {
+    LOGGER.debug("--> deactivateMember()");
+    webSocketService.removeMemberPrincipal(principal);
+    val session =
+        ControllerUtils.getSessionByMemberIDOrThrowResponse(
+                databaseService, principal.getMemberID())
+            .deactivateMember(principal.getMemberID());
+    databaseService.saveSession(session);
+    webSocketService.sendMembersUpdate(session);
+    boolean votingCompleted = checkIfAllMembersVoted(session.getActiveMembers(), session);
+    if (votingCompleted) {
+      votingFinished(
+          new AdminPrincipal(
+              session.getSessionID(),
+              databaseService.getSessionByID(session.getSessionID()).get().getAdminID()));
+    }
+    LOGGER.debug("<-- deactivateMember()");
   }
 }

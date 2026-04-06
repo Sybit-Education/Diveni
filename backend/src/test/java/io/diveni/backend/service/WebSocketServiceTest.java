@@ -5,6 +5,7 @@
 */
 package io.diveni.backend.service;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.times;
@@ -589,5 +590,20 @@ public class WebSocketServiceTest {
             defaultMemberPrincipal.getMemberID(),
             WebSocketService.ADMIN_UPDATED_ESTIMATION,
             session.getHostEstimation());
+  }
+
+  @Test
+  public void markPendingUnregister_and_consumePending_works() {
+    val memberID = "member-123";
+
+    webSocketService.markPendingUnregister(memberID);
+
+    assertTrue(webSocketService.consumePendingUnregister(memberID));
+    assertFalse(webSocketService.consumePendingUnregister(memberID));
+  }
+
+  @Test
+  public void consumePendingUnregister_returnsFalse_whenNotMarked() {
+    assertFalse(webSocketService.consumePendingUnregister("unknown-member"));
   }
 }
