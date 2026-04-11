@@ -136,10 +136,7 @@ public class WebsocketController {
               new MemberPayload(((MemberPrincipal) principal).getMemberID())));
       boolean votingCompleted = checkIfAllMembersVoted(session.getActiveMembers(), session);
       if (votingCompleted) {
-        votingFinished(
-            new AdminPrincipal(
-                session.getSessionID(),
-                databaseService.getSessionByID(session.getSessionID()).get().getAdminID()));
+        votingFinished(new AdminPrincipal(session.getSessionID(), session.getAdminID()));
       }
     } else {
       val session =
@@ -254,10 +251,7 @@ public class WebsocketController {
 
     if (autoReveal) {
       if (checkIfAllMembersVoted(session.getActiveMembers(), session)) {
-        votingFinished(
-            new AdminPrincipal(
-                member.getSessionID(),
-                databaseService.getSessionByID(member.getSessionID()).get().getAdminID()));
+        votingFinished(new AdminPrincipal(session.getSessionID(), session.getAdminID()));
       }
     }
     LOGGER.debug("<-- processVote()");
@@ -350,10 +344,7 @@ public class WebsocketController {
     webSocketService.sendMembersUpdate(session);
     boolean votingCompleted = checkIfAllMembersVoted(session.getActiveMembers(), session);
     if (votingCompleted) {
-      votingFinished(
-          new AdminPrincipal(
-              session.getSessionID(),
-              databaseService.getSessionByID(session.getSessionID()).get().getAdminID()));
+      votingFinished(new AdminPrincipal(session.getSessionID(), session.getAdminID()));
     }
     LOGGER.debug("<-- deactivateMember()");
   }

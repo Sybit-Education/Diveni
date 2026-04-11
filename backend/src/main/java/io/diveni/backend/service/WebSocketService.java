@@ -59,14 +59,22 @@ public class WebSocketService {
 
   @Getter private List<SessionPrincipals> sessionPrincipalList = List.of();
 
-  private final Set<String> pendingUnregister = ConcurrentHashMap.newKeySet();
+  private static final long PENDING_UNREGISTER_TTL_MS = 60_000;
+
+  private final ConcurrentHashMap<String, Long> pendingUnregister = new ConcurrentHashMap<>();
 
   public void markPendingUnregister(String memberID) {
-    pendingUnregister.add(memberID);
+    pendingUnregister.put(memberID, System.currentTimeMillis());
+    evictStalePendingUnregisters();
   }
 
   public boolean consumePendingUnregister(String memberID) {
-    return pendingUnregister.remove(memberID);
+    return pendingUnregister.remove(memberID) != null;
+  }
+
+  private void evictStalePendingUnregisters() {
+    long cutoff = System.currentTimeMillis() - PENDING_UNREGISTER_TTL_MS;
+    pendingUnregister.entrySet().removeIf(entry -> entry.getValue() < cutoff);
   }
 
   public SessionPrincipals getSessionPrincipals(String sessionID) {

@@ -183,18 +183,18 @@
       <h4 v-if="!hostVoting">
         {{ t("page.session.during.estimation.message.finished") }}
         {{ membersEstimated.length }} /
-        {{ members.length }}
+        {{ membersPending.length + membersEstimated.length }}
       </h4>
       <h4 v-else>
         <div v-if="hostEstimation == ''">
           {{ t("page.session.during.estimation.message.finished") }}
           {{ membersEstimated.length }} /
-          {{ members.length + 1 }}
+          {{ membersPending.length + membersEstimated.length + 1 }}
         </div>
         <div v-else>
           {{ t("page.session.during.estimation.message.finished") }}
           {{ membersEstimated.length + 1 }} /
-          {{ members.length + 1 }}
+          {{ membersPending.length + membersEstimated.length + 1 }}
         </div>
       </h4>
       <b-row

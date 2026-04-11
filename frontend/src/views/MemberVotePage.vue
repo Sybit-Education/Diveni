@@ -271,9 +271,6 @@ export default defineComponent({
     members() {
       return this.store.members;
     },
-    membersEstimated(): Member[] {
-      return this.members.filter((member: Member) => member.currentEstimation !== null);
-    },
     highlightedMembers() {
       return this.store.highlightedMembers;
     },
@@ -366,7 +363,7 @@ export default defineComponent({
           prevState === ConnectionState.RECONNECTING &&
           state === ConnectionState.CONNECTED
         ) {
-          this.store.sendViaBackendWS("/ws/registerMember", this.memberID);
+          this.store.sendViaBackendWS(Constants.webSocketRegisterMemberRoute);
         }
       }
     );
