@@ -1,6 +1,10 @@
 <template>
   <div class="component" :style="{ width: width }">
-    <div :id="targetId" class="member-card" :class="{ 'member-inactive': !member.isActive }">
+    <div
+      :id="targetId"
+      class="member-card"
+      :class="{ 'member-inactive': !member.isActive && child === 'RoundedAvatar' }"
+    >
       <Component :is="child" :member="member" :props="props" />
     </div>
     <b-popover :target="targetId" hover placement="top" boundary="viewport">
@@ -91,8 +95,8 @@ export default defineComponent({
   content: "\F61B";
   font-family: "bootstrap-icons", sans-serif;
   position: absolute;
-  top: 4px;
-  right: 4px;
+  top: 0;
+  right: 0;
   font-size: 1.2rem;
   color: #dc3545;
   opacity: 1;

@@ -109,7 +109,6 @@
         <session-member-card
           v-for="member of members"
           :key="member.memberID"
-          :class="{ 'member-inactive': !member.isActive }"
           :member="member"
           :props="{
             estimateFinished: votingFinished,
@@ -126,7 +125,6 @@
         <session-member-card
           v-for="member of members"
           :key="member.memberID"
-          :class="{ 'member-inactive': !member.isActive }"
           :member="member"
           :props="{
             estimateFinished: votingFinished,
@@ -462,22 +460,6 @@ export default defineComponent({
   }
   100% {
     opacity: 0;
-  }
-}
-
-.member-inactive {
-  opacity: 0.5;
-  position: relative;
-
-  &::after {
-    content: "\F61B";
-    font-family: "bootstrap-icons";
-    position: absolute;
-    top: 4px;
-    right: 4px;
-    font-size: 1.2rem;
-    color: #dc3545;
-    opacity: 1;
   }
 }
 </style>

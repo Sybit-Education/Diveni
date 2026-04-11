@@ -178,6 +178,13 @@
           child="RoundedAvatar"
           :member="member"
         />
+        <kick-user-wrapper
+          v-for="member of membersInactive"
+          :key="member.memberID"
+          :class="[isMobile ? 'm-4' : 'spaceBetweenAvatar']"
+          child="RoundedAvatar"
+          :member="member"
+        />
       </b-row>
       <hr class="my-5 breakingLine" />
       <h4 v-if="!hostVoting">
@@ -472,6 +479,9 @@ export default defineComponent({
       return this.members.filter(
         (member: Member) => member.isActive && member.currentEstimation !== null
       );
+    },
+    membersInactive(): Member[] {
+      return this.members.filter((member: Member) => !member.isActive);
     },
     timerTimestamp() {
       return this.store.timerTimestamp ? this.store.timerTimestamp : "";
