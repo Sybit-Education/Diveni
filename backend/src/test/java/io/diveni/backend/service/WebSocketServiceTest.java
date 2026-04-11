@@ -593,6 +593,32 @@ public class WebSocketServiceTest {
   }
 
   @Test
+  public void addMember_noSessionEntry_createsEntry() {
+    val sessionID = Utils.generateRandomID();
+    val memberPrincipal = new MemberPrincipal(sessionID, Utils.generateRandomID());
+
+    webSocketService.addMemberIfNew(memberPrincipal);
+
+    val principals = webSocketService.getSessionPrincipals(sessionID);
+    Assertions.assertNull(principals.adminPrincipal());
+    Assertions.assertTrue(principals.memberPrincipals().contains(memberPrincipal));
+  }
+
+  @Test
+  public void addMemberBeforeAdmin_adminPreservesMember() {
+    val sessionID = Utils.generateRandomID();
+    val memberPrincipal = new MemberPrincipal(sessionID, Utils.generateRandomID());
+    val adminPrincipal = new AdminPrincipal(sessionID, Utils.generateRandomID());
+
+    webSocketService.addMemberIfNew(memberPrincipal);
+    webSocketService.setAdminUser(adminPrincipal);
+
+    val principals = webSocketService.getSessionPrincipals(sessionID);
+    Assertions.assertEquals(adminPrincipal, principals.adminPrincipal());
+    Assertions.assertTrue(principals.memberPrincipals().contains(memberPrincipal));
+  }
+
+  @Test
   public void markPendingUnregister_and_consumePending_works() {
     val memberID = "member-123";
 

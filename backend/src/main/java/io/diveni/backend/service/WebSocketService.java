@@ -93,7 +93,26 @@ public class WebSocketService {
 
   public synchronized void addMemberIfNew(MemberPrincipal member) {
     LOGGER.debug("--> addMemberIfNew(), member={}", member.getMemberID());
-    val sessionPrincipals = getSessionPrincipals(member.getSessionID());
+    val sessionPrincipals =
+        sessionPrincipalList.stream()
+            .filter(s -> s.sessionID().equals(member.getSessionID()))
+            .findFirst()
+            .orElse(null);
+
+    if (sessionPrincipals == null) {
+      LOGGER.info(
+          "Session {} not yet in principal list, creating entry for member {}",
+          member.getSessionID(),
+          member.getMemberID());
+      sessionPrincipalList =
+          Stream.concat(
+                  sessionPrincipalList.stream(),
+                  Stream.of(new SessionPrincipals(member.getSessionID(), null, Set.of(member))))
+              .collect(Collectors.toList());
+      LOGGER.debug("<-- addMemberIfNew()");
+      return;
+    }
+
     val updatedMembers =
         Stream.concat(
                 sessionPrincipals.memberPrincipals().stream()
