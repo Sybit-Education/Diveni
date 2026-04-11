@@ -52,11 +52,6 @@ public class Member {
 
   public Member withActive(boolean active) {
     return new Member(
-        this.memberID,
-        this.name,
-        this.hexColor,
-        this.avatarAnimal,
-        this.currentEstimation,
-        active);
+        this.memberID, this.name, this.hexColor, this.avatarAnimal, this.currentEstimation, active);
   }
 }
