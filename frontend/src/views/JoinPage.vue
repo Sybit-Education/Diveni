@@ -1,17 +1,24 @@
 <template class="main">
   <b-container>
-    <h1 id="heading">
-      {{ t("page.join.title") }}
-      <!-- <b-img :src="require('@/assets/ControllerJoinPage.png')" id="controller"/> -->
-      <i id="controller" class="bi bi-controller"></i>
-    </h1>
-    <join-page-card
-      :color="hexColor"
-      :animal-asset-name="avatarAnimalAssetName"
-      :button-text="t('page.join.submit')"
-      :session-id-from-url="sessionID"
-      @clicked="sendJoinSessionRequest"
-    />
+    <b-overlay :show="isJoining">
+      <template #overlay>
+        <b-spinner class="me-2" />
+        <span class="overlayText">
+          {{ t("session.connection.connecting") }}
+        </span>
+      </template>
+      <h1 id="heading">
+        {{ t("page.join.title") }}
+        <i id="controller" class="bi bi-controller"></i>
+      </h1>
+      <join-page-card
+        :color="hexColor"
+        :animal-asset-name="avatarAnimalAssetName"
+        :button-text="t('page.join.submit')"
+        :session-id-from-url="sessionID"
+        @clicked="sendJoinSessionRequest"
+      />
+    </b-overlay>
   </b-container>
 </template>
 
@@ -43,6 +50,7 @@ export default defineComponent({
   },
   data() {
     return {
+      isJoining: false,
       hexColor: Constants.getRandomPastelColor(),
       avatarAnimalAssetName: Constants.getRandomAvatarAnimalAssetName(),
       memberID: uuidv4(),
@@ -74,6 +82,7 @@ export default defineComponent({
   },
   methods: {
     async sendJoinSessionRequest(data: JoinCommand) {
+      this.isJoining = true;
       await this.store.clearStore();
       this.name = data.name;
       const url = `${Constants.backendURL}${Constants.joinSessionRoute(data.sessionID)}`;
@@ -104,6 +113,7 @@ export default defineComponent({
         });
         this.connectToWebSocket(data.sessionID, joinInfo.member.memberID);
       } catch (e) {
+        this.isJoining = false;
         console.error(`Response of ${url} is invalid: ${e}`);
         this.showToast(e);
       }
@@ -157,6 +167,12 @@ export default defineComponent({
 
 <!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
 <style lang="scss" scoped>
+.overlayText {
+  font-size: 2em;
+  margin: 0.67em 0;
+  font-weight: bold;
+}
+
 #heading {
   display: flex;
   justify-content: center;

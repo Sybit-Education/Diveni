@@ -405,6 +405,7 @@
       }
     },
     "connection": {
+      "connecting": "Connecting...",
       "reconnecting": "Connection lost — reconnecting...",
       "disconnected": "Connection lost",
       "reconnected": "Reconnected"
