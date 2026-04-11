@@ -3,12 +3,7 @@
     <div id="picture-holderLeave">
       <b-img id="pandaPictureLeave" :src="leaveButtonImg" />
     </div>
-    <b-button
-      v-b-modal.close-session-modal
-      variant="danger"
-      class="mt-4 button"
-      @click="leaveSession"
-    >
+    <b-button variant="danger" class="mt-4 button" @click="leaveSession">
       <i class="bi bi-x"></i>
       {{ t("page.vote.button.leave.label") }}
     </b-button>
