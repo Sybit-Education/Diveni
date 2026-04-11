@@ -428,11 +428,7 @@ public class Session {
   public Session reactivateMember(String memberID) {
     val updatedMembers =
         members.stream()
-            .map(
-                m ->
-                    m.getMemberID().equals(memberID)
-                        ? m.withActive(true).resetEstimation()
-                        : m)
+            .map(m -> m.getMemberID().equals(memberID) ? m.withActive(true).resetEstimation() : m)
             .collect(Collectors.toList());
     return new Session(
         databaseID,

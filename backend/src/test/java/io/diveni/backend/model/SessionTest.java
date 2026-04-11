@@ -538,11 +538,21 @@ public class SessionTest {
     val member = new Member(memberID, "John", "#fff", null, "5");
     val session =
         new Session(
-            null, null, null, null, null,
+            null,
+            null,
+            null,
+            null,
+            null,
             List.of(member),
-            new HashMap<>(), new ArrayList<>(),
+            new HashMap<>(),
+            new ArrayList<>(),
             SessionState.START_VOTING,
-            null, null, null, null, false, null);
+            null,
+            null,
+            null,
+            null,
+            false,
+            null);
 
     val result = session.deactivateMember(memberID);
 
@@ -557,11 +567,21 @@ public class SessionTest {
     val member = new Member(memberID, "John", "#fff", null, "5", false);
     val session =
         new Session(
-            null, null, null, null, null,
+            null,
+            null,
+            null,
+            null,
+            null,
             List.of(member),
-            new HashMap<>(), new ArrayList<>(),
+            new HashMap<>(),
+            new ArrayList<>(),
             SessionState.START_VOTING,
-            null, null, null, null, false, null);
+            null,
+            null,
+            null,
+            null,
+            false,
+            null);
 
     val result = session.reactivateMember(memberID);
 
@@ -576,11 +596,21 @@ public class SessionTest {
     val inactive = new Member(Utils.generateRandomID(), "Bob", "#000", null, "5", false);
     val session =
         new Session(
-            null, null, null, null, null,
+            null,
+            null,
+            null,
+            null,
+            null,
             List.of(active, inactive),
-            new HashMap<>(), new ArrayList<>(),
+            new HashMap<>(),
+            new ArrayList<>(),
             SessionState.START_VOTING,
-            null, null, null, null, false, null);
+            null,
+            null,
+            null,
+            null,
+            false,
+            null);
 
     val result = session.getActiveMembers();
 
