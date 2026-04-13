@@ -296,6 +296,7 @@
             :select-story="true"
             :host="true"
             :story-mode="userStoryMode"
+            :host-selected-story-index="index"
             :splitted-user-stories="splitted_user_stories"
             :story-to-split-idx="index"
             :has-api-key="hasApiKey"
