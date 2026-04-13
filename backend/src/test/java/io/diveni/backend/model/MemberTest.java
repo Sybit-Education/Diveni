@@ -8,6 +8,7 @@ package io.diveni.backend.model;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -86,5 +87,48 @@ public class MemberTest {
 
     assertFalse(reset.isActive());
     assertNull(reset.getCurrentEstimation());
+  }
+
+  @Test
+  public void withActive_false_setsDeactivatedAt() {
+    val member = new Member("id1", "John", "#fff", AvatarAnimal.WOLF, null);
+
+    val inactive = member.withActive(false);
+
+    assertFalse(inactive.isActive());
+    assertNotNull(inactive.getDeactivatedAt());
+  }
+
+  @Test
+  public void withActive_true_clearsDeactivatedAt() {
+    val member = new Member("id1", "John", "#fff", AvatarAnimal.WOLF, null);
+    val inactive = member.withActive(false);
+
+    val reactivated = inactive.withActive(true);
+
+    assertTrue(reactivated.isActive());
+    assertNull(reactivated.getDeactivatedAt());
+  }
+
+  @Test
+  public void updateEstimation_preservesDeactivatedAt() {
+    val member = new Member("id1", "John", "#fff", AvatarAnimal.WOLF, null);
+    val inactive = member.withActive(false);
+    val deactivatedAt = inactive.getDeactivatedAt();
+
+    val updated = inactive.updateEstimation("5");
+
+    assertEquals(deactivatedAt, updated.getDeactivatedAt());
+  }
+
+  @Test
+  public void resetEstimation_preservesDeactivatedAt() {
+    val member = new Member("id1", "John", "#fff", AvatarAnimal.WOLF, "5");
+    val inactive = member.withActive(false);
+    val deactivatedAt = inactive.getDeactivatedAt();
+
+    val reset = inactive.resetEstimation();
+
+    assertEquals(deactivatedAt, reset.getDeactivatedAt());
   }
 }

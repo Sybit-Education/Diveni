@@ -6,6 +6,7 @@
 package io.diveni.backend.model;
 
 import java.util.AbstractMap;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
@@ -71,6 +72,8 @@ public class Session {
 
   private final AdminVote hostEstimation;
 
+  private final Integer selectedUserStoryIndex;
+
   static Comparator<String> estimationByIndex(List<String> set) {
     return Comparator.comparingInt((str) -> set.indexOf(str));
   }
@@ -101,7 +104,8 @@ public class Session {
         timerTimestamp,
         creationTime,
         hostVoting,
-        hostEstimation);
+        hostEstimation,
+        selectedUserStoryIndex);
   }
 
   public Session selectHighlightedMembers() {
@@ -159,7 +163,8 @@ public class Session {
           timerTimestamp,
           creationTime,
           hostVoting,
-          hostEstimation);
+          hostEstimation,
+        selectedUserStoryIndex);
     }
     val maxEstimationMembers =
         this.getActiveMembers().stream()
@@ -251,7 +256,8 @@ public class Session {
         timerTimestamp,
         creationTime,
         hostVoting,
-        hostEstimation);
+        hostEstimation,
+        selectedUserStoryIndex);
   }
 
   public Session resetCurrentHighlights() {
@@ -270,7 +276,8 @@ public class Session {
         timerTimestamp,
         creationTime,
         hostVoting,
-        hostEstimation);
+        hostEstimation,
+        selectedUserStoryIndex);
   }
 
   public Session updateUserStories(List<UserStory> userStories) {
@@ -296,7 +303,8 @@ public class Session {
         timerTimestamp,
         creationTime,
         hostVoting,
-        hostEstimation);
+        hostEstimation,
+        selectedUserStoryIndex);
   }
 
   public Session resetEstimations() {
@@ -317,7 +325,8 @@ public class Session {
         timerTimestamp,
         creationTime,
         hostVoting,
-        new AdminVote(""));
+        new AdminVote(""),
+        selectedUserStoryIndex);
   }
 
   public Session updateMembers(List<Member> updatedMembers) {
@@ -336,7 +345,8 @@ public class Session {
         timerTimestamp,
         creationTime,
         hostVoting,
-        hostEstimation);
+        hostEstimation,
+        selectedUserStoryIndex);
   }
 
   public Session updateSessionState(SessionState updatedSessionState) {
@@ -355,7 +365,8 @@ public class Session {
         timerTimestamp,
         creationTime,
         hostVoting,
-        hostEstimation);
+        hostEstimation,
+        selectedUserStoryIndex);
   }
 
   public Session addMember(Member member) {
@@ -376,7 +387,8 @@ public class Session {
         timerTimestamp,
         creationTime,
         hostVoting,
-        hostEstimation);
+        hostEstimation,
+        selectedUserStoryIndex);
   }
 
   public Session removeMember(String memberID) {
@@ -399,7 +411,8 @@ public class Session {
         timerTimestamp,
         creationTime,
         hostVoting,
-        hostEstimation);
+        hostEstimation,
+        selectedUserStoryIndex);
   }
 
   public Session deactivateMember(String memberID) {
@@ -422,13 +435,19 @@ public class Session {
         timerTimestamp,
         creationTime,
         hostVoting,
-        hostEstimation);
+        hostEstimation,
+        selectedUserStoryIndex);
   }
 
   public Session reactivateMember(String memberID) {
+    val preserveEstimation = SessionState.VOTING_FINISHED.equals(sessionState);
     val updatedMembers =
         members.stream()
-            .map(m -> m.getMemberID().equals(memberID) ? m.withActive(true).resetEstimation() : m)
+            .map(
+                m -> {
+                  if (!m.getMemberID().equals(memberID)) return m;
+                  return preserveEstimation ? m.withActive(true) : m.withActive(true).resetEstimation();
+                })
             .collect(Collectors.toList());
     return new Session(
         databaseID,
@@ -445,11 +464,27 @@ public class Session {
         timerTimestamp,
         creationTime,
         hostVoting,
-        hostEstimation);
+        hostEstimation,
+        selectedUserStoryIndex);
   }
 
   public List<Member> getActiveMembers() {
     return members.stream().filter(Member::isActive).collect(Collectors.toList());
+  }
+
+  public Session removeStaleInactiveMembers(Instant cutoff) {
+    val updatedMembers =
+        members.stream()
+            .filter(
+                m ->
+                    m.isActive()
+                        || m.getDeactivatedAt() == null
+                        || m.getDeactivatedAt().isAfter(cutoff))
+            .collect(Collectors.toList());
+    if (updatedMembers.size() == members.size()) {
+      return this;
+    }
+    return updateMembers(updatedMembers);
   }
 
   public Session setTimerTimestamp(String timestamp) {
@@ -468,7 +503,8 @@ public class Session {
         timestamp,
         creationTime,
         hostVoting,
-        hostEstimation);
+        hostEstimation,
+        selectedUserStoryIndex);
   }
 
   public Session resetTimerTimestamp() {
@@ -487,7 +523,8 @@ public class Session {
         null,
         creationTime,
         hostVoting,
-        hostEstimation);
+        hostEstimation,
+        selectedUserStoryIndex);
   }
 
   public Session setLastModified(Date lastModified) {
@@ -506,7 +543,8 @@ public class Session {
         timerTimestamp,
         creationTime,
         hostVoting,
-        hostEstimation);
+        hostEstimation,
+        selectedUserStoryIndex);
   }
 
   public Session setAccessToken(String token) {
@@ -525,7 +563,8 @@ public class Session {
         timerTimestamp,
         creationTime,
         hostVoting,
-        hostEstimation);
+        hostEstimation,
+        selectedUserStoryIndex);
   }
 
   public Session setHostVoting(boolean isHostVoting) {
@@ -544,11 +583,32 @@ public class Session {
         timerTimestamp,
         creationTime,
         isHostVoting,
-        hostEstimation);
+        hostEstimation,
+        selectedUserStoryIndex);
   }
 
   public boolean getHostVoting() {
     return hostVoting;
+  }
+
+  public Session setSelectedUserStoryIndex(Integer index) {
+    return new Session(
+        databaseID,
+        sessionID,
+        adminID,
+        sessionConfig,
+        adminCookie,
+        members,
+        memberVoted,
+        currentHighlights,
+        sessionState,
+        lastModified,
+        accessToken,
+        timerTimestamp,
+        creationTime,
+        hostVoting,
+        hostEstimation,
+        index);
   }
 
   public Session setHostEstimation(String vote) {
@@ -567,6 +627,7 @@ public class Session {
         timerTimestamp,
         creationTime,
         hostVoting,
-        new AdminVote(vote));
+        new AdminVote(vote),
+        selectedUserStoryIndex);
   }
 }

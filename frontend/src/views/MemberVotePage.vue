@@ -350,8 +350,58 @@ export default defineComponent({
       this.hexColor === undefined ||
       this.avatarAnimalAssetName === undefined
     ) {
-      this.goToJoinPage();
+      // Try localStorage recovery (page refresh)
+      const saved = localStorage.getItem("diveni_member_session");
+      if (!saved) {
+        this.goToJoinPage();
+        return;
+      }
+      let parsed;
+      try {
+        parsed = JSON.parse(saved);
+      } catch {
+        localStorage.removeItem("diveni_member_session");
+        this.goToJoinPage();
+        return;
+      }
+      if (!parsed.memberID || !parsed.sessionID) {
+        localStorage.removeItem("diveni_member_session");
+        this.goToJoinPage();
+        return;
+      }
+      this.memberID = parsed.memberID;
+      this.name = parsed.name;
+      this.hexColor = parsed.hexColor;
+      this.avatarAnimalAssetName = parsed.avatarAnimalAssetName;
+      this.voteSetJson = parsed.voteSetJson;
+      this.timerSecondsString = parsed.timerSecondsString;
+      this.userStoryMode = parsed.userStoryMode;
+
+      this.timerCountdownNumber = Number.parseInt(this.timerSecondsString ?? "0");
+      this.voteSet = JSON.parse(this.voteSetJson ?? "[]");
+
+      this.setupSubscriptions();
+      const url = `${Constants.backendURL}/connect?sessionID=${parsed.sessionID}&memberID=${parsed.memberID}`;
+      this.store.connectToBackendWS(url);
+
+      // Watch for initial connect AND reconnects — send /registerMember in both cases
+      watch(
+        () => webSocketService.connectionState.value,
+        (state, prevState) => {
+          if (
+            this.memberID &&
+            state === ConnectionState.CONNECTED &&
+            (prevState === ConnectionState.CONNECTING || prevState === ConnectionState.RECONNECTING)
+          ) {
+            this.store.sendViaBackendWS(Constants.webSocketRegisterMemberRoute);
+          }
+        }
+      );
+      return;
     }
+
+    // Normal flow (navigated from JoinPage, not a page refresh)
+    this.store.subscribeOnBackendWSError(this.onSessionError);
 
     watch(
       () => webSocketService.connectionState.value,
@@ -366,7 +416,7 @@ export default defineComponent({
       }
     );
 
-    this.voteSet = JSON.parse(this.voteSetJson ?? "{}");
+    this.voteSet = JSON.parse(this.voteSetJson ?? "[]");
   },
   methods: {
     isAdminHighlighted() {
@@ -408,7 +458,7 @@ export default defineComponent({
       this.router.push({ name: "JoinPage" });
     },
     leaveMeeting() {
-      window.localStorage.removeItem("memberCookie");
+      localStorage.removeItem("diveni_member_session");
       this.router.push({ name: "LandingPage" });
     },
     reactOnHostLeave() {
@@ -416,6 +466,29 @@ export default defineComponent({
     },
     reactOnHostJoin() {
       this.pauseSession = false;
+    },
+    setupSubscriptions() {
+      this.store.subscribeOnBackendWSMemberUpdates();
+      this.store.subscribeOnBackendWSMemberUpdatesWithAutoReveal();
+      this.store.subscribeOnBackendWSStoriesUpdated();
+      this.store.subscribeOnBackendWSStorySelected();
+      this.store.subscribeOnBackendWSAdminUpdate();
+      this.store.subscribeOnBackendWSTimerStart();
+      this.store.subscribeOnBackendWSNotify();
+      this.store.subscribeOnBackendWSHostVoting();
+      this.store.subscribeOnBackendWSHostEstimation();
+      this.store.subscribeOnBackendWSError(this.onSessionError);
+    },
+    onSessionError(errorCode: string) {
+      localStorage.removeItem("diveni_member_session");
+      const messageKey =
+        errorCode === "SESSION_NOT_FOUND"
+          ? "session.notification.messages.sessionNotFound"
+          : errorCode === "MEMBER_NOT_IN_SESSION"
+            ? "session.notification.messages.memberNotInSession"
+            : "session.notification.messages.sessionLost";
+      this.toast.error(this.t(messageKey));
+      this.goToJoinPage();
     },
   },
 });

@@ -5,6 +5,9 @@
 */
 package io.diveni.backend.model;
 
+import java.time.Instant;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
@@ -31,27 +34,57 @@ public class Member {
   @JsonProperty("isActive")
   private boolean isActive = true;
 
+  @JsonIgnore @EqualsAndHashCode.Exclude private Instant deactivatedAt;
+
   public Member(
       String memberID,
       String name,
       String hexColor,
       AvatarAnimal avatarAnimal,
       String currentEstimation) {
-    this(memberID, name, hexColor, avatarAnimal, currentEstimation, true);
+    this(memberID, name, hexColor, avatarAnimal, currentEstimation, true, null);
+  }
+
+  public Member(
+      String memberID,
+      String name,
+      String hexColor,
+      AvatarAnimal avatarAnimal,
+      String currentEstimation,
+      boolean isActive) {
+    this(memberID, name, hexColor, avatarAnimal, currentEstimation, isActive, null);
   }
 
   public Member updateEstimation(String estimation) {
     return new Member(
-        this.memberID, this.name, this.hexColor, this.avatarAnimal, estimation, this.isActive);
+        this.memberID,
+        this.name,
+        this.hexColor,
+        this.avatarAnimal,
+        estimation,
+        this.isActive,
+        this.deactivatedAt);
   }
 
   public Member resetEstimation() {
     return new Member(
-        this.memberID, this.name, this.hexColor, this.avatarAnimal, null, this.isActive);
+        this.memberID,
+        this.name,
+        this.hexColor,
+        this.avatarAnimal,
+        null,
+        this.isActive,
+        this.deactivatedAt);
   }
 
   public Member withActive(boolean active) {
     return new Member(
-        this.memberID, this.name, this.hexColor, this.avatarAnimal, this.currentEstimation, active);
+        this.memberID,
+        this.name,
+        this.hexColor,
+        this.avatarAnimal,
+        this.currentEstimation,
+        active,
+        active ? null : Instant.now());
   }
 }

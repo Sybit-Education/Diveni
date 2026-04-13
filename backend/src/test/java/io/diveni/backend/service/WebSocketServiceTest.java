@@ -176,6 +176,7 @@ public class WebSocketServiceTest {
             null,
             null,
             false,
+            null,
             null);
 
     webSocketService.sendMembersUpdate(session);
@@ -206,6 +207,7 @@ public class WebSocketServiceTest {
             null,
             null,
             false,
+            null,
             null);
 
     webSocketService.sendSessionStateToMember(session, defaultMemberPrincipal.getMemberID());
@@ -236,6 +238,7 @@ public class WebSocketServiceTest {
             null,
             null,
             false,
+            null,
             null);
 
     webSocketService.sendSessionStateToMemberWithAutoReveal(
@@ -267,6 +270,7 @@ public class WebSocketServiceTest {
             null,
             null,
             false,
+            null,
             null);
 
     webSocketService.sendSessionStateToMemberWithAutoReveal(
@@ -302,6 +306,7 @@ public class WebSocketServiceTest {
             null,
             null,
             false,
+            null,
             null);
 
     webSocketService.sendSessionStateToMembers(session);
@@ -341,6 +346,7 @@ public class WebSocketServiceTest {
             null,
             null,
             false,
+            null,
             null);
 
     webSocketService.sendSessionStateToMembersWithAutoReveal(session, true);
@@ -380,6 +386,7 @@ public class WebSocketServiceTest {
             null,
             null,
             false,
+            null,
             null);
 
     webSocketService.sendSessionStateToMembersWithAutoReveal(session, false);
@@ -419,6 +426,7 @@ public class WebSocketServiceTest {
             null,
             null,
             false,
+            null,
             null);
 
     webSocketService.sendUpdatedUserStoriesToMembers(session);
@@ -460,6 +468,7 @@ public class WebSocketServiceTest {
             null,
             null,
             false,
+            null,
             null);
 
     webSocketService.sendSelectedUserStoryToMembers(session, selectedUserStoryIndex);
@@ -494,6 +503,7 @@ public class WebSocketServiceTest {
             null,
             null,
             false,
+            null,
             null);
     val notification = new Notification(NotificationType.ADMIN_LEFT, null);
 
@@ -525,6 +535,7 @@ public class WebSocketServiceTest {
             null,
             null,
             false,
+            null,
             null);
 
     webSocketService.removeSession(session);
@@ -551,6 +562,7 @@ public class WebSocketServiceTest {
             null,
             null,
             false,
+            null,
             null);
 
     webSocketService.sendMembersHostVoting(session);
@@ -581,7 +593,8 @@ public class WebSocketServiceTest {
             null,
             null,
             false,
-            new AdminVote("XL"));
+            new AdminVote("XL"),
+            null);
 
     webSocketService.sendMembersAdminVote(session);
 
@@ -631,5 +644,31 @@ public class WebSocketServiceTest {
   @Test
   public void consumePendingUnregister_returnsFalse_whenNotMarked() {
     assertFalse(webSocketService.consumePendingUnregister("unknown-member"));
+  }
+
+  @Test
+  public void markPendingAdminUnregister_and_consume_works() {
+    val adminID = "admin-123";
+
+    webSocketService.markPendingAdminUnregister(adminID);
+
+    assertTrue(webSocketService.consumePendingAdminUnregister(adminID));
+    assertFalse(webSocketService.consumePendingAdminUnregister(adminID));
+  }
+
+  @Test
+  public void consumePendingAdminUnregister_returnsFalse_whenNotMarked() {
+    assertFalse(webSocketService.consumePendingAdminUnregister("unknown-admin"));
+  }
+
+  @Test
+  public void sendErrorToMember_sendsError() throws Exception {
+    val memberID = "member-456";
+
+    webSocketService.sendErrorToMember(memberID, "SESSION_NOT_FOUND");
+
+    verify(simpMessagingTemplateMock, times(1))
+        .convertAndSendToUser(
+            memberID, WebSocketService.ERROR_DESTINATION, "SESSION_NOT_FOUND");
   }
 }

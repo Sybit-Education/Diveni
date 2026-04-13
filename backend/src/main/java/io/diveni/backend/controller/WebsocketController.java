@@ -55,6 +55,10 @@ public class WebsocketController {
         webSocketService.sendTimerStartMessage(session, session.getTimerTimestamp());
       }
     }
+    // Send current state to admin immediately after principal is set,
+    // so rejoin does not depend on separate update messages arriving later.
+    webSocketService.sendMembersUpdate(session);
+    webSocketService.sendSelectedUserStoryToUser(session, principal.getName());
     if (session.getMembers().size() > 0) {
       webSocketService.sendNotification(
           session, new Notification(NotificationType.ADMIN_JOINED, null));
@@ -65,8 +69,13 @@ public class WebsocketController {
   @MessageMapping("/registerMember")
   public synchronized void joinMember(MemberPrincipal principal) {
     LOGGER.debug("--> joinMember()");
-    val session =
-        ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID());
+    val sessionOpt = databaseService.getSessionByID(principal.getSessionID());
+    if (sessionOpt.isEmpty()) {
+      webSocketService.sendErrorToMember(principal.getMemberID(), "SESSION_NOT_FOUND");
+      LOGGER.debug("<-- joinMember() [session not found]");
+      return;
+    }
+    val session = sessionOpt.get();
 
     // Check if this is a reconnecting inactive member
     val inactiveMember =
@@ -86,6 +95,8 @@ public class WebsocketController {
             updatedSession, updatedSession.getTimerTimestamp(), principal.getMemberID());
       }
       webSocketService.sendUpdatedHostVotingToMember(updatedSession, principal.getMemberID());
+      webSocketService.sendUpdatedUserStoriesToMember(updatedSession, principal.getMemberID());
+      webSocketService.sendSelectedUserStoryToUser(updatedSession, principal.getMemberID());
       if (updatedSession.getHostVoting()
           && updatedSession.getSessionState().equals(SessionState.VOTING_FINISHED)) {
         webSocketService.sendMembersAdminVote(updatedSession);
@@ -98,23 +109,33 @@ public class WebsocketController {
       return;
     }
 
-    // Normal join flow
-    webSocketService.addMemberIfNew(principal);
-    webSocketService.sendMembersUpdate(session);
-    webSocketService.sendSessionStateToMember(session, principal.getName());
-    if (session.getTimerTimestamp() != null) {
-      webSocketService.sendTimerStartMessageToUser(
-          session, session.getTimerTimestamp(), principal.getMemberID());
+    // Check for active member (already connected, duplicate tab or fast reconnect)
+    val activeMember =
+        session.getMembers().stream()
+            .filter(m -> m.getMemberID().equals(principal.getMemberID()) && m.isActive())
+            .findFirst();
+
+    if (activeMember.isPresent()) {
+      webSocketService.addMemberIfNew(principal);
+      webSocketService.sendSessionStateToMember(session, principal.getName());
+      if (session.getTimerTimestamp() != null) {
+        webSocketService.sendTimerStartMessageToUser(
+            session, session.getTimerTimestamp(), principal.getMemberID());
+      }
+      webSocketService.sendUpdatedHostVotingToMember(session, principal.getMemberID());
+      webSocketService.sendUpdatedUserStoriesToMember(session, principal.getMemberID());
+      webSocketService.sendSelectedUserStoryToUser(session, principal.getMemberID());
+      if (session.getHostVoting()
+          && session.getSessionState().equals(SessionState.VOTING_FINISHED)) {
+        webSocketService.sendMembersAdminVote(session);
+      }
+      LOGGER.debug("<-- joinMember() [already active]");
+      return;
     }
-    webSocketService.sendUpdatedHostVotingToMember(session, principal.getMemberID());
-    if (session.getHostVoting() && session.getSessionState().equals(SessionState.VOTING_FINISHED)) {
-      webSocketService.sendMembersAdminVote(session);
-    }
-    webSocketService.sendNotification(
-        session,
-        new Notification(
-            NotificationType.MEMBER_JOINED, new MemberPayload(principal.getMemberID())));
-    LOGGER.debug("<-- joinMember()");
+
+    // Member not in session (removed by cleanup or kicked)
+    webSocketService.sendErrorToMember(principal.getMemberID(), "MEMBER_NOT_IN_SESSION");
+    LOGGER.debug("<-- joinMember() [member not found]");
   }
 
   @MessageMapping("/unregister")
@@ -139,6 +160,7 @@ public class WebsocketController {
         votingFinished(new AdminPrincipal(session.getSessionID(), session.getAdminID()));
       }
     } else {
+      webSocketService.markPendingAdminUnregister(((AdminPrincipal) principal).getAdminID());
       val session =
           ControllerUtils.getSessionOrThrowResponse(
               databaseService, ((AdminPrincipal) principal).getSessionID());
@@ -304,7 +326,9 @@ public class WebsocketController {
       AdminPrincipal principal, @Payload Integer index) {
     LOGGER.debug("--> adminSelectedUserStory()");
     val session =
-        ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID());
+        ControllerUtils.getSessionOrThrowResponse(databaseService, principal.getSessionID())
+            .setSelectedUserStoryIndex(index);
+    databaseService.saveSession(session);
     webSocketService.sendSelectedUserStoryToMembers(session, index);
     LOGGER.debug("<-- adminSelectedUserStory()");
   }
@@ -347,5 +371,16 @@ public class WebsocketController {
       votingFinished(new AdminPrincipal(session.getSessionID(), session.getAdminID()));
     }
     LOGGER.debug("<-- deactivateMember()");
+  }
+
+  public synchronized void handleAdminDisconnect(AdminPrincipal principal) {
+    LOGGER.debug("--> handleAdminDisconnect()");
+    val sessionOpt = databaseService.getSessionByID(principal.getSessionID());
+    if (sessionOpt.isPresent()) {
+      webSocketService.sendNotification(
+          sessionOpt.get(), new Notification(NotificationType.ADMIN_LEFT, null));
+      webSocketService.removeAdmin(principal);
+    }
+    LOGGER.debug("<-- handleAdminDisconnect()");
   }
 }

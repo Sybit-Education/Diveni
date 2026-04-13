@@ -52,6 +52,8 @@ class Constants {
 
   websocketNotification = "/users/updates/notifications";
 
+  webSocketErrorRoute = "/users/updates/error";
+
   memberUpdateCommandStartVoting = "START_VOTING";
 
   memberUpdateCommandVotingFinished = "VOTING_FINISHED";

@@ -552,10 +552,16 @@ export default defineComponent({
     window.addEventListener("beforeunload", this.sendUnregisterCommand);
   },
   mounted() {
+    webSocketService.onStompErrorCallback = () => {
+      this.toast.error(this.t("session.notification.messages.sessionLost"));
+      window.localStorage.removeItem("adminCookie");
+      this.goToLandingPage();
+    };
     if (this.rejoined === "false") {
       this.subscribeWSMemberUpdated();
       this.subscribeOnTimerStart();
       this.subscribeWSNotification();
+      this.subscribeWSStorySelected();
       this.connectToWebSocket();
     }
     if (this.voteSetJson) {
@@ -569,6 +575,7 @@ export default defineComponent({
     }
   },
   unmounted() {
+    webSocketService.onStompErrorCallback = null;
     window.removeEventListener("beforeunload", this.sendUnregisterCommand);
     this.subscriptionCleanups.forEach((cleanup) => cleanup());
     this.subscriptionCleanups = [];
@@ -623,6 +630,9 @@ export default defineComponent({
 
         this.store.setUserStories({ stories: session.sessionConfig.userStories });
         this.voteSet = JSON.parse(this.voteSetJson);
+        if (session.selectedUserStoryIndex != null) {
+          this.index = session.selectedUserStoryIndex;
+        }
       }
     },
     handleReload() {
@@ -639,6 +649,7 @@ export default defineComponent({
       this.subscribeWSMemberUpdated();
       this.subscribeOnTimerStart();
       this.subscribeWSNotification();
+      this.subscribeWSStorySelected();
       this.connectToWebSocket();
     },
     async onUserStoriesChanged({ us, idx, doRemove }) {
@@ -732,6 +743,13 @@ export default defineComponent({
     },
     subscribeWSNotification() {
       this.subscriptionCleanups.push(this.store.subscribeOnBackendWSNotify());
+    },
+    subscribeWSStorySelected() {
+      this.subscriptionCleanups.push(
+        webSocketService.subscribe(Constants.webSocketSelectedUserStoryRoute, (body) => {
+          this.index = +body;
+        })
+      );
     },
     sendUnregisterCommand() {
       const endPoint = `${Constants.webSocketUnregisterRoute}`;

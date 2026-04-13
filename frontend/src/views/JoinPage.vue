@@ -111,6 +111,19 @@ export default defineComponent({
         this.store.setUserStories({
           stories: sessionConfig.userStories,
         });
+        localStorage.setItem(
+          "diveni_member_session",
+          JSON.stringify({
+            sessionID: data.sessionID,
+            memberID: this.memberID,
+            name: this.name,
+            hexColor: this.hexColor,
+            avatarAnimalAssetName: this.avatarAnimalAssetName,
+            voteSetJson: this.voteSet,
+            timerSecondsString: this.timerSeconds.toString(),
+            userStoryMode: this.userStoryMode,
+          })
+        );
         this.connectToWebSocket(data.sessionID, joinInfo.member.memberID);
       } catch (e) {
         this.isJoining = false;

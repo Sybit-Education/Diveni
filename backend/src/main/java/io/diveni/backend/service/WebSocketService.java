@@ -49,6 +49,8 @@ public class WebSocketService {
 
   public static String NOTIFICATIONS_DESTINATION = "/updates/notifications";
 
+  public static String ERROR_DESTINATION = "/updates/error";
+
   public static String START_TIMER_DESTINATION = "/updates/startTimer";
 
   public static String USER_STORY_SELECTED_DESTINATION = "/updates/userStorySelected";
@@ -57,7 +59,7 @@ public class WebSocketService {
 
   @Autowired private DatabaseService databaseService;
 
-  @Getter private List<SessionPrincipals> sessionPrincipalList = List.of();
+  @Getter private volatile List<SessionPrincipals> sessionPrincipalList = List.of();
 
   private static final long PENDING_UNREGISTER_TTL_MS = 60_000;
 
@@ -75,6 +77,15 @@ public class WebSocketService {
   private void evictStalePendingUnregisters() {
     long cutoff = System.currentTimeMillis() - PENDING_UNREGISTER_TTL_MS;
     pendingUnregister.entrySet().removeIf(entry -> entry.getValue() < cutoff);
+  }
+
+  public void markPendingAdminUnregister(String adminID) {
+    pendingUnregister.put(adminID, System.currentTimeMillis());
+    evictStalePendingUnregisters();
+  }
+
+  public boolean consumePendingAdminUnregister(String adminID) {
+    return pendingUnregister.remove(adminID) != null;
   }
 
   public SessionPrincipals getSessionPrincipals(String sessionID) {
@@ -330,6 +341,19 @@ public class WebSocketService {
     LOGGER.debug("<-- sendSelectedUserStoryToMembers()");
   }
 
+  public void sendSelectedUserStoryToUser(Session session, String userID) {
+    if (session.getSelectedUserStoryIndex() == null) {
+      return;
+    }
+    LOGGER.debug(
+        "--> sendSelectedUserStoryToUser(), sessionID={}, userID={}",
+        session.getSessionID(),
+        userID);
+    simpMessagingTemplate.convertAndSendToUser(
+        userID, USER_STORY_SELECTED_DESTINATION, session.getSelectedUserStoryIndex());
+    LOGGER.debug("<-- sendSelectedUserStoryToUser()");
+  }
+
   public void sendTimerStartMessage(Session session, String timestamp) {
     LOGGER.debug("--> sendTimerStartMessage(), sessionID={}", session.getSessionID());
     val sessionPrincipals = getSessionPrincipals(session.getSessionID());
@@ -367,6 +391,12 @@ public class WebSocketService {
           notification);
     }
     LOGGER.debug("<-- sendNotification()");
+  }
+
+  public void sendErrorToMember(String memberID, String errorCode) {
+    LOGGER.debug("--> sendErrorToMember(), memberID={}, error={}", memberID, errorCode);
+    simpMessagingTemplate.convertAndSendToUser(memberID, ERROR_DESTINATION, errorCode);
+    LOGGER.debug("<-- sendErrorToMember()");
   }
 
   public void removeSession(Session session) {

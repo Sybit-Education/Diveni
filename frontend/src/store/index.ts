@@ -84,6 +84,9 @@ export const useDiveniStore = defineStore("diveni-store", {
         this.notifications = this.notifications.concat([JSON.parse(body)]);
       });
     },
+    subscribeOnBackendWSError(callback: (body: string) => void): () => void {
+      return webSocketService.subscribe(Constants.webSocketErrorRoute, callback);
+    },
     sendViaBackendWS(endPoint: string, data?: string | undefined) {
       webSocketService.publish(endPoint, data);
     },

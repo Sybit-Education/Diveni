@@ -6,6 +6,7 @@
 package io.diveni.backend.handler;
 
 import io.diveni.backend.controller.WebsocketController;
+import io.diveni.backend.principals.AdminPrincipal;
 import io.diveni.backend.principals.MemberPrincipal;
 import io.diveni.backend.service.WebSocketService;
 import org.slf4j.Logger;
@@ -34,6 +35,16 @@ public class SessionDisconnectedListener implements ApplicationListener<SessionD
         LOGGER.debug(
             "Network disconnect for member={}, deactivating", memberPrincipal.getMemberID());
         controller.deactivateMember(memberPrincipal);
+      }
+    } else if (principal instanceof AdminPrincipal adminPrincipal) {
+      if (webSocketService.consumePendingAdminUnregister(adminPrincipal.getAdminID())) {
+        LOGGER.debug(
+            "Intentional unregister for admin={}, skipping", adminPrincipal.getAdminID());
+      } else {
+        LOGGER.debug(
+            "Network disconnect for admin={}, notifying members",
+            adminPrincipal.getAdminID());
+        controller.handleAdminDisconnect(adminPrincipal);
       }
     }
     LOGGER.debug("<-- onApplicationEvent()");

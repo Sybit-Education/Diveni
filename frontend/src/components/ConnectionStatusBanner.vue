@@ -3,12 +3,15 @@
     <div v-if="visible" class="connection-banner" :class="bannerClass">
       <i :class="iconClass"></i>
       {{ bannerText }}
+      <button v-if="showReconnectButton" class="reconnect-button" @click="onReconnect">
+        {{ t("session.connection.reconnectButton") }}
+      </button>
     </div>
   </transition>
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onUnmounted } from "vue";
+import { ref, computed, watch, onUnmounted } from "vue";
 import { webSocketService, ConnectionState } from "@/services/WebSocketService";
 import { useI18n } from "vue-i18n";
 
@@ -21,6 +24,12 @@ const iconClass = ref("");
 let hideTimeout: ReturnType<typeof setTimeout> | null = null;
 let previousState: ConnectionState = ConnectionState.DISCONNECTED;
 
+const showReconnectButton = computed(() => webSocketService.retriesExhausted);
+
+function onReconnect() {
+  webSocketService.reconnect();
+}
+
 watch(
   () => webSocketService.connectionState.value,
   (state) => {
@@ -32,7 +41,10 @@ watch(
     if (state === ConnectionState.RECONNECTING) {
       visible.value = true;
       bannerClass.value = "banner-warning";
-      bannerText.value = t("session.connection.reconnecting");
+      bannerText.value = t("session.connection.reconnectingWithCount", {
+        current: webSocketService.retryCount.value,
+        max: webSocketService.maxRetries,
+      });
       iconClass.value = "bi bi-arrow-repeat spin-icon";
     } else if (
       state === ConnectionState.DISCONNECTED &&
@@ -102,6 +114,22 @@ onUnmounted(() => {
   background-color: #d1e7dd;
   color: #0f5132;
   border-bottom: 1px solid #198754;
+}
+
+.reconnect-button {
+  margin-left: 12px;
+  padding: 2px 12px;
+  border: 1px solid currentColor;
+  border-radius: 4px;
+  background: transparent;
+  color: inherit;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.1);
+  }
 }
 
 .spin-icon {

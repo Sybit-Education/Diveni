@@ -9,8 +9,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -48,6 +51,7 @@ public class SessionTest {
             null,
             null,
             false,
+            null,
             null);
     val sameSession =
         new Session(
@@ -65,6 +69,7 @@ public class SessionTest {
             null,
             null,
             false,
+            null,
             null);
     val otherSession =
         new Session(
@@ -82,6 +87,7 @@ public class SessionTest {
             null,
             null,
             false,
+            null,
             null);
 
     assertEquals(session, sameSession);
@@ -114,6 +120,7 @@ public class SessionTest {
             null,
             null,
             false,
+            null,
             null);
     val result = session.updateEstimation(member1.getMemberID(), vote);
 
@@ -149,7 +156,8 @@ public class SessionTest {
             null,
             null,
             false,
-            new AdminVote("10"));
+            new AdminVote("10"),
+            null);
 
     val result = session.resetEstimations();
 
@@ -178,6 +186,7 @@ public class SessionTest {
             null,
             null,
             false,
+            null,
             null);
     val result = session.updateSessionState(newSessionState);
 
@@ -202,6 +211,7 @@ public class SessionTest {
             null,
             null,
             false,
+            null,
             null);
     val date = new Date();
 
@@ -231,6 +241,7 @@ public class SessionTest {
             null,
             null,
             false,
+            null,
             null);
     val memberID2 = Utils.generateRandomID();
     val member2 = new Member(memberID2, null, null, null, "5");
@@ -264,6 +275,7 @@ public class SessionTest {
             null,
             null,
             false,
+            null,
             null);
 
     val result = session.removeMember(memberID1);
@@ -294,7 +306,8 @@ public class SessionTest {
             null,
             null,
             true,
-            new AdminVote("M"));
+            new AdminVote("M"),
+            null);
 
     val result = session.selectHighlightedMembers();
 
@@ -327,7 +340,8 @@ public class SessionTest {
             null,
             null,
             true,
-            new AdminVote("XS"));
+            new AdminVote("XS"),
+            null);
 
     val result = session.selectHighlightedMembers();
 
@@ -361,6 +375,7 @@ public class SessionTest {
             null,
             null,
             false,
+            null,
             null);
 
     val result = session.selectHighlightedMembers();
@@ -397,6 +412,7 @@ public class SessionTest {
             null,
             null,
             false,
+            null,
             null);
 
     val result = session.selectHighlightedMembers();
@@ -426,6 +442,7 @@ public class SessionTest {
             null,
             null,
             false,
+            null,
             null);
 
     val result = session.resetCurrentHighlights();
@@ -451,6 +468,7 @@ public class SessionTest {
             null,
             null,
             false,
+            null,
             null);
     val timestamp = Utils.getTimestampISO8601(new Date());
 
@@ -477,6 +495,7 @@ public class SessionTest {
             Utils.getTimestampISO8601(new Date()),
             null,
             false,
+            null,
             null);
 
     val result = session.resetTimerTimestamp();
@@ -502,6 +521,7 @@ public class SessionTest {
             Utils.getTimestampISO8601(new Date()),
             LocalDate.of(2222, 12, 3),
             false,
+            null,
             null);
 
     assertEquals(LocalDate.of(2222, 12, 3), session.getCreationTime());
@@ -525,6 +545,7 @@ public class SessionTest {
             Utils.getTimestampISO8601(new Date()),
             null,
             false,
+            null,
             null);
 
     Session result = session.setHostVoting(true);
@@ -552,6 +573,7 @@ public class SessionTest {
             null,
             null,
             false,
+            null,
             null);
 
     val result = session.deactivateMember(memberID);
@@ -581,6 +603,7 @@ public class SessionTest {
             null,
             null,
             false,
+            null,
             null);
 
     val result = session.reactivateMember(memberID);
@@ -588,6 +611,36 @@ public class SessionTest {
     assertEquals(1, result.getMembers().size());
     assertTrue(result.getMembers().get(0).isActive());
     assertNull(result.getMembers().get(0).getCurrentEstimation());
+  }
+
+  @Test
+  public void reactivateMember_preservesEstimationDuringVotingFinished() {
+    val memberID = Utils.generateRandomID();
+    val member = new Member(memberID, "John", "#fff", null, "5", false);
+    val session =
+        new Session(
+            null,
+            null,
+            null,
+            null,
+            null,
+            List.of(member),
+            new HashMap<>(),
+            new ArrayList<>(),
+            SessionState.VOTING_FINISHED,
+            null,
+            null,
+            null,
+            null,
+            false,
+            null,
+            null);
+
+    val result = session.reactivateMember(memberID);
+
+    assertEquals(1, result.getMembers().size());
+    assertTrue(result.getMembers().get(0).isActive());
+    assertEquals("5", result.getMembers().get(0).getCurrentEstimation());
   }
 
   @Test
@@ -610,12 +663,118 @@ public class SessionTest {
             null,
             null,
             false,
+            null,
             null);
 
     val result = session.getActiveMembers();
 
     assertEquals(1, result.size());
     assertEquals(active.getMemberID(), result.get(0).getMemberID());
+  }
+
+  @Test
+  public void removeStaleInactiveMembers_removesExpired() {
+    val activeMember = new Member(Utils.generateRandomID(), "Alice", "#fff", null, "3");
+    // Create inactive member with deactivatedAt 5 minutes ago
+    val staleMember =
+        new Member(
+            Utils.generateRandomID(),
+            "Bob",
+            "#000",
+            null,
+            "5",
+            false,
+            Instant.now().minus(Duration.ofMinutes(5)));
+    val session =
+        new Session(
+            null,
+            null,
+            null,
+            null,
+            null,
+            List.of(activeMember, staleMember),
+            new HashMap<>(),
+            new ArrayList<>(),
+            SessionState.START_VOTING,
+            null,
+            null,
+            null,
+            null,
+            false,
+            null,
+            null);
+
+    val cutoff = Instant.now().minus(Duration.ofMinutes(3));
+    val result = session.removeStaleInactiveMembers(cutoff);
+
+    assertEquals(1, result.getMembers().size());
+    assertEquals(activeMember.getMemberID(), result.getMembers().get(0).getMemberID());
+  }
+
+  @Test
+  public void removeStaleInactiveMembers_keepsRecent() {
+    val activeMember = new Member(Utils.generateRandomID(), "Alice", "#fff", null, "3");
+    // Create inactive member with deactivatedAt 1 minute ago (within grace period)
+    val recentInactive =
+        new Member(
+            Utils.generateRandomID(),
+            "Bob",
+            "#000",
+            null,
+            "5",
+            false,
+            Instant.now().minus(Duration.ofMinutes(1)));
+    val session =
+        new Session(
+            null,
+            null,
+            null,
+            null,
+            null,
+            List.of(activeMember, recentInactive),
+            new HashMap<>(),
+            new ArrayList<>(),
+            SessionState.START_VOTING,
+            null,
+            null,
+            null,
+            null,
+            false,
+            null,
+            null);
+
+    val cutoff = Instant.now().minus(Duration.ofMinutes(3));
+    val result = session.removeStaleInactiveMembers(cutoff);
+
+    assertEquals(2, result.getMembers().size());
+  }
+
+  @Test
+  public void removeStaleInactiveMembers_returnsIdentityWhenNoneExpired() {
+    val activeMember = new Member(Utils.generateRandomID(), "Alice", "#fff", null, "3");
+    val session =
+        new Session(
+            null,
+            null,
+            null,
+            null,
+            null,
+            List.of(activeMember),
+            new HashMap<>(),
+            new ArrayList<>(),
+            SessionState.START_VOTING,
+            null,
+            null,
+            null,
+            null,
+            false,
+            null,
+            null);
+
+    val cutoff = Instant.now().minus(Duration.ofMinutes(3));
+    val result = session.removeStaleInactiveMembers(cutoff);
+
+    assertSame(session, result);
   }
 
   public void setHostEstimation_works() {
@@ -635,6 +794,7 @@ public class SessionTest {
             Utils.getTimestampISO8601(new Date()),
             null,
             false,
+            null,
             null);
 
     val result = session.setHostEstimation("10");

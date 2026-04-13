@@ -13,12 +13,27 @@ class WebSocketService {
   private subscriptions = new Map<string, (body: string) => void>();
   private activeStompSubs = new Map<string, StompSubscription>();
   private wasConnected = false;
+  readonly maxRetries = 10;
+  private lastUrl: string | null = null;
 
   public connectionState: Ref<ConnectionState> = ref(ConnectionState.DISCONNECTED);
+  public retryCount: Ref<number> = ref(0);
   /** True when disconnect was triggered by user action, not connection loss. */
   public intentionalDisconnect = false;
+  /** Optional callback invoked when the broker sends a STOMP ERROR frame. */
+  public onStompErrorCallback: ((message: string) => void) | null = null;
+
+  get retriesExhausted(): boolean {
+    return (
+      this.retryCount.value > this.maxRetries &&
+      this.connectionState.value === ConnectionState.DISCONNECTED
+    );
+  }
 
   connect(url: string): void {
+    this.lastUrl = url;
+    this.retryCount.value = 0;
+
     // Tear down previous client; deactivate in background -- callbacks are
     // guarded below so the old client's late onDisconnect/onWebSocketClose
     // cannot mutate state after the new client takes over.
@@ -54,12 +69,19 @@ class WebSocketService {
       beforeConnect: () => {
         if (this.client !== newClient) return;
         if (this.wasConnected) {
+          this.retryCount.value++;
+          if (this.retryCount.value > this.maxRetries) {
+            newClient.deactivate();
+            this.connectionState.value = ConnectionState.DISCONNECTED;
+            return;
+          }
           this.connectionState.value = ConnectionState.RECONNECTING;
         }
       },
 
       onConnect: () => {
         if (this.client !== newClient) return;
+        this.retryCount.value = 0;
         this.wasConnected = true;
         this.connectionState.value = ConnectionState.CONNECTED;
         this.resubscribeAll();
@@ -67,7 +89,9 @@ class WebSocketService {
 
       onStompError: (frame) => {
         if (this.client !== newClient) return;
-        console.error("[WebSocket] STOMP error:", frame.headers["message"], frame.body);
+        const message = frame.headers["message"] ?? frame.body;
+        console.error("[WebSocket] STOMP error:", message);
+        this.onStompErrorCallback?.(message);
       },
 
       onWebSocketError: (event) => {
@@ -99,8 +123,15 @@ class WebSocketService {
     newClient.activate();
   }
 
+  reconnect(): void {
+    if (this.lastUrl) {
+      this.connect(this.lastUrl);
+    }
+  }
+
   async disconnect(): Promise<void> {
     this.intentionalDisconnect = true;
+    this.onStompErrorCallback = null;
     this.activeStompSubs.clear();
     this.subscriptions.clear();
     this.wasConnected = false;

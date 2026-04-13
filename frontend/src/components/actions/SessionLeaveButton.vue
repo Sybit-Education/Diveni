@@ -34,7 +34,7 @@ export default defineComponent({
       const endPoint = `${Constants.webSocketUnregisterRoute}`;
       this.store.sendViaBackendWS(endPoint);
       await this.store.clearStore();
-      window.localStorage.removeItem("memberCookie");
+      localStorage.removeItem("diveni_member_session");
       this.router.push({ name: "LandingPage" });
     },
   },
