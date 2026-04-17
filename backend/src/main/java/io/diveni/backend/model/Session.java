@@ -164,7 +164,7 @@ public class Session {
           creationTime,
           hostVoting,
           hostEstimation,
-        selectedUserStoryIndex);
+          selectedUserStoryIndex);
     }
     val maxEstimationMembers =
         this.getActiveMembers().stream()
@@ -288,6 +288,11 @@ public class Session {
             sessionConfig.getTimerSeconds().orElse(null),
             sessionConfig.getUserStoryMode(),
             sessionConfig.getPassword());
+    Integer sanitizedSelectedIndex = selectedUserStoryIndex;
+    if (sanitizedSelectedIndex != null
+        && (sanitizedSelectedIndex < 0 || sanitizedSelectedIndex >= userStories.size())) {
+      sanitizedSelectedIndex = null;
+    }
     return new Session(
         databaseID,
         sessionID,
@@ -304,7 +309,7 @@ public class Session {
         creationTime,
         hostVoting,
         hostEstimation,
-        selectedUserStoryIndex);
+        sanitizedSelectedIndex);
   }
 
   public Session resetEstimations() {
@@ -446,7 +451,9 @@ public class Session {
             .map(
                 m -> {
                   if (!m.getMemberID().equals(memberID)) return m;
-                  return preserveEstimation ? m.withActive(true) : m.withActive(true).resetEstimation();
+                  return preserveEstimation
+                      ? m.withActive(true)
+                      : m.withActive(true).resetEstimation();
                 })
             .collect(Collectors.toList());
     return new Session(

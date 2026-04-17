@@ -801,4 +801,80 @@ public class SessionTest {
 
     assertEquals("10", result.getHostEstimation().getHostEstimation());
   }
+
+  @Test
+  public void updateUserStories_clearsSelectedIndexWhenNewListIsShorter() {
+    val story1 = new UserStory("id1", "Story 1", "desc", "", true, null);
+    val story2 = new UserStory("id2", "Story 2", "desc", "", true, null);
+    val story3 = new UserStory("id3", "Story 3", "desc", "", true, null);
+    val session = sessionWithStoriesAndSelectedIndex(List.of(story1, story2, story3), 2);
+
+    val result = session.updateUserStories(List.of(story1));
+
+    assertNull(result.getSelectedUserStoryIndex());
+  }
+
+  @Test
+  public void updateUserStories_clearsSelectedIndexWhenNewListIsEmpty() {
+    val story1 = new UserStory("id1", "Story 1", "desc", "", true, null);
+    val session = sessionWithStoriesAndSelectedIndex(List.of(story1), 0);
+
+    val result = session.updateUserStories(List.of());
+
+    assertNull(result.getSelectedUserStoryIndex());
+  }
+
+  @Test
+  public void updateUserStories_clearsSelectedIndexAtUpperBoundary() {
+    val story1 = new UserStory("id1", "Story 1", "desc", "", true, null);
+    val story2 = new UserStory("id2", "Story 2", "desc", "", true, null);
+    val session = sessionWithStoriesAndSelectedIndex(List.of(story1, story2), 1);
+
+    val result = session.updateUserStories(List.of(story1));
+
+    assertNull(result.getSelectedUserStoryIndex());
+  }
+
+  @Test
+  public void updateUserStories_preservesSelectedIndexWhenStillInBounds() {
+    val story1 = new UserStory("id1", "Story 1", "desc", "", true, null);
+    val story2 = new UserStory("id2", "Story 2", "desc", "", true, null);
+    val story3 = new UserStory("id3", "Story 3", "desc", "", true, null);
+    val session = sessionWithStoriesAndSelectedIndex(List.of(story1, story2, story3), 1);
+
+    val result = session.updateUserStories(List.of(story1, story2));
+
+    assertEquals(1, result.getSelectedUserStoryIndex());
+  }
+
+  @Test
+  public void updateUserStories_preservesNullSelectedIndex() {
+    val story1 = new UserStory("id1", "Story 1", "desc", "", true, null);
+    val session = sessionWithStoriesAndSelectedIndex(List.of(story1), null);
+
+    val result = session.updateUserStories(List.of(story1, story1));
+
+    assertNull(result.getSelectedUserStoryIndex());
+  }
+
+  private Session sessionWithStoriesAndSelectedIndex(
+      List<UserStory> stories, Integer selectedIndex) {
+    return new Session(
+        null,
+        null,
+        null,
+        new SessionConfig(List.of(), stories, 30, null, null),
+        null,
+        new ArrayList<>(),
+        new HashMap<>(),
+        new ArrayList<>(),
+        SessionState.START_VOTING,
+        null,
+        null,
+        null,
+        null,
+        false,
+        null,
+        selectedIndex);
+  }
 }
