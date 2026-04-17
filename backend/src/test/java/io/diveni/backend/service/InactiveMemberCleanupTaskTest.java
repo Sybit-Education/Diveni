@@ -82,8 +82,7 @@ public class InactiveMemberCleanupTaskTest {
     verify(databaseService).saveSession(sessionCaptor.capture());
     assertEquals(1, sessionCaptor.getValue().getMembers().size());
     assertEquals(
-        activeMember.getMemberID(),
-        sessionCaptor.getValue().getMembers().get(0).getMemberID());
+        activeMember.getMemberID(), sessionCaptor.getValue().getMembers().get(0).getMemberID());
 
     verify(webSocketService).removeMemberPrincipal(any(MemberPrincipal.class));
     verify(webSocketService).sendMembersUpdate(any(Session.class));

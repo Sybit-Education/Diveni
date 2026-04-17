@@ -38,12 +38,10 @@ public class SessionDisconnectedListener implements ApplicationListener<SessionD
       }
     } else if (principal instanceof AdminPrincipal adminPrincipal) {
       if (webSocketService.consumePendingAdminUnregister(adminPrincipal.getAdminID())) {
-        LOGGER.debug(
-            "Intentional unregister for admin={}, skipping", adminPrincipal.getAdminID());
+        LOGGER.debug("Intentional unregister for admin={}, skipping", adminPrincipal.getAdminID());
       } else {
         LOGGER.debug(
-            "Network disconnect for admin={}, notifying members",
-            adminPrincipal.getAdminID());
+            "Network disconnect for admin={}, notifying members", adminPrincipal.getAdminID());
         controller.handleAdminDisconnect(adminPrincipal);
       }
     }
