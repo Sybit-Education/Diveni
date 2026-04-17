@@ -610,7 +610,11 @@ public class SessionTest {
 
     assertEquals(1, result.getMembers().size());
     assertTrue(result.getMembers().get(0).isActive());
-    assertNull(result.getMembers().get(0).getCurrentEstimation());
+    assertNull(result.getMembers().get(0).getDeactivatedAt());
+    assertEquals(
+        "5",
+        result.getMembers().get(0).getCurrentEstimation(),
+        "reactivation must preserve the existing estimation regardless of session state");
   }
 
   @Test

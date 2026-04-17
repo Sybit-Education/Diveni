@@ -60,6 +60,10 @@
     "vite": "^7.3.1",
     "vite-plugin-pwa": "^1.2.0"
   },
+  "overrides": {
+    "dompurify": "^3.3.3",
+    "serialize-javascript": "^7.0.4"
+  },
   "lint-staged": {
     "*.ts": "npm run lint:fix",
     "*.vue": "npm run lint:fix"

@@ -50,32 +50,60 @@ public class InactiveMemberCleanupTask {
     Instant cutoff = Instant.now().minus(GRACE_PERIOD);
 
     for (Session snapshot : databaseService.getSessions()) {
-      synchronized (websocketController) {
-        Session session = databaseService.getSessionByID(snapshot.getSessionID()).orElse(null);
-        if (session == null) {
-          continue;
+      try {
+        synchronized (websocketController) {
+          Session session = databaseService.getSessionByID(snapshot.getSessionID()).orElse(null);
+          if (session == null) {
+            continue;
+          }
+          Session cleaned = session.removeStaleInactiveMembers(cutoff);
+          if (cleaned == session) {
+            continue;
+          }
+          databaseService.saveSession(cleaned);
+          session.getMembers().stream()
+              .filter(
+                  m ->
+                      !m.isActive()
+                          && m.getDeactivatedAt() != null
+                          && m.getDeactivatedAt().isBefore(cutoff))
+              .forEach(
+                  m ->
+                      removeMemberPrincipalQuietly(
+                          new MemberPrincipal(session.getSessionID(), m.getMemberID())));
+          sendMembersUpdateQuietly(cleaned);
+          LOGGER.info(
+              "Cleaned {} stale members from session {}",
+              session.getMembers().size() - cleaned.getMembers().size(),
+              session.getSessionID());
         }
-        Session cleaned = session.removeStaleInactiveMembers(cutoff);
-        if (cleaned == session) {
-          continue;
-        }
-        databaseService.saveSession(cleaned);
-        session.getMembers().stream()
-            .filter(
-                m ->
-                    !m.isActive()
-                        && m.getDeactivatedAt() != null
-                        && m.getDeactivatedAt().isBefore(cutoff))
-            .forEach(
-                m ->
-                    webSocketService.removeMemberPrincipal(
-                        new MemberPrincipal(session.getSessionID(), m.getMemberID())));
-        webSocketService.sendMembersUpdate(cleaned);
-        LOGGER.info(
-            "Cleaned {} stale members from session {}",
-            session.getMembers().size() - cleaned.getMembers().size(),
-            session.getSessionID());
+      } catch (RuntimeException e) {
+        LOGGER.warn(
+            "Cleanup failed for session {}, continuing with remaining sessions",
+            snapshot.getSessionID(),
+            e);
       }
+    }
+  }
+
+  private void removeMemberPrincipalQuietly(MemberPrincipal principal) {
+    try {
+      webSocketService.removeMemberPrincipal(principal);
+    } catch (RuntimeException e) {
+      LOGGER.debug(
+          "Stale principal entry already absent for session {}, member {}",
+          principal.getSessionID(),
+          principal.getMemberID());
+    }
+  }
+
+  private void sendMembersUpdateQuietly(Session session) {
+    try {
+      webSocketService.sendMembersUpdate(session);
+    } catch (RuntimeException e) {
+      LOGGER.debug(
+          "No live WS listeners for session {}, skipping members update",
+          session.getSessionID());
     }
   }
 }

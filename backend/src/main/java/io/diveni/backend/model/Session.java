@@ -445,16 +445,9 @@ public class Session {
   }
 
   public Session reactivateMember(String memberID) {
-    val preserveEstimation = SessionState.VOTING_FINISHED.equals(sessionState);
     val updatedMembers =
         members.stream()
-            .map(
-                m -> {
-                  if (!m.getMemberID().equals(memberID)) return m;
-                  return preserveEstimation
-                      ? m.withActive(true)
-                      : m.withActive(true).resetEstimation();
-                })
+            .map(m -> m.getMemberID().equals(memberID) ? m.withActive(true) : m)
             .collect(Collectors.toList());
     return new Session(
         databaseID,

@@ -68,13 +68,13 @@ class WebSocketService {
 
       beforeConnect: () => {
         if (this.client !== newClient) return;
+        this.retryCount.value++;
+        if (this.retryCount.value > this.maxRetries) {
+          newClient.deactivate();
+          this.connectionState.value = ConnectionState.DISCONNECTED;
+          return;
+        }
         if (this.wasConnected) {
-          this.retryCount.value++;
-          if (this.retryCount.value > this.maxRetries) {
-            newClient.deactivate();
-            this.connectionState.value = ConnectionState.DISCONNECTED;
-            return;
-          }
           this.connectionState.value = ConnectionState.RECONNECTING;
         }
       },

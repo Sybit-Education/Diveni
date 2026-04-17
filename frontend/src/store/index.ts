@@ -50,6 +50,15 @@ export const useDiveniStore = defineStore("diveni-store", {
     subscribeOnBackendWSStoriesUpdated(): () => void {
       return webSocketService.subscribe(Constants.webSocketMemberListenUserStoriesRoute, (body) => {
         this.userStories = JSON.parse(body);
+        // Self-heal the selected index when the list shrinks past it since the backend
+        // suppresses null-index broadcasts to avoid NaN-parsed payloads
+        if (
+          this.selectedUserStoryIndex !== null &&
+          (this.selectedUserStoryIndex < 0 ||
+            this.selectedUserStoryIndex >= this.userStories.length)
+        ) {
+          this.selectedUserStoryIndex = null;
+        }
       });
     },
     subscribeOnBackendWSStorySelected(): () => void {

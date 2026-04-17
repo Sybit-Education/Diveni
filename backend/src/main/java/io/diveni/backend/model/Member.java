@@ -78,6 +78,14 @@ public class Member {
   }
 
   public Member withActive(boolean active) {
+    final Instant nextDeactivatedAt;
+    if (active) {
+      nextDeactivatedAt = null;
+    } else if (this.isActive) {
+      nextDeactivatedAt = Instant.now();
+    } else {
+      nextDeactivatedAt = this.deactivatedAt;
+    }
     return new Member(
         this.memberID,
         this.name,
@@ -85,6 +93,6 @@ public class Member {
         this.avatarAnimal,
         this.currentEstimation,
         active,
-        active ? null : Instant.now());
+        nextDeactivatedAt);
   }
 }

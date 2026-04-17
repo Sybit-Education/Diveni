@@ -160,6 +160,7 @@ export default defineComponent({
       this.router.push({
         name: "MemberVotePage",
         state: {
+          sessionID: this.sessionID,
           memberID: this.memberID,
           name: this.name,
           hexColor: this.hexColor,

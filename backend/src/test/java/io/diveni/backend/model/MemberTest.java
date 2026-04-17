@@ -13,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import io.diveni.backend.Utils;
+import java.time.Instant;
 import org.junit.jupiter.api.Test;
 
 import lombok.val;
@@ -97,6 +98,25 @@ public class MemberTest {
 
     assertFalse(inactive.isActive());
     assertNotNull(inactive.getDeactivatedAt());
+  }
+
+  @Test
+  public void withActive_false_preservesExistingDeactivatedAt_whenAlreadyInactive()
+      throws Exception {
+    val member = new Member("id1", "John", "#fff", AvatarAnimal.WOLF, null);
+    val firstInactive = member.withActive(false);
+    Instant originalDeactivatedAt = firstInactive.getDeactivatedAt();
+    assertNotNull(originalDeactivatedAt);
+
+    Thread.sleep(5);
+
+    val secondInactive = firstInactive.withActive(false);
+
+    assertFalse(secondInactive.isActive());
+    assertEquals(
+        originalDeactivatedAt,
+        secondInactive.getDeactivatedAt(),
+        "withActive(false) on an already-inactive member must NOT overwrite deactivatedAt");
   }
 
   @Test

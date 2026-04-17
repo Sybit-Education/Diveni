@@ -235,7 +235,7 @@ export default defineComponent({
       triggerTimer: 0,
       estimateFinished: false,
       pauseSession: false,
-      sessionID: undefined as string | undefined,
+      sessionID: history.state.sessionID,
       memberID: history.state.memberID,
       name: history.state.name,
       hexColor: history.state.hexColor,
@@ -351,8 +351,8 @@ export default defineComponent({
         this.goToJoinPage();
         return;
       }
-      this.initializeWebSocketConnection();
     }
+    this.initializeWebSocketConnection();
     this.voteSet = JSON.parse(this.voteSetJson ?? "[]");
     this.store.subscribeOnBackendWSError(this.onSessionError);
     this.watchRegisterOnConnect();
@@ -408,6 +408,7 @@ export default defineComponent({
     },
     hasValidSessionData() {
       return (
+        this.sessionID !== undefined &&
         this.memberID !== undefined &&
         this.name !== undefined &&
         this.hexColor !== undefined &&

@@ -63,29 +63,30 @@ public class WebSocketService {
 
   private static final long PENDING_UNREGISTER_TTL_MS = 60_000;
 
-  private final ConcurrentHashMap<String, Long> pendingUnregister = new ConcurrentHashMap<>();
+  private final ConcurrentHashMap<String, Long> pendingMemberUnregister = new ConcurrentHashMap<>();
+  private final ConcurrentHashMap<String, Long> pendingAdminUnregister = new ConcurrentHashMap<>();
 
   public void markPendingUnregister(String memberID) {
-    pendingUnregister.put(memberID, System.currentTimeMillis());
-    evictStalePendingUnregisters();
+    pendingMemberUnregister.put(memberID, System.currentTimeMillis());
+    evictStale(pendingMemberUnregister);
   }
 
   public boolean consumePendingUnregister(String memberID) {
-    return pendingUnregister.remove(memberID) != null;
-  }
-
-  private void evictStalePendingUnregisters() {
-    long cutoff = System.currentTimeMillis() - PENDING_UNREGISTER_TTL_MS;
-    pendingUnregister.entrySet().removeIf(entry -> entry.getValue() < cutoff);
+    return pendingMemberUnregister.remove(memberID) != null;
   }
 
   public void markPendingAdminUnregister(String adminID) {
-    pendingUnregister.put(adminID, System.currentTimeMillis());
-    evictStalePendingUnregisters();
+    pendingAdminUnregister.put(adminID, System.currentTimeMillis());
+    evictStale(pendingAdminUnregister);
   }
 
   public boolean consumePendingAdminUnregister(String adminID) {
-    return pendingUnregister.remove(adminID) != null;
+    return pendingAdminUnregister.remove(adminID) != null;
+  }
+
+  private void evictStale(ConcurrentHashMap<String, Long> map) {
+    long cutoff = System.currentTimeMillis() - PENDING_UNREGISTER_TTL_MS;
+    map.entrySet().removeIf(entry -> entry.getValue() < cutoff);
   }
 
   public SessionPrincipals getSessionPrincipals(String sessionID) {
@@ -326,6 +327,9 @@ public class WebSocketService {
   }
 
   public void sendSelectedUserStoryToMembers(Session session, Integer index) {
+    if (index == null) {
+      return;
+    }
     LOGGER.debug(
         "--> sendSelectedUserStoryToMembers(), sessionID={}, index={}",
         session.getSessionID(),

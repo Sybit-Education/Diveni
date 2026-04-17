@@ -5,8 +5,10 @@
 */
 package io.diveni.backend.service;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -87,6 +89,53 @@ public class InactiveMemberCleanupTaskTest {
 
     verify(databaseService, never()).saveSession(any());
     verifyNoInteractions(webSocketService);
+  }
+
+  @Test
+  public void cleanupStaleInactiveMembers_continuesAfterPerSessionFailure() {
+    val badSessionStale = inactiveMember(Instant.now().minus(Duration.ofMinutes(5)));
+    val goodSessionActive = new Member(Utils.generateRandomID(), "Alice", "#fff", null, null);
+    val goodSessionStale = inactiveMember(Instant.now().minus(Duration.ofMinutes(5)));
+    val badSession = sessionWithMembers(badSessionStale);
+    val goodSession = sessionWithMembers(goodSessionActive, goodSessionStale);
+
+    when(databaseService.getSessions()).thenReturn(List.of(badSession, goodSession));
+    when(databaseService.getSessionByID(badSession.getSessionID()))
+        .thenReturn(Optional.of(badSession));
+    when(databaseService.getSessionByID(goodSession.getSessionID()))
+        .thenReturn(Optional.of(goodSession));
+    doThrow(new org.springframework.web.server.ResponseStatusException(
+            org.springframework.http.HttpStatus.NOT_FOUND, "principal list gone"))
+        .when(webSocketService)
+        .removeMemberPrincipal(
+            new MemberPrincipal(badSession.getSessionID(), badSessionStale.getMemberID()));
+
+    assertDoesNotThrow(() -> cleanupTask.cleanupStaleInactiveMembers());
+
+    verify(databaseService).saveSession(
+        org.mockito.ArgumentMatchers.argThat(
+            s -> s.getSessionID().equals(goodSession.getSessionID())
+                && s.getMembers().size() == 1));
+    verify(webSocketService)
+        .removeMemberPrincipal(
+            new MemberPrincipal(goodSession.getSessionID(), goodSessionStale.getMemberID()));
+  }
+
+  @Test
+  public void cleanupStaleInactiveMembers_tolerates_missingPrincipalEntry_whenRemovingMember() {
+    val stale = inactiveMember(Instant.now().minus(Duration.ofMinutes(5)));
+    val session = sessionWithMembers(stale);
+    when(databaseService.getSessions()).thenReturn(List.of(session));
+    when(databaseService.getSessionByID(session.getSessionID())).thenReturn(Optional.of(session));
+    doThrow(new org.springframework.web.server.ResponseStatusException(
+            org.springframework.http.HttpStatus.NOT_FOUND, "principal list gone"))
+        .when(webSocketService)
+        .removeMemberPrincipal(any());
+
+    assertDoesNotThrow(() -> cleanupTask.cleanupStaleInactiveMembers());
+
+    verify(databaseService).saveSession(any());
+    verify(webSocketService).sendMembersUpdate(any());
   }
 
   @Test
