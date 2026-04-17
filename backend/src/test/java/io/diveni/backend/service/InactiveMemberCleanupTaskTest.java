@@ -105,18 +105,21 @@ public class InactiveMemberCleanupTaskTest {
         .thenReturn(Optional.of(badSession));
     when(databaseService.getSessionByID(goodSession.getSessionID()))
         .thenReturn(Optional.of(goodSession));
-    doThrow(new org.springframework.web.server.ResponseStatusException(
-            org.springframework.http.HttpStatus.NOT_FOUND, "principal list gone"))
+    doThrow(
+            new org.springframework.web.server.ResponseStatusException(
+                org.springframework.http.HttpStatus.NOT_FOUND, "principal list gone"))
         .when(webSocketService)
         .removeMemberPrincipal(
             new MemberPrincipal(badSession.getSessionID(), badSessionStale.getMemberID()));
 
     assertDoesNotThrow(() -> cleanupTask.cleanupStaleInactiveMembers());
 
-    verify(databaseService).saveSession(
-        org.mockito.ArgumentMatchers.argThat(
-            s -> s.getSessionID().equals(goodSession.getSessionID())
-                && s.getMembers().size() == 1));
+    verify(databaseService)
+        .saveSession(
+            org.mockito.ArgumentMatchers.argThat(
+                s ->
+                    s.getSessionID().equals(goodSession.getSessionID())
+                        && s.getMembers().size() == 1));
     verify(webSocketService)
         .removeMemberPrincipal(
             new MemberPrincipal(goodSession.getSessionID(), goodSessionStale.getMemberID()));
@@ -128,8 +131,9 @@ public class InactiveMemberCleanupTaskTest {
     val session = sessionWithMembers(stale);
     when(databaseService.getSessions()).thenReturn(List.of(session));
     when(databaseService.getSessionByID(session.getSessionID())).thenReturn(Optional.of(session));
-    doThrow(new org.springframework.web.server.ResponseStatusException(
-            org.springframework.http.HttpStatus.NOT_FOUND, "principal list gone"))
+    doThrow(
+            new org.springframework.web.server.ResponseStatusException(
+                org.springframework.http.HttpStatus.NOT_FOUND, "principal list gone"))
         .when(webSocketService)
         .removeMemberPrincipal(any());
 

@@ -102,8 +102,7 @@ public class InactiveMemberCleanupTask {
       webSocketService.sendMembersUpdate(session);
     } catch (RuntimeException e) {
       LOGGER.debug(
-          "No live WS listeners for session {}, skipping members update",
-          session.getSessionID());
+          "No live WS listeners for session {}, skipping members update", session.getSessionID());
     }
   }
 }

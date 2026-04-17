@@ -281,8 +281,7 @@ public class WebsocketController {
     if (members.isEmpty()) {
       return false;
     }
-    boolean allMembersVoted =
-        members.stream().allMatch(m -> m.getCurrentEstimation() != null);
+    boolean allMembersVoted = members.stream().allMatch(m -> m.getCurrentEstimation() != null);
     if (!session.getHostVoting()) {
       return allMembersVoted;
     }
@@ -323,8 +322,7 @@ public class WebsocketController {
     webSocketService.sendUpdatedUserStoriesToMembers(session);
     if (!Objects.equals(
         beforeSession.getSelectedUserStoryIndex(), session.getSelectedUserStoryIndex())) {
-      webSocketService.sendSelectedUserStoryToMembers(
-          session, session.getSelectedUserStoryIndex());
+      webSocketService.sendSelectedUserStoryToMembers(session, session.getSelectedUserStoryIndex());
     }
     LOGGER.debug("<-- adminUpdatedUserStories()");
   }
