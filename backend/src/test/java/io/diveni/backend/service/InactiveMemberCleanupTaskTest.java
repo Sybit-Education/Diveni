@@ -40,6 +40,7 @@ public class InactiveMemberCleanupTaskTest {
 
   @Mock private DatabaseService databaseService;
   @Mock private WebSocketService webSocketService;
+
   // Referenced indirectly -> constructor-injected via @InjectMocks
   @SuppressWarnings("unused")
   @Mock
