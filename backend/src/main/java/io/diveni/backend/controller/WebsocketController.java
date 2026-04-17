@@ -376,10 +376,9 @@ public class WebsocketController {
   public synchronized void handleAdminDisconnect(AdminPrincipal principal) {
     LOGGER.debug("--> handleAdminDisconnect()");
     val sessionOpt = databaseService.getSessionByID(principal.getSessionID());
-    if (sessionOpt.isPresent()) {
+    if (sessionOpt.isPresent() && webSocketService.removeAdmin(principal)) {
       webSocketService.sendNotification(
           sessionOpt.get(), new Notification(NotificationType.ADMIN_LEFT, null));
-      webSocketService.removeAdmin(principal);
     }
     LOGGER.debug("<-- handleAdminDisconnect()");
   }

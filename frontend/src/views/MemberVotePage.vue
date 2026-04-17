@@ -235,6 +235,7 @@ export default defineComponent({
       triggerTimer: 0,
       estimateFinished: false,
       pauseSession: false,
+      sessionID: undefined as string | undefined,
       memberID: history.state.memberID,
       name: history.state.name,
       hexColor: history.state.hexColor,
@@ -336,87 +337,25 @@ export default defineComponent({
     },
     selectedUserStoryIndex(index) {
       this.hostSelectedStoryIndex = index;
+      this.index = index;
     },
   },
   created() {
     if (this.timerSecondsString !== undefined) {
-      this.timerCountdownNumber = Number.parseInt(this.timerSecondsString);
+      this.timerCountdownNumber = Number.parseInt(this.timerSecondsString, 10);
     }
   },
   mounted() {
-    if (
-      this.memberID === undefined ||
-      this.name === undefined ||
-      this.hexColor === undefined ||
-      this.avatarAnimalAssetName === undefined
-    ) {
-      // Try localStorage recovery (page refresh)
-      const saved = localStorage.getItem("diveni_member_session");
-      if (!saved) {
+    if (!this.hasValidSessionData()) {
+      if (!this.tryRecoverFromLocalStorage()) {
         this.goToJoinPage();
         return;
       }
-      let parsed;
-      try {
-        parsed = JSON.parse(saved);
-      } catch {
-        localStorage.removeItem("diveni_member_session");
-        this.goToJoinPage();
-        return;
-      }
-      if (!parsed.memberID || !parsed.sessionID) {
-        localStorage.removeItem("diveni_member_session");
-        this.goToJoinPage();
-        return;
-      }
-      this.memberID = parsed.memberID;
-      this.name = parsed.name;
-      this.hexColor = parsed.hexColor;
-      this.avatarAnimalAssetName = parsed.avatarAnimalAssetName;
-      this.voteSetJson = parsed.voteSetJson;
-      this.timerSecondsString = parsed.timerSecondsString;
-      this.userStoryMode = parsed.userStoryMode;
-
-      this.timerCountdownNumber = Number.parseInt(this.timerSecondsString ?? "0");
-      this.voteSet = JSON.parse(this.voteSetJson ?? "[]");
-
-      this.setupSubscriptions();
-      const url = `${Constants.backendURL}/connect?sessionID=${parsed.sessionID}&memberID=${parsed.memberID}`;
-      this.store.connectToBackendWS(url);
-
-      // Watch for initial connect AND reconnects — send /registerMember in both cases
-      watch(
-        () => webSocketService.connectionState.value,
-        (state, prevState) => {
-          if (
-            this.memberID &&
-            state === ConnectionState.CONNECTED &&
-            (prevState === ConnectionState.CONNECTING || prevState === ConnectionState.RECONNECTING)
-          ) {
-            this.store.sendViaBackendWS(Constants.webSocketRegisterMemberRoute);
-          }
-        }
-      );
-      return;
+      this.initializeWebSocketConnection();
     }
-
-    // Normal flow (navigated from JoinPage, not a page refresh)
-    this.store.subscribeOnBackendWSError(this.onSessionError);
-
-    watch(
-      () => webSocketService.connectionState.value,
-      (state, prevState) => {
-        if (
-          this.memberID &&
-          prevState === ConnectionState.RECONNECTING &&
-          state === ConnectionState.CONNECTED
-        ) {
-          this.store.sendViaBackendWS(Constants.webSocketRegisterMemberRoute);
-        }
-      }
-    );
-
     this.voteSet = JSON.parse(this.voteSetJson ?? "[]");
+    this.store.subscribeOnBackendWSError(this.onSessionError);
+    this.watchRegisterOnConnect();
   },
   methods: {
     isAdminHighlighted() {
@@ -467,17 +406,59 @@ export default defineComponent({
     reactOnHostJoin() {
       this.pauseSession = false;
     },
-    setupSubscriptions() {
-      this.store.subscribeOnBackendWSMemberUpdates();
-      this.store.subscribeOnBackendWSMemberUpdatesWithAutoReveal();
-      this.store.subscribeOnBackendWSStoriesUpdated();
-      this.store.subscribeOnBackendWSStorySelected();
-      this.store.subscribeOnBackendWSAdminUpdate();
-      this.store.subscribeOnBackendWSTimerStart();
-      this.store.subscribeOnBackendWSNotify();
-      this.store.subscribeOnBackendWSHostVoting();
-      this.store.subscribeOnBackendWSHostEstimation();
-      this.store.subscribeOnBackendWSError(this.onSessionError);
+    hasValidSessionData() {
+      return (
+        this.memberID !== undefined &&
+        this.name !== undefined &&
+        this.hexColor !== undefined &&
+        this.avatarAnimalAssetName !== undefined
+      );
+    },
+    tryRecoverFromLocalStorage() {
+      const saved = localStorage.getItem("diveni_member_session");
+      if (!saved) {
+        return false;
+      }
+      let parsed;
+      try {
+        parsed = JSON.parse(saved);
+      } catch {
+        localStorage.removeItem("diveni_member_session");
+        return false;
+      }
+      if (!parsed.memberID || !parsed.sessionID) {
+        localStorage.removeItem("diveni_member_session");
+        return false;
+      }
+      this.sessionID = parsed.sessionID;
+      this.memberID = parsed.memberID;
+      this.name = parsed.name;
+      this.hexColor = parsed.hexColor;
+      this.avatarAnimalAssetName = parsed.avatarAnimalAssetName;
+      this.voteSetJson = parsed.voteSetJson;
+      this.timerSecondsString = parsed.timerSecondsString;
+      this.userStoryMode = parsed.userStoryMode;
+      this.timerCountdownNumber = Number.parseInt(this.timerSecondsString ?? "0", 10);
+      return true;
+    },
+    initializeWebSocketConnection() {
+      this.store.subscribeOnMemberSessionTopics();
+      const url = `${Constants.backendURL}/connect?sessionID=${this.sessionID}&memberID=${this.memberID}`;
+      this.store.connectToBackendWS(url);
+    },
+    watchRegisterOnConnect() {
+      watch(
+        () => webSocketService.connectionState.value,
+        (state, prevState) => {
+          if (
+            this.memberID &&
+            state === ConnectionState.CONNECTED &&
+            (prevState === ConnectionState.CONNECTING || prevState === ConnectionState.RECONNECTING)
+          ) {
+            this.store.sendViaBackendWS(Constants.webSocketRegisterMemberRoute);
+          }
+        }
+      );
     },
     onSessionError(errorCode: string) {
       localStorage.removeItem("diveni_member_session");

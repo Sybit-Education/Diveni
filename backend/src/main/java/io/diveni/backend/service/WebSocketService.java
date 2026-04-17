@@ -169,20 +169,18 @@ public class WebSocketService {
     LOGGER.debug("<-- removeMemberPrincipal()");
   }
 
-  public synchronized void removeAdmin(AdminPrincipal admin) {
+  public synchronized boolean removeAdmin(AdminPrincipal admin) {
     LOGGER.debug("--> removeAdmin(), admin={}", admin.getAdminID());
+    if (sessionPrincipalList.stream().noneMatch(p -> p.adminPrincipal() == admin)) {
+      LOGGER.debug("<-- removeAdmin(), stored principal differs, skipping");
+      return false;
+    }
     sessionPrincipalList =
         sessionPrincipalList.stream()
-            .map(
-                p -> {
-                  if (p.adminPrincipal() == admin) {
-                    return p.adminPrincipal(null);
-                  } else {
-                    return p;
-                  }
-                })
+            .map(p -> p.adminPrincipal() == admin ? p.adminPrincipal(null) : p)
             .collect(Collectors.toList());
     LOGGER.debug("<-- removeAdmin()");
+    return true;
   }
 
   public synchronized void setAdminUser(AdminPrincipal principal) {

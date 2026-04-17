@@ -87,6 +87,19 @@ export const useDiveniStore = defineStore("diveni-store", {
     subscribeOnBackendWSError(callback: (body: string) => void): () => void {
       return webSocketService.subscribe(Constants.webSocketErrorRoute, callback);
     },
+    subscribeOnMemberSessionTopics(): Array<() => void> {
+      return [
+        this.subscribeOnBackendWSMemberUpdates(),
+        this.subscribeOnBackendWSMemberUpdatesWithAutoReveal(),
+        this.subscribeOnBackendWSStoriesUpdated(),
+        this.subscribeOnBackendWSStorySelected(),
+        this.subscribeOnBackendWSAdminUpdate(),
+        this.subscribeOnBackendWSTimerStart(),
+        this.subscribeOnBackendWSNotify(),
+        this.subscribeOnBackendWSHostVoting(),
+        this.subscribeOnBackendWSHostEstimation(),
+      ];
+    },
     sendViaBackendWS(endPoint: string, data?: string | undefined) {
       webSocketService.publish(endPoint, data);
     },

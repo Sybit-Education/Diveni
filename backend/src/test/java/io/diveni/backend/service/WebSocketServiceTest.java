@@ -668,7 +668,40 @@ public class WebSocketServiceTest {
     webSocketService.sendErrorToMember(memberID, "SESSION_NOT_FOUND");
 
     verify(simpMessagingTemplateMock, times(1))
-        .convertAndSendToUser(
-            memberID, WebSocketService.ERROR_DESTINATION, "SESSION_NOT_FOUND");
+        .convertAndSendToUser(memberID, WebSocketService.ERROR_DESTINATION, "SESSION_NOT_FOUND");
+  }
+
+  @Test
+  public void removeAdmin_returnsTrue_whenStoredPrincipalIsCurrent() throws Exception {
+    setDefaultAdminPrincipal(new HashSet<>());
+
+    boolean removed = webSocketService.removeAdmin(defaultAdminPrincipal);
+
+    assertTrue(removed);
+    assertTrue(
+        webSocketService.getSessionPrincipalList().stream()
+            .allMatch(p -> p.adminPrincipal() == null));
+  }
+
+  @Test
+  public void removeAdmin_returnsFalse_whenStoredPrincipalIsDifferentInstance() throws Exception {
+    setDefaultAdminPrincipal(new HashSet<>());
+    val staleAdmin =
+        new AdminPrincipal(
+            defaultAdminPrincipal.getSessionID(), defaultAdminPrincipal.getAdminID());
+
+    boolean removed = webSocketService.removeAdmin(staleAdmin);
+
+    assertFalse(removed);
+    assertTrue(
+        webSocketService.getSessionPrincipalList().stream()
+            .anyMatch(p -> p.adminPrincipal() == defaultAdminPrincipal));
+  }
+
+  @Test
+  public void removeAdmin_returnsFalse_whenNoAdminStored() throws Exception {
+    boolean removed = webSocketService.removeAdmin(defaultAdminPrincipal);
+
+    assertFalse(removed);
   }
 }

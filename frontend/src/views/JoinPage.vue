@@ -135,21 +135,26 @@ export default defineComponent({
       return Constants.avatarAnimalAssetNameToBackendEnum(this.avatarAnimalAssetName);
     },
     connectToWebSocket(sessionID: string, memberID: string) {
-      this.store.subscribeOnBackendWSMemberUpdates();
-      this.store.subscribeOnBackendWSMemberUpdatesWithAutoReveal();
-      this.store.subscribeOnBackendWSStoriesUpdated();
-      this.store.subscribeOnBackendWSStorySelected();
-      this.store.subscribeOnBackendWSAdminUpdate();
-      this.store.subscribeOnBackendWSTimerStart();
-      this.store.subscribeOnBackendWSNotify();
-      this.store.subscribeOnBackendWSHostVoting();
-      this.store.subscribeOnBackendWSHostEstimation();
+      this.store.subscribeOnMemberSessionTopics();
+      this.store.subscribeOnBackendWSError(this.onSessionError);
       const url = `${Constants.backendURL}/connect?sessionID=${sessionID}&memberID=${memberID}`;
       this.store.connectToBackendWS(url);
     },
     registerMemberPrincipalOnBackend() {
       const endPoint = Constants.webSocketRegisterMemberRoute;
       this.store.sendViaBackendWS(endPoint);
+    },
+    onSessionError(errorCode: string) {
+      this.isJoining = false;
+      localStorage.removeItem("diveni_member_session");
+      const messageKey =
+        errorCode === "SESSION_NOT_FOUND"
+          ? "session.notification.messages.sessionNotFound"
+          : errorCode === "MEMBER_NOT_IN_SESSION"
+            ? "session.notification.messages.memberNotInSession"
+            : "session.notification.messages.sessionLost";
+      this.toast.error(this.t(messageKey));
+      this.router.push({ name: "JoinPage" });
     },
     goToEstimationPage() {
       this.router.push({
