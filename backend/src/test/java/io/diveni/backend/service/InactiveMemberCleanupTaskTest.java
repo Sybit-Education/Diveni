@@ -7,9 +7,13 @@ package io.diveni.backend.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
 
 import io.diveni.backend.Utils;
+import io.diveni.backend.controller.WebsocketController;
 import io.diveni.backend.model.Member;
 import io.diveni.backend.model.Session;
 import io.diveni.backend.model.SessionState;
@@ -19,113 +23,60 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 import lombok.val;
 import org.bson.types.ObjectId;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
 
+@ExtendWith(MockitoExtension.class)
 public class InactiveMemberCleanupTaskTest {
 
   @Mock private DatabaseService databaseService;
-
   @Mock private WebSocketService webSocketService;
+  // Referenced indirectly -> constructor-injected via @InjectMocks
+  @SuppressWarnings("unused")
+  @Mock
+  private WebsocketController websocketController;
 
   @InjectMocks private InactiveMemberCleanupTask cleanupTask;
 
-  @BeforeEach
-  public void initEach() {
-    MockitoAnnotations.openMocks(this);
-  }
-
   @Test
   public void cleanupStaleInactiveMembers_removesExpiredMembers() {
-    val sessionID = Utils.generateRandomID();
-    val adminID = Utils.generateRandomID();
     val activeMember = new Member(Utils.generateRandomID(), "Alice", "#fff", null, null);
-    val staleMember =
-        new Member(
-            Utils.generateRandomID(),
-            "Bob",
-            "#000",
-            null,
-            null,
-            false,
-            Instant.now().minus(Duration.ofMinutes(5)));
-    val session =
-        new Session(
-            new ObjectId(),
-            sessionID,
-            adminID,
-            null,
-            null,
-            List.of(activeMember, staleMember),
-            new HashMap<>(),
-            new ArrayList<>(),
-            SessionState.START_VOTING,
-            null,
-            null,
-            null,
-            null,
-            false,
-            null,
-            null);
-
+    val staleMember = inactiveMember(Instant.now().minus(Duration.ofMinutes(5)));
+    val session = sessionWithMembers(activeMember, staleMember);
     when(databaseService.getSessions()).thenReturn(List.of(session));
+    when(databaseService.getSessionByID(session.getSessionID())).thenReturn(Optional.of(session));
 
     cleanupTask.cleanupStaleInactiveMembers();
 
-    val sessionCaptor = ArgumentCaptor.forClass(Session.class);
-    verify(databaseService).saveSession(sessionCaptor.capture());
-    assertEquals(1, sessionCaptor.getValue().getMembers().size());
-    assertEquals(
-        activeMember.getMemberID(),
-        sessionCaptor.getValue().getMembers().get(0).getMemberID());
-
-    verify(webSocketService).removeMemberPrincipal(any(MemberPrincipal.class));
-    verify(webSocketService).sendMembersUpdate(any(Session.class));
+    val savedSessionCaptor = ArgumentCaptor.forClass(Session.class);
+    verify(databaseService).saveSession(savedSessionCaptor.capture());
+    val savedSession = savedSessionCaptor.getValue();
+    assertEquals(List.of(activeMember), savedSession.getMembers());
+    verify(webSocketService)
+        .removeMemberPrincipal(
+            new MemberPrincipal(session.getSessionID(), staleMember.getMemberID()));
+    verify(webSocketService).sendMembersUpdate(savedSession);
   }
 
   @Test
   public void cleanupStaleInactiveMembers_skipsRecentInactive() {
     val activeMember = new Member(Utils.generateRandomID(), "Alice", "#fff", null, null);
-    val recentInactive =
-        new Member(
-            Utils.generateRandomID(),
-            "Bob",
-            "#000",
-            null,
-            null,
-            false,
-            Instant.now().minus(Duration.ofMinutes(1)));
-    val session =
-        new Session(
-            new ObjectId(),
-            Utils.generateRandomID(),
-            Utils.generateRandomID(),
-            null,
-            null,
-            List.of(activeMember, recentInactive),
-            new HashMap<>(),
-            new ArrayList<>(),
-            SessionState.START_VOTING,
-            null,
-            null,
-            null,
-            null,
-            false,
-            null,
-            null);
-
+    val recentInactive = inactiveMember(Instant.now().minus(Duration.ofMinutes(1)));
+    val session = sessionWithMembers(activeMember, recentInactive);
     when(databaseService.getSessions()).thenReturn(List.of(session));
+    when(databaseService.getSessionByID(session.getSessionID())).thenReturn(Optional.of(session));
 
     cleanupTask.cleanupStaleInactiveMembers();
 
     verify(databaseService, never()).saveSession(any());
-    verify(webSocketService, never()).sendMembersUpdate(any());
+    verifyNoInteractions(webSocketService);
   }
 
   @Test
@@ -135,5 +86,43 @@ public class InactiveMemberCleanupTaskTest {
     cleanupTask.cleanupStaleInactiveMembers();
 
     verify(databaseService, never()).saveSession(any());
+    verifyNoInteractions(webSocketService);
+  }
+
+  @Test
+  public void cleanupStaleInactiveMembers_skipsWhenSessionDeletedConcurrently() {
+    val session =
+        sessionWithMembers(new Member(Utils.generateRandomID(), "Alice", "#fff", null, null));
+    when(databaseService.getSessions()).thenReturn(List.of(session));
+    when(databaseService.getSessionByID(session.getSessionID())).thenReturn(Optional.empty());
+
+    cleanupTask.cleanupStaleInactiveMembers();
+
+    verify(databaseService, never()).saveSession(any());
+    verifyNoInteractions(webSocketService);
+  }
+
+  private static Member inactiveMember(Instant deactivatedAt) {
+    return new Member(Utils.generateRandomID(), "Bob", "#000", null, null, false, deactivatedAt);
+  }
+
+  private static Session sessionWithMembers(Member... members) {
+    return new Session(
+        new ObjectId(),
+        Utils.generateRandomID(),
+        Utils.generateRandomID(),
+        null,
+        null,
+        List.of(members),
+        new HashMap<>(),
+        new ArrayList<>(),
+        SessionState.START_VOTING,
+        null,
+        null,
+        null,
+        null,
+        false,
+        null,
+        null);
   }
 }
