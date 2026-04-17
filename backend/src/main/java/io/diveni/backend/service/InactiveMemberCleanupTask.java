@@ -5,6 +5,7 @@
 */
 package io.diveni.backend.service;
 
+import io.diveni.backend.controller.WebsocketController;
 import io.diveni.backend.model.Session;
 import io.diveni.backend.principals.MemberPrincipal;
 import java.time.Duration;
@@ -21,16 +22,43 @@ public class InactiveMemberCleanupTask {
   private static final Logger LOGGER = LoggerFactory.getLogger(InactiveMemberCleanupTask.class);
   private static final Duration GRACE_PERIOD = Duration.ofMinutes(3);
 
-  @Autowired private DatabaseService databaseService;
-  @Autowired private WebSocketService webSocketService;
+  private final DatabaseService databaseService;
+  private final WebSocketService webSocketService;
+  private final WebsocketController websocketController;
 
+  @Autowired
+  public InactiveMemberCleanupTask(
+      DatabaseService databaseService,
+      WebSocketService webSocketService,
+      WebsocketController websocketController) {
+    this.databaseService = databaseService;
+    this.webSocketService = webSocketService;
+    this.websocketController = websocketController;
+  }
+
+  /**
+   * Periodically removes members whose deactivation is older than {@link #GRACE_PERIOD}.
+   *
+   * <p>Synchronizes on the {@link WebsocketController} bean monitor, the same monitor held by all
+   * {@code public synchronized} WS handler methods to serialize session mutations against
+   * concurrent WS traffic and avoid a lost-update race on the unversioned {@link Session} document.
+   * The lock is taken per session (not around the whole loop) so WS handlers can interleave between
+   * iterations.
+   */
   @Scheduled(fixedRate = 60_000)
   public void cleanupStaleInactiveMembers() {
     Instant cutoff = Instant.now().minus(GRACE_PERIOD);
 
-    for (Session session : databaseService.getSessions()) {
-      Session cleaned = session.removeStaleInactiveMembers(cutoff);
-      if (cleaned != session) {
+    for (Session snapshot : databaseService.getSessions()) {
+      synchronized (websocketController) {
+        Session session = databaseService.getSessionByID(snapshot.getSessionID()).orElse(null);
+        if (session == null) {
+          continue;
+        }
+        Session cleaned = session.removeStaleInactiveMembers(cutoff);
+        if (cleaned == session) {
+          continue;
+        }
         databaseService.saveSession(cleaned);
         session.getMembers().stream()
             .filter(
