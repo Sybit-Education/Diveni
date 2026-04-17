@@ -1,121 +1,37 @@
 <template>
   <b-container id="session-page">
-    <b-row class="headers">
-      <b-col cols="auto" sm="8">
-        <h1>
-          {{
-            planningStart
-              ? t("page.session.during.estimation.title")
-              : t("page.session.before.title")
-          }}
-        </h1>
-      </b-col>
-      <b-col class="d-flex justify-content-end align-items-center ms-auto">
-        <copy-session-id-popup v-if="planningStart" :session-id="sessionID" class="me-2" />
-        <session-close-button :is-planning-start="planningStart" :user-story-mode="userStoryMode" />
-      </b-col>
-    </b-row>
-
-    <b-row class="pb-3">
-      <b-col class="d-flex justify-content-center flex-wrap">
-        <b-button
-          v-if="!autoReveal && !planningStart"
-          class="optionButton"
-          variant="outline-dark"
-          @click="
-            autoReveal = true;
-            $event.target.blur();
-          "
-        >
-          <i class="bi bi-eye-slash-fill bIcons"></i>
-          {{ t("page.session.during.estimation.buttons.autoRevealOff") }}
-        </b-button>
-
-        <b-button
-          v-if="autoReveal && !planningStart"
-          class="optionButton"
-          variant="outline-dark"
-          @click="
-            autoReveal = false;
-            $event.target.blur();
-          "
-        >
-          <i class="bi bi-eye-fill bIcons"></i>
-          {{ t("page.session.during.estimation.buttons.autoRevealOn") }}
-        </b-button>
-
-        <b-button
-          v-if="!planningStart"
-          class="optionButton"
-          variant="outline-dark"
-          @click="copyDeepLink"
-        >
-          <i class="bi bi-clipboard bIcons"></i>
-          {{ t("session.prepare.step.wizard.deeplink.copyDeeplink") }}
-        </b-button>
-      </b-col>
-    </b-row>
-
-    <div v-if="!planningStart">
-      <copy-session-id-popup
-        :text-before-session-i-d="t('page.session.before.text.beforeID')"
-        :session-id="sessionID"
-        :text-after-session-i-d="t('page.session.before.text.afterID')"
-        class="copy-popup"
-      />
-
-      <b-row
-        class="d-flex justify-content-center overflow-auto kick-user"
-        :class="isMobile ? 'avatar-maxHeight' : ''"
-      >
-        <kick-user-wrapper
-          v-for="member of members"
-          :key="member.memberID"
-          :class="isMobile ? 'm-4' : 'spaceBetweenAvatar'"
-          child="RoundedAvatar"
-          :member="member"
-        />
-      </b-row>
-      <b-row>
-        <b-col class="text-center">
-          <session-start-button
-            :host-voting="hostVoting"
-            :auto-reveal="autoReveal"
-            @clicked="onPlanningStarted"
+    <b-overlay :show="isConnecting">
+      <template #overlay>
+        <b-spinner class="me-2" />
+        <span class="overlayText">
+          {{ t("session.connection.connecting") }}
+        </span>
+      </template>
+      <b-row class="headers">
+        <b-col cols="auto" sm="8">
+          <h1>
+            {{
+              planningStart
+                ? t("page.session.during.estimation.title")
+                : t("page.session.before.title")
+            }}
+          </h1>
+        </b-col>
+        <b-col class="d-flex justify-content-end align-items-center ms-auto">
+          <copy-session-id-popup v-if="planningStart" :session-id="sessionID" class="me-2" />
+          <session-close-button
+            :is-planning-start="planningStart"
+            :user-story-mode="userStoryMode"
           />
         </b-col>
       </b-row>
-    </div>
-    <div v-else>
-      <b-row class="d-flex justify-content-start pb-3">
-        <b-col cols="auto" class="me-auto optionButtonCol">
+
+      <b-row class="pb-3">
+        <b-col class="d-flex justify-content-center flex-wrap">
           <b-button
-            class="me-3 optionButton"
+            v-if="!autoReveal && !planningStart"
+            class="optionButton"
             variant="outline-dark"
-            @click="
-              sendRestartMessage();
-              $event.target.blur();
-            "
-          >
-            <i class="bi bi-arrow-clockwise bIcons"></i>
-            {{ t("page.session.during.estimation.buttons.new") }}
-          </b-button>
-          <b-button
-            class="me-3 optionButton"
-            variant="outline-dark"
-            @click="
-              sendVotingFinishedMessage();
-              $event.target.blur();
-            "
-          >
-            <i class="bi bi-bar-chart-fill bIcons"></i>
-            {{ t("page.session.during.estimation.buttons.result") }}
-          </b-button>
-          <b-button
-            v-if="!autoReveal"
-            class="me-3 optionButton"
-            variant="outline-dark"
-            :disabled="planningStart && !estimateFinished"
             @click="
               autoReveal = true;
               $event.target.blur();
@@ -124,11 +40,11 @@
             <i class="bi bi-eye-slash-fill bIcons"></i>
             {{ t("page.session.during.estimation.buttons.autoRevealOff") }}
           </b-button>
+
           <b-button
-            v-if="autoReveal"
-            class="me-3 optionButton"
+            v-if="autoReveal && !planningStart"
+            class="optionButton"
             variant="outline-dark"
-            :disabled="planningStart && !estimateFinished"
             @click="
               autoReveal = false;
               $event.target.blur();
@@ -137,211 +53,314 @@
             <i class="bi bi-eye-fill bIcons"></i>
             {{ t("page.session.during.estimation.buttons.autoRevealOn") }}
           </b-button>
+
           <b-button
-            class="me-3 optionButton"
+            v-if="!planningStart"
+            class="optionButton"
             variant="outline-dark"
-            @click="
-              copyDeepLink();
-              $event.target.blur();
-            "
+            @click="copyDeepLink"
           >
             <i class="bi bi-clipboard bIcons"></i>
             {{ t("session.prepare.step.wizard.deeplink.copyDeeplink") }}
           </b-button>
         </b-col>
-        <b-col cols="auto">
-          <estimate-timer
-            :start-timestamp="timerTimestamp"
-            :pause-timer="estimateFinished"
-            :duration="timerCountdownNumber"
-            :voting-started="planningStart"
-            @timer-finished="sendVotingFinishedMessage"
+      </b-row>
+
+      <div v-if="!planningStart">
+        <copy-session-id-popup
+          :text-before-session-i-d="t('page.session.before.text.beforeID')"
+          :session-id="sessionID"
+          :text-after-session-i-d="t('page.session.before.text.afterID')"
+          class="copy-popup"
+        />
+
+        <b-row
+          class="d-flex justify-content-center overflow-auto kick-user"
+          :class="isMobile ? 'avatar-maxHeight' : ''"
+        >
+          <kick-user-wrapper
+            v-for="member of members"
+            :key="member.memberID"
+            :class="[isMobile ? 'm-4' : 'spaceBetweenAvatar']"
+            child="RoundedAvatar"
+            :member="member"
+          />
+        </b-row>
+        <b-row>
+          <b-col class="text-center">
+            <session-start-button
+              :host-voting="hostVoting"
+              :auto-reveal="autoReveal"
+              @clicked="onPlanningStarted"
+            />
+          </b-col>
+        </b-row>
+      </div>
+      <div v-else>
+        <b-row class="d-flex justify-content-start pb-3">
+          <b-col cols="auto" class="me-auto optionButtonCol">
+            <b-button
+              class="me-3 optionButton"
+              variant="outline-dark"
+              @click="
+                sendRestartMessage();
+                $event.target.blur();
+              "
+            >
+              <i class="bi bi-arrow-clockwise bIcons"></i>
+              {{ t("page.session.during.estimation.buttons.new") }}
+            </b-button>
+            <b-button
+              class="me-3 optionButton"
+              variant="outline-dark"
+              @click="
+                sendVotingFinishedMessage();
+                $event.target.blur();
+              "
+            >
+              <i class="bi bi-bar-chart-fill bIcons"></i>
+              {{ t("page.session.during.estimation.buttons.result") }}
+            </b-button>
+            <b-button
+              v-if="!autoReveal"
+              class="me-3 optionButton"
+              variant="outline-dark"
+              :disabled="planningStart && !estimateFinished"
+              @click="
+                autoReveal = true;
+                $event.target.blur();
+              "
+            >
+              <i class="bi bi-eye-slash-fill bIcons"></i>
+              {{ t("page.session.during.estimation.buttons.autoRevealOff") }}
+            </b-button>
+            <b-button
+              v-if="autoReveal"
+              class="me-3 optionButton"
+              variant="outline-dark"
+              :disabled="planningStart && !estimateFinished"
+              @click="
+                autoReveal = false;
+                $event.target.blur();
+              "
+            >
+              <i class="bi bi-eye-fill bIcons"></i>
+              {{ t("page.session.during.estimation.buttons.autoRevealOn") }}
+            </b-button>
+            <b-button
+              class="me-3 optionButton"
+              variant="outline-dark"
+              @click="
+                copyDeepLink();
+                $event.target.blur();
+              "
+            >
+              <i class="bi bi-clipboard bIcons"></i>
+              {{ t("session.prepare.step.wizard.deeplink.copyDeeplink") }}
+            </b-button>
+          </b-col>
+          <b-col cols="auto">
+            <estimate-timer
+              :start-timestamp="timerTimestamp"
+              :pause-timer="estimateFinished"
+              :duration="timerCountdownNumber"
+              :voting-started="planningStart"
+              @timer-finished="sendVotingFinishedMessage"
+            />
+          </b-col>
+        </b-row>
+
+        <h4 v-if="membersPending.length > 0 && !estimateFinished" class="d-inline">
+          {{ t("page.session.during.estimation.message.waitingFor") }}
+          {{ membersPending.length }} /
+          {{ membersPending.length + membersEstimated.length }}
+        </h4>
+
+        <b-row
+          v-if="!estimateFinished"
+          class="d-flex justify-content-center overflow-auto"
+          :class="isMobile ? 'avatar-maxHeight' : ''"
+        >
+          <kick-user-wrapper
+            v-for="member of membersPending"
+            :key="member.memberID"
+            :class="[isMobile ? 'm-4' : 'spaceBetweenAvatar']"
+            child="RoundedAvatar"
+            :member="member"
+          />
+          <kick-user-wrapper
+            v-for="member of membersInactive"
+            :key="member.memberID"
+            :class="[isMobile ? 'm-4' : 'spaceBetweenAvatar']"
+            child="RoundedAvatar"
+            :member="member"
+          />
+        </b-row>
+        <hr class="my-5 breakingLine" />
+        <h4 v-if="!hostVoting">
+          {{ t("page.session.during.estimation.message.finished") }}
+          {{ membersEstimated.length }} /
+          {{ membersPending.length + membersEstimated.length }}
+        </h4>
+        <h4 v-else>
+          <div v-if="hostEstimation == ''">
+            {{ t("page.session.during.estimation.message.finished") }}
+            {{ membersEstimated.length }} /
+            {{ membersPending.length + membersEstimated.length + 1 }}
+          </div>
+          <div v-else>
+            {{ t("page.session.during.estimation.message.finished") }}
+            {{ membersEstimated.length + 1 }} /
+            {{ membersPending.length + membersEstimated.length + 1 }}
+          </div>
+        </h4>
+        <b-row
+          v-if="highlightedMembers.includes(adminID)"
+          class="my-1 d-flex justify-content-center flex-wrap overflow-auto kick-user"
+          style="max-height: 500px"
+        >
+          <session-admin-card
+            v-if="(estimateFinished && hostVoting) || hostEstimation !== ''"
+            :current-estimation="hostEstimation"
+            :estimate-finished="estimateFinished"
+            :highlight="highlightedMembers.includes(adminID) || highlightedMembers.length === 0"
+          />
+          <kick-user-wrapper
+            v-for="member of estimateFinished ? members : membersEstimated"
+            :key="member.memberID"
+            child="SessionMemberCard"
+            :member="member"
+            :props="{
+              estimateFinished: estimateFinished,
+              highlight:
+                highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0,
+            }"
+          />
+        </b-row>
+        <b-row
+          v-else
+          class="my-1 d-flex justify-content-center flex-wrap overflow-auto"
+          style="max-height: 500px"
+        >
+          <kick-user-wrapper
+            v-for="member of estimateFinished ? members : membersEstimated"
+            :key="member.memberID"
+            child="SessionMemberCard"
+            :member="member"
+            :props="{
+              estimateFinished: estimateFinished,
+              highlight:
+                highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0,
+            }"
+          />
+          <session-admin-card
+            v-if="(estimateFinished && hostVoting) || hostEstimation !== ''"
+            :current-estimation="hostEstimation"
+            :estimate-finished="estimateFinished"
+            :highlight="highlightedMembers.includes(adminID) || highlightedMembers.length === 0"
+          />
+        </b-row>
+        <div v-if="hostVoting && !estimateFinished">
+          <div v-if="!estimateFinished">
+            <hr class="breakingLine" />
+            <h4 class="d-inline">Your Estimation</h4>
+          </div>
+          <div v-if="!estimateFinished" class="newVotes m-1">
+            <b-button
+              v-for="item in voteSet"
+              :key="item"
+              variant="primary"
+              class="activePills m-1"
+              pill
+              style="width: 60px"
+              @click="vote(item)"
+            >
+              {{ item }}
+            </b-button>
+          </div>
+        </div>
+      </div>
+      <b-row v-if="userStoryMode !== 'NO_US'">
+        <b-col>
+          <user-story-sum-component />
+        </b-col>
+      </b-row>
+      <b-row v-if="userStoryMode !== 'NO_US'" class="d-flex flex-wrap">
+        <b-col cols="12" md="5" class="userStories">
+          <user-stories
+            :key="splitted_user_stories"
+            :card-set="voteSet"
+            :show-estimations="planningStart"
+            :initial-stories="userStories"
+            :show-edit-buttons="true"
+            :select-story="true"
+            :host="true"
+            :story-mode="userStoryMode"
+            :host-selected-story-index="index"
+            :splitted-user-stories="splitted_user_stories"
+            :story-to-split-idx="index"
+            :has-api-key="hasApiKey"
+            @user-stories-changed="onUserStoriesChanged"
+            @selected-story="onSelectedStory($event)"
+            @send-g-p-t-request="splitUserStory"
+          />
+          <div v-if="userStoryMode === 'US_JIRA'" class="refreshUserstories">
+            <b-button
+              variant="primary"
+              class="w-100 mb-3"
+              @click="
+                refreshUserStories();
+                $event.target.blur();
+              "
+            >
+              {{ t("page.session.before.refreshStories") }}
+            </b-button>
+          </div>
+        </b-col>
+        <b-spinner v-if="showSpinner" variant="primary" class="position-absolute centerSpinner" />
+        <GptModal
+          v-if="showGPTModal"
+          :suggestion-description="alternateDescription"
+          :gpt-mode="descriptionMode"
+          :retry-repaint="updateComponent"
+          @accept-suggestion-description="acceptSuggestionDescription"
+          @retry="retrySuggestionDescription"
+          @hide-modal="closeModal"
+        />
+        <b-col v-if="index !== null" cols="12" md="7">
+          <user-story-title
+            :alternate-title="alternateTitle"
+            :display-ai-option="gptTitleResponse"
+            :host="true"
+            :initial-stories="userStories"
+            :card-set="voteSet"
+            :index="index"
+            :has-api-key="hasApiKey"
+            @user-stories-changed="onUserStoriesChanged"
+            @improve-title="improveTitle"
+            @accept-title="acceptSuggestionTitle"
+            @adjust-title="adjustOriginalTitle"
+            @retry-title="retryImproveTitle"
+            @delete-title="deleteTitle"
+            @ai-estimation="aiEstimation"
+          />
+          <user-story-descriptions
+            :initial-stories="userStories"
+            :edit-description="true"
+            :index="index"
+            :story-mode="userStoryMode"
+            :gpt-description-response="gptDescriptionResponse"
+            :update-component="updateComponent"
+            :accepted-stories="acceptedStoriesDescription"
+            :is-jira-selected="isJiraSelected"
+            :has-api-key="hasApiKey"
+            @user-stories-changed="onUserStoriesChanged"
+            @send-g-p-t-description-request="improveDescription"
           />
         </b-col>
       </b-row>
-
-      <h4 v-if="membersPending.length > 0 && !estimateFinished" class="d-inline">
-        {{ t("page.session.during.estimation.message.waitingFor") }}
-        {{ membersPending.length }} /
-        {{ membersPending.length + membersEstimated.length }}
-      </h4>
-
-      <b-row
-        v-if="!estimateFinished"
-        class="d-flex justify-content-center overflow-auto"
-        :class="isMobile ? 'avatar-maxHeight' : ''"
-      >
-        <kick-user-wrapper
-          v-for="member of membersPending"
-          :key="member.memberID"
-          :class="isMobile ? 'm-4' : 'spaceBetweenAvatar'"
-          child="RoundedAvatar"
-          :member="member"
-        />
-      </b-row>
-      <hr class="my-5 breakingLine" />
-      <h4 v-if="!hostVoting">
-        {{ t("page.session.during.estimation.message.finished") }}
-        {{ membersEstimated.length }} /
-        {{ members.length }}
-      </h4>
-      <h4 v-else>
-        <div v-if="hostEstimation == ''">
-          {{ t("page.session.during.estimation.message.finished") }}
-          {{ membersEstimated.length }} /
-          {{ members.length + 1 }}
-        </div>
-        <div v-else>
-          {{ t("page.session.during.estimation.message.finished") }}
-          {{ membersEstimated.length + 1 }} /
-          {{ members.length + 1 }}
-        </div>
-      </h4>
-      <b-row
-        v-if="highlightedMembers.includes(adminID)"
-        class="my-1 d-flex justify-content-center flex-wrap overflow-auto kick-user"
-        style="max-height: 500px"
-      >
-        <session-admin-card
-          v-if="(estimateFinished && hostVoting) || hostEstimation !== ''"
-          :current-estimation="hostEstimation"
-          :estimate-finished="estimateFinished"
-          :highlight="highlightedMembers.includes(adminID) || highlightedMembers.length === 0"
-        />
-        <kick-user-wrapper
-          v-for="member of estimateFinished ? members : membersEstimated"
-          :key="member.memberID"
-          child="SessionMemberCard"
-          :member="member"
-          :props="{
-            estimateFinished: estimateFinished,
-            highlight:
-              highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0,
-          }"
-        />
-      </b-row>
-      <b-row
-        v-else
-        class="my-1 d-flex justify-content-center flex-wrap overflow-auto"
-        style="max-height: 500px"
-      >
-        <kick-user-wrapper
-          v-for="member of estimateFinished ? members : membersEstimated"
-          :key="member.memberID"
-          child="SessionMemberCard"
-          :member="member"
-          :props="{
-            estimateFinished: estimateFinished,
-            highlight:
-              highlightedMembers.includes(member.memberID) || highlightedMembers.length === 0,
-          }"
-        />
-        <session-admin-card
-          v-if="(estimateFinished && hostVoting) || hostEstimation !== ''"
-          :current-estimation="hostEstimation"
-          :estimate-finished="estimateFinished"
-          :highlight="highlightedMembers.includes(adminID) || highlightedMembers.length === 0"
-        />
-      </b-row>
-      <div v-if="hostVoting && !estimateFinished">
-        <div v-if="!estimateFinished">
-          <hr class="breakingLine" />
-          <h4 class="d-inline">Your Estimation</h4>
-        </div>
-        <div v-if="!estimateFinished" class="newVotes m-1">
-          <b-button
-            v-for="item in voteSet"
-            :key="item"
-            variant="primary"
-            class="activePills m-1"
-            pill
-            style="width: 60px"
-            @click="vote(item)"
-          >
-            {{ item }}
-          </b-button>
-        </div>
-      </div>
-    </div>
-    <b-row v-if="userStoryMode !== 'NO_US'">
-      <b-col>
-        <user-story-sum-component />
-      </b-col>
-    </b-row>
-    <b-row v-if="userStoryMode !== 'NO_US'" class="d-flex flex-wrap">
-      <b-col cols="12" md="5" class="userStories">
-        <user-stories
-          :key="splitted_user_stories"
-          :card-set="voteSet"
-          :show-estimations="planningStart"
-          :initial-stories="userStories"
-          :show-edit-buttons="true"
-          :select-story="true"
-          :host="true"
-          :story-mode="userStoryMode"
-          :splitted-user-stories="splitted_user_stories"
-          :story-to-split-idx="index"
-          :has-api-key="hasApiKey"
-          @user-stories-changed="onUserStoriesChanged"
-          @selected-story="onSelectedStory($event)"
-          @send-g-p-t-request="splitUserStory"
-        />
-        <div v-if="userStoryMode === 'US_JIRA'" class="refreshUserstories">
-          <b-button
-            variant="primary"
-            class="w-100 mb-3"
-            @click="
-              refreshUserStories();
-              $event.target.blur();
-            "
-          >
-            {{ t("page.session.before.refreshStories") }}
-          </b-button>
-        </div>
-      </b-col>
-      <b-spinner v-if="showSpinner" variant="primary" class="position-absolute centerSpinner" />
-      <GptModal
-        v-if="showGPTModal"
-        :suggestion-description="alternateDescription"
-        :gpt-mode="descriptionMode"
-        :retry-repaint="updateComponent"
-        @accept-suggestion-description="acceptSuggestionDescription"
-        @retry="retrySuggestionDescription"
-        @hide-modal="closeModal"
-      />
-      <b-col v-if="index !== null" cols="12" md="7">
-        <user-story-title
-          :alternate-title="alternateTitle"
-          :display-ai-option="gptTitleResponse"
-          :host="true"
-          :initial-stories="userStories"
-          :card-set="voteSet"
-          :index="index"
-          :has-api-key="hasApiKey"
-          @user-stories-changed="onUserStoriesChanged"
-          @improve-title="improveTitle"
-          @accept-title="acceptSuggestionTitle"
-          @adjust-title="adjustOriginalTitle"
-          @retry-title="retryImproveTitle"
-          @delete-title="deleteTitle"
-          @ai-estimation="aiEstimation"
-        />
-        <user-story-descriptions
-          :initial-stories="userStories"
-          :edit-description="true"
-          :index="index"
-          :story-mode="userStoryMode"
-          :gpt-description-response="gptDescriptionResponse"
-          :update-component="updateComponent"
-          :accepted-stories="acceptedStoriesDescription"
-          :is-jira-selected="isJiraSelected"
-          :has-api-key="hasApiKey"
-          @user-stories-changed="onUserStoriesChanged"
-          @send-g-p-t-description-request="improveDescription"
-        />
-      </b-col>
-    </b-row>
-    <notify-host-component />
+      <notify-host-component />
+    </b-overlay>
   </b-container>
 </template>
 
@@ -362,6 +381,7 @@ import SessionStartButton from "@/components/actions/SessionStartButton.vue";
 import axios from "axios";
 import { defineComponent } from "vue";
 import { useDiveniStore } from "@/store";
+import { webSocketService, ConnectionState } from "@/services/WebSocketService";
 import { useToast } from "vue-toastification";
 import { useI18n } from "vue-i18n";
 import SessionAdminCard from "@/components/SessionAdminCard.vue";
@@ -443,6 +463,7 @@ export default defineComponent({
       // needed for splitting user stories
       splitted_user_stories: [] as Array<UserStory>,
       language: "",
+      subscriptionCleanups: [] as Array<() => void>,
     };
   },
   computed: {
@@ -456,16 +477,26 @@ export default defineComponent({
       return this.store.members;
     },
     webSocketIsConnected() {
-      return this.store.webSocketConnected;
+      return webSocketService.connectionState.value === ConnectionState.CONNECTED;
+    },
+    isConnecting() {
+      return webSocketService.connectionState.value === ConnectionState.CONNECTING;
     },
     highlightedMembers() {
       return this.store.highlightedMembers;
     },
     membersPending(): Member[] {
-      return this.members.filter((member: Member) => member.currentEstimation === null);
+      return this.members.filter(
+        (member: Member) => member.isActive && member.currentEstimation === null
+      );
     },
     membersEstimated(): Member[] {
-      return this.members.filter((member: Member) => member.currentEstimation !== null);
+      return this.members.filter(
+        (member: Member) => member.isActive && member.currentEstimation !== null
+      );
+    },
+    membersInactive(): Member[] {
+      return this.members.filter((member: Member) => !member.isActive);
     },
     timerTimestamp() {
       return this.store.timerTimestamp ? this.store.timerTimestamp : "";
@@ -479,19 +510,11 @@ export default defineComponent({
   watch: {
     webSocketIsConnected(isConnected) {
       if (isConnected) {
-        console.debug("SessionPage: member connected to websocket");
-        setTimeout(() => {
-          this.registerAdminPrincipalOnBackend();
-          this.subscribeWSMemberUpdated();
-          this.subscribeOnTimerStart();
-          this.subscribeWSNotification();
-          if (this.startNewSessionOnMountedString === "true") {
-            this.sendRestartMessage();
-          }
-          setTimeout(() => {
-            this.requestMemberUpdate();
-          }, 400);
-        }, 300);
+        this.registerAdminPrincipalOnBackend();
+        if (this.startNewSessionOnMountedString === "true") {
+          this.sendRestartMessage();
+        }
+        this.requestMemberUpdate();
       }
     },
     highlightedMembers(highlights) {
@@ -514,7 +537,7 @@ export default defineComponent({
     },
   },
   async created() {
-    this.store.clearStoreWithoutUserStories();
+    await this.store.clearStoreWithoutUserStories();
     this.hasApiKey = await apiService.ensureServiceAndApiKey();
     if (!this.sessionID || !this.adminID) {
       //check for cookie
@@ -530,7 +553,16 @@ export default defineComponent({
     window.addEventListener("beforeunload", this.sendUnregisterCommand);
   },
   mounted() {
+    webSocketService.onStompErrorCallback = () => {
+      this.toast.error(this.t("session.notification.messages.sessionLost"));
+      window.localStorage.removeItem("adminCookie");
+      this.goToLandingPage();
+    };
     if (this.rejoined === "false") {
+      this.subscribeWSMemberUpdated();
+      this.subscribeOnTimerStart();
+      this.subscribeWSNotification();
+      this.subscribeWSStorySelected();
       this.connectToWebSocket();
     }
     if (this.voteSetJson) {
@@ -540,12 +572,14 @@ export default defineComponent({
       this.planningStart = true;
     } else if (this.sessionState === Constants.memberUpdateCommandVotingFinished) {
       this.planningStart = true;
-      console.log("ON MOUNTED");
       this.estimateFinished = true;
     }
   },
   unmounted() {
+    webSocketService.onStompErrorCallback = null;
     window.removeEventListener("beforeunload", this.sendUnregisterCommand);
+    this.subscriptionCleanups.forEach((cleanup) => cleanup());
+    this.subscriptionCleanups = [];
   },
   methods: {
     async checkAdminCookie() {
@@ -597,6 +631,9 @@ export default defineComponent({
 
         this.store.setUserStories({ stories: session.sessionConfig.userStories });
         this.voteSet = JSON.parse(this.voteSetJson);
+        if (session.selectedUserStoryIndex != null) {
+          this.index = session.selectedUserStoryIndex;
+        }
       }
     },
     handleReload() {
@@ -610,7 +647,10 @@ export default defineComponent({
         this.estimateFinished = true;
       }
       this.timerCountdownNumber = parseInt(this.timerSecondsString ?? "0", 10);
-      //reconnect and reload member
+      this.subscribeWSMemberUpdated();
+      this.subscribeOnTimerStart();
+      this.subscribeWSNotification();
+      this.subscribeWSStorySelected();
       this.connectToWebSocket();
     },
     async onUserStoriesChanged({ us, idx, doRemove }) {
@@ -680,7 +720,7 @@ export default defineComponent({
     onSelectedStory($event) {
       if (this.planningStart && $event != null) {
         const endPoint = Constants.webSocketAdminSelectedUserStoryRoute;
-        this.store.sendViaBackendWS(endPoint, $event);
+        this.store.sendViaBackendWS(endPoint, String($event));
       }
       this.index = $event;
     },
@@ -693,21 +733,30 @@ export default defineComponent({
       this.store.sendViaBackendWS(endPoint);
     },
     subscribeWSMemberUpdated() {
-      this.store.subscribeOnBackendWSAdminUpdate();
+      this.subscriptionCleanups.push(this.store.subscribeOnBackendWSAdminUpdate());
     },
     subscribeOnTimerStart() {
-      this.store.subscribeOnBackendWSTimerStart();
+      this.subscriptionCleanups.push(this.store.subscribeOnBackendWSTimerStart());
     },
     requestMemberUpdate() {
       const endPoint = Constants.webSocketGetMemberUpdateRoute;
       this.store.sendViaBackendWS(endPoint);
     },
     subscribeWSNotification() {
-      this.store.subscribeOnBackendWSNotify();
+      this.subscriptionCleanups.push(this.store.subscribeOnBackendWSNotify());
+    },
+    subscribeWSStorySelected() {
+      this.subscriptionCleanups.push(
+        webSocketService.subscribe(Constants.webSocketSelectedUserStoryRoute, (body) => {
+          this.index = +body;
+        })
+      );
     },
     sendUnregisterCommand() {
       const endPoint = `${Constants.webSocketUnregisterRoute}`;
       this.store.sendViaBackendWS(endPoint);
+      // Fire-and-forget: clearStore is async but beforeunload cannot await.
+      // The publish above is buffered synchronously; disconnect may not complete.
       this.store.clearStore();
     },
     sendVotingFinishedMessage() {
@@ -916,6 +965,12 @@ export default defineComponent({
 
 <!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
 <style lang="scss" scoped>
+.overlayText {
+  font-size: 2em;
+  margin: 0.67em 0;
+  font-weight: bold;
+}
+
 .centerSpinner {
   left: 0;
   right: 10%;

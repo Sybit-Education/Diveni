@@ -4,6 +4,7 @@ interface Member {
   hexColor: string;
   avatarAnimal: string;
   currentEstimation: string | null;
+  isActive: boolean;
 }
 
 export default Member;

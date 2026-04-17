@@ -401,8 +401,19 @@
         "issueTrackerSynchronizeFailed": "Failed to synchronize changes with Issue-Tracker",
         "issueTrackerJiraMissingTitle": "A title is required to create/update an issue in Jira. Please enter a title!",
         "wrongID": "Wrong invitation code",
-        "password": "Wrong password"
+        "password": "Wrong password",
+        "sessionLost": "Session no longer available. Please rejoin.",
+        "sessionNotFound": "Session no longer exists. Please rejoin.",
+        "memberNotInSession": "You have been removed from this session."
       }
+    },
+    "connection": {
+      "connecting": "Connecting...",
+      "reconnecting": "Connection lost — reconnecting...",
+      "reconnectingWithCount": "Connection lost — reconnecting... ({current}/{max})",
+      "disconnected": "Connection lost",
+      "reconnected": "Reconnected",
+      "reconnectButton": "Reconnect"
     }
   }
 }

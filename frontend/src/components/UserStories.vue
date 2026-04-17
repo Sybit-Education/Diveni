@@ -200,7 +200,6 @@ export default defineComponent({
     },
     hostSelectedStoryIndex() {
       this.selectedStoryIndex = this.hostSelectedStoryIndex;
-      this.$emit("selectedStory", this.selectedStoryIndex);
     },
   },
   mounted() {

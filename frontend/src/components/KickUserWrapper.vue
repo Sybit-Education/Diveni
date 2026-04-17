@@ -1,7 +1,13 @@
 <template>
-  <div :id="`user${member.memberID}`" class="component" :style="{ width: width }">
-    <Component :is="child" :member="member" :props="props" />
-    <b-popover :target="`user${member.memberID}`" hover placement="top" boundary="viewport">
+  <div class="component" :style="{ width: width }">
+    <div
+      :id="targetId"
+      class="member-card"
+      :class="{ 'member-inactive': !member.isActive && child === 'RoundedAvatar' }"
+    >
+      <Component :is="child" :member="member" :props="props" />
+    </div>
+    <b-popover :target="targetId" hover placement="top" boundary="viewport">
       <b-button v-b-modal="`modal-${member.memberID}`" class="rounded-circle px-2" variant="danger">
         <i class="bi bi-x" style="font-size: 1.2rem"></i>
       </b-button>
@@ -46,6 +52,9 @@ export default defineComponent({
     return { store, t };
   },
   computed: {
+    targetId() {
+      return `user${this.member.memberID}`;
+    },
     width() {
       switch (this.child) {
         case "RoundedAvatar":
@@ -72,5 +81,25 @@ export default defineComponent({
   display: grid;
   justify-content: center;
   align-items: center;
+}
+
+.member-card {
+  position: relative;
+}
+
+.member-inactive {
+  opacity: 0.5;
+}
+
+.member-inactive::after {
+  content: "\F61B";
+  font-family: "bootstrap-icons", sans-serif;
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 1.2rem;
+  color: #dc3545;
+  opacity: 1;
+  pointer-events: none;
 }
 </style>

@@ -113,6 +113,7 @@ public class RoutesControllerTest {
             null,
             LocalDate.of(2000, 12, 12),
             false,
+            null,
             null));
 
     // @formatter:off
@@ -159,6 +160,7 @@ public class RoutesControllerTest {
             null,
             LocalDate.of(2000, 12, 12),
             false,
+            null,
             null));
 
     // @formatter:off
@@ -208,6 +210,7 @@ public class RoutesControllerTest {
             null,
             LocalDate.of(2000, 12, 12),
             false,
+            null,
             null));
     // @formatter:off
     var memberAsJson =
@@ -257,6 +260,7 @@ public class RoutesControllerTest {
             null,
             LocalDate.of(2000, 12, 12),
             false,
+            null,
             null));
 
     // @formatter:off
@@ -304,6 +308,7 @@ public class RoutesControllerTest {
             null,
             LocalDate.of(2000, 12, 12),
             false,
+            null,
             null));
 
     // @formatter:off
@@ -347,6 +352,7 @@ public class RoutesControllerTest {
             null,
             LocalDate.of(2000, 12, 12),
             false,
+            null,
             null));
 
     // @formatter:off
@@ -390,6 +396,7 @@ public class RoutesControllerTest {
             null,
             LocalDate.of(2000, 12, 12),
             false,
+            null,
             null));
 
     // @formatter:off
@@ -460,6 +467,7 @@ public class RoutesControllerTest {
             null,
             LocalDate.of(2000, 12, 12),
             false,
+            null,
             null));
 
     // @formatter:off
@@ -512,6 +520,7 @@ public class RoutesControllerTest {
             null,
             LocalDate.of(2000, 12, 12),
             false,
+            null,
             null));
     this.mockMvc
         .perform(get("/sessions/{sessionID}", sessionUUID))
@@ -539,6 +548,7 @@ public class RoutesControllerTest {
             null,
             LocalDate.of(2000, 12, 12),
             false,
+            null,
             null));
 
     this.mockMvc

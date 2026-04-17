@@ -3,12 +3,7 @@
     <div id="picture-holderLeave">
       <b-img id="pandaPictureLeave" :src="leaveButtonImg" />
     </div>
-    <b-button
-      v-b-modal.close-session-modal
-      variant="danger"
-      class="mt-4 button"
-      @click="leaveSession"
-    >
+    <b-button variant="danger" class="mt-4 button" @click="leaveSession">
       <i class="bi bi-x"></i>
       {{ t("page.vote.button.leave.label") }}
     </b-button>
@@ -35,11 +30,11 @@ export default defineComponent({
     return { store, t, router, leaveButtonImg };
   },
   methods: {
-    leaveSession() {
+    async leaveSession() {
       const endPoint = `${Constants.webSocketUnregisterRoute}`;
       this.store.sendViaBackendWS(endPoint);
-      this.store.clearStore();
-      window.localStorage.removeItem("memberCookie");
+      await this.store.clearStore();
+      localStorage.removeItem("diveni_member_session");
       this.router.push({ name: "LandingPage" });
     },
   },
