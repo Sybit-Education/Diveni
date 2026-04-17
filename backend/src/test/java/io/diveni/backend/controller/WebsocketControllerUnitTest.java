@@ -83,7 +83,8 @@ public class WebsocketControllerUnitTest {
   }
 
   private Session sessionWithStoriesAndIndex(List<UserStory> stories, Integer index) {
-    SessionConfig config = new SessionConfig(List.of("1", "2", "3"), stories, 60, "USER_STORY", null);
+    SessionConfig config =
+        new SessionConfig(List.of("1", "2", "3"), stories, 60, "USER_STORY", null);
     return new Session(
         null,
         "sess-1",
@@ -144,12 +145,10 @@ public class WebsocketControllerUnitTest {
     // keeps votingFinished from firing.
     Member leaving = new Member("m-1", "Alice", "#fff", null, "5");
     Member staying = new Member("m-2", "Bob", "#000", null, "8");
-    Session session =
-        sessionInState(SessionState.WAITING_FOR_MEMBERS, List.of(leaving, staying));
+    Session session = sessionInState(SessionState.WAITING_FOR_MEMBERS, List.of(leaving, staying));
 
     when(databaseService.getSessionByMemberID("m-1")).thenReturn(Optional.of(session));
-    when(databaseService.saveSession(any(Session.class)))
-        .thenAnswer(inv -> inv.getArgument(0));
+    when(databaseService.saveSession(any(Session.class))).thenAnswer(inv -> inv.getArgument(0));
 
     controller.deactivateMember(new MemberPrincipal(session.getSessionID(), "m-1"));
 
@@ -166,8 +165,7 @@ public class WebsocketControllerUnitTest {
     AdminPrincipal admin = new AdminPrincipal(before.getSessionID(), before.getAdminID());
 
     when(databaseService.getSessionByID(before.getSessionID())).thenReturn(Optional.of(before));
-    when(databaseService.saveSession(any(Session.class)))
-        .thenAnswer(inv -> inv.getArgument(0));
+    when(databaseService.saveSession(any(Session.class))).thenAnswer(inv -> inv.getArgument(0));
 
     controller.adminUpdatedUserStories(admin, List.of(a));
 
@@ -181,8 +179,7 @@ public class WebsocketControllerUnitTest {
     Session session = sessionInState(SessionState.START_VOTING, List.of(alreadyActive));
     MemberPrincipal principal = new MemberPrincipal(session.getSessionID(), "m-1");
 
-    when(databaseService.getSessionByID(session.getSessionID()))
-        .thenReturn(Optional.of(session));
+    when(databaseService.getSessionByID(session.getSessionID())).thenReturn(Optional.of(session));
 
     controller.joinMember(principal);
 
@@ -192,7 +189,8 @@ public class WebsocketControllerUnitTest {
     verify(webSocketService, never())
         .sendNotification(
             any(Session.class),
-            argThat((Notification n) -> n != null && n.getType() == NotificationType.MEMBER_JOINED));
+            argThat(
+                (Notification n) -> n != null && n.getType() == NotificationType.MEMBER_JOINED));
   }
 
   @Test
@@ -201,14 +199,11 @@ public class WebsocketControllerUnitTest {
     // (no MEMBER_LEFT broadcast), so reactivation must be silent too —
     // otherwise flaky Wi-Fi produces an unbalanced stream of 'joined' toasts.
     Member inactive = new Member("m-1", "Alice", "#fff", null, "5", false, java.time.Instant.now());
-    Session session =
-        sessionInState(SessionState.WAITING_FOR_MEMBERS, List.of(inactive));
+    Session session = sessionInState(SessionState.WAITING_FOR_MEMBERS, List.of(inactive));
     MemberPrincipal principal = new MemberPrincipal(session.getSessionID(), "m-1");
 
-    when(databaseService.getSessionByID(session.getSessionID()))
-        .thenReturn(Optional.of(session));
-    when(databaseService.saveSession(any(Session.class)))
-        .thenAnswer(inv -> inv.getArgument(0));
+    when(databaseService.getSessionByID(session.getSessionID())).thenReturn(Optional.of(session));
+    when(databaseService.saveSession(any(Session.class))).thenAnswer(inv -> inv.getArgument(0));
 
     controller.joinMember(principal);
 
@@ -216,7 +211,8 @@ public class WebsocketControllerUnitTest {
     verify(webSocketService, never())
         .sendNotification(
             any(Session.class),
-            argThat((Notification n) -> n != null && n.getType() == NotificationType.MEMBER_JOINED));
+            argThat(
+                (Notification n) -> n != null && n.getType() == NotificationType.MEMBER_JOINED));
   }
 
   @Test
@@ -261,8 +257,7 @@ public class WebsocketControllerUnitTest {
     AdminPrincipal admin = new AdminPrincipal(before.getSessionID(), before.getAdminID());
 
     when(databaseService.getSessionByID(before.getSessionID())).thenReturn(Optional.of(before));
-    when(databaseService.saveSession(any(Session.class)))
-        .thenAnswer(inv -> inv.getArgument(0));
+    when(databaseService.saveSession(any(Session.class))).thenAnswer(inv -> inv.getArgument(0));
 
     controller.adminUpdatedUserStories(admin, List.of(a, b));
 
