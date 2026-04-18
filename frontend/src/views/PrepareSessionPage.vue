@@ -12,6 +12,7 @@
       :finalize="sendCreateSessionRequest"
       :tabs="tabs"
       :circle-size="40"
+      :content-margin-top="100"
       :primary-color1="'var(--preparePage-wizard-status)'"
       :primary-color2="'var(--preparePage-wizard-statusbackground)'"
       :background-color="'var(--preparePage-wizard-background)'"
