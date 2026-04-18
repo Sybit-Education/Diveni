@@ -327,7 +327,7 @@
           @retry="retrySuggestionDescription"
           @hide-modal="closeModal"
         />
-        <b-col v-if="index !== null" cols="12" md="7">
+        <b-col v-if="currentStory" cols="12" md="7">
           <user-story-title
             :alternate-title="alternateTitle"
             :display-ai-option="gptTitleResponse"
@@ -473,6 +473,15 @@ export default defineComponent({
     userStories() {
       return this.store.userStories;
     },
+    currentStory() {
+      if (this.index === null) {
+        return null;
+      }
+      if (this.index < 0 || this.index >= this.userStories.length) {
+        return null;
+      }
+      return this.userStories[this.index];
+    },
     members() {
       return this.store.members;
     },
@@ -508,6 +517,11 @@ export default defineComponent({
     },
   },
   watch: {
+    userStories(stories: UserStory[]) {
+      if (this.index !== null && (this.index < 0 || this.index >= stories.length)) {
+        this.index = null;
+      }
+    },
     webSocketIsConnected(isConnected) {
       if (isConnected) {
         this.registerAdminPrincipalOnBackend();
@@ -631,9 +645,7 @@ export default defineComponent({
 
         this.store.setUserStories({ stories: session.sessionConfig.userStories });
         this.voteSet = JSON.parse(this.voteSetJson);
-        if (session.selectedUserStoryIndex != null) {
-          this.index = session.selectedUserStoryIndex;
-        }
+        this.index = session.selectedUserStoryIndex ?? null;
       }
     },
     handleReload() {
@@ -874,22 +886,26 @@ export default defineComponent({
       this.showGPTModal = true;
     },
     acceptSuggestionDescription({ description, originalText }) {
-      if (originalText) {
-        this.userStories[this.index!].description = this.alternateDescription;
-      } else {
-        this.userStories[this.index!].description = description;
+      const story = this.currentStory;
+      if (!story) {
+        return;
       }
+      story.description = originalText ? this.alternateDescription : description;
       this.onUserStoriesChanged({ us: this.userStories, idx: this.index, doRemove: false });
       this.updateComponent = !this.updateComponent;
       this.acceptedStoriesDescription.push({
-        storyID: this.userStories[this.index!].id,
+        storyID: story.id,
         issueType: this.descriptionMode,
       });
     },
     async retrySuggestionDescription() {
+      const story = this.currentStory;
+      if (!story) {
+        return;
+      }
       await this.improveDescription({
-        userStory: this.userStories[this.index!],
-        description: this.userStories[this.index!].description,
+        userStory: story,
+        description: story.description,
         issue: this.descriptionMode,
         confidentialData: this.confidentialData,
         language: this.userStoryLanguage,
@@ -901,18 +917,18 @@ export default defineComponent({
       this.gptDescriptionResponse = false;
     },
     async aiEstimation({ confidentialData }) {
+      const story = this.currentStory;
+      if (!story) {
+        return;
+      }
       this.confidentialData = confidentialData;
       this.showSpinner = true;
-      const response = await apiService.estimateUserStory(
-        this.userStories[this.index!],
-        confidentialData,
-        this.voteSet
-      );
+      const response = await apiService.estimateUserStory(story, confidentialData, this.voteSet);
       this.showSpinner = false;
       this.toast.info(
         this.t("general.aiFeature.estimationToast.startingText") +
           '"' +
-          this.userStories[this.index!].title +
+          story.title +
           '"' +
           this.t("general.aiFeature.estimationToast.endingText") +
           response,
@@ -920,27 +936,27 @@ export default defineComponent({
       );
     },
     async splitUserStory({ confidentialData: confidentialData, language: language, retry: retry }) {
+      const story = this.currentStory;
+      if (!story) {
+        return;
+      }
+      this.showSpinner = true;
       if (!retry) {
         this.confidentialData = confidentialData;
         this.language = language;
-        this.showSpinner = true;
-        const response = await apiService.splitUserStory(
-          this.userStories[this.index!],
+        this.splitted_user_stories = await apiService.splitUserStory(
+          story,
           confidentialData,
           language
         );
-        this.showSpinner = false;
-        this.splitted_user_stories = response;
       } else {
-        this.showSpinner = true;
-        const response = await apiService.splitUserStory(
-          this.userStories[this.index!],
+        this.splitted_user_stories = await apiService.splitUserStory(
+          story,
           this.confidentialData,
           this.language
         );
-        this.showSpinner = false;
-        this.splitted_user_stories = response;
       }
+      this.showSpinner = false;
     },
     copyDeepLink() {
       const baseUrl = window.location.origin + "/prepare";

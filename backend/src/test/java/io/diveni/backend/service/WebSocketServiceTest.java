@@ -15,6 +15,9 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+import java.time.Clock;
+import java.time.Instant;
+import java.time.ZoneOffset;
 import java.util.HashSet;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -72,6 +75,23 @@ public class WebSocketServiceTest {
             new SessionPrincipals(
                 defaultAdminPrincipal.getSessionID(), defaultAdminPrincipal, members));
     sessionPrincipalsField.set(webSocketService, sessionPrincipals);
+  }
+
+  /**
+   * Installs a fixed {@link Clock} on the service under test so TTL-sensitive behavior can be
+   * asserted deterministically without {@code Thread.sleep} or real wall-clock waits.
+   */
+  private void setClock(Instant now) throws Exception {
+    val clockField = WebSocketService.class.getDeclaredField("clock");
+    clockField.setAccessible(true);
+    clockField.set(webSocketService, Clock.fixed(now, ZoneOffset.UTC));
+  }
+
+  @SuppressWarnings("unchecked")
+  private java.util.Map<String, Long> getPendingMap(String fieldName) throws Exception {
+    val field = WebSocketService.class.getDeclaredField(fieldName);
+    field.setAccessible(true);
+    return (java.util.Map<String, Long>) field.get(webSocketService);
   }
 
   @Test
@@ -676,6 +696,87 @@ public class WebSocketServiceTest {
   @Test
   public void consumePendingUnregister_returnsFalse_whenNotMarked() {
     assertFalse(webSocketService.consumePendingUnregister("unknown-member"));
+  }
+
+  @Test
+  public void consumePendingUnregister_returnsFalse_whenEntryExpired() throws Exception {
+    val memberID = "member-expired";
+    val t0 = Instant.parse("2026-04-18T12:00:00Z");
+
+    setClock(t0);
+    webSocketService.markPendingUnregister(memberID);
+
+    // Advance past the 60s TTL
+    setClock(t0.plusSeconds(61));
+
+    assertFalse(
+        webSocketService.consumePendingUnregister(memberID),
+        "expired entry must be treated as if never marked");
+    assertFalse(
+        webSocketService.consumePendingUnregister(memberID),
+        "expired entry must be removed on first consume attempt");
+  }
+
+  @Test
+  public void consumePendingAdminUnregister_returnsFalse_whenEntryExpired() throws Exception {
+    val adminID = "admin-expired";
+    val t0 = Instant.parse("2026-04-18T12:00:00Z");
+
+    setClock(t0);
+    webSocketService.markPendingAdminUnregister(adminID);
+
+    setClock(t0.plusSeconds(61));
+
+    assertFalse(
+        webSocketService.consumePendingAdminUnregister(adminID),
+        "expired admin entry must be treated as if never marked");
+  }
+
+  @Test
+  public void consumePendingUnregister_returnsTrue_whenWithinTtl() throws Exception {
+    val memberID = "member-fresh";
+    val t0 = Instant.parse("2026-04-18T12:00:00Z");
+
+    setClock(t0);
+    webSocketService.markPendingUnregister(memberID);
+
+    // Exactly at TTL boundary — must still count as fresh (> comparison in isExpired)
+    setClock(t0.plusMillis(60_000));
+
+    assertTrue(
+        webSocketService.consumePendingUnregister(memberID),
+        "entry exactly at TTL boundary must be considered fresh");
+  }
+
+  @Test
+  public void evictExpiredPendingUnregisters_removesOnlyExpiredEntries() throws Exception {
+    val t0 = Instant.parse("2026-04-18T12:00:00Z");
+
+    // Mark stale entries at t0.
+    setClock(t0);
+    webSocketService.markPendingUnregister("member-stale");
+    webSocketService.markPendingAdminUnregister("admin-stale");
+
+    // Mark fresh entries 30s later — still within TTL for BOTH sets, so the opportunistic
+    // evictStale() inside markPending* removes nothing. After this step the maps contain
+    // all four entries.
+    setClock(t0.plusSeconds(30));
+    webSocketService.markPendingUnregister("member-fresh");
+    webSocketService.markPendingAdminUnregister("admin-fresh");
+
+    // Advance past the stale entries' TTL (t0+61s) but still within the fresh entries' TTL
+    // (31s after their mark). Call the scheduled pass WITHOUT any intervening mark/consume,
+    // so it is the only code path that could evict anything.
+    setClock(t0.plusSeconds(61));
+    webSocketService.evictExpiredPendingUnregisters();
+
+    val memberMap = getPendingMap("pendingMemberUnregister");
+    val adminMap = getPendingMap("pendingAdminUnregister");
+
+    assertFalse(memberMap.containsKey("member-stale"), "stale member entry must be evicted");
+    assertFalse(adminMap.containsKey("admin-stale"), "stale admin entry must be evicted");
+    assertTrue(memberMap.containsKey("member-fresh"), "fresh member entry must NOT be evicted");
+    assertTrue(adminMap.containsKey("admin-fresh"), "fresh admin entry must NOT be evicted");
   }
 
   @Test

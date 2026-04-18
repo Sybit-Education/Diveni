@@ -406,14 +406,15 @@ export default defineComponent({
     reactOnHostJoin() {
       this.pauseSession = false;
     },
-    hasValidSessionData() {
-      return (
-        this.sessionID !== undefined &&
-        this.memberID !== undefined &&
-        this.name !== undefined &&
-        this.hexColor !== undefined &&
-        this.avatarAnimalAssetName !== undefined
-      );
+    hasValidSessionData(): boolean {
+      const requiredFields = [
+        this.sessionID,
+        this.memberID,
+        this.name,
+        this.hexColor,
+        this.avatarAnimalAssetName,
+      ];
+      return requiredFields.every((field) => typeof field === "string" && field.length > 0);
     },
     tryRecoverFromLocalStorage() {
       const saved = localStorage.getItem("diveni_member_session");

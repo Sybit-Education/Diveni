@@ -5,7 +5,9 @@
 */
 package io.diveni.backend.service;
 
+import java.time.Clock;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -20,6 +22,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -66,27 +69,47 @@ public class WebSocketService {
   private final ConcurrentHashMap<String, Long> pendingMemberUnregister = new ConcurrentHashMap<>();
   private final ConcurrentHashMap<String, Long> pendingAdminUnregister = new ConcurrentHashMap<>();
 
+  private final Clock clock = Clock.systemUTC();
+
   public void markPendingUnregister(String memberID) {
-    pendingMemberUnregister.put(memberID, System.currentTimeMillis());
+    pendingMemberUnregister.put(memberID, clock.millis());
     evictStale(pendingMemberUnregister);
   }
 
   public boolean consumePendingUnregister(String memberID) {
-    return pendingMemberUnregister.remove(memberID) != null;
+    return consumeIfFresh(pendingMemberUnregister, memberID);
   }
 
   public void markPendingAdminUnregister(String adminID) {
-    pendingAdminUnregister.put(adminID, System.currentTimeMillis());
+    pendingAdminUnregister.put(adminID, clock.millis());
     evictStale(pendingAdminUnregister);
   }
 
   public boolean consumePendingAdminUnregister(String adminID) {
-    return pendingAdminUnregister.remove(adminID) != null;
+    return consumeIfFresh(pendingAdminUnregister, adminID);
+  }
+
+  private boolean consumeIfFresh(Map<String, Long> map, String key) {
+    Long markedAt = map.remove(key);
+    if (markedAt == null) {
+      return false;
+    }
+    return !isExpired(markedAt);
+  }
+
+  private boolean isExpired(long markedAt) {
+    return clock.millis() - markedAt > PENDING_UNREGISTER_TTL_MS;
   }
 
   private void evictStale(ConcurrentHashMap<String, Long> map) {
-    long cutoff = System.currentTimeMillis() - PENDING_UNREGISTER_TTL_MS;
+    long cutoff = clock.millis() - PENDING_UNREGISTER_TTL_MS;
     map.entrySet().removeIf(entry -> entry.getValue() < cutoff);
+  }
+
+  @Scheduled(fixedRate = 60_000)
+  public void evictExpiredPendingUnregisters() {
+    evictStale(pendingMemberUnregister);
+    evictStale(pendingAdminUnregister);
   }
 
   public SessionPrincipals getSessionPrincipals(String sessionID) {
