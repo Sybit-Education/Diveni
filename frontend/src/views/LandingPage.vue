@@ -173,7 +173,6 @@ export default defineComponent({
   data() {
     return {
       sessionWrapper: {} as { session: Session },
-      startNewSessionOnMounted: false,
     };
   },
   async created() {
@@ -237,7 +236,6 @@ export default defineComponent({
           voteSetJson: JSON.stringify(this.sessionWrapper.session.sessionConfig.set),
           sessionState: this.sessionWrapper.session.sessionState,
           timerSecondsString: this.sessionWrapper.session.sessionConfig.timerSeconds.toString(),
-          startNewSessionOnMountedString: this.startNewSessionOnMounted.toString(),
           userStoryMode: this.sessionWrapper.session.sessionConfig.userStoryMode,
           hostVoting: this.sessionWrapper.session.hostVoting,
           rejoined: "false",

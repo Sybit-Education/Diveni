@@ -1,10 +1,10 @@
 <template>
   <b-container id="member-vote-page">
-    <b-overlay :show="pauseSession">
+    <b-overlay :show="pauseSession || isConnecting">
       <template #overlay>
         <b-spinner class="me-2" />
         <span class="overlayText">
-          {{ t("page.vote.hostLeft") }}
+          {{ pauseSession ? t("page.vote.hostLeft") : t("session.connection.connecting") }}
         </span>
       </template>
       <b-row v-if="!isMobile" class="headers">
@@ -304,6 +304,9 @@ export default defineComponent({
       }
       return this.userStories[this.index];
     },
+    isConnecting(): boolean {
+      return webSocketService.connectionState.value !== ConnectionState.CONNECTED;
+    },
   },
   watch: {
     memberUpdates(updates) {
@@ -358,10 +361,13 @@ export default defineComponent({
         return;
       }
     }
-    this.initializeWebSocketConnection();
     this.voteSet = JSON.parse(this.voteSetJson ?? "[]");
+    // Register all subs and watchers BEFORE kicking off the connect so any
+    // STOMP error frame or state transition the broker emits during the
+    // handshake lands on a live listener.
     this.subscriptionCleanups.push(this.store.subscribeOnBackendWSError(this.onSessionError));
     this.watchRegisterOnConnect();
+    this.initializeWebSocketConnection();
   },
   unmounted() {
     this.subscriptionCleanups.forEach((cleanup) => cleanup());

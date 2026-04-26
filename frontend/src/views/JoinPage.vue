@@ -15,7 +15,7 @@
         :color="hexColor"
         :animal-asset-name="avatarAnimalAssetName"
         :button-text="t('page.join.submit')"
-        :session-id-from-url="sessionID"
+        :session-id-from-url="sessionIDFromUrl"
         @clicked="sendJoinSessionRequest"
       />
     </b-overlay>
@@ -30,7 +30,6 @@ import JoinCommand from "../model/JoinCommand";
 import Constants from "../constants";
 import axios from "axios";
 import { useDiveniStore } from "@/store";
-import { webSocketService, ConnectionState } from "@/services/WebSocketService";
 import { useToast } from "vue-toastification";
 import { useI18n } from "vue-i18n";
 import { useRouter, useRoute } from "vue-router";
@@ -54,48 +53,28 @@ export default defineComponent({
       hexColor: Constants.getRandomPastelColor(),
       avatarAnimalAssetName: Constants.getRandomAvatarAnimalAssetName(),
       memberID: uuidv4(),
-      name: "",
-      sessionID: "",
-      voteSet: "",
-      timerSeconds: 0,
-      userStoryMode: "",
-      subscriptionCleanups: [] as Array<() => void>,
+      sessionIDFromUrl: "",
     };
-  },
-  computed: {
-    webSocketIsConnected() {
-      return webSocketService.connectionState.value === ConnectionState.CONNECTED;
-    },
-  },
-  watch: {
-    webSocketIsConnected(isConnected) {
-      if (isConnected) {
-        this.registerMemberPrincipalOnBackend();
-        this.goToEstimationPage();
-      }
-    },
   },
   created() {
     const id = this.route.query as unknown as { sessionID: string };
     if (id.sessionID) {
-      this.sessionID = id.sessionID;
+      this.sessionIDFromUrl = id.sessionID;
     }
-  },
-  unmounted() {
-    this.subscriptionCleanups.forEach((cleanup) => cleanup());
-    this.subscriptionCleanups = [];
   },
   methods: {
     async sendJoinSessionRequest(data: JoinCommand) {
       this.isJoining = true;
+      // clearStore disconnects any leftover WS from a prior session and resets
+      // the Pinia state. JoinPage itself does not open the WS -- MemberVotePage
+      // owns the WebSocket lifecycle.
       await this.store.clearStore();
-      this.name = data.name;
       const url = `${Constants.backendURL}${Constants.joinSessionRoute(data.sessionID)}`;
       const joinInfo = {
         password: data.password,
         member: {
           memberID: this.memberID,
-          name: this.name,
+          name: data.name,
           hexColor: this.hexColor,
           avatarAnimal: this.convertAvatarAssetNameToBackendAnimal(),
           currentEstimation: null,
@@ -103,16 +82,15 @@ export default defineComponent({
       };
       try {
         const result = await axios.post(url, joinInfo);
-
         const sessionConfig = result.data as {
           set: Array<string>;
           timerSeconds: number;
           userStories: Array<{ title: string; description: string; estimation: string | null }>;
           userStoryMode: string;
         };
-        this.voteSet = JSON.stringify(sessionConfig.set);
-        this.timerSeconds = parseInt(JSON.stringify(sessionConfig.timerSeconds), 10);
-        this.userStoryMode = sessionConfig.userStoryMode;
+        const voteSetJson = JSON.stringify(sessionConfig.set);
+        const timerSecondsString = sessionConfig.timerSeconds.toString();
+        const userStoryMode = sessionConfig.userStoryMode;
         this.store.setUserStories({
           stories: sessionConfig.userStories,
         });
@@ -121,15 +99,27 @@ export default defineComponent({
           JSON.stringify({
             sessionID: data.sessionID,
             memberID: this.memberID,
-            name: this.name,
+            name: data.name,
             hexColor: this.hexColor,
             avatarAnimalAssetName: this.avatarAnimalAssetName,
-            voteSetJson: this.voteSet,
-            timerSecondsString: this.timerSeconds.toString(),
-            userStoryMode: this.userStoryMode,
+            voteSetJson,
+            timerSecondsString,
+            userStoryMode,
           })
         );
-        this.connectToWebSocket(data.sessionID, joinInfo.member.memberID);
+        this.router.push({
+          name: "MemberVotePage",
+          state: {
+            sessionID: data.sessionID,
+            memberID: this.memberID,
+            name: data.name,
+            hexColor: this.hexColor,
+            avatarAnimalAssetName: this.avatarAnimalAssetName,
+            voteSetJson,
+            timerSecondsString,
+            userStoryMode,
+          },
+        });
       } catch (e) {
         this.isJoining = false;
         console.error(`Response of ${url} is invalid: ${e}`);
@@ -138,43 +128,6 @@ export default defineComponent({
     },
     convertAvatarAssetNameToBackendAnimal() {
       return Constants.avatarAnimalAssetNameToBackendEnum(this.avatarAnimalAssetName);
-    },
-    connectToWebSocket(sessionID: string, memberID: string) {
-      this.subscriptionCleanups.push(...this.store.subscribeOnMemberSessionTopics());
-      this.subscriptionCleanups.push(this.store.subscribeOnBackendWSError(this.onSessionError));
-      const url = `${Constants.backendURL}/connect?sessionID=${sessionID}&memberID=${memberID}`;
-      this.store.connectToBackendWS(url);
-    },
-    registerMemberPrincipalOnBackend() {
-      const endPoint = Constants.webSocketRegisterMemberRoute;
-      this.store.sendViaBackendWS(endPoint);
-    },
-    onSessionError(errorCode: string) {
-      this.isJoining = false;
-      localStorage.removeItem("diveni_member_session");
-      const messageKey =
-        errorCode === "SESSION_NOT_FOUND"
-          ? "session.notification.messages.sessionNotFound"
-          : errorCode === "MEMBER_NOT_IN_SESSION"
-            ? "session.notification.messages.memberNotInSession"
-            : "session.notification.messages.sessionLost";
-      this.toast.error(this.t(messageKey));
-      this.router.push({ name: "JoinPage" });
-    },
-    goToEstimationPage() {
-      this.router.push({
-        name: "MemberVotePage",
-        state: {
-          sessionID: this.sessionID,
-          memberID: this.memberID,
-          name: this.name,
-          hexColor: this.hexColor,
-          avatarAnimalAssetName: this.avatarAnimalAssetName,
-          voteSetJson: this.voteSet,
-          timerSecondsString: this.timerSeconds.toString(),
-          userStoryMode: this.userStoryMode,
-        },
-      });
     },
     showToast(e) {
       if (e.message == "Request failed with status code 404") {

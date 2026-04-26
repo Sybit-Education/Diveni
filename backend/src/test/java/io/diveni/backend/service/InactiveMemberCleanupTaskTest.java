@@ -83,6 +83,26 @@ public class InactiveMemberCleanupTaskTest {
   }
 
   @Test
+  public void cleanupStaleInactiveMembers_collectsAbandonedRestJoin() {
+    val abandonedRestJoin = inactiveMember(Instant.now().minus(Duration.ofMinutes(5)));
+    val session = sessionWithMembers(abandonedRestJoin);
+    when(databaseService.getSessions()).thenReturn(List.of(session));
+    when(databaseService.getSessionByID(session.getSessionID())).thenReturn(Optional.of(session));
+
+    cleanupTask.cleanupStaleInactiveMembers();
+
+    val savedSessionCaptor = ArgumentCaptor.forClass(Session.class);
+    verify(databaseService).saveSession(savedSessionCaptor.capture());
+    assertEquals(
+        List.of(),
+        savedSessionCaptor.getValue().getMembers(),
+        "abandoned REST-only member must be removed once grace period expires");
+    verify(webSocketService)
+        .removeMemberPrincipal(
+            new MemberPrincipal(session.getSessionID(), abandonedRestJoin.getMemberID()));
+  }
+
+  @Test
   public void cleanupStaleInactiveMembers_handlesEmptySessionList() {
     when(databaseService.getSessions()).thenReturn(List.of());
 

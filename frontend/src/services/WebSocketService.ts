@@ -33,6 +33,19 @@ class WebSocketService {
   }
 
   connect(url: string): void {
+    // Idempotency guard: a second call with the same URL while the existing
+    // client is still alive is a no-op. JoinPage opens the WS, then
+    // MemberVotePage mounts and calls connect() again -- without this guard
+    // the second call replaces a healthy client and causes the duplicate
+    // /registerMember and a brief subscription gap.
+    if (
+      this.lastUrl === url &&
+      this.client !== null &&
+      (this.client.active || this.client.connected)
+    ) {
+      return;
+    }
+
     this.lastUrl = url;
     this.retryCount.value = 0;
 

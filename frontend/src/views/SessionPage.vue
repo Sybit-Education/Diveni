@@ -422,7 +422,6 @@ export default defineComponent({
       sessionState: history.state.sessionState,
       timerSecondsString: history.state.timerSecondsString,
       password: history.state.password,
-      startNewSessionOnMountedString: history.state.startNewSessionOnMountedString,
       userStoryMode: history.state.userStoryMode,
       hostVoting: history.state.hostVoting as boolean,
       rejoined: history.state.rejoined,
@@ -525,9 +524,6 @@ export default defineComponent({
     webSocketIsConnected(isConnected) {
       if (isConnected) {
         this.registerAdminPrincipalOnBackend();
-        if (this.startNewSessionOnMountedString === "true") {
-          this.sendRestartMessage();
-        }
         this.requestMemberUpdate();
       }
     },
