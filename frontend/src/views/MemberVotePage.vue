@@ -159,7 +159,7 @@
             />
           </div>
         </b-col>
-        <b-col v-if="index !== null" cols="12" md="7">
+        <b-col v-if="currentStory" cols="12" md="7">
           <user-story-title
             :host="false"
             :initial-stories="userStories"
@@ -167,8 +167,7 @@
             :index="index"
           />
           <user-story-descriptions
-            v-if="userStories.length > 0 && index < userStories.length"
-            :key="userStories[index].description"
+            :key="currentStory.description"
             :index="index"
             :initial-stories="userStories"
             :edit-description="false"
@@ -244,6 +243,7 @@ export default defineComponent({
       timerSecondsString: history.state.timerSecondsString,
       userStoryMode: history.state.userStoryMode,
       safedHostEstimation: undefined as string | undefined,
+      subscriptionCleanups: [] as Array<() => void>,
     };
   },
   computed: {
@@ -297,6 +297,12 @@ export default defineComponent({
     },
     selectedUserStoryIndex() {
       return this.store.selectedUserStoryIndex;
+    },
+    currentStory() {
+      if (this.index === null || this.index < 0 || this.index >= this.userStories.length) {
+        return null;
+      }
+      return this.userStories[this.index];
     },
   },
   watch: {
@@ -354,8 +360,12 @@ export default defineComponent({
     }
     this.initializeWebSocketConnection();
     this.voteSet = JSON.parse(this.voteSetJson ?? "[]");
-    this.store.subscribeOnBackendWSError(this.onSessionError);
+    this.subscriptionCleanups.push(this.store.subscribeOnBackendWSError(this.onSessionError));
     this.watchRegisterOnConnect();
+  },
+  unmounted() {
+    this.subscriptionCleanups.forEach((cleanup) => cleanup());
+    this.subscriptionCleanups = [];
   },
   methods: {
     isAdminHighlighted() {
@@ -444,12 +454,12 @@ export default defineComponent({
       return true;
     },
     initializeWebSocketConnection() {
-      this.store.subscribeOnMemberSessionTopics();
+      this.subscriptionCleanups.push(...this.store.subscribeOnMemberSessionTopics());
       const url = `${Constants.backendURL}/connect?sessionID=${this.sessionID}&memberID=${this.memberID}`;
       this.store.connectToBackendWS(url);
     },
     watchRegisterOnConnect() {
-      watch(
+      const stop = watch(
         () => webSocketService.connectionState.value,
         (state, prevState) => {
           if (
@@ -461,6 +471,7 @@ export default defineComponent({
           }
         }
       );
+      this.subscriptionCleanups.push(stop);
     },
     onSessionError(errorCode: string) {
       localStorage.removeItem("diveni_member_session");

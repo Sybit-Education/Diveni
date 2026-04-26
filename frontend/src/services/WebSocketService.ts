@@ -8,6 +8,8 @@ export enum ConnectionState {
   RECONNECTING = "RECONNECTING",
 }
 
+const HEARTBEAT_INTERVAL_MS = 25_000;
+
 class WebSocketService {
   private client: Client | null = null;
   private subscriptions = new Map<string, (body: string) => void>();
@@ -56,8 +58,8 @@ class WebSocketService {
       reconnectTimeMode: ReconnectionTimeMode.EXPONENTIAL,
       maxReconnectDelay: 30000,
 
-      heartbeatIncoming: 10000,
-      heartbeatOutgoing: 10000,
+      heartbeatIncoming: HEARTBEAT_INTERVAL_MS,
+      heartbeatOutgoing: HEARTBEAT_INTERVAL_MS,
       heartbeatStrategy: TickerStrategy.Worker,
       heartbeatToleranceMultiplier: 2,
 

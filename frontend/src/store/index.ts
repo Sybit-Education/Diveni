@@ -63,7 +63,15 @@ export const useDiveniStore = defineStore("diveni-store", {
     },
     subscribeOnBackendWSStorySelected(): () => void {
       return webSocketService.subscribe(Constants.webSocketSelectedUserStoryRoute, (body) => {
-        this.selectedUserStoryIndex = +body;
+        const trimmed = typeof body === "string" ? body.trim() : "";
+        const parsed = trimmed ? Number(trimmed) : Number.NaN;
+        if (!Number.isInteger(parsed) || parsed < 0) {
+          console.warn(
+            `[Store] Discarding invalid story-selected payload: ${JSON.stringify(body)}`
+          );
+          return;
+        }
+        this.selectedUserStoryIndex = parsed;
       });
     },
     subscribeOnBackendWSAdminUpdate(): () => void {

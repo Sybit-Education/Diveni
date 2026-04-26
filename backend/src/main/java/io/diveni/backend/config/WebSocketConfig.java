@@ -22,6 +22,8 @@ import io.diveni.backend.handler.PrincipalWebSocketHandler;
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
+  private static final long HEARTBEAT_INTERVAL_MS = 25_000L;
+
   @Value("${SERVER_URL:#{null}}")
   private String SERVER_URL;
 
@@ -36,7 +38,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
   public void configureMessageBroker(MessageBrokerRegistry registry) {
     registry
         .enableSimpleBroker("/updates")
-        .setHeartbeatValue(new long[] {10000, 10000})
+        .setHeartbeatValue(new long[] {HEARTBEAT_INTERVAL_MS, HEARTBEAT_INTERVAL_MS})
         .setTaskScheduler(this.messageBrokerTaskScheduler);
     registry.setApplicationDestinationPrefixes("/ws");
     registry.setUserDestinationPrefix("/users");

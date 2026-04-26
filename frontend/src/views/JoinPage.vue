@@ -59,6 +59,7 @@ export default defineComponent({
       voteSet: "",
       timerSeconds: 0,
       userStoryMode: "",
+      subscriptionCleanups: [] as Array<() => void>,
     };
   },
   computed: {
@@ -79,6 +80,10 @@ export default defineComponent({
     if (id.sessionID) {
       this.sessionID = id.sessionID;
     }
+  },
+  unmounted() {
+    this.subscriptionCleanups.forEach((cleanup) => cleanup());
+    this.subscriptionCleanups = [];
   },
   methods: {
     async sendJoinSessionRequest(data: JoinCommand) {
@@ -135,8 +140,8 @@ export default defineComponent({
       return Constants.avatarAnimalAssetNameToBackendEnum(this.avatarAnimalAssetName);
     },
     connectToWebSocket(sessionID: string, memberID: string) {
-      this.store.subscribeOnMemberSessionTopics();
-      this.store.subscribeOnBackendWSError(this.onSessionError);
+      this.subscriptionCleanups.push(...this.store.subscribeOnMemberSessionTopics());
+      this.subscriptionCleanups.push(this.store.subscribeOnBackendWSError(this.onSessionError));
       const url = `${Constants.backendURL}/connect?sessionID=${sessionID}&memberID=${memberID}`;
       this.store.connectToBackendWS(url);
     },

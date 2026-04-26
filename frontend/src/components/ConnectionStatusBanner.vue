@@ -31,8 +31,8 @@ function onReconnect() {
 }
 
 watch(
-  () => webSocketService.connectionState.value,
-  (state) => {
+  [() => webSocketService.connectionState.value, () => webSocketService.retryCount.value],
+  ([state]) => {
     if (hideTimeout) {
       clearTimeout(hideTimeout);
       hideTimeout = null;
