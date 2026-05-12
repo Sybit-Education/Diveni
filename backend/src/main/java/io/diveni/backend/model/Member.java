@@ -81,7 +81,7 @@ public class Member {
     final Instant nextDeactivatedAt;
     if (active) {
       nextDeactivatedAt = null;
-    } else if (this.isActive) {
+    } else if (this.isActive || this.deactivatedAt == null) {
       nextDeactivatedAt = Instant.now();
     } else {
       nextDeactivatedAt = this.deactivatedAt;
