@@ -190,8 +190,7 @@ public class RoutesControllerTest {
         joined.isActive(),
         "REST-joined member must start inactive so cleanup can collect abandoned tabs");
     org.junit.jupiter.api.Assertions.assertNotNull(
-        joined.getDeactivatedAt(),
-        "deactivatedAt must be set so the cleanup grace-period applies");
+        joined.getDeactivatedAt(), "deactivatedAt must be set so the cleanup grace-period applies");
   }
 
   @Test
