@@ -5,8 +5,11 @@
 */
 package io.diveni.backend.service;
 
+import java.time.Clock;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -19,6 +22,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -48,6 +52,8 @@ public class WebSocketService {
 
   public static String NOTIFICATIONS_DESTINATION = "/updates/notifications";
 
+  public static String ERROR_DESTINATION = "/updates/error";
+
   public static String START_TIMER_DESTINATION = "/updates/startTimer";
 
   public static String USER_STORY_SELECTED_DESTINATION = "/updates/userStorySelected";
@@ -56,7 +62,55 @@ public class WebSocketService {
 
   @Autowired private DatabaseService databaseService;
 
-  @Getter private List<SessionPrincipals> sessionPrincipalList = List.of();
+  @Getter private volatile List<SessionPrincipals> sessionPrincipalList = List.of();
+
+  private static final long PENDING_UNREGISTER_TTL_MS = 60_000;
+
+  private final ConcurrentHashMap<String, Long> pendingMemberUnregister = new ConcurrentHashMap<>();
+  private final ConcurrentHashMap<String, Long> pendingAdminUnregister = new ConcurrentHashMap<>();
+
+  private final Clock clock = Clock.systemUTC();
+
+  public void markPendingUnregister(String memberID) {
+    pendingMemberUnregister.put(memberID, clock.millis());
+    evictStale(pendingMemberUnregister);
+  }
+
+  public boolean consumePendingUnregister(String memberID) {
+    return consumeIfFresh(pendingMemberUnregister, memberID);
+  }
+
+  public void markPendingAdminUnregister(String adminID) {
+    pendingAdminUnregister.put(adminID, clock.millis());
+    evictStale(pendingAdminUnregister);
+  }
+
+  public boolean consumePendingAdminUnregister(String adminID) {
+    return consumeIfFresh(pendingAdminUnregister, adminID);
+  }
+
+  private boolean consumeIfFresh(Map<String, Long> map, String key) {
+    Long markedAt = map.remove(key);
+    if (markedAt == null) {
+      return false;
+    }
+    return !isExpired(markedAt);
+  }
+
+  private boolean isExpired(long markedAt) {
+    return clock.millis() - markedAt > PENDING_UNREGISTER_TTL_MS;
+  }
+
+  private void evictStale(ConcurrentHashMap<String, Long> map) {
+    long cutoff = clock.millis() - PENDING_UNREGISTER_TTL_MS;
+    map.entrySet().removeIf(entry -> entry.getValue() < cutoff);
+  }
+
+  @Scheduled(fixedRate = 60_000)
+  public void evictExpiredPendingUnregisters() {
+    evictStale(pendingMemberUnregister);
+    evictStale(pendingAdminUnregister);
+  }
 
   public SessionPrincipals getSessionPrincipals(String sessionID) {
     LOGGER.debug("--> getSessionPrincipals(), sessionID={}", sessionID);
@@ -74,7 +128,26 @@ public class WebSocketService {
 
   public synchronized void addMemberIfNew(MemberPrincipal member) {
     LOGGER.debug("--> addMemberIfNew(), member={}", member.getMemberID());
-    val sessionPrincipals = getSessionPrincipals(member.getSessionID());
+    val sessionPrincipals =
+        sessionPrincipalList.stream()
+            .filter(s -> s.sessionID().equals(member.getSessionID()))
+            .findFirst()
+            .orElse(null);
+
+    if (sessionPrincipals == null) {
+      LOGGER.info(
+          "Session {} not yet in principal list, creating entry for member {}",
+          member.getSessionID(),
+          member.getMemberID());
+      sessionPrincipalList =
+          Stream.concat(
+                  sessionPrincipalList.stream(),
+                  Stream.of(new SessionPrincipals(member.getSessionID(), null, Set.of(member))))
+              .collect(Collectors.toList());
+      LOGGER.debug("<-- addMemberIfNew()");
+      return;
+    }
+
     val updatedMembers =
         Stream.concat(
                 sessionPrincipals.memberPrincipals().stream()
@@ -97,6 +170,13 @@ public class WebSocketService {
 
   public synchronized void removeMember(MemberPrincipal member) {
     LOGGER.debug("--> removeMember(), member={}", member.getMemberID());
+    removeMemberPrincipal(member);
+    databaseService.addRemovedMember();
+    LOGGER.debug("<-- removeMember()");
+  }
+
+  public synchronized void removeMemberPrincipal(MemberPrincipal member) {
+    LOGGER.debug("--> removeMemberPrincipal(), member={}", member.getMemberID());
     val sessionPrincipals = getSessionPrincipals(member.getSessionID());
     val updatedMembers =
         sessionPrincipals.memberPrincipals().stream()
@@ -110,24 +190,21 @@ public class WebSocketService {
                   else return p;
                 })
             .collect(Collectors.toList());
-    databaseService.addRemovedMember();
-    LOGGER.debug("<-- removeMember()");
+    LOGGER.debug("<-- removeMemberPrincipal()");
   }
 
-  public synchronized void removeAdmin(AdminPrincipal admin) {
+  public synchronized boolean removeAdmin(AdminPrincipal admin) {
     LOGGER.debug("--> removeAdmin(), admin={}", admin.getAdminID());
+    if (sessionPrincipalList.stream().noneMatch(p -> p.adminPrincipal() == admin)) {
+      LOGGER.debug("<-- removeAdmin(), stored principal differs, skipping");
+      return false;
+    }
     sessionPrincipalList =
         sessionPrincipalList.stream()
-            .map(
-                p -> {
-                  if (p.adminPrincipal() == admin) {
-                    return p.adminPrincipal(null);
-                  } else {
-                    return p;
-                  }
-                })
+            .map(p -> p.adminPrincipal() == admin ? p.adminPrincipal(null) : p)
             .collect(Collectors.toList());
     LOGGER.debug("<-- removeAdmin()");
+    return true;
   }
 
   public synchronized void setAdminUser(AdminPrincipal principal) {
@@ -273,6 +350,9 @@ public class WebSocketService {
   }
 
   public void sendSelectedUserStoryToMembers(Session session, Integer index) {
+    if (index == null) {
+      return;
+    }
     LOGGER.debug(
         "--> sendSelectedUserStoryToMembers(), sessionID={}, index={}",
         session.getSessionID(),
@@ -284,6 +364,19 @@ public class WebSocketService {
                 simpMessagingTemplate.convertAndSendToUser(
                     member.getMemberID(), USER_STORY_SELECTED_DESTINATION, index));
     LOGGER.debug("<-- sendSelectedUserStoryToMembers()");
+  }
+
+  public void sendSelectedUserStoryToUser(Session session, String userID) {
+    if (session.getSelectedUserStoryIndex() == null) {
+      return;
+    }
+    LOGGER.debug(
+        "--> sendSelectedUserStoryToUser(), sessionID={}, userID={}",
+        session.getSessionID(),
+        userID);
+    simpMessagingTemplate.convertAndSendToUser(
+        userID, USER_STORY_SELECTED_DESTINATION, session.getSelectedUserStoryIndex());
+    LOGGER.debug("<-- sendSelectedUserStoryToUser()");
   }
 
   public void sendTimerStartMessage(Session session, String timestamp) {
@@ -323,6 +416,12 @@ public class WebSocketService {
           notification);
     }
     LOGGER.debug("<-- sendNotification()");
+  }
+
+  public void sendErrorToMember(String memberID, String errorCode) {
+    LOGGER.debug("--> sendErrorToMember(), memberID={}, error={}", memberID, errorCode);
+    simpMessagingTemplate.convertAndSendToUser(memberID, ERROR_DESTINATION, errorCode);
+    LOGGER.debug("<-- sendErrorToMember()");
   }
 
   public void removeSession(Session session) {

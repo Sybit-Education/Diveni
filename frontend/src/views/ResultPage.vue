@@ -71,9 +71,9 @@ export default defineComponent({
       link.click();
       URL.revokeObjectURL(link.href);
     },
-    goHome() {
+    async goHome() {
       this.store.setUserStories({ stories: [] });
-      this.store.clearStore();
+      await this.store.clearStore();
       this.router.push({ name: "LandingPage" });
     },
   },

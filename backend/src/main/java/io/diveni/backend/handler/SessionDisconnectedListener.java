@@ -6,7 +6,9 @@
 package io.diveni.backend.handler;
 
 import io.diveni.backend.controller.WebsocketController;
+import io.diveni.backend.principals.AdminPrincipal;
 import io.diveni.backend.principals.MemberPrincipal;
+import io.diveni.backend.service.WebSocketService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,14 +21,28 @@ public class SessionDisconnectedListener implements ApplicationListener<SessionD
 
   private static final Logger LOGGER = LoggerFactory.getLogger(SessionDisconnectedListener.class);
   @Autowired WebsocketController controller;
+  @Autowired WebSocketService webSocketService;
 
   @Override
   public void onApplicationEvent(SessionDisconnectEvent event) {
     LOGGER.debug("--> onApplicationEvent()");
     var principal = event.getUser();
-    if (principal instanceof MemberPrincipal) {
-      if (controller.isMemberInSession(principal)) {
-        controller.removeMember(principal);
+    if (principal instanceof MemberPrincipal memberPrincipal) {
+      if (webSocketService.consumePendingUnregister(memberPrincipal.getMemberID())) {
+        LOGGER.debug(
+            "Intentional unregister for member={}, skipping", memberPrincipal.getMemberID());
+      } else if (controller.isMemberInSession(principal)) {
+        LOGGER.debug(
+            "Network disconnect for member={}, deactivating", memberPrincipal.getMemberID());
+        controller.deactivateMember(memberPrincipal);
+      }
+    } else if (principal instanceof AdminPrincipal adminPrincipal) {
+      if (webSocketService.consumePendingAdminUnregister(adminPrincipal.getAdminID())) {
+        LOGGER.debug("Intentional unregister for admin={}, skipping", adminPrincipal.getAdminID());
+      } else {
+        LOGGER.debug(
+            "Network disconnect for admin={}, notifying members", adminPrincipal.getAdminID());
+        controller.handleAdminDisconnect(adminPrincipal);
       }
     }
     LOGGER.debug("<-- onApplicationEvent()");

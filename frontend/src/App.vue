@@ -6,6 +6,7 @@ Copyright (C) 2022 AUME-Team 21/22, HTWG Konstanz
 
 <template>
   <div>
+    <connection-status-banner />
     <top-navigation-bar />
     <main>
       <feedback-button></feedback-button>
@@ -20,10 +21,11 @@ import { defineComponent } from "vue";
 import TopNavigationBar from "@/components/navigation/TopNavigationBar.vue";
 import FooterBar from "@/components/navigation/FooterBar.vue";
 import FeedbackButton from "@/components/FeedbackButton.vue";
+import ConnectionStatusBanner from "@/components/ConnectionStatusBanner.vue";
 
 export default defineComponent({
   name: "App",
-  components: { FeedbackButton, FooterBar, TopNavigationBar },
+  components: { ConnectionStatusBanner, FeedbackButton, FooterBar, TopNavigationBar },
   mounted() {
     document.title = "DIVENI";
   },

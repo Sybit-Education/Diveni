@@ -5,11 +5,19 @@
 */
 package io.diveni.backend.service;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+import java.time.Clock;
+import java.time.Instant;
+import java.time.ZoneOffset;
 import java.util.HashSet;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -67,6 +75,23 @@ public class WebSocketServiceTest {
             new SessionPrincipals(
                 defaultAdminPrincipal.getSessionID(), defaultAdminPrincipal, members));
     sessionPrincipalsField.set(webSocketService, sessionPrincipals);
+  }
+
+  /**
+   * Installs a fixed {@link Clock} on the service under test so TTL-sensitive behavior can be
+   * asserted deterministically without {@code Thread.sleep} or real wall-clock waits.
+   */
+  private void setClock(Instant now) throws Exception {
+    val clockField = WebSocketService.class.getDeclaredField("clock");
+    clockField.setAccessible(true);
+    clockField.set(webSocketService, Clock.fixed(now, ZoneOffset.UTC));
+  }
+
+  @SuppressWarnings("unchecked")
+  private java.util.Map<String, Long> getPendingMap(String fieldName) throws Exception {
+    val field = WebSocketService.class.getDeclaredField(fieldName);
+    field.setAccessible(true);
+    return (java.util.Map<String, Long>) field.get(webSocketService);
   }
 
   @Test
@@ -175,6 +200,7 @@ public class WebSocketServiceTest {
             null,
             null,
             false,
+            null,
             null);
 
     webSocketService.sendMembersUpdate(session);
@@ -205,6 +231,7 @@ public class WebSocketServiceTest {
             null,
             null,
             false,
+            null,
             null);
 
     webSocketService.sendSessionStateToMember(session, defaultMemberPrincipal.getMemberID());
@@ -235,6 +262,7 @@ public class WebSocketServiceTest {
             null,
             null,
             false,
+            null,
             null);
 
     webSocketService.sendSessionStateToMemberWithAutoReveal(
@@ -266,6 +294,7 @@ public class WebSocketServiceTest {
             null,
             null,
             false,
+            null,
             null);
 
     webSocketService.sendSessionStateToMemberWithAutoReveal(
@@ -301,6 +330,7 @@ public class WebSocketServiceTest {
             null,
             null,
             false,
+            null,
             null);
 
     webSocketService.sendSessionStateToMembers(session);
@@ -340,6 +370,7 @@ public class WebSocketServiceTest {
             null,
             null,
             false,
+            null,
             null);
 
     webSocketService.sendSessionStateToMembersWithAutoReveal(session, true);
@@ -379,6 +410,7 @@ public class WebSocketServiceTest {
             null,
             null,
             false,
+            null,
             null);
 
     webSocketService.sendSessionStateToMembersWithAutoReveal(session, false);
@@ -418,6 +450,7 @@ public class WebSocketServiceTest {
             null,
             null,
             false,
+            null,
             null);
 
     webSocketService.sendUpdatedUserStoriesToMembers(session);
@@ -459,6 +492,7 @@ public class WebSocketServiceTest {
             null,
             null,
             false,
+            null,
             null);
 
     webSocketService.sendSelectedUserStoryToMembers(session, selectedUserStoryIndex);
@@ -468,6 +502,34 @@ public class WebSocketServiceTest {
             defaultMemberPrincipal.getMemberID(),
             WebSocketService.USER_STORY_SELECTED_DESTINATION,
             selectedUserStoryIndex);
+  }
+
+  @Test
+  public void sendSelectedUserStoryToMembers_isNoOp_whenIndexIsNull() throws Exception {
+    val session =
+        new Session(
+            new ObjectId(),
+            defaultAdminPrincipal.getSessionID(),
+            defaultAdminPrincipal.getAdminID(),
+            new SessionConfig(List.of(), List.of(), null, "US_MANUALLY", "password"),
+            null,
+            List.of(new Member(defaultMemberPrincipal.getMemberID(), null, null, null, null)),
+            new HashMap<>(),
+            new ArrayList<>(),
+            SessionState.WAITING_FOR_MEMBERS,
+            null,
+            null,
+            null,
+            null,
+            false,
+            null,
+            null);
+
+    webSocketService.sendSelectedUserStoryToMembers(session, null);
+
+    verify(simpMessagingTemplateMock, never())
+        .convertAndSendToUser(
+            anyString(), eq(WebSocketService.USER_STORY_SELECTED_DESTINATION), any());
   }
 
   @Test
@@ -493,6 +555,7 @@ public class WebSocketServiceTest {
             null,
             null,
             false,
+            null,
             null);
     val notification = new Notification(NotificationType.ADMIN_LEFT, null);
 
@@ -524,6 +587,7 @@ public class WebSocketServiceTest {
             null,
             null,
             false,
+            null,
             null);
 
     webSocketService.removeSession(session);
@@ -550,6 +614,7 @@ public class WebSocketServiceTest {
             null,
             null,
             false,
+            null,
             null);
 
     webSocketService.sendMembersHostVoting(session);
@@ -580,7 +645,8 @@ public class WebSocketServiceTest {
             null,
             null,
             false,
-            new AdminVote("XL"));
+            new AdminVote("XL"),
+            null);
 
     webSocketService.sendMembersAdminVote(session);
 
@@ -589,5 +655,209 @@ public class WebSocketServiceTest {
             defaultMemberPrincipal.getMemberID(),
             WebSocketService.ADMIN_UPDATED_ESTIMATION,
             session.getHostEstimation());
+  }
+
+  @Test
+  public void addMember_noSessionEntry_createsEntry() {
+    val sessionID = Utils.generateRandomID();
+    val memberPrincipal = new MemberPrincipal(sessionID, Utils.generateRandomID());
+
+    webSocketService.addMemberIfNew(memberPrincipal);
+
+    val principals = webSocketService.getSessionPrincipals(sessionID);
+    Assertions.assertNull(principals.adminPrincipal());
+    Assertions.assertTrue(principals.memberPrincipals().contains(memberPrincipal));
+  }
+
+  @Test
+  public void addMemberBeforeAdmin_adminPreservesMember() {
+    val sessionID = Utils.generateRandomID();
+    val memberPrincipal = new MemberPrincipal(sessionID, Utils.generateRandomID());
+    val adminPrincipal = new AdminPrincipal(sessionID, Utils.generateRandomID());
+
+    webSocketService.addMemberIfNew(memberPrincipal);
+    webSocketService.setAdminUser(adminPrincipal);
+
+    val principals = webSocketService.getSessionPrincipals(sessionID);
+    Assertions.assertEquals(adminPrincipal, principals.adminPrincipal());
+    Assertions.assertTrue(principals.memberPrincipals().contains(memberPrincipal));
+  }
+
+  @Test
+  public void markPendingUnregister_and_consumePending_works() {
+    val memberID = "member-123";
+
+    webSocketService.markPendingUnregister(memberID);
+
+    assertTrue(webSocketService.consumePendingUnregister(memberID));
+    assertFalse(webSocketService.consumePendingUnregister(memberID));
+  }
+
+  @Test
+  public void consumePendingUnregister_returnsFalse_whenNotMarked() {
+    assertFalse(webSocketService.consumePendingUnregister("unknown-member"));
+  }
+
+  @Test
+  public void consumePendingUnregister_returnsFalse_whenEntryExpired() throws Exception {
+    val memberID = "member-expired";
+    val t0 = Instant.parse("2026-04-18T12:00:00Z");
+
+    setClock(t0);
+    webSocketService.markPendingUnregister(memberID);
+
+    // Advance past the 60s TTL
+    setClock(t0.plusSeconds(61));
+
+    assertFalse(
+        webSocketService.consumePendingUnregister(memberID),
+        "expired entry must be treated as if never marked");
+    assertFalse(
+        webSocketService.consumePendingUnregister(memberID),
+        "expired entry must be removed on first consume attempt");
+  }
+
+  @Test
+  public void consumePendingAdminUnregister_returnsFalse_whenEntryExpired() throws Exception {
+    val adminID = "admin-expired";
+    val t0 = Instant.parse("2026-04-18T12:00:00Z");
+
+    setClock(t0);
+    webSocketService.markPendingAdminUnregister(adminID);
+
+    setClock(t0.plusSeconds(61));
+
+    assertFalse(
+        webSocketService.consumePendingAdminUnregister(adminID),
+        "expired admin entry must be treated as if never marked");
+  }
+
+  @Test
+  public void consumePendingUnregister_returnsTrue_whenWithinTtl() throws Exception {
+    val memberID = "member-fresh";
+    val t0 = Instant.parse("2026-04-18T12:00:00Z");
+
+    setClock(t0);
+    webSocketService.markPendingUnregister(memberID);
+
+    // Exactly at TTL boundary — must still count as fresh (> comparison in isExpired)
+    setClock(t0.plusMillis(60_000));
+
+    assertTrue(
+        webSocketService.consumePendingUnregister(memberID),
+        "entry exactly at TTL boundary must be considered fresh");
+  }
+
+  @Test
+  public void evictExpiredPendingUnregisters_removesOnlyExpiredEntries() throws Exception {
+    val t0 = Instant.parse("2026-04-18T12:00:00Z");
+
+    // Mark stale entries at t0.
+    setClock(t0);
+    webSocketService.markPendingUnregister("member-stale");
+    webSocketService.markPendingAdminUnregister("admin-stale");
+
+    // Mark fresh entries 30s later — still within TTL for BOTH sets, so the opportunistic
+    // evictStale() inside markPending* removes nothing. After this step the maps contain
+    // all four entries.
+    setClock(t0.plusSeconds(30));
+    webSocketService.markPendingUnregister("member-fresh");
+    webSocketService.markPendingAdminUnregister("admin-fresh");
+
+    // Advance past the stale entries' TTL (t0+61s) but still within the fresh entries' TTL
+    // (31s after their mark). Call the scheduled pass WITHOUT any intervening mark/consume,
+    // so it is the only code path that could evict anything.
+    setClock(t0.plusSeconds(61));
+    webSocketService.evictExpiredPendingUnregisters();
+
+    val memberMap = getPendingMap("pendingMemberUnregister");
+    val adminMap = getPendingMap("pendingAdminUnregister");
+
+    assertFalse(memberMap.containsKey("member-stale"), "stale member entry must be evicted");
+    assertFalse(adminMap.containsKey("admin-stale"), "stale admin entry must be evicted");
+    assertTrue(memberMap.containsKey("member-fresh"), "fresh member entry must NOT be evicted");
+    assertTrue(adminMap.containsKey("admin-fresh"), "fresh admin entry must NOT be evicted");
+  }
+
+  @Test
+  public void markPendingAdminUnregister_and_consume_works() {
+    val adminID = "admin-123";
+
+    webSocketService.markPendingAdminUnregister(adminID);
+
+    assertTrue(webSocketService.consumePendingAdminUnregister(adminID));
+    assertFalse(webSocketService.consumePendingAdminUnregister(adminID));
+  }
+
+  @Test
+  public void consumePendingAdminUnregister_returnsFalse_whenNotMarked() {
+    assertFalse(webSocketService.consumePendingAdminUnregister("unknown-admin"));
+  }
+
+  @Test
+  public void pendingMemberAndAdminUnregister_useIsolatedKeyspaces() {
+    val sharedID = "shared-id-for-test";
+
+    webSocketService.markPendingUnregister(sharedID);
+
+    assertFalse(
+        webSocketService.consumePendingAdminUnregister(sharedID),
+        "consuming with the admin method must NOT drain the member map");
+    assertTrue(
+        webSocketService.consumePendingUnregister(sharedID),
+        "the original member-side mark must still be consumable");
+
+    webSocketService.markPendingAdminUnregister(sharedID);
+
+    assertFalse(
+        webSocketService.consumePendingUnregister(sharedID),
+        "consuming with the member method must NOT drain the admin map");
+    assertTrue(
+        webSocketService.consumePendingAdminUnregister(sharedID),
+        "the original admin-side mark must still be consumable");
+  }
+
+  @Test
+  public void sendErrorToMember_sendsError() throws Exception {
+    val memberID = "member-456";
+
+    webSocketService.sendErrorToMember(memberID, "SESSION_NOT_FOUND");
+
+    verify(simpMessagingTemplateMock, times(1))
+        .convertAndSendToUser(memberID, WebSocketService.ERROR_DESTINATION, "SESSION_NOT_FOUND");
+  }
+
+  @Test
+  public void removeAdmin_returnsTrue_whenStoredPrincipalIsCurrent() throws Exception {
+    setDefaultAdminPrincipal(new HashSet<>());
+
+    boolean removed = webSocketService.removeAdmin(defaultAdminPrincipal);
+
+    assertTrue(removed);
+    assertTrue(
+        webSocketService.getSessionPrincipalList().stream()
+            .allMatch(p -> p.adminPrincipal() == null));
+  }
+
+  @Test
+  public void removeAdmin_returnsFalse_whenStoredPrincipalIsDifferentInstance() throws Exception {
+    setDefaultAdminPrincipal(new HashSet<>());
+    val staleAdmin =
+        new AdminPrincipal(
+            defaultAdminPrincipal.getSessionID(), defaultAdminPrincipal.getAdminID());
+
+    boolean removed = webSocketService.removeAdmin(staleAdmin);
+
+    assertFalse(removed);
+    assertTrue(
+        webSocketService.getSessionPrincipalList().stream()
+            .anyMatch(p -> p.adminPrincipal() == defaultAdminPrincipal));
+  }
+
+  @Test
+  public void removeAdmin_returnsFalse_whenNoAdminStored() throws Exception {
+    boolean removed = webSocketService.removeAdmin(defaultAdminPrincipal);
+
+    assertFalse(removed);
   }
 }

@@ -1,10 +1,10 @@
 <template>
   <b-container id="member-vote-page">
-    <b-overlay :show="pauseSession">
+    <b-overlay :show="pauseSession || isConnecting">
       <template #overlay>
         <b-spinner class="me-2" />
         <span class="overlayText">
-          {{ t("page.vote.hostLeft") }}
+          {{ pauseSession ? t("page.vote.hostLeft") : t("session.connection.connecting") }}
         </span>
       </template>
       <b-row v-if="!isMobile" class="headers">
@@ -159,7 +159,7 @@
             />
           </div>
         </b-col>
-        <b-col v-if="index !== null" cols="12" md="7">
+        <b-col v-if="currentStory" cols="12" md="7">
           <user-story-title
             :host="false"
             :initial-stories="userStories"
@@ -167,8 +167,7 @@
             :index="index"
           />
           <user-story-descriptions
-            v-if="userStories.length > 0 && index < userStories.length"
-            :key="userStories[index].description"
+            :key="currentStory.description"
             :index="index"
             :initial-stories="userStories"
             :edit-description="false"
@@ -195,12 +194,13 @@ import UserStoryDescriptions from "../components/UserStoryDescriptions.vue";
 import UserStorySumComponent from "@/components/UserStorySum.vue";
 import SessionLeaveButton from "@/components/actions/SessionLeaveButton.vue";
 import SessionAdminCard from "@/components/SessionAdminCard.vue";
-import { defineComponent } from "vue";
+import { defineComponent, watch } from "vue";
 import { useDiveniStore } from "@/store";
 import { useToast } from "vue-toastification";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import UserStoryTitle from "@/components/UserStoryTitle.vue";
+import { webSocketService, ConnectionState } from "@/services/WebSocketService";
 
 export default defineComponent({
   name: "MemberVotePage",
@@ -234,6 +234,7 @@ export default defineComponent({
       triggerTimer: 0,
       estimateFinished: false,
       pauseSession: false,
+      sessionID: history.state.sessionID,
       memberID: history.state.memberID,
       name: history.state.name,
       hexColor: history.state.hexColor,
@@ -242,6 +243,7 @@ export default defineComponent({
       timerSecondsString: history.state.timerSecondsString,
       userStoryMode: history.state.userStoryMode,
       safedHostEstimation: undefined as string | undefined,
+      subscriptionCleanups: [] as Array<() => void>,
     };
   },
   computed: {
@@ -268,9 +270,6 @@ export default defineComponent({
     members() {
       return this.store.members;
     },
-    membersEstimated(): Member[] {
-      return this.members.filter((member: Member) => member.currentEstimation !== null);
-    },
     highlightedMembers() {
       return this.store.highlightedMembers;
     },
@@ -293,10 +292,20 @@ export default defineComponent({
         hexColor: this.hexColor,
         avatarAnimal: this.avatarAnimalAssetName,
         currentEstimation: "",
+        isActive: true,
       } as Member;
     },
     selectedUserStoryIndex() {
       return this.store.selectedUserStoryIndex;
+    },
+    currentStory() {
+      if (this.index === null || this.index < 0 || this.index >= this.userStories.length) {
+        return null;
+      }
+      return this.userStories[this.index];
+    },
+    isConnecting(): boolean {
+      return webSocketService.connectionState.value !== ConnectionState.CONNECTED;
     },
   },
   watch: {
@@ -337,23 +346,32 @@ export default defineComponent({
     },
     selectedUserStoryIndex(index) {
       this.hostSelectedStoryIndex = index;
+      this.index = index;
     },
   },
   created() {
     if (this.timerSecondsString !== undefined) {
-      this.timerCountdownNumber = Number.parseInt(this.timerSecondsString);
+      this.timerCountdownNumber = Number.parseInt(this.timerSecondsString, 10);
     }
   },
   mounted() {
-    if (
-      this.memberID === undefined ||
-      this.name === undefined ||
-      this.hexColor === undefined ||
-      this.avatarAnimalAssetName === undefined
-    ) {
-      this.goToJoinPage();
+    if (!this.hasValidSessionData()) {
+      if (!this.tryRecoverFromLocalStorage()) {
+        this.goToJoinPage();
+        return;
+      }
     }
-    this.voteSet = JSON.parse(this.voteSetJson ?? "{}");
+    this.voteSet = JSON.parse(this.voteSetJson ?? "[]");
+    // Register all subs and watchers BEFORE kicking off the connect so any
+    // STOMP error frame or state transition the broker emits during the
+    // handshake lands on a live listener.
+    this.subscriptionCleanups.push(this.store.subscribeOnBackendWSError(this.onSessionError));
+    this.watchRegisterOnConnect();
+    this.initializeWebSocketConnection();
+  },
+  unmounted() {
+    this.subscriptionCleanups.forEach((cleanup) => cleanup());
+    this.subscriptionCleanups = [];
   },
   methods: {
     isAdminHighlighted() {
@@ -395,7 +413,7 @@ export default defineComponent({
       this.router.push({ name: "JoinPage" });
     },
     leaveMeeting() {
-      window.localStorage.removeItem("memberCookie");
+      localStorage.removeItem("diveni_member_session");
       this.router.push({ name: "LandingPage" });
     },
     reactOnHostLeave() {
@@ -403,6 +421,74 @@ export default defineComponent({
     },
     reactOnHostJoin() {
       this.pauseSession = false;
+    },
+    hasValidSessionData(): boolean {
+      const requiredFields = [
+        this.sessionID,
+        this.memberID,
+        this.name,
+        this.hexColor,
+        this.avatarAnimalAssetName,
+      ];
+      return requiredFields.every((field) => typeof field === "string" && field.length > 0);
+    },
+    tryRecoverFromLocalStorage() {
+      const saved = localStorage.getItem("diveni_member_session");
+      if (!saved) {
+        return false;
+      }
+      let parsed;
+      try {
+        parsed = JSON.parse(saved);
+      } catch {
+        localStorage.removeItem("diveni_member_session");
+        return false;
+      }
+      if (!parsed.memberID || !parsed.sessionID) {
+        localStorage.removeItem("diveni_member_session");
+        return false;
+      }
+      this.sessionID = parsed.sessionID;
+      this.memberID = parsed.memberID;
+      this.name = parsed.name;
+      this.hexColor = parsed.hexColor;
+      this.avatarAnimalAssetName = parsed.avatarAnimalAssetName;
+      this.voteSetJson = parsed.voteSetJson;
+      this.timerSecondsString = parsed.timerSecondsString;
+      this.userStoryMode = parsed.userStoryMode;
+      this.timerCountdownNumber = Number.parseInt(this.timerSecondsString ?? "0", 10);
+      return true;
+    },
+    initializeWebSocketConnection() {
+      this.subscriptionCleanups.push(...this.store.subscribeOnMemberSessionTopics());
+      const url = `${Constants.backendURL}/connect?sessionID=${this.sessionID}&memberID=${this.memberID}`;
+      this.store.connectToBackendWS(url);
+    },
+    watchRegisterOnConnect() {
+      const stop = watch(
+        () => webSocketService.connectionState.value,
+        (state, prevState) => {
+          if (
+            this.memberID &&
+            state === ConnectionState.CONNECTED &&
+            (prevState === ConnectionState.CONNECTING || prevState === ConnectionState.RECONNECTING)
+          ) {
+            this.store.sendViaBackendWS(Constants.webSocketRegisterMemberRoute);
+          }
+        }
+      );
+      this.subscriptionCleanups.push(stop);
+    },
+    onSessionError(errorCode: string) {
+      localStorage.removeItem("diveni_member_session");
+      const messageKey =
+        errorCode === "SESSION_NOT_FOUND"
+          ? "session.notification.messages.sessionNotFound"
+          : errorCode === "MEMBER_NOT_IN_SESSION"
+            ? "session.notification.messages.memberNotInSession"
+            : "session.notification.messages.sessionLost";
+      this.toast.error(this.t(messageKey));
+      this.goToJoinPage();
     },
   },
 });

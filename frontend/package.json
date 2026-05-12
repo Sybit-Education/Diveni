@@ -14,6 +14,7 @@
     "licenses:update": "license-checker --json > ./public/frontend-dependencies.json"
   },
   "dependencies": {
+    "@stomp/stompjs": "^7.3.0",
     "@toast-ui/editor": "^3.2.2",
     "@toast-ui/editor-plugin-code-syntax-highlight": "^3.1.0",
     "axios": "^1.13.6",
@@ -27,15 +28,13 @@
     "papaparse": "^5.5.3",
     "pinia": "^3.0.4",
     "qrcode.vue": "^3.8.0",
-    "sockjs-client": "^1.6.1",
     "uuid": "^13.0.0",
     "vue": "^3.5.30",
     "vue-debounce": "^5.0.1",
     "vue-i18n": "^11.3.0",
     "vue-router": "^5.0.4",
     "vue-toastification": "^2.0.0-rc.5",
-    "vue3-steppy": "^1.6.0",
-    "webstomp-client": "^1.2.6"
+    "vue3-steppy": "^1.6.0"
   },
   "devDependencies": {
     "@crowdin/cli": "^4.14.1",
@@ -45,7 +44,6 @@
     "@types/hammerjs": "^2.0.46",
     "@types/node": "^25.5.0",
     "@types/papaparse": "^5.5.2",
-    "@types/sockjs-client": "^1.5.4",
     "@vitejs/plugin-vue": "^6.0.5",
     "@vue/eslint-config-prettier": "^10.2.0",
     "@vue/eslint-config-typescript": "^14.7.0",

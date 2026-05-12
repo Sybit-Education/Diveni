@@ -49,6 +49,7 @@ declare module 'vue' {
     BSpinner: typeof import('bootstrap-vue-next/components/BSpinner')['BSpinner']
     CardSetComponent: typeof import('./src/components/CardSetComponent.vue')['default']
     CarouselComponent: typeof import('./src/components/CarouselComponent.vue')['default']
+    ConnectionStatusBanner: typeof import('./src/components/ConnectionStatusBanner.vue')['default']
     CopySessionIdPopup: typeof import('./src/components/CopySessionIdPopup.vue')['default']
     DownloadPWAModal: typeof import('./src/components/DownloadPWAModal.vue')['default']
     EstimateTimer: typeof import('./src/components/EstimateTimer.vue')['default']

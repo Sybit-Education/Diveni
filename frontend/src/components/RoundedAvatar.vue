@@ -56,8 +56,8 @@ export default defineComponent({
 .rounded-avatar {
   padding: 8px;
   display: flex;
-  justify-content: center; /* Centering y-axis */
-  align-items: center; /* Centering x-axis */
+  justify-content: center;
+  align-items: center;
   overflow: hidden;
 }
 

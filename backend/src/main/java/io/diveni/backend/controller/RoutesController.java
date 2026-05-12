@@ -91,6 +91,7 @@ public class RoutesController {
             null,
             LocalDate.now(),
             false,
+            null,
             null);
     databaseService.saveSession(session);
     val responseMap = Map.of("session", session, "adminCookie", session.getAdminCookie());
@@ -153,7 +154,7 @@ public class RoutesController {
             HttpStatus.UNAUTHORIZED, ErrorMessages.wrongPasswordMessage);
       }
     }
-    members.add(member);
+    members.add(member.withActive(false));
     databaseService.saveSession(session.updateMembers(members));
     LOGGER.debug("<-- addMemberToSession()");
     return session;

@@ -2,7 +2,10 @@
   <div
     :style="`background-color: ${member.hexColor};`"
     class="session-member-card text-center card m-2"
-    :class="{ greyOut: !props.highlight && props.estimateFinished }"
+    :class="{
+      greyOut: !props.highlight && props.estimateFinished,
+      'member-inactive': !member.isActive,
+    }"
   >
     <h1 class="fs-3-rem">
       <strong v-if="!props.estimateFinished">?</strong>
@@ -59,7 +62,21 @@ h4 {
 .greyOut {
   opacity: 0.5;
   transform: scale(0.8);
-  /*border-width: 5px;*/
-  /*border-color: darkred;*/
+}
+
+.member-inactive {
+  opacity: 0.5;
+}
+
+.member-inactive::after {
+  content: "\F61B";
+  font-family: "bootstrap-icons", sans-serif;
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 1.2rem;
+  color: #dc3545;
+  opacity: 1;
+  pointer-events: none;
 }
 </style>

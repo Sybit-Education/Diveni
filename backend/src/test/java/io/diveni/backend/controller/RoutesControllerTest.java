@@ -113,6 +113,7 @@ public class RoutesControllerTest {
             null,
             LocalDate.of(2000, 12, 12),
             false,
+            null,
             null));
 
     // @formatter:off
@@ -138,6 +139,61 @@ public class RoutesControllerTest {
   }
 
   @Test
+  public void joinMember_savesMemberAsInactivePendingWebSocketRegistration() throws Exception {
+    val sessionUUID = Utils.generateRandomID();
+    sessionRepo.save(
+        new Session(
+            new ObjectId(),
+            sessionUUID,
+            Utils.generateRandomID(),
+            new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", null),
+            null,
+            new ArrayList<>(),
+            new HashMap<>(),
+            new ArrayList<>(),
+            SessionState.WAITING_FOR_MEMBERS,
+            null,
+            null,
+            null,
+            LocalDate.of(2000, 12, 12),
+            false,
+            null,
+            null));
+
+    var memberAsJson =
+        ("{"
+                + "'member': {"
+                + "'memberID': '365eef59-931d-0000-0000-aaaaaaaaaaaa',"
+                + "'name': 'Pending',"
+                + "'hexColor': '0xababab',"
+                + "'avatarAnimal': 'LION',"
+                + "'currentEstimation': null"
+                + "}"
+                + "}")
+            .replaceAll("'", "\"");
+
+    this.mockMvc
+        .perform(
+            post("/sessions/{sessionID}/join", sessionUUID)
+                .contentType(APPLICATION_JSON_UTF8)
+                .content(memberAsJson))
+        .andExpect(status().isOk());
+
+    val saved = sessionRepo.findBySessionID(sessionUUID);
+    val joined =
+        saved.getMembers().stream()
+            .filter(m -> "365eef59-931d-0000-0000-aaaaaaaaaaaa".equals(m.getMemberID()))
+            .findFirst()
+            .orElseThrow();
+
+    org.junit.jupiter.api.Assertions.assertFalse(
+        joined.isActive(),
+        "REST-joined member must start inactive so cleanup can collect abandoned tabs");
+    org.junit.jupiter.api.Assertions.assertNotNull(
+        joined.getDeactivatedAt(), "deactivatedAt must be set so the cleanup grace-period applies");
+  }
+
+  @Test
   public void joinMember_addsMemberToProtectedSession() throws Exception {
     val sessionUUID = Utils.generateRandomID();
     val password = "testPassword";
@@ -159,6 +215,7 @@ public class RoutesControllerTest {
             null,
             LocalDate.of(2000, 12, 12),
             false,
+            null,
             null));
 
     // @formatter:off
@@ -208,6 +265,7 @@ public class RoutesControllerTest {
             null,
             LocalDate.of(2000, 12, 12),
             false,
+            null,
             null));
     // @formatter:off
     var memberAsJson =
@@ -257,6 +315,7 @@ public class RoutesControllerTest {
             null,
             LocalDate.of(2000, 12, 12),
             false,
+            null,
             null));
 
     // @formatter:off
@@ -304,6 +363,7 @@ public class RoutesControllerTest {
             null,
             LocalDate.of(2000, 12, 12),
             false,
+            null,
             null));
 
     // @formatter:off
@@ -347,6 +407,7 @@ public class RoutesControllerTest {
             null,
             LocalDate.of(2000, 12, 12),
             false,
+            null,
             null));
 
     // @formatter:off
@@ -390,6 +451,7 @@ public class RoutesControllerTest {
             null,
             LocalDate.of(2000, 12, 12),
             false,
+            null,
             null));
 
     // @formatter:off
@@ -460,6 +522,7 @@ public class RoutesControllerTest {
             null,
             LocalDate.of(2000, 12, 12),
             false,
+            null,
             null));
 
     // @formatter:off
@@ -512,6 +575,7 @@ public class RoutesControllerTest {
             null,
             LocalDate.of(2000, 12, 12),
             false,
+            null,
             null));
     this.mockMvc
         .perform(get("/sessions/{sessionID}", sessionUUID))
@@ -539,6 +603,7 @@ public class RoutesControllerTest {
             null,
             LocalDate.of(2000, 12, 12),
             false,
+            null,
             null));
 
     this.mockMvc

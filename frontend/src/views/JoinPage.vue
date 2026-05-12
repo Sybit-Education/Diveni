@@ -1,17 +1,24 @@
 <template class="main">
   <b-container>
-    <h1 id="heading">
-      {{ t("page.join.title") }}
-      <!-- <b-img :src="require('@/assets/ControllerJoinPage.png')" id="controller"/> -->
-      <i id="controller" class="bi bi-controller"></i>
-    </h1>
-    <join-page-card
-      :color="hexColor"
-      :animal-asset-name="avatarAnimalAssetName"
-      :button-text="t('page.join.submit')"
-      :session-id-from-url="sessionID"
-      @clicked="sendJoinSessionRequest"
-    />
+    <b-overlay :show="isJoining">
+      <template #overlay>
+        <b-spinner class="me-2" />
+        <span class="overlayText">
+          {{ t("session.connection.connecting") }}
+        </span>
+      </template>
+      <h1 id="heading">
+        {{ t("page.join.title") }}
+        <i id="controller" class="bi bi-controller"></i>
+      </h1>
+      <join-page-card
+        :color="hexColor"
+        :animal-asset-name="avatarAnimalAssetName"
+        :button-text="t('page.join.submit')"
+        :session-id-from-url="sessionIDFromUrl"
+        @clicked="sendJoinSessionRequest"
+      />
+    </b-overlay>
   </b-container>
 </template>
 
@@ -42,55 +49,32 @@ export default defineComponent({
   },
   data() {
     return {
+      isJoining: false,
       hexColor: Constants.getRandomPastelColor(),
       avatarAnimalAssetName: Constants.getRandomAvatarAnimalAssetName(),
       memberID: uuidv4(),
-      name: "",
-      sessionID: "",
-      voteSet: "",
-      timerSeconds: 0,
-      userStoryMode: "",
+      sessionIDFromUrl: "",
     };
-  },
-  computed: {
-    webSocketIsConnected() {
-      return this.store.webSocketConnected;
-    },
-  },
-  watch: {
-    webSocketIsConnected(isConnected) {
-      if (isConnected) {
-        console.debug("JoinPage: member connected to websocket");
-        this.registerMemberPrincipalOnBackend();
-        this.subscribeWSMemberUpdates();
-        this.subscribeWSMemberUpdatesWithAutoReveal();
-        this.subscribeWSadminUpdatedUserStories();
-        this.subscribeWSStorySelected();
-        this.subscribeWSMemberUpdated();
-        this.subscribeOnTimerStart();
-        this.subscribeWSNotification();
-        this.subscribeWSMemberHostVotingUpdate();
-        this.subscribeWSMemberHostEstimation();
-        this.goToEstimationPage();
-      }
-    },
   },
   created() {
     const id = this.route.query as unknown as { sessionID: string };
     if (id.sessionID) {
-      this.sessionID = id.sessionID;
+      this.sessionIDFromUrl = id.sessionID;
     }
   },
   methods: {
     async sendJoinSessionRequest(data: JoinCommand) {
-      this.store.clearStore();
-      this.name = data.name;
+      this.isJoining = true;
+      // clearStore disconnects any leftover WS from a prior session and resets
+      // the Pinia state. JoinPage itself does not open the WS -- MemberVotePage
+      // owns the WebSocket lifecycle.
+      await this.store.clearStore();
       const url = `${Constants.backendURL}${Constants.joinSessionRoute(data.sessionID)}`;
       const joinInfo = {
         password: data.password,
         member: {
           memberID: this.memberID,
-          name: this.name,
+          name: data.name,
           hexColor: this.hexColor,
           avatarAnimal: this.convertAvatarAssetNameToBackendAnimal(),
           currentEstimation: null,
@@ -98,76 +82,52 @@ export default defineComponent({
       };
       try {
         const result = await axios.post(url, joinInfo);
-
         const sessionConfig = result.data as {
           set: Array<string>;
           timerSeconds: number;
           userStories: Array<{ title: string; description: string; estimation: string | null }>;
           userStoryMode: string;
         };
-        this.voteSet = JSON.stringify(sessionConfig.set);
-        this.timerSeconds = parseInt(JSON.stringify(sessionConfig.timerSeconds), 10);
-        this.userStoryMode = sessionConfig.userStoryMode;
+        const voteSetJson = JSON.stringify(sessionConfig.set);
+        const timerSecondsString = sessionConfig.timerSeconds.toString();
+        const userStoryMode = sessionConfig.userStoryMode;
         this.store.setUserStories({
           stories: sessionConfig.userStories,
         });
-        this.connectToWebSocket(data.sessionID, joinInfo.member.memberID);
+        localStorage.setItem(
+          "diveni_member_session",
+          JSON.stringify({
+            sessionID: data.sessionID,
+            memberID: this.memberID,
+            name: data.name,
+            hexColor: this.hexColor,
+            avatarAnimalAssetName: this.avatarAnimalAssetName,
+            voteSetJson,
+            timerSecondsString,
+            userStoryMode,
+          })
+        );
+        this.router.push({
+          name: "MemberVotePage",
+          state: {
+            sessionID: data.sessionID,
+            memberID: this.memberID,
+            name: data.name,
+            hexColor: this.hexColor,
+            avatarAnimalAssetName: this.avatarAnimalAssetName,
+            voteSetJson,
+            timerSecondsString,
+            userStoryMode,
+          },
+        });
       } catch (e) {
+        this.isJoining = false;
         console.error(`Response of ${url} is invalid: ${e}`);
         this.showToast(e);
       }
     },
     convertAvatarAssetNameToBackendAnimal() {
       return Constants.avatarAnimalAssetNameToBackendEnum(this.avatarAnimalAssetName);
-    },
-    connectToWebSocket(sessionID: string, memberID: string) {
-      const url = `${Constants.backendURL}/connect?sessionID=${sessionID}&memberID=${memberID}`;
-      this.store.connectToBackendWS(url);
-    },
-    registerMemberPrincipalOnBackend() {
-      const endPoint = Constants.webSocketRegisterMemberRoute;
-      this.store.sendViaBackendWS(endPoint);
-    },
-    subscribeWSMemberHostVotingUpdate() {
-      this.store.subscribeOnBackendWSHostVoting();
-    },
-    subscribeWSMemberHostEstimation() {
-      this.store.subscribeOnBackendWSHostEstimation();
-    },
-    subscribeWSMemberUpdates() {
-      this.store.subscribeOnBackendWSMemberUpdates();
-    },
-    subscribeWSMemberUpdatesWithAutoReveal() {
-      this.store.subscribeOnBackendWSMemberUpdatesWithAutoReveal();
-    },
-    subscribeWSNotification() {
-      this.store.subscribeOnBackendWSNotify();
-    },
-    subscribeWSadminUpdatedUserStories() {
-      this.store.subscribeOnBackendWSStoriesUpdated();
-    },
-    subscribeWSStorySelected() {
-      this.store.subscribeOnBackendWSStorySelected();
-    },
-    subscribeWSMemberUpdated() {
-      this.store.subscribeOnBackendWSAdminUpdate();
-    },
-    subscribeOnTimerStart() {
-      this.store.subscribeOnBackendWSTimerStart();
-    },
-    goToEstimationPage() {
-      this.router.push({
-        name: "MemberVotePage",
-        state: {
-          memberID: this.memberID,
-          name: this.name,
-          hexColor: this.hexColor,
-          avatarAnimalAssetName: this.avatarAnimalAssetName,
-          voteSetJson: this.voteSet,
-          timerSecondsString: this.timerSeconds.toString(),
-          userStoryMode: this.userStoryMode,
-        },
-      });
     },
     showToast(e) {
       if (e.message == "Request failed with status code 404") {
@@ -184,6 +144,12 @@ export default defineComponent({
 
 <!-- Add "scoped" attribute to limit CSS/SCSS to this component only -->
 <style lang="scss" scoped>
+.overlayText {
+  font-size: 2em;
+  margin: 0.67em 0;
+  font-weight: bold;
+}
+
 #heading {
   display: flex;
   justify-content: center;

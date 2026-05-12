@@ -173,12 +173,11 @@ export default defineComponent({
   data() {
     return {
       sessionWrapper: {} as { session: Session },
-      startNewSessionOnMounted: false,
     };
   },
-  created() {
-    this.disconnectFromBackendWS();
-    this.checkAdminCookie();
+  async created() {
+    await this.disconnectFromBackendWS();
+    await this.checkAdminCookie();
   },
   methods: {
     async checkAdminCookie() {
@@ -237,15 +236,14 @@ export default defineComponent({
           voteSetJson: JSON.stringify(this.sessionWrapper.session.sessionConfig.set),
           sessionState: this.sessionWrapper.session.sessionState,
           timerSecondsString: this.sessionWrapper.session.sessionConfig.timerSeconds.toString(),
-          startNewSessionOnMountedString: this.startNewSessionOnMounted.toString(),
           userStoryMode: this.sessionWrapper.session.sessionConfig.userStoryMode,
           hostVoting: this.sessionWrapper.session.hostVoting,
           rejoined: "false",
         },
       });
     },
-    disconnectFromBackendWS() {
-      this.store.disconnectFromBackendWS();
+    async disconnectFromBackendWS() {
+      await this.store.disconnectFromBackendWS();
     },
   },
 });

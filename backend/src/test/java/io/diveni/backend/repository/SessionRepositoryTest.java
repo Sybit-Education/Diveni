@@ -50,6 +50,7 @@ public class SessionRepositoryTest {
             null,
             null,
             false,
+            null,
             null);
 
     assertEquals(session, sessionRepo.save(session));
@@ -78,6 +79,7 @@ public class SessionRepositoryTest {
             null,
             null,
             false,
+            null,
             null);
 
     assertEquals(session, sessionRepo.save(session));
