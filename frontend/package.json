@@ -64,7 +64,7 @@
   },
   "overrides": {
     "dompurify": "^3.3.3",
-    "serialize-javascript": "^7.0.4"
+    "serialize-javascript": "^7.0.5"
   },
   "lint-staged": {
     "*.ts": "npm run lint:fix",
