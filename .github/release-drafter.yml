@@ -1,7 +1,7 @@
-# The name template for the release tag
+# The name template for the release name
 name-template: 'v$RESOLVED_VERSION 🌈'
 
-# The tag template for the release version
+# The tag template for the release tag
 tag-template: 'v$RESOLVED_VERSION'
 
 # Categories for organizing changes in the release notes
