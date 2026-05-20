@@ -46,10 +46,12 @@ jobs:
           RELEASE_DRAFTER_CONFIG_PATH: ${{ env.RELEASE_DRAFTER_CONFIG_PATH }}
         run: |
           response_file="$(mktemp)"
+          trap 'rm -f "$response_file"' EXIT
 
           status_code="$(curl --silent --output "$response_file" --write-out '%{http_code}' --config - <<EOF
           header = "Authorization: Bearer $GITHUB_TOKEN"
           header = "Accept: application/vnd.github+json"
+          header = "X-GitHub-Api-Version: 2022-11-28"
           url = "https://api.github.com/repos/$REPOSITORY/contents/$RELEASE_DRAFTER_CONFIG_PATH?ref=$DEFAULT_BRANCH"
           EOF
           )"
@@ -59,12 +61,10 @@ jobs:
           elif [ "$status_code" = "404" ]; then
             echo "exists=false" >> "$GITHUB_OUTPUT"
           else
-            echo "Error: Unexpected API response (HTTP $status_code) when checking for Release Drafter config:"
+            echo "Error: Unexpected API response (HTTP $status_code) when checking for $RELEASE_DRAFTER_CONFIG_PATH on branch $DEFAULT_BRANCH:"
             cat "$response_file"
             exit 1
           fi
-
-          rm -f "$response_file"
 
       - name: Skip bootstrap PR runs until the config is available on the default branch
         if: github.event_name != 'push' && steps.config_check.outputs.exists != 'true'
