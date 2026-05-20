@@ -1,7 +1,7 @@
-# The name template for the release name
+# Template for the release name displayed on GitHub
 name-template: 'v$RESOLVED_VERSION 🌈'
 
-# The tag template for the release tag
+# Template for the Git tag created for the release
 tag-template: 'v$RESOLVED_VERSION'
 
 # Categories for organizing changes in the release notes
