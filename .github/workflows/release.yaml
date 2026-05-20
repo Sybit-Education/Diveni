@@ -32,8 +32,32 @@ jobs:
       #  run: |
       #    echo "GHE_HOST=${GITHUB_SERVER_URL##https:\/\/}" >> $GITHUB_ENV
 
+      - name: Check if Release Drafter config exists on the default branch
+        if: github.event_name != 'push'
+        id: config_check
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPOSITORY: ${{ github.repository }}
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+        run: |
+          status_code="$(curl --silent --show-error --output /dev/null --write-out '%{http_code}' \
+            --header "Authorization: Bearer $GITHUB_TOKEN" \
+            --header "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/$REPOSITORY/contents/.github/release-drafter.yml?ref=$DEFAULT_BRANCH")"
+
+          if [ "$status_code" = "200" ]; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Skip bootstrap PR runs until the config is available on the default branch
+        if: github.event_name != 'push' && steps.config_check.outputs.exists != 'true'
+        run: echo "Skipping Release Drafter because .github/release-drafter.yml is not yet available on the default branch."
+
       # Drafts your next Release notes as Pull Requests are merged into "main"
       - uses: release-drafter/release-drafter@v6
+        if: github.event_name == 'push' || steps.config_check.outputs.exists == 'true'
         # (Optional) specify config name to use, relative to .github/. Default: release-drafter.yml
         with:
           config-name: release-drafter.yml
