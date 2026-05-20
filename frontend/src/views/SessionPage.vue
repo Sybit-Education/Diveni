@@ -481,10 +481,10 @@ export default defineComponent({
       if (isConnected) {
         console.debug("SessionPage: member connected to websocket");
         setTimeout(() => {
-          this.registerAdminPrincipalOnBackend();
           this.subscribeWSMemberUpdated();
           this.subscribeOnTimerStart();
           this.subscribeWSNotification();
+          this.registerAdminPrincipalOnBackend();
           if (this.startNewSessionOnMountedString === "true") {
             this.sendRestartMessage();
           }

@@ -116,6 +116,7 @@ export const useDiveniStore = defineStore("diveni-store", {
       this.userStories = [];
       this.memberUpdates = [];
       this.notifications = [];
+      this.timerTimestamp = undefined;
       this.webSocketConnected = false;
       this.stompClient = undefined;
     },
@@ -123,6 +124,7 @@ export const useDiveniStore = defineStore("diveni-store", {
       this.members = [];
       this.memberUpdates = [];
       this.notifications = [];
+      this.timerTimestamp = undefined;
       this.webSocketConnected = false;
       this.stompClient = undefined;
     },
