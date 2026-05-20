@@ -68,7 +68,7 @@ jobs:
 
       - name: Skip bootstrap PR runs until the config is available on the default branch
         if: github.event_name != 'push' && steps.config_check.outputs.exists != 'true'
-        run: echo "Skipping Release Drafter because .github/release-drafter.yml is not yet available on the default branch."
+        run: echo "Skipping Release Drafter because ${{ env.RELEASE_DRAFTER_CONFIG_PATH }} is not yet available on the default branch."
 
       # Drafts your next Release notes as Pull Requests are merged into "main"
       - uses: release-drafter/release-drafter@v6
