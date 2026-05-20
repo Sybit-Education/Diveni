@@ -17,6 +17,10 @@ on:
 permissions:
   contents: read
 
+env:
+  RELEASE_DRAFTER_CONFIG_NAME: release-drafter.yml
+  RELEASE_DRAFTER_CONFIG_PATH: .github/release-drafter.yml
+
 jobs:
   update_release_draft:
     permissions:
@@ -39,13 +43,14 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REPOSITORY: ${{ github.repository }}
           DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+          RELEASE_DRAFTER_CONFIG_PATH: ${{ env.RELEASE_DRAFTER_CONFIG_PATH }}
         run: |
           response_file="$(mktemp)"
 
           status_code="$(curl --silent --output "$response_file" --write-out '%{http_code}' --config - <<EOF
           header = "Authorization: Bearer $GITHUB_TOKEN"
           header = "Accept: application/vnd.github+json"
-          url = "https://api.github.com/repos/$REPOSITORY/contents/.github/release-drafter.yml?ref=$DEFAULT_BRANCH"
+          url = "https://api.github.com/repos/$REPOSITORY/contents/$RELEASE_DRAFTER_CONFIG_PATH?ref=$DEFAULT_BRANCH"
           EOF
           )"
 
@@ -54,6 +59,7 @@ jobs:
           elif [ "$status_code" = "404" ]; then
             echo "exists=false" >> "$GITHUB_OUTPUT"
           else
+            echo "Error: Unexpected API response (HTTP $status_code) when checking for Release Drafter config:"
             cat "$response_file"
             exit 1
           fi
@@ -69,7 +75,7 @@ jobs:
         if: github.event_name == 'push' || steps.config_check.outputs.exists == 'true'
         # (Optional) specify config name to use, relative to .github/. Default: release-drafter.yml
         with:
-          config-name: release-drafter.yml
+          config-name: ${{ env.RELEASE_DRAFTER_CONFIG_NAME }}
         #   disable-autolabeler: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
