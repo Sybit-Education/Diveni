@@ -115,11 +115,11 @@ jobs:
 
           def request(url, method="GET", data=None):
               payload = None if data is None else json.dumps(data).encode("utf-8")
-              request = Request(url, data=payload, method=method, headers=headers)
+              http_request = Request(url, data=payload, method=method, headers=headers)
               if payload is not None:
-                  request.add_header("Content-Type", "application/json")
+                  http_request.add_header("Content-Type", "application/json")
               try:
-                  with urlopen(request) as response:
+                  with urlopen(http_request) as response:
                       return response.status, response.read().decode("utf-8")
               except HTTPError as error:
                   return error.code, error.read().decode("utf-8")

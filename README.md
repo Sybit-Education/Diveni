@@ -58,7 +58,7 @@ Try to keep your Pull Request title aligned with your main commit so Release Dra
 | `build:` / `ci:` / `test:` | `build: speed up docs build cache` | patch |
 | `type!:` | `feat!: remove legacy API token flow` | major |
 
-For breaking changes, add `!` before the colon (for example `feat!:` or `fix(auth)!:`) so the release draft is promoted to the next major version.
+For breaking changes, add `!` after the type (and scope if present) but before the colon (for example `feat!:` or `fix(auth)!:`) so the release draft is promoted to the next major version.
 
 Happy coding 🚀
 
