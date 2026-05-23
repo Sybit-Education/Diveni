@@ -36,7 +36,9 @@ change-template: '- $TITLE @$AUTHOR (#$NUMBER)'
 # Escaping characters in titles to avoid issues with Markdown
 change-title-escapes: '\<*_&' # You can add # and @ to disable mentions, and add ` to disable code blocks.
 
-# Version resolver settings based on labels
+# Version resolver settings based on labels.
+# The semver labels are applied automatically from common conventional-commit style
+# PR titles and branch names further below in the autolabeler section.
 version-resolver:
   major:
     labels:
@@ -117,6 +119,13 @@ autolabeler:
       - '/documentation/i'
       - '/doc/i'
 
+  # Label for chore changes based on branch names and PR titles
+  - label: 'chore'
+    branch:
+      - '/chore\/.+/'
+    title:
+      - '/^chore(\([^)]+\))?:/i'
+
   # Label for refactoring changes based on branch names and PR titles
   - label: 'refactor'
     branch:
@@ -129,3 +138,37 @@ autolabeler:
       - '/cleanup/i'
       - '/rework/i'
       - '/optimize/i'
+
+  # Semver major for conventional commits with a breaking-change marker
+  - label: 'major'
+    branch:
+      - '/major\/.+/'
+      - '/breaking\/.+/'
+    title:
+      - '/^[a-z]+(\([^)]+\))?!:/i'
+
+  # Semver minor for conventional feature commits
+  - label: 'minor'
+    branch:
+      - '/feat\/.+/'
+      - '/feature\/.+/'
+    title:
+      - '/^feat(\([^)]+\))?:/i'
+      - '/^feature(\([^)]+\))?:/i'
+
+  # Semver patch for common maintenance and bug-fix commits
+  - label: 'patch'
+    branch:
+      - '/fix\/.+/'
+      - '/bugfix\/.+/'
+      - '/perf\/.+/'
+      - '/refactor\/.+/'
+      - '/docs\/.+/'
+      - '/doc\/.+/'
+      - '/style\/.+/'
+      - '/test\/.+/'
+      - '/build\/.+/'
+      - '/ci\/.+/'
+      - '/chore\/.+/'
+    title:
+      - '/^(fix|bugfix|perf|refactor|docs|doc|style|test|build|ci|chore)(\([^)]+\))?:/i'

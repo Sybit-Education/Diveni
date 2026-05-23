@@ -26,6 +26,8 @@ jobs:
     permissions:
       # write permission is required to create a github release
       contents: write
+      # write permission is required to create and update repository labels
+      issues: write
       # write permission is required for autolabeler
       # otherwise, read permission is required at least
       pull-requests: write
@@ -69,6 +71,85 @@ jobs:
       - name: Skip bootstrap PR runs until the config is available on the default branch
         if: github.event_name != 'push' && steps.config_check.outputs.exists != 'true'
         run: echo "Skipping Release Drafter because ${{ env.RELEASE_DRAFTER_CONFIG_PATH }} is not yet available on the default branch."
+
+      - name: Ensure Release Drafter labels exist
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          python <<'PY'
+          import json
+          import os
+          import sys
+          from urllib.error import HTTPError
+          from urllib.parse import quote
+          from urllib.request import Request, urlopen
+
+          repo = os.environ["REPOSITORY"]
+          token = os.environ["GITHUB_TOKEN"]
+          base_url = f"https://api.github.com/repos/{repo}/labels"
+          headers = {
+              "Authorization": f"Bearer {token}",
+              "Accept": "application/vnd.github+json",
+              "X-GitHub-Api-Version": "2022-11-28",
+              "User-Agent": "diveni-release-drafter",
+          }
+          labels = [
+              {"name": "major", "color": "b60205", "description": "Semver major release"},
+              {"name": "minor", "color": "fbca04", "description": "Semver minor release"},
+              {"name": "patch", "color": "0e8a16", "description": "Semver patch release"},
+              {"name": "feature", "color": "a2eeef", "description": "Feature work"},
+              {"name": "feature request", "color": "a2eeef", "description": "Requested feature work"},
+              {"name": "enhancement", "color": "a2eeef", "description": "Improvements or additions"},
+              {"name": "fix", "color": "d73a4a", "description": "Bug fix"},
+              {"name": "bugfix", "color": "d73a4a", "description": "Bug fix"},
+              {"name": "bug", "color": "d73a4a", "description": "Something is not working"},
+              {"name": "chore", "color": "cfd3d7", "description": "Maintenance work"},
+              {"name": "refactor", "color": "cfd3d7", "description": "Code refactoring"},
+              {"name": "documentation", "color": "0075ca", "description": "Documentation changes"},
+              {"name": "frontend", "color": "1d76db", "description": "Frontend changes"},
+              {"name": "backend", "color": "5319e7", "description": "Backend changes"},
+              {"name": "npm dependencies", "color": "0366d6", "description": "npm dependency updates"},
+              {"name": "gradle dependencies", "color": "0366d6", "description": "Gradle dependency updates"},
+          ]
+
+          def request(url, method="GET", data=None):
+              payload = None if data is None else json.dumps(data).encode("utf-8")
+              request = Request(url, data=payload, method=method, headers=headers)
+              if payload is not None:
+                  request.add_header("Content-Type", "application/json")
+              try:
+                  with urlopen(request) as response:
+                      return response.status, response.read().decode("utf-8")
+              except HTTPError as error:
+                  return error.code, error.read().decode("utf-8")
+
+          for label in labels:
+              status_code, response_body = request(f"{base_url}/{quote(label['name'], safe='')}")
+
+              if status_code == 200:
+                  print(f"Label already exists: {label['name']}")
+                  continue
+
+              if status_code != 404:
+                  print(f"Error: Unexpected API response (HTTP {status_code}) while checking label '{label['name']}':")
+                  print(response_body)
+                  sys.exit(1)
+
+              status_code, response_body = request(base_url, method="POST", data=label)
+
+              if status_code == 201:
+                  print(f"Created label: {label['name']}")
+                  continue
+
+              if status_code == 422:
+                  print(f"Label already exists: {label['name']}")
+                  continue
+
+              print(f"Error: Unexpected API response (HTTP {status_code}) while creating label '{label['name']}':")
+              print(response_body)
+              sys.exit(1)
+          PY
 
       # Drafts your next Release notes as Pull Requests are merged into "main"
       - uses: release-drafter/release-drafter@v6

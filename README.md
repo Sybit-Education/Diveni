@@ -43,6 +43,23 @@ How to contribute:
 6) Create a Pull Request to the original repo and wait for a code review
 7) Have fun and learn new things
 
+### Common commit prefixes
+
+We use common conventional-commit style prefixes to help the release workflow draft semantic versions automatically.
+Try to keep your Pull Request title aligned with your main commit so Release Drafter can assign the correct semver label.
+
+| Prefix | Example | Release impact |
+| --- | --- | --- |
+| `feat:` | `feat: add Azure Boards filter` | minor |
+| `fix:` | `fix: handle missing Jira sprint field` | patch |
+| `docs:` | `docs: explain GitHub provider setup` | patch |
+| `refactor:` | `refactor: simplify vote result mapping` | patch |
+| `chore:` | `chore: update release workflow comments` | patch |
+| `build:` / `ci:` / `test:` | `build: speed up docs build cache` | patch |
+| `type!:` | `feat!: remove legacy API token flow` | major |
+
+For breaking changes, add `!` before the colon (for example `feat!:` or `fix(auth)!:`) so the release draft is promoted to the next major version.
+
 Happy coding 🚀
 
 ### Hacktoberfest 2023
