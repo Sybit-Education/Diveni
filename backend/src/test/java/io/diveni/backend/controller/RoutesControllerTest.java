@@ -145,7 +145,8 @@ public class RoutesControllerTest {
     val sessionUUID = Utils.generateRandomID();
     val password = "testPassword";
     SessionConfig sessionConfig =
-        new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", passwordEncoder.encode(password));
+        new SessionConfig(
+            new ArrayList<>(), List.of(), 10, "US_MANUALLY", passwordEncoder.encode(password));
     sessionRepo.save(
         new Session(
             new ObjectId(),
@@ -194,7 +195,8 @@ public class RoutesControllerTest {
     val sessionUUID = Utils.generateRandomID();
     val password = "testPassword";
     SessionConfig sessionConfig =
-        new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", passwordEncoder.encode(password));
+        new SessionConfig(
+            new ArrayList<>(), List.of(), 10, "US_MANUALLY", passwordEncoder.encode(password));
     sessionRepo.save(
         new Session(
             new ObjectId(),
@@ -243,7 +245,8 @@ public class RoutesControllerTest {
     val sessionUUID = Utils.generateRandomID();
     val password = "testPassword";
     SessionConfig sessionConfig =
-        new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", passwordEncoder.encode(password));
+        new SessionConfig(
+            new ArrayList<>(), List.of(), 10, "US_MANUALLY", passwordEncoder.encode(password));
     sessionRepo.save(
         new Session(
             new ObjectId(),

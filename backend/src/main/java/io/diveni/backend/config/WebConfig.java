@@ -16,8 +16,7 @@ import java.util.concurrent.TimeUnit;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-  @Autowired
-  private RateLimitInterceptor rateLimitInterceptor;
+  @Autowired private RateLimitInterceptor rateLimitInterceptor;
 
   @Override
   public void addInterceptors(InterceptorRegistry registry) {

@@ -18,10 +18,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * Simple in-memory rate limiter that tracks requests per IP address.
- * Allows up to MAX_REQUESTS requests within WINDOW_SIZE_MS per IP.
- * This is a best-effort protection against abuse, not a production-grade
- * distributed rate limiter.
+ * Simple in-memory rate limiter that tracks requests per IP address. Allows up to MAX_REQUESTS
+ * requests within WINDOW_SIZE_MS per IP. This is a best-effort protection against abuse, not a
+ * production-grade distributed rate limiter.
  */
 @Component
 public class RateLimitInterceptor implements HandlerInterceptor {
@@ -38,19 +37,22 @@ public class RateLimitInterceptor implements HandlerInterceptor {
   public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
       throws Exception {
     String clientIp = getClientIp(request);
-    Window window = requestCounts.compute(clientIp, (key, existing) -> {
-      long now = System.currentTimeMillis();
-      if (existing == null || now - existing.startTime > WINDOW_SIZE_MS) {
-        return new Window(now, new AtomicInteger(1));
-      }
-      existing.count.incrementAndGet();
-      return existing;
-    });
+    Window window =
+        requestCounts.compute(
+            clientIp,
+            (key, existing) -> {
+              long now = System.currentTimeMillis();
+              if (existing == null || now - existing.startTime > WINDOW_SIZE_MS) {
+                return new Window(now, new AtomicInteger(1));
+              }
+              existing.count.incrementAndGet();
+              return existing;
+            });
 
     if (window.count.get() > MAX_REQUESTS) {
       LOGGER.warn("Rate limit exceeded for IP: {}", clientIp);
-      response.sendError(HttpStatus.TOO_MANY_REQUESTS.value(),
-          "Too many requests. Please try again later.");
+      response.sendError(
+          HttpStatus.TOO_MANY_REQUESTS.value(), "Too many requests. Please try again later.");
       return false;
     }
 
