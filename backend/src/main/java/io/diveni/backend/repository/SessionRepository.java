@@ -17,9 +17,6 @@ public interface SessionRepository extends MongoRepository<Session, String> {
 
   Session findByAdminCookie(UUID adminCookie);
 
-  default Optional<Session> findByMemberID(String memberID) {
-    return findAll().stream()
-        .filter(s -> s.getMembers().stream().anyMatch(m -> m.getMemberID().equals(memberID)))
-        .findFirst();
-  }
+  @Query("{ 'members.memberID': ?0 }")
+  Optional<Session> findByMemberID(String memberID);
 }
