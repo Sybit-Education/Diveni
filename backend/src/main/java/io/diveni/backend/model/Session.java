@@ -75,6 +75,7 @@ public class Session {
 
   @Version
   @Setter
+  @EqualsAndHashCode.Exclude
   @JsonProperty(access = JsonProperty.Access.READ_ONLY)
   private Integer version;
 
