@@ -60,13 +60,15 @@ public class DatabaseService {
 
   public Session saveSession(Session session) {
     LOGGER.debug("saveSession()");
-    if (session.getVersion() == null && session.getDatabaseID() != null) {
+    // setLastModified creates an immutable copy — version must be restored after
+    Session toSave = session.setLastModified(new Date());
+    if (toSave.getVersion() == null && toSave.getDatabaseID() != null) {
       // Version was lost during immutable copy — restore from DB for optimistic locking
       sessionRepo
-          .findById(session.getDatabaseID().toHexString())
-          .ifPresent(current -> session.setVersion(current.getVersion()));
+          .findById(toSave.getDatabaseID().toHexString())
+          .ifPresent(current -> toSave.setVersion(current.getVersion()));
     }
-    return sessionRepo.save(session.setLastModified(new Date()));
+    return sessionRepo.save(toSave);
   }
 
   @Transactional
