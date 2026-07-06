@@ -25,7 +25,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +35,6 @@ import org.bson.types.ObjectId;
 @Getter
 @RequiredArgsConstructor
 @EqualsAndHashCode
-@Builder(toBuilder = true)
 @Document("sessions")
 public class Session {
 
