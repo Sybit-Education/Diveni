@@ -5,8 +5,10 @@
 */
 package io.diveni.backend.controller;
 
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -129,6 +131,18 @@ public class RoutesController {
     Session session = ControllerUtils.getSessionOrThrowResponse(databaseService, sessionID);
     LOGGER.debug("<-- getSession()");
     return session;
+  }
+
+  @GetMapping("/get-timer-value")
+  public synchronized ResponseEntity<Long> getTimeValue(String memberID) throws ParseException {
+    LOGGER.debug("--> get-timer-value()");
+    Session session =
+        ControllerUtils.getSessionByMemberIDOrThrowResponse(databaseService, memberID);
+    Date startDate = Utils.getDateFromString(session.getTimerTimestamp());
+    Date currentDate = new Date();
+    long timeDifference = currentDate.getTime() - startDate.getTime();
+    LOGGER.debug("<-- get-timer-value() + " + timeDifference);
+    return new ResponseEntity<>(timeDifference, HttpStatus.OK);
   }
 
   private synchronized Session addMemberToSession(
