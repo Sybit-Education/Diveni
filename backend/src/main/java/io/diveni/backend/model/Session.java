@@ -22,17 +22,19 @@ import java.util.stream.Stream;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.val;
 import org.bson.types.ObjectId;
 
 @Getter
-@AllArgsConstructor
+@RequiredArgsConstructor
 @EqualsAndHashCode
 @Builder(toBuilder = true)
 @Document("sessions")
@@ -72,6 +74,11 @@ public class Session {
   private final boolean hostVoting;
 
   private final AdminVote hostEstimation;
+
+  @Version
+  @Setter
+  @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+  private Integer version;
 
   static Comparator<String> estimationByIndex(List<String> set) {
     return Comparator.comparingInt((str) -> set.indexOf(str));
