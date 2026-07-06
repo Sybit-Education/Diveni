@@ -22,8 +22,7 @@ public class AiService {
   @Value("${python_ai_url}")
   private String aiUrl;
 
-  @Autowired
-  private RestTemplate restTemplate;
+  @Autowired private RestTemplate restTemplate;
 
   @PostConstruct
   public void logConfig() {
