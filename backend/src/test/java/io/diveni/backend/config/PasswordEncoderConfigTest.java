@@ -33,7 +33,8 @@ public class PasswordEncoderConfigTest {
 
     assertNotNull(encoded);
     assertTrue(passwordEncoder.matches(rawPassword, encoded));
-    assertTrue(encoded.startsWith("$2a$") || encoded.startsWith("$2b$"),
+    assertTrue(
+        encoded.startsWith("$2a$") || encoded.startsWith("$2b$"),
         "Should be a BCrypt hash starting with $2a$ or $2b$");
   }
 

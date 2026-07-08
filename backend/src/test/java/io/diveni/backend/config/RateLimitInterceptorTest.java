@@ -36,9 +36,7 @@ public class RateLimitInterceptorTest {
       val result = interceptor.preHandle(request, response, null);
       assertTrue(result, "Request " + (i + 1) + " should be allowed");
       assertEquals(
-          HttpServletResponse.SC_OK,
-          response.getStatus(),
-          "Response status should remain OK");
+          HttpServletResponse.SC_OK, response.getStatus(), "Response status should remain OK");
     }
   }
 
@@ -73,8 +71,8 @@ public class RateLimitInterceptorTest {
     }
 
     // IP2 should still be allowed
-    assertTrue(interceptor.preHandle(request2, null, null),
-        "Different IP should not be rate-limited");
+    assertTrue(
+        interceptor.preHandle(request2, null, null), "Different IP should not be rate-limited");
   }
 
   @Test
@@ -91,7 +89,8 @@ public class RateLimitInterceptorTest {
     val request2 = new MockHttpServletRequest();
     request2.setRemoteAddr("10.0.0.1");
     request2.addHeader("X-Forwarded-For", "203.0.113.2");
-    assertTrue(interceptor.preHandle(request2, null, null),
+    assertTrue(
+        interceptor.preHandle(request2, null, null),
         "Different X-Forwarded-For IP should not be rate-limited");
   }
 
@@ -111,7 +110,8 @@ public class RateLimitInterceptorTest {
     // After cleanup with no wait, entries are still within the window
     // (cleanUp only removes entries older than WINDOW_SIZE_MS)
     response = new MockHttpServletResponse();
-    assertFalse(interceptor.preHandle(request, response, null),
+    assertFalse(
+        interceptor.preHandle(request, response, null),
         "Entries should not be removed before window expires");
   }
 
@@ -136,7 +136,8 @@ public class RateLimitInterceptorTest {
     val request = new MockHttpServletRequest();
     for (int i = 0; i < RateLimitInterceptor.MAX_REQUESTS; i++) {
       response = new MockHttpServletResponse();
-      assertTrue(interceptor.preHandle(request, response, null),
+      assertTrue(
+          interceptor.preHandle(request, response, null),
           "Request #" + (i + 1) + " should be allowed");
     }
   }
