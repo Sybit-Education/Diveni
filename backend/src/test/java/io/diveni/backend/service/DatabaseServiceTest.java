@@ -94,7 +94,7 @@ public class DatabaseServiceTest {
             saved.getAccessToken(),
             saved.getTimerTimestamp(),
             saved.getCreationTime(),
-            saved.isHostVoting(),
+            saved.getHostVoting(),
             saved.getHostEstimation());
 
     val restored = databaseService.saveSession(versionlessCopy);
@@ -138,7 +138,7 @@ public class DatabaseServiceTest {
             saved.getAccessToken(),
             saved.getTimerTimestamp(),
             saved.getCreationTime(),
-            saved.isHostVoting(),
+            saved.getHostVoting(),
             saved.getHostEstimation());
 
     // Should succeed due to version restoration in deleteSession
