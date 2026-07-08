@@ -5,7 +5,6 @@
 */
 package io.diveni.backend.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -67,8 +66,7 @@ public class DatabaseServiceTest {
     val secondSave = databaseService.saveSession(modified);
     assertNotNull(secondSave.getVersion());
     assertTrue(
-        secondSave.getVersion() > firstVersion,
-        "Version should increment on subsequent saves");
+        secondSave.getVersion() > firstVersion, "Version should increment on subsequent saves");
   }
 
   @Test
@@ -115,8 +113,7 @@ public class DatabaseServiceTest {
     databaseService.deleteSession(saved);
 
     // Verify it's gone
-    val deleted =
-        databaseService.getSessionByID(saved.getSessionID());
+    val deleted = databaseService.getSessionByID(saved.getSessionID());
     assertTrue(deleted.isEmpty(), "Session should be deleted");
   }
 
@@ -147,8 +144,7 @@ public class DatabaseServiceTest {
     // Should succeed due to version restoration in deleteSession
     databaseService.deleteSession(versionlessCopy);
 
-    val deleted =
-        databaseService.getSessionByID(saved.getSessionID());
+    val deleted = databaseService.getSessionByID(saved.getSessionID());
     assertTrue(deleted.isEmpty(), "Session should be deleted");
   }
 
@@ -159,13 +155,11 @@ public class DatabaseServiceTest {
     val firstSave = databaseService.saveSession(session);
 
     // Simulate two updates via the same correctly-versioned object
-    val update1 =
-        firstSave.setLastModified(new java.util.Date());
+    val update1 = firstSave.setLastModified(new java.util.Date());
     val result1 = databaseService.saveSession(update1);
     assertNotNull(result1.getVersion());
 
-    val update2 =
-        result1.setLastModified(new java.util.Date());
+    val update2 = result1.setLastModified(new java.util.Date());
     val result2 = databaseService.saveSession(update2);
     assertNotNull(result2.getVersion());
     assertTrue(result2.getVersion() > result1.getVersion());

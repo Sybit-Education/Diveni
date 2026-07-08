@@ -557,12 +557,40 @@ public class SessionTest {
 
   @Test
   public void versionField_isExcludedFromEqualsAndHashCode() {
-    val session1 = new Session(
-        null, null, null, null, null, new ArrayList<>(), new HashMap<>(), new ArrayList<>(),
-        SessionState.WAITING_FOR_MEMBERS, null, null, null, null, false, null);
-    val session2 = new Session(
-        null, null, null, null, null, new ArrayList<>(), new HashMap<>(), new ArrayList<>(),
-        SessionState.WAITING_FOR_MEMBERS, null, null, null, null, false, null);
+    val session1 =
+        new Session(
+            null,
+            null,
+            null,
+            null,
+            null,
+            new ArrayList<>(),
+            new HashMap<>(),
+            new ArrayList<>(),
+            SessionState.WAITING_FOR_MEMBERS,
+            null,
+            null,
+            null,
+            null,
+            false,
+            null);
+    val session2 =
+        new Session(
+            null,
+            null,
+            null,
+            null,
+            null,
+            new ArrayList<>(),
+            new HashMap<>(),
+            new ArrayList<>(),
+            SessionState.WAITING_FOR_MEMBERS,
+            null,
+            null,
+            null,
+            null,
+            false,
+            null);
 
     session1.setVersion(1);
     session2.setVersion(5);
