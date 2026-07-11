@@ -51,7 +51,7 @@
     "@vue/eslint-config-typescript": "^14.7.0",
     "@vue/tsconfig": "^0.9.1",
     "eslint": "^10.1.0",
-    "eslint-plugin-vue": "^10.8.0",
+    "eslint-plugin-vue": "^10.9.2",
     "globals": "^17.4.0",
     "license-checker": "^25.0.1",
     "lint-staged": "^16.4.0",
