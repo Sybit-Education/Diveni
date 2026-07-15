@@ -60,7 +60,15 @@ public class DatabaseService {
 
   public Session saveSession(Session session) {
     LOGGER.debug("saveSession()");
-    return sessionRepo.save(session.setLastModified(new Date()));
+    // setLastModified creates an immutable copy — version must be restored after
+    Session toSave = session.setLastModified(new Date());
+    if (toSave.getVersion() == null && toSave.getDatabaseID() != null) {
+      // Version was lost during immutable copy — restore from DB for optimistic locking
+      sessionRepo
+          .findById(toSave.getDatabaseID().toHexString())
+          .ifPresent(current -> toSave.setVersion(current.getVersion()));
+    }
+    return sessionRepo.save(toSave);
   }
 
   @Transactional
@@ -70,6 +78,12 @@ public class DatabaseService {
         getOrCreateStatistic()
             .addOverallSessions(1)
             .addOverallAttendees(session.getMembers().size()));
+    // Restore version if lost during immutable copy, otherwise @Version may reject the delete
+    if (session.getVersion() == null && session.getDatabaseID() != null) {
+      sessionRepo
+          .findById(session.getDatabaseID().toHexString())
+          .ifPresent(current -> session.setVersion(current.getVersion()));
+    }
     sessionRepo.delete(session);
     LOGGER.debug("<-- deleteSession()");
   }

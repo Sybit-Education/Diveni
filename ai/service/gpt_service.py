@@ -10,7 +10,7 @@ import json
 
 def setUp():
     API_KEY = os.environ.get('api_key')
-    model_id = 'gpt-3.5-turbo-instruct'
+    model_id = 'gpt-4o-mini'
     client = OpenAI(api_key=API_KEY)
     return client, model_id
 
@@ -66,19 +66,24 @@ def get_prompt(information):
     return prompt
 
 
+def _chat_completion(client, model_id, prompt, max_tokens=100, temperature=0.8):
+    """Helper to call OpenAI chat completions API."""
+    messages = [{"role": "user", "content": prompt}]
+    completion = client.chat.completions.create(
+        model=model_id,
+        messages=messages,
+        max_tokens=max_tokens,
+        temperature=temperature
+    )
+    return completion.choices[0].message.content.strip()
+
+
 async def improve_title(original_title: str, confidential_data: dict):
     print("gpt_service: --> improve_title()")
     swapped_data, new_title = replace_confidential_data(original_title, confidential_data)
     client, model_id = setUp()
-    # "Improve the title of this issue: "
     prompt_input = get_prompt("title") + new_title + "\nAnswer:"
-    completion = client.completions.create(
-        model=model_id,
-        prompt=prompt_input,
-        max_tokens=100,
-        temperature=0.8
-    )
-    response = completion.choices[0].text.lstrip().rstrip()
+    response = _chat_completion(client, model_id, prompt_input, max_tokens=100, temperature=0.8)
     title = replace_confidential_data_to_original(response, swapped_data)
     print("gpt_service: <-- improve_title()")
     return title
@@ -88,26 +93,17 @@ async def improve_description(original_user_story: UserStory):
     print("gpt_service: --> improve_description()")
     swappedData, new_description = replace_confidential_data(original_user_story.description, original_user_story.confidential_data)
     client, model_id = setUp()
-    # prompt_input = ("Send JSON with 'description' & 'acceptance_criteria' (acceptance_criteria should be a list & description needs "
-    #                "improvement) for this user story description: ") + new_description
 
     if original_user_story.language == "english":
         final_prompt = get_prompt("improve_description") + new_description + "\n Solution: "
     else:
         final_prompt = get_prompt("improve_description_german") + new_description + "\n Antwort: "
 
-    completion = client.completions.create(
-        model=model_id,
-        prompt=final_prompt,
-        max_tokens=1500,
-        temperature=0.1
-    )
-    output = completion.choices[0].text
+    output = _chat_completion(client, model_id, final_prompt, max_tokens=1500, temperature=0.1)
     start_brace = output.find('{')
     end_brace = output.rfind('}')
     json_ready_string = output[start_brace: end_brace + 1]
     data = json.loads(json_ready_string)
-    # data = json.loads(completion.choices[0].text.strip("'<>() ").replace('\'', '\"'), strict = False)
     description = data.get("description", "")
     acceptance_criteria = data.get("acceptance_criteria", [])
     if original_user_story.language == "german":
@@ -125,17 +121,8 @@ async def grammar_check(original_user_story: UserStory):
     print("gpt_service: --> grammar_check()")
     swappedData, new_description = replace_confidential_data(original_user_story.description, original_user_story.confidential_data)
     client, model_id = setUp()
-    prompt_input = ("Fix grammar & syntax mistakes, but do not add new elements. Send it back as a JSON with 'description' and "
-                    "'acceptance_criteria' (list) field."
-                    "If the text does not mention acceptance criteria, leave the field blank. This is the text: ") + new_description
     final_prompt = get_prompt("grammar_check") + new_description + "\n Solution: "
-    completion = client.completions.create(
-        model=model_id,
-        prompt=final_prompt,
-        max_tokens=1500,
-        temperature=0
-    )
-    output = completion.choices[0].text
+    output = _chat_completion(client, model_id, final_prompt, max_tokens=1500, temperature=0)
     start_brace = output.find('{')
     end_brace = output.rfind('}')
     json_ready_string = output[start_brace: end_brace + 1]
@@ -176,15 +163,9 @@ async def estimate_user_story(original_data: Estimation_data):
             original_data.voteSet)
     else:
         prompt = ("Task: Send a JSON with \"estimation\" and estimate the effort for this user story: Title: " + new_title + "\n "
-                                                                                                                             "Description: " + new_description + "\n Valid Options are: " + str(
+                                                                                                                              "Description: " + new_description + "\n Valid Options are: " + str(
             original_data.voteSet))
-    completion = client.completions.create(
-        model=model_id,
-        prompt=prompt,
-        max_tokens=1000,
-        temperature=0
-    )
-    output = completion.choices[0].text
+    output = _chat_completion(client, model_id, prompt, max_tokens=1000, temperature=0)
     start_brace = output.find('{')
     end_brace = output.rfind('}')
     json_ready_string = output[start_brace: end_brace + 1]
@@ -203,13 +184,7 @@ async def split_user_story(data: UserStory):
         prompt = get_prompt("split_story") + new_title + "\nDescription: " + new_description + "\nSolution:"
     else:
         prompt = get_prompt("split_story_german") + new_title + "\nBeschreibung: " + new_description + "\nAntwort:"
-    completion = client.completions.create(
-        model=model_id,
-        prompt=prompt,
-        max_tokens=3000,
-        temperature=0
-    )
-    output = completion.choices[0].text
+    output = _chat_completion(client, model_id, prompt, max_tokens=3000, temperature=0)
     start_brace = output.find('{')
     end_brace = output.rfind('}')
     json_ready_string = output[start_brace: end_brace + 1]
@@ -231,6 +206,7 @@ async def split_user_story(data: UserStory):
     print("gpt_service: <-- split_user_story()")
     return user_story_list
 
+
 async def mark_description(data: UserStory):
     print("gpt_service: --> mark_description()")
     client, model_id = setUp()
@@ -239,13 +215,7 @@ async def mark_description(data: UserStory):
         prompt = get_prompt("mark_description") + new_description + "\nSolution:"
     else:
         prompt = get_prompt("mark_description_german") + new_description + "\nAntwort:"
-    completion = client.completions.create(
-        model=model_id,
-        prompt=prompt,
-        max_tokens=3000,
-        temperature=0
-    )
-    output = completion.choices[0].text
+    output = _chat_completion(client, model_id, prompt, max_tokens=3000, temperature=0)
     start_brace = output.find('{')
     end_brace = output.rfind('}')
     json_ready_string = output[start_brace: end_brace + 1]
@@ -261,4 +231,3 @@ def check_api_key():
     api_key = os.environ.get('api_key')
     print("gpt_service: <-- check_api_key()")
     return False if api_key is None else True
-

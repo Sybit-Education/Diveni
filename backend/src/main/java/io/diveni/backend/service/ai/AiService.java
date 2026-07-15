@@ -1,12 +1,16 @@
+/*
+  SPDX-License-Identifier: AGPL-3.0-or-later
+  Diveni - The Planing-Poker App
+  Copyright (C) 2022 Diveni Team, AUME-Team 21/22, HTWG Konstanz
+*/
 package io.diveni.backend.service.ai;
 
-import com.google.gson.Gson;
 import io.diveni.backend.dto.AiServiceResponse;
 import io.diveni.backend.dto.GptConfidentialData;
 import jakarta.annotation.PostConstruct;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
@@ -23,6 +27,8 @@ public class AiService {
   @Value("${python_ai_url}")
   private String aiUrl;
 
+  @Autowired private RestTemplate restTemplate;
+
   @PostConstruct
   public void logConfig() {
     LOGGER.info("Url to Server is: " + aiUrl);
@@ -31,9 +37,6 @@ public class AiService {
   public ResponseEntity<String> executeRequest(String url, HttpMethod method, Object body)
       throws RestClientException {
     LOGGER.debug("--> executeRequest()");
-    // Create a RestTemplate object
-    RestTemplate restTemplate = new RestTemplate();
-    // Set the headers for the request
     HttpHeaders headers = new HttpHeaders();
     headers.setAccept(List.of(MediaType.APPLICATION_JSON));
     headers.setContentType(MediaType.APPLICATION_JSON);
@@ -48,7 +51,7 @@ public class AiService {
     content.put("name", data.getTitle());
     content.put("confidential_data", data.getConfidentialData().toMap());
     ResponseEntity<String> response =
-        executeRequest(aiUrl + "/improve-title", HttpMethod.POST, new Gson().toJson(content));
+        executeRequest(aiUrl + "/improve-title", HttpMethod.POST, content);
     LOGGER.debug("<-- improveTitle()");
     return response;
   }
@@ -61,7 +64,7 @@ public class AiService {
     content.put("confidential_data", data.getConfidentialData().toMap());
     content.put("language", data.getLanguage());
     ResponseEntity<String> response =
-        executeRequest(aiUrl + "/improve-description", HttpMethod.POST, new Gson().toJson(content));
+        executeRequest(aiUrl + "/improve-description", HttpMethod.POST, content);
     LOGGER.debug("<-- improveDescription()");
     return response;
   }
@@ -74,7 +77,7 @@ public class AiService {
     content.put("confidential_data", data.getConfidentialData().toMap());
     content.put("language", data.getLanguage());
     ResponseEntity<String> response =
-        executeRequest(aiUrl + "/grammar-check", HttpMethod.POST, new Gson().toJson(content));
+        executeRequest(aiUrl + "/grammar-check", HttpMethod.POST, content);
     LOGGER.debug("<-- grammarCheck()");
     return response;
   }
@@ -87,7 +90,7 @@ public class AiService {
     content.put("confidential_data", data.getConfidentialData().toMap());
     content.put("voteSet", data.getVoteSet());
     ResponseEntity<String> response =
-        executeRequest(aiUrl + "/estimate-user-story", HttpMethod.POST, new Gson().toJson(content));
+        executeRequest(aiUrl + "/estimate-user-story", HttpMethod.POST, content);
     LOGGER.debug("<-- estimateUserStory()");
     return response;
   }
@@ -100,7 +103,7 @@ public class AiService {
     content.put("confidential_data", data.getConfidentialData().toMap());
     content.put("language", data.getLanguage());
     ResponseEntity<String> response =
-        executeRequest(aiUrl + "/split-user-story", HttpMethod.POST, new Gson().toJson(content));
+        executeRequest(aiUrl + "/split-user-story", HttpMethod.POST, content);
     LOGGER.debug("<-- splitUserStory()");
     return response;
   }
@@ -113,20 +116,26 @@ public class AiService {
     content.put("confidential_data", data.getConfidentialData().toMap());
     content.put("language", data.getLanguage());
     ResponseEntity<String> response =
-        executeRequest(aiUrl + "/mark-description", HttpMethod.POST, new Gson().toJson(content));
+        executeRequest(aiUrl + "/mark-description", HttpMethod.POST, content);
     LOGGER.debug("<-- markDescription");
     return response;
   }
 
+  @SuppressWarnings("unchecked")
   public ResponseEntity<AiServiceResponse> ensureServiceAndApiKey() {
     LOGGER.debug("--> ensureServiceAndApiKey()");
     AiServiceResponse result;
     try {
-      ResponseEntity<String> response =
-          executeRequest(aiUrl + "/check-api-key", HttpMethod.GET, null);
+      ResponseEntity<Map<String, Object>> response =
+          restTemplate.exchange(
+              aiUrl + "/check-api-key",
+              HttpMethod.GET,
+              null,
+              (Class<Map<String, Object>>) (Class<?>) Map.class);
+      Map<String, Object> body = response.getBody();
       result =
           AiServiceResponse.builder()
-              .apiKeyValid(new JSONObject(response.getBody()).getBoolean("has_api_key"))
+              .apiKeyValid(body != null && Boolean.TRUE.equals(body.get("has_api_key")))
               .serviceAvailable(response.getStatusCode().is2xxSuccessful())
               .build();
     } catch (RestClientException rce) {
