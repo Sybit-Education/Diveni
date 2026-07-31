@@ -30,4 +30,8 @@ public class SessionConfig {
   public Optional<Integer> getTimerSeconds() {
     return Optional.of(timerSeconds);
   }
+
+  public SessionConfig withPassword(String hashedPassword) {
+    return new SessionConfig(set, userStories, timerSeconds, userStoryMode, hashedPassword);
+  }
 }

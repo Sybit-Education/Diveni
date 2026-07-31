@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -49,6 +50,8 @@ public class RoutesController {
   @Autowired JiraServerService jiraServerService;
 
   @Autowired DatabaseService databaseService;
+
+  @Autowired PasswordEncoder passwordEncoder;
 
   @PostMapping(value = "/sessions")
   public ResponseEntity<Map<String, Object>> createSession(
@@ -75,12 +78,16 @@ public class RoutesController {
         tokenIdentifier
             .map(token -> jiraServerService.getAccessTokens().remove(token))
             .orElse(null);
+    val hashedConfig =
+        sessionConfig.getPassword() != null
+            ? sessionConfig.withPassword(passwordEncoder.encode(sessionConfig.getPassword()))
+            : sessionConfig;
     val session =
         new Session(
             databaseID,
             sessionIds.get(0),
             sessionIds.get(1),
-            sessionConfig,
+            hashedConfig,
             UUID.randomUUID(),
             new ArrayList<>(),
             new HashMap<>(),
@@ -148,7 +155,7 @@ public class RoutesController {
     }
     if (session.getSessionConfig().getPassword() != null) {
       if (!password.isPresent()
-          || !password.get().equals(session.getSessionConfig().getPassword())) {
+          || !passwordEncoder.matches(password.get(), session.getSessionConfig().getPassword())) {
         throw new ResponseStatusException(
             HttpStatus.UNAUTHORIZED, ErrorMessages.wrongPasswordMessage);
       }

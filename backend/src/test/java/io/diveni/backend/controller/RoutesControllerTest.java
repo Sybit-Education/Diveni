@@ -29,6 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 
 import lombok.val;
@@ -48,6 +49,8 @@ public class RoutesControllerTest {
   @Autowired private MockMvc mockMvc;
 
   @Autowired DatabaseService databaseService;
+
+  @Autowired PasswordEncoder passwordEncoder;
 
   private static String sessionConfigToJson(SessionConfig config) {
     val set = config.getSet().stream().map(s -> "\"" + s + "\"").collect(Collectors.joining(","));
@@ -142,7 +145,8 @@ public class RoutesControllerTest {
     val sessionUUID = Utils.generateRandomID();
     val password = "testPassword";
     SessionConfig sessionConfig =
-        new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", password);
+        new SessionConfig(
+            new ArrayList<>(), List.of(), 10, "US_MANUALLY", passwordEncoder.encode(password));
     sessionRepo.save(
         new Session(
             new ObjectId(),
@@ -191,7 +195,8 @@ public class RoutesControllerTest {
     val sessionUUID = Utils.generateRandomID();
     val password = "testPassword";
     SessionConfig sessionConfig =
-        new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", password);
+        new SessionConfig(
+            new ArrayList<>(), List.of(), 10, "US_MANUALLY", passwordEncoder.encode(password));
     sessionRepo.save(
         new Session(
             new ObjectId(),
@@ -240,7 +245,8 @@ public class RoutesControllerTest {
     val sessionUUID = Utils.generateRandomID();
     val password = "testPassword";
     SessionConfig sessionConfig =
-        new SessionConfig(new ArrayList<>(), List.of(), 10, "US_MANUALLY", password);
+        new SessionConfig(
+            new ArrayList<>(), List.of(), 10, "US_MANUALLY", passwordEncoder.encode(password));
     sessionRepo.save(
         new Session(
             new ObjectId(),
