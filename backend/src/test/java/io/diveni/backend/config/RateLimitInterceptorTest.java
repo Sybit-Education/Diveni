@@ -9,6 +9,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -119,11 +124,24 @@ public class RateLimitInterceptorTest {
     response = new MockHttpServletResponse();
     assertFalse(interceptor.preHandle(request, response, null));
 
-    // Manually force window expiry by sleeping past the window
-    // Instead, directly manipulate the internal state using cleanUp timing
-    // We can verify the logic by checking that after the window,
-    // new requests are allowed
-    assertFalse(interceptor.preHandle(request, response, null));
+    // Simulate window expiry: replace the tracked window with one whose start time
+    // lies outside the window (no need to actually wait WINDOW_SIZE_MS)
+    Field requestCountsField = RateLimitInterceptor.class.getDeclaredField("requestCounts");
+    requestCountsField.setAccessible(true);
+    @SuppressWarnings("unchecked")
+    Map<String, Object> requestCounts = (Map<String, Object>) requestCountsField.get(interceptor);
+    Class<?> windowClass = Class.forName("io.diveni.backend.config.RateLimitInterceptor$Window");
+    Constructor<?> windowCtor = windowClass.getDeclaredConstructor(long.class, AtomicInteger.class);
+    windowCtor.setAccessible(true);
+    requestCounts.put(
+        request.getRemoteAddr(),
+        windowCtor.newInstance(
+            System.currentTimeMillis() - RateLimitInterceptor.WINDOW_SIZE_MS - 1,
+            new AtomicInteger(RateLimitInterceptor.MAX_REQUESTS)));
+
+    // A request after the window has expired should be allowed again
+    response = new MockHttpServletResponse();
+    assertTrue(interceptor.preHandle(request, response, null));
   }
 
   @Test
