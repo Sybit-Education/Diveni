@@ -7,7 +7,7 @@
 </template>
 
 <script lang="ts">
-import apiService from "@/services/api.service";
+import planeApiService from "@/services/plane-api.service";
 import { defineComponent } from "vue";
 import { useDiveniStore } from "@/store";
 import { useToast } from "vue-toastification";
@@ -37,7 +37,7 @@ export default defineComponent({
     async connectToPlane() {
       this.connecting = true;
       try {
-        const response = await apiService.connectToPlane();
+        const response = await planeApiService.connectToPlane();
         localStorage.setItem("tokenId", response.tokenId);
         this.store.setTokenId(response.tokenId);
       } catch (error) {
