@@ -152,7 +152,7 @@ public class PlaneService implements ProjectManagementProvider {
       List<UserStory> stories = new ArrayList<>();
       String path = workspacePath() + "/projects/" + projectId + "/work-items/";
       for (JsonNode node : getPaginated(apiUrl(path))) {
-        if (!node.path("archived_at").isNull() || !node.path("completed_at").isNull()) {
+        if (node.hasNonNull("archived_at") || node.hasNonNull("completed_at")) {
           continue;
         }
         String description = node.path("description_stripped").asText("");
@@ -171,8 +171,7 @@ public class PlaneService implements ProjectManagementProvider {
       return stories;
     } catch (Exception exception) {
       LOGGER.warn("Failed to retrieve Plane work items", exception);
-      throw new ResponseStatusException(
-          HttpStatus.BAD_GATEWAY, ErrorMessages.failedToRetrieveIssuesErrorMessage);
+      throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "failed to retrieve issues");
     }
   }
 
