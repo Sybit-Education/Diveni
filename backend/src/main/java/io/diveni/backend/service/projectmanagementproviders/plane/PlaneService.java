@@ -184,24 +184,34 @@ public class PlaneService implements ProjectManagementProvider {
   public void updateIssue(String tokenIdentifier, UserStory story) {
     requireToken(tokenIdentifier);
     String projectId = requireSelectedProject(tokenIdentifier);
+    String issueUrl = workItemUrl(projectId, story.getId());
+
     try {
-      Map<String, Object> content = storyPayload(projectId, story);
-      executeRequest(
-          apiUrl(
-              workspacePath()
-                  + "/projects/"
-                  + projectId
-                  + "/work-items/"
-                  + story.getId()
-                  + "/"),
-          HttpMethod.PATCH,
-          content);
-      LOGGER.info(
-          "Updated Plane work item {} with estimate {} (estimate point {}, slot {})",
-          story.getId(),
-          story.getEstimation(),
-          content.get("estimate_point"),
-          content.get("point"));
+      // Plane can acknowledge a combined metadata + estimate PATCH while retaining the old
+      // estimate. Keep the estimate update isolated so it matches Plane's working API request.
+      executeRequest(issueUrl, HttpMethod.PATCH, storyMetadataPayload(story));
+
+      if (hasEstimate(story)) {
+        ensureEstimatePointsLoaded(projectId);
+        PlaneEstimatePoint estimatePoint =
+            resolvePlaneEstimatePoint(projectId, story.getEstimation());
+        int slot = estimatePoint.key() + 1;
+
+        executeRequest(
+            issueUrl,
+            HttpMethod.PATCH,
+            estimatePayload(estimatePoint.id(), slot));
+        verifyPersistedEstimate(issueUrl, estimatePoint.id(), slot);
+
+        LOGGER.info(
+            "Verified Plane work item {} with estimate {} (estimate point {}, slot {})",
+            story.getId(),
+            story.getEstimation(),
+            estimatePoint.id(),
+            slot);
+      } else {
+        LOGGER.info("Updated Plane work item {} metadata without estimate", story.getId());
+      }
     } catch (ResponseStatusException exception) {
       throw exception;
     } catch (Exception exception) {
@@ -220,8 +230,23 @@ public class PlaneService implements ProjectManagementProvider {
           executeRequest(
               apiUrl(workspacePath() + "/projects/" + projectId + "/work-items/"),
               HttpMethod.POST,
-              storyPayload(projectId, story));
-      return new ObjectMapper().readTree(response.getBody()).path("id").asText();
+              storyMetadataPayload(story));
+      String issueId = new ObjectMapper().readTree(response.getBody()).path("id").asText();
+
+      if (hasEstimate(story)) {
+        ensureEstimatePointsLoaded(projectId);
+        PlaneEstimatePoint estimatePoint =
+            resolvePlaneEstimatePoint(projectId, story.getEstimation());
+        int slot = estimatePoint.key() + 1;
+        String issueUrl = workItemUrl(projectId, issueId);
+        executeRequest(
+            issueUrl,
+            HttpMethod.PATCH,
+            estimatePayload(estimatePoint.id(), slot));
+        verifyPersistedEstimate(issueUrl, estimatePoint.id(), slot);
+      }
+
+      return issueId;
     } catch (ResponseStatusException exception) {
       throw exception;
     } catch (Exception exception) {
@@ -242,10 +267,7 @@ public class PlaneService implements ProjectManagementProvider {
 
     String projectId = requireSelectedProject(tokenIdentifier);
     try {
-      executeRequest(
-          apiUrl(workspacePath() + "/projects/" + projectId + "/work-items/" + issueId + "/"),
-          HttpMethod.DELETE,
-          null);
+      executeRequest(workItemUrl(projectId, issueId), HttpMethod.DELETE, null);
     } catch (Exception exception) {
       LOGGER.warn("Failed to delete Plane work item {}", issueId, exception);
       throw new ResponseStatusException(
@@ -345,31 +367,53 @@ public class PlaneService implements ProjectManagementProvider {
     return results;
   }
 
-  private Map<String, Object> storyPayload(String projectId, UserStory story) throws Exception {
+  private Map<String, Object> storyMetadataPayload(UserStory story) {
     Map<String, Object> content = new HashMap<>();
     content.put("name", story.getTitle());
     content.put("description_html", toHtml(story.getDescription()));
-    if (story.getEstimation() != null && !story.getEstimation().isBlank()) {
-      ensureEstimatePointsLoaded(projectId);
-      PlaneEstimatePoint estimatePoint =
-          resolvePlaneEstimatePoint(projectId, story.getEstimation());
-      content.put("estimate_point", estimatePoint.id());
-      content.put("point", estimatePoint.key() + 1);
-    }
     return content;
+  }
+
+  private Map<String, Object> estimatePayload(String estimatePointId, int slot) {
+    Map<String, Object> content = new HashMap<>();
+    content.put("estimate_point", estimatePointId);
+    content.put("point", slot);
+    return content;
+  }
+
+  private void verifyPersistedEstimate(
+      String issueUrl, String expectedEstimatePointId, int expectedSlot) throws Exception {
+    JsonNode item =
+        new ObjectMapper()
+            .readTree(executeRequest(issueUrl, HttpMethod.GET, null).getBody());
+    String actualEstimatePointId = estimatePointId(item.path("estimate_point"));
+    JsonNode pointNode = item.path("point");
+    Integer actualSlot = pointNode.canConvertToInt() ? pointNode.asInt() : null;
+
+    if (!expectedEstimatePointId.equals(actualEstimatePointId)
+        || actualSlot == null
+        || actualSlot != expectedSlot) {
+      throw new ResponseStatusException(
+          HttpStatus.BAD_GATEWAY,
+          "Plane acknowledged the estimate update but persisted estimate_point="
+              + actualEstimatePointId
+              + " and point="
+              + actualSlot
+              + "; expected estimate_point="
+              + expectedEstimatePointId
+              + " and point="
+              + expectedSlot);
+    }
   }
 
   private String fromPlaneEstimate(
       String projectId, JsonNode estimatePoint, JsonNode pointSlot) {
-    if (estimatePoint != null && !estimatePoint.isNull()) {
-      String estimatePointId =
-          estimatePoint.isObject() ? estimatePoint.path("id").asText() : estimatePoint.asText();
-      if (!estimatePointId.isBlank()) {
-        String value =
-            estimateValuesByPointId.getOrDefault(projectId, Map.of()).get(estimatePointId);
-        if (value != null) {
-          return value;
-        }
+    String estimatePointId = estimatePointId(estimatePoint);
+    if (!estimatePointId.isBlank()) {
+      String value =
+          estimateValuesByPointId.getOrDefault(projectId, Map.of()).get(estimatePointId);
+      if (value != null) {
+        return value;
       }
     }
 
@@ -380,6 +424,15 @@ public class PlaneService implements ProjectManagementProvider {
     }
 
     return null;
+  }
+
+  private String estimatePointId(JsonNode estimatePoint) {
+    if (estimatePoint == null || estimatePoint.isNull()) {
+      return "";
+    }
+    return estimatePoint.isObject()
+        ? estimatePoint.path("id").asText("")
+        : estimatePoint.asText("");
   }
 
   private PlaneEstimatePoint resolvePlaneEstimatePoint(String projectId, String estimation) {
@@ -406,6 +459,20 @@ public class PlaneService implements ProjectManagementProvider {
     }
 
     return new PlaneEstimatePoint(estimatePointId, estimatePointKey);
+  }
+
+  private boolean hasEstimate(UserStory story) {
+    return story.getEstimation() != null && !story.getEstimation().isBlank();
+  }
+
+  private String workItemUrl(String projectId, String issueId) {
+    return apiUrl(
+        workspacePath()
+            + "/projects/"
+            + projectId
+            + "/work-items/"
+            + issueId
+            + "/");
   }
 
   private String resolveProjectId(String tokenIdentifier, String projectName) {
