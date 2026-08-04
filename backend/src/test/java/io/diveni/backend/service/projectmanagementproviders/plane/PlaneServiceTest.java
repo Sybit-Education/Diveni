@@ -59,11 +59,11 @@ class PlaneServiceTest {
             "{\"next_page_results\":false,\"results\":["
                 + "{\"id\":\"work-1\",\"name\":\"Add Plane\","
                 + "\"description_stripped\":\"Build connector\","
-                + "\"estimate_point\":\"point-5\","
+                + "\"estimate_point\":\"point-5\",\"point\":4,"
                 + "\"archived_at\":null,\"completed_at\":null},"
                 + "{\"id\":\"work-2\",\"name\":\"Completed\","
                 + "\"description_stripped\":\"Done\","
-                + "\"estimate_point\":\"point-1\","
+                + "\"estimate_point\":\"point-1\",\"point\":1,"
                 + "\"completed_at\":\"2026-08-01T00:00:00Z\"}"
                 + "]}");
 
@@ -87,7 +87,7 @@ class PlaneServiceTest {
 
   @Test
   @SuppressWarnings("unchecked")
-  void writesDiveniEstimateAsPlaneEstimatePointId() {
+  void writesDiveniEstimateAsPlaneEstimatePointIdAndKey() {
     ResponseEntity<String> userResponse =
         ResponseEntity.ok("{\"email\":\"test@example.com\"}");
     ResponseEntity<String> projectResponse =
@@ -125,6 +125,7 @@ class PlaneServiceTest {
 
     Map<String, Object> body = (Map<String, Object>) bodyCaptor.getValue();
     assertEquals("point-13", body.get("estimate_point"));
+    assertEquals(6, body.get("point"));
     assertEquals("<p>Line one<br>Line two</p>", body.get("description_html"));
   }
 
