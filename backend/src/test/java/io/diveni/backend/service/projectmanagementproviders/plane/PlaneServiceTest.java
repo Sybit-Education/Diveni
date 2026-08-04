@@ -34,7 +34,6 @@ class PlaneServiceTest {
     ReflectionTestUtils.setField(planeService, "planeBaseUrl", "https://plane.example.com/");
     ReflectionTestUtils.setField(planeService, "workspaceSlug", "engineering");
     ReflectionTestUtils.setField(planeService, "apiKey", "plane_api_test");
-    ReflectionTestUtils.setField(planeService, "estimateValuesConfig", "0,1,2,3,5,8,13,21");
     ReflectionTestUtils.setField(planeService, "allowDelete", false);
     planeService.logConfig();
   }
@@ -45,15 +44,30 @@ class PlaneServiceTest {
         ResponseEntity.ok("{\"display_name\":\"Plane Test User\"}");
     ResponseEntity<String> projectResponse =
         ResponseEntity.ok(
-            "{\"next_page_results\":false,\"results\":[{\"id\":\"project-1\",\"name\":\"Engineering\"}]}");
+            "{\"next_page_results\":false,\"results\":["
+                + "{\"id\":\"project-1\",\"name\":\"Engineering\","
+                + "\"estimate\":\"estimate-1\"}"
+                + "]}");
+    ResponseEntity<String> estimatePointResponse =
+        ResponseEntity.ok(
+            "["
+                + "{\"id\":\"point-1\",\"key\":1,\"value\":\"1\"},"
+                + "{\"id\":\"point-5\",\"key\":4,\"value\":\"5\"}"
+                + "]");
     ResponseEntity<String> workItemResponse =
         ResponseEntity.ok(
             "{\"next_page_results\":false,\"results\":["
-                + "{\"id\":\"work-1\",\"name\":\"Add Plane\",\"description_stripped\":\"Build connector\",\"estimate_point\":4,\"archived_at\":null,\"completed_at\":null},"
-                + "{\"id\":\"work-2\",\"name\":\"Completed\",\"description_stripped\":\"Done\",\"estimate_point\":2,\"completed_at\":\"2026-08-01T00:00:00Z\"}"
+                + "{\"id\":\"work-1\",\"name\":\"Add Plane\","
+                + "\"description_stripped\":\"Build connector\","
+                + "\"estimate_point\":\"point-5\","
+                + "\"archived_at\":null,\"completed_at\":null},"
+                + "{\"id\":\"work-2\",\"name\":\"Completed\","
+                + "\"description_stripped\":\"Done\","
+                + "\"estimate_point\":\"point-1\","
+                + "\"completed_at\":\"2026-08-01T00:00:00Z\"}"
                 + "]}");
 
-    doReturn(userResponse, projectResponse, workItemResponse)
+    doReturn(userResponse, projectResponse, estimatePointResponse, workItemResponse)
         .when(planeService)
         .executeRequest(anyString(), any(HttpMethod.class), any());
 
@@ -73,14 +87,28 @@ class PlaneServiceTest {
 
   @Test
   @SuppressWarnings("unchecked")
-  void writesDiveniEstimateAsPlaneEstimateSlot() {
-    ResponseEntity<String> userResponse = ResponseEntity.ok("{\"email\":\"test@example.com\"}");
+  void writesDiveniEstimateAsPlaneEstimatePointId() {
+    ResponseEntity<String> userResponse =
+        ResponseEntity.ok("{\"email\":\"test@example.com\"}");
     ResponseEntity<String> projectResponse =
-        ResponseEntity.ok("[{\"id\":\"project-1\",\"name\":\"Engineering\"}]");
+        ResponseEntity.ok(
+            "[{\"id\":\"project-1\",\"name\":\"Engineering\","
+                + "\"estimate\":\"estimate-1\"}]");
+    ResponseEntity<String> estimatePointResponse =
+        ResponseEntity.ok(
+            "["
+                + "{\"id\":\"point-5\",\"key\":4,\"value\":\"5\"},"
+                + "{\"id\":\"point-13\",\"key\":6,\"value\":\"13\"}"
+                + "]");
     ResponseEntity<String> workItemResponse = ResponseEntity.ok("[]");
     ResponseEntity<String> updateResponse = ResponseEntity.ok("{}");
 
-    doReturn(userResponse, projectResponse, workItemResponse, updateResponse)
+    doReturn(
+            userResponse,
+            projectResponse,
+            estimatePointResponse,
+            workItemResponse,
+            updateResponse)
         .when(planeService)
         .executeRequest(anyString(), any(HttpMethod.class), any());
 
@@ -96,13 +124,13 @@ class PlaneServiceTest {
         .executeRequest(anyString(), eq(HttpMethod.PATCH), bodyCaptor.capture());
 
     Map<String, Object> body = (Map<String, Object>) bodyCaptor.getValue();
-    assertEquals("6", body.get("estimate_point"));
+    assertEquals("point-13", body.get("estimate_point"));
     assertEquals("<p>Line one<br>Line two</p>", body.get("description_html"));
   }
 
   @Test
-  void connectorIsDisabledWithAnInvalidEstimateMapping() {
-    ReflectionTestUtils.setField(planeService, "estimateValuesConfig", "1,2,3");
+  void connectorIsDisabledWithoutAnApiKey() {
+    ReflectionTestUtils.setField(planeService, "apiKey", "");
     planeService.logConfig();
 
     assertFalse(planeService.serviceEnabled());
