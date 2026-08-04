@@ -15,6 +15,7 @@ import io.diveni.backend.model.UserStory;
 import io.diveni.backend.service.projectmanagementproviders.ProjectManagementProvider;
 import jakarta.annotation.PostConstruct;
 import java.net.URLEncoder;
+import java.net.http.HttpClient;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -56,7 +57,9 @@ public class PlaneService implements ProjectManagementProvider {
   private boolean serviceEnabled;
 
   private final RestTemplate restTemplate =
-      new RestTemplate(new JdkClientHttpRequestFactory());
+      new RestTemplate(
+          new JdkClientHttpRequestFactory(
+              HttpClient.newBuilder().version(HttpClient.Version.HTTP_1_1).build()));
 
   private final Set<String> tokenIdentifiers = ConcurrentHashMap.newKeySet();
   private final Map<String, String> userNames = new ConcurrentHashMap<>();
