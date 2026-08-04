@@ -197,7 +197,7 @@ public class PlaneService implements ProjectManagementProvider {
           HttpMethod.PATCH,
           content);
       LOGGER.info(
-          "Updated Plane work item {} with estimate {} (estimate point {}, key {})",
+          "Updated Plane work item {} with estimate {} (estimate point {}, slot {})",
           story.getId(),
           story.getEstimation(),
           content.get("estimate_point"),
@@ -354,13 +354,13 @@ public class PlaneService implements ProjectManagementProvider {
       PlaneEstimatePoint estimatePoint =
           resolvePlaneEstimatePoint(projectId, story.getEstimation());
       content.put("estimate_point", estimatePoint.id());
-      content.put("point", estimatePoint.key());
+      content.put("point", estimatePoint.key() + 1);
     }
     return content;
   }
 
   private String fromPlaneEstimate(
-      String projectId, JsonNode estimatePoint, JsonNode pointKey) {
+      String projectId, JsonNode estimatePoint, JsonNode pointSlot) {
     if (estimatePoint != null && !estimatePoint.isNull()) {
       String estimatePointId =
           estimatePoint.isObject() ? estimatePoint.path("id").asText() : estimatePoint.asText();
@@ -373,10 +373,10 @@ public class PlaneService implements ProjectManagementProvider {
       }
     }
 
-    if (pointKey != null && !pointKey.isNull() && pointKey.canConvertToInt()) {
+    if (pointSlot != null && !pointSlot.isNull() && pointSlot.canConvertToInt()) {
       return estimateValuesByPointKey
           .getOrDefault(projectId, Map.of())
-          .get(pointKey.asInt());
+          .get(pointSlot.asInt() - 1);
     }
 
     return null;
