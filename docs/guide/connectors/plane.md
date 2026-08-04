@@ -16,7 +16,6 @@ Add the following variables to `backend/.env` or the backend container environme
 PLANE_BASE_URL=https://plane.example.com
 PLANE_WORKSPACE_SLUG=engineering
 PLANE_API_KEY=plane_api_xxxxxxxxxxxxxxxxx
-PLANE_ESTIMATE_VALUES=0,1,2,3,5,8,13,21
 PLANE_ALLOW_DELETE=false
 ```
 
@@ -25,29 +24,25 @@ PLANE_ALLOW_DELETE=false
 | `PLANE_BASE_URL` | Plane instance root URL, without `/api/v1` | none |
 | `PLANE_WORKSPACE_SLUG` | Workspace slug shown in the Plane URL | none |
 | `PLANE_API_KEY` | Plane API key used by the Diveni backend | none |
-| `PLANE_ESTIMATE_VALUES` | Eight comma-separated Diveni card values corresponding to Plane estimate slots `0` through `7` | `0,1,2,3,5,8,13,21` |
 | `PLANE_ALLOW_DELETE` | Allow Diveni to permanently delete Plane work items | `false` |
 
-The connector is enabled only when `PLANE_BASE_URL`, `PLANE_WORKSPACE_SLUG`, and `PLANE_API_KEY` are all set and `PLANE_ESTIMATE_VALUES` contains exactly eight values.
+The connector is enabled only when `PLANE_BASE_URL`, `PLANE_WORKSPACE_SLUG`, and `PLANE_API_KEY` are all set.
 
 ## Estimate mapping
 
-Plane stores an estimate as a slot from `0` through `7`. Diveni displays the value at that position in `PLANE_ESTIMATE_VALUES`.
+Plane stores each configured estimate as an estimate-point record with its own UUID. Diveni reads the active estimate system for the selected project, loads its estimate points, and maps values by their displayed value.
 
-With the default configuration:
+For example, when a Plane project uses Fibonacci values such as `1`, `2`, `3`, `5`, `8`, `13`, `21`, `34`, and `55`, selecting `13` in Diveni causes the connector to send the UUID of Plane's estimate point whose value is `13`.
 
-| Plane slot | Diveni value |
-|---:|---:|
-| 0 | 0 |
-| 1 | 1 |
-| 2 | 2 |
-| 3 | 3 |
-| 4 | 5 |
-| 5 | 8 |
-| 6 | 13 |
-| 7 | 21 |
+No fixed slot table is used. This allows the connector to work with:
 
-Use a card set compatible with the configured values. Diveni rejects an estimate that is not present in `PLANE_ESTIMATE_VALUES` rather than writing the wrong Plane slot.
+- Fibonacci
+- Linear
+- Squares
+- Custom point systems
+- Category systems, provided the Diveni card values match the Plane category values
+
+Choose a Diveni card set whose values match the selected Plane project's estimate system. Diveni rejects a value that does not exist in that project's active Plane estimate system rather than writing the wrong estimate.
 
 ## Use in Diveni
 
@@ -56,5 +51,6 @@ Use a card set compatible with the configured values. Diveni rejects an estimate
 3. Select **Connect to Plane**.
 4. Select a Plane project.
 5. Load and estimate its open work items.
+6. After voting, select the agreed final estimate from the dropdown beside the story title.
 
 Completed and archived Plane work items are excluded. Creating and editing work items is supported. Permanent deletion remains disabled unless `PLANE_ALLOW_DELETE=true` is explicitly configured.
