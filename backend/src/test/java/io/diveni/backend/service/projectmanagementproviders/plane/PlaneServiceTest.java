@@ -96,7 +96,7 @@ class PlaneServiceTest {
         .executeRequest(anyString(), eq(HttpMethod.PATCH), bodyCaptor.capture());
 
     Map<String, Object> body = (Map<String, Object>) bodyCaptor.getValue();
-    assertEquals(6, body.get("estimate_point"));
+    assertEquals("6", body.get("estimate_point"));
     assertEquals("<p>Line one<br>Line two</p>", body.get("description_html"));
   }
 
