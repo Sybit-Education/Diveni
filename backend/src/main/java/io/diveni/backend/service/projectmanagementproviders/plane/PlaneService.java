@@ -185,6 +185,10 @@ public class PlaneService implements ProjectManagementProvider {
           apiUrl(workspacePath() + "/projects/" + projectId + "/work-items/" + story.getId() + "/"),
           HttpMethod.PATCH,
           content);
+      LOGGER.info(
+          "Updated Plane work item {} with estimate slot {}",
+          story.getId(),
+          content.get("estimate_point"));
     } catch (ResponseStatusException exception) {
       throw exception;
     } catch (Exception exception) {
@@ -278,7 +282,7 @@ public class PlaneService implements ProjectManagementProvider {
     content.put("name", story.getTitle());
     content.put("description_html", toHtml(story.getDescription()));
     if (story.getEstimation() != null && !story.getEstimation().isBlank()) {
-      content.put("estimate_point", toPlaneEstimate(story.getEstimation()));
+      content.put("estimate_point", Integer.toString(toPlaneEstimate(story.getEstimation())));
     }
     return content;
   }
