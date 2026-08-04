@@ -145,7 +145,7 @@ class PlaneServiceTest {
     assertNull(estimateBody.get("name"));
     assertNull(estimateBody.get("description_html"));
 
-    verify(planeService)
+    verify(planeService, times(5))
         .executeRequest(anyString(), eq(HttpMethod.GET), eq(null));
   }
 
