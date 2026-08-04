@@ -31,6 +31,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.JdkClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
@@ -53,6 +54,9 @@ public class PlaneService implements ProjectManagementProvider {
   private boolean allowDelete;
 
   private boolean serviceEnabled;
+
+  private final RestTemplate restTemplate =
+      new RestTemplate(new JdkClientHttpRequestFactory());
 
   private final Set<String> tokenIdentifiers = ConcurrentHashMap.newKeySet();
   private final Map<String, String> userNames = new ConcurrentHashMap<>();
@@ -100,7 +104,7 @@ public class PlaneService implements ProjectManagementProvider {
     headers.setAccept(List.of(MediaType.APPLICATION_JSON));
     headers.setContentType(MediaType.APPLICATION_JSON);
     headers.add("X-API-Key", apiKey);
-    return new RestTemplate().exchange(url, method, new HttpEntity<>(body, headers), String.class);
+    return restTemplate.exchange(url, method, new HttpEntity<>(body, headers), String.class);
   }
 
   @Override
