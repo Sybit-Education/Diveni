@@ -2,11 +2,13 @@ package io.diveni.backend.service.projectmanagementproviders.plane;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import io.diveni.backend.model.Project;
@@ -87,7 +89,7 @@ class PlaneServiceTest {
 
   @Test
   @SuppressWarnings("unchecked")
-  void writesDiveniEstimateAsPlaneEstimatePointIdAndOneBasedSlot() {
+  void writesAndVerifiesEstimateWithDedicatedPatch() {
     ResponseEntity<String> userResponse =
         ResponseEntity.ok("{\"email\":\"test@example.com\"}");
     ResponseEntity<String> projectResponse =
@@ -101,14 +103,20 @@ class PlaneServiceTest {
                 + "{\"id\":\"point-13\",\"key\":6,\"value\":\"13\"}"
                 + "]");
     ResponseEntity<String> workItemResponse = ResponseEntity.ok("[]");
-    ResponseEntity<String> updateResponse = ResponseEntity.ok("{}");
+    ResponseEntity<String> metadataUpdateResponse = ResponseEntity.ok("{}");
+    ResponseEntity<String> estimateUpdateResponse = ResponseEntity.ok("{}");
+    ResponseEntity<String> verificationResponse =
+        ResponseEntity.ok(
+            "{\"id\":\"work-1\",\"estimate_point\":\"point-13\",\"point\":7}");
 
     doReturn(
             userResponse,
             projectResponse,
             estimatePointResponse,
             workItemResponse,
-            updateResponse)
+            metadataUpdateResponse,
+            estimateUpdateResponse,
+            verificationResponse)
         .when(planeService)
         .executeRequest(anyString(), any(HttpMethod.class), any());
 
@@ -120,13 +128,25 @@ class PlaneServiceTest {
         new UserStory("work-1", "Updated", "Line one\nLine two", "13", true, null));
 
     ArgumentCaptor<Object> bodyCaptor = ArgumentCaptor.forClass(Object.class);
-    verify(planeService)
+    verify(planeService, times(2))
         .executeRequest(anyString(), eq(HttpMethod.PATCH), bodyCaptor.capture());
 
-    Map<String, Object> body = (Map<String, Object>) bodyCaptor.getValue();
-    assertEquals("point-13", body.get("estimate_point"));
-    assertEquals(7, body.get("point"));
-    assertEquals("<p>Line one<br>Line two</p>", body.get("description_html"));
+    List<Object> bodies = bodyCaptor.getAllValues();
+    Map<String, Object> metadataBody = (Map<String, Object>) bodies.get(0);
+    Map<String, Object> estimateBody = (Map<String, Object>) bodies.get(1);
+
+    assertEquals("Updated", metadataBody.get("name"));
+    assertEquals("<p>Line one<br>Line two</p>", metadataBody.get("description_html"));
+    assertNull(metadataBody.get("estimate_point"));
+    assertNull(metadataBody.get("point"));
+
+    assertEquals("point-13", estimateBody.get("estimate_point"));
+    assertEquals(7, estimateBody.get("point"));
+    assertNull(estimateBody.get("name"));
+    assertNull(estimateBody.get("description_html"));
+
+    verify(planeService)
+        .executeRequest(anyString(), eq(HttpMethod.GET), eq(null));
   }
 
   @Test
