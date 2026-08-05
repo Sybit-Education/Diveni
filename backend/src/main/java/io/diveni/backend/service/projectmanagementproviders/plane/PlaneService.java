@@ -14,8 +14,11 @@ import io.diveni.backend.model.TokenIdentifier;
 import io.diveni.backend.model.UserStory;
 import io.diveni.backend.service.projectmanagementproviders.ProjectManagementProvider;
 import jakarta.annotation.PostConstruct;
+import java.net.URI;
 import java.net.URLEncoder;
 import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -56,10 +59,11 @@ public class PlaneService implements ProjectManagementProvider {
 
   private boolean serviceEnabled;
 
+  private final HttpClient httpClient =
+      HttpClient.newBuilder().version(HttpClient.Version.HTTP_1_1).build();
+
   private final RestTemplate restTemplate =
-      new RestTemplate(
-          new JdkClientHttpRequestFactory(
-              HttpClient.newBuilder().version(HttpClient.Version.HTTP_1_1).build()));
+      new RestTemplate(new JdkClientHttpRequestFactory(httpClient));
 
   private final Set<String> tokenIdentifiers = ConcurrentHashMap.newKeySet();
   private final Map<String, String> userNames = new ConcurrentHashMap<>();
@@ -107,11 +111,61 @@ public class PlaneService implements ProjectManagementProvider {
   }
 
   public ResponseEntity<String> executeRequest(String url, HttpMethod method, Object body) {
+    if (method == HttpMethod.PATCH) {
+      return executeFixedLengthPatch(url, body);
+    }
+
     HttpHeaders headers = new HttpHeaders();
     headers.setAccept(List.of(MediaType.APPLICATION_JSON));
     headers.setContentType(MediaType.APPLICATION_JSON);
     headers.add("X-API-Key", apiKey);
     return restTemplate.exchange(url, method, new HttpEntity<>(body, headers), String.class);
+  }
+
+  private ResponseEntity<String> executeFixedLengthPatch(String url, Object body) {
+    try {
+      String json = new ObjectMapper().writeValueAsString(body);
+
+      HttpRequest request =
+          HttpRequest.newBuilder(URI.create(url))
+              .version(HttpClient.Version.HTTP_1_1)
+              .header("X-API-Key", apiKey)
+              .header("Accept", "application/json")
+              .header("Content-Type", "application/json")
+              .method(
+                  "PATCH",
+                  HttpRequest.BodyPublishers.ofString(json, StandardCharsets.UTF_8))
+              .build();
+
+      HttpResponse<String> response =
+          httpClient.send(
+              request,
+              HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
+
+      if (response.statusCode() < 200 || response.statusCode() >= 300) {
+        throw new ResponseStatusException(
+            HttpStatus.BAD_GATEWAY,
+            "Plane PATCH failed with HTTP "
+                + response.statusCode()
+                + ": "
+                + response.body());
+      }
+
+      return ResponseEntity.status(response.statusCode()).body(response.body());
+    } catch (ResponseStatusException exception) {
+      throw exception;
+    } catch (InterruptedException exception) {
+      Thread.currentThread().interrupt();
+      throw new ResponseStatusException(
+          HttpStatus.BAD_GATEWAY,
+          "Plane PATCH request was interrupted",
+          exception);
+    } catch (Exception exception) {
+      throw new ResponseStatusException(
+          HttpStatus.BAD_GATEWAY,
+          "Failed to send Plane PATCH request",
+          exception);
+    }
   }
 
   @Override
@@ -187,10 +241,6 @@ public class PlaneService implements ProjectManagementProvider {
     String issueUrl = workItemUrl(projectId, story.getId());
 
     try {
-      // Plane can acknowledge a combined metadata + estimate PATCH while retaining the old
-      // estimate. Keep the estimate update isolated so it matches Plane's working API request.
-      executeRequest(issueUrl, HttpMethod.PATCH, storyMetadataPayload(story));
-
       if (hasEstimate(story)) {
         ensureEstimatePointsLoaded(projectId);
         PlaneEstimatePoint estimatePoint =
@@ -210,6 +260,7 @@ public class PlaneService implements ProjectManagementProvider {
             estimatePoint.id(),
             slot);
       } else {
+        executeRequest(issueUrl, HttpMethod.PATCH, storyMetadataPayload(story));
         LOGGER.info("Updated Plane work item {} metadata without estimate", story.getId());
       }
     } catch (ResponseStatusException exception) {
