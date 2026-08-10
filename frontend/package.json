@@ -52,7 +52,7 @@
     "@vue/tsconfig": "^0.9.1",
     "eslint": "^10.1.0",
     "eslint-plugin-vue": "^10.9.2",
-    "globals": "^17.7.0",
+    "globals": "^17.9.0",
     "license-checker": "^25.0.1",
     "lint-staged": "^16.4.0",
     "prettier": "^3.8.3",
