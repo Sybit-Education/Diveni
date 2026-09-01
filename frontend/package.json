@@ -29,7 +29,7 @@
     "qrcode.vue": "^3.10.0",
     "sockjs-client": "^1.6.1",
     "uuid": "^14.0.2",
-    "vue": "^3.5.39",
+    "vue": "^3.5.42",
     "vue-debounce": "^5.0.1",
     "vue-i18n": "^11.4.8",
     "vue-router": "^5.2.0",
