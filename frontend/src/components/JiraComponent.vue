@@ -16,6 +16,7 @@
         <sign-in-with-azure-cloud-button-component v-if="isAzureDevOpsEnabled" class="my-1" />
         <sign-in-with-git-hub-button-component v-if="isGithubEnabled" class="my-1" />
         <sign-in-with-gitlab-button-component v-if="isGitlabEnabled" class="my-1" />
+        <sign-in-with-plane-button-component v-if="isPlaneEnabled" class="my-1" />
       </li>
       <li>
         {{ t("session.prepare.step.selection.mode.description.withIssueTracker.descriptionLine2") }}
@@ -41,6 +42,7 @@ import SignInWithJiraServerButtonComponent from "./SignInWithJiraServerButtonCom
 import SignInWithAzureCloudButtonComponent from "./SignInWithAzureDevOpsButtonComponent.vue";
 import SignInWithGitHubButtonComponent from "@/components/SignInWithGitHubButtonComponent.vue";
 import SignInWithGitlabButtonComponent from "@/components/SignInWithGitlabButtonComponent.vue";
+import SignInWithPlaneButtonComponent from "@/components/SignInWithPlaneButtonComponent.vue";
 import ProjectSelectionComponent from "./ProjectSelectionComponent.vue";
 import apiService from "@/services/api.service";
 import { useDiveniStore } from "@/store";
@@ -55,6 +57,7 @@ export default defineComponent({
     SignInWithAzureCloudButtonComponent,
     SignInWithGitHubButtonComponent,
     SignInWithGitlabButtonComponent,
+    SignInWithPlaneButtonComponent,
     ProjectSelectionComponent,
   },
   emits: ["jira"],
@@ -71,6 +74,7 @@ export default defineComponent({
       isAzureDevOpsEnabled: false,
       isGithubEnabled: false,
       isGitlabEnabled: false,
+      isPlaneEnabled: false,
     };
   },
   computed: {
@@ -101,6 +105,7 @@ export default defineComponent({
       this.isAzureDevOpsEnabled = result.isAzureDevOpsEnabled === "true";
       this.isGithubEnabled = result.isGithubEnabled === "true";
       this.isGitlabEnabled = result.isGitlabEnabled === "true";
+      this.isPlaneEnabled = result.isPlaneEnabled === "true";
     });
   },
 });

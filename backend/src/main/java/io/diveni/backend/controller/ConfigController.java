@@ -5,6 +5,7 @@ import io.diveni.backend.service.projectmanagementproviders.github.GithubService
 import io.diveni.backend.service.projectmanagementproviders.gitlab.GitlabService;
 import io.diveni.backend.service.projectmanagementproviders.jiracloud.JiraCloudService;
 import io.diveni.backend.service.projectmanagementproviders.jiraserver.JiraServerService;
+import io.diveni.backend.service.projectmanagementproviders.plane.PlaneService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,6 +29,8 @@ public class ConfigController {
 
   @Autowired private GitlabService gitlabService;
 
+  @Autowired private PlaneService planeService;
+
   @Value("${LOCALE:en}")
   private String LOCALE;
 
@@ -43,6 +46,7 @@ public class ConfigController {
         "isAzureDevOpsEnabled", Boolean.toString(azureDevOpsService.serviceEnabled()));
     issueTrackerConfig.put("isGithubEnabled", Boolean.toString(githubService.serviceEnabled()));
     issueTrackerConfig.put("isGitlabEnabled", Boolean.toString(gitlabService.serviceEnabled()));
+    issueTrackerConfig.put("isPlaneEnabled", Boolean.toString(planeService.serviceEnabled()));
     return issueTrackerConfig;
   }
 
