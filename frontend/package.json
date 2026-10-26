@@ -31,7 +31,7 @@
     "uuid": "^14.0.2",
     "vue": "^3.5.42",
     "vue-debounce": "^5.0.1",
-    "vue-i18n": "^11.4.8",
+    "vue-i18n": "^11.4.16",
     "vue-router": "^5.3.1",
     "vue-toastification": "^2.0.0-rc.5",
     "vue3-steppy": "^1.6.3",
