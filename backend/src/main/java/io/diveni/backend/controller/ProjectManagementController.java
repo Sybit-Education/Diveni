@@ -15,6 +15,7 @@ import io.diveni.backend.service.projectmanagementproviders.github.GithubService
 import io.diveni.backend.service.projectmanagementproviders.gitlab.GitlabService;
 import io.diveni.backend.service.projectmanagementproviders.jiracloud.JiraCloudService;
 import io.diveni.backend.service.projectmanagementproviders.jiraserver.JiraServerService;
+import io.diveni.backend.service.projectmanagementproviders.plane.PlaneService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +52,8 @@ public class ProjectManagementController {
   @Autowired GithubService githubService;
 
   @Autowired GitlabService gitlabService;
+
+  @Autowired PlaneService planeService;
 
   private final String PROVIDER_NOT_ENABLED_MESSAGE =
       "The selected issue tracker is not enabled. Make sure to set all required parameters.";
@@ -142,6 +145,20 @@ public class ProjectManagementController {
         new ResponseEntity<>(
             gitlabService.getAccessTokenForGitlab(origin, pat.getCode()), HttpStatus.OK);
     LOGGER.debug("<-- getOAuth2AccessToken()");
+    return response;
+  }
+
+  @PostMapping("/plane/accessToken")
+  public ResponseEntity<TokenIdentifier> getPlaneAccessToken() {
+    LOGGER.debug("--> getPlaneAccessToken()");
+    if (!planeService.serviceEnabled()) {
+      LOGGER.warn("Plane is not configured!");
+      throw new ResponseStatusException(
+          HttpStatus.INTERNAL_SERVER_ERROR, PROVIDER_NOT_ENABLED_MESSAGE);
+    }
+    ResponseEntity<TokenIdentifier> response =
+        new ResponseEntity<>(planeService.connect(), HttpStatus.OK);
+    LOGGER.debug("<-- getPlaneAccessToken()");
     return response;
   }
 
@@ -265,6 +282,8 @@ public class ProjectManagementController {
       return githubService;
     } else if (gitlabService.containsToken(tokenIdentifier)) {
       return gitlabService;
+    } else if (planeService.containsToken(tokenIdentifier)) {
+      return planeService;
     }
     // If a new project management provider should be implemented, it can just be
     // added here
